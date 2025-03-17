@@ -37,6 +37,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.MatrixInformation;
 import eu.albina.model.Region;
@@ -83,6 +84,23 @@ public class StatisticsController {
 	}
 
 	/**
+	 * Return a CSV string with all danger source variants from {@code startDate}
+	 * until {@code endDate} for {@code region}.
+	 *
+	 * @param startDate
+	 *            the start date of the desired time period
+	 * @param endDate
+	 *            the end date of the desired time period
+	 * @return a CSV string with all bulletin information from {@code startDate}
+	 *         until {@code endDate} in {@code lang}
+	 */
+	public String getDangerSourceStatistics(Instant startDate, Instant endDate) {
+		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance().getAllDangerSourceVariants(startDate,
+				endDate);
+		return getDangerSourceVariantsCsvString(variants);
+	}
+
+	/**
 	 * Return a CSV string with all bulletin information from {@code startDate}
 	 * until {@code endDate} in {@code lang} for {@code region}.
 	 *
@@ -114,7 +132,7 @@ public class StatisticsController {
 
 			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
+			return getAvalancheBulletinCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
 		});
 	}
 
@@ -150,7 +168,7 @@ public class StatisticsController {
 
 			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-			return getCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
+			return getAvalancheBulletinCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
 		});
 	}
 
@@ -221,6 +239,352 @@ public class StatisticsController {
 	}
 
 	/**
+	 * Return a CSV string representing all {@code dangerSourceVariants}.
+	 *
+	 * @param dangerSourceVariants
+	 *            the bulletins that should be included in the CSV string
+	 * @return a CSV string representing all {@code bulletins} in {@code lang}
+	 */
+	public String getDangerSourceVariantsCsvString(List<DangerSourceVariant> dangerSourceVariants) {
+		// sort variants by validity
+		dangerSourceVariants.sort(Comparator.comparing(DangerSourceVariant::getValidFrom));
+
+		StringBuilder sb = new StringBuilder();
+
+		// GENERAL DANGER SOURCE VARIANT INFORMATION
+		// TODO dangerSigns, comment
+		sb.append("DangerSourceVariantId");
+		sb.append(csvDeliminator);
+		sb.append("DangerSourceId");
+		sb.append(csvDeliminator);
+		sb.append("DangerSourceTitle");
+		sb.append(csvDeliminator);
+		sb.append("OriginalDangerSourceVariantId");
+		sb.append(csvDeliminator);
+		sb.append("ForecastDangerSourceVariantId");
+		sb.append(csvDeliminator);
+		sb.append("DangerSourceVariantStatus");
+		sb.append(csvDeliminator);
+		sb.append("DangerSourceVariantType");
+		sb.append(csvDeliminator);
+		sb.append("ValidFrom");
+		sb.append(csvDeliminator);
+		sb.append("ValidUntil");
+		sb.append(csvDeliminator);
+		sb.append("MicroRegions");
+		sb.append(csvDeliminator);
+		sb.append("HasDaytimeDependency");
+		sb.append(csvDeliminator);
+		sb.append("DangerPeak");
+		sb.append(csvDeliminator);
+		sb.append("HighestDangerAspect");
+		sb.append(csvDeliminator);
+		sb.append("DangerIncreaseWithElevation");
+		sb.append(csvDeliminator);
+		sb.append("AvalancheType");
+		sb.append(csvDeliminator);
+		sb.append("SlopeGradient");
+		sb.append(csvDeliminator);
+		sb.append("RunoutIntoGreen");
+		sb.append(csvDeliminator);
+		sb.append("NaturalRelease");
+		sb.append(csvDeliminator);
+
+		// EAWS MATRIX INFORMATION
+		sb.append(csvDeliminator);
+		sb.append("DangerRating");
+		sb.append(csvDeliminator);
+		sb.append("DangerRatingModificator");
+		sb.append(csvDeliminator);
+		sb.append("SnowpackStability");
+		sb.append(csvDeliminator);
+		sb.append("SnowpackStabilityValue");
+		sb.append(csvDeliminator);
+		sb.append("Frequency");
+		sb.append(csvDeliminator);
+		sb.append("FrequencyValue");
+		sb.append(csvDeliminator);
+		sb.append("AvalancheSize");
+		sb.append(csvDeliminator);
+		sb.append("AvalancheSizeValue");
+		sb.append(csvDeliminator);
+		sb.append("ElevationAbove");
+		sb.append(csvDeliminator);
+		sb.append("ElevationBelow");
+		sb.append(csvDeliminator);
+		sb.append("AspectN");
+		sb.append(csvDeliminator);
+		sb.append("AspectNE");
+		sb.append(csvDeliminator);
+		sb.append("AspectE");
+		sb.append(csvDeliminator);
+		sb.append("AspectSE");
+		sb.append(csvDeliminator);
+		sb.append("AspectS");
+		sb.append(csvDeliminator);
+		sb.append("AspectSW");
+		sb.append(csvDeliminator);
+		sb.append("AspectW");
+		sb.append(csvDeliminator);
+		sb.append("AspectNW");
+		sb.append(csvDeliminator);
+
+		// GLIDE SNOW AVALANCHES
+		sb.append("GlidingSnowActivity");
+		sb.append(csvDeliminator);
+		sb.append("GlidingSnowActivityValue");
+		sb.append(csvDeliminator);
+		sb.append("SnowHeightUpperLimit");
+		sb.append(csvDeliminator);
+		sb.append("SnowHeightLowerLimit");
+		sb.append(csvDeliminator);
+		sb.append("SnowHeightAverage");
+		sb.append(csvDeliminator);
+		sb.append("ZeroDegreeIsotherm");
+		sb.append(csvDeliminator);
+		
+		// SLAB AVALANCHES
+		// TODO terrainTypes
+		sb.append("SlabGrainShape");
+		sb.append(csvDeliminator);
+		sb.append("slabThicknessUpperLimit");
+		sb.append(csvDeliminator);
+		sb.append("slabThicknessLowerLimit");
+		sb.append(csvDeliminator);
+		sb.append("slabHandHardnessUpperLimit");
+		sb.append(csvDeliminator);
+		sb.append("slabHandHardnessLowerLimit");
+		sb.append(csvDeliminator);
+		sb.append("slabHardnessProfile");
+		sb.append(csvDeliminator);
+		sb.append("slabEnergyTransferPotential");
+		sb.append(csvDeliminator);
+		sb.append("slabDistribution");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerGrainShape");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerGrainSizeUpperLimit");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerGrainSizeLowerLimit");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerPersistent");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerThickness");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerStrength");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerWet");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerCrustAbove");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerCrustBelow");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerPosition");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerCreation");
+		sb.append(csvDeliminator);
+		sb.append("weakLayerDistribution");
+		sb.append(csvDeliminator);
+		sb.append("dangerSpotRecognizability");
+		sb.append(csvDeliminator);
+		sb.append("remoteTriggering");
+		sb.append(csvDeliminator);
+		
+		// LOOSE SNOW AVALANCHES
+		sb.append("LooseSnowGrainShape");
+		sb.append(csvDeliminator);
+		sb.append("LooseSnowMoisture");
+		sb.append(csvLineBreak);
+
+		for (DangerSourceVariant variant : dangerSourceVariants) {
+			addDangerSourceVariantCsvLines(sb, variant);
+		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * Add a CSV string to a {@code StringBuilder} instance representing the
+	 * {@code dangerSourceVariant}.
+	 *
+	 * @param sb
+	 *            the string builder instance the new string should be added to
+	 * @param dangerSourceVariant
+	 *            the variant that should be added to the {@code StringBuilder}
+	 *            instance
+	 */
+	private void addDangerSourceVariantCsvLines(StringBuilder sb, DangerSourceVariant dangerSourceVariant) {
+		sb.append(dangerSourceVariant.getId());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerSource().getId());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerSource().getTitle());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getOriginalDangerSourceVariantId());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getForecastDangerSourceVariantId());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerSourceVariantStatus());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerSourceVariantType());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getValidFrom());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getValidUntil());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getRegions().stream().collect(Collectors.joining(",")));
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getHasDaytimeDependency());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerPeak());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getHighestDangerAspect());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerIncreaseWithElevation());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getAvalancheType());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlopeGradient());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getRunoutIntoGreen());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getNaturalRelease());
+		sb.append(csvDeliminator);
+
+		addEawsMatrixInformation(sb, dangerSourceVariant.getEawsMatrixInformation());
+		sb.append(csvDeliminator);
+
+		if (dangerSourceVariant.getTreelineLow())
+			sb.append("treeline");
+		else {
+			if (dangerSourceVariant.getElevationLow() <= 0)
+				sb.append(notAvailableString);
+			else
+				sb.append(dangerSourceVariant.getElevationLow());
+		}
+		sb.append(csvDeliminator);
+		if (dangerSourceVariant.getTreelineHigh())
+			sb.append("treeline");
+		else {
+			if (dangerSourceVariant.getElevationHigh() <= 0)
+				sb.append(notAvailableString);
+			else
+				sb.append(dangerSourceVariant.getElevationHigh());
+		}
+		sb.append(csvDeliminator);
+		if (dangerSourceVariant.getAspects() != null && !dangerSourceVariant.getAspects().isEmpty()) {
+			if (dangerSourceVariant.getAspects().contains(Aspect.N))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspects().contains(Aspect.NE))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspects().contains(Aspect.E))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspects().contains(Aspect.SE))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspects().contains(Aspect.S))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspects().contains(Aspect.SW))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspects().contains(Aspect.W))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspects().contains(Aspect.NW))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+		} else {
+			for (int i = 0; i < 8; i++) {
+				sb.append(notAvailableString);
+				sb.append(csvDeliminator);
+			}
+		}
+
+		sb.append(dangerSourceVariant.getGlidingSnowActivity());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getGlidingSnowActivityValue());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSnowHeightUpperLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSnowHeightLowerLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSnowHeightAverage());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getZeroDegreeIsotherm());
+		sb.append(csvDeliminator);
+
+		sb.append(dangerSourceVariant.getSlabGrainShape());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlabThicknessUpperLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlabThicknessLowerLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlabHandHardnessUpperLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlabHandHardnessLowerLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlabHardnessProfile());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlabEnergyTransferPotential());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getSlabDistribution());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerGrainShape());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerGrainSizeUpperLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerGrainSizeLowerLimit());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerPersistent());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerThickness());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerStrength());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerWet());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerCrustAbove());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerCrustBelow());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerPosition());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerCreation());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getWeakLayerDistribution());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerSpotRecognizability());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getRemoteTriggering());
+		sb.append(csvDeliminator);
+
+		sb.append(dangerSourceVariant.getLooseSnowGrainShape());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getLooseSnowMoisture());
+		sb.append(csvLineBreak);
+	}
+
+	/**
 	 * Return a CSV string representing all {@code bulletins} in {@code lang}.
 	 *
 	 * @param lang
@@ -234,7 +598,7 @@ public class StatisticsController {
 	 *            {@code true}
 	 * @return a CSV string representing all {@code bulletins} in {@code lang}
 	 */
-	public String getCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended,
+	public String getAvalancheBulletinCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended,
 			boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		// sort bulletins by validity
 		bulletins.sort(Comparator.comparing(AvalancheBulletin::getValidFrom));
@@ -352,11 +716,11 @@ public class StatisticsController {
 		}
 		sb.append(csvLineBreak);
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			addCsvLines(sb, avalancheBulletin, false, lang, extended, false, obsoleteMatrix);
+			addAvalancheBulletinCsvLines(sb, avalancheBulletin, false, lang, extended, false, obsoleteMatrix);
 			if (avalancheBulletin.isHasDaytimeDependency()) {
-				addCsvLines(sb, avalancheBulletin, true, lang, extended, false, obsoleteMatrix);
+				addAvalancheBulletinCsvLines(sb, avalancheBulletin, true, lang, extended, false, obsoleteMatrix);
 			} else if (duplicateBulletinForenoon) {
-				addCsvLines(sb, avalancheBulletin, false, lang, extended, true, obsoleteMatrix);
+				addAvalancheBulletinCsvLines(sb, avalancheBulletin, false, lang, extended, true, obsoleteMatrix);
 			}
 		}
 
@@ -380,7 +744,7 @@ public class StatisticsController {
 	 * @param lang
 	 *            the desired language
 	 */
-	private void addCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
+	private void addAvalancheBulletinCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
 			LanguageCode lang, boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		AvalancheBulletinDaytimeDescription daytimeDescription;
 		if (!isAfternoon || duplicateBulletinForenoon)

@@ -49,7 +49,7 @@ public class StatisticsControllerTest {
 	public void getCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, false, false, true);
+		String csvString = StatisticsController.getInstance().getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, false, false, true);
 		Assertions.assertEquals(expected, csvString);
 	}
 
@@ -57,7 +57,7 @@ public class StatisticsControllerTest {
 	public void getExtendedCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.extended.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getCsvString(LanguageCode.de, bulletinsAmPm, true, false, true);
+		String csvString = StatisticsController.getInstance().getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, true, false, true);
 		Assertions.assertEquals(expected, csvString);
 	}
 }

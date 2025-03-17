@@ -41,8 +41,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +50,10 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/statistics")
 @Tag(name = "statistics")
@@ -119,7 +119,50 @@ public class StatisticsService {
 			return Response.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
 			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
 		} catch (IOException e) {
-			logger.warn("Error creating statistics", e);
+			logger.warn("Error creating bulletin statistics", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		}
+	}
+
+	@GET
+	@Path("/danger-sources")
+	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Produces("text/csv")
+	@Operation(summary = "Get danger source statistics")
+	public Response getDangerSourceCsv(
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate) {
+		logger.debug("GET CSV danger sources");
+
+		Instant start = null;
+		Instant end = null;
+
+		if (startDate != null)
+			start = OffsetDateTime.parse(startDate).toInstant();
+		else
+			return Response.notAcceptable(null).build();
+		if (endDate != null)
+			end = OffsetDateTime.parse(endDate).toInstant();
+		else
+			return Response.notAcceptable(null).build();
+
+		String statistics = StatisticsController.getInstance().getDangerSourceStatistics(start, end);
+
+		String filename = String.format("danger_source_statistic_%s_%s",
+			OffsetDateTime.parse(startDate).toLocalDate(),
+			OffsetDateTime.parse(endDate).toLocalDate());
+
+		try {
+			File tmpFile = File.createTempFile(filename, ".csv");
+			FileWriter writer = new FileWriter(tmpFile);
+			writer.write(statistics);
+			writer.close();
+
+			return Response.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
+		} catch (IOException e) {
+			logger.warn("Error creating danger source statistics", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
