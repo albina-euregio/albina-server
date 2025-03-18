@@ -42,7 +42,9 @@ import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.MatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.DangerSign;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.TerrainType;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -252,7 +254,6 @@ public class StatisticsController {
 		StringBuilder sb = new StringBuilder();
 
 		// GENERAL DANGER SOURCE VARIANT INFORMATION
-		// TODO dangerSigns, comment
 		sb.append("DangerSourceVariantId");
 		sb.append(csvDeliminator);
 		sb.append("DangerSourceId");
@@ -288,6 +289,10 @@ public class StatisticsController {
 		sb.append("RunoutIntoGreen");
 		sb.append(csvDeliminator);
 		sb.append("NaturalRelease");
+		sb.append(csvDeliminator);
+		sb.append("DangerSigns");
+		sb.append(csvDeliminator);
+		sb.append("Comment");
 		sb.append(csvDeliminator);
 
 		// EAWS MATRIX INFORMATION
@@ -344,7 +349,6 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		
 		// SLAB AVALANCHES
-		// TODO terrainTypes
 		sb.append("SlabGrainShape");
 		sb.append(csvDeliminator);
 		sb.append("slabThicknessUpperLimit");
@@ -389,6 +393,8 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("remoteTriggering");
 		sb.append(csvDeliminator);
+		sb.append("terrainTypes");
+		sb.append(csvDeliminator);
 		
 		// LOOSE SNOW AVALANCHES
 		sb.append("LooseSnowGrainShape");
@@ -416,9 +422,17 @@ public class StatisticsController {
 	private void addDangerSourceVariantCsvLines(StringBuilder sb, DangerSourceVariant dangerSourceVariant) {
 		sb.append(dangerSourceVariant.getId());
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerSource().getId());
+		if (dangerSourceVariant.getDangerSource() != null && dangerSourceVariant.getDangerSource().getId() != null) {
+			sb.append(dangerSourceVariant.getDangerSource().getId());
+		} else {
+			sb.append(notAvailableString);
+		}
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerSource().getTitle());
+		if (dangerSourceVariant.getDangerSource() != null && dangerSourceVariant.getDangerSource().getTitle() != null) {
+			sb.append(dangerSourceVariant.getDangerSource().getTitle());
+		} else {
+			sb.append(notAvailableString);
+		}
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getOriginalDangerSourceVariantId());
 		sb.append(csvDeliminator);
@@ -449,6 +463,10 @@ public class StatisticsController {
 		sb.append(dangerSourceVariant.getRunoutIntoGreen());
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getNaturalRelease());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getDangerSigns().stream().map(DangerSign::toString).collect(Collectors.joining(",")));
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getComment().replace(";", ","));
 		sb.append(csvDeliminator);
 
 		addEawsMatrixInformation(sb, dangerSourceVariant.getEawsMatrixInformation());
@@ -576,6 +594,8 @@ public class StatisticsController {
 		sb.append(dangerSourceVariant.getDangerSpotRecognizability());
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getRemoteTriggering());
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getTerrainTypes().stream().map(TerrainType::toString).collect(Collectors.joining(",")));
 		sb.append(csvDeliminator);
 
 		sb.append(dangerSourceVariant.getLooseSnowGrainShape());
