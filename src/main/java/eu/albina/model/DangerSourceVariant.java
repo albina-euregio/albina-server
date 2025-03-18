@@ -16,14 +16,23 @@
  ******************************************************************************/
 package eu.albina.model;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
+import com.google.common.io.Resources;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
@@ -309,6 +318,98 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		aspects = new LinkedHashSet<>();
 		dangerSigns = new LinkedHashSet<>();
 		terrainTypes = new LinkedHashSet<>();
+	}
+
+	public DangerSourceVariant(JSONObject jsonObject) {
+		this.originalDangerSourceVariantId = jsonObject.optString("originalDangerSourceVariantId");
+		this.forecastDangerSourceVariantId = jsonObject.optString("forecastDangerSourceVariantId");
+		this.creationDate = Instant.parse(jsonObject.optString("creationDate"));
+		this.updateDate = Instant.parse(jsonObject.optString("updateDate"));
+		this.validFrom = Instant.parse(jsonObject.optString("validFrom"));
+		this.validUntil = Instant.parse(jsonObject.optString("validUntil"));
+		this.dangerSourceVariantStatus = DangerSourceVariantStatus.valueOf(jsonObject.optString("dangerSourceVariantStatus"));
+		this.dangerSourceVariantType = DangerSourceVariantType.valueOf(jsonObject.optString("dangerSourceVariantType"));
+		this.ownerRegion = jsonObject.optString("ownerRegion");
+		this.hasDaytimeDependency = jsonObject.optBoolean("hasDaytimeDependency");
+		this.avalancheType = AvalancheType.valueOf(jsonObject.optString("avalancheType"));
+		this.elevationHigh = jsonObject.optInt("elevationHigh");
+		this.treelineHigh = jsonObject.optBoolean("treelineHigh");
+		this.elevationLow = jsonObject.optInt("elevationLow");
+		this.treelineLow = jsonObject.optBoolean("treelineLow");
+		this.dangerIncreaseWithElevation = jsonObject.optBoolean("dangerIncreaseWithElevation");
+		this.highestDangerAspect = Aspect.valueOf(jsonObject.optString("highestDangerAspect"));
+		this.dangerPeak = eu.albina.model.enumerations.Daytime.valueOf(jsonObject.optString("dangerPeak"));
+		this.slopeGradient = eu.albina.model.enumerations.SlopeGradient.valueOf(jsonObject.optString("slopeGradient"));
+		this.runoutIntoGreen = jsonObject.optBoolean("runoutIntoGreen");
+		this.naturalRelease = eu.albina.model.enumerations.Probability.valueOf(jsonObject.optString("naturalRelease"));
+		this.comment = jsonObject.optString("comment");
+		this.glidingSnowActivity = GlidingSnowActivity.valueOf(jsonObject.optString("glidingSnowActivity"));
+		this.glidingSnowActivityValue = jsonObject.optInt("glidingSnowActivityValue");
+		this.snowHeightUpperLimit = jsonObject.optInt("snowHeightUpperLimit");
+		this.snowHeightLowerLimit = jsonObject.optInt("snowHeightLowerLimit");
+		this.snowHeightAverage = jsonObject.optInt("snowHeightAverage");
+		this.zeroDegreeIsotherm = jsonObject.optBoolean("zeroDegreeIsotherm");
+		this.slabGrainShape = GrainShape.valueOf(jsonObject.optString("slabGrainShape"));
+		this.slabThicknessUpperLimit = jsonObject.optInt("slabThicknessUpperLimit");
+		this.slabThicknessLowerLimit = jsonObject.optInt("slabThicknessLowerLimit");
+		this.slabHandHardnessUpperLimit = HandHardness.valueOf(jsonObject.optString("slabHandHardnessUpperLimit"));
+		this.slabHandHardnessLowerLimit = HandHardness.valueOf(jsonObject.optString("slabHandHardnessLowerLimit"));
+		this.slabHardnessProfile = Tendency.valueOf(jsonObject.optString("slabHardnessProfile"));
+		this.slabEnergyTransferPotential = Characteristic.valueOf(jsonObject.optString("slabEnergyTransferPotential"));
+		this.slabDistribution = Distribution.valueOf(jsonObject.optString("slabDistribution"));
+		this.weakLayerGrainShape = GrainShape.valueOf(jsonObject.optString("weakLayerGrainShape"));
+		this.weakLayerGrainSizeUpperLimit = jsonObject.optDouble("weakLayerGrainSizeUpperLimit");
+		this.weakLayerGrainSizeLowerLimit = jsonObject.optDouble("weakLayerGrainSizeLowerLimit");
+		this.weakLayerPersistent = jsonObject.optBoolean("weakLayerPersistent");
+		this.weakLayerThickness = Thickness.valueOf(jsonObject.optString("weakLayerThickness"));
+		this.weakLayerStrength = Characteristic.valueOf(jsonObject.optString("weakLayerStrength"));
+		this.weakLayerWet = jsonObject.optBoolean("weakLayerWet");
+		this.weakLayerCrustAbove = Crust.valueOf(jsonObject.optString("weakLayerCrustAbove"));
+		this.weakLayerCrustBelow = Crust.valueOf(jsonObject.optString("weakLayerCrustBelow"));
+		this.weakLayerPosition = SnowpackPosition.valueOf(jsonObject.optString("weakLayerPosition"));
+		this.weakLayerCreation = CreationProcess.valueOf(jsonObject.optString("weakLayerCreation"));
+		this.weakLayerDistribution = Distribution.valueOf(jsonObject.optString("weakLayerDistribution"));
+		this.dangerSpotRecognizability = Recognizability.valueOf(jsonObject.optString("dangerSpotRecognizability"));
+		this.remoteTriggering = jsonObject.optBoolean("remoteTriggering");
+		this.looseSnowGrainShape = GrainShape.valueOf(jsonObject.optString("looseSnowGrainShape"));
+		this.looseSnowMoisture = Wetness.valueOf(jsonObject.optString("looseSnowMoisture"));
+
+		JSONArray regionsArray = jsonObject.optJSONArray("regions");
+		this.regions = new LinkedHashSet<>();
+		if (regionsArray != null) {
+			for (int i = 0; i < regionsArray.length(); i++) {
+				this.regions.add(regionsArray.getString(i));
+			}
+		}
+
+		JSONArray aspectsArray = jsonObject.optJSONArray("aspects");
+		this.aspects = new LinkedHashSet<>();
+		if (aspectsArray != null) {
+			for (int i = 0; i < aspectsArray.length(); i++) {
+				this.aspects.add(Aspect.valueOf(aspectsArray.getString(i)));
+			}
+		}
+
+		JSONArray dangerSignsArray = jsonObject.optJSONArray("dangerSigns");
+		this.dangerSigns = new LinkedHashSet<>();
+		if (dangerSignsArray != null) {
+			for (int i = 0; i < dangerSignsArray.length(); i++) {
+				this.dangerSigns.add(DangerSign.valueOf(dangerSignsArray.getString(i)));
+			}
+		}
+
+		JSONArray terrainTypesArray = jsonObject.optJSONArray("terrainTypes");
+		this.terrainTypes = new LinkedHashSet<>();
+		if (terrainTypesArray != null) {
+			for (int i = 0; i < terrainTypesArray.length(); i++) {
+				this.terrainTypes.add(TerrainType.valueOf(terrainTypesArray.getString(i)));
+			}
+		}
+
+		JSONObject eawsMatrixInformation = jsonObject.optJSONObject("eawsMatrixInformation");
+		if (eawsMatrixInformation != null) {
+			this.eawsMatrixInformation = new EawsMatrixInformation(eawsMatrixInformation);
+		}
 	}
 
 	public String getOriginalDangerSourceVariantId() {
@@ -850,4 +951,17 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	public int compareTo(DangerSourceVariant other) {
 		return this.getEawsMatrixInformation().compareTo(other.getEawsMatrixInformation());
 	}
+
+	public static DangerSourceVariant readDangerSourceVariant(final URL resource) throws IOException {
+		final String validDangerSourceVariantFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+		return new DangerSourceVariant(new JSONObject(validDangerSourceVariantFromResource));
+	}
+
+	public static List<DangerSourceVariant> readDangerSourceVariants(final URL resource) throws IOException {
+		final String validDangerSourceVariantStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+		final JSONArray array = new JSONArray(validDangerSourceVariantStringFromResource);
+		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(u -> new DangerSourceVariant(u))
+				.collect(Collectors.toList());
+	}
+
 }
