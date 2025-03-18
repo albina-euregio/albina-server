@@ -2,6 +2,12 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.9] - 2025-03-18
+
+### Danger Sources
+
+- Add endpoint to export statistics
+
 ## [7.1.8] - 2025-03-17
 
 ### Bulletins
