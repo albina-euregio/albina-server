@@ -294,7 +294,7 @@ public class DangerSourceVariantController {
 
 	private List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate, EntityManager entityManager) {
 		final List<DangerSourceVariant> variants = entityManager
-			.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
+			.createQuery(HibernateUtil.queryGetDangerSourceVariantsForTimePeriod, DangerSourceVariant.class)
 			.setParameter("startDate", startDate)
 			.setParameter("endDate", endDate)
 			.getResultList();
