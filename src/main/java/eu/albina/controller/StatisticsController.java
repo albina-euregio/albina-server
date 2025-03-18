@@ -420,7 +420,11 @@ public class StatisticsController {
 	 *            instance
 	 */
 	private void addDangerSourceVariantCsvLines(StringBuilder sb, DangerSourceVariant dangerSourceVariant) {
-		sb.append(dangerSourceVariant.getId());
+		if (dangerSourceVariant == null) {
+			return;
+		}
+
+		sb.append(dangerSourceVariant.getId() != null ? dangerSourceVariant.getId() : notAvailableString);
 		sb.append(csvDeliminator);
 		if (dangerSourceVariant.getDangerSource() != null && dangerSourceVariant.getDangerSource().getId() != null) {
 			sb.append(dangerSourceVariant.getDangerSource().getId());
@@ -434,60 +438,64 @@ public class StatisticsController {
 			sb.append(notAvailableString);
 		}
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getOriginalDangerSourceVariantId());
+		sb.append(dangerSourceVariant.getOriginalDangerSourceVariantId() != null ? dangerSourceVariant.getOriginalDangerSourceVariantId() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getForecastDangerSourceVariantId());
+		sb.append(dangerSourceVariant.getForecastDangerSourceVariantId() != null ? dangerSourceVariant.getForecastDangerSourceVariantId() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerSourceVariantStatus());
+		sb.append(dangerSourceVariant.getDangerSourceVariantStatus() != null ? dangerSourceVariant.getDangerSourceVariantStatus() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerSourceVariantType());
+		sb.append(dangerSourceVariant.getDangerSourceVariantType() != null ? dangerSourceVariant.getDangerSourceVariantType() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getValidFrom());
+		sb.append(dangerSourceVariant.getValidFrom() != null ? dangerSourceVariant.getValidFrom() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getValidUntil());
+		sb.append(dangerSourceVariant.getValidUntil() != null ? dangerSourceVariant.getValidUntil() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getRegions().stream().collect(Collectors.joining(",")));
+		sb.append(dangerSourceVariant.getRegions() != null ? dangerSourceVariant.getRegions().stream().collect(Collectors.joining(",")) : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getHasDaytimeDependency());
+		sb.append(dangerSourceVariant.getHasDaytimeDependency() != null ? dangerSourceVariant.getHasDaytimeDependency() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerPeak());
+		sb.append(dangerSourceVariant.getDangerPeak() != null ? dangerSourceVariant.getDangerPeak() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getHighestDangerAspect());
+		sb.append(dangerSourceVariant.getHighestDangerAspect() != null ? dangerSourceVariant.getHighestDangerAspect() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerIncreaseWithElevation());
+		sb.append(dangerSourceVariant.getDangerIncreaseWithElevation() != null ? dangerSourceVariant.getDangerIncreaseWithElevation() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getAvalancheType());
+		sb.append(dangerSourceVariant.getAvalancheType() != null ? dangerSourceVariant.getAvalancheType() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getSlopeGradient());
+		sb.append(dangerSourceVariant.getSlopeGradient() != null ? dangerSourceVariant.getSlopeGradient() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getRunoutIntoGreen());
+		sb.append(dangerSourceVariant.getRunoutIntoGreen() != null ? dangerSourceVariant.getRunoutIntoGreen() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getNaturalRelease());
+		sb.append(dangerSourceVariant.getNaturalRelease() != null ? dangerSourceVariant.getNaturalRelease() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerSigns().stream().map(DangerSign::toString).collect(Collectors.joining(",")));
+		sb.append(dangerSourceVariant.getDangerSigns() != null ? dangerSourceVariant.getDangerSigns().stream().map(DangerSign::toString).collect(Collectors.joining(",")) : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getComment().replace(";", ","));
+		sb.append(dangerSourceVariant.getComment() != null ? dangerSourceVariant.getComment().replace(";", ",") : notAvailableString);
 		sb.append(csvDeliminator);
 
 		addEawsMatrixInformation(sb, dangerSourceVariant.getEawsMatrixInformation());
 		sb.append(csvDeliminator);
 
-		if (dangerSourceVariant.getTreelineLow())
+		if (dangerSourceVariant.getTreelineLow() != null && dangerSourceVariant.getTreelineLow())
 			sb.append("treeline");
 		else {
-			if (dangerSourceVariant.getElevationLow() <= 0)
+			if (dangerSourceVariant.getElevationLow() != null && dangerSourceVariant.getElevationLow() <= 0)
 				sb.append(notAvailableString);
-			else
+			else if (dangerSourceVariant.getElevationLow() != null)
 				sb.append(dangerSourceVariant.getElevationLow());
+			else
+				sb.append(notAvailableString);
 		}
 		sb.append(csvDeliminator);
-		if (dangerSourceVariant.getTreelineHigh())
+		if (dangerSourceVariant.getTreelineHigh() != null && dangerSourceVariant.getTreelineHigh())
 			sb.append("treeline");
 		else {
-			if (dangerSourceVariant.getElevationHigh() <= 0)
+			if (dangerSourceVariant.getElevationHigh() != null && dangerSourceVariant.getElevationHigh() <= 0)
 				sb.append(notAvailableString);
-			else
+			else if (dangerSourceVariant.getElevationHigh() != null)
 				sb.append(dangerSourceVariant.getElevationHigh());
+			else
+				sb.append(notAvailableString);
 		}
 		sb.append(csvDeliminator);
 		if (dangerSourceVariant.getAspects() != null && !dangerSourceVariant.getAspects().isEmpty()) {
