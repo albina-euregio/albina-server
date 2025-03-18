@@ -67,7 +67,7 @@ public class StatisticsControllerTest {
 
 	@Test
 	public void getDangerSourceVariantCsv() throws IOException {
-		final String expected = Resources.toString(Resources.getResource("danger_source_empty.statistics.csv"),
+		final String expected = Resources.toString(Resources.getResource("danger_source_variants.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getInstance().getDangerSourceVariantsCsvString(dangerSourceVariants);
 		Assertions.assertEquals(expected, csvString);
