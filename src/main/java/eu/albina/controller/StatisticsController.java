@@ -296,7 +296,6 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 
 		// EAWS MATRIX INFORMATION
-		sb.append(csvDeliminator);
 		sb.append("DangerRating");
 		sb.append(csvDeliminator);
 		sb.append("DangerRatingModificator");
@@ -546,7 +545,7 @@ public class StatisticsController {
 			}
 		}
 
-		sb.append(dangerSourceVariant.getGlidingSnowActivity());
+		sb.append(dangerSourceVariant.getGlidingSnowActivity() != null ? dangerSourceVariant.getGlidingSnowActivity() : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getGlidingSnowActivityValue());
 		sb.append(csvDeliminator);
@@ -556,59 +555,59 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getSnowHeightAverage());
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getZeroDegreeIsotherm());
+		sb.append(dangerSourceVariant.getZeroDegreeIsotherm() != null ? dangerSourceVariant.getZeroDegreeIsotherm() : notAvailableString);
 		sb.append(csvDeliminator);
 
-		sb.append(dangerSourceVariant.getSlabGrainShape());
+		sb.append(dangerSourceVariant.getSlabGrainShape() != null ? dangerSourceVariant.getSlabGrainShape() : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getSlabThicknessUpperLimit());
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getSlabThicknessLowerLimit());
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getSlabHandHardnessUpperLimit());
+		sb.append(dangerSourceVariant.getSlabHandHardnessUpperLimit() != null ? dangerSourceVariant.getSlabHandHardnessUpperLimit() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getSlabHandHardnessLowerLimit());
+		sb.append(dangerSourceVariant.getSlabHandHardnessLowerLimit() != null ? dangerSourceVariant.getSlabHandHardnessLowerLimit() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getSlabHardnessProfile());
+		sb.append(dangerSourceVariant.getSlabHardnessProfile() != null ? dangerSourceVariant.getSlabHardnessProfile() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getSlabEnergyTransferPotential());
+		sb.append(dangerSourceVariant.getSlabEnergyTransferPotential() != null ? dangerSourceVariant.getSlabEnergyTransferPotential() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getSlabDistribution());
+		sb.append(dangerSourceVariant.getSlabDistribution() != null ? dangerSourceVariant.getSlabDistribution() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerGrainShape());
+		sb.append(dangerSourceVariant.getWeakLayerGrainShape() != null ? dangerSourceVariant.getWeakLayerGrainShape() : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getWeakLayerGrainSizeUpperLimit());
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getWeakLayerGrainSizeLowerLimit());
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerPersistent());
+		sb.append(dangerSourceVariant.getWeakLayerPersistent() != null ? dangerSourceVariant.getWeakLayerPersistent() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerThickness());
+		sb.append(dangerSourceVariant.getWeakLayerThickness() != null ? dangerSourceVariant.getWeakLayerThickness() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerStrength());
+		sb.append(dangerSourceVariant.getWeakLayerStrength() != null ? dangerSourceVariant.getWeakLayerStrength() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerWet());
+		sb.append(dangerSourceVariant.getWeakLayerWet() != null ? dangerSourceVariant.getWeakLayerWet() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerCrustAbove());
+		sb.append(dangerSourceVariant.getWeakLayerCrustAbove() != null ? dangerSourceVariant.getWeakLayerCrustAbove() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerCrustBelow());
+		sb.append(dangerSourceVariant.getWeakLayerCrustBelow() != null ? dangerSourceVariant.getWeakLayerCrustBelow() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerPosition());
+		sb.append(dangerSourceVariant.getWeakLayerPosition() != null ? dangerSourceVariant.getWeakLayerPosition() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerCreation());
+		sb.append(dangerSourceVariant.getWeakLayerCreation() != null ? dangerSourceVariant.getWeakLayerCreation() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerDistribution());
+		sb.append(dangerSourceVariant.getWeakLayerDistribution() != null ? dangerSourceVariant.getWeakLayerDistribution() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getDangerSpotRecognizability());
+		sb.append(dangerSourceVariant.getDangerSpotRecognizability() != null ? dangerSourceVariant.getDangerSpotRecognizability() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getRemoteTriggering());
+		sb.append(dangerSourceVariant.getRemoteTriggering() != null ? dangerSourceVariant.getRemoteTriggering() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getTerrainTypes().stream().map(TerrainType::toString).collect(Collectors.joining(",")));
+		sb.append(dangerSourceVariant.getTerrainTypes() != null ? dangerSourceVariant.getTerrainTypes().stream().map(TerrainType::toString).collect(Collectors.joining(",")) : notAvailableString);
 		sb.append(csvDeliminator);
 
-		sb.append(dangerSourceVariant.getLooseSnowGrainShape());
+		sb.append(dangerSourceVariant.getLooseSnowGrainShape() != null ? dangerSourceVariant.getLooseSnowGrainShape() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getLooseSnowMoisture());
+		sb.append(dangerSourceVariant.getLooseSnowMoisture() != null ? dangerSourceVariant.getLooseSnowMoisture() : notAvailableString);
 		sb.append(csvLineBreak);
 	}
 
