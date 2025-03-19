@@ -185,6 +185,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "COMMENT")
 	private String comment;
 
+	@Lob
+	@Column(name = "TEXTCAT")
+	private String textcat;
+
 	// TODO add uncertainties
 
 	/** --------------------- */
@@ -327,7 +331,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.updateDate = Instant.parse(jsonObject.optString("updateDate"));
 		this.validFrom = Instant.parse(jsonObject.optString("validFrom"));
 		this.validUntil = Instant.parse(jsonObject.optString("validUntil"));
-		this.dangerSourceVariantStatus = DangerSourceVariantStatus.valueOf(jsonObject.optString("dangerSourceVariantStatus"));
+		this.dangerSourceVariantStatus = DangerSourceVariantStatus
+				.valueOf(jsonObject.optString("dangerSourceVariantStatus"));
 		this.dangerSourceVariantType = DangerSourceVariantType.valueOf(jsonObject.optString("dangerSourceVariantType"));
 		this.ownerRegion = jsonObject.optString("ownerRegion");
 		this.hasDaytimeDependency = jsonObject.optBoolean("hasDaytimeDependency");
@@ -343,6 +348,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.runoutIntoGreen = jsonObject.optBoolean("runoutIntoGreen");
 		this.naturalRelease = eu.albina.model.enumerations.Probability.valueOf(jsonObject.optString("naturalRelease"));
 		this.comment = jsonObject.optString("comment");
+		this.textcat = jsonObject.optString("textcat");
 		this.glidingSnowActivity = GlidingSnowActivity.valueOf(jsonObject.optString("glidingSnowActivity"));
 		this.glidingSnowActivityValue = jsonObject.optInt("glidingSnowActivityValue");
 		this.snowHeightUpperLimit = jsonObject.optInt("snowHeightUpperLimit");
@@ -648,6 +654,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.comment = comment;
 	}
 
+	public String getTextcat() {
+		return this.textcat;
+	}
+
+	public void setTextcat(String textcat) {
+		this.textcat = textcat;
+	}
+
 	public GlidingSnowActivity getGlidingSnowActivity() {
 		return this.glidingSnowActivity;
 	}
@@ -922,6 +936,69 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public Boolean affectsRegion(Region region) {
 		return getRegions().stream().anyMatch(region::affects);
+	}
+
+	public eu.albina.model.enumerations.AvalancheProblem getAvalancheProblem() {
+		switch (this.avalancheType) {
+			case slab:
+				switch (this.slabGrainShape) {
+					case PP:
+					case DF:
+					case RG:
+					case FC:
+						if (this.weakLayerPersistent) {
+							switch (this.dangerSpotRecognizability) {
+								case very_easy:
+								case easy:
+									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard:
+								case very_hard:
+									return eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
+								default:
+									return null;
+							}
+						} else {
+							switch (this.dangerSpotRecognizability) {
+								case very_easy:
+								case easy:
+									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard:
+								case very_hard:
+									return eu.albina.model.enumerations.AvalancheProblem.new_snow;
+								default:
+									return null;
+							}
+						}
+					case MF:
+						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+					case MFcr:
+						if (this.weakLayerPersistent) {
+							return eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
+						} else {
+							return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+						}
+					default:
+						return null;
+				}
+			case loose:
+				switch (this.looseSnowGrainShape) {
+					case PP:
+					case DF:
+						return eu.albina.model.enumerations.AvalancheProblem.new_snow;
+					case MF:
+						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+					case FC:
+					case DH:
+					case SH:
+						return null;
+					default:
+						return null;
+				}
+			case glide:
+				return eu.albina.model.enumerations.AvalancheProblem.gliding_snow;
+			default:
+				return null;
+		}
 	}
 
 	public void copy(DangerSourceVariant dangerSourceVariant) {
