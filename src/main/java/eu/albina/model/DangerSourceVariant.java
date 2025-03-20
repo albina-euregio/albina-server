@@ -162,6 +162,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "RUNOUT_INTO_GREEN")
 	private Boolean runoutIntoGreen;
 
+	@Column(name = "PENETRATE_DEEP_LAYERS")
+	private Boolean penetrateDeepLayers;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURAL_RELEASE")
 	private eu.albina.model.enumerations.Probability naturalRelease;
@@ -346,6 +349,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.dangerPeak = eu.albina.model.enumerations.Daytime.valueOf(jsonObject.optString("dangerPeak"));
 		this.slopeGradient = eu.albina.model.enumerations.SlopeGradient.valueOf(jsonObject.optString("slopeGradient"));
 		this.runoutIntoGreen = jsonObject.optBoolean("runoutIntoGreen");
+		this.penetrateDeepLayers = jsonObject.optBoolean("penetrateDeepLayers");
 		this.naturalRelease = eu.albina.model.enumerations.Probability.valueOf(jsonObject.optString("naturalRelease"));
 		this.comment = jsonObject.optString("comment");
 		this.textcat = jsonObject.optString("textcat");
@@ -620,6 +624,18 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setRunoutIntoGreen(Boolean runoutIntoGreen) {
 		this.runoutIntoGreen = runoutIntoGreen;
+	}
+
+	public Boolean isPenetrateDeepLayers() {
+		return this.penetrateDeepLayers;
+	}
+
+	public Boolean getPenetrateDeepLayers() {
+		return this.penetrateDeepLayers;
+	}
+
+	public void setPenetrateDeepLayers(Boolean penetrateDeepLayers) {
+		this.penetrateDeepLayers = penetrateDeepLayers;
 	}
 
 	public eu.albina.model.enumerations.Probability getNaturalRelease() {
