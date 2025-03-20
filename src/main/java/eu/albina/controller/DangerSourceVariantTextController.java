@@ -73,7 +73,7 @@ public class DangerSourceVariantTextController {
 		});
 	}
 
-	public DangerSourceVariantText getDangerSourceVariantText(DangerSourceVariant dangerSourceVariant) {
+	private DangerSourceVariantText getDangerSourceVariantText(DangerSourceVariant dangerSourceVariant) {
 		return getDangerSourceVariantTexts(dangerSourceVariant.getAvalancheType()).stream()
 			.filter(text -> text.getAvalancheProblem() == dangerSourceVariant.getAvalancheProblem())
 			.filter(text -> text.getHasDaytimeDependency() == dangerSourceVariant.getHasDaytimeDependency())
@@ -82,5 +82,17 @@ public class DangerSourceVariantTextController {
 			.filter(text -> text.getSnowpackStability() == dangerSourceVariant.getEawsMatrixInformation().getSnowpackStability())
 			.filter(text -> text.getFrequency() == dangerSourceVariant.getEawsMatrixInformation().getFrequency())
 			.findFirst().orElse(null);
+	}
+
+	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant) {
+		DangerSourceVariantText dangerSourceVariantText = getDangerSourceVariantText(dangerSourceVariant);
+		if (dangerSourceVariantText == null) {
+			logger.warn("No danger source variant text found for: {}", dangerSourceVariant);
+			return null;
+		}
+
+		// TODO replace placeholders with actual values
+
+		return dangerSourceVariantText.getTextcat();
 	}
 }
