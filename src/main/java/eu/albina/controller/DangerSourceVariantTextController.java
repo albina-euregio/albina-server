@@ -76,11 +76,11 @@ public class DangerSourceVariantTextController {
 	private DangerSourceVariantText getDangerSourceVariantText(DangerSourceVariant dangerSourceVariant) {
 		return getDangerSourceVariantTexts(dangerSourceVariant.getAvalancheType()).stream()
 			.filter(text -> text.getAvalancheProblem() == dangerSourceVariant.deriveAvalancheProblem())
-			.filter(text -> text.getHasDaytimeDependency() == dangerSourceVariant.getHasDaytimeDependency())
-			.filter(text -> text.getGlidingSnowActivity() == dangerSourceVariant.getGlidingSnowActivity())
-			.filter(text -> text.getAvalancheSize() == dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize())
-			.filter(text -> text.getSnowpackStability() == dangerSourceVariant.getEawsMatrixInformation().getSnowpackStability())
-			.filter(text -> text.getFrequency() == dangerSourceVariant.getEawsMatrixInformation().getFrequency())
+			.filter(text -> dangerSourceVariant.getHasDaytimeDependency() == null || text.getHasDaytimeDependency() == dangerSourceVariant.getHasDaytimeDependency())
+			.filter(text -> dangerSourceVariant.getGlidingSnowActivity() == null || text.getGlidingSnowActivity() == dangerSourceVariant.getGlidingSnowActivity())
+			.filter(text -> dangerSourceVariant.getEawsMatrixInformation() == null || dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == null || text.getAvalancheSize() == dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize())
+			.filter(text -> dangerSourceVariant.getEawsMatrixInformation() == null || dangerSourceVariant.getEawsMatrixInformation().getSnowpackStability() == null || text.getSnowpackStability() == dangerSourceVariant.getEawsMatrixInformation().getSnowpackStability())
+			.filter(text -> dangerSourceVariant.getEawsMatrixInformation() == null || dangerSourceVariant.getEawsMatrixInformation().getFrequency() == null || text.getFrequency() == dangerSourceVariant.getEawsMatrixInformation().getFrequency())
 			.findFirst().orElse(null);
 	}
 
