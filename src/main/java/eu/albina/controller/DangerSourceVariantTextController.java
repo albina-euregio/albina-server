@@ -75,7 +75,7 @@ public class DangerSourceVariantTextController {
 
 	private DangerSourceVariantText getDangerSourceVariantText(DangerSourceVariant dangerSourceVariant) {
 		return getDangerSourceVariantTexts(dangerSourceVariant.getAvalancheType()).stream()
-			.filter(text -> text.getAvalancheProblem() == dangerSourceVariant.getAvalancheProblem())
+			.filter(text -> text.getAvalancheProblem() == dangerSourceVariant.deriveAvalancheProblem())
 			.filter(text -> text.getHasDaytimeDependency() == dangerSourceVariant.getHasDaytimeDependency())
 			.filter(text -> text.getGlidingSnowActivity() == dangerSourceVariant.getGlidingSnowActivity())
 			.filter(text -> text.getAvalancheSize() == dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize())

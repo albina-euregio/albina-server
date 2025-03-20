@@ -954,7 +954,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		return getRegions().stream().anyMatch(region::affects);
 	}
 
-	public eu.albina.model.enumerations.AvalancheProblem getAvalancheProblem() {
+	public eu.albina.model.enumerations.AvalancheProblem deriveAvalancheProblem() {
 		switch (this.avalancheType) {
 			case slab:
 				switch (this.slabGrainShape) {
