@@ -88,7 +88,7 @@ public class DangerSourceVariantTextController {
 		DangerSourceVariantText dangerSourceVariantText = getDangerSourceVariantText(dangerSourceVariant);
 		if (dangerSourceVariantText == null) {
 			logger.warn("No danger source variant text found for: {}", dangerSourceVariant);
-			return null;
+			return "";
 		}
 
 		// TODO replace placeholders with actual values
