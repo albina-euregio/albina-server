@@ -17,12 +17,15 @@
 package eu.albina.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.DangerSourceVariantText;
+import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.util.HibernateUtil;
 
@@ -39,6 +42,63 @@ public class DangerSourceVariantTextController {
 
 	private static DangerSourceVariantTextController instance = null;
 
+	// phrase "Gefahrenstellen05§an_Expositionen"
+	// placeholder: {"curlyName":"Gefahrenstellen05§an_Expositionen","line":3,"args":{"vor_allem_an":{"curlyName":"vor_allem_an","line":0},"Expo1":{"curlyName":"Expo1","line":2},"steilen":{"curlyName":"steilen","line":1},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":1},"und_Expo":{"curlyName":"und_Expo","line":7}}}
+	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects1 = Map.of(
+		Set.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW), "{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":4,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":0},\"steilen\":{\"curlyName\":\"steilen\",\"line\":1}}}",
+		Set.of(Aspect.NW, Aspect.N, Aspect.NE), "{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":5,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":0},\"steilen\":{\"curlyName\":\"steilen\",\"line\":1}}}",
+		Set.of(Aspect.SE, Aspect.S, Aspect.SW), "{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":4,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":0},\"steilen\":{\"curlyName\":\"steilen\",\"line\":1}}}"
+	);
+
+	// phrase "Hangart1"
+	// placeholder: {"curlyName":"Hangart1","line":2,"args":{"an_steilen":{"curlyName":"an_steilen","line":1},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":1},"und_Expo":{"curlyName":"und_Expo","line":7}}}
+	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects2 = Map.of(
+		Set.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW), "{\"curlyName\":\"Hangart1\",\"line\":7}",
+		Set.of(Aspect.NW, Aspect.N, Aspect.NE), "{\"curlyName\":\"Hangart1\",\"line\":3,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1}}}",
+		Set.of(Aspect.SE, Aspect.S, Aspect.SW), "{\"curlyName\":\"Hangart1\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1}}}"
+	);
+
+	// phrase "Expo"
+	// placeholder: {"curlyName":"Expo","line":2}
+	private static final Map<Aspect, String> textcatSubstitutionsAspect1 = Map.of(
+		Aspect.N, "{\"curlyName\":\"Expo\",\"line\":0}",
+		Aspect.NE, "{\"curlyName\":\"Expo\",\"line\":1}",
+		Aspect.E, "{\"curlyName\":\"Expo\",\"line\":2}",
+		Aspect.SE, "{\"curlyName\":\"Expo\",\"line\":3}",
+		Aspect.S, "{\"curlyName\":\"Expo\",\"line\":4}",
+		Aspect.SW, "{\"curlyName\":\"Expo\",\"line\":5}",
+		Aspect.W, "{\"curlyName\":\"Expo\",\"line\":6}",
+		Aspect.NW, "{\"curlyName\":\"Expo\",\"line\":7}"
+	);
+	
+	// phrase "Komma_Expo"
+	// placeholder: {"curlyName":"Komma_Expo","line":1}
+	private static final Map<Aspect, String> textcatSubstitutionsAspect2 = Map.of(
+		null, "{\"curlyName\":\"Komma_Expo\",\"line\":0}",
+		Aspect.N, "{\"curlyName\":\"Komma_Expo\",\"line\":1}",
+		Aspect.NE, "{\"curlyName\":\"Komma_Expo\",\"line\":2}",
+		Aspect.E, "{\"curlyName\":\"Komma_Expo\",\"line\":3}",
+		Aspect.SE, "{\"curlyName\":\"Komma_Expo\",\"line\":4}",
+		Aspect.S, "{\"curlyName\":\"Komma_Expo\",\"line\":5}",
+		Aspect.SW, "{\"curlyName\":\"Komma_Expo\",\"line\":6}",
+		Aspect.W, "{\"curlyName\":\"Komma_Expo\",\"line\":7}",
+		Aspect.NW, "{\"curlyName\":\"Komma_Expo\",\"line\":8}"
+	);
+	
+	// phrase "und_Expo"
+	// placeholder: {"curlyName":"und_Expo","line":7}
+	private static final Map<Aspect, String> textcatSubstitutionsAspect3 = Map.of(
+		null, "{\"curlyName\":\"und_Expo\",\"line\":0}",
+		Aspect.N, "{\"curlyName\":\"und_Expo\",\"line\":1}",
+		Aspect.NE, "{\"curlyName\":\"und_Expo\",\"line\":2}",
+		Aspect.E, "{\"curlyName\":\"und_Expo\",\"line\":3}",
+		Aspect.SE, "{\"curlyName\":\"und_Expo\",\"line\":4}",
+		Aspect.S, "{\"curlyName\":\"und_Expo\",\"line\":5}",
+		Aspect.SW, "{\"curlyName\":\"und_Expo\",\"line\":6}",
+		Aspect.W, "{\"curlyName\":\"und_Expo\",\"line\":7}",
+		Aspect.NW, "{\"curlyName\":\"und_Expo\",\"line\":8}"
+	);
+	
 	/**
 	 * Private constructor.
 	 */
@@ -109,6 +169,65 @@ public class DangerSourceVariantTextController {
 		}
 
 		// TODO replace placeholders with actual values
+		// aspects
+		// elevation
+		// position of the weak layer
+		// recognizability
+		// remote triggering
+		// wetness (missing in XLS)
+		// danger peak
+		// steepness
+		// danger signs
+
+		String result = dangerSourceVariantText.getTextcat();
+		Set<Aspect> aspects = dangerSourceVariant.getAspects();
+		if (aspects != null && !aspects.isEmpty()) {
+			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects1.entrySet()) {
+				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
+					result = result.replaceAll("{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":0},\"Expo1\":{\"curlyName\":\"Expo1\",\"line\":2},\"steilen\":{\"curlyName\":\"steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}", entry.getValue());
+					break;
+				}
+			}
+			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects2.entrySet()) {
+				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
+					result = result.replaceAll("{\"curlyName\":\"Hangart1\",\"line\":2,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}", entry.getValue());
+					break;
+				}
+			}
+			List<Aspect> sortedAspects = Aspect.sortAspects(aspects);
+			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect1.entrySet()) {
+				if (entry.getKey() == sortedAspects.get(0)) {
+					result = result.replaceAll("{\"curlyName\":\"Expo\",\"line\":2}", entry.getValue());
+					break;
+				}
+			}
+			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect2.entrySet()) {
+				if (sortedAspects.size() > 2) {
+					if (entry.getKey() == sortedAspects.get(1)) {
+						result = result.replaceAll("{\"curlyName\":\"Komma_Expo\",\"line\":1}", entry.getValue());
+						break;
+					}
+				} else {
+					if (entry.getKey() == null) {
+						result = result.replaceAll("{\"curlyName\":\"Komma_Expo\",\"line\":1}", entry.getValue());
+						break;
+					}
+				}
+			}
+			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect3.entrySet()) {
+				if (sortedAspects.size() > 1) {
+					if (entry.getKey() == sortedAspects.get(1)) {
+						result = result.replaceAll("{\"curlyName\":\"und_Expo\",\"line\":7}", entry.getValue());
+						break;
+					}
+				} else {
+					if (entry.getKey() == null) {
+						result = result.replaceAll("{\"curlyName\":\"und_Expo\",\"line\":7}", entry.getValue());
+						break;
+					}
+				}
+			}
+		}
 
 		return dangerSourceVariantText.getTextcat();
 	}

@@ -17,9 +17,13 @@
 package eu.albina.model.enumerations;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import eu.albina.util.XMLResourceBundleControl;
 
@@ -122,5 +126,19 @@ public enum Aspect {
 			default:
 				return 0;
 		}
+	}
+
+	public static List<Aspect> sortAspects(Set<Aspect> aspects) {
+		List<Aspect> order = List.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW);
+		List<Aspect> sorted = Stream.concat(order.stream(), order.stream())
+			.dropWhile(aspects::contains)
+			.dropWhile(Predicate.not(aspects::contains))
+			.takeWhile(aspects::contains)
+			.collect(Collectors.toList());
+		if (sorted.size() < 4) {
+			return sorted;
+		}
+		Aspect middleAspect = Stream.of(Aspect.N, Aspect.S, Aspect.W, Aspect.E).filter(aspects::contains).findFirst().orElseThrow();
+		return List.of(sorted.get(0), middleAspect, sorted.get(sorted.size() - 1));
 	}
 }
