@@ -99,6 +99,53 @@ public class DangerSourceVariantTextController {
 		Aspect.NW, "{\"curlyName\":\"und_Expo\",\"line\":8}"
 	);
 	
+	// phrase "Höhe_m"
+	// placeholder: {"curlyName":"Höhe_m","line":0}
+	private static final Map<Integer, String> textcatSubstitutionsElevation1 = Map.ofEntries(
+		Map.entry(400, "{\"curlyName\":\"Höhe_m\",\"line\":0}"),
+		Map.entry(500, "{\"curlyName\":\"Höhe_m\",\"line\":1}"),
+		Map.entry(600, "{\"curlyName\":\"Höhe_m\",\"line\":2}"),
+		Map.entry(700, "{\"curlyName\":\"Höhe_m\",\"line\":3}"),
+		Map.entry(800, "{\"curlyName\":\"Höhe_m\",\"line\":4}"),
+		Map.entry(900, "{\"curlyName\":\"Höhe_m\",\"line\":5}"),
+		Map.entry(1000, "{\"curlyName\":\"Höhe_m\",\"line\":6}"),
+		Map.entry(1100, "{\"curlyName\":\"Höhe_m\",\"line\":7}"),
+		Map.entry(1200, "{\"curlyName\":\"Höhe_m\",\"line\":8}"),
+		Map.entry(1300, "{\"curlyName\":\"Höhe_m\",\"line\":9}"),
+		Map.entry(1400, "{\"curlyName\":\"Höhe_m\",\"line\":10}"),
+		Map.entry(1500, "{\"curlyName\":\"Höhe_m\",\"line\":11}"),
+		Map.entry(1600, "{\"curlyName\":\"Höhe_m\",\"line\":12}"),
+		Map.entry(1700, "{\"curlyName\":\"Höhe_m\",\"line\":13}"),
+		Map.entry(1800, "{\"curlyName\":\"Höhe_m\",\"line\":14}"),
+		Map.entry(1900, "{\"curlyName\":\"Höhe_m\",\"line\":15}"),
+		Map.entry(2000, "{\"curlyName\":\"Höhe_m\",\"line\":16}"),
+		Map.entry(2100, "{\"curlyName\":\"Höhe_m\",\"line\":17}"),
+		Map.entry(2200, "{\"curlyName\":\"Höhe_m\",\"line\":18}"),
+		Map.entry(2300, "{\"curlyName\":\"Höhe_m\",\"line\":19}"),
+		Map.entry(2400, "{\"curlyName\":\"Höhe_m\",\"line\":20}"),
+		Map.entry(2500, "{\"curlyName\":\"Höhe_m\",\"line\":21}"),
+		Map.entry(2600, "{\"curlyName\":\"Höhe_m\",\"line\":22}"),
+		Map.entry(2700, "{\"curlyName\":\"Höhe_m\",\"line\":23}"),
+		Map.entry(2800, "{\"curlyName\":\"Höhe_m\",\"line\":24}"),
+		Map.entry(2900, "{\"curlyName\":\"Höhe_m\",\"line\":25}"),
+		Map.entry(3000, "{\"curlyName\":\"Höhe_m\",\"line\":26}"),
+		Map.entry(3100, "{\"curlyName\":\"Höhe_m\",\"line\":27}"),
+		Map.entry(3200, "{\"curlyName\":\"Höhe_m\",\"line\":28}"),
+		Map.entry(3300, "{\"curlyName\":\"Höhe_m\",\"line\":29}"),
+		Map.entry(3400, "{\"curlyName\":\"Höhe_m\",\"line\":30}"),
+		Map.entry(3500, "{\"curlyName\":\"Höhe_m\",\"line\":31}"),
+		Map.entry(3600, "{\"curlyName\":\"Höhe_m\",\"line\":32}"),
+		Map.entry(3700, "{\"curlyName\":\"Höhe_m\",\"line\":33}"),
+		Map.entry(3800, "{\"curlyName\":\"Höhe_m\",\"line\":34}"),
+		Map.entry(3900, "{\"curlyName\":\"Höhe_m\",\"line\":35}"),
+		Map.entry(4000, "{\"curlyName\":\"Höhe_m\",\"line\":36}"),
+		Map.entry(4100, "{\"curlyName\":\"Höhe_m\",\"line\":37}"),
+		Map.entry(4200, "{\"curlyName\":\"Höhe_m\",\"line\":38}"),
+		Map.entry(4300, "{\"curlyName\":\"Höhe_m\",\"line\":39}"),
+		Map.entry(4400, "{\"curlyName\":\"Höhe_m\",\"line\":40}"),
+		Map.entry(4500, "{\"curlyName\":\"Höhe_m\",\"line\":41}")
+	);
+	
 	/**
 	 * Private constructor.
 	 */
@@ -169,8 +216,6 @@ public class DangerSourceVariantTextController {
 		}
 
 		// TODO replace placeholders with actual values
-		// aspects
-		// elevation
 		// position of the weak layer
 		// recognizability
 		// remote triggering
@@ -178,7 +223,8 @@ public class DangerSourceVariantTextController {
 		// danger peak
 		// steepness
 		// danger signs
-
+		
+		// aspects
 		String result = dangerSourceVariantText.getTextcat();
 		Set<Aspect> aspects = dangerSourceVariant.getAspects();
 		if (aspects != null && !aspects.isEmpty()) {
@@ -225,6 +271,51 @@ public class DangerSourceVariantTextController {
 						result = result.replaceAll("{\"curlyName\":\"und_Expo\",\"line\":7}", entry.getValue());
 						break;
 					}
+				}
+			}
+		}
+		
+		// elevation
+		// phrase: Höhe_Höhenlage
+		if (dangerSourceVariant.getElevationHigh() != null || dangerSourceVariant.getTreelineHigh()) {
+			if (dangerSourceVariant.getElevationHigh() != null) {
+				// below [m]
+				result = result.replaceAll("{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+			} else {
+				// below treeline
+				result = result.replaceAll("{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
+			}
+		} else if (dangerSourceVariant.getElevationLow() != null || dangerSourceVariant.getTreelineLow()) {
+			if (dangerSourceVariant.getElevationLow() != null) {
+				// above [m]
+				result = result.replaceAll("{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+			} else {
+				// above treeline
+				result = result.replaceAll("{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":13}");
+			}
+		}
+		// phrase: Höhenlage3
+		if (dangerSourceVariant.getElevationHigh() != null) {
+			// below [m]
+			result = result.replaceAll("{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+		} else {
+			// below treeline
+			result = result.replaceAll("{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
+		}
+		// phrase: Höhe_m
+		if (dangerSourceVariant.getElevationHigh() != null) {
+			for (Map.Entry<Integer, String> entry : textcatSubstitutionsElevation1.entrySet()) {
+				if (dangerSourceVariant.getElevationHigh() == entry.getKey()) {
+					result = result.replaceAll("{\"curlyName\":\"Höhe_m\",\"line\":0}", entry.getValue());
+					break;
+				}
+			}
+		}
+		if (dangerSourceVariant.getElevationLow() != null) {
+			for (Map.Entry<Integer, String> entry : textcatSubstitutionsElevation1.entrySet()) {
+				if (dangerSourceVariant.getElevationLow() == entry.getKey()) {
+					result = result.replaceAll("{\"curlyName\":\"Höhe_m\",\"line\":0}", entry.getValue());
+					break;
 				}
 			}
 		}
