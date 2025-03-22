@@ -320,6 +320,6 @@ public class DangerSourceVariantTextController {
 			}
 		}
 
-		return dangerSourceVariantText.getTextcat();
+		return result;
 	}
 }
