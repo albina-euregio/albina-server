@@ -22,12 +22,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.auth.oauth2.AccessToken;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.common.base.MoreObjects;
-import com.google.common.net.HttpHeaders;
-import com.google.common.net.MediaType;
-import com.google.gson.Gson;
 import org.caaml.v6.Aspect;
 import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheBulletinCustomData;
@@ -41,9 +35,15 @@ import org.caaml.v6.ValidTimePeriod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.auth.oauth2.AccessToken;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Streams;
+import com.google.common.net.HttpHeaders;
+import com.google.common.net.MediaType;
 import com.google.errorprone.annotations.CheckReturnValue;
+import com.google.gson.Gson;
 
 import eu.albina.caaml.Caaml6;
 import eu.albina.model.enumerations.DangerPattern;

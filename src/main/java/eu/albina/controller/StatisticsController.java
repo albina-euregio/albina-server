@@ -288,6 +288,8 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("RunoutIntoGreen");
 		sb.append(csvDeliminator);
+		sb.append("PenetrateDeepLayers");
+		sb.append(csvDeliminator);
 		sb.append("NaturalRelease");
 		sb.append(csvDeliminator);
 		sb.append("DangerSigns");
@@ -464,6 +466,8 @@ public class StatisticsController {
 		sb.append(dangerSourceVariant.getSlopeGradient() != null ? dangerSourceVariant.getSlopeGradient() : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getRunoutIntoGreen() != null ? dangerSourceVariant.getRunoutIntoGreen() : notAvailableString);
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getPenetrateDeepLayers() != null ? dangerSourceVariant.getPenetrateDeepLayers() : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getNaturalRelease() != null ? dangerSourceVariant.getNaturalRelease() : notAvailableString);
 		sb.append(csvDeliminator);

@@ -162,6 +162,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "RUNOUT_INTO_GREEN")
 	private Boolean runoutIntoGreen;
 
+	@Column(name = "PENETRATE_DEEP_LAYERS")
+	private Boolean penetrateDeepLayers;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURAL_RELEASE")
 	private eu.albina.model.enumerations.Probability naturalRelease;
@@ -184,6 +187,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Lob
 	@Column(name = "COMMENT")
 	private String comment;
+
+	@Lob
+	@Column(name = "TEXTCAT")
+	private String textcat;
 
 	// TODO add uncertainties
 
@@ -327,7 +334,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.updateDate = Instant.parse(jsonObject.optString("updateDate"));
 		this.validFrom = Instant.parse(jsonObject.optString("validFrom"));
 		this.validUntil = Instant.parse(jsonObject.optString("validUntil"));
-		this.dangerSourceVariantStatus = DangerSourceVariantStatus.valueOf(jsonObject.optString("dangerSourceVariantStatus"));
+		this.dangerSourceVariantStatus = DangerSourceVariantStatus
+				.valueOf(jsonObject.optString("dangerSourceVariantStatus"));
 		this.dangerSourceVariantType = DangerSourceVariantType.valueOf(jsonObject.optString("dangerSourceVariantType"));
 		this.ownerRegion = jsonObject.optString("ownerRegion");
 		this.hasDaytimeDependency = jsonObject.optBoolean("hasDaytimeDependency");
@@ -341,8 +349,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.dangerPeak = eu.albina.model.enumerations.Daytime.valueOf(jsonObject.optString("dangerPeak"));
 		this.slopeGradient = eu.albina.model.enumerations.SlopeGradient.valueOf(jsonObject.optString("slopeGradient"));
 		this.runoutIntoGreen = jsonObject.optBoolean("runoutIntoGreen");
+		this.penetrateDeepLayers = jsonObject.optBoolean("penetrateDeepLayers");
 		this.naturalRelease = eu.albina.model.enumerations.Probability.valueOf(jsonObject.optString("naturalRelease"));
 		this.comment = jsonObject.optString("comment");
+		this.textcat = jsonObject.optString("textcat");
 		this.glidingSnowActivity = GlidingSnowActivity.valueOf(jsonObject.optString("glidingSnowActivity"));
 		this.glidingSnowActivityValue = jsonObject.optInt("glidingSnowActivityValue");
 		this.snowHeightUpperLimit = jsonObject.optInt("snowHeightUpperLimit");
@@ -616,6 +626,18 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.runoutIntoGreen = runoutIntoGreen;
 	}
 
+	public Boolean isPenetrateDeepLayers() {
+		return this.penetrateDeepLayers;
+	}
+
+	public Boolean getPenetrateDeepLayers() {
+		return this.penetrateDeepLayers;
+	}
+
+	public void setPenetrateDeepLayers(Boolean penetrateDeepLayers) {
+		this.penetrateDeepLayers = penetrateDeepLayers;
+	}
+
 	public eu.albina.model.enumerations.Probability getNaturalRelease() {
 		return this.naturalRelease;
 	}
@@ -646,6 +668,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getTextcat() {
+		return this.textcat;
+	}
+
+	public void setTextcat(String textcat) {
+		this.textcat = textcat;
 	}
 
 	public GlidingSnowActivity getGlidingSnowActivity() {
@@ -922,6 +952,69 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public Boolean affectsRegion(Region region) {
 		return getRegions().stream().anyMatch(region::affects);
+	}
+
+	public eu.albina.model.enumerations.AvalancheProblem deriveAvalancheProblem() {
+		switch (this.avalancheType) {
+			case slab:
+				switch (this.slabGrainShape) {
+					case PP:
+					case DF:
+					case RG:
+					case FC:
+						if (this.weakLayerPersistent) {
+							switch (this.dangerSpotRecognizability) {
+								case very_easy:
+								case easy:
+									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard:
+								case very_hard:
+									return eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
+								default:
+									return null;
+							}
+						} else {
+							switch (this.dangerSpotRecognizability) {
+								case very_easy:
+								case easy:
+									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard:
+								case very_hard:
+									return eu.albina.model.enumerations.AvalancheProblem.new_snow;
+								default:
+									return null;
+							}
+						}
+					case MF:
+						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+					case MFcr:
+						if (this.weakLayerPersistent) {
+							return eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
+						} else {
+							return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+						}
+					default:
+						return null;
+				}
+			case loose:
+				switch (this.looseSnowGrainShape) {
+					case PP:
+					case DF:
+						return eu.albina.model.enumerations.AvalancheProblem.new_snow;
+					case MF:
+						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+					case FC:
+					case DH:
+					case SH:
+						return null;
+					default:
+						return null;
+				}
+			case glide:
+				return eu.albina.model.enumerations.AvalancheProblem.gliding_snow;
+			default:
+				return null;
+		}
 	}
 
 	public void copy(DangerSourceVariant dangerSourceVariant) {

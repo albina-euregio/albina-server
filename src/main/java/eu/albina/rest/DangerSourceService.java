@@ -41,6 +41,7 @@ import com.google.common.collect.Range;
 
 import eu.albina.controller.DangerSourceController;
 import eu.albina.controller.DangerSourceVariantController;
+import eu.albina.controller.DangerSourceVariantTextController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
@@ -198,6 +199,9 @@ public class DangerSourceService {
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				DangerSourceVariant[] variants = JsonUtil.parseUsingJackson(json, DangerSourceVariant[].class);
+				for (DangerSourceVariant variant : variants) {
+					variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant, DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
+				}
 				DangerSourceVariantController.getInstance().saveDangerSourceVariants(Arrays.asList(variants), instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
@@ -245,6 +249,8 @@ public class DangerSourceService {
 
 		try {
 			DangerSourceVariant variant = JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
+			variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant, DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
+
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
@@ -313,6 +319,8 @@ public class DangerSourceService {
 
 		try {
 			DangerSourceVariant variant = JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
+			variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant, DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
+
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());

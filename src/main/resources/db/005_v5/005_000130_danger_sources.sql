@@ -9,5 +9,5 @@ create table danger_source_variants (AVALANCHE_SIZE_VALUE integer, DANGER_INCREA
 create table danger_sources (CREATION_DATE datetime(6), DESCRIPTION varchar(255), TITLE varchar(255), ID varchar(255) not null, primary key (ID)) engine=InnoDB;
 
 --ALTER TABLE danger_source_variant_danger_signs CHANGE DANGER_SIGN DANGER_SIGN tinyint(4) DEFAULT NULL;
---ALTER TABLE danger_source_variant_terrain_types CHANGE TERRAIN_TYPE TERRAIN_TYPE tinyint(4) DEFAULT NULL;
+--ALTER TABLE danger_source_variant_terrain_types CHANGE TERRAIN_TYPE TERRAIN_TYPE tinyint(5) DEFAULT NULL;
 --ALTER TABLE danger_source_variant_aspects CHANGE ASPECT ASPECT tinyint(4) DEFAULT NULL;

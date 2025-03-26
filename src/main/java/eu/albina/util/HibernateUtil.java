@@ -62,6 +62,8 @@ public class HibernateUtil {
 	public static String queryGetDangerSourceVariantsForTimePeriod = "from DangerSourceVariant as v where v.validFrom between :startDate and :endDate";
 	public static String queryGetDangerSources = "from DangerSource as d where d.creationDate between :startDate and :endDate";
 
+	public static String queryGetDangerSourceVariantTexts = "from DangerSourceVariantText as t where t.avalancheType = :avalancheType";
+
 	public static HibernateUtil getInstance() {
 		if (System.getenv("CI_JOB_NAME") != null) {
 			// https://docs.gitlab.com/ee/ci/variables/#list-all-environment-variables
