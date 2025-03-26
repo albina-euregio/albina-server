@@ -217,10 +217,10 @@ public class DangerSourceVariantTextController {
 		Map.entry("und_Expo", "\\{\"curlyName\":\"und_Expo\",\"line\":7}"),
 		Map.entry("Höhe_Höhenlage", "\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}"),
 		Map.entry("Höhenlage3", "\\{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":\\{\"und_vor_allem\":\\{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}"),
+		Map.entry("Höhe_m", "\\{\"curlyName\":\"Höhe_m\",\"line\":0}"),
 		Map.entry("Schwachschichten", "\\{\"curlyName\":\"Schwachschichten\",\"line\":0}"),
 		Map.entry("Gefahrenstellen02§und_erkennbar.", "\\{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}"),
 		Map.entry("Auslösung07§möglich.", "\\{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1}"),
-		Map.entry("Hangart1", "\\{\"curlyName\":\"Hangart1\",\"line\":9}"),
 		Map.entry("Zeit", "\\{\"curlyName\":\"Zeit\",\"line\":0}"),
 		Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0}"),
 		Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":1}"),
@@ -333,42 +333,46 @@ public class DangerSourceVariantTextController {
 		
 		// POSITION OF THE WEAK LAYER
 		// phrase: Schwachschichten
-		switch (dangerSourceVariant.getWeakLayerPosition()) {
-			case upper:
-				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":8}");
-				break;
-			case lower:
-				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":6}");
-				break;
-			case middle:
-				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
-				break;
-			case ground:
-				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":5}");
-				break;
-			default:
-				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
-				break;
+		if (dangerSourceVariant.getWeakLayerPosition() != null) {
+			switch (dangerSourceVariant.getWeakLayerPosition()) {
+				case upper:
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":8}");
+					break;
+				case lower:
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":6}");
+					break;
+				case middle:
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
+					break;
+				case ground:
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":5}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
+					break;
+			}
 		}
 
 		// RECOGNIZABILITY
 		// phrase: Gefahrenstellen02§und_erkennbar.
-		switch (dangerSourceVariant.getDangerSpotRecognizability()) {
-			case very_easy:
-				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
-				break;
-			case easy:
-				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
-				break;
-			case hard:
-				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":2}");
-				break;
-			case very_hard:
-				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":2}");
-				break;
-			default:
-				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":0,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
-				break;
+		if (dangerSourceVariant.getDangerSpotRecognizability() != null) {
+			switch (dangerSourceVariant.getDangerSpotRecognizability()) {
+				case very_easy:
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
+					break;
+				case easy:
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
+					break;
+				case hard:
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":2}");
+					break;
+				case very_hard:
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":2}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":0,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
+					break;
+			}
 		}
 
 		// TODO replace placeholders with actual values
