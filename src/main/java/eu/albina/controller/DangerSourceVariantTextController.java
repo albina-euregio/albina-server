@@ -206,21 +206,34 @@ public class DangerSourceVariantTextController {
 		}
 	}
 
+	// map of placeholder texts
+	//   key: phrase name
+	//   value: placeholder regex
+	private static final Map<String, String> textcatPlaceholder = Map.ofEntries(
+		Map.entry("Gefahrenstellen05§an_Expositionen", "\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0},\"Expo1\":\\{\"curlyName\":\"Expo1\",\"line\":2},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":1},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7}}}"),
+		Map.entry("Hangart1", "\\{\"curlyName\":\"Hangart1\",\"line\":2,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7}}}"),
+		Map.entry("Expo", "\\{\"curlyName\":\"Expo\",\"line\":2}"),
+		Map.entry("Komma_Expo", "\\{\"curlyName\":\"Komma_Expo\",\"line\":1}"),
+		Map.entry("und_Expo", "\\{\"curlyName\":\"und_Expo\",\"line\":7}"),
+		Map.entry("Höhe_Höhenlage", "\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}"),
+		Map.entry("Höhenlage3", "\\{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":\\{\"und_vor_allem\":\\{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}"),
+		Map.entry("Schwachschichten", "\\{\"curlyName\":\"Schwachschichten\",\"line\":0}"),
+		Map.entry("Gefahrenstellen02§und_erkennbar.", "\\{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}"),
+		Map.entry("Auslösung07§möglich.", "\\{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1}"),
+		Map.entry("Hangart1", "\\{\"curlyName\":\"Hangart1\",\"line\":9}"),
+		Map.entry("Zeit", "\\{\"curlyName\":\"Zeit\",\"line\":0}"),
+		Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0}"),
+		Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":1}"),
+		Map.entry("Alarmzeichen", "\\{\"curlyName\":\"Alarmzeichen\",\"line\":0}"),
+		Map.entry("Triebschnee_Beschreibung1", "\\{\"curlyName\":\"Triebschnee_Beschreibung1\",\"line\":22}")
+	);
+
 	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant, DangerSourceVariantText dangerSourceVariantText) {
 		if (dangerSourceVariantText == null) {
 			logger.warn("No danger source variant text found!");
 			return "";
 		}
 
-		// TODO replace placeholders with actual values
-		// position of the weak layer
-		// recognizability
-		// remote triggering
-		// wetness (missing in XLS)
-		// danger peak
-		// steepness
-		// danger signs
-		
 		// ASPECTS
 		String result = dangerSourceVariantText.getTextcat();
 		Set<Aspect> aspects = dangerSourceVariant.getAspects();
@@ -228,14 +241,14 @@ public class DangerSourceVariantTextController {
 			// phrase: Gefahrenstellen05§an_Expositionen
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects1.entrySet()) {
 				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
-					result = result.replaceAll("\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0},\"Expo1\":\\{\"curlyName\":\"Expo1\",\"line\":2},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":1},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7}}}", entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen"), entry.getValue());
 					break;
 				}
 			}
 			// phrase: Hangart1
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects2.entrySet()) {
 				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
-					result = result.replaceAll("\\{\"curlyName\":\"Hangart1\",\"line\":2,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7}}}", entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Hangart1"), entry.getValue());
 					break;
 				}
 			}
@@ -243,7 +256,7 @@ public class DangerSourceVariantTextController {
 			List<Aspect> sortedAspects = Aspect.sortAspects(aspects);
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect1.entrySet()) {
 				if (entry.getKey() == sortedAspects.get(0)) {
-					result = result.replaceAll("\\{\"curlyName\":\"Expo\",\"line\":2}", entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Expo"), entry.getValue());
 					break;
 				}
 			}
@@ -251,11 +264,11 @@ public class DangerSourceVariantTextController {
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect2.entrySet()) {
 				if (sortedAspects.size() > 2) {
 					if (entry.getKey() == sortedAspects.get(1)) {
-						result = result.replaceAll("\\{\"curlyName\":\"Komma_Expo\",\"line\":1}", entry.getValue());
+						result = result.replaceAll(textcatPlaceholder.get("Komma_Expo"), entry.getValue());
 						break;
 					}
 				} else {
-					result = result.replaceAll("\\{\"curlyName\":\"Komma_Expo\",\"line\":1}", "{\"curlyName\":\"Komma_Expo\",\"line\":0}");
+					result = result.replaceAll(textcatPlaceholder.get("Komma_Expo"), "{\"curlyName\":\"Komma_Expo\",\"line\":0}");
 					break;
 				}
 			}
@@ -263,11 +276,11 @@ public class DangerSourceVariantTextController {
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect3.entrySet()) {
 				if (sortedAspects.size() > 1) {
 					if (entry.getKey() == sortedAspects.get(1)) {
-						result = result.replaceAll("\\{\"curlyName\":\"und_Expo\",\"line\":7}", entry.getValue());
+						result = result.replaceAll(textcatPlaceholder.get("und_Expo"), entry.getValue());
 						break;
 					}
 				} else {
-					result = result.replaceAll("\\{\"curlyName\":\"und_Expo\",\"line\":7}", "{\"curlyName\":\"und_Expo\",\"line\":0}");
+					result = result.replaceAll(textcatPlaceholder.get("und_Expo"), "{\"curlyName\":\"und_Expo\",\"line\":0}");
 					break;
 				}
 			}
@@ -278,33 +291,33 @@ public class DangerSourceVariantTextController {
 		if (dangerSourceVariant.getElevationHigh() != null || dangerSourceVariant.getTreelineHigh()) {
 			if (dangerSourceVariant.getElevationHigh() != null) {
 				// below [m]
-				result = result.replaceAll("\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 			} else {
 				// below treeline
-				result = result.replaceAll("\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
 			}
 		} else if (dangerSourceVariant.getElevationLow() != null || dangerSourceVariant.getTreelineLow()) {
 			if (dangerSourceVariant.getElevationLow() != null) {
 				// above [m]
-				result = result.replaceAll("\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 			} else {
 				// above treeline
-				result = result.replaceAll("\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":13}");
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":13}");
 			}
 		}
 		// phrase: Höhenlage3
 		if (dangerSourceVariant.getElevationHigh() != null) {
 			// below [m]
-			result = result.replaceAll("\\{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":\\{\"und_vor_allem\":\\{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
-		} else {
-			// below treeline
-			result = result.replaceAll("\\{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":\\{\"und_vor_allem\":\\{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}", "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
+			result = result.replaceAll(textcatPlaceholder.get("Höhenlage3"), "{\"curlyName\":\"Höhenlage3\",\"line\":2,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+		} else if (dangerSourceVariant.getElevationLow() != null) {
+			// above [m]
+			result = result.replaceAll(textcatPlaceholder.get("Höhenlage3"), "{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 		}
 		// phrase: Höhe_m
 		if (dangerSourceVariant.getElevationHigh() != null) {
 			for (Map.Entry<Integer, String> entry : textcatSubstitutionsElevation1.entrySet()) {
 				if (dangerSourceVariant.getElevationHigh() == entry.getKey().intValue()) {
-					result = result.replaceAll("\\{\"curlyName\":\"Höhe_m\",\"line\":0}", entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Höhe_m"), entry.getValue());
 					break;
 				}
 			}
@@ -312,12 +325,59 @@ public class DangerSourceVariantTextController {
 		if (dangerSourceVariant.getElevationLow() != null) {
 			for (Map.Entry<Integer, String> entry : textcatSubstitutionsElevation1.entrySet()) {
 				if (dangerSourceVariant.getElevationLow() == entry.getKey().intValue()) {
-					result = result.replaceAll("\\{\"curlyName\":\"Höhe_m\",\"line\":0}", entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Höhe_m"), entry.getValue());
 					break;
 				}
 			}
 		}
+		
+		// POSITION OF THE WEAK LAYER
+		// phrase: Schwachschichten
+		switch (dangerSourceVariant.getWeakLayerPosition()) {
+			case upper:
+				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":8}");
+				break;
+			case lower:
+				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":6}");
+				break;
+			case middle:
+				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
+				break;
+			case ground:
+				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":5}");
+				break;
+			default:
+				result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
+				break;
+		}
 
+		// RECOGNIZABILITY
+		// phrase: Gefahrenstellen02§und_erkennbar.
+		switch (dangerSourceVariant.getDangerSpotRecognizability()) {
+			case very_easy:
+				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
+				break;
+			case easy:
+				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
+				break;
+			case hard:
+				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":2}");
+				break;
+			case very_hard:
+				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":2}");
+				break;
+			default:
+				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":0,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
+				break;
+		}
+
+		// TODO replace placeholders with actual values
+		// REMOTE TRIGGERING
+		// WETNESS (missing in XLS)
+		// DANGER PEAK
+		// STEEPNESS
+		// DANGER SIGNS
+		
 		return result;
 	}
 }
