@@ -46,6 +46,7 @@ import eu.albina.model.enumerations.Distribution;
 import eu.albina.model.enumerations.GlidingSnowActivity;
 import eu.albina.model.enumerations.GrainShape;
 import eu.albina.model.enumerations.HandHardness;
+import eu.albina.model.enumerations.Probability;
 import eu.albina.model.enumerations.Recognizability;
 import eu.albina.model.enumerations.SnowpackPosition;
 import eu.albina.model.enumerations.Tendency;
@@ -167,7 +168,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "NATURAL_RELEASE")
-	private eu.albina.model.enumerations.Probability naturalRelease;
+	private Probability naturalRelease;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
@@ -297,8 +298,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "DANGER_SPOT_RECOGNIZABILITY")
 	private Recognizability dangerSpotRecognizability;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "REMOTE_TRIGGERING")
-	private Boolean remoteTriggering;
+	private Probability remoteTriggering;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
@@ -380,7 +382,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.weakLayerCreation = CreationProcess.valueOf(jsonObject.optString("weakLayerCreation"));
 		this.weakLayerDistribution = Distribution.valueOf(jsonObject.optString("weakLayerDistribution"));
 		this.dangerSpotRecognizability = Recognizability.valueOf(jsonObject.optString("dangerSpotRecognizability"));
-		this.remoteTriggering = jsonObject.optBoolean("remoteTriggering");
+		this.remoteTriggering = Probability.valueOf(jsonObject.optString("remoteTriggering"));
 		this.looseSnowGrainShape = GrainShape.valueOf(jsonObject.optString("looseSnowGrainShape"));
 		this.looseSnowMoisture = Wetness.valueOf(jsonObject.optString("looseSnowMoisture"));
 
@@ -914,15 +916,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.dangerSpotRecognizability = dangerSpotRecognizability;
 	}
 
-	public Boolean isRemoteTriggering() {
+	public Probability getRemoteTriggering() {
 		return this.remoteTriggering;
 	}
 
-	public Boolean getRemoteTriggering() {
-		return this.remoteTriggering;
-	}
-
-	public void setRemoteTriggering(Boolean remoteTriggering) {
+	public void setRemoteTriggering(Probability remoteTriggering) {
 		this.remoteTriggering = remoteTriggering;
 	}
 
