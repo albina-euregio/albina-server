@@ -19,7 +19,7 @@
     "naturalRelease": "likely",
     "originalDangerSourceVariantId": "originalId",
     "ownerRegion": "AT-07",
-    "remoteTriggering": true,
+    "remoteTriggering": "likely",
     "runoutIntoGreen": true,
     "slabDistribution": "widespread",
     "slabEnergyTransferPotential": "high",
