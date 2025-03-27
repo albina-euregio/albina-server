@@ -16,31 +16,13 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.PublicationController;
-import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
-import eu.albina.controller.UserController;
-import eu.albina.controller.publication.MultichannelMessage;
-import eu.albina.exception.AlbinaException;
-import eu.albina.jobs.PublicationJob;
-import eu.albina.jobs.UpdateJob;
-import eu.albina.model.AbstractPersistentObject;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
-import eu.albina.model.User;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
-import eu.albina.util.AlbinaUtil;
-import eu.albina.util.PdfUtil;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -51,16 +33,29 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.time.Clock;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
+import eu.albina.controller.UserController;
+import eu.albina.controller.publication.MultichannelMessage;
+import eu.albina.exception.AlbinaException;
+import eu.albina.jobs.PublicationJob;
+import eu.albina.jobs.UpdateJob;
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
+import eu.albina.model.User;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.Role;
+import eu.albina.rest.filter.Secured;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/bulletins/publish")
 @Tag(name = "bulletins/publish")
@@ -141,6 +136,7 @@ public class AvalancheBulletinPublishService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response publishAllBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@QueryParam("change") boolean change,
 			@Context SecurityContext securityContext) {
 		logger.debug("POST publish all bulletins");
 
@@ -156,6 +152,11 @@ public class AvalancheBulletinPublishService {
 					@Override
 					protected Instant getStartDate(Clock clock) {
 						return startDate;
+					}
+
+					@Override
+					protected boolean isChange() {
+						return change;
 					}
 				}.execute(null);
 				}, "publishAllBulletins").start();
