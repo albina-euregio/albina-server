@@ -27,6 +27,8 @@ import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.DangerSourceVariantText;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
+import eu.albina.model.enumerations.DangerSign;
+import eu.albina.model.enumerations.TerrainType;
 import eu.albina.util.HibernateUtil;
 
 
@@ -50,12 +52,28 @@ public class DangerSourceVariantTextController {
 		Set.of(Aspect.SE, Aspect.S, Aspect.SW), "{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":4,\"args\":{\"vor_allem_an\":{\"curlyName\":\"vor_allem_an\",\"line\":0},\"steilen\":{\"curlyName\":\"steilen\",\"line\":1}}}"
 	);
 
+	// phrase "es_warum_Ort_wann"
+	// placeholder: {"curlyName":"es_warum_Ort_wann","line":27,"args":{"an_steilen":{"curlyName":"an_steilen","line":1},"vor_allem":{"curlyName":"vor_allem","line":0},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":1},"und_Expo":{"curlyName":"und_Expo","line":7}}}
+	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects2 = Map.of(
+		Set.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW), "{\"es_warum_Ort_wann\":{\"curlyName\":\"es_warum_Ort_wann\",\"line\":32}",
+		Set.of(Aspect.NW, Aspect.N, Aspect.NE), "{\"curlyName\":\"es_warum_Ort_wann\",\"line\":28,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1}}}",
+		Set.of(Aspect.SE, Aspect.S, Aspect.SW), "{\"curlyName\":\"es_warum_Ort_wann\",\"line\":29,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1}}}"
+	);
+
 	// phrase "Hangart1"
 	// placeholder: {"curlyName":"Hangart1","line":2,"args":{"an_steilen":{"curlyName":"an_steilen","line":1},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":1},"und_Expo":{"curlyName":"und_Expo","line":7}}}
-	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects2 = Map.of(
+	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects3 = Map.of(
 		Set.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW), "{\"curlyName\":\"Hangart1\",\"line\":7}",
 		Set.of(Aspect.NW, Aspect.N, Aspect.NE), "{\"curlyName\":\"Hangart1\",\"line\":3,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1}}}",
 		Set.of(Aspect.SE, Aspect.S, Aspect.SW), "{\"curlyName\":\"Hangart1\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1}}}"
+	);
+
+	// phrase "Hangart_Höhe2"
+	// placeholder: {"curlyName":"Hangart_Höhe2","line":2,"args":{"an_steilen":{"curlyName":"an_steilen","line":1},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":1},"und_Expo":{"curlyName":"und_Expo","line":7}}}
+	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects4 = Map.of(
+		Set.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":1,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(Aspect.NW, Aspect.N, Aspect.NE), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":3,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(Aspect.SE, Aspect.S, Aspect.SW), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}"
 	);
 
 	// phrase "Expo"
@@ -144,6 +162,37 @@ public class DangerSourceVariantTextController {
 		Map.entry(4500, "{\"curlyName\":\"Höhe_m\",\"line\":41}")
 	);
 	
+	// phrase "Alarmzeichen"
+	// placeholder: {"curlyName":"Alarmzeichen","line":0}, {"curlyName":"Altschnee03§sowie_Alarmzeichen","line":0,"args":{"Alarmzeichen2":{"curlyName":"Alarmzeichen2","line":0}}}
+	private static final Map<Set<DangerSign>, String> textcatSubstitutionsDangerSigns = Map.of(
+		Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks, DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(DangerSign.whumpfing, DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(DangerSign.shooting_cracks, DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(DangerSign.whumpfing), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":1,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(DangerSign.shooting_cracks), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":3,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+		Set.of(DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}"
+	);
+
+	// phrase "Hangart1"
+	// placeholder: {"curlyName":"Hangart1","line":9}, {"curlyName":"Dies02§sowie","line":0}, {"curlyName":"Hangart1°1","line":0}
+	private static final Map<Set<TerrainType>, String> textcatSubstitutionsTerrainTypes = Map.ofEntries(
+		Map.entry(Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack, TerrainType.gullies_and_bowls, TerrainType.little_used_backcountry_terrain), "{\"curlyName\":\"Hangart1\",\"line\":23}, {\"curlyName\":\"Dies02§sowie\",\"line\":1}, {\"curlyName\":\"Hangart1°1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}"),
+		Map.entry(Set.of(TerrainType.adjacent_to_ridgelines, TerrainType.gullies_and_bowls), "{\"curlyName\":\"Hangart1\",\"line\":15}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.adjacent_to_ridgelines, TerrainType.pass_areas), "{\"curlyName\":\"Hangart1\",\"line\":14}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.gullies_and_bowls, TerrainType.behind_abrupt_changes_in_the_terrain), "{\"curlyName\":\"Hangart1\",\"line\":19}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.gullies_and_bowls, TerrainType.transitions_from_a_shallow_to_a_deep_snowpack), "{\"curlyName\":\"Hangart1\",\"line\":23}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack, TerrainType.little_used_backcountry_terrain), "{\"curlyName\":\"Hangart1\",\"line\":22}, {\"curlyName\":\"Dies02§sowie\",\"line\":1}, {\"curlyName\":\"Hangart1°1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}"),
+		Map.entry(Set.of(TerrainType.base_of_rock_walls, TerrainType.behind_abrupt_changes_in_the_terrain), "{\"curlyName\":\"Hangart1\",\"line\":18}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.adjacent_to_ridgelines), "{\"curlyName\":\"Hangart1\",\"line\":9}, , {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.distant_from_ridgelines), "{\"curlyName\":\"Hangart1\",\"line\":12}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.pass_areas), "{\"curlyName\":\"Hangart1\",\"line\":13}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.gullies_and_bowls), "{\"curlyName\":\"Hangart1\",\"line\":16}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.base_of_rock_walls), "{\"curlyName\":\"Hangart1\",\"line\":17}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.little_used_backcountry_terrain), "{\"curlyName\":\"Hangart1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+		Map.entry(Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack), "{\"curlyName\":\"Hangart1\",\"line\":22}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}")
+	);
+
 	/**
 	 * Private constructor.
 	 */
@@ -210,22 +259,28 @@ public class DangerSourceVariantTextController {
 	//   key: phrase name
 	//   value: placeholder regex
 	private static final Map<String, String> textcatPlaceholder = Map.ofEntries(
-		Map.entry("Gefahrenstellen05§an_Expositionen", "\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0},\"Expo1\":\\{\"curlyName\":\"Expo1\",\"line\":2},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":1},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7}}}"),
-		Map.entry("Hangart1", "\\{\"curlyName\":\"Hangart1\",\"line\":2,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7}}}"),
-		Map.entry("Expo", "\\{\"curlyName\":\"Expo\",\"line\":2}"),
-		Map.entry("Komma_Expo", "\\{\"curlyName\":\"Komma_Expo\",\"line\":1}"),
-		Map.entry("und_Expo", "\\{\"curlyName\":\"und_Expo\",\"line\":7}"),
-		Map.entry("Höhe_Höhenlage", "\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}"),
-		Map.entry("Höhenlage3", "\\{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":\\{\"und_vor_allem\":\\{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0}}}"),
-		Map.entry("Höhe_m", "\\{\"curlyName\":\"Höhe_m\",\"line\":0}"),
-		Map.entry("Schwachschichten", "\\{\"curlyName\":\"Schwachschichten\",\"line\":0}"),
-		Map.entry("Gefahrenstellen02§und_erkennbar.", "\\{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}"),
-		Map.entry("Auslösung07§möglich.", "\\{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1}"),
-		Map.entry("Zeit", "\\{\"curlyName\":\"Zeit\",\"line\":0}"),
-		Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0}"),
-		Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":1}"),
-		Map.entry("Alarmzeichen", "\\{\"curlyName\":\"Alarmzeichen\",\"line\":0}"),
-		Map.entry("Triebschnee_Beschreibung1", "\\{\"curlyName\":\"Triebschnee_Beschreibung1\",\"line\":22}")
+		Map.entry("Gefahrenstellen05§an_Expositionen", "\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0\\},\"Expo1\":\\{\"curlyName\":\"Expo1\",\"line\":2\\},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":1\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7\\}\\}\\}"),
+		Map.entry("es_warum_Ort_wann", "\\{\"curlyName\":\"es_warum_Ort_wann\",\"line\":27,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":1\\},\"vor_allem\":\\{\"curlyName\":\"vor_allem\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7\\}\\}\\}"),
+		Map.entry("Hangart1", "\\{\"curlyName\":\"Hangart1\",\"line\":2,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":1\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7\\}\\}\\}"),
+		Map.entry("Hangart_Höhe2", "\\{\"curlyName\":\"Hangart_Höhe2\",\"line\":2,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":1\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":1\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":7\\}\\}\\}"),
+		Map.entry("Expo", "\\{\"curlyName\":\"Expo\",\"line\":2\\}"),
+		Map.entry("Komma_Expo", "\\{\"curlyName\":\"Komma_Expo\",\"line\":1\\}"),
+		Map.entry("und_Expo", "\\{\"curlyName\":\"und_Expo\",\"line\":7\\}"),
+		Map.entry("Höhe_Höhenlage", "\\{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0\\}\\}\\}"),
+		Map.entry("Höhenlage3", "\\{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":\\{\"und_vor_allem\":\\{\"curlyName\":\"und_vor_allem\",\"line\":0\\},\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0\\}\\}\\}"),
+		Map.entry("oberhalb_von_Höhe_optional", "\\{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":\\{\"Höhe_m\":\\{\"curlyName\":\"Höhe_m\",\"line\":0\\}\\}\\}"),
+		Map.entry("Höhe_m", "\\{\"curlyName\":\"Höhe_m\",\"line\":0\\}"),
+		Map.entry("Schwachschichten", "\\{\"curlyName\":\"Schwachschichten\",\"line\":0\\}"),
+		Map.entry("Gefahrenstellen02§und_erkennbar.", "\\{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":\\{\"aber_und\":\\{\"curlyName\":\"aber_und\",\"line\":1\\}\\}\\}"),
+		Map.entry("Auslösung07§möglich.", "\\{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1\\}"),
+		Map.entry("Geländeformen", "\\{\"curlyName\":\"Hangart1\",\"line\":9\\}, \\{\"curlyName\":\"Dies02§sowie\",\"line\":0\\}, \\{\"curlyName\":\"Hangart1°1\",\"line\":0\\}"),
+		Map.entry("trockene", "\\{\"curlyName\":\"Lawinenart5\",\"line\":13\\}"),
+		Map.entry("Zeit", "\\{\"curlyName\":\"Zeit\",\"line\":0\\}"),
+		Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0\\}"),
+		Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":1\\}"),
+		Map.entry("steilen", "\\{\"curlyName\":\"steilen\",\"line\":1\\}"),
+		Map.entry("möglich", "\\{\"curlyName\":\"wieviele\",\"line\":0\\}, \\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
+		Map.entry("Alarmzeichen", "\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\}, \\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":\\{\"Alarmzeichen2\":\\{\"curlyName\":\"Alarmzeichen2\",\"line\":0\\}\\}\\}")
 	);
 
 	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant, DangerSourceVariantText dangerSourceVariantText) {
@@ -245,10 +300,24 @@ public class DangerSourceVariantTextController {
 					break;
 				}
 			}
-			// phrase: Hangart1
+			// phrase: es_warum_Ort_wann
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects2.entrySet()) {
 				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
+					result = result.replaceAll(textcatPlaceholder.get("es_warum_Ort_wann"), entry.getValue());
+					break;
+				}
+			}
+			// phrase: Hangart1
+			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects3.entrySet()) {
+				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
 					result = result.replaceAll(textcatPlaceholder.get("Hangart1"), entry.getValue());
+					break;
+				}
+			}
+			// phrase: Hangart_Höhe2
+			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects4.entrySet()) {
+				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
+					result = result.replaceAll(textcatPlaceholder.get("Hangart_Höhe2"), entry.getValue());
 					break;
 				}
 			}
@@ -304,7 +373,11 @@ public class DangerSourceVariantTextController {
 				// above treeline
 				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":13}");
 			}
+		} else {
+			// no elevation information
+			result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":0}");
 		}
+
 		// phrase: Höhenlage3
 		if (dangerSourceVariant.getElevationHigh() != null) {
 			// below [m]
@@ -312,7 +385,23 @@ public class DangerSourceVariantTextController {
 		} else if (dangerSourceVariant.getElevationLow() != null) {
 			// above [m]
 			result = result.replaceAll(textcatPlaceholder.get("Höhenlage3"), "{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+		} else {
+			// no elevation information
+			result = result.replaceAll(textcatPlaceholder.get("Höhenlage3"), "{\"curlyName\":\"Höhenlage3\",\"line\":0}");
 		}
+		
+		// phrase: oberhalb_von_Höhe_optional
+		if (dangerSourceVariant.getElevationHigh() != null) {
+			// below [m]
+			result = result.replaceAll(textcatPlaceholder.get("oberhalb_von_Höhe_optional"), "{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+		} else if (dangerSourceVariant.getElevationLow() != null) {
+			// above [m]
+			result = result.replaceAll(textcatPlaceholder.get("oberhalb_von_Höhe_optional"), "{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
+		} else {
+			// no elevation information
+			result = result.replaceAll(textcatPlaceholder.get("oberhalb_von_Höhe_optional"), "{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":0}");
+		}
+
 		// phrase: Höhe_m
 		if (dangerSourceVariant.getElevationHigh() != null) {
 			for (Map.Entry<Integer, String> entry : textcatSubstitutionsElevation1.entrySet()) {
@@ -351,6 +440,8 @@ public class DangerSourceVariantTextController {
 					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
 					break;
 			}
+		} else {
+			result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"), "{\"curlyName\":\"Schwachschichten\",\"line\":0}");
 		}
 
 		// RECOGNIZABILITY
@@ -373,14 +464,192 @@ public class DangerSourceVariantTextController {
 					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":0,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");
 					break;
 			}
+		} else {
+			result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":0,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":1}}}");			
 		}
 
-		// TODO replace placeholders with actual values
 		// REMOTE TRIGGERING
-		// WETNESS (missing in XLS)
+		// phrase: Auslösung07§möglich.
+		if (dangerSourceVariant.getRemoteTriggering() != null) {
+			switch (dangerSourceVariant.getRemoteTriggering()) {
+				case likely:
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."), "{\"curlyName\":\"Auslösung07§möglich.\",\"line\":2}");
+					break;
+				case possible:
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."), "{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1}");
+					break;
+				case unlikely:
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."), "{\"curlyName\":\"Auslösung07§möglich.\",\"line\":0}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."), "{\"curlyName\":\"Auslösung07§möglich.\",\"line\":0}");
+					break;
+			}
+		}
+
+		// TERRAIN TYPES
+		// phrase: Hangart1
+		Set<TerrainType> terrainTypes = dangerSourceVariant.getTerrainTypes();
+		for (Map.Entry<Set<TerrainType>, String> entry : textcatSubstitutionsTerrainTypes.entrySet()) {
+			if (entry.getKey().size() == terrainTypes.size() && entry.getKey().containsAll(terrainTypes)) {
+				result = result.replaceAll(textcatPlaceholder.get("Geländeformen"), entry.getValue());
+				break;
+			}
+		}
+
+		// WETNESS
+		// phrase: {trockene}
+		if (dangerSourceVariant.getLooseSnowMoisture() != null) {
+			switch (dangerSourceVariant.getLooseSnowMoisture()) {
+				case dry:
+					result = result.replaceAll(textcatPlaceholder.get("trockene"), "{\"curlyName\":\"Lawinenart5\",\"line\":13}");
+					break;
+				case moist:
+					result = result.replaceAll(textcatPlaceholder.get("trockene"), "{\"curlyName\":\"Lawinenart5\",\"line\":14}");
+					break;
+				case wet:
+					result = result.replaceAll(textcatPlaceholder.get("trockene"), "{\"curlyName\":\"Lawinenart5\",\"line\":15}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("trockene"), "{\"curlyName\":\"Lawinenart5\",\"line\":12}");
+					break;
+			}
+		} else {
+			result = result.replaceAll(textcatPlaceholder.get("trockene"), "{\"curlyName\":\"Lawinenart5\",\"line\":12}");
+		}
+
 		// DANGER PEAK
+		// phrase: Zeit
+		if (dangerSourceVariant.getDangerPeak() != null) {
+			switch (dangerSourceVariant.getDangerPeak()) {
+				case evening:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":16}");
+					break;
+				case morning:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":8}");
+					break;
+				case forenoon:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":10");
+					break;
+				case afternoon:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":13}");
+					break;
+				case first_night_half:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":3}");
+					break;
+				case second_night_half:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":4}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":0}");
+					break;
+			}
+		}
+
+		// phrase: Zeit_optional1
+		if (dangerSourceVariant.getDangerPeak() != null) {
+			switch (dangerSourceVariant.getDangerPeak()) {
+				case evening:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":18}");
+					break;
+				case morning:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":10}");
+					break;
+				case forenoon:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":12}");
+					break;
+				case afternoon:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":17}");
+					break;
+				case first_night_half:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":5}");
+					break;
+				case second_night_half:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":6}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
+					break;
+			}
+		} else {
+			result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"), "{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
+		}
+
 		// STEEPNESS
+		// phrase: an_steilen
+		if (dangerSourceVariant.getSlopeGradient() != null) {
+			switch (dangerSourceVariant.getSlopeGradient()) {
+				case moderately_steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"an_steilen\",\"line\":0}");
+					break;
+				case steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"an_steilen\",\"line\":1}");
+					break;
+				case very_steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"an_steilen\",\"line\":2}");
+					break;
+				case extremely_steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"an_steilen\",\"line\":3}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"an_steilen\",\"line\":0}");
+					break;
+			}
+		} else {
+			result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"an_steilen\",\"line\":0}");
+		}
+
+		// phrase: steilen
+		if (dangerSourceVariant.getSlopeGradient() != null) {
+			switch (dangerSourceVariant.getSlopeGradient()) {
+				case moderately_steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
+					break;
+				case steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":1}");
+					break;
+				case very_steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":2}");
+					break;
+				case extremely_steep:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":3}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
+					break;
+			}
+		} else {
+			result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
+		}
+
+		// NATURAL AVALANCHES
+		// phrase: möglich
+		if (dangerSourceVariant.getNaturalRelease() != null) {
+			switch (dangerSourceVariant.getNaturalRelease()) {
+				case likely:
+					result = result.replaceAll(textcatPlaceholder.get("möglich"), "{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
+					break;
+				case possible:
+					result = result.replaceAll(textcatPlaceholder.get("möglich."), "{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+					break;
+				case unlikely:
+					result = result.replaceAll(textcatPlaceholder.get("möglich."), "{\"curlyName\":\"wieviele\",\"line\":5}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+					break;
+				default:
+					result = result.replaceAll(textcatPlaceholder.get("möglich."), "{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+					break;
+			}
+		}
+
 		// DANGER SIGNS
+		// phrase: Alarmzeichen
+		Set<DangerSign> dangerSigns = dangerSourceVariant.getDangerSigns();
+		for (Map.Entry<Set<DangerSign>, String> entry : textcatSubstitutionsDangerSigns.entrySet()) {
+			if (entry.getKey().size() == dangerSigns.size() && entry.getKey().containsAll(dangerSigns)) {
+				result = result.replaceAll(textcatPlaceholder.get("Alarmzeichen"), entry.getValue());
+				break;
+			}
+		}
 		
 		return result;
 	}
