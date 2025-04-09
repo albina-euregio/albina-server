@@ -2,6 +2,16 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.10] - 2025-04-09
+
+### Danger Sources
+
+- Create textcat from danger sources
+
+### Bulletins
+
+- Allow to publish all regions without messages (admin)
+
 ## [7.1.9] - 2025-03-18
 
 ### Danger Sources
