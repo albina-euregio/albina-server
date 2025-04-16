@@ -155,6 +155,7 @@ public class AvalancheBulletinService {
 			List<AvalancheBulletin> bulletins = HibernateUtil.getInstance().runTransaction(entityManager ->
 				AvalancheBulletinController.getInstance().getBulletins(startDate, endDate, regions, entityManager));
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
+			bulletins.forEach(b -> b.setPublishedRegions(b.getPublishedAndSavedRegions()));
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, ServerInstanceController.getInstance().getLocalServerInstance());
 			avalancheReport.setStatus(BulletinStatus.draft);
 			return makeCAAML(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
