@@ -73,14 +73,7 @@ public class PublicationJob implements org.quartz.Job {
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
 
-	/**
-	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
-	 * on the current settings.
-	 *
-	 * @param arg0
-	 */
-	@Override
-	public void execute(JobExecutionContext arg0) {
+	private List<Runnable> execute0() {
 		PublicationController publicationController = PublicationController.getInstance();
 		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
 		AvalancheReportController avalancheReportController = AvalancheReportController.getInstance();
@@ -88,7 +81,7 @@ public class PublicationJob implements org.quartz.Job {
 		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		if (!isEnabled(serverInstance)) {
-			return;
+			return null;
 		}
 		Clock system = Clock.system(AlbinaUtil.localZone());
 		Instant startDate = getStartDate(system);
@@ -104,7 +97,7 @@ public class PublicationJob implements org.quartz.Job {
 			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");
-			return;
+			return null;
 		}
 		User user = getUser(serverInstance);
 
@@ -120,7 +113,7 @@ public class PublicationJob implements org.quartz.Job {
 		}
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
-			return;
+			return null;
 		}
 
 		publishedBulletins = publishedBulletins.stream()
@@ -129,7 +122,7 @@ public class PublicationJob implements org.quartz.Job {
 			.collect(Collectors.toList());
 		if (publishedBulletins.isEmpty()) {
 			logger.info("No published regions found in bulletins.");
-			return;
+			return null;
 		}
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		String validityDateString = AvalancheReport.of(publishedBulletins, null, serverInstance).getValidityDateString();
@@ -215,6 +208,25 @@ public class PublicationJob implements org.quartz.Job {
 		} catch (IOException e) {
 			logger.error("Failed to create symbolic links", e);
 			throw new UncheckedIOException(e);
+		}
+		return tasksAfterDirectoryUpdate;
+	}
+
+	/**
+	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
+	 * on the current settings.
+	 *
+	 * @param arg0
+	 */
+	@Override
+	public void execute(JobExecutionContext arg0) {
+		List<Runnable> tasksAfterDirectoryUpdate;
+
+		synchronized (PublicationJob.class) {
+			tasksAfterDirectoryUpdate = execute0();
+			if (tasksAfterDirectoryUpdate == null) {
+				return;
+			}
 		}
 
 		tasksAfterDirectoryUpdate.stream()
