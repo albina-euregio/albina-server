@@ -228,7 +228,7 @@ public class DangerSourceVariantTextController {
 	}
 
 	public DangerSourceVariantText getDangerSourceVariantText(DangerSourceVariant dangerSourceVariant) {
-		if (dangerSourceVariant == null) {
+		if (dangerSourceVariant == null || dangerSourceVariant.getAvalancheType() == null) {
 			return null;
 		}
 		List<DangerSourceVariantText> result = getDangerSourceVariantTexts(dangerSourceVariant.getAvalancheType());
