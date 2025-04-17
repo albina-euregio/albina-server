@@ -115,6 +115,17 @@ public class HibernateUtil {
 		}
 	}
 
+	public <T> T run(Function<EntityManager, T> function) {
+		try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+			return function.apply(entityManager);
+		} catch (NoResultException e) {
+			throw e;
+		} catch (PersistenceException e) {
+			logger.warn("PersistenceException: " + e.getMessage(), e);
+			throw e;
+		}
+	}
+
 	public void shutDown() {
 		if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
 			entityManagerFactory.close();

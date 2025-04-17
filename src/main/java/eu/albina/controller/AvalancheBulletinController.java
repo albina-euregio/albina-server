@@ -90,7 +90,7 @@ public class AvalancheBulletinController {
 	 * @return The avalanche bulletin with the given ID.
 	 */
 	public AvalancheBulletin getBulletin(String bulletinId) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			AvalancheBulletin bulletin = entityManager.find(AvalancheBulletin.class, bulletinId);
 			if (bulletin == null) {
 				throw new HibernateException("No bulletin with ID: " + bulletinId);
@@ -611,7 +611,7 @@ public class AvalancheBulletinController {
 	}
 
 	public List<AvalancheBulletin> getAllBulletins(Instant startDate, Instant endDate) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> getAllBulletins(startDate, endDate, entityManager));
+		return HibernateUtil.getInstance().run(entityManager -> getAllBulletins(startDate, endDate, entityManager));
 	}
 
 	private List<AvalancheBulletin> getAllBulletins(Instant startDate, Instant endDate, EntityManager entityManager) {

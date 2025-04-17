@@ -79,7 +79,7 @@ public class DangerSourceVariantController {
 	 * @return The variant with the given ID.
 	 */
 	public DangerSourceVariant getDangerSourceVariant(String variantId) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			DangerSourceVariant variant = entityManager.find(DangerSourceVariant.class, variantId);
 			if (variant == null) {
 				throw new HibernateException("No danger source variant with ID: " + variantId);
@@ -209,7 +209,7 @@ public class DangerSourceVariantController {
 	 * @return the most recent variants for the given time period and regions
 	 */
 	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<DangerSourceVariant> results = variants.stream()
@@ -272,7 +272,7 @@ public class DangerSourceVariantController {
 	 * @return the most recent variants for the given time period and regions
 	 */
 	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions, String dangerSourceId) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<DangerSourceVariant> results = variants.stream()
@@ -289,7 +289,7 @@ public class DangerSourceVariantController {
 	}
 
 	public List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> getAllDangerSourceVariants(startDate, endDate, entityManager));
+		return HibernateUtil.getInstance().run(entityManager -> getAllDangerSourceVariants(startDate, endDate, entityManager));
 	}
 
 	private List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate, EntityManager entityManager) {

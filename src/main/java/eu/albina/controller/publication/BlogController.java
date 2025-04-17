@@ -48,7 +48,7 @@ public interface BlogController {
 		Objects.requireNonNull(region.getId(), "region.getId()");
 		Objects.requireNonNull(languageCode, "languageCode");
 
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 			CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
 			Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
@@ -141,7 +141,7 @@ public interface BlogController {
 	static void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) {
 		BlogConfiguration config;
 		try {
-			config = HibernateUtil.getInstance().runTransaction(entityManager -> {
+			config = HibernateUtil.getInstance().run(entityManager -> {
 				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 				CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
 				Root<BlogConfiguration> root = select.from(BlogConfiguration.class);

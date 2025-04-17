@@ -75,7 +75,7 @@ public class SubscriberController {
 	 *             if the subscriber could not be found
 	 */
 	public Subscriber getSubscriber(String email) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			Subscriber subscriber = entityManager.find(Subscriber.class, email);
 			if (subscriber == null) {
 				throw new HibernateException("No subscriber with email: " + email);
@@ -155,7 +155,7 @@ public class SubscriberController {
 	 *         {@code regions}
 	 */
 	public List<Subscriber> getSubscribers(LanguageCode lang, List<String> regionIds) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage, Subscriber.class)
 					.setParameter("language", lang).getResultList();
 			List<Subscriber> results = subscribers.stream()

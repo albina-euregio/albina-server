@@ -71,10 +71,7 @@ public class UserController {
 	 * @return {@code true} if the user with {@code username} exists
 	 */
 	public boolean userExists(String username) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			User user = entityManager.find(User.class, username);
-			return user != null;
-		});
+		return HibernateUtil.getInstance().run(entityManager -> entityManager.find(User.class, username) != null);
 	}
 
 	public User updateUser(User user) throws AlbinaException {
@@ -103,7 +100,7 @@ public class UserController {
 	 * @return the {@code User} with the specified {@code username}
 	 */
 	public User getUser(String username) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			User user = entityManager.find(User.class, username);
 			if (user == null) {
 				throw new HibernateException("No user with username: " + username);
@@ -118,7 +115,7 @@ public class UserController {
 	 * @return list of all {@code User}
 	 */
 	public List<User> getUsers() {
-		return HibernateUtil.getInstance().runTransaction(entityManager ->
+		return HibernateUtil.getInstance().run(entityManager ->
 			entityManager.createQuery(HibernateUtil.queryGetUsers, User.class).getResultList());
 	}
 
@@ -221,7 +218,7 @@ public class UserController {
 	 * @return {@code true} if the password is correct
 	 */
 	public boolean checkPassword(String username, String password) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			User user = entityManager.find(User.class, username);
 			if (user == null) {
 				throw new HibernateException("No user with username: " + username);
@@ -260,7 +257,7 @@ public class UserController {
 	}
 
 	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			Region region = entityManager.find(Region.class, regionId);
 			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks, UserRegionRoleLink.class)
 				.setParameter("userEmail", userEmail)

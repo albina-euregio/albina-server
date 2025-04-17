@@ -124,7 +124,7 @@ public class StatisticsController {
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, Region region,
 			boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			// get latest reports
 			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
 					endDate, region);
@@ -160,7 +160,7 @@ public class StatisticsController {
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, List<Region> regions, boolean extended,
 			boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+		return HibernateUtil.getInstance().run(entityManager -> {
 			List<AvalancheBulletin> bulletins = regions.stream()
 				.map(region -> AvalancheReportController.getInstance().getPublicReports(startDate,
 					endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports, lang).stream())
@@ -652,7 +652,7 @@ public class StatisticsController {
 		sb.append("DangerRatingElevation");
 		sb.append(csvDeliminator);
 
-		String[] problems = {"AvalancheProblem1", "AvalancheProblem2", "AvalancheProblem3", "AvalancheProblem4", "AvalancheProblem5"}; 
+		String[] problems = {"AvalancheProblem1", "AvalancheProblem2", "AvalancheProblem3", "AvalancheProblem4", "AvalancheProblem5"};
 		for (String problem : problems) {
 			sb.append(problem);
 			sb.append(csvDeliminator);
@@ -710,7 +710,7 @@ public class StatisticsController {
 					sb.append(problem + "AvalancheSizeValue");
 				}
 			}
-			sb.append(csvDeliminator);	
+			sb.append(csvDeliminator);
 		}
 		sb.append("Tendency");
 		sb.append(csvDeliminator);
