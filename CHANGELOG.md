@@ -2,6 +2,13 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [7.1.11] - 2025-04-17
+
+### Bulletins
+
+- Synchronize publication process
+- Export draft bulletins with regions on authenticated endpoint
+
 ## [7.1.10] - 2025-04-09
 
 ### Danger Sources
