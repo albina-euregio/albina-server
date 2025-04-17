@@ -228,6 +228,9 @@ public class DangerSourceVariantTextController {
 	}
 
 	public DangerSourceVariantText getDangerSourceVariantText(DangerSourceVariant dangerSourceVariant) {
+		if (dangerSourceVariant == null) {
+			return null;
+		}
 		List<DangerSourceVariantText> result = getDangerSourceVariantTexts(dangerSourceVariant.getAvalancheType());
 		switch (dangerSourceVariant.getAvalancheType()) {
 			case glide:
