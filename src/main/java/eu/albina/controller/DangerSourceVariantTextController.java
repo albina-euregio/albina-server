@@ -363,7 +363,7 @@ public class DangerSourceVariantTextController {
 		
 		// ELEVATION
 		// phrase: Höhe_Höhenlage
-		if (dangerSourceVariant.getElevationHigh() != null || dangerSourceVariant.getTreelineHigh()) {
+		if (dangerSourceVariant.getElevationHigh() != null || dangerSourceVariant.getTreelineHigh() != null || dangerSourceVariant.getTreelineHigh()) {
 			if (dangerSourceVariant.getElevationHigh() != null) {
 				// below [m]
 				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
@@ -371,7 +371,7 @@ public class DangerSourceVariantTextController {
 				// below treeline
 				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
 			}
-		} else if (dangerSourceVariant.getElevationLow() != null || dangerSourceVariant.getTreelineLow()) {
+		} else if (dangerSourceVariant.getElevationLow() != null || dangerSourceVariant.getTreelineLow() != null || dangerSourceVariant.getTreelineLow()) {
 			if (dangerSourceVariant.getElevationLow() != null) {
 				// above [m]
 				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
