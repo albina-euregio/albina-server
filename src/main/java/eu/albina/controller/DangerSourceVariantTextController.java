@@ -285,7 +285,7 @@ public class DangerSourceVariantTextController {
 		Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0\\}"),
 		Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":0\\}"),
 		Map.entry("steilen", "\\{\"curlyName\":\"steilen\",\"line\":0\\}"),
-		Map.entry("möglich", "\\{\"curlyName\":\"wieviele\",\"line\":0\\}, \\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
+		Map.entry("möglich.", "\\{\"curlyName\":\"wieviele\",\"line\":0\\}, \\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
 		Map.entry("Alarmzeichen", "\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\}, \\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":\\{\"Alarmzeichen2\":\\{\"curlyName\":\"Alarmzeichen2\",\"line\":0\\}\\}\\}")
 	);
 
