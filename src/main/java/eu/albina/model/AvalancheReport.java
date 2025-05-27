@@ -98,6 +98,9 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Column(name = "TELEGRAM_SENT")
 	private boolean telegramSent;
 
+	@Column(name = "WHATSAPP_SENT")
+	private boolean whatsAppSent;
+
 	@Column(name = "PUSH_SENT")
 	private boolean pushSent;
 
@@ -246,6 +249,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		this.telegramSent = telegram;
 	}
 
+	public boolean isWhatsAppSent() {
+		return whatsAppSent;
+	}
+
+	public void setWhatsAppSent(boolean whatsapp) {
+		this.whatsAppSent = whatsapp;
+	}
+
 	public boolean isPushSent() {
 		return pushSent;
 	}
@@ -339,6 +350,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		json.put("mapCreated", mapCreated);
 		json.put("emailCreated", emailCreated);
 		json.put("telegramSent", telegramSent);
+		json.put("whatsAppSent", whatsAppSent);
 		json.put("pushSent", pushSent);
 		json.put("mediaFileUploaded", mediaFileUploaded);
 

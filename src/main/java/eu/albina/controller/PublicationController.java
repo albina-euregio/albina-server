@@ -221,6 +221,7 @@ public class PublicationController {
 				AvalancheReportController c = AvalancheReportController.getInstance();
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);
+				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setWhatsAppSent);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setPushSent);
 			} catch (Exception e) {
 				logger.error("Error sending " + posting, e);
