@@ -33,9 +33,19 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
+import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.Role;
+import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -43,15 +53,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.hibernate.HibernateException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.albina.controller.RegionController;
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/regions")
@@ -163,6 +164,7 @@ public class RegionService {
 		logger.debug("POST JSON region");
 		JSONObject regionJson = new JSONObject(regionString);
 		Region region = new Region(regionJson, RegionController.getInstance()::getRegion);
+		region.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 
 		// check if id already exists
 		if (!RegionController.getInstance().regionExists(region.getId())) {
