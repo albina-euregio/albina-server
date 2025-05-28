@@ -14,6 +14,7 @@
     "createSimpleHtml": true,
     "sendEmails": false,
     "sendTelegramMessages": false,
+	"sendWhatsAppMessages": false,
     "sendPushNotifications": false,
     "enableMediaFile": true,
     "enableAvalancheProblemCornices": false,
