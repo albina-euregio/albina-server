@@ -285,7 +285,7 @@ public class DangerSourceVariantTextController {
 		Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0\\}"),
 		Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":0\\}"),
 		Map.entry("steilen", "\\{\"curlyName\":\"steilen\",\"line\":0\\}"),
-		Map.entry("möglich", "\\{\"curlyName\":\"wieviele\",\"line\":0\\}, \\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
+		Map.entry("möglich.", "\\{\"curlyName\":\"wieviele\",\"line\":0\\}, \\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
 		Map.entry("Alarmzeichen", "\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\}, \\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":\\{\"Alarmzeichen2\":\\{\"curlyName\":\"Alarmzeichen2\",\"line\":0\\}\\}\\}")
 	);
 
@@ -363,7 +363,7 @@ public class DangerSourceVariantTextController {
 		
 		// ELEVATION
 		// phrase: Höhe_Höhenlage
-		if (dangerSourceVariant.getElevationHigh() != null || dangerSourceVariant.getTreelineHigh()) {
+		if (dangerSourceVariant.getElevationHigh() != null || dangerSourceVariant.getTreelineHigh() != null || dangerSourceVariant.getTreelineHigh()) {
 			if (dangerSourceVariant.getElevationHigh() != null) {
 				// below [m]
 				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
@@ -371,7 +371,7 @@ public class DangerSourceVariantTextController {
 				// below treeline
 				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
 			}
-		} else if (dangerSourceVariant.getElevationLow() != null || dangerSourceVariant.getTreelineLow()) {
+		} else if (dangerSourceVariant.getElevationLow() != null || dangerSourceVariant.getTreelineLow() != null || dangerSourceVariant.getTreelineLow()) {
 			if (dangerSourceVariant.getElevationLow() != null) {
 				// above [m]
 				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"), "{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
