@@ -147,6 +147,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "SEND_TELEGRAM_MESSAGES")
 	private boolean sendTelegramMessages;
 
+	@Column(name = "SEND_WHATSAPP_MESSAGES")
+	private boolean sendWhatsAppMessages;
+
 	@Column(name = "SEND_PUSH_NOTIFICATIONS")
 	private boolean sendPushNotifications;
 
@@ -327,6 +330,8 @@ public class Region implements AvalancheInformationObject {
 			this.sendEmails = json.getBoolean("sendEmails");
 		if (json.has("sendTelegramMessages") && !json.isNull("sendTelegramMessages"))
 			this.sendTelegramMessages = json.getBoolean("sendTelegramMessages");
+		if (json.has("sendWhatsAppMessages") && !json.isNull("sendWhatsAppMessages"))
+			this.sendWhatsAppMessages = json.getBoolean("sendWhatsAppMessages");
 		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
 			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
 		if (json.has("enableMediaFile") && !json.isNull("enableMediaFile"))
@@ -529,6 +534,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void setSendTelegramMessages(boolean sendTelegramMessages) {
 		this.sendTelegramMessages = sendTelegramMessages;
+	}
+
+	public boolean isSendWhatsAppMessages() {
+		return sendWhatsAppMessages;
+	}
+
+	public void setSendWhatsAppMessages(boolean sendWhatsAppMessages) {
+		this.sendWhatsAppMessages = sendWhatsAppMessages;
 	}
 
 	public boolean isSendPushNotifications() {
@@ -869,6 +882,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("createSimpleHtml", isCreateSimpleHtml());
 		json.put("sendEmails", isSendEmails());
 		json.put("sendTelegramMessages", isSendTelegramMessages());
+		json.put("sendWhatsAppMessages", isSendWhatsAppMessages());
 		json.put("sendPushNotifications", isSendPushNotifications());
 		json.put("enableMediaFile", isEnableMediaFile());
 		json.put("enableAvalancheProblemCornices", isEnableAvalancheProblemCornices());

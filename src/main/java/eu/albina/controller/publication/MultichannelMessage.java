@@ -24,6 +24,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
+import eu.albina.model.publication.WhatsAppConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +68,7 @@ public interface MultichannelMessage {
 	default void sendToAllChannels() {
 		sendMails();
 		sendTelegramMessage();
+		sendWhatsAppMessage();
 		sendPushNotifications();
 	}
 
@@ -90,6 +92,18 @@ public interface MultichannelMessage {
 			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).
 				orElseThrow(() -> new NoSuchElementException(String.format("No TelegramConfiguration for %s/%s", getRegion(), getLanguageCode())));
 			TelegramController.trySend(telegramConfig, this, 3);
+			return null;
+		});
+	}
+
+	default void sendWhatsAppMessage() {
+		if (!getRegion().isSendWhatsAppMessages()) {
+			return;
+		}
+		tryRunWithLogging("WhatsApp message", () -> {
+			WhatsAppConfiguration whatsAppConfig = WhatsAppController.getConfiguration(getRegion(), getLanguageCode()).
+				orElseThrow(() -> new NoSuchElementException(String.format("No WhatsAppConfiguration for %s/%s", getRegion(), getLanguageCode())));
+			WhatsAppController.trySend(whatsAppConfig, this, 3);
 			return null;
 		});
 	}

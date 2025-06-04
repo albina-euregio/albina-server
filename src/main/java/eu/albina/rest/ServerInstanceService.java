@@ -38,10 +38,12 @@ import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogController;
 import eu.albina.controller.publication.BlogItem;
 import eu.albina.controller.publication.TelegramController;
+import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
+import eu.albina.model.publication.WhatsAppConfiguration;
 import eu.albina.util.GlobalVariables;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -197,12 +199,16 @@ public class ServerInstanceService {
 		logger.info("Testing TelegramController");
 		TelegramConfiguration telegramConfig = TelegramController.getConfiguration(region, language).orElseThrow();
 		Response me = TelegramController.getMe(telegramConfig);
+		logger.info("Testing WhatsAppController");
+		WhatsAppConfiguration whatsAppConfiguration = WhatsAppController.getConfiguration(region, language).orElseThrow();
+		Response whapiResponse = WhatsAppController.getHealth(whatsAppConfiguration);
 		logger.info("Testing Blog");
 		BlogConfiguration config = BlogController.getConfiguration(region, language);
 		BlogItem latestBlogPost = BlogController.getLatestBlogPost(config);
 		return Map.of(
 			"region", MoreObjects.firstNonNull(region, ""),
 			"telegram", MoreObjects.firstNonNull(me, ""),
+			"whatsapp", MoreObjects.firstNonNull(whapiResponse, ""),
 			"blog", MoreObjects.firstNonNull(latestBlogPost, "")
 		);
 	}

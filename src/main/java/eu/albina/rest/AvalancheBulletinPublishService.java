@@ -220,6 +220,31 @@ public class AvalancheBulletinPublishService {
 	@POST
 	@Secured({ Role.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Path("/whatsapp")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response triggerWhatsAppChannel(@QueryParam("region") String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+			@QueryParam("lang") LanguageCode language,
+			@Context SecurityContext securityContext) {
+		try {
+			logger.debug("POST trigger whatsapp channel for {} in {} [{}]", regionId, language, date);
+			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
+				posting.sendWhatsAppMessage();
+			}
+			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+		} catch (AlbinaException e) {
+			logger.warn("Error triggering whatsapp channel", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+		} catch (Exception e) {
+			logger.warn("Error triggering whatsapp channel", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		}
+	}
+
+	@POST
+	@Secured({ Role.ADMIN })
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Path("/push")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
