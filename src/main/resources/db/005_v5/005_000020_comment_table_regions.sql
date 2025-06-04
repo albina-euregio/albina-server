@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset weiss:000_000020 failOnError:true
+-- changeset weiss:005_000020 failOnError:true
 -- comment add comments to table regions
 ALTER TABLE  regions
     MODIFY COLUMN ID varchar(191) NOT NULL

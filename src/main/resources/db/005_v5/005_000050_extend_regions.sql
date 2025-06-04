@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset albina:000_000050 failOnError:true
+-- changeset albina:005_000050 failOnError:true
 
 ALTER TABLE regions ADD ENABLE_OBSERVATIONS bit DEFAULT 0 NULL;
 ALTER TABLE regions ADD ENABLE_MODELLING BIT DEFAULT 0 NULL;
