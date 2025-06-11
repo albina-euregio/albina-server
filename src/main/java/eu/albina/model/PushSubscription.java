@@ -45,20 +45,20 @@ public class PushSubscription {
 	@Column(name = "SUBSCRIBE_DATE")
 	private ZonedDateTime subscribeDate = ZonedDateTime.now();
 
-	@Column(name = "AUTH")
+	@Column(name = "AUTH", length = 191)
 	private String auth;
 
-	@Column(name = "P256DH")
+	@Column(name = "P256DH", length = 191)
 	private String p256dh;
 
-	@Column(name = "ENDPOINT", length = 1023)
+	@Column(name = "ENDPOINT", columnDefinition = "longtext")
 	private String endpoint;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE_CODE")
+	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode language;
 
-	@Column(name = "REGION_ID")
+	@Column(name = "REGION_ID", length = 191)
 	private String region;
 
 	@Column(name = "FAILED_COUNT")

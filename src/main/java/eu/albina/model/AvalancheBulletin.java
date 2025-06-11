@@ -102,19 +102,19 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	/** The recommended regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_suggested_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
+	@Column(name = "REGION_ID", length = 191)
 	private Set<String> suggestedRegions;
 
 	/** The published regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_published_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
+	@Column(name = "REGION_ID",  length = 191)
 	private Set<String> publishedRegions;
 
 	/** The saved regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_saved_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
+	@Column(name = "REGION_ID", length = 191)
 	private Set<String> savedRegions;
 
 	@Enumerated(EnumType.STRING)
@@ -192,7 +192,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@MapKeyEnumerated(EnumType.STRING)
-	@MapKeyColumn(name = "TEXT_TYPE")
+	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
 	private Map<TextPart, Texts> textPartsMap;
 
 	/**

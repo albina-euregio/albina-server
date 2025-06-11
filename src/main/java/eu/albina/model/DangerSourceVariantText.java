@@ -43,7 +43,7 @@ public class DangerSourceVariantText extends AbstractPersistentObject {
 	private AvalancheType avalancheType;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_PROBLEM")
+	@Column(name = "AVALANCHE_PROBLEM", length = 191)
 	private eu.albina.model.enumerations.AvalancheProblem avalancheProblem;
 
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")

@@ -50,20 +50,20 @@ public class RapidMailConfiguration implements Serializable {
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@Column(name = "USERNAME")
+	@Column(name = "USERNAME", length = 191)
 	private String username;
 
-	@Column(name = "PASSWORD")
+	@Column(name = "PASSWORD",  length = 191)
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE_CODE")
+	@Column(name = "LANGUAGE_CODE",  length = 191)
 	private LanguageCode lang;
 
-	@Column(name = "MAILINGLIST_NAME")
+	@Column(name = "MAILINGLIST_NAME", length = 191)
 	private String mailinglistName;
 
-	@Column(name = "SUBJECT_MATTER")
+	@Column(name = "SUBJECT_MATTER", length = 191)
 	private String subjectMatter;
 
 	public Long getId() {

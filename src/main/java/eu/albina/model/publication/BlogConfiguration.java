@@ -58,17 +58,17 @@ public class BlogConfiguration implements Serializable {
 	@Column(name = "API_KEY", length = 191)
 	private String apiKey;
 
-	@Column(name = "BLOG_ID")
+	@Column(name = "BLOG_ID", length = 191)
 	private String blogId;
 
-	@Column(name = "BLOG_URL")
+	@Column(name = "BLOG_URL", length = 191)
 	private String blogUrl;
 
-	@Column(name = "BLOG_API_URL")
+	@Column(name = "BLOG_API_URL",  length = 191)
 	private String blogApiUrl;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE_CODE")
+	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode lang;
 
 	@Column(name = "LAST_PUBLISHED_BLOG_ID")

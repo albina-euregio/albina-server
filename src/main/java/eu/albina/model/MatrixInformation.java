@@ -36,31 +36,31 @@ import eu.albina.model.enumerations.NaturalAvalancheReleaseProbability;
 public class MatrixInformation implements AvalancheInformationObject {
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ARTIFICIAL_DANGER_RATING")
+	@Column(name = "ARTIFICIAL_DANGER_RATING", length = 191)
 	private DangerRating artificialDangerRating;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ARTIFICIAL_AVALANCHE_SIZE")
+	@Column(name = "ARTIFICIAL_AVALANCHE_SIZE", length = 191)
 	private AvalancheSize artificialAvalancheSize;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY")
+	@Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY", length = 191)
 	private ArtificialAvalancheReleaseProbability artificialAvalancheReleaseProbability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION")
+	@Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION", length = 191)
 	private HazardSiteDistribution artificialHazardSiteDistribution;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "NATURAL_DANGER_RATING")
+	@Column(name = "NATURAL_DANGER_RATING", length = 191)
 	private DangerRating naturalDangerRating;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY")
+	@Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY", length = 191)
 	private NaturalAvalancheReleaseProbability naturalAvalancheReleaseProbability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION")
+	@Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION", length = 191)
 	private HazardSiteDistribution naturalHazardSiteDistribution;
 
 	public MatrixInformation() {
