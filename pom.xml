@@ -438,8 +438,9 @@
 <!--					<propertyFile>liquibase.properties</propertyFile>-->
 					<changeLogFile>db/changelog-main.xml</changeLogFile>
 					<diffChangeLogFile>
-						${project.basedir}/src/main/resources/db/generated_changelog.xml
+						${project.basedir}/src/main/resources/db/generated_changelog.mariadb.sql
 					</diffChangeLogFile>
+<!--					<diffTypes>tables, columns</diffTypes>-->
 					<url>${hibernate.connection.url}</url>
 					<username>${hibernate.connection.username}</username>
 					<password>${hibernate.connection.password}</password>
