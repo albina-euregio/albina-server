@@ -440,7 +440,9 @@
 					<diffChangeLogFile>
 						${project.basedir}/src/main/resources/db/generated_changelog.mariadb.sql
 					</diffChangeLogFile>
-<!--					<diffTypes>tables, columns</diffTypes>-->
+<!--					default diffTypes: tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints
+						in addition one can add: data -->
+					<diffTypes>tables, columns, primarykeys, foreignkeys</diffTypes>
 					<url>${hibernate.connection.url}</url>
 					<username>${hibernate.connection.username}</username>
 					<password>${hibernate.connection.password}</password>
