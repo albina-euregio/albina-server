@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
 
-  <preConditions onFail="HALT">
-    <dbms  type="mysql"/>
-  </preConditions>
-
-  <include file="changelog-legacy.xml" relativeToChangelogFile="true"/>
-  <include file="changelog-v5.xml" relativeToChangelogFile="true"/>
+  <includeAll path="000_initial" relativeToChangelogFile="true"/>
+  <includeAll path="005_v5" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
