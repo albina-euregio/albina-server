@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+-- changeset christina:007_000100 failOnError:true
+
 CREATE TABLE whatsapp_configurations (
     ID bigint NOT NULL AUTO_INCREMENT,
     API_TOKEN varchar(191),

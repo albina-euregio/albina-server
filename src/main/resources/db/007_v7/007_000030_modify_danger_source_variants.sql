@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset albina:000_000050 failOnError:true
+-- changeset albina:007_000030 failOnError:true
 
 ALTER TABLE danger_source_variants
     CHANGE COLUMN WEAK_LAYER_CRUST_ABOVE WEAK_LAYER_CRUST_ABOVE_OLD BIT(1);

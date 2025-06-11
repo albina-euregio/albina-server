@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset albina:000_000050 failOnError:true
+-- changeset albina:007_000010 failOnError:true
 
 create table danger_source_variant_danger_signs (DANGER_SIGN tinyint, DANGER_SOURCE_VARIANT_ID varchar(255) not null) engine=InnoDB;
 create table danger_source_variant_terrain_types (TERRAIN_TYPE tinyint, DANGER_SOURCE_VARIANT_ID varchar(255) not null) engine=InnoDB;

@@ -6,5 +6,6 @@
   <includeAll path="000_initial" relativeToChangelogFile="true"/>
   <includeAll path="005_v5" relativeToChangelogFile="true"/>
   <includeAll path="006_v6" relativeToChangelogFile="true"/>
+  <includeAll path="007_v7" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

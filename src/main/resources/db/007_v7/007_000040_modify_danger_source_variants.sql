@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset albina:000_000050 failOnError:true
+-- changeset albina:007_000040 failOnError:true
 
 ALTER TABLE
     danger_source_variants
