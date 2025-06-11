@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+-- changeset albina:006_000100 failOnError:true
+
 CREATE TABLE user_stress_levels
 (
     USER_ID      VARCHAR(255) NOT NULL,
