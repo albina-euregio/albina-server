@@ -59,7 +59,7 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 
 	@Override
 	public String getWebsiteUrl() {
-		return LinkUtil.getBulletinUrl(avalancheReport, lang);
+		return LinkUtil.getBulletinUrl(avalancheReport, lang, avalancheReport.getRegion());
 	}
 
 	@Override
@@ -81,7 +81,7 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 	@Override
 	public String getSocialMediaText() {
 		String dateString = avalancheReport.getDate(lang);
-		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang);
+		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang, avalancheReport.getRegion());
 		return avalancheReport.getStatus() == BulletinStatus.republished
 			? MessageFormat.format(lang.getBundleString("social-media.message.update"), lang.getBundleString("website.name"), dateString, bulletinUrl)
 			: MessageFormat.format(lang.getBundleString("social-media.message"), lang.getBundleString("website.name"), dateString, bulletinUrl);

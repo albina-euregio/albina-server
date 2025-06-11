@@ -20,6 +20,12 @@
   <entry key="website.url.IT-32-TN">https://avalanche.report/fr</entry>
   <entry key="website.url.ES-CT-L">https://lauegi.report/</entry>
   <entry key="website.url.AT-02">https://lawinenwarndienst.ktn.gv.at/</entry>
+  <entry key="website.url.format">%s/bulletin/%s</entry>
+  <entry key="website.url.format.AT-07">%s/bulletin/%s</entry>
+  <entry key="website.url.format.IT-32-BZ">%s/bulletin/%s</entry>
+  <entry key="website.url.format.IT-32-TN">%s/bulletin/%s</entry>
+  <entry key="website.url.format.ES-CT-L">%s/bulletin/%s</entry>
+  <entry key="website.url.format.AT-02">%s?date=%s</entry>
   <entry key="website.url.capitalized">WWW.AVALANCHE.REPORT/FR</entry>
   <entry key="website.url.capitalized.AT-07">WWW.AVALANCHE.REPORT/FR</entry>
   <entry key="website.url.capitalized.IT-32-BZ">WWW.AVALANCHE.REPORT/FR</entry>

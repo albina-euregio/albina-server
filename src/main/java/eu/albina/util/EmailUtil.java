@@ -307,7 +307,7 @@ public class EmailUtil {
 		root.put("bulletins", arrayList);
 
 		Map<String, Object> links = new HashMap<>();
-		links.put("website", LinkUtil.getBulletinUrl(avalancheReport, lang));
+		links.put("website", LinkUtil.getBulletinUrl(avalancheReport, lang, region));
 		links.put("unsubscribe", "{%link_unsubscribe}");
 		links.put("pdf", LinkUtil.getPdfLink(avalancheReport, lang));
 		links.put("imprint", LinkUtil.getImprintLink(lang, region));

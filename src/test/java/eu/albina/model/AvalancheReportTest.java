@@ -28,9 +28,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import eu.albina.util.AlbinaUtil;
-import eu.albina.util.HibernateUtil;
-import eu.albina.util.LinkUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -42,6 +39,9 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.AlbinaUtil;
+import eu.albina.util.HibernateUtil;
+import eu.albina.util.LinkUtil;
 
 public class AvalancheReportTest {
 
@@ -112,7 +112,7 @@ public class AvalancheReportTest {
 		Assertions.assertEquals("Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		avalancheReport.setStatus(BulletinStatus.republished);
 		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
-		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de));
+		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de, regionEuregio));
 		Assertions.assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf", LinkUtil.getPdfLink(avalancheReport, LanguageCode.de));
 		Assertions.assertTrue(avalancheReport.isLatest(
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
