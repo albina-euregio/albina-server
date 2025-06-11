@@ -54,15 +54,15 @@ public class DangerSourceVariantText extends AbstractPersistentObject {
 	private GlidingSnowActivity glidingSnowActivity;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_SIZE")
+	@Column(name = "AVALANCHE_SIZE", length=191)
 	private AvalancheSize avalancheSize;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SNOWPACK_STABILITY")
+	@Column(name = "SNOWPACK_STABILITY", length = 191)
 	private SnowpackStability snowpackStability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "FREQUENCY")
+	@Column(name = "FREQUENCY", length = 191)
 	private Frequency frequency;
 
 	@Lob

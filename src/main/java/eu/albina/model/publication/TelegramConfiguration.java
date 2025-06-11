@@ -48,7 +48,7 @@ public class TelegramConfiguration implements Serializable {
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@Column(name = "API_TOKEN")
+	@Column(name = "API_TOKEN", length = 191)
 	private String apiToken;
 
 	@Column(name = "CHAT_ID")

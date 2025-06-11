@@ -2,12 +2,12 @@
 -- changeset legacy:000_000200 failOnError:true
 -- comment create table avalanche_reports
 -- preconditions onFail:MARK_RAN
--- precondition-sql-check expectedResult:0 SELECT EXISTS( SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'avalanche_reports' AND TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = SCHEMA()) 
+-- precondition-sql-check expectedResult:0 SELECT EXISTS( SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'avalanche_reports' AND TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = SCHEMA())
 CREATE TABLE avalanche_reports (
     ID varchar(191) NOT NULL,
     CAAML_V5_CREATED bit DEFAULT FALSE,
     CAAML_V6_CREATED bit DEFAULT FALSE,
-    date datetime,
+    DATE datetime,
     EMAIL_CREATED bit DEFAULT FALSE,
     HTML_CREATED bit DEFAULT FALSE,
     JSON_CREATED bit DEFAULT FALSE,
@@ -18,7 +18,7 @@ CREATE TABLE avalanche_reports (
     PUSH_SENT bit DEFAULT FALSE,
     STATUS integer,
     TELEGRAM_SENT bit DEFAULT FALSE,
-    timestamp datetime,
+    TIMESTAMP datetime,
     REGION_ID varchar(191),
     USER_ID varchar(191),
     PRIMARY KEY (ID),

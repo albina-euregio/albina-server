@@ -84,7 +84,7 @@ public class Region implements AvalancheInformationObject {
 	}
 
 	@Id
-	@Column(name = "ID")
+	@Column(name = "ID", length = 191)
 	private String id;
 
 	@Column(name = "MICRO_REGIONS")
@@ -190,7 +190,7 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "PDF_COLOR")
 	private String pdfColor;
 
-	@Column(name = "EMAIL_COLOR")
+	@Column(name = "EMAIL_COLOR", length = 191)
 	private String emailColor;
 
 	@Column(name = "PDF_MAP_Y_AM_PM")

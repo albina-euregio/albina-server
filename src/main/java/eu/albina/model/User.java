@@ -50,7 +50,7 @@ public class User {
 
 	/** Email address of the user */
 	@Id
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", length = 191)
 	private String email;
 
 	/** Password of the user */

@@ -55,7 +55,7 @@ public class BlogConfiguration implements Serializable {
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@Column(name = "API_KEY")
+	@Column(name = "API_KEY", length = 191)
 	private String apiKey;
 
 	@Column(name = "BLOG_ID")

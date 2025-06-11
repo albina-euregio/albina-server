@@ -82,12 +82,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
-	@Column(name = "OWNER_REGION")
+	@Column(name = "OWNER_REGION", length = 191)
 	private String ownerRegion;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_additional_users", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "ADDITIONAL_USER_NAME")
+	@Column(name = "ADDITIONAL_USER_NAME", length = 191)
 	private Set<String> additionalAuthors;
 
 	@Column(name = "PUBLICATION_DATE")
@@ -118,7 +118,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private Set<String> savedRegions;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "STRATEGIC_MINDSET")
+	@Column(name = "STRATEGIC_MINDSET", length=191)
 	private StrategicMindset strategicMindset;
 
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
@@ -177,15 +177,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private String tendencyCommentNotes;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "TENDENCY")
+	@Column(name = "TENDENCY", length=191)
 	private Tendency tendency;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_PATTERN_1")
+	@Column(name = "DANGER_PATTERN_1", length = 191)
 	private DangerPattern dangerPattern1;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_PATTERN_2")
+	@Column(name = "DANGER_PATTERN_2", length = 191)
 	private DangerPattern dangerPattern2;
 
 	/** Map containing all text parts available for a bulletin */

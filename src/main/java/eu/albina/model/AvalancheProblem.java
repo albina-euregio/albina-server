@@ -58,11 +58,11 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	private AvalancheBulletinDaytimeDescription avalancheBulletinDaytimeDescription;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_TYPE")
+	@Column(name = "AVALANCHE_TYPE", length = 191)
 	private eu.albina.model.enumerations.AvalancheType avalancheType;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_PROBLEM")
+	@Column(name = "AVALANCHE_PROBLEM", length = 191)
 	private eu.albina.model.enumerations.AvalancheProblem avalancheProblem;
 
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -84,28 +84,28 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	private boolean treelineLow;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_RATING_DIRECTION")
+	@Column(name = "DANGER_RATING_DIRECTION", length = 191)
 	private Direction dangerRatingDirection;
 
 	/** Information about the selected field in the EAWS matrix */
 	@Embedded
 	@AttributeOverrides({
-			@AttributeOverride(name = "artificialDangerRating", column = @Column(name = "ARTIFICIAL_DANGER_RATING")),
-			@AttributeOverride(name = "artificialAvalancheSize", column = @Column(name = "ARTIFICIAL_AVALANCHE_SIZE")),
-			@AttributeOverride(name = "artificialAvalancheReleaseProbability", column = @Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY")),
-			@AttributeOverride(name = "artificialHazardSiteDistribution", column = @Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION")),
-			@AttributeOverride(name = "naturalDangerRating", column = @Column(name = "NATURAL_DANGER_RATING")),
-			@AttributeOverride(name = "naturalAvalancheReleaseProbability", column = @Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY")),
-			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION")) })
+			@AttributeOverride(name = "artificialDangerRating", column = @Column(name = "ARTIFICIAL_DANGER_RATING", length = 191)),
+			@AttributeOverride(name = "artificialAvalancheSize", column = @Column(name = "ARTIFICIAL_AVALANCHE_SIZE", length = 191)),
+			@AttributeOverride(name = "artificialAvalancheReleaseProbability", column = @Column(name = "ARTIFICIAL_AVALANCHE_RELEASE_PROBABILITY", length = 191)),
+			@AttributeOverride(name = "artificialHazardSiteDistribution", column = @Column(name = "ARTIFICIAL_HAZARD_SITE_DISTRIBUTION", length = 191)),
+			@AttributeOverride(name = "naturalDangerRating", column = @Column(name = "NATURAL_DANGER_RATING", length = 191)),
+			@AttributeOverride(name = "naturalAvalancheReleaseProbability", column = @Column(name = "NATURAL_AVALANCHE_RELEASE_PROBABILITY", length = 191)),
+			@AttributeOverride(name = "naturalHazardSiteDistribution", column = @Column(name = "NATURAL_HAZARD_SITE_DISTRIBUTION", length = 191)) })
 	private MatrixInformation matrixInformation;
 
 	/** Information about the selected field in the EAWS matrix */
 	@Embedded
 	@AttributeOverrides({
-			@AttributeOverride(name = "dangerRating", column = @Column(name = "DANGER_RATING")),
-			@AttributeOverride(name = "avalancheSize", column = @Column(name = "AVALANCHE_SIZE")),
-			@AttributeOverride(name = "snowpackStability", column = @Column(name = "SNOWPACK_STABILITY")),
-			@AttributeOverride(name = "frequency", column = @Column(name = "FREQUENCY")) })
+			@AttributeOverride(name = "dangerRating", column = @Column(name = "DANGER_RATING", length = 191)),
+			@AttributeOverride(name = "avalancheSize", column = @Column(name = "AVALANCHE_SIZE", length = 191)),
+			@AttributeOverride(name = "snowpackStability", column = @Column(name = "SNOWPACK_STABILITY", length = 191)),
+			@AttributeOverride(name = "frequency", column = @Column(name = "FREQUENCY", length = 191)) })
 	private EawsMatrixInformation eawsMatrixInformation;
 
 	@Lob
@@ -113,7 +113,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	private String terrainFeatureTextcat;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "TEXT_PARTS", joinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@Column(name = "TERRAIN_FEATURE")
 	private Set<Text> terrainFeature;
 
