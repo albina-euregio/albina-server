@@ -28,7 +28,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.hibernate.annotations.Comment;
 
 /**
  * This class holds all information about a server instance.
@@ -38,7 +37,6 @@ import org.hibernate.annotations.Comment;
  */
 @Entity
 @Table(name = "server_instances")
-@Comment("Configuration of the server instances, may only contain one local instance.")
 public class ServerInstance implements AvalancheInformationObject, Serializable {
 
 	private static final long serialVersionUID = 1L;
