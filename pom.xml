@@ -443,6 +443,8 @@
 <!--					default diffTypes: tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints
 						in addition one can add: data -->
 					<diffTypes>tables, columns, primarykeys, foreignkeys</diffTypes>
+<!--					Liquibase diff has problems detecting the existing primary keys for some tables. Use diffExcludeObjects to ignore them -->
+<!--					<diffExcludeObjects>table:region_hierarchy, table:user_stress_levels, table:text_parts</diffExcludeObjects>-->
 					<url>${hibernate.connection.url}</url>
 					<username>${hibernate.connection.username}</username>
 					<password>${hibernate.connection.password}</password>

@@ -36,13 +36,15 @@ make sure that you have the environment variable
    3. `mvn liquibase:diff` --> this generates the file `resourcees/db/generated_changelog.mariadb.sql`
    4. check the contents of the file and adapt if necessary. Once you are satisfied, rename it and move into appropriate sub-folder under `resources/db`
 3. Deploy changesets in your local test environment:
-   1. run `mvn liquibase:update`, or,
+   1. run `mvn compile` followed by `mvn liquibase:update`, or,
    2. check that `ALBINA_DB_RUN_MIGRATION=true` and start local server with `mvn jetty:run`
 4. Commit changes to Java source and liquibase changesets together.
 
 ### Tips
 - If you only want changes for a specific table of the database you can use `diffIncludeObjects`. E.g.
 ` mvn liquibase:diff -Dliquibase.diffIncludeObjects="regions"`
+- similarly, `diffExcludeObjects` can be used to ignore tables
+- use `mvn liquibase:status` to check what changes will be applied before you run `mvn liquibase:update`
 - The JPA Buddy plugin for Intellij (Ultimate) provides nice GUI features for automatic changeset generation.
   You can specify a connection to your development database and it will detect when columns are missing and automatically
   suggest to generate changesets.
