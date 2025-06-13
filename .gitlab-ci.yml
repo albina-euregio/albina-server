@@ -20,6 +20,7 @@ production build:
         when: always
         paths:
             - target/albina.war
+            - target/test-results/
         reports:
             junit:
                 - target/surefire-reports/TEST-*.xml
