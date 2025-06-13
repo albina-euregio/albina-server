@@ -28,7 +28,6 @@ import eu.albina.util.PdfUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import com.google.common.io.Resources;
 
@@ -41,8 +40,9 @@ public class MapUtilTest {
 	private Path folder;
 
 	@BeforeEach
-	public void setUp(@TempDir Path folder) throws Exception {
-		this.folder = folder;
+	public void setUp() throws Exception {
+		folder = Paths.get("target/test-results");
+		Files.createDirectories(folder);
 		serverInstance = new ServerInstance();
 		serverInstance.setMapsPath(folder.toString());
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
