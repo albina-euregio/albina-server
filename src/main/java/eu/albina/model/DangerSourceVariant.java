@@ -955,12 +955,18 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	public eu.albina.model.enumerations.AvalancheProblem deriveAvalancheProblem() {
 		switch (this.avalancheType) {
 			case slab:
+				if (this.slabGrainShape == null) {
+					return null;
+				}
 				switch (this.slabGrainShape) {
 					case PP:
 					case DF:
 					case RG:
 					case FC:
-						if (this.weakLayerPersistent) {
+						if (Boolean.TRUE.equals(this.weakLayerPersistent)) {
+							if (this.dangerSpotRecognizability == null) {
+								return null;
+							}
 							switch (this.dangerSpotRecognizability) {
 								case very_easy:
 								case easy:
@@ -972,6 +978,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 									return null;
 							}
 						} else {
+							if (this.dangerSpotRecognizability == null) {
+								return null;
+							}
 							switch (this.dangerSpotRecognizability) {
 								case very_easy:
 								case easy:
@@ -986,7 +995,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 					case MF:
 						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
 					case MFcr:
-						if (this.weakLayerPersistent) {
+						if (Boolean.TRUE.equals(this.weakLayerPersistent)) {
 							return eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
 						} else {
 							return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
