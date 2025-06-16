@@ -157,6 +157,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private String tendencyCommentTextcat;
 
 	@Lob
+	@Column(name = "GENERAL_HEADLINE_COMMENT_TEXTCAT")
+	private String generalHeadlineCommentTextcat;
+
+	@Lob
 	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_NOTES")
 	private String avActivityHighlightsNotes;
 
@@ -175,6 +179,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Lob
 	@Column(name = "TENDENCY_COMMENT_NOTES")
 	private String tendencyCommentNotes;
+
+	@Lob
+	@Column(name = "GENERAL_HEADLINE_COMMENT_NOTES")
+	private String generalHeadlineCommentNotes;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "TENDENCY")
@@ -250,6 +258,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			this.snowpackStructureCommentTextcat = json.getString("snowpackStructureCommentTextcat");
 		if (json.has("tendencyCommentTextcat"))
 			this.tendencyCommentTextcat = json.getString("tendencyCommentTextcat");
+		if (json.has("generalHeadlineCommentTextcat"))
+			this.generalHeadlineCommentTextcat = json.getString("generalHeadlineCommentTextcat");
 		if (json.has("avActivityHighlightsNotes"))
 			this.avActivityHighlightsNotes = json.getString("avActivityHighlightsNotes");
 		if (json.has("avActivityCommentNotes"))
@@ -260,6 +270,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			this.snowpackStructureCommentNotes = json.getString("snowpackStructureCommentNotes");
 		if (json.has("tendencyCommentNotes"))
 			this.tendencyCommentNotes = json.getString("tendencyCommentNotes");
+		if (json.has("generalHeadlinesCommentNotes"))
+			this.generalHeadlineCommentNotes = json.getString("generalHeadlinesCommentNotes");
 
 		if (json.has("tendency"))
 			this.tendency = Tendency.valueOf(json.getString("tendency").toLowerCase());
@@ -408,6 +420,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.tendencyCommentTextcat = tendencyCommentTextcat;
 	}
 
+	public String getGeneralHeadlineCommentTextcat() {
+		return generalHeadlineCommentTextcat;
+	}
+
+	public void setGeneralHeadlineCommentTextcat(String generalHeadlineCommentTextcat) {
+		this.generalHeadlineCommentTextcat = generalHeadlineCommentTextcat;
+	}
+
 	public String getAvActivityHighlightsNotes() {
 		return avActivityHighlightsNotes;
 	}
@@ -446,6 +466,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void setTendencyCommentNotes(String tendencyCommentNotes) {
 		this.tendencyCommentNotes = tendencyCommentNotes;
+	}
+
+	public String getGeneralHeadlineCommentNotes() {
+		return generalHeadlineCommentNotes;
+	}
+
+	public void setGeneralHeadlineCommentNotes(String generalHeadlineCommentNotes) {
+		this.generalHeadlineCommentNotes = generalHeadlineCommentNotes;
 	}
 
 	public Texts getHighlights() {
@@ -578,6 +606,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void setTendencyComment(Texts tendencyComment) {
 		textPartsMap.put(TextPart.tendencyComment, tendencyComment);
+	}
+
+	public Texts getGeneralHeadlineComment() {
+		return textPartsMap.get(TextPart.generalHeadlineComment);
+	}
+
+	public String getGeneralHeadlineCommentIn(LanguageCode lang) {
+		return getTextPartIn(TextPart.generalHeadlineComment, lang);
+	}
+
+	public void setGeneralHeadlineComment(Texts generalHeadlineComment) {
+		textPartsMap.put(TextPart.generalHeadlineComment, generalHeadlineComment);
 	}
 
 	public Tendency getTendency() {
@@ -824,6 +864,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
 		if (!Strings.isNullOrEmpty(tendencyCommentTextcat))
 			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
+		if (!Strings.isNullOrEmpty(generalHeadlineCommentTextcat))
+			json.put("generalHeadlineCommentTextcat", generalHeadlineCommentTextcat);
 
 		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
 			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
@@ -835,6 +877,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			json.put("snowpackStructureCommentNotes", snowpackStructureCommentNotes);
 		if (!Strings.isNullOrEmpty(tendencyCommentNotes))
 			json.put("tendencyCommentNotes", tendencyCommentNotes);
+		if (!Strings.isNullOrEmpty(generalHeadlineCommentNotes))
+			json.put("generalHeadlineCommentNotes", generalHeadlineCommentNotes);
 
 		for (TextPart part : TextPart.values())
 			if ((textPartsMap.get(part) != null))
@@ -892,6 +936,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
 		if (!Strings.isNullOrEmpty(tendencyCommentTextcat))
 			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
+		if (!Strings.isNullOrEmpty(generalHeadlineCommentTextcat))
+			json.put("generalHeadlineCommentTextcat", generalHeadlineCommentTextcat);
 
 		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
 			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
@@ -903,6 +949,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			json.put("snowpackStructureCommentNotes", snowpackStructureCommentNotes);
 		if (!Strings.isNullOrEmpty(tendencyCommentNotes))
 			json.put("tendencyCommentNotes", tendencyCommentNotes);
+		if (!Strings.isNullOrEmpty(generalHeadlineCommentNotes))
+			json.put("generalHeadlineCommentNotes", generalHeadlineCommentNotes);
 
 		for (TextPart part : TextPart.values())
 			if ((textPartsMap.get(part) != null))
@@ -1004,12 +1052,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setSnowpackStructureHighlightsTextcat(bulletin.getSnowpackStructureHighlightsTextcat());
 		setSnowpackStructureCommentTextcat(bulletin.getSnowpackStructureCommentTextcat());
 		setTendencyCommentTextcat(bulletin.getTendencyCommentTextcat());
+		setGeneralHeadlineCommentTextcat(bulletin.getGeneralHeadlineCommentTextcat());
 
 		setAvActivityHighlightsNotes(bulletin.getAvActivityHighlightsNotes());
 		setAvActivityCommentNotes(bulletin.getAvActivityCommentNotes());
 		setSnowpackStructureHighlightsNotes(bulletin.getSnowpackStructureHighlightsNotes());
 		setSnowpackStructureCommentNotes(bulletin.getSnowpackStructureCommentNotes());
 		setTendencyCommentNotes(bulletin.getTendencyCommentNotes());
+		setGeneralHeadlineCommentNotes(bulletin.getGeneralHeadlineCommentNotes());
 	}
 
 	@Override
@@ -1043,6 +1093,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (!Objects.equals(this.snowpackStructureCommentTextcat, other.snowpackStructureCommentTextcat))
 			return false;
 		if (!Objects.equals(this.tendencyCommentTextcat, other.tendencyCommentTextcat))
+			return false;
+		if (!Objects.equals(this.generalHeadlineCommentTextcat, other.generalHeadlineCommentTextcat))
 			return false;
 		if (!Objects.equals(this.tendency, other.tendency))
 			return false;
