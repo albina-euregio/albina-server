@@ -1,8 +1,8 @@
 -- liquibase formatted sql
--- changeset legacy:000_000220 failOnError:true
+-- changeset albina:000_000220 failOnError:true
 -- comment create table observations
 -- preconditions onFail:MARK_RAN
--- precondition-sql-check expectedResult:0 SELECT EXISTS( SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'observations' AND TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = SCHEMA()) 
+-- precondition-sql-check expectedResult:0 SELECT EXISTS( SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'observations' AND TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = SCHEMA())
 CREATE TABLE observations (
     ID bigint NOT NULL AUTO_INCREMENT,
     ASPECT varchar(191),

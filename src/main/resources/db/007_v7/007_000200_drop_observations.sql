@@ -1,5 +1,4 @@
 -- liquibase formatted sql
 
--- changeset christina:1749649290419-1
+-- changeset albina:007_000200 failOnError:true
 DROP TABLE observations;
-

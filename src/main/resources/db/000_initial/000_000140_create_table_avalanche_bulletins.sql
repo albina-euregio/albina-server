@@ -1,8 +1,8 @@
 -- liquibase formatted sql
--- changeset legacy:000_000140 failOnError:true
+-- changeset albina:000_000140 failOnError:true
 -- comment create table avalanche_bulletins
 -- preconditions onFail:MARK_RAN
--- precondition-sql-check expectedResult:0 SELECT EXISTS( SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'avalanche_bulletins' AND TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = SCHEMA()) 
+-- precondition-sql-check expectedResult:0 SELECT EXISTS( SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'avalanche_bulletins' AND TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = SCHEMA())
 CREATE TABLE avalanche_bulletins (
     ID varchar(191) NOT NULL,
     AV_ACTIVITY_COMMENT_NOTES longtext,
