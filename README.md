@@ -34,7 +34,7 @@ make sure that you have the environment variable
    1. extend `resources/hibernate.cfg.xml` if necessary
    2. `mvn compile`
    3. `mvn liquibase:diff` --> this generates the file `resourcees/db/generated_changelog.mariadb.sql`
-   4. check the contents of the file and adapt if necessary. Once you are satisfied, rename it and move into appropriate sub-folder under `resources/db`
+   4. check the contents of the file and adapt if necessary. Once you are satisfied, rename it, update the lines `-- changeset albina:000_000000 failOnError:true` accordingly, and move into appropriate sub-folder under `resources/db`
 3. Deploy changesets in your local test environment:
    1. run `mvn compile` followed by `mvn liquibase:update`, or,
    2. check that `ALBINA_DB_RUN_MIGRATION=true` and start local server with `mvn jetty:run`
