@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -318,6 +319,12 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	public Path getHtmlDirectory() {
 		return Paths.get(getServerInstance().getHtmlDirectory(), getValidityDateString());
+	}
+
+	public String getGeneralHeadline(LanguageCode lang) {
+		return !this.bulletins.isEmpty()
+			? this.bulletins.get(0).getGeneralHeadlineCommentIn(lang)
+			: "";
 	}
 
 	@Override
