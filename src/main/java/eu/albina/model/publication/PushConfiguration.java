@@ -37,10 +37,10 @@ public class PushConfiguration implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "VAPID_PUBLIC_KEY")
+	@Column(name = "VAPID_PUBLIC_KEY", length = 191)
 	private String vapidPublicKey;
 
-	@Column(name = "VAPID_PRIVATE_KEY")
+	@Column(name = "VAPID_PRIVATE_KEY", length = 191)
 	private String vapidPrivateKey;
 
 	public Long getId() {

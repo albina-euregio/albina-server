@@ -254,10 +254,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "WEAK_LAYER_GRAIN_SHAPE")
 	private GrainShape weakLayerGrainShape;
 
-	@Column(name = "WEAK_LAYER_GRAIN_SIZE_UPPER_LIMIT")
+	@Column(name = "WEAK_LAYER_GRAIN_SIZE_UPPER_LIMIT", columnDefinition = "double")
 	private double weakLayerGrainSizeUpperLimit;
 
-	@Column(name = "WEAK_LAYER_GRAIN_SIZE_LOWER_LIMIT")
+	@Column(name = "WEAK_LAYER_GRAIN_SIZE_LOWER_LIMIT", columnDefinition = "double")
 	private double weakLayerGrainSizeLowerLimit;
 
 	@Column(name = "WEAK_LAYER_PERSISTENT")

@@ -51,7 +51,7 @@ public class UserRegionRoleLink {
 	private Region region;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "ROLE")
+	@Column(name = "ROLE", length = 191)
 	private Role role;
 
 	public UserRegionRoleLink() {

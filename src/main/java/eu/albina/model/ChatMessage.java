@@ -29,10 +29,10 @@ import com.github.openjson.JSONObject;
 @Table(name = "chat_messages")
 public class ChatMessage extends AbstractPersistentObject implements AvalancheInformationObject {
 
-	@Column(name = "TEXT")
+	@Column(name = "TEXT", length = 191)
 	private String text;
 
-	@Column(name = "USERNAME")
+	@Column(name = "USERNAME", length = 191)
 	private String username;
 
 	@Column(name = "DATETIME")

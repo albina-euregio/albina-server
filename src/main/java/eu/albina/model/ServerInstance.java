@@ -46,16 +46,16 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "NAME")
+	@Column(name = "NAME", length = 191)
 	private String name;
 
-	@Column(name = "API_URL")
+	@Column(name = "API_URL", length = 191)
 	private String apiUrl;
 
-	@Column(name = "USER_NAME")
+	@Column(name = "USER_NAME", length = 191)
 	private String userName;
 
-	@Column(name = "PASSWORD")
+	@Column(name = "PASSWORD", length = 191)
 	private String password;
 
 	@Column(name = "EXTERNAL_SERVER")
@@ -67,22 +67,22 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	@Column(name = "PUBLISH_AT_8PM")
 	private boolean publishAt8AM;
 
-	@Column(name = "PDF_DIRECTORY")
+	@Column(name = "PDF_DIRECTORY", length = 191)
 	private String pdfDirectory;
 
-	@Column(name = "HTML_DIRECTORY")
+	@Column(name = "HTML_DIRECTORY",  length = 191)
 	private String htmlDirectory;
 
-	@Column(name = "MAPS_PATH")
+	@Column(name = "MAPS_PATH",  length = 191)
 	private String mapsPath;
 
-	@Column(name = "MEDIA_PATH")
+	@Column(name = "MEDIA_PATH",  length = 191)
 	private String mediaPath;
 
-	@Column(name = "MAP_PRODUCTION_URL")
+	@Column(name = "MAP_PRODUCTION_URL", length = 191)
 	private String mapProductionUrl;
 
-	@Column(name = "SERVER_IMAGES_URL")
+	@Column(name = "SERVER_IMAGES_URL", length = 191)
 	private String serverImagesUrl;
 
 	@Column(name = "DANGER_LEVEL_ELEVATION_DEPENDENCY")

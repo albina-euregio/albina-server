@@ -82,12 +82,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
-	@Column(name = "OWNER_REGION")
+	@Column(name = "OWNER_REGION", length = 191)
 	private String ownerRegion;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_additional_users", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "ADDITIONAL_USER_NAME")
+	@Column(name = "ADDITIONAL_USER_NAME", length = 191)
 	private Set<String> additionalAuthors;
 
 	@Column(name = "PUBLICATION_DATE")
@@ -102,23 +102,23 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	/** The recommended regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_suggested_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
+	@Column(name = "REGION_ID", length = 191)
 	private Set<String> suggestedRegions;
 
 	/** The published regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_published_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
+	@Column(name = "REGION_ID",  length = 191)
 	private Set<String> publishedRegions;
 
 	/** The saved regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_saved_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
-	@Column(name = "REGION_ID")
+	@Column(name = "REGION_ID", length = 191)
 	private Set<String> savedRegions;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "STRATEGIC_MINDSET")
+	@Column(name = "STRATEGIC_MINDSET", length=191)
 	private StrategicMindset strategicMindset;
 
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
@@ -177,22 +177,22 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private String tendencyCommentNotes;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "TENDENCY")
+	@Column(name = "TENDENCY", length=191)
 	private Tendency tendency;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_PATTERN_1")
+	@Column(name = "DANGER_PATTERN_1", length = 191)
 	private DangerPattern dangerPattern1;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_PATTERN_2")
+	@Column(name = "DANGER_PATTERN_2", length = 191)
 	private DangerPattern dangerPattern2;
 
 	/** Map containing all text parts available for a bulletin */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@MapKeyEnumerated(EnumType.STRING)
-	@MapKeyColumn(name = "TEXT_TYPE")
+	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
 	private Map<TextPart, Texts> textPartsMap;
 
 	/**

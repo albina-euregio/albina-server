@@ -35,7 +35,7 @@ public class Text implements AvalancheInformationObject, Comparable<Text> {
 	private static final Comparator<Text> COMPARATOR = Comparator.comparing(Text::getLanguage, Comparator.nullsLast(Comparator.naturalOrder()));
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE_CODE")
+	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode languageCode;
 
 	@Lob

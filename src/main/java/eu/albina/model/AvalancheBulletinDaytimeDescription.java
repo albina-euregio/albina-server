@@ -56,7 +56,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private boolean hasElevationDependency;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_RATING_ABOVE")
+	@Column(name = "DANGER_RATING_ABOVE", length = 191)
 	private DangerRating dangerRatingAbove;
 
 	@Column(name = "ELEVATION")
@@ -70,12 +70,12 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private String terrainFeatureAboveTextcat;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "TEXT_PARTS", joinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@Column(name = "TERRAIN_FEATURE_ABOVE")
 	private Set<Text> terrainFeatureAbove;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_RATING_BELOW")
+	@Column(name = "DANGER_RATING_BELOW", length = 191)
 	private DangerRating dangerRatingBelow;
 
 	@Lob
@@ -83,12 +83,12 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private String terrainFeatureBelowTextcat;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "TEXT_PARTS", joinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@Column(name = "TERRAIN_FEATURE_BELOW")
 	private Set<Text> terrainFeatureBelow;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "COMPLEXITY")
+	@Column(name = "COMPLEXITY", length = 191)
 	private Complexity complexity;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
