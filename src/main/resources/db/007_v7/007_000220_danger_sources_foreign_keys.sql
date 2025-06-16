@@ -1,6 +1,7 @@
 -- liquibase formatted sql
 
 -- changeset albina:007_000220-1
+delete from danger_source_variant_regions where danger_source_variant_id not in (select id from danger_source_variants);
 ALTER TABLE danger_source_variant_regions ADD CONSTRAINT FK3h4cnx2rft0jbndrnkhtq8onc FOREIGN KEY (DANGER_SOURCE_VARIANT_ID) REFERENCES danger_source_variants (ID);
 
 -- changeset albina:007_000220-2
