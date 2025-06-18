@@ -100,7 +100,7 @@ public class CaamlTest {
 	private void createOldCaamlFiles(LocalDate date, CaamlVersion version) throws Exception {
 		LoggerFactory.getLogger(getClass()).info("Loading {}", date);
 		AvalancheReport avalancheReport = date.isAfter(LocalDate.parse("2020-10-01")) ? loadFromURL(date): loadFromDatabase(date);
-		for (LanguageCode language : LanguageCode.ENABLED) {
+		for (LanguageCode language : avalancheReport.getRegion().getEnabledLanguages()) {
 			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, version.filenameSuffix()));
 			String caaml = Caaml.createCaaml(avalancheReport, language, version);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);

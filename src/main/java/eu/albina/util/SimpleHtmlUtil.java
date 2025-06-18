@@ -122,7 +122,7 @@ public class SimpleHtmlUtil {
 		boolean result = true;
 
 		if (!avalancheReport.getBulletins().isEmpty())
-			for (LanguageCode lang : LanguageCode.ENABLED) {
+			for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 				if (!createSimpleHtml(avalancheReport, lang))
 					result = false;
 			}

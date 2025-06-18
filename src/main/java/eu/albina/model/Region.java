@@ -20,23 +20,15 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import eu.albina.model.converter.LanguageCodeConverter;
+import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.LanguageCode;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -116,6 +108,10 @@ public class Region implements AvalancheInformationObject {
 	@JsonSerialize(contentUsing = RegionSerializer.class)
 	@JsonDeserialize(contentUsing = RegionDeserializer.class)
 	private Set<Region> neighborRegions;
+
+	@Column(name = "ENABLED_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
+	@Convert(converter = LanguageCodeConverter.class)
+	private Set<LanguageCode> enabledLanguages;
 
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
@@ -310,6 +306,12 @@ public class Region implements AvalancheInformationObject {
 					this.neighborRegions.add(region);
 			}
 		}
+		if (json.has("enabledLanguages")) {
+			JSONArray enabledLanguages = json.getJSONArray("enabledLanguages");
+			for (Object entry : enabledLanguages) {
+				this.enabledLanguages.add(LanguageCode.valueOf(((String) entry)));
+			}
+		}
 		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
 			this.publishBulletins = json.getBoolean("publishBulletins");
 		if (json.has("publishBlogs") && !json.isNull("publishBlogs"))
@@ -454,6 +456,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void addNeighborRegion(Region neighborRegion) {
 		this.neighborRegions.add(neighborRegion);
+	}
+
+	public Set<LanguageCode> getEnabledLanguages() {
+		return enabledLanguages;
+	}
+
+	public void  setEnabledLanguages(Set<LanguageCode> enabledLanguages) {
+		this.enabledLanguages = enabledLanguages;
 	}
 
 	public boolean isPublishBulletins() {
@@ -871,6 +881,13 @@ public class Region implements AvalancheInformationObject {
 			json.put("neighborRegions", jsonNeighborRegions);
 		} else {
 			json.put("neighborRegions", new JSONArray());
+		}
+		if (enabledLanguages != null && enabledLanguages.size() > 0) {
+			JSONArray enabledLanguages = new JSONArray();
+			for (LanguageCode language : this.enabledLanguages) {
+				enabledLanguages.put(language.toString());
+			}
+			json.put("enabledLanguages", enabledLanguages);
 		}
 		json.put("publishBulletins", isPublishBulletins());
 		json.put("publishBlogs", isPublishBlogs());

@@ -76,7 +76,7 @@ public class PdfUtilRebuildTest {
 	}
 
 	private static void createRegionPdfs(AvalancheReport avalancheReport) {
-		for (LanguageCode lang : LanguageCode.ENABLED) {
+		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			try {
 				logger.info("Creating PDF for region {}, language {}", avalancheReport.getRegion().getId(), lang);
 				new RebuildPdfUtil(avalancheReport, lang, false).createPdf();
