@@ -330,9 +330,14 @@ public class DangerSourceVariantTextController {
 			// phrase: Expo
 			List<Aspect> sortedAspects = Aspect.sortAspects(aspects);
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect1.entrySet()) {
-				if (entry.getKey() == sortedAspects.get(0)) {
-					result = result.replaceAll(textcatPlaceholder.get("Expo"), entry.getValue());
-					break;
+				if (!sortedAspects.isEmpty()) {
+					if (entry.getKey() == sortedAspects.get(0)) {
+						result = result.replaceAll(textcatPlaceholder.get("Expo"), entry.getValue());
+						break;
+					}
+				} else {
+					result = result.replaceAll(textcatPlaceholder.get("Komma_Expo"), "{\"curlyName\":\"Komma_Expo\",\"line\":0}");
+						break;
 				}
 			}
 			// phrase: Komma_Expo
