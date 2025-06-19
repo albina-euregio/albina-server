@@ -35,6 +35,13 @@ public class AspectsTest {
 	}
 
 	@Test
+	void testSortAspects_TwoAdjacentAspects2() {
+		Set<Aspect> aspects = EnumSet.of(Aspect.NE, Aspect.N);
+		List<Aspect> sorted = Aspect.sortAspects(aspects);
+		assertEquals(List.of(Aspect.N, Aspect.NE), sorted);
+	}
+
+	@Test
 	void testSortAspects_ThreeAdjacentAspects() {
 		Set<Aspect> aspects = EnumSet.of(Aspect.N, Aspect.NE, Aspect.E);
 		List<Aspect> sorted = Aspect.sortAspects(aspects);
@@ -49,10 +56,25 @@ public class AspectsTest {
 	}
 
 	@Test
+	void testSortAspects_ThreeAdjacentAspects3() {
+		Set<Aspect> aspects = EnumSet.of(Aspect.NW, Aspect.N, Aspect.W);
+		List<Aspect> sorted = Aspect.sortAspects(aspects);
+		assertEquals(List.of(Aspect.W, Aspect.NW, Aspect.N), sorted);
+	}
+
+	@Test
 	void testSortAspects_FourOrMoreAspects() {
 		Set<Aspect> aspects = EnumSet.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE);
 		List<Aspect> sorted = Aspect.sortAspects(aspects);
 		// Should return [N, E, SE] (middleAspect is E)
 		assertEquals(List.of(Aspect.N, Aspect.E, Aspect.SE), sorted);
+	}
+
+	@Test
+	void testSortAspects_FourOrMoreAspects2() {
+		Set<Aspect> aspects = EnumSet.of(Aspect.SW, Aspect.NE, Aspect.E, Aspect.W, Aspect.NW, Aspect.N);
+		List<Aspect> sorted = Aspect.sortAspects(aspects);
+		// Should return [N, E, SE] (middleAspect is E)
+		assertEquals(List.of(Aspect.SW, Aspect.N, Aspect.E), sorted);
 	}
 }
