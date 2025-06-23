@@ -20,9 +20,16 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import eu.albina.model.RegionLanguageConfiguration;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.WhatsAppConfiguration;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
+import org.apache.commons.codec.language.bm.Lang;
+import org.apache.commons.codec.language.bm.Languages;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,6 +228,48 @@ public class RegionController {
 				return null;
 			}
 		}).filter(Objects::nonNull).collect(Collectors.toList());
+	}
+
+	public Optional<RegionLanguageConfiguration> getLanguageConfiguration(Region region, LanguageCode languageCode) {
+			Objects.requireNonNull(region, "regionId");
+			Objects.requireNonNull(region.getId(), "regionId.getId()");
+			Objects.requireNonNull(languageCode, "languageCode");
+
+			return HibernateUtil.getInstance().run(entityManager -> {
+				try {
+					RegionLanguageConfiguration result = (RegionLanguageConfiguration) entityManager.createQuery(HibernateUtil.queryGetRegionLanguageConfiguration)
+						.setParameter("region", region)
+						.setParameter("lang", languageCode)
+						.getSingleResult();
+					return Optional.ofNullable(result);
+				} catch (PersistenceException e) {
+					return Optional.empty();
+				}
+			});
+	}
+
+	public Optional<RegionLanguageConfiguration> getDefaultConfiguration(Region region) {
+		Objects.requireNonNull(region, "regionId");
+		Objects.requireNonNull(region.getId(), "regionId.getId()");
+
+		// TODO: enforce a default language on database level
+		LanguageCode defaultLang = region.getDefaultLang() != null ? region.getDefaultLang() : LanguageCode.de;
+		return getLanguageConfiguration(region, defaultLang);
+	}
+
+	/**
+	 * Get a format string for a url with date for the given region and language code. If no url was set for this
+	 * combination of region and language, the default language for that region is used.
+	 * @param region region for which to obtain url
+	 * @param languageCode for which to obtain url, reverts to default language if no url for this language is set
+	 * @return format string for url with date or empty string
+	 */
+	public String getUrlWithDate(Region region, LanguageCode languageCode) {
+		return getLanguageConfiguration(region, languageCode)
+			.map(config -> config.urlWithDate)
+			.orElseGet(() -> getDefaultConfiguration(region)
+				.map(config -> config.urlWithDate)
+				.orElse(""));
 	}
 
 }

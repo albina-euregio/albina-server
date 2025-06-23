@@ -12,6 +12,7 @@
 		<mapping class="eu.albina.model.Texts"/>
 		<mapping class="eu.albina.model.User"/>
 		<mapping class="eu.albina.model.Region"/>
+		<mapping class="eu.albina.model.RegionLanguageConfiguration"/>
 		<mapping class="eu.albina.model.ServerInstance"/>
 		<mapping class="eu.albina.model.StressLevel"/>
 		<mapping class="eu.albina.model.MatrixInformation"/>

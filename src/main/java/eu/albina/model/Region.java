@@ -272,6 +272,25 @@ public class Region {
 	@Column(name = "IMAGE_COLORBAR_BW_PATH", length = 191)
 	private String imageColorbarBwPath;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DEFAULT_LANG", length = 191)
+	private LanguageCode defaultLang;
+
+	@Column(name = "LOGO", columnDefinition = "LONGBLOB")
+	private String logo;
+
+	@Column(name = "LOGO_BW", columnDefinition = "LONGBLOB")
+	private String logoBw;
+
+	@Column(name = "LOGO_SECONDARY", columnDefinition = "LONGBLOB")
+	private String logoSecondary;
+
+	@Column(name = "LOGO_SECONDARY_BW", columnDefinition = "LONGBLOB")
+	private String logoSecondaryBw;
+
+	@Column(name = "COAT_OF_ARMS", columnDefinition = "LONGBLOB")
+	private String coatOfArms;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -765,6 +784,53 @@ public class Region {
 	public void setEnableWeatherbox(boolean enableWeatherbox) {
 		this.enableWeatherbox = enableWeatherbox;
 	}
+
+	public LanguageCode getDefaultLang() { return defaultLang; }
+
+	public void setDefaultLang(LanguageCode defaultLang) {
+		this.defaultLang = defaultLang;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	public void setLogoBw(String logoBw) {
+		this.logoBw = logoBw;
+	}
+
+	public String getLogoBw() {
+		return logoBw;
+	}
+
+	public String getLogoSecondary() {
+		return logoSecondary;
+	}
+
+	public void setLogoSecondary(String logoSecondary) {
+		this.logoSecondary = logoSecondary;
+	}
+
+	public String getLogoSecondaryBw() {
+		return logoSecondaryBw;
+	}
+
+	public void setLogoSecondaryBw(String logoSecondaryBw) {
+		this.logoSecondaryBw = logoSecondaryBw;
+	}
+
+	public String getCoatOfArms() {
+		return coatOfArms;
+	}
+
+	public void setCoatOfArms(String coatOfArms) {
+		this.coatOfArms = coatOfArms;
+	}
+
 
 	public boolean isEnableGeneralHeadline() {
 		return enableGeneralHeadline;
