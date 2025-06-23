@@ -20,14 +20,12 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
 import eu.albina.model.converter.LanguageCodeConverter;
-import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 
 import org.w3c.dom.Document;
@@ -112,6 +110,10 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLED_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
 	@Convert(converter = LanguageCodeConverter.class)
 	private Set<LanguageCode> enabledLanguages;
+
+	@Column(name = "TTS_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'es', 'ca', 'oc')")
+	@Convert(converter = LanguageCodeConverter.class)
+	private Set<LanguageCode> ttsLanguages;
 
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
@@ -260,6 +262,8 @@ public class Region implements AvalancheInformationObject {
 		this.superRegions = new HashSet<Region>();
 		this.subRegions = new HashSet<Region>();
 		this.neighborRegions = new HashSet<Region>();
+		this.enabledLanguages = new TreeSet<LanguageCode>();
+		this.ttsLanguages = new TreeSet<LanguageCode>();
 	}
 
 	public Region(String id) {
@@ -310,6 +314,12 @@ public class Region implements AvalancheInformationObject {
 			JSONArray enabledLanguages = json.getJSONArray("enabledLanguages");
 			for (Object entry : enabledLanguages) {
 				this.enabledLanguages.add(LanguageCode.valueOf(((String) entry)));
+			}
+		}
+		if (json.has("ttsLanguages")) {
+			JSONArray ttsLanguages = json.getJSONArray("ttsLanguages");
+			for (Object entry : ttsLanguages) {
+				this.ttsLanguages.add(LanguageCode.valueOf(((String) entry)));
 			}
 		}
 		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
@@ -464,6 +474,14 @@ public class Region implements AvalancheInformationObject {
 
 	public void  setEnabledLanguages(Set<LanguageCode> enabledLanguages) {
 		this.enabledLanguages = enabledLanguages;
+	}
+
+	public Set<LanguageCode> getTTSLanguages() {
+		return ttsLanguages;
+	}
+
+	public void  setTTSLanguages(Set<LanguageCode> ttsLanguages) {
+		this.ttsLanguages = ttsLanguages;
 	}
 
 	public boolean isPublishBulletins() {
@@ -888,6 +906,13 @@ public class Region implements AvalancheInformationObject {
 				enabledLanguages.put(language.toString());
 			}
 			json.put("enabledLanguages", enabledLanguages);
+		}
+		if (ttsLanguages != null && ttsLanguages.size() > 0) {
+			JSONArray ttsLanguages = new JSONArray();
+			for (LanguageCode language : this.ttsLanguages) {
+				ttsLanguages.put(language.toString());
+			}
+			json.put("ttsLanguages", ttsLanguages);
 		}
 		json.put("publishBulletins", isPublishBulletins());
 		json.put("publishBlogs", isPublishBlogs());
