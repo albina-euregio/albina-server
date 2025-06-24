@@ -47,14 +47,14 @@ public class WhatsAppConfiguration implements Serializable {
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
 
-	@Column(name = "API_TOKEN")
+	@Column(name = "API_TOKEN", length = 191)
 	private String apiToken;
 
-	@Column(name = "CHAT_ID")
+	@Column(name = "CHAT_ID",  length = 191)
 	private String chatId;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE_CODE")
+	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode lang;
 
 	public Long getId() {

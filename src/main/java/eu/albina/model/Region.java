@@ -84,7 +84,7 @@ public class Region implements AvalancheInformationObject {
 	}
 
 	@Id
-	@Column(name = "ID")
+	@Column(name = "ID", length = 191)
 	private String id;
 
 	@Column(name = "MICRO_REGIONS")
@@ -187,10 +187,10 @@ public class Region implements AvalancheInformationObject {
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
 
-	@Column(name = "PDF_COLOR")
+	@Column(name = "PDF_COLOR", length = 191)
 	private String pdfColor;
 
-	@Column(name = "EMAIL_COLOR")
+	@Column(name = "EMAIL_COLOR", length = 191)
 	private String emailColor;
 
 	@Column(name = "PDF_MAP_Y_AM_PM")
@@ -211,10 +211,10 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "PDF_FOOTER_LOGO")
 	private boolean pdfFooterLogo;
 
-	@Column(name = "PDF_FOOTER_LOGO_COLOR_PATH")
+	@Column(name = "PDF_FOOTER_LOGO_COLOR_PATH", length = 191)
 	private String pdfFooterLogoColorPath;
 
-	@Column(name = "PDF_FOOTER_LOGO_BW_PATH")
+	@Column(name = "PDF_FOOTER_LOGO_BW_PATH", length = 191)
 	private String pdfFooterLogoBwPath;
 
 	@Column(name = "MAP_X_MAX")
@@ -229,32 +229,32 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "MAP_Y_MIN")
 	private int mapYmin;
 
-	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME")
+	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME", length = 191)
 	private String simpleHtmlTemplateName;
 
-	@Column(name = "GEO_DATA_DIRECTORY")
+	@Column(name = "GEO_DATA_DIRECTORY", length = 191)
 	private String geoDataDirectory;
 
-	@Column(name = "MAP_LOGO_COLOR_PATH")
+	@Column(name = "MAP_LOGO_COLOR_PATH", length = 191)
 	private String mapLogoColorPath;
 
-	@Column(name = "MAP_LOGO_BW_PATH")
+	@Column(name = "MAP_LOGO_BW_PATH", length = 191)
 	private String mapLogoBwPath;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "MAP_LOGO_POSITION")
+	@Column(name = "MAP_LOGO_POSITION", length = 191)
 	private Position mapLogoPosition;
 
-	@Column(name = "MAP_CENTER_LAT")
+	@Column(name = "MAP_CENTER_LAT", columnDefinition = "double")
 	private double mapCenterLat;
 
-	@Column(name = "MAP_CENTER_LNG")
+	@Column(name = "MAP_CENTER_LNG", columnDefinition = "double")
 	private double mapCenterLng;
 
-	@Column(name = "IMAGE_COLORBAR_COLOR_PATH")
+	@Column(name = "IMAGE_COLORBAR_COLOR_PATH", length = 191)
 	private String imageColorbarColorPath;
 
-	@Column(name = "IMAGE_COLORBAR_BW_PATH")
+	@Column(name = "IMAGE_COLORBAR_BW_PATH", length = 191)
 	private String imageColorbarBwPath;
 
 	/**

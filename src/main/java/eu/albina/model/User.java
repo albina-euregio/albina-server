@@ -50,20 +50,20 @@ public class User {
 
 	/** Email address of the user */
 	@Id
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", length = 191)
 	private String email;
 
 	/** Password of the user */
-	@Column(name = "PASSWORD")
+	@Column(name = "PASSWORD", length = 191)
 	private String password;
 
 	/** Name of the user **/
-	@Column(name = "NAME")
+	@Column(name = "NAME",  length = 191)
 	private String name;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "USER_EMAIL"))
-	@Column(name = "USER_ROLE")
+	@Column(name = "USER_ROLE", length = 191)
 	@Enumerated(EnumType.STRING)
 	private List<Role> roles;
 
@@ -79,7 +79,7 @@ public class User {
 	private String image;
 
 	/** Organization the user works for **/
-	@Column(name = "ORGANIZATION")
+	@Column(name = "ORGANIZATION", length = 191)
 	private String organization;
 
 	/** The avalanche bulletins of the user */
@@ -88,7 +88,7 @@ public class User {
 
 	/** Prefered language of the user */
 	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE_CODE")
+	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode languageCode;
 
 	@Column(name = "DELETED")

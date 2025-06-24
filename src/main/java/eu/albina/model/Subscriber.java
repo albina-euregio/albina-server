@@ -41,7 +41,7 @@ public class Subscriber {
 
 	/** Email address of the subscriber */
 	@Id
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", length = 191)
 	private String email;
 
 	@Column(name = "CONFIRMED")
@@ -55,7 +55,7 @@ public class Subscriber {
 	private List<Region> regions;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE")
+	@Column(name = "LANGUAGE", length = 191)
 	private LanguageCode language;
 
 	@Column(name = "PDF_ATTACHMENT")

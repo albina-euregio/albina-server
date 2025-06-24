@@ -1,5 +1,5 @@
 -- liquibase formatted sql
--- changeset weiss:005_000010 failOnError:true
+-- changeset albina:005_000010 failOnError:true
 -- comment add comments to table server_instances
 ALTER TABLE server_instances
     MODIFY COLUMN ID bigint NOT NULL AUTO_INCREMENT

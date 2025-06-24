@@ -44,7 +44,7 @@ public class StressLevel {
 
 	@Id
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "USER_ID", nullable = false)
+	@JoinColumn(name = "USER_ID", nullable = false, columnDefinition = "varchar(255)")
 	@JsonIgnore
 	private User user;
 

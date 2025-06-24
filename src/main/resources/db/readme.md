@@ -19,11 +19,11 @@ To perform the DB migration automatically at server start, the environment varia
 ALBINA_DB_RUN_MIGRATION=true
 ```
 
-Manual DB migration with liqubase (docker image)
+Manual DB migration with liquibase (docker image)
 -----
 
-When executing liqubae manually, the Changlog must be in the db directory.
-Otherwise, there will be problems if you switch between manual execution and 
+When executing liquibase manually, the Changelog must be in the db directory.
+Otherwise, there will be problems if you switch between manual execution and
 automatic execution when starting the server, as the file ID will
 no longer match.
 

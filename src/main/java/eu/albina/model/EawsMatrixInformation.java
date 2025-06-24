@@ -38,23 +38,23 @@ import java.util.Comparator;
 public class EawsMatrixInformation implements AvalancheInformationObject, Comparable<EawsMatrixInformation> {
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_RATING")
+	@Column(name = "DANGER_RATING", length = 191)
 	private DangerRating dangerRating;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DANGER_RATING_MODIFICATOR")
+	@Column(name = "DANGER_RATING_MODIFICATOR", length = 191)
 	private DangerRatingModificator dangerRatingModificator;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_SIZE")
+	@Column(name = "AVALANCHE_SIZE", length = 191)
 	private AvalancheSize avalancheSize;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SNOWPACK_STABILITY")
+	@Column(name = "SNOWPACK_STABILITY", length = 191)
 	private SnowpackStability snowpackStability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "FREQUENCY")
+	@Column(name = "FREQUENCY", length = 191)
 	private Frequency frequency;
 
 	@Column(name = "AVALANCHE_SIZE_VALUE")

@@ -138,7 +138,7 @@ public enum Aspect {
 		if (sorted.size() < 4) {
 			return sorted;
 		}
-		Aspect middleAspect = Stream.of(Aspect.N, Aspect.S, Aspect.W, Aspect.E).filter(aspects::contains).findFirst().orElseThrow();
+		Aspect middleAspect = Stream.of(Aspect.N, Aspect.S, Aspect.W, Aspect.E).filter(sorted.subList(1, sorted.size() - 1)::contains).findFirst().orElseThrow();
 		return List.of(sorted.get(0), middleAspect, sorted.get(sorted.size() - 1));
 	}
 }

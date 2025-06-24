@@ -330,9 +330,11 @@ public class DangerSourceVariantTextController {
 			// phrase: Expo
 			List<Aspect> sortedAspects = Aspect.sortAspects(aspects);
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect1.entrySet()) {
-				if (entry.getKey() == sortedAspects.get(0)) {
-					result = result.replaceAll(textcatPlaceholder.get("Expo"), entry.getValue());
-					break;
+				if (!sortedAspects.isEmpty()) {
+					if (entry.getKey() == sortedAspects.get(0)) {
+						result = result.replaceAll(textcatPlaceholder.get("Expo"), entry.getValue());
+						break;
+					}
 				}
 			}
 			// phrase: Komma_Expo
@@ -349,7 +351,12 @@ public class DangerSourceVariantTextController {
 			}
 			// phrase: und_Expo
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect3.entrySet()) {
-				if (sortedAspects.size() > 1) {
+				if (sortedAspects.size() > 2) {
+					if (entry.getKey() == sortedAspects.get(2)) {
+						result = result.replaceAll(textcatPlaceholder.get("und_Expo"), entry.getValue());
+						break;
+					}
+				} else if (sortedAspects.size() > 1) {
 					if (entry.getKey() == sortedAspects.get(1)) {
 						result = result.replaceAll(textcatPlaceholder.get("und_Expo"), entry.getValue());
 						break;

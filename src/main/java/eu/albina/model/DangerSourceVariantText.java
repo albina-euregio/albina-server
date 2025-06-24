@@ -43,7 +43,7 @@ public class DangerSourceVariantText extends AbstractPersistentObject {
 	private AvalancheType avalancheType;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_PROBLEM")
+	@Column(name = "AVALANCHE_PROBLEM", length = 191)
 	private eu.albina.model.enumerations.AvalancheProblem avalancheProblem;
 
 	@Column(name = "HAS_DAYTIME_DEPENDENCY")
@@ -54,15 +54,15 @@ public class DangerSourceVariantText extends AbstractPersistentObject {
 	private GlidingSnowActivity glidingSnowActivity;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "AVALANCHE_SIZE")
+	@Column(name = "AVALANCHE_SIZE", length=191)
 	private AvalancheSize avalancheSize;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "SNOWPACK_STABILITY")
+	@Column(name = "SNOWPACK_STABILITY", length = 191)
 	private SnowpackStability snowpackStability;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "FREQUENCY")
+	@Column(name = "FREQUENCY", length = 191)
 	private Frequency frequency;
 
 	@Lob

@@ -27,7 +27,7 @@ public abstract class AbstractPersistentObject implements PersistentObject {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "ID")
+	@Column(name = "ID", length = 191)
 	protected String id;
 
 	@Override

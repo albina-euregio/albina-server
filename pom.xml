@@ -16,6 +16,7 @@
 		<jersey.version>2.40</jersey.version>
 		<slf4j.version>1.7.36</slf4j.version>
 		<hibernate.version>6.6.2.Final</hibernate.version>
+		<liquibase.version>4.30.0</liquibase.version>
 		<itextpdf.version>7.2.6</itextpdf.version>
 	</properties>
 
@@ -185,6 +186,13 @@
 			<version>2.3.31</version>
 		</dependency>
 
+		<!-- blog -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
 		<!-- pdf -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>
@@ -285,7 +293,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>4.21.1</version>
+			<version>${liquibase.version}</version>
 		</dependency>
 
 		<!-- testing -->
@@ -426,6 +434,44 @@
 				<configuration>
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<!--set values for Liquibase properties and settings
+					for example, the location of a properties file to use-->
+<!--					<propertyFile>liquibase.properties</propertyFile>-->
+					<changeLogFile>db/changelog-main.xml</changeLogFile>
+					<diffChangeLogFile>
+						${project.basedir}/src/main/resources/db/generated_changelog.mariadb.sql
+					</diffChangeLogFile>
+<!--					default diffTypes: tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints
+						in addition one can add: data -->
+					<diffTypes>tables, columns, primarykeys, foreignkeys</diffTypes>
+<!--					Liquibase diff has problems detecting the existing primary keys for some tables. Use diffExcludeObjects to ignore them -->
+<!--					<diffExcludeObjects>table:region_hierarchy, table:user_stress_levels, table:text_parts</diffExcludeObjects>-->
+					<diffExcludeObjects>table:generic_observations</diffExcludeObjects>
+					<url>${hibernate.connection.url}</url>
+					<username>${hibernate.connection.username}</username>
+					<password>${hibernate.connection.password}</password>
+					<referenceUrl>hibernate:classic:hibernate.cfg.xml</referenceUrl>
+				</configuration>
+				<dependencies>
+					<!--set up any dependencies for Liquibase to function in your
+					environment for example, a database-specific plugin-->
+					<dependency>
+						<groupId>org.liquibase.ext</groupId>
+						<artifactId>liquibase-hibernate6</artifactId>
+						<version>${liquibase.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-data-jpa</artifactId>
+						<version>3.0.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 
