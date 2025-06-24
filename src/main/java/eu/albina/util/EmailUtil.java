@@ -136,6 +136,13 @@ public class EmailUtil {
 			text.put("pm", "");
 		}
 
+		// TODO: (general-headline): add conditional - only set general headline if activated in backend
+		if (!avalancheReport.getGeneralHeadline(lang).isEmpty()) {
+			text.put("generalHeadline", avalancheReport.getGeneralHeadline(lang));
+		} else {
+			text.put("generalHeadline", "");
+		}
+
 		Map<String, Object> dangerRatings = new HashMap<>();
 		dangerRatings.put("low", DangerRating.low.toString(lang.getLocale(), false));
 		dangerRatings.put("moderate", DangerRating.moderate.toString(lang.getLocale(), false));
