@@ -137,7 +137,7 @@ public class EmailUtil {
 		}
 
 		// TODO: (general-headline): add conditional - only set general headline if activated in backend
-		if (!avalancheReport.getGeneralHeadline(lang).isEmpty()) {
+		if (avalancheReport.getGeneralHeadline(lang) != null && !avalancheReport.getGeneralHeadline(lang).isEmpty()) {
 			text.put("generalHeadline", avalancheReport.getGeneralHeadline(lang));
 		} else {
 			text.put("generalHeadline", "");
