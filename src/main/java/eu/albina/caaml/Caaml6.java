@@ -47,6 +47,7 @@ public interface Caaml6 {
 
 	static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
 		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
+		// TODO (general-headline): insert conditional - only set general headline if activated in backend
 		AvalancheBulletin firstBulletin = avalancheReport.getBulletins().get(0);
 		bulletins.setCustomData(new AvalancheBulletinsCustomData(
 			new AvalancheBulletinsCustomData.ALBINA(firstBulletin.getGeneralHeadlineCommentIn(lang))
