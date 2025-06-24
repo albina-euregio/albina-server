@@ -1078,6 +1078,18 @@ public class PdfUtil {
 			mapWidth = region.getPdfMapWidthAmPm();
 			mapHeight = region.getPdfMapHeight();
 
+			String generalHeadlineComment = avalancheReport.getGeneralHeadline(lang);
+			if (generalHeadlineComment != null && !generalHeadlineComment.isEmpty()) {
+				Text title = new Text(generalHeadlineComment == null ? "" : generalHeadlineComment)
+					.setFont(openSansBoldFont)
+					.setFontSize(14)
+					.setFontColor(blackColor);
+				Paragraph p = new Paragraph().add(title)
+					.setMultipliedLeading(1.1f)
+					.setFixedPosition(pageSize.getWidth() / 2 - 260, mapY + 2 * mapHeight * 0.88f + 80, mapWidth);
+				canvas.add(p);
+			}
+
 			ImageData overviewMapAMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.am));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
 			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
@@ -1102,6 +1114,19 @@ public class PdfUtil {
 			Image overviewMapImg = new Image(overviewMapImageData);
 			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			mapY = region.getPdfMapYFd();
+
+			String generalHeadlineComment = avalancheReport.getGeneralHeadline(lang);
+			if (generalHeadlineComment != null && !generalHeadlineComment.isEmpty()) {
+				Text title = new Text(generalHeadlineComment)
+					.setFont(openSansBoldFont)
+					.setFontSize(14)
+					.setFontColor(blackColor);
+				Paragraph p = new Paragraph().add(title)
+					.setMultipliedLeading(1.1f)
+					.setFixedPosition(pageSize.getWidth() / 2 - (float) region.getPdfMapWidthFd() / 2, region.getPdfMapYFd() + region.getPdfMapHeight() + 120, region.getPdfMapWidthFd());
+				canvas.add(p);
+			}
+
 			overviewMapImg.scaleToFit(region.getPdfMapWidthFd(), 500);
 			overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - region.getPdfMapWidthFd() / 2, mapY);
 			canvas.add(overviewMapImg);
