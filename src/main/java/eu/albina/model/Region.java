@@ -183,6 +183,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_STRESS_LEVEL")
 	private boolean enableStressLevel;
 
+	@Column(name = "ENABLE_GENERAL_HEADLINE")
+	private boolean enableGeneralHeadline;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -348,6 +351,8 @@ public class Region implements AvalancheInformationObject {
 			this.enableModelling = json.getBoolean("enableModelling");
 		if (json.has("enableWeatherbox") && !json.isNull("enableWeatherbox"))
 			this.enableWeatherbox = json.getBoolean("enableWeatherbox");
+		if (json.has("enableGeneralHeadline") && !json.isNull("enableGeneralHeadline"))
+			this.enableGeneralHeadline = json.getBoolean("enableGeneralHeadline");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
 			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("enableStrategicMindset") && !json.isNull("enableStrategicMindset"))
@@ -824,6 +829,14 @@ public class Region implements AvalancheInformationObject {
 		this.enableWeatherbox = enableWeatherbox;
 	}
 
+	public boolean isEnableGeneralHeadline() {
+		return enableGeneralHeadline;
+	}
+
+	public void setEnableGeneralHeadline(boolean enableGeneralHeadline) {
+		this.enableGeneralHeadline = enableGeneralHeadline;
+	}
+
 	public Element toCAAML(Document doc) {
 		Element region = doc.createElement("Region");
 		region.setAttribute("gml:id", getId());
@@ -891,6 +904,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableObservations", isEnableObservations());
 		json.put("enableModelling", isEnableModelling());
 		json.put("enableWeatherbox", isEnableWeatherbox());
+		json.put("enableGeneralHeadline", isEnableGeneralHeadline());
 		json.put("showMatrix", isShowMatrix());
 		json.put("enableStrategicMindset", isEnableStrategicMindset());
 		json.put("enableStressLevel", isEnableStressLevel());
