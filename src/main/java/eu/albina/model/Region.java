@@ -174,6 +174,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_WEATHERBOX")
 	private boolean enableWeatherbox;
 
+	@Column(name = "ENABLE_EDITABLE_FIELDS")
+	private boolean enableEditableFields;
+
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
 
@@ -348,6 +351,8 @@ public class Region implements AvalancheInformationObject {
 			this.enableModelling = json.getBoolean("enableModelling");
 		if (json.has("enableWeatherbox") && !json.isNull("enableWeatherbox"))
 			this.enableWeatherbox = json.getBoolean("enableWeatherbox");
+		if (json.has("enableEditableFields") && !json.isNull("enableEditableFields"))
+			this.enableEditableFields = json.getBoolean("enableEditableFields");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
 			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("enableStrategicMindset") && !json.isNull("enableStrategicMindset"))
@@ -816,6 +821,10 @@ public class Region implements AvalancheInformationObject {
 		this.enableModelling = enableModelling;
 	}
 
+	public boolean isEnableEditableFields() { return enableEditableFields; }
+
+	public void setEnableEditableField(boolean enableEditableFields) { this.enableEditableFields = enableEditableFields; }
+
 	public boolean isEnableWeatherbox() {
 		return enableWeatherbox;
 	}
@@ -891,6 +900,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableObservations", isEnableObservations());
 		json.put("enableModelling", isEnableModelling());
 		json.put("enableWeatherbox", isEnableWeatherbox());
+		json.put("enableEditableFields", isEnableEditableFields());
 		json.put("showMatrix", isShowMatrix());
 		json.put("enableStrategicMindset", isEnableStrategicMindset());
 		json.put("enableStressLevel", isEnableStressLevel());
