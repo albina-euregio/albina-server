@@ -125,7 +125,7 @@ public class Region implements AvalancheInformationObject {
 	@Convert(converter = LanguageCodeConverter.class)
 	private Set<LanguageCode> enabledLanguages;
 
-	@Column(name = "TTS_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'es', 'ca', 'oc')")
+	@Column(name = "TTS_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
 	@Convert(converter = LanguageCodeConverter.class)
 	private Set<LanguageCode> ttsLanguages;
 
