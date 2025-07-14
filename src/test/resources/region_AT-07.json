@@ -4,6 +4,22 @@
     "subRegions": [],
     "superRegions": ["EUREGIO"],
     "neighborRegions": [],
+	"enabledLanguages": [
+		"es",
+		"fr",
+		"de",
+		"it",
+		"oc",
+		"en",
+		"ca"
+	],
+	"ttsLanguages": [
+		"de",
+		"it",
+		"en",
+		"es",
+		"ca"
+	],
     "publishBulletins": true,
     "publishBlogs": false,
     "createCaamlV5": true,

@@ -17,13 +17,15 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static eu.albina.RegionTestUtils.regionTyrol;
+
 class TextToSpeechTest {
 
 	private static void toCAAMLv6(String bulletinResource) throws Exception {
 		URL resource = Resources.getResource(bulletinResource);
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
-		for (LanguageCode lang : TextToSpeech.ENABLED) {
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, null);
+		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
 			String ssml = caaml.getBulletins().stream()
 				.map(bulletin -> new TextToSpeech.ScriptEngine(bulletin).createScript())

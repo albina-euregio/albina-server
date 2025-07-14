@@ -83,9 +83,6 @@ public enum LanguageCode {
 		}
 	};
 
-	// LANG
-	public static final Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(de, it, en, fr, es, ca, oc));
-
 	private final Locale locale;
 
 	LanguageCode(Locale locale) {
