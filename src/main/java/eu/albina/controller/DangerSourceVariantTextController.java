@@ -250,7 +250,11 @@ public class DangerSourceVariantTextController {
 			case slab:
 				return result.stream()
 					.filter(text -> text.getAvalancheProblem() == dangerSourceVariant.deriveAvalancheProblem())
-					.filter(text -> dangerSourceVariant.getHasDaytimeDependency() == null || text.getHasDaytimeDependency() == dangerSourceVariant.getHasDaytimeDependency())
+					.filter(text -> 
+						text.getHasDaytimeDependency().equals(dangerSourceVariant.getHasDaytimeDependency()) ||
+						(Boolean.FALSE.equals(text.getHasDaytimeDependency()) && dangerSourceVariant.getHasDaytimeDependency() == null) ||
+						(Boolean.FALSE.equals(dangerSourceVariant.getHasDaytimeDependency()) && text.getHasDaytimeDependency() == null)
+					)
 					.filter(text -> dangerSourceVariant.getEawsMatrixInformation() == null || dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == null || text.getAvalancheSize() == dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize())
 					.filter(text -> dangerSourceVariant.getEawsMatrixInformation() == null || dangerSourceVariant.getEawsMatrixInformation().getSnowpackStability() == null || text.getSnowpackStability() == dangerSourceVariant.getEawsMatrixInformation().getSnowpackStability())
 					.filter(text -> dangerSourceVariant.getEawsMatrixInformation() == null || dangerSourceVariant.getEawsMatrixInformation().getFrequency() == null || text.getFrequency() == dangerSourceVariant.getEawsMatrixInformation().getFrequency())
