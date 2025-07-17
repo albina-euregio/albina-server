@@ -214,7 +214,7 @@ public class PublicationController {
 		if (!avalancheReport.getRegion().isPublishBulletins() || avalancheReport.getBulletins().isEmpty() || !avalancheReport.getRegion().isCreateMaps()) {
 			return;
 		}
-		for (LanguageCode lang : LanguageCode.ENABLED) {
+		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
 			try {
 				posting.sendToAllChannels();

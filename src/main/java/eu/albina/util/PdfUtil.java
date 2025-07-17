@@ -270,7 +270,7 @@ public class PdfUtil {
 		if (avalancheReport.getBulletins().isEmpty()) {
 			return;
 		}
-		for (LanguageCode lang : LanguageCode.ENABLED) {
+		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			try {
 				logger.info("Creating PDF for region {}, language {}", avalancheReport.getRegion().getId(), lang);
 				new PdfUtil(avalancheReport, lang, false).createPdf();
