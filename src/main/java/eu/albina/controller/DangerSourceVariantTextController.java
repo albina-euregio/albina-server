@@ -412,7 +412,7 @@ public class DangerSourceVariantTextController {
 		String addOnsResult = addAddOns(dangerSourceVariant);
 
 		if (addOnsResult != null && !addOnsResult.isEmpty()) {
-			textcatResult += addOnsResult;
+			textcatResult = textcatResult + "," + addOnsResult;
 		}
 
 		return textcatResult;
@@ -422,38 +422,38 @@ public class DangerSourceVariantTextController {
 		String result = "";
 		if (dangerSourceVariant.getRemoteTriggering() == Probability.possible
 				|| dangerSourceVariant.getRemoteTriggering() == Probability.likely) {
-			result = result + replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
+			result = result + "," + replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
 					addOnSentences.get(AddOns.remote_triggering));
 		}
 		if (dangerSourceVariant.getTerrainTypes() != null && !dangerSourceVariant.getTerrainTypes().isEmpty()) {
-			result = result + replaceTerrainTypes(dangerSourceVariant.getTerrainTypes(),
+			result = result + "," + replaceTerrainTypes(dangerSourceVariant.getTerrainTypes(),
 					addOnSentences.get(AddOns.terrain_features));
 		}
 		if (dangerSourceVariant.getDangerIncreaseWithElevation()) {
-			result = result + addOnSentences.get(AddOns.danger_increase_with_elevation);
+			result = result + "," + addOnSentences.get(AddOns.danger_increase_with_elevation);
 		}
 		if (dangerSourceVariant.getHighestDangerAspect() != null) {
-			result = result
+			result = result + ","
 					+ replaceAspects(java.util.Collections.singleton(dangerSourceVariant.getHighestDangerAspect()),
 							addOnSentences.get(AddOns.highest_danger_aspect));
 		}
 		if (dangerSourceVariant.getDangerPeak() != null) {
-			result = result
+			result = result + ","
 					+ replaceDangerPeak(dangerSourceVariant.getDangerPeak(), addOnSentences.get(AddOns.danger_peak));
 		}
 		if (dangerSourceVariant.getRunoutIntoGreen()) {
-			result = result + addOnSentences.get(AddOns.runout_into_green);
+			result = result + "," + addOnSentences.get(AddOns.runout_into_green);
 		}
 		if (dangerSourceVariant.getNaturalRelease() == Probability.possible
 				|| dangerSourceVariant.getNaturalRelease() == Probability.likely) {
-			result = result + replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
+			result = result + "," + replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
 					addOnSentences.get(AddOns.natural_release));
 		}
 		if (dangerSourceVariant.getDangerSigns() != null && !dangerSourceVariant.getDangerSigns().isEmpty()) {
-			result = result + replaceDangerSigns(dangerSourceVariant.getDangerSigns(), addOnSentences.get(AddOns.danger_signs));
+			result = result + "," + replaceDangerSigns(dangerSourceVariant.getDangerSigns(), addOnSentences.get(AddOns.danger_signs));
 		}
 		if (dangerSourceVariant.getPenetrateDeepLayers()) {
-			result = result + addOnSentences.get(AddOns.penetrate_deep_layers);
+			result = result + "," + addOnSentences.get(AddOns.penetrate_deep_layers);
 		}
 		if ((dangerSourceVariant.getNaturalRelease() == Probability.possible
 				|| dangerSourceVariant.getNaturalRelease() == Probability.likely)
@@ -462,7 +462,7 @@ public class DangerSourceVariantTextController {
 						(dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == AvalancheSize.very_large)
 						||
 						(dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == AvalancheSize.extreme))) {
-			result = result + addOnSentences.get(AddOns.outflow_areas_to_consider);
+			result = result + "," + addOnSentences.get(AddOns.outflow_areas_to_consider);
 		}
 
 		return result;
