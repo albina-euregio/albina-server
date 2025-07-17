@@ -422,38 +422,45 @@ public class DangerSourceVariantTextController {
 		String result = "";
 		if (dangerSourceVariant.getRemoteTriggering() == Probability.possible
 				|| dangerSourceVariant.getRemoteTriggering() == Probability.likely) {
-			result = result + "," + replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
+			String remoteTriggeringText = replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
 					addOnSentences.get(AddOns.remote_triggering));
+			result = concatTexts(result, remoteTriggeringText);
 		}
 		if (dangerSourceVariant.getTerrainTypes() != null && !dangerSourceVariant.getTerrainTypes().isEmpty()) {
-			result = result + "," + replaceTerrainTypes(dangerSourceVariant.getTerrainTypes(),
+			String terrainTypesText = replaceTerrainTypes(dangerSourceVariant.getTerrainTypes(),
 					addOnSentences.get(AddOns.terrain_features));
+			result = concatTexts(result, terrainTypesText);
 		}
 		if (dangerSourceVariant.getDangerIncreaseWithElevation()) {
-			result = result + "," + addOnSentences.get(AddOns.danger_increase_with_elevation);
+			String dangerIncreaseWithElevationText = addOnSentences.get(AddOns.danger_increase_with_elevation);
+			result = concatTexts(result, dangerIncreaseWithElevationText);
 		}
 		if (dangerSourceVariant.getHighestDangerAspect() != null) {
-			result = result + ","
-					+ replaceAspects(java.util.Collections.singleton(dangerSourceVariant.getHighestDangerAspect()),
+			String aspectsText = replaceAspects(java.util.Collections.singleton(dangerSourceVariant.getHighestDangerAspect()),
 							addOnSentences.get(AddOns.highest_danger_aspect));
+			result = concatTexts(result, aspectsText);
 		}
 		if (dangerSourceVariant.getDangerPeak() != null) {
-			result = result + ","
-					+ replaceDangerPeak(dangerSourceVariant.getDangerPeak(), addOnSentences.get(AddOns.danger_peak));
+			String dangerPeakText = replaceDangerPeak(dangerSourceVariant.getDangerPeak(), addOnSentences.get(AddOns.danger_peak));
+			result = concatTexts(result, dangerPeakText);
 		}
 		if (dangerSourceVariant.getRunoutIntoGreen()) {
-			result = result + "," + addOnSentences.get(AddOns.runout_into_green);
+			String runoutIntoGreenText = addOnSentences.get(AddOns.runout_into_green);
+			result = concatTexts(result, runoutIntoGreenText);
 		}
 		if (dangerSourceVariant.getNaturalRelease() == Probability.possible
 				|| dangerSourceVariant.getNaturalRelease() == Probability.likely) {
-			result = result + "," + replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
+			String naturalAvalanchesText = replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
 					addOnSentences.get(AddOns.natural_release));
+			result = concatTexts(result, naturalAvalanchesText);
 		}
 		if (dangerSourceVariant.getDangerSigns() != null && !dangerSourceVariant.getDangerSigns().isEmpty()) {
-			result = result + "," + replaceDangerSigns(dangerSourceVariant.getDangerSigns(), addOnSentences.get(AddOns.danger_signs));
+			String dangerSignsText = replaceDangerSigns(dangerSourceVariant.getDangerSigns(), addOnSentences.get(AddOns.danger_signs));
+			result = concatTexts(result, dangerSignsText);
 		}
 		if (dangerSourceVariant.getPenetrateDeepLayers()) {
-			result = result + "," + addOnSentences.get(AddOns.penetrate_deep_layers);
+			String penetrateDeepLayersText = addOnSentences.get(AddOns.penetrate_deep_layers);
+			result = concatTexts(result, penetrateDeepLayersText);
 		}
 		if ((dangerSourceVariant.getNaturalRelease() == Probability.possible
 				|| dangerSourceVariant.getNaturalRelease() == Probability.likely)
@@ -462,10 +469,22 @@ public class DangerSourceVariantTextController {
 						(dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == AvalancheSize.very_large)
 						||
 						(dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == AvalancheSize.extreme))) {
-			result = result + "," + addOnSentences.get(AddOns.outflow_areas_to_consider);
+			String outflowAreasToConsiderText = addOnSentences.get(AddOns.outflow_areas_to_consider);
+			result = concatTexts(result, outflowAreasToConsiderText);
 		}
 
 		return result;
+	}
+
+	private String concatTexts(String first, String second) {
+		if (second != null && !second.isEmpty()) {
+			if (first != null && !first.isEmpty()) {
+				first = first + "," + second;
+			} else {
+				first = second;
+			}
+		}
+		return first;
 	}
 
 	private String doReplacements(DangerSourceVariant dangerSourceVariant, String result) {
