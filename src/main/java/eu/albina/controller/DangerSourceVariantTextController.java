@@ -540,8 +540,6 @@ public class DangerSourceVariantTextController {
 							"{\"curlyName\":\"wieviele\",\"line\":5}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				default:
-					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 			}
 		}
@@ -569,8 +567,6 @@ public class DangerSourceVariantTextController {
 							"{\"curlyName\":\"an_steilen\",\"line\":3}");
 					break;
 				default:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
-							"{\"curlyName\":\"an_steilen\",\"line\":0}");
 					break;
 			}
 		} else {
