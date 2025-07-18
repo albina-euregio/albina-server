@@ -167,13 +167,13 @@ public class DangerSourceVariantTextController {
 	// phrase "Alarmzeichen"
 	// placeholder: {"curlyName":"Alarmzeichen","line":0}, {"curlyName":"Altschnee03§sowie_Alarmzeichen","line":0,"args":{"Alarmzeichen2":{"curlyName":"Alarmzeichen2","line":0}}}
 	private static final Map<Set<DangerSign>, String> textcatSubstitutionsDangerSigns = Map.of(
-		Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks, DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
-		Set.of(DangerSign.whumpfing, DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
-		Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
-		Set.of(DangerSign.shooting_cracks, DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
-		Set.of(DangerSign.whumpfing), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":1,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
-		Set.of(DangerSign.shooting_cracks), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":3,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
-		Set.of(DangerSign.fresh_avalanches), "{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}"
+		Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks, DangerSign.fresh_avalanches), "{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+		Set.of(DangerSign.whumpfing, DangerSign.fresh_avalanches), "{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+		Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks), "{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+		Set.of(DangerSign.shooting_cracks, DangerSign.fresh_avalanches), "{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+		Set.of(DangerSign.whumpfing), "{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+		Set.of(DangerSign.shooting_cracks), "{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+		Set.of(DangerSign.fresh_avalanches), "{\"curlyName\":\"Alarmzeichen\",\"line\":7}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}"
 	);
 
 	// phrase "Hangart1"
@@ -267,7 +267,7 @@ public class DangerSourceVariantTextController {
 	// map of placeholder texts
 	//   key: phrase name
 	//   value: placeholder regex
-	private static final Map<String, String> textcatPlaceholder = Map.ofEntries(
+	protected static final Map<String, String> textcatPlaceholder = Map.ofEntries(
 		Map.entry("Gefahrenstellen05§an_Expositionen", "\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0},\"Expo1\":\\{\"curlyName\":\"Expo1\",\"line\":2},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":0\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":0\\}\\}\\}"),
 		Map.entry("es_warum_Ort_wann", "\\{\"curlyName\":\"es_warum_Ort_wann\",\"line\":27,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":0\\},\"vor_allem\":\\{\"curlyName\":\"vor_allem\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":0\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":0\\}\\}\\}"),
 		Map.entry("Hangart1", "\\{\"curlyName\":\"Hangart1\",\"line\":2,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":0\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":0\\}\\}\\}"),
