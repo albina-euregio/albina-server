@@ -398,11 +398,9 @@ public class DangerSourceVariantTextController {
 
 		String addOnsResult = addAddOns(dangerSourceVariant);
 
-		if (addOnsResult != null && !addOnsResult.isEmpty()) {
-			textcatResult = textcatResult + "," + addOnsResult;
-		}
+		String result = concatTexts(textcatResult, addOnsResult);
 
-		return textcatResult;
+		return result;
 	}
 
 	private String addAddOns(DangerSourceVariant dangerSourceVariant) {
