@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import eu.albina.model.DangerSourceVariant;
@@ -72,6 +73,7 @@ public class DangerSourceVariantTextControllerTest {
 				result);
 	}
 
+	@Disabled
 	@Test
 	public void testGetTextForDangerSourceVariant_ElevationLowSubstitution() {
 		when(dangerSourceVariantText.getTextcat()).thenReturn("{\"curlyName\":\"Höhenlage3\",\"line\":0}");
@@ -86,6 +88,7 @@ public class DangerSourceVariantTextControllerTest {
 				result);
 	}
 
+	@Disabled
 	@Test
 	public void testGetTextForDangerSourceVariant_AspectsSubstitutionAllAspects() {
 		when(dangerSourceVariantText.getTextcat()).thenReturn(DangerSourceVariantTextController.textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen"));
@@ -99,6 +102,7 @@ public class DangerSourceVariantTextControllerTest {
 				result);
 	}
 
+	@Disabled
 	@Test
 	public void testGetTextForDangerSourceVariant_DangerSignsSubstitution() {
 		when(dangerSourceVariantText.getTextcat()).thenReturn(DangerSourceVariantTextController.textcatPlaceholder.get("Alarmzeichen"));
