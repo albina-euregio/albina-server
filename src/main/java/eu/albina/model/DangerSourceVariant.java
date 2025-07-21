@@ -35,6 +35,7 @@ import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheProblemType;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Characteristic;
 import eu.albina.model.enumerations.CreationProcess;
@@ -1022,6 +1023,84 @@ public class DangerSourceVariant extends AbstractPersistentObject
 			default:
 				return null;
 		}
+	}
+
+	public AvalancheProblemType deriveAvalancheProblemType() {
+		switch (this.avalancheType) {
+			case slab:
+				if (this.slabGrainShape == null) {
+					return null;
+				}
+				switch (this.slabGrainShape) {
+					case PP:
+					case DF:
+					case RG:
+					case FC:
+						if (Boolean.TRUE.equals(this.weakLayerPersistent)) {
+							if (this.dangerSpotRecognizability == null) {
+								return null;
+							}
+							switch (this.dangerSpotRecognizability) {
+								case very_easy:
+								case easy:
+									return AvalancheProblemType.wind_slab;
+								case hard:
+								case very_hard:
+									if (this.getWeakLayerPosition() != null
+											&& (this.getWeakLayerPosition() == SnowpackPosition.ground
+													|| this.getWeakLayerPosition() == SnowpackPosition.lower)) {
+										return AvalancheProblemType.deep_persistent_slab;
+									} else {
+										return AvalancheProblemType.persistent_slab;
+									}
+								default:
+									return null;
+							}
+						} else {
+							if (this.dangerSpotRecognizability == null) {
+								return null;
+							}
+							switch (this.dangerSpotRecognizability) {
+								case very_easy:
+								case easy:
+									return AvalancheProblemType.wind_slab;
+								case hard:
+								case very_hard:
+									return AvalancheProblemType.storm_slab;
+								default:
+									return null;
+							}
+						}
+					case MF:
+						return AvalancheProblemType.wet_slab;
+					case MFcr:
+						if (Boolean.TRUE.equals(this.weakLayerPersistent)) {
+							return AvalancheProblemType.persistent_slab;
+						} else {
+							return AvalancheProblemType.wet_slab;
+						}
+					default:
+						return null;
+				}
+			case loose:
+				switch (this.looseSnowGrainShape) {
+					case PP:
+					case DF:
+					case FC:
+					case DH:
+					case SH:
+						return AvalancheProblemType.dry_loose;
+					case MF:
+						return AvalancheProblemType.wet_loose;
+					default:
+						return null;
+				}
+			case glide:
+				return AvalancheProblemType.glide_avalanche;
+			default:
+				return null;
+		}
+
 	}
 
 	public void copy(DangerSourceVariant dangerSourceVariant) {

@@ -183,19 +183,19 @@ public class DangerSourceVariantTextController {
 	// {"curlyName":"Altschnee03§sowie_Alarmzeichen","line":0,"args":{"Alarmzeichen2":{"curlyName":"Alarmzeichen2","line":0}}}
 	private static final Map<Set<DangerSign>, String> textcatSubstitutionsDangerSigns = Map.of(
 			Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks),
-			"{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
 			Set.of(DangerSign.shooting_cracks, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing),
-			"{\"curlyName\":\"Hangart_Höhe2\",\"line\":1,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
 			Set.of(DangerSign.shooting_cracks),
-			"{\"curlyName\":\"Hangart_Höhe2\",\"line\":3,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
 			Set.of(DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Hangart_Höhe2\",\"line\":4,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":1},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":1},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":7}}}");
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":7}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}");
 
 	// phrase "Hangart1"
 	// placeholder: {"curlyName":"Hangart1","line":9},
@@ -245,7 +245,7 @@ public class DangerSourceVariantTextController {
 			AddOns.highest_danger_aspect,
 			"{\"curlyName\":\"Änderung08\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet1\":{\"curlyName\":\"Hangart_Höhe_Gebiet1\",\"line\":1,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":0},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":0},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":0}}},\"und_Hangart_Höhe_Gebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet\",\"line\":0},\"Änderung08§Gefahr_höher\":{\"curlyName\":\"Änderung08§Gefahr_höher\",\"line\":2,\"args\":{\"Lawinengefahr2\":{\"curlyName\":\"Lawinengefahr2\",\"line\":0},\"etwas\":{\"curlyName\":\"etwas\",\"line\":0},\"höher\":{\"curlyName\":\"höher\",\"line\":0}}}}}",
 			AddOns.danger_peak,
-			"{\"curlyName\":\"Änderung03\",\"line\":0,\"args\":{\"wo_Gefahrenspitze2\":{\"curlyName\":\"wo_Gefahrenspitze2\",\"line\":0},\"Änderung03§erreicht\":{\"curlyName\":\"Änderung03§erreicht\",\"line\":0},\"Gefahrenspitze\":{\"curlyName\":\"Gefahrenspitze\",\"line\":1},\"wo_Gefahrenspitze1\":{\"curlyName\":\"wo_Gefahrenspitze1\",\"line\":1},\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":0}}}",
+			"{\"curlyName\":\"Änderung03\",\"line\":0,\"args\":{\"wo_Gefahrenspitze2\":{\"curlyName\":\"wo_Gefahrenspitze2\",\"line\":0},\"Änderung03§erreicht\":{\"curlyName\":\"Änderung03§erreicht\",\"line\":0},\"Gefahrenspitze\":{\"curlyName\":\"Gefahrenspitze\",\"line\":1},\"wo_Gefahrenspitze1\":{\"curlyName\":\"wo_Gefahrenspitze1\",\"line\":1},\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":0}}}}",
 			AddOns.runout_into_green,
 			"{\"curlyName\":\"Grösse05\",\"line\":0,\"args\":{\"Die_Lawinen\":{\"curlyName\":\"Die_Lawinen\",\"line\":1},\"Gebiet_auch\":{\"curlyName\":\"Gebiet_auch\",\"line\":0},\"Einzugsgebiet\":{\"curlyName\":\"Einzugsgebiet\",\"line\":1},\"oft5\":{\"curlyName\":\"oft5\",\"line\":0},\"vorstossen\":{\"curlyName\":\"vorstossen\",\"line\":3,\"args\":{\"bis_in_Täler\":{\"curlyName\":\"bis_in_Täler\",\"line\":13}}}}}",
 			AddOns.natural_release,
@@ -366,7 +366,7 @@ public class DangerSourceVariantTextController {
 	// map of placeholder texts
 	// key: phrase name
 	// value: placeholder regex
-	private static final Map<String, String> textcatPlaceholder = Map.ofEntries(
+	protected static final Map<String, String> textcatPlaceholder = Map.ofEntries(
 			Map.entry("Gefahrenstellen05§an_Expositionen",
 					"\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0},\"Expo1\":\\{\"curlyName\":\"Expo1\",\"line\":2},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":0\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":0\\}\\}\\}"),
 			Map.entry("es_warum_Ort_wann",
@@ -411,61 +411,85 @@ public class DangerSourceVariantTextController {
 
 		String addOnsResult = addAddOns(dangerSourceVariant);
 
-		if (addOnsResult != null && !addOnsResult.isEmpty()) {
-			textcatResult += addOnsResult;
-		}
+		String result = concatTexts(textcatResult, addOnsResult);
 
-		return textcatResult;
+		return result;
 	}
 
 	private String addAddOns(DangerSourceVariant dangerSourceVariant) {
 		String result = "";
-		if (dangerSourceVariant.getRemoteTriggering() == Probability.possible
-				|| dangerSourceVariant.getRemoteTriggering() == Probability.likely) {
-			result = result + replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
+		if (dangerSourceVariant.getRemoteTriggering() != null
+				&& (dangerSourceVariant.getRemoteTriggering() == Probability.possible
+						|| dangerSourceVariant.getRemoteTriggering() == Probability.likely)) {
+			String remoteTriggeringText = replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
 					addOnSentences.get(AddOns.remote_triggering));
+			result = concatTexts(result, remoteTriggeringText);
 		}
 		if (dangerSourceVariant.getTerrainTypes() != null && !dangerSourceVariant.getTerrainTypes().isEmpty()) {
-			result = result + replaceTerrainTypes(dangerSourceVariant.getTerrainTypes(),
+			String terrainTypesText = replaceTerrainTypes(dangerSourceVariant.getTerrainTypes(),
 					addOnSentences.get(AddOns.terrain_features));
+			result = concatTexts(result, terrainTypesText);
 		}
-		if (dangerSourceVariant.getDangerIncreaseWithElevation()) {
-			result = result + addOnSentences.get(AddOns.danger_increase_with_elevation);
+		if (dangerSourceVariant.getDangerIncreaseWithElevation() != null
+				&& dangerSourceVariant.getDangerIncreaseWithElevation()) {
+			String dangerIncreaseWithElevationText = addOnSentences.get(AddOns.danger_increase_with_elevation);
+			result = concatTexts(result, dangerIncreaseWithElevationText);
 		}
 		if (dangerSourceVariant.getHighestDangerAspect() != null) {
-			result = result
-					+ replaceAspects(java.util.Collections.singleton(dangerSourceVariant.getHighestDangerAspect()),
-							addOnSentences.get(AddOns.highest_danger_aspect));
+			String aspectsText = replaceAspects(
+					java.util.Collections.singleton(dangerSourceVariant.getHighestDangerAspect()),
+					addOnSentences.get(AddOns.highest_danger_aspect));
+			result = concatTexts(result, aspectsText);
 		}
 		if (dangerSourceVariant.getDangerPeak() != null) {
-			result = result
-					+ replaceDangerPeak(dangerSourceVariant.getDangerPeak(), addOnSentences.get(AddOns.danger_peak));
+			String dangerPeakText = replaceDangerPeak(dangerSourceVariant.getDangerPeak(),
+					addOnSentences.get(AddOns.danger_peak));
+			result = concatTexts(result, dangerPeakText);
 		}
-		if (dangerSourceVariant.getRunoutIntoGreen()) {
-			result = result + addOnSentences.get(AddOns.runout_into_green);
+		if (dangerSourceVariant.getRunoutIntoGreen() != null && dangerSourceVariant.getRunoutIntoGreen()) {
+			String runoutIntoGreenText = addOnSentences.get(AddOns.runout_into_green);
+			result = concatTexts(result, runoutIntoGreenText);
 		}
-		if (dangerSourceVariant.getNaturalRelease() == Probability.possible
-				|| dangerSourceVariant.getNaturalRelease() == Probability.likely) {
-			result = result + replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
+		if (dangerSourceVariant.getNaturalRelease() != null
+				&& (dangerSourceVariant.getNaturalRelease() == Probability.possible
+						|| dangerSourceVariant.getNaturalRelease() == Probability.likely)) {
+			String naturalAvalanchesText = replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
 					addOnSentences.get(AddOns.natural_release));
+			result = concatTexts(result, naturalAvalanchesText);
 		}
 		if (dangerSourceVariant.getDangerSigns() != null && !dangerSourceVariant.getDangerSigns().isEmpty()) {
-			result = result + replaceDangerSigns(dangerSourceVariant.getDangerSigns(), addOnSentences.get(AddOns.danger_signs));
+			String dangerSignsText = replaceDangerSigns(dangerSourceVariant.getDangerSigns(),
+					addOnSentences.get(AddOns.danger_signs));
+			result = concatTexts(result, dangerSignsText);
 		}
-		if (dangerSourceVariant.getPenetrateDeepLayers()) {
-			result = result + addOnSentences.get(AddOns.penetrate_deep_layers);
+		if (dangerSourceVariant.getPenetrateDeepLayers() != null && dangerSourceVariant.getPenetrateDeepLayers()) {
+			String penetrateDeepLayersText = addOnSentences.get(AddOns.penetrate_deep_layers);
+			result = concatTexts(result, penetrateDeepLayersText);
 		}
-		if ((dangerSourceVariant.getNaturalRelease() == Probability.possible
-				|| dangerSourceVariant.getNaturalRelease() == Probability.likely)
+		if (dangerSourceVariant.getNaturalRelease() != null && dangerSourceVariant.getEawsMatrixInformation() != null
+				&& (dangerSourceVariant.getNaturalRelease() == Probability.possible
+						|| dangerSourceVariant.getNaturalRelease() == Probability.likely)
 				&&
 				((dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == AvalancheSize.large) ||
 						(dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == AvalancheSize.very_large)
 						||
 						(dangerSourceVariant.getEawsMatrixInformation().getAvalancheSize() == AvalancheSize.extreme))) {
-			result = result + addOnSentences.get(AddOns.outflow_areas_to_consider);
+			String outflowAreasToConsiderText = addOnSentences.get(AddOns.outflow_areas_to_consider);
+			result = concatTexts(result, outflowAreasToConsiderText);
 		}
 
 		return result;
+	}
+
+	private String concatTexts(String first, String second) {
+		if (second != null && !second.isEmpty()) {
+			if (first != null && !first.isEmpty()) {
+				first = first + "," + second;
+			} else {
+				first = second;
+			}
+		}
+		return first;
 	}
 
 	private String doReplacements(DangerSourceVariant dangerSourceVariant, String result) {
@@ -534,8 +558,6 @@ public class DangerSourceVariantTextController {
 							"{\"curlyName\":\"wieviele\",\"line\":5}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				default:
-					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 			}
 		}
@@ -563,8 +585,6 @@ public class DangerSourceVariantTextController {
 							"{\"curlyName\":\"an_steilen\",\"line\":3}");
 					break;
 				default:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
-							"{\"curlyName\":\"an_steilen\",\"line\":0}");
 					break;
 			}
 		} else {
