@@ -1080,7 +1080,7 @@ public class PdfUtil {
 
 			String generalHeadlineComment = avalancheReport.getGeneralHeadline(lang);
 			if (generalHeadlineComment != null && !generalHeadlineComment.isEmpty()) {
-				Text title = new Text(generalHeadlineComment == null ? "" : generalHeadlineComment)
+				Text title = new Text(generalHeadlineComment)
 					.setFont(openSansBoldFont)
 					.setFontSize(14)
 					.setFontColor(blackColor);
