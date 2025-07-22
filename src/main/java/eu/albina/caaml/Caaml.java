@@ -43,7 +43,7 @@ public interface Caaml {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
 
-		for (LanguageCode lang : LanguageCode.ENABLED) {
+		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			String caamlString = createCaaml(avalancheReport, lang, version);
 			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString() + version.filenameSuffix();
 			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));

@@ -27,6 +27,7 @@ import java.util.function.Function;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,6 +38,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.albina.model.converter.LanguageCodeConverter;
+import eu.albina.model.enumerations.LanguageCode;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -117,6 +121,14 @@ public class Region implements AvalancheInformationObject {
 	@JsonDeserialize(contentUsing = RegionDeserializer.class)
 	private Set<Region> neighborRegions;
 
+	@Column(name = "ENABLED_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
+	@Convert(converter = LanguageCodeConverter.class)
+	private Set<LanguageCode> enabledLanguages;
+
+	@Column(name = "TTS_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
+	@Convert(converter = LanguageCodeConverter.class)
+	private Set<LanguageCode> ttsLanguages;
+
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
 
@@ -173,6 +185,9 @@ public class Region implements AvalancheInformationObject {
 
 	@Column(name = "ENABLE_WEATHERBOX")
 	private boolean enableWeatherbox;
+
+	@Column(name = "ENABLE_EDITABLE_FIELDS")
+	private boolean enableEditableFields;
 
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
@@ -267,6 +282,8 @@ public class Region implements AvalancheInformationObject {
 		this.superRegions = new HashSet<Region>();
 		this.subRegions = new HashSet<Region>();
 		this.neighborRegions = new HashSet<Region>();
+		this.enabledLanguages = new HashSet<LanguageCode>();
+		this.ttsLanguages = new HashSet<LanguageCode>();
 	}
 
 	public Region(String id) {
@@ -313,6 +330,18 @@ public class Region implements AvalancheInformationObject {
 					this.neighborRegions.add(region);
 			}
 		}
+		if (json.has("enabledLanguages")) {
+			JSONArray enabledLanguages = json.getJSONArray("enabledLanguages");
+			for (Object entry : enabledLanguages) {
+				this.enabledLanguages.add(LanguageCode.valueOf(((String) entry)));
+			}
+		}
+		if (json.has("ttsLanguages")) {
+			JSONArray ttsLanguages = json.getJSONArray("ttsLanguages");
+			for (Object entry : ttsLanguages) {
+				this.ttsLanguages.add(LanguageCode.valueOf(((String) entry)));
+			}
+		}
 		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
 			this.publishBulletins = json.getBoolean("publishBulletins");
 		if (json.has("publishBlogs") && !json.isNull("publishBlogs"))
@@ -351,6 +380,8 @@ public class Region implements AvalancheInformationObject {
 			this.enableModelling = json.getBoolean("enableModelling");
 		if (json.has("enableWeatherbox") && !json.isNull("enableWeatherbox"))
 			this.enableWeatherbox = json.getBoolean("enableWeatherbox");
+		if (json.has("enableEditableFields") && !json.isNull("enableEditableFields"))
+			this.enableEditableFields = json.getBoolean("enableEditableFields");
 		if (json.has("enableGeneralHeadline") && !json.isNull("enableGeneralHeadline"))
 			this.enableGeneralHeadline = json.getBoolean("enableGeneralHeadline");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
@@ -459,6 +490,24 @@ public class Region implements AvalancheInformationObject {
 
 	public void addNeighborRegion(Region neighborRegion) {
 		this.neighborRegions.add(neighborRegion);
+	}
+
+	public Set<LanguageCode> getEnabledLanguages() {
+		return enabledLanguages;
+	}
+
+	public void  setEnabledLanguages(Set<LanguageCode> enabledLanguages) {
+		this.enabledLanguages = enabledLanguages;
+	}
+
+	@JsonProperty("ttsLanguages")
+	public Set<LanguageCode> getTTSLanguages() {
+		return ttsLanguages;
+	}
+
+	@JsonProperty("ttsLanguages")
+	public void  setTTSLanguages(Set<LanguageCode> ttsLanguages) {
+		this.ttsLanguages = ttsLanguages;
 	}
 
 	public boolean isPublishBulletins() {
@@ -821,6 +870,10 @@ public class Region implements AvalancheInformationObject {
 		this.enableModelling = enableModelling;
 	}
 
+	public boolean isEnableEditableFields() { return enableEditableFields; }
+
+	public void setEnableEditableField(boolean enableEditableFields) { this.enableEditableFields = enableEditableFields; }
+
 	public boolean isEnableWeatherbox() {
 		return enableWeatherbox;
 	}
@@ -885,6 +938,20 @@ public class Region implements AvalancheInformationObject {
 		} else {
 			json.put("neighborRegions", new JSONArray());
 		}
+		if (enabledLanguages != null && enabledLanguages.size() > 0) {
+			JSONArray enabledLanguages = new JSONArray();
+			for (LanguageCode language : this.enabledLanguages) {
+				enabledLanguages.put(language.toString());
+			}
+			json.put("enabledLanguages", enabledLanguages);
+		}
+		if (ttsLanguages != null && ttsLanguages.size() > 0) {
+			JSONArray ttsLanguages = new JSONArray();
+			for (LanguageCode language : this.ttsLanguages) {
+				ttsLanguages.put(language.toString());
+			}
+			json.put("ttsLanguages", ttsLanguages);
+		}
 		json.put("publishBulletins", isPublishBulletins());
 		json.put("publishBlogs", isPublishBlogs());
 		json.put("createCaamlV5", isCreateCaamlV5());
@@ -904,6 +971,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableObservations", isEnableObservations());
 		json.put("enableModelling", isEnableModelling());
 		json.put("enableWeatherbox", isEnableWeatherbox());
+		json.put("enableEditableFields", isEnableEditableFields());
 		json.put("enableGeneralHeadline", isEnableGeneralHeadline());
 		json.put("showMatrix", isShowMatrix());
 		json.put("enableStrategicMindset", isEnableStrategicMindset());

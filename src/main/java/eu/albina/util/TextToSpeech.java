@@ -11,13 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,7 +50,6 @@ public interface TextToSpeech {
 	String API_URL = "https://eu-texttospeech.googleapis.com/v1/text:synthesize";
 	String API_AUTH_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
 	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
-	Set<LanguageCode> ENABLED = Collections.unmodifiableSet(EnumSet.of(LanguageCode.de, LanguageCode.en, LanguageCode.it, LanguageCode.es, LanguageCode.ca));
 	Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
 
 	enum SsmlVoiceGender {FEMALE, MALE}
@@ -391,7 +387,7 @@ public interface TextToSpeech {
 			return;
 		}
 		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
-			for (LanguageCode lang : ENABLED) {
+			for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
 				String filename = String.format("%s_%s_%s.ssml", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang);
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);

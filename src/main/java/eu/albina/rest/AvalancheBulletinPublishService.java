@@ -272,7 +272,7 @@ public class AvalancheBulletinPublishService {
 		AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);
 		avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
-		return (language != null ? Collections.singleton(language) : LanguageCode.ENABLED).stream()
+		return (language != null ? Collections.singleton(language) : region.getEnabledLanguages()).stream()
 			.map(lang -> MultichannelMessage.of(avalancheReport, lang))
 			.collect(Collectors.toList());
 	}
