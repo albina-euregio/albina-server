@@ -377,9 +377,16 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin loadedBulletin : loadedBulletins) {
 				if (!loadedBulletin.getId().equals(updatedBulletin.getId())) {
 					// check micro-regions for each bulletin to prevent duplicates
+					// and add general headline from currently updated bulletin
 					for (String microRegion : updatedBulletin.getPublishedAndSavedRegions()) {
 						loadedBulletin.getPublishedRegions().remove(microRegion);
 						loadedBulletin.getSavedRegions().remove(microRegion);
+
+						if (loadedBulletin.getOwnerRegion().equals(updatedBulletin.getOwnerRegion()) && region.isEnableGeneralHeadline()) {
+							loadedBulletin.setGeneralHeadlineComment(updatedBulletin.getGeneralHeadlineComment());
+							loadedBulletin.setGeneralHeadlineCommentTextcat(updatedBulletin.getGeneralHeadlineCommentTextcat());
+							loadedBulletin.setGeneralHeadlineCommentNotes(updatedBulletin.getGeneralHeadlineCommentNotes());
+						}
 					}
 					if (!loadedBulletin.getPublishedAndSavedRegions().isEmpty()) {
 						entityManager.merge(loadedBulletin);
