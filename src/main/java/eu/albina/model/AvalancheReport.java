@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+import eu.albina.controller.RegionController;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.Column;
@@ -122,18 +123,30 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	@Transient
 	private ServerInstance serverInstance;
 
+	@Transient
+	private RegionController regionController;
+
 	/**
 	 * Standard constructor for an avalanche report.
 	 */
 	public AvalancheReport() {
 	}
 
+	public static AvalancheReport of(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance, RegionController regionController) {
+		return createReport(bulletins, region, serverInstance, regionController);
+	}
+
 	public static AvalancheReport of(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance) {
-		final AvalancheReport avalancheReport = new AvalancheReport();
-		avalancheReport.setServerInstance(serverInstance);
-		avalancheReport.setRegion(region);
-		avalancheReport.setBulletins(bulletins); // after region
-		return avalancheReport;
+		return createReport(bulletins, region, serverInstance, RegionController.getInstance());
+	}
+
+	private static AvalancheReport createReport(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance, RegionController regionController) {
+		AvalancheReport report = new AvalancheReport();
+		report.setServerInstance(serverInstance);
+		report.setRegion(region);
+		report.setBulletins(bulletins);
+		report.setRegionController(regionController);
+		return report;
 	}
 
 	public void setBulletins(List<AvalancheBulletin> bulletins) {
@@ -308,6 +321,14 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 				bulletin.getAfternoon().serverInstance(serverInstance);
 			}
 		}
+	}
+
+	public RegionController getRegionController() {
+		return regionController;
+	}
+
+	public void setRegionController(RegionController regionController) {
+		this.regionController = regionController;
 	}
 
 	public Path getMapsPath() {

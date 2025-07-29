@@ -20,6 +20,7 @@ public class RssUtilTest {
 
 	@Test
 	public void rss(@TempDir Path folder) throws Exception {
+		String websiteName = "Lawinen.report";
 		ServerInstance serverInstance = new ServerInstance();
 		serverInstance.setMediaPath(folder.resolve("media_files").toString());
 		Path directory = MediaFileService.getMediaPath(serverInstance, RegionTestUtils.regionTyrol, LanguageCode.de);
@@ -29,7 +30,7 @@ public class RssUtilTest {
 		MoreFiles.touch(directory.resolve("2022-12-14.mp3"));
 		Files.setLastModifiedTime(directory.resolve("2020-12-12.mp3"), FileTime.from(Instant.parse("2020-12-12T17:30:00Z")));
 		Files.setLastModifiedTime(directory.resolve("2022-12-14.mp3"), FileTime.from(Instant.parse("2022-12-14T17:45:00Z")));
-		final String rss = RssUtil.getRss(LanguageCode.de, new Region("AT-07"), directory).replace("\r\n", "\n");
+		final String rss = RssUtil.getRss(LanguageCode.de, new Region("AT-07"), directory, websiteName).replace("\r\n", "\n");
 		assertEquals("" +
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
 			"<rss version=\"2.0\">\n" +
