@@ -2,11 +2,6 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="website.name">Avalanche.report</entry>
-  <entry key="website.name.AT-07">Avalanche.report</entry>
-  <entry key="website.name.IT-32-BZ">Avalanche.report</entry>
-  <entry key="website.name.IT-32-TN">Avalanche.report</entry>
-  <entry key="website.name.ES-CT-L">Lauegi.report</entry>
-  <entry key="website.name.AT-02">Lawinenwarndienst.ktn.gv</entry>
   <entry key="warning-service.name">Avalanche.report</entry>
   <entry key="warning-service.name.AT-07">Avalanche Warning Service Tyrol</entry>
   <entry key="warning-service.name.IT-32-BZ">Avalanche Warning Service South Tyrol</entry>

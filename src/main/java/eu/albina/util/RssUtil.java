@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.albina.util;
 
+import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import org.w3c.dom.Document;
@@ -54,9 +55,9 @@ public interface RssUtil {
 		channel.appendChild(document.createElement("description")).setTextContent("albina media files");
 		channel.appendChild(document.createElement("language")).setTextContent(language.name());
 		channel.appendChild(document.createElement("link")).setTextContent(LinkUtil.getWebsiteUrl(language, region));
-		channel.appendChild(document.createElementNS(ITUNES_NS, "author")).setTextContent(language.getBundleString("website.name", region));
+		channel.appendChild(document.createElementNS(ITUNES_NS, "author")).setTextContent(RegionController.getInstance().getWebsiteName(region, language));
 		Node owner = channel.appendChild(document.createElementNS(ITUNES_NS, "owner"));
-		owner.appendChild(document.createElementNS(ITUNES_NS, "name")).setTextContent(language.getBundleString("website.name", region));
+		owner.appendChild(document.createElementNS(ITUNES_NS, "name")).setTextContent(RegionController.getInstance().getWebsiteName(region, language));
 		owner.appendChild(document.createElementNS(ITUNES_NS, "email")).setTextContent(language.getBundleString("email", region));
 
 

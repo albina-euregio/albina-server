@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
 
+import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -74,7 +75,8 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 			? lang.getBundleString("email.subject.update")
 			: lang.getBundleString("email.subject");
 
-		return MessageFormat.format(bundleString, lang.getBundleString("website.name", region), lang.getRegionName(region.getId()))
+		String websiteName = RegionController.getInstance().getWebsiteName(region, lang);
+		return MessageFormat.format(bundleString, websiteName, lang.getRegionName(region.getId()))
 			+ avalancheReport.getDate(lang);
 	}
 

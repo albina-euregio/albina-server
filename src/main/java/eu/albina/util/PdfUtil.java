@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import eu.albina.controller.RegionController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -164,7 +165,7 @@ public class PdfUtil {
 		Color blue = grayscale ? blueColorBw : PdfUtil.getColor(region.getPdfColor());
 
 		// Add headline
-		String headline = lang.getBundleString("website.name", region);
+		String headline = RegionController.getInstance().getWebsiteName(region, lang);
 		pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 			.setColor(greyDarkColor, true).showText(headline).endText();
 		String date = avalancheReport.getDate(lang);

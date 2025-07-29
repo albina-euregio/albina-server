@@ -2,11 +2,6 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="website.name">Lawinen.report</entry>
-  <entry key="website.name.AT-07">Lawinen.report</entry>
-  <entry key="website.name.IT-32-BZ">Lawinen.report</entry>
-  <entry key="website.name.IT-32-TN">Lawinen.report</entry>
-  <entry key="website.name.ES-CT-L">Lauegi.report</entry>
-  <entry key="website.name.AT-02">Lawinenwarndienst.ktn.gv</entry>
   <entry key="warning-service.name">Lawinen.report</entry>
   <entry key="warning-service.name.AT-07">Lawinenwarndienst Tirol</entry>
   <entry key="warning-service.name.IT-32-BZ">Lawinenwarndienst Südtirol</entry>

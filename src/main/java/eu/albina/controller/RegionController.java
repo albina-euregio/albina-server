@@ -258,8 +258,19 @@ public class RegionController {
 	}
 
 	/**
-	 * Get a format string for a url with date for the given region and language code. If no url was set for this
-	 * combination of region and language, the default language for that region is used.
+	 * @param region region for which to obtain url
+	 * @param languageCode for which to obtain url, reverts to default language if no url for this language is set
+	 * @return format string for url with date or empty string
+	 */
+	public String getWebsiteName(Region region, LanguageCode languageCode) {
+		return getLanguageConfiguration(region, languageCode)
+			.map(config -> config.websiteName)
+			.orElseGet(() -> getDefaultConfiguration(region)
+				.map(config -> config.websiteName)
+				.orElse(""));
+	}
+
+	/**
 	 * @param region region for which to obtain url
 	 * @param languageCode for which to obtain url, reverts to default language if no url for this language is set
 	 * @return format string for url with date or empty string

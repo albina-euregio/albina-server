@@ -49,7 +49,7 @@ public class PushNotificationUtilTest {
 		when(client.target(eq(URI.create(subscription.getEndpoint())))).thenReturn(webTarget);
 
 		final JSONObject payload = new JSONObject();
-		payload.put("title", subscription.getLanguage().getBundleString("website.name"));
+		payload.put("title", "Avalanche.report");
 		payload.put("body", "Hello World!");
 		new PushNotificationUtil(client).sendPushMessage(subscription, payload, serverKeys);
 

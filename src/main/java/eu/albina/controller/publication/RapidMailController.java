@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -182,7 +183,7 @@ public interface RapidMailController {
 			.type("application/zip")
 			.content(createZipFile(emailHtml, null));
 		final String fromEmail = lang.getBundleString("email", region);
-		final String fromName = lang.getBundleString("website.name", region);
+		final String fromName = RegionController.getInstance().getWebsiteName(region, lang);
 		PostMailingsRequest request = new PostMailingsRequest()
 			.fromEmail(fromEmail)
 			.fromName(fromName)
