@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -226,7 +227,7 @@ public class User {
 		this.deleted = deleted;
 	}
 
-	public JSONObject toJSON() {
+	public JSONObject toJSON() throws JsonProcessingException {
 		JSONObject json = new JSONObject();
 
 		json.put("email", getEmail());
@@ -245,39 +246,7 @@ public class User {
 		if (regions != null && regions.size() > 0) {
 			JSONArray jsonRegions = new JSONArray();
 			for (Region region : regions) {
-				jsonRegions.put(region.toJSON());
-			}
-			json.put("regions", jsonRegions);
-		}
-
-		if (languageCode != null)
-			json.put("languageCode", this.languageCode.toString());
-
-		json.put("deleted", isDeleted());
-
-		return json;
-	}
-
-	public JSONObject toMediumJSON() {
-		JSONObject json = new JSONObject();
-
-		json.put("email", getEmail());
-		json.put("name", getName());
-		json.put("image", getImage());
-		json.put("organization", getOrganization());
-
-		if (roles != null && roles.size() > 0) {
-			JSONArray jsonRoles = new JSONArray();
-			for (Role role : roles) {
-				jsonRoles.put(role.toString());
-			}
-			json.put("roles", jsonRoles);
-		}
-
-		if (regions != null && regions.size() > 0) {
-			JSONArray jsonRegions = new JSONArray();
-			for (Region region : regions) {
-				jsonRegions.put(region.getId());
+				jsonRegions.put(new JSONObject(region.toJSON()));
 			}
 			json.put("regions", jsonRegions);
 		}

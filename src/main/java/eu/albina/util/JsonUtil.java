@@ -16,24 +16,25 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.openjson.JSONArray;
-
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JsonUtil {
 
@@ -112,6 +113,22 @@ public class JsonUtil {
 	public static String writeValueUsingJackson(Object value) {
 		try {
 			return ALBINA_OBJECT_MAPPER.writeValueAsString(value);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T parseUsingJackson(InputStream json, Class<T> valueType) throws IOException {
+		try {
+			return ALBINA_OBJECT_MAPPER.readValue(json, valueType);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void writeValueUsingJackson(OutputStream out, Object value) throws IOException {
+		try {
+			ALBINA_OBJECT_MAPPER.writeValue(out, value);
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}

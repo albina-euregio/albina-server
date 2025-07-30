@@ -15,7 +15,7 @@ public class RegionTest {
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("region_AT-07.json"), StandardCharsets.UTF_8);
 		Region region = Region.readRegion(Resources.getResource("region_AT-07.json"));
-		JSONAssert.assertEquals(expected, region.toJSON().toString(), JSONCompareMode.LENIENT);
+		JSONAssert.assertEquals(expected, region.toJSON(), JSONCompareMode.LENIENT);
 	}
 
 	@Test

@@ -16,8 +16,6 @@
  ******************************************************************************/
 package eu.albina.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.StressLevelController;
 import eu.albina.controller.UserController;
@@ -46,11 +44,9 @@ import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -68,15 +64,14 @@ public class StressLevelService {
 	public Response getStressLevels(
 			@Context SecurityContext securityContext,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) throws JsonProcessingException {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
 		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 		Set<User> users = Collections.singleton(user);
 		List<StressLevel> stressLevels = StressLevelController.get(users, startDate, endDate);
-		String json = new ObjectMapper().writeValueAsString(stressLevels);
-		return Response.ok(json).build();
+		return Response.ok(stressLevels).build();
 	}
 
 	@GET
@@ -89,9 +84,8 @@ public class StressLevelService {
 			@Context SecurityContext securityContext,
 			@QueryParam("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) throws JsonProcessingException {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
 
-		Map<User, UUID> randomization = new TreeMap<>(Comparator.comparing(User::getEmail));
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
 		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
@@ -107,13 +101,8 @@ public class StressLevelService {
 					.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
 					.filter(u -> u.hasPermissionForRegion(region.getId()))
 					.collect(Collectors.toList());
-			Map<UUID, List<StressLevel>> stressLevels = StressLevelController.get(users, startDate, endDate).stream()
-					.collect(Collectors.groupingBy(stressLevel -> randomization.computeIfAbsent(stressLevel.getUser(), i -> UUID.randomUUID())));
-			String json = new ObjectMapper().writeValueAsString(stressLevels);
-			if (json.contains("@")) {
-				throw new IllegalStateException("Found unexpected '@'. Randomization of users emails does not work.");
-			}
-			return Response.ok(json).build();
+			Map<UUID, List<StressLevel>> stressLevels = StressLevel.randomizeUsers(StressLevelController.get(users, startDate, endDate));
+			return Response.ok(stressLevels).build();
 		} catch (Exception e) {
 			logger.warn("Failed to get stress levels for region: " + regionId, e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -128,14 +117,13 @@ public class StressLevelService {
 	@Operation(summary = "Create stress level entry")
 	public Response postStressLevel(
 			@Context SecurityContext securityContext,
-			StressLevel stressLevel) throws JsonProcessingException {
+			StressLevel stressLevel) {
 
 		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 		stressLevel.setUser(user);
 		stressLevel = StressLevelController.create(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);
-		String json = new ObjectMapper().writeValueAsString(stressLevel);
-		return Response.ok(json).build();
+		return Response.ok(stressLevel).build();
 	}
 
 }

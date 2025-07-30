@@ -35,7 +35,13 @@ import jakarta.persistence.Table;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @IdClass(StressLevel.StressLevelID.class)
@@ -61,6 +67,12 @@ public class StressLevel {
 	@JsonSerialize(using = InstantSerializer.class)
 	@JsonDeserialize(using = InstantDeserializer.class)
 	private Instant lastUpdated;
+
+	public static Map<UUID, List<StressLevel>> randomizeUsers(List<StressLevel> stressLevels) {
+		Map<User, UUID> randomization = new TreeMap<>(Comparator.comparing(User::getEmail));
+		return stressLevels.stream()
+			.collect(Collectors.groupingBy(stressLevel -> randomization.computeIfAbsent(stressLevel.getUser(), i -> UUID.randomUUID())));
+	}
 
 	public User getUser() {
 		return user;
