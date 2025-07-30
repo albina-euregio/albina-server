@@ -250,6 +250,15 @@ public class EmailUtil {
 					bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
 				}
 
+				// weather
+				if (avalancheBulletin.getSynopsisCommentIn(lang) != null) {
+					bulletin.put("synopsisHeadline", lang.getBundleString("headline.synopsis"));
+					bulletin.put("synopsisComment", avalancheBulletin.getSynopsisCommentIn(lang));
+				} else {
+					bulletin.put("synopsisHeadline", "");
+					bulletin.put("synopsisComment", "");
+				}
+
 				// tendency
 				if (avalancheBulletin.getTendencyCommentIn(lang) != null) {
 					bulletin.put("tendencyHeadline", lang.getBundleString("headline.tendency"));
