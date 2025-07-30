@@ -6,7 +6,6 @@ import static eu.albina.RegionTestUtils.regionSouthTyrol;
 import static eu.albina.RegionTestUtils.regionTrentino;
 import static eu.albina.RegionTestUtils.regionTyrol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -17,8 +16,6 @@ import java.util.stream.Collectors;
 
 import eu.albina.ImageTestUtils;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.RegionLanguageConfiguration;
-import eu.albina.controller.RegionController;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
@@ -38,8 +35,6 @@ public class MapUtilTest {
 
 	private ServerInstance serverInstance;
 	private Path folder;
-	RegionLanguageConfiguration config = new RegionLanguageConfiguration();
-	RegionController regionController = mock(RegionController.class,CALLS_REAL_METHODS);
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -49,10 +44,6 @@ public class MapUtilTest {
 		serverInstance.setMapsPath(folder.toString());
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 		serverInstance.setPdfDirectory(folder.toString());
-		config.websiteName = "Avalanche.report";
-		doReturn(Optional.of(config))
-			.when(regionController)
-			.getLanguageConfiguration(any(), any());
 	}
 
 	private Path getRelativePath(Path path) {
@@ -154,7 +145,7 @@ public class MapUtilTest {
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance, regionController);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
@@ -176,7 +167,7 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletinsTyrol = bulletins.stream()
 			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(regionTyrol))
 			.collect(Collectors.toList());
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstance, regionController);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstance);
 		avalancheReport.setBulletins(bulletinsTyrol, bulletins);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_AT-07_en.pdf",
@@ -188,7 +179,7 @@ public class MapUtilTest {
 	public void testMapyrusMapsAran() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance, regionController);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));

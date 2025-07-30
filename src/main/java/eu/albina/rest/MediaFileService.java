@@ -163,7 +163,7 @@ public class MediaFileService {
 	) throws Exception {
 		final ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 		final Region region = new Region(regionId);
-		final String websiteName = RegionController.getInstance().getWebsiteName(region,  language);
+		final String websiteName = region.getWebsiteName(language);
 		final String rss = RssUtil.getRss(
 			language,
 			region,

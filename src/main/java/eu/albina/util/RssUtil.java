@@ -16,7 +16,6 @@
  ******************************************************************************/
 package eu.albina.util;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import org.w3c.dom.Document;

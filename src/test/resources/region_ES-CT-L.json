@@ -33,5 +33,11 @@
     "mapLogoBwPath" : "images\/logo\/grey\/lauegi.png",
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",
-    "imageColorbarBwPath" : "logo\/grey\/colorbar.gif"
+    "imageColorbarBwPath" : "logo\/grey\/colorbar.gif",
+	"languageConfigurations": [
+		{
+			"lang": "en",
+			"websiteName": "Avalanche.report"
+		}
+	]
 }

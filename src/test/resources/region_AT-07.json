@@ -64,5 +64,11 @@
     "mapCenterLat": 47.1,
     "mapCenterLng": 11.44,
     "imageColorbarColorPath": "logo/color/colorbar.gif",
-    "imageColorbarBwPath": "logo/grey/colorbar.gif"
+    "imageColorbarBwPath": "logo/grey/colorbar.gif",
+	"languageConfigurations": [
+		{
+			"lang": "en",
+			"websiteName": "Avalanche.report"
+		}
+	]
 }

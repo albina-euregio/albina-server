@@ -164,7 +164,7 @@ public class PdfUtil {
 		Color blue = grayscale ? blueColorBw : PdfUtil.getColor(region.getPdfColor());
 
 		// Add headline
-		String headline = avalancheReport.getRegionController().getWebsiteName(region, lang);
+		String headline = region.getWebsiteName(lang);
 		pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 			.setColor(greyDarkColor, true).showText(headline).endText();
 		String date = avalancheReport.getDate(lang);

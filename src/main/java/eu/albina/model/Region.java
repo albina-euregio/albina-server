@@ -19,24 +19,13 @@ package eu.albina.model;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import eu.albina.util.JsonUtil;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.albina.model.converter.LanguageCodeConverter;
 import eu.albina.model.enumerations.LanguageCode;
@@ -114,6 +103,9 @@ public class Region {
 	@JsonSerialize(contentUsing = RegionSerializer.class)
 	@JsonDeserialize(contentUsing = RegionDeserializer.class)
 	private Set<Region> neighborRegions;
+
+	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<RegionLanguageConfiguration> languageConfigurations;
 
 	@Column(name = "ENABLED_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
 	@Convert(converter = LanguageCodeConverter.class)
@@ -298,6 +290,7 @@ public class Region {
 		this.superRegions = new HashSet<Region>();
 		this.subRegions = new HashSet<Region>();
 		this.neighborRegions = new HashSet<Region>();
+		this.languageConfigurations = new HashSet<RegionLanguageConfiguration>();
 		this.enabledLanguages = new HashSet<LanguageCode>();
 		this.ttsLanguages = new HashSet<LanguageCode>();
 	}
@@ -389,6 +382,44 @@ public class Region {
 
 	public void addNeighborRegion(Region neighborRegion) {
 		this.neighborRegions.add(neighborRegion);
+	}
+
+	public Set<RegionLanguageConfiguration> getLanguageConfigurations() {
+		return languageConfigurations;
+	}
+
+	@JsonIgnore
+	public Optional<RegionLanguageConfiguration> getDefaultLanguageConfiguration() {
+		return getLanguageConfiguration(defaultLang);
+	}
+
+	public Optional<RegionLanguageConfiguration> getLanguageConfiguration(LanguageCode lang) {
+		return languageConfigurations.stream()
+			.filter(config -> config.getLang() == lang)
+			.findFirst();
+	}
+	private <T> T getFromLanguageConfig(
+		LanguageCode languageCode,
+		Function<RegionLanguageConfiguration, T> extractor,
+		T fallbackValue) {
+
+		return getLanguageConfiguration(languageCode)
+			.map(extractor)
+			.orElseGet(() -> getDefaultLanguageConfiguration()
+				.map(extractor)
+				.orElse(fallbackValue));
+	}
+
+	public String getWebsiteName(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getWebsiteName, "");
+	}
+
+	public void setLanguageConfigurations(Set<RegionLanguageConfiguration> languageConfigurations) {
+		this.languageConfigurations = languageConfigurations;
+	}
+
+	public void addLanguageConfiguration(RegionLanguageConfiguration languageConfiguration) {
+		this.languageConfigurations.add(languageConfiguration);
 	}
 
 	public Set<LanguageCode> getEnabledLanguages() {
