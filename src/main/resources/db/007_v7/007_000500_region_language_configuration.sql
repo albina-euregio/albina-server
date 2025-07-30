@@ -27,16 +27,15 @@ ALTER TABLE regions
 -- changeset albina:007_000500-7
 CREATE TABLE region_language_configurations
 (
-    ID                    BIGINT AUTO_INCREMENT NOT NULL,
-    LANGUAGE_CODE         VARCHAR(191)          NULL,
-    STATIC_URL            VARCHAR(191)          NULL,
-    URL                   VARCHAR(191)          NULL,
-    URL_WITH_DATE         VARCHAR(191)          NULL,
-    WARNING_SERVICE_EMAIL VARCHAR(191)          NULL,
-    WARNING_SERVICE_NAME  VARCHAR(191)          NULL,
-    WEBSITE_NAME          VARCHAR(191)          NULL,
-    REGION_ID             VARCHAR(191)          NULL,
-    CONSTRAINT region_language_configurationPK PRIMARY KEY (ID)
+    REGION_ID             VARCHAR(191) NOT NULL,
+    LANGUAGE_CODE         VARCHAR(191) NOT NULL,
+    STATIC_URL            VARCHAR(191) NULL,
+    URL                   VARCHAR(191) NULL,
+    URL_WITH_DATE         VARCHAR(191) NULL,
+    WARNING_SERVICE_EMAIL VARCHAR(191) NULL,
+    WARNING_SERVICE_NAME  VARCHAR(191) NULL,
+    WEBSITE_NAME          VARCHAR(191) NULL,
+    CONSTRAINT region_language_configurationsPK PRIMARY KEY (LANGUAGE_CODE, REGION_ID)
 );
 
 -- changeset albina:007_000500-8

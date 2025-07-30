@@ -264,9 +264,9 @@ public class RegionController {
 	 */
 	public String getWebsiteName(Region region, LanguageCode languageCode) {
 		return getLanguageConfiguration(region, languageCode)
-			.map(config -> config.websiteName)
+			.map(RegionLanguageConfiguration::getWebsiteName)
 			.orElseGet(() -> getDefaultConfiguration(region)
-				.map(config -> config.websiteName)
+				.map(RegionLanguageConfiguration::getWebsiteName)
 				.orElse(""));
 	}
 
@@ -277,9 +277,9 @@ public class RegionController {
 	 */
 	public String getUrlWithDate(Region region, LanguageCode languageCode) {
 		return getLanguageConfiguration(region, languageCode)
-			.map(config -> config.urlWithDate)
+			.map(RegionLanguageConfiguration::getUrlWithDate)
 			.orElseGet(() -> getDefaultConfiguration(region)
-				.map(config -> config.urlWithDate)
+				.map(RegionLanguageConfiguration::getUrlWithDate)
 				.orElse(""));
 	}
 
