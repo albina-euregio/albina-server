@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import eu.albina.util.JsonUtil;
@@ -308,31 +309,21 @@ public class Region implements AvalancheInformationObject {
 		} catch (IOException e) {
 			logger.warn("Failed to deserialize region JSON", e);
 		}
+
 		// Handle region references manually
-		if (json.has("subRegions")) {
-			JSONArray subRegions = json.getJSONArray("subRegions");
-			for (Object entry : subRegions) {
-				Region region = regionFunction.apply((String) entry);
-				if (region != null)
-					this.subRegions.add(region);
+		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
+			if (json.has(key)) {
+				JSONArray array = json.getJSONArray(key);
+				for (Object entry : array) {
+					Region region = regionFunction.apply((String) entry);
+					if (region != null)
+						targetSet.add(region);
+				}
 			}
-		}
-		if (json.has("superRegions")) {
-			JSONArray superRegions = json.getJSONArray("superRegions");
-			for (Object entry : superRegions) {
-				Region region = regionFunction.apply((String) entry);
-				if (region != null)
-					this.superRegions.add(region);
-			}
-		}
-		if (json.has("neighborRegions")) {
-			JSONArray neighborRegions = json.getJSONArray("neighborRegions");
-			for (Object entry : neighborRegions) {
-				Region region = regionFunction.apply((String) entry);
-				if (region != null)
-					this.neighborRegions.add(region);
-			}
-		}
+		};
+		extractRegionsFromJSON.accept("subRegions", this.subRegions);
+		extractRegionsFromJSON.accept("superRegions", this.superRegions);
+		extractRegionsFromJSON.accept("neighborRegions", this.neighborRegions);
 	}
 
 	public String getId() {
