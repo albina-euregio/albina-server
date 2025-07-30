@@ -364,6 +364,8 @@ interface Caaml5 {
 			return "tendencyComment";
 		case highlights:
 			return "highlights";
+		case generalHeadlineComment:
+			return "generalHeadlineComment";
 
 		default:
 			return null;

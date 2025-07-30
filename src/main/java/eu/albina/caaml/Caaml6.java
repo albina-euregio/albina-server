@@ -6,18 +6,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.caaml.v6.AvalancheBulletinCustomData;
-import org.caaml.v6.AvalancheBulletins;
-import org.caaml.v6.AvalancheProblemCustomData;
-import org.caaml.v6.AvalancheProblemType;
-import org.caaml.v6.DangerRatingValue;
-import org.caaml.v6.ElevationBoundaryOrBand;
-import org.caaml.v6.ExpectedAvalancheFrequency;
-import org.caaml.v6.ExpectedSnowpackStability;
-import org.caaml.v6.Tendency;
-import org.caaml.v6.TendencyType;
-import org.caaml.v6.ValidTime;
-import org.caaml.v6.ValidTimePeriod;
+import org.apache.logging.log4j.util.Strings;
+import org.caaml.v6.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -57,7 +47,15 @@ public interface Caaml6 {
 	}
 
 	static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
-		return new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
+		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
+		// TODO (general-headline): insert conditional - only set general headline if activated in backend
+		String generalHeadline = avalancheReport.getGeneralHeadline(lang);
+		if (Strings.isNotEmpty(generalHeadline)) {
+			bulletins.setCustomData(new AvalancheBulletinsCustomData(
+				new AvalancheBulletinsCustomData.ALBINA(generalHeadline)
+			));
+		}
+		return bulletins;
 	}
 
 	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {

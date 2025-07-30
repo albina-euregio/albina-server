@@ -196,6 +196,9 @@ public class Region {
 	@Column(name = "ENABLE_STRESS_LEVEL")
 	private boolean enableStressLevel;
 
+	@Column(name = "ENABLE_GENERAL_HEADLINE")
+	private boolean enableGeneralHeadline;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -758,6 +761,14 @@ public class Region {
 
 	public void setEnableWeatherbox(boolean enableWeatherbox) {
 		this.enableWeatherbox = enableWeatherbox;
+	}
+
+	public boolean isEnableGeneralHeadline() {
+		return enableGeneralHeadline;
+	}
+
+	public void setEnableGeneralHeadline(boolean enableGeneralHeadline) {
+		this.enableGeneralHeadline = enableGeneralHeadline;
 	}
 
 	public Element toCAAML(Document doc) {

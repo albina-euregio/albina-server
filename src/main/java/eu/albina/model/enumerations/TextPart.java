@@ -19,7 +19,7 @@ package eu.albina.model.enumerations;
 import java.util.Arrays;
 
 public enum TextPart {
-	highlights, synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment, tendencyComment;
+	highlights, synopsisHighlights, synopsisComment, avActivityHighlights, avActivityComment, snowpackStructureHighlights, snowpackStructureComment, travelAdvisoryHighlights, travelAdvisoryComment, tendencyComment, generalHeadlineComment;
 
 	public static TextPart fromString(String text) {
 		if (text != null) {
@@ -50,6 +50,8 @@ public enum TextPart {
 			return "tendencyComment";
 		case highlights:
 			return "highlights";
+		case generalHeadlineComment:
+			return "generalHeadlineComment";
 
 		default:
 			return null;
