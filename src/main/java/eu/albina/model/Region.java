@@ -44,8 +44,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.albina.model.converter.LanguageCodeConverter;
 import eu.albina.model.enumerations.LanguageCode;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -60,8 +58,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 /**
@@ -73,9 +69,7 @@ import com.google.common.io.Resources;
 @Entity
 @Table(name = "regions")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Region.class)
-public class Region implements AvalancheInformationObject {
-
-	private static final Logger logger = LoggerFactory.getLogger(Region.class);
+public class Region {
 
 	static class RegionSerializer extends JsonSerializer<Region> {
 		@Override
@@ -301,21 +295,19 @@ public class Region implements AvalancheInformationObject {
 		this.mapYmin = mapYmin;
 	}
 
-	public Region(JSONObject json, Function<String, Region> regionFunction) {
+	public Region(String json, Function<String, Region> regionFunction) throws JsonProcessingException {
 		this();
-		try {
-			// Use Jackson to populate all "normal" fields
-			JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(this).readValue(json.toString());
-		} catch (IOException e) {
-			logger.warn("Failed to deserialize region JSON", e);
-		}
+
+		// Use Jackson to populate all "normal" fields
+		JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(this).readValue(json);
 
 		// Handle region references manually
+		JsonNode node = JsonUtil.ALBINA_OBJECT_MAPPER.readTree(json);
 		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
-			if (json.has(key)) {
-				JSONArray array = json.getJSONArray(key);
-				for (Object entry : array) {
-					Region region = regionFunction.apply((String) entry);
+			JsonNode arrayNode = node.get(key);
+			if (arrayNode != null && arrayNode.isArray()) {
+				for (JsonNode entryNode : arrayNode) {
+					Region region = regionFunction.apply(entryNode.asText());
 					if (region != null)
 						targetSet.add(region);
 				}
@@ -783,15 +775,8 @@ public class Region implements AvalancheInformationObject {
 		return subRegions.stream().anyMatch(subRegion -> regionId.startsWith(subRegion.getId()));
 	}
 
-	@Override
-	public JSONObject toJSON() {
-		try {
-			String jsonString = JsonUtil.ALBINA_OBJECT_MAPPER.writeValueAsString(this);
-			return new JSONObject(jsonString);
-		} catch (JsonProcessingException e) {
-			logger.warn("Error converting region {} to JSON", id, e);
-			return new JSONObject();
-		}
+	public String toJSON() throws JsonProcessingException {
+		return JsonUtil.ALBINA_OBJECT_MAPPER.writeValueAsString(this);
 	}
 
 	@Override
@@ -816,8 +801,7 @@ public class Region implements AvalancheInformationObject {
 
     public static Region readRegion(URL resource) throws UncheckedIOException {
 		try {
-			final String validRegionStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-			return new Region(new JSONObject(validRegionStringFromResource), Region::new);
+			return new Region(Resources.toString(resource, StandardCharsets.UTF_8), Region::new);
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
