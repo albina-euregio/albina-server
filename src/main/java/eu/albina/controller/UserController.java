@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.openjson.JSONArray;
 
 import org.hibernate.HibernateException;
@@ -123,7 +124,13 @@ public class UserController {
 		List<User> users = this.getUsers();
 		if (users != null) {
 			JSONArray jsonResult = new JSONArray();
-			users.stream().filter(user -> !user.isDeleted()).forEach(user -> jsonResult.put(user.toMediumJSON()));
+			users.stream().filter(user -> !user.isDeleted()).forEach(user -> {
+				try {
+					jsonResult.put(user.toJSON());
+				} catch (JsonProcessingException e) {
+					throw new RuntimeException(e);
+				}
+			});
 
 			return jsonResult;
 		} else

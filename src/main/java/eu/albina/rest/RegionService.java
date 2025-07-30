@@ -33,6 +33,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,14 +80,7 @@ public class RegionService {
 
 		try {
 			List<Region> regions = RegionController.getInstance().getRegions();
-			if (regions != null) {
-				JSONArray jsonResult = new JSONArray();
-				for (Region region : regions)
-					jsonResult.put(region.toJSON());
-				return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-			} else {
-				return Response.ok("", MediaType.APPLICATION_JSON).build();
-			}
+			return Response.ok(regions).build();
 		} catch (HibernateException he) {
 			logger.warn("Error loading regions", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
@@ -107,7 +102,7 @@ public class RegionService {
 
 		try {
 			Region region = RegionController.getInstance().getRegion(regionId);
-			return Response.ok(region.toJSON().toString(), MediaType.APPLICATION_JSON).build();
+			return Response.ok(region).build();
 		} catch (HibernateException he) {
 			logger.warn("Error loading region", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
@@ -128,8 +123,7 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
 
 		try {
-			JSONObject regionJson = new JSONObject(regionString);
-			Region region = new Region(regionJson, RegionController.getInstance()::getRegion);
+			Region region = new Region(regionString, RegionController.getInstance()::getRegion);
 
 			// check if region id already exists
 			if (RegionController.getInstance().regionExists(region.getId())) {
@@ -149,6 +143,9 @@ public class RegionService {
 		} catch (HibernateException e) {
 			logger.warn("Error updating region", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+		} catch (JsonProcessingException e) {
+			logger.warn("Error deserializing region", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -162,21 +159,25 @@ public class RegionService {
 		@Parameter(schema = @Schema(implementation = Region.class)) String regionString,
 		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON region");
-		JSONObject regionJson = new JSONObject(regionString);
-		Region region = new Region(regionJson, RegionController.getInstance()::getRegion);
-		region.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
+		try {
+			Region region = new Region(regionString, RegionController.getInstance()::getRegion);
+			region.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 
-		// check if id already exists
-		if (!RegionController.getInstance().regionExists(region.getId())) {
-			RegionController.getInstance().createRegion(region);
-			JSONObject jsonObject = new JSONObject();
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
-		} else {
-			logger.warn("Error creating region - Region already exists");
-			JSONObject json = new JSONObject();
-			json.append("message", "Error creating region - Region already exists");
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			// check if id already exists
+			if (!RegionController.getInstance().regionExists(region.getId())) {
+				RegionController.getInstance().createRegion(region);
+				JSONObject jsonObject = new JSONObject();
+				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
+						.entity(jsonObject.toString()).build();
+			} else {
+				logger.warn("Error creating region - Region already exists");
+				JSONObject json = new JSONObject();
+				json.append("message", "Error creating region - Region already exists");
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			}
+		} catch (JsonProcessingException e) {
+			logger.warn("Error deserializing region", e);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
