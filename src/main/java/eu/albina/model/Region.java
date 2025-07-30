@@ -201,6 +201,9 @@ public class Region implements AvalancheInformationObject {
 	@Column(name = "ENABLE_GENERAL_HEADLINE")
 	private boolean enableGeneralHeadline;
 
+	@Column(name = "ENABLE_WEATHER_TEXT_FIELD")
+	private boolean enableWeatherTextField;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -384,6 +387,8 @@ public class Region implements AvalancheInformationObject {
 			this.enableEditableFields = json.getBoolean("enableEditableFields");
 		if (json.has("enableGeneralHeadline") && !json.isNull("enableGeneralHeadline"))
 			this.enableGeneralHeadline = json.getBoolean("enableGeneralHeadline");
+		if (json.has("enableWeatherTextField") && !json.isNull("enableWeatherTextField"))
+			this.enableWeatherTextField = json.getBoolean("enableWeatherTextField");
 		if (json.has("showMatrix") && !json.isNull("showMatrix"))
 			this.showMatrix = json.getBoolean("showMatrix");
 		if (json.has("enableStrategicMindset") && !json.isNull("enableStrategicMindset"))
@@ -874,6 +879,10 @@ public class Region implements AvalancheInformationObject {
 
 	public void setEnableEditableField(boolean enableEditableFields) { this.enableEditableFields = enableEditableFields; }
 
+	public boolean isEnableWeatherTextField() { return enableWeatherTextField; }
+
+	public void setEnableWeatherTextField(boolean enableWeatherTextField) { this.enableWeatherTextField = enableWeatherTextField; }
+
 	public boolean isEnableWeatherbox() {
 		return enableWeatherbox;
 	}
@@ -973,6 +982,7 @@ public class Region implements AvalancheInformationObject {
 		json.put("enableWeatherbox", isEnableWeatherbox());
 		json.put("enableEditableFields", isEnableEditableFields());
 		json.put("enableGeneralHeadline", isEnableGeneralHeadline());
+		json.put("enableWeatherTextField", isEnableWeatherTextField());
 		json.put("showMatrix", isShowMatrix());
 		json.put("enableStrategicMindset", isEnableStrategicMindset());
 		json.put("enableStressLevel", isEnableStressLevel());
