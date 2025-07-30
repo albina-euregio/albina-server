@@ -161,6 +161,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private String generalHeadlineCommentTextcat;
 
 	@Lob
+	@Column(name = "SYNOPSIS_COMMENT_TEXTCAT")
+	private String synopsisCommentTextcat;
+
+	@Lob
 	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_NOTES")
 	private String avActivityHighlightsNotes;
 
@@ -260,6 +264,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			this.tendencyCommentTextcat = json.getString("tendencyCommentTextcat");
 		if (json.has("generalHeadlineCommentTextcat"))
 			this.generalHeadlineCommentTextcat = json.getString("generalHeadlineCommentTextcat");
+		if (json.has("synopsisCommentTextcat"))
+			this.synopsisCommentTextcat = json.getString("synopsisCommentTextcat");
 		if (json.has("avActivityHighlightsNotes"))
 			this.avActivityHighlightsNotes = json.getString("avActivityHighlightsNotes");
 		if (json.has("avActivityCommentNotes"))
@@ -426,6 +432,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void setGeneralHeadlineCommentTextcat(String generalHeadlineCommentTextcat) {
 		this.generalHeadlineCommentTextcat = generalHeadlineCommentTextcat;
+	}
+
+	public void setSynopsisCommentTextcat(String synopsisCommentTextcat) {
+		this.synopsisCommentTextcat = synopsisCommentTextcat;
+	}
+
+	public String getSynopsisCommentTextcat() {
+		return synopsisCommentTextcat;
 	}
 
 	public String getAvActivityHighlightsNotes() {
@@ -866,6 +880,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
 		if (!Strings.isNullOrEmpty(generalHeadlineCommentTextcat))
 			json.put("generalHeadlineCommentTextcat", generalHeadlineCommentTextcat);
+		if (!Strings.isNullOrEmpty(synopsisCommentTextcat))
+			json.put("synopsisCommentTextcat", synopsisCommentTextcat);
 
 		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
 			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
@@ -938,6 +954,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
 		if (!Strings.isNullOrEmpty(generalHeadlineCommentTextcat))
 			json.put("generalHeadlineCommentTextcat", generalHeadlineCommentTextcat);
+		if (!Strings.isNullOrEmpty(synopsisCommentTextcat))
+			json.put("synopsisCommentTextcat", synopsisCommentTextcat);
 
 		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
 			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
@@ -1053,6 +1071,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setSnowpackStructureCommentTextcat(bulletin.getSnowpackStructureCommentTextcat());
 		setTendencyCommentTextcat(bulletin.getTendencyCommentTextcat());
 		setGeneralHeadlineCommentTextcat(bulletin.getGeneralHeadlineCommentTextcat());
+		setSynopsisCommentTextcat(bulletin.getSynopsisCommentTextcat());
 
 		setAvActivityHighlightsNotes(bulletin.getAvActivityHighlightsNotes());
 		setAvActivityCommentNotes(bulletin.getAvActivityCommentNotes());
@@ -1095,6 +1114,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (!Objects.equals(this.tendencyCommentTextcat, other.tendencyCommentTextcat))
 			return false;
 		if (!Objects.equals(this.generalHeadlineCommentTextcat, other.generalHeadlineCommentTextcat))
+			return false;
+		if (!Objects.equals(this.synopsisCommentTextcat, other.synopsisCommentTextcat))
 			return false;
 		if (!Objects.equals(this.tendency, other.tendency))
 			return false;
