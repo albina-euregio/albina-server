@@ -80,14 +80,10 @@ public class RegionService {
 
 		try {
 			List<Region> regions = RegionController.getInstance().getRegions();
-			String json = new ObjectMapper().writeValueAsString(regions);
-			return Response.ok(json).build();
+			return Response.ok(regions).build();
 		} catch (HibernateException he) {
 			logger.warn("Error loading regions", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
-		} catch (JsonProcessingException e) {
-			logger.warn("Error serializing regions", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
 		}
 	}
 
@@ -106,7 +102,7 @@ public class RegionService {
 
 		try {
 			Region region = RegionController.getInstance().getRegion(regionId);
-			return Response.ok(region, MediaType.APPLICATION_JSON).build();
+			return Response.ok(region).build();
 		} catch (HibernateException he) {
 			logger.warn("Error loading region", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
