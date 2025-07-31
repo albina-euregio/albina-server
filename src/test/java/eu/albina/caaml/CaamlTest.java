@@ -105,7 +105,7 @@ public class CaamlTest {
 			String caaml = Caaml.createCaaml(avalancheReport, language, version);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.createDirectories(path.getParent());
-			Files.write(path, caaml.getBytes(StandardCharsets.UTF_8));
+			Files.writeString(path, caaml, StandardCharsets.UTF_8);
 		}
 	}
 
@@ -122,7 +122,8 @@ public class CaamlTest {
 		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));
 		Files.createDirectories(path.getParent());
-		Files.write(path, JsonUtil.createJSONString(bulletins, new Region("" /* empty to avoid filtering */), true).toString().getBytes(StandardCharsets.UTF_8));
+		String json = JsonUtil.createJSONString(bulletins, new Region("" /* empty to avoid filtering */), true).toString();
+		Files.writeString(path, json, StandardCharsets.UTF_8);
 		return report;
 	}
 

@@ -46,7 +46,7 @@ public interface Caaml {
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			String caamlString = createCaaml(avalancheReport, lang, version);
 			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString() + version.filenameSuffix();
-			Files.write(Paths.get(fileName), caamlString.getBytes(StandardCharsets.UTF_8));
+			Files.writeString(Paths.get(fileName), caamlString, StandardCharsets.UTF_8);
 		}
 	}
 

@@ -137,7 +137,7 @@ public class SimpleHtmlUtil {
 				Path dirPath = avalancheReport.getHtmlDirectory();
 				Files.createDirectories(dirPath);
 				Path newHtmlFile = dirPath.resolve(filename);
-				Files.write(newHtmlFile, simpleHtmlString.getBytes(StandardCharsets.UTF_8));
+				Files.writeString(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
 				return true;
 			} else
 				return false;
