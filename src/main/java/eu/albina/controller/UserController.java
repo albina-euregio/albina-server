@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.openjson.JSONArray;
 
+import com.github.openjson.JSONObject;
 import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -126,7 +127,7 @@ public class UserController {
 			JSONArray jsonResult = new JSONArray();
 			users.stream().filter(user -> !user.isDeleted()).forEach(user -> {
 				try {
-					jsonResult.put(user.toJSON());
+					jsonResult.put(user.toMediumJSON());
 				} catch (JsonProcessingException e) {
 					throw new RuntimeException(e);
 				}
