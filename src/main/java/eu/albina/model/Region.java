@@ -23,8 +23,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import eu.albina.util.JsonUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -52,14 +54,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 /**
@@ -71,7 +69,7 @@ import com.google.common.io.Resources;
 @Entity
 @Table(name = "regions")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Region.class)
-public class Region implements AvalancheInformationObject {
+public class Region {
 
 	static class RegionSerializer extends JsonSerializer<Region> {
 		@Override
@@ -303,146 +301,27 @@ public class Region implements AvalancheInformationObject {
 		this.mapYmin = mapYmin;
 	}
 
-	public Region(JSONObject json, Function<String, Region> regionFunction) {
+	public Region(String json, Function<String, Region> regionFunction) throws JsonProcessingException {
 		this();
-		if (json.has("id") && !json.isNull("id"))
-			this.id = json.getString("id");
-		if (json.has("microRegions") && !json.isNull("microRegions"))
-			this.microRegions = json.getInt("microRegions");
-		if (json.has("subRegions")) {
-			JSONArray subRegions = json.getJSONArray("subRegions");
-			for (Object entry : subRegions) {
-				Region region = regionFunction.apply((String) entry);
-				if (region != null)
-					this.subRegions.add(region);
+
+		// Use Jackson to populate all "normal" fields
+		JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(this).readValue(json);
+
+		// Handle region references manually
+		JsonNode node = JsonUtil.ALBINA_OBJECT_MAPPER.readTree(json);
+		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
+			JsonNode arrayNode = node.get(key);
+			if (arrayNode != null && arrayNode.isArray()) {
+				for (JsonNode entryNode : arrayNode) {
+					Region region = regionFunction.apply(entryNode.asText());
+					if (region != null)
+						targetSet.add(region);
+				}
 			}
-		}
-		if (json.has("superRegions")) {
-			JSONArray superRegions = json.getJSONArray("superRegions");
-			for (Object entry : superRegions) {
-				Region region = regionFunction.apply((String) entry);
-				if (region != null)
-					this.superRegions.add(region);
-			}
-		}
-		if (json.has("neighborRegions")) {
-			JSONArray neighborRegions = json.getJSONArray("neighborRegions");
-			for (Object entry : neighborRegions) {
-				Region region = regionFunction.apply((String) entry);
-				if (region != null)
-					this.neighborRegions.add(region);
-			}
-		}
-		if (json.has("enabledLanguages")) {
-			JSONArray enabledLanguages = json.getJSONArray("enabledLanguages");
-			for (Object entry : enabledLanguages) {
-				this.enabledLanguages.add(LanguageCode.valueOf(((String) entry)));
-			}
-		}
-		if (json.has("ttsLanguages")) {
-			JSONArray ttsLanguages = json.getJSONArray("ttsLanguages");
-			for (Object entry : ttsLanguages) {
-				this.ttsLanguages.add(LanguageCode.valueOf(((String) entry)));
-			}
-		}
-		if (json.has("publishBulletins") && !json.isNull("publishBulletins"))
-			this.publishBulletins = json.getBoolean("publishBulletins");
-		if (json.has("publishBlogs") && !json.isNull("publishBlogs"))
-			this.publishBlogs = json.getBoolean("publishBlogs");
-		if (json.has("createCaamlV5") && !json.isNull("createCaamlV5"))
-			this.createCaamlV5 = json.getBoolean("createCaamlV5");
-		if (json.has("createCaamlV6") && !json.isNull("createCaamlV6"))
-			this.createCaamlV6 = json.getBoolean("createCaamlV6");
-		if (json.has("createJson") && !json.isNull("createJson"))
-			this.createJson = json.getBoolean("createJson");
-		if (json.has("createMaps") && !json.isNull("createMaps"))
-			this.createMaps = json.getBoolean("createMaps");
-		if (json.has("createPdf") && !json.isNull("createPdf"))
-			this.createPdf = json.getBoolean("createPdf");
-		if (json.has("createSimpleHtml") && !json.isNull("createSimpleHtml"))
-			this.createSimpleHtml = json.getBoolean("createSimpleHtml");
-		if (json.has("sendEmails") && !json.isNull("sendEmails"))
-			this.sendEmails = json.getBoolean("sendEmails");
-		if (json.has("sendTelegramMessages") && !json.isNull("sendTelegramMessages"))
-			this.sendTelegramMessages = json.getBoolean("sendTelegramMessages");
-		if (json.has("sendWhatsAppMessages") && !json.isNull("sendWhatsAppMessages"))
-			this.sendWhatsAppMessages = json.getBoolean("sendWhatsAppMessages");
-		if (json.has("sendPushNotifications") && !json.isNull("sendPushNotifications"))
-			this.sendPushNotifications = json.getBoolean("sendPushNotifications");
-		if (json.has("enableMediaFile") && !json.isNull("enableMediaFile"))
-			this.enableMediaFile = json.getBoolean("enableMediaFile");
-		if (json.has("enableAvalancheProblemCornices") && !json.isNull("enableAvalancheProblemCornices"))
-			this.enableAvalancheProblemCornices = json.getBoolean("enableAvalancheProblemCornices");
-		if (json.has("enableAvalancheProblemNoDistinctAvalancheProblem") && !json.isNull("enableAvalancheProblemNoDistinctAvalancheProblem"))
-			this.enableAvalancheProblemNoDistinctAvalancheProblem = json.getBoolean("enableAvalancheProblemNoDistinctAvalancheProblem");
-		if (json.has("enableDangerSources") && !json.isNull("enableDangerSources"))
-			this.enableDangerSources = json.getBoolean("enableDangerSources");
-		if (json.has("enableObservations") && !json.isNull("enableObservations"))
-			this.enableObservations = json.getBoolean("enableObservations");
-		if (json.has("enableModelling") && !json.isNull("enableModelling"))
-			this.enableModelling = json.getBoolean("enableModelling");
-		if (json.has("enableWeatherbox") && !json.isNull("enableWeatherbox"))
-			this.enableWeatherbox = json.getBoolean("enableWeatherbox");
-		if (json.has("enableEditableFields") && !json.isNull("enableEditableFields"))
-			this.enableEditableFields = json.getBoolean("enableEditableFields");
-		if (json.has("enableGeneralHeadline") && !json.isNull("enableGeneralHeadline"))
-			this.enableGeneralHeadline = json.getBoolean("enableGeneralHeadline");
-		if (json.has("enableWeatherTextField") && !json.isNull("enableWeatherTextField"))
-			this.enableWeatherTextField = json.getBoolean("enableWeatherTextField");
-		if (json.has("showMatrix") && !json.isNull("showMatrix"))
-			this.showMatrix = json.getBoolean("showMatrix");
-		if (json.has("enableStrategicMindset") && !json.isNull("enableStrategicMindset"))
-			this.enableStrategicMindset = json.getBoolean("enableStrategicMindset");
-		if (json.has("enableStressLevel") && !json.isNull("enableStressLevel"))
-			this.enableStressLevel = json.getBoolean("enableStressLevel");
-		if (json.has("serverInstance") && !json.isNull("serverInstance"))
-			this.serverInstance = new ServerInstance(json.getJSONObject("serverInstance"), regionFunction);
-		if (json.has("pdfColor") && !json.isNull("pdfColor"))
-			this.pdfColor = json.getString("pdfColor");
-		if (json.has("emailColor") && !json.isNull("emailColor"))
-			this.emailColor = json.getString("emailColor");
-		if (json.has("pdfMapYAmPm") && !json.isNull("pdfMapYAmPm"))
-			this.pdfMapYAmPm = json.getInt("pdfMapYAmPm");
-		if (json.has("pdfMapYFd") && !json.isNull("pdfMapYFd"))
-			this.pdfMapYFd = json.getInt("pdfMapYFd");
-		if (json.has("pdfMapWidthAmPm") && !json.isNull("pdfMapWidthAmPm"))
-			this.pdfMapWidthAmPm = json.getInt("pdfMapWidthAmPm");
-		if (json.has("pdfMapWidthFd") && !json.isNull("pdfMapWidthFd"))
-			this.pdfMapWidthFd = json.getInt("pdfMapWidthFd");
-		if (json.has("pdfMapHeight") && !json.isNull("pdfMapHeight"))
-			this.pdfMapHeight = json.getInt("pdfMapHeight");
-		if (json.has("pdfFooterLogo") && !json.isNull("pdfFooterLogo"))
-			this.pdfFooterLogo = json.getBoolean("pdfFooterLogo");
-		if (json.has("pdfFooterLogoColorPath") && !json.isNull("pdfFooterLogoColorPath"))
-			this.pdfFooterLogoColorPath = json.getString("pdfFooterLogoColorPath");
-		if (json.has("pdfFooterLogoBwPath") && !json.isNull("pdfFooterLogoBwPath"))
-			this.pdfFooterLogoBwPath = json.getString("pdfFooterLogoBwPath");
-		if (json.has("mapXmax") && !json.isNull("mapXmax"))
-			this.mapXmax = json.getInt("mapXmax");
-		if (json.has("mapXmin") && !json.isNull("mapXmin"))
-			this.mapXmin = json.getInt("mapXmin");
-		if (json.has("mapYmax") && !json.isNull("mapYmax"))
-			this.mapYmax = json.getInt("mapYmax");
-		if (json.has("mapYmin") && !json.isNull("mapYmin"))
-			this.mapYmin = json.getInt("mapYmin");
-		if (json.has("simpleHtmlTemplateName") && !json.isNull("simpleHtmlTemplateName"))
-			this.simpleHtmlTemplateName = json.getString("simpleHtmlTemplateName");
-		if (json.has("geoDataDirectory") && !json.isNull("geoDataDirectory"))
-			this.geoDataDirectory = json.getString("geoDataDirectory");
-		if (json.has("mapLogoColorPath") && !json.isNull("mapLogoColorPath"))
-			this.mapLogoColorPath = json.getString("mapLogoColorPath");
-		if (json.has("mapLogoBwPath") && !json.isNull("mapLogoBwPath"))
-			this.mapLogoBwPath = json.getString("mapLogoBwPath");
-		if (json.has("mapLogoPosition"))
-			this.mapLogoPosition = Position.fromString(json.getString("mapLogoPosition"));
-		if (json.has("mapCenterLat"))
-			this.mapCenterLat = json.getDouble("mapCenterLat");
-		if (json.has("mapCenterLng"))
-			this.mapCenterLng = json.getDouble("mapCenterLng");
-		if (json.has("imageColorbarColorPath") && !json.isNull("imageColorbarColorPath"))
-			this.imageColorbarColorPath = json.getString("imageColorbarColorPath");
-		if (json.has("imageColorbarBwPath") && !json.isNull("imageColorbarBwPath"))
-			this.imageColorbarBwPath = json.getString("imageColorbarBwPath");
+		};
+		extractRegionsFromJSON.accept("subRegions", this.subRegions);
+		extractRegionsFromJSON.accept("superRegions", this.superRegions);
+		extractRegionsFromJSON.accept("neighborRegions", this.neighborRegions);
 	}
 
 	public String getId() {
@@ -914,106 +793,8 @@ public class Region implements AvalancheInformationObject {
 		return subRegions.stream().anyMatch(subRegion -> regionId.startsWith(subRegion.getId()));
 	}
 
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		json.put("id", getId());
-		json.put("microRegions", getMicroRegions());
-		if (subRegions != null && subRegions.size() > 0) {
-			JSONArray jsonSubRegions = new JSONArray();
-			for (Region subRegion : subRegions) {
-				jsonSubRegions.put(subRegion.getId());
-			}
-			json.put("subRegions", jsonSubRegions);
-		} else {
-			json.put("subRegions", new JSONArray());
-		}
-		if (superRegions != null && superRegions.size() > 0) {
-			JSONArray jsonSuperRegions = new JSONArray();
-			for (Region superRegion : superRegions) {
-				jsonSuperRegions.put(superRegion.getId());
-			}
-			json.put("superRegions", jsonSuperRegions);
-		} else {
-			json.put("superRegions", new JSONArray());
-		}
-		if (neighborRegions != null && neighborRegions.size() > 0) {
-			JSONArray jsonNeighborRegions = new JSONArray();
-			for (Region neighborRegion : neighborRegions) {
-				jsonNeighborRegions.put(neighborRegion.getId());
-			}
-			json.put("neighborRegions", jsonNeighborRegions);
-		} else {
-			json.put("neighborRegions", new JSONArray());
-		}
-		if (enabledLanguages != null && enabledLanguages.size() > 0) {
-			JSONArray enabledLanguages = new JSONArray();
-			for (LanguageCode language : this.enabledLanguages) {
-				enabledLanguages.put(language.toString());
-			}
-			json.put("enabledLanguages", enabledLanguages);
-		}
-		if (ttsLanguages != null && ttsLanguages.size() > 0) {
-			JSONArray ttsLanguages = new JSONArray();
-			for (LanguageCode language : this.ttsLanguages) {
-				ttsLanguages.put(language.toString());
-			}
-			json.put("ttsLanguages", ttsLanguages);
-		}
-		json.put("publishBulletins", isPublishBulletins());
-		json.put("publishBlogs", isPublishBlogs());
-		json.put("createCaamlV5", isCreateCaamlV5());
-		json.put("createCaamlV6", isCreateCaamlV6());
-		json.put("createJson", isCreateJson());
-		json.put("createMaps", isCreateMaps());
-		json.put("createPdf", isCreatePdf());
-		json.put("createSimpleHtml", isCreateSimpleHtml());
-		json.put("sendEmails", isSendEmails());
-		json.put("sendTelegramMessages", isSendTelegramMessages());
-		json.put("sendWhatsAppMessages", isSendWhatsAppMessages());
-		json.put("sendPushNotifications", isSendPushNotifications());
-		json.put("enableMediaFile", isEnableMediaFile());
-		json.put("enableAvalancheProblemCornices", isEnableAvalancheProblemCornices());
-		json.put("enableAvalancheProblemNoDistinctAvalancheProblem", isEnableAvalancheProblemNoDistinctAvalancheProblem());
-		json.put("enableDangerSources", isEnableDangerSources());
-		json.put("enableObservations", isEnableObservations());
-		json.put("enableModelling", isEnableModelling());
-		json.put("enableWeatherbox", isEnableWeatherbox());
-		json.put("enableEditableFields", isEnableEditableFields());
-		json.put("enableGeneralHeadline", isEnableGeneralHeadline());
-		json.put("enableWeatherTextField", isEnableWeatherTextField());
-		json.put("showMatrix", isShowMatrix());
-		json.put("enableStrategicMindset", isEnableStrategicMindset());
-		json.put("enableStressLevel", isEnableStressLevel());
-		if (getServerInstance() != null) {
-			json.put("serverInstance", getServerInstance().toJSON());
-		}
-		json.put("pdfColor", getPdfColor());
-		json.put("emailColor", getEmailColor());
-		json.put("pdfMapYAmPm", getPdfMapYAmPm());
-		json.put("pdfMapYFd", getPdfMapYFd());
-		json.put("pdfMapWidthAmPm", getPdfMapWidthAmPm());
-		json.put("pdfMapWidthFd", getPdfMapWidthFd());
-		json.put("pdfMapHeight", getPdfMapHeight());
-		json.put("pdfFooterLogo", isPdfFooterLogo());
-		json.put("pdfFooterLogoColorPath", getPdfFooterLogoColorPath());
-		json.put("pdfFooterLogoBwPath", getPdfFooterLogoBwPath());
-		json.put("mapXmax", getMapXmax());
-		json.put("mapXmin", getMapXmin());
-		json.put("mapYmax", getMapYmax());
-		json.put("mapYmin", getMapYmin());
-		json.put("simpleHtmlTemplateName", getSimpleHtmlTemplateName());
-		json.put("geoDataDirectory", getGeoDataDirectory());
-		json.put("mapLogoColorPath", getMapLogoColorPath());
-		json.put("mapLogoBwPath", getMapLogoBwPath());
-		json.put("mapLogoPosition", getMapLogoPosition().toString());
-		json.put("mapCenterLat", getMapCenterLat());
-		json.put("mapCenterLng", getMapCenterLng());
-		json.put("imageColorbarColorPath", getImageColorbarColorPath());
-		json.put("imageColorbarBwPath", getImageColorbarBwPath());
-
-		return json;
+	public String toJSON() throws JsonProcessingException {
+		return JsonUtil.ALBINA_OBJECT_MAPPER.writeValueAsString(this);
 	}
 
 	@Override
@@ -1038,8 +819,7 @@ public class Region implements AvalancheInformationObject {
 
     public static Region readRegion(URL resource) throws UncheckedIOException {
 		try {
-			final String validRegionStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-			return new Region(new JSONObject(validRegionStringFromResource), Region::new);
+			return new Region(Resources.toString(resource, StandardCharsets.UTF_8), Region::new);
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}

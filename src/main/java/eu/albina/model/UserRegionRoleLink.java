@@ -89,13 +89,4 @@ public class UserRegionRoleLink {
 		this.role = role;
 	}
 
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		json.put("user", getUser().toJSON());
-		json.put("region", getRegion().toJSON());
-		json.put("role", getRole());
-
-        return json;
-	}
 }
