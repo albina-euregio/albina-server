@@ -137,9 +137,6 @@ public class RegionService {
 				json.append("message", "Error updating region - Region does not exists");
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
 			}
-		} catch (AlbinaException e) {
-			logger.warn("Error updating region", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (HibernateException e) {
 			logger.warn("Error updating region", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();

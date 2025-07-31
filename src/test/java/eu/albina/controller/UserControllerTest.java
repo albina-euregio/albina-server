@@ -63,13 +63,6 @@ public class UserControllerTest {
 
 	@Test
 	@Disabled
-	public void getRegionsTest() throws AlbinaException {
-		JSONArray regionsJson = RegionController.getInstance().getRegionsJson();
-		logger.info(regionsJson.toString());
-	}
-
-	@Test
-	@Disabled
 	public void getRolesTest() throws AlbinaException {
 		JSONArray rolesJson = UserController.getInstance().getRolesJson();
 		logger.info(rolesJson.toString());
