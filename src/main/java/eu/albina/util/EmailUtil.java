@@ -251,8 +251,8 @@ public class EmailUtil {
 					bulletin.put("synopsisHeadline", lang.getBundleString("headline.synopsis"));
 					bulletin.put("synopsisComment", avalancheBulletin.getSynopsisCommentIn(lang));
 				} else {
-					bulletin.put("synopsisHeadline", "");
-					bulletin.put("synopsisComment", "");
+					bulletin.put("synopsisHeadline", null);
+					bulletin.put("synopsisComment", null);
 				}
 
 				// tendency
