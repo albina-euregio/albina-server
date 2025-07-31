@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import eu.albina.model.AvalancheReport;
 import org.slf4j.Logger;
@@ -45,8 +44,8 @@ public interface Caaml {
 
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			String caamlString = createCaaml(avalancheReport, lang, version);
-			String fileName = dirPath + "/" + avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString() + version.filenameSuffix();
-			Files.writeString(Paths.get(fileName), caamlString, StandardCharsets.UTF_8);
+			Path path = dirPath.resolve(avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString() + version.filenameSuffix());
+			Files.writeString(path, caamlString, StandardCharsets.UTF_8);
 		}
 	}
 
