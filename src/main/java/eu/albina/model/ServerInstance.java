@@ -18,9 +18,6 @@ package eu.albina.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.function.Function;
-
-import com.github.openjson.JSONObject;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,7 +34,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "server_instances")
-public class ServerInstance implements AvalancheInformationObject, Serializable {
+public class ServerInstance implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -92,40 +89,6 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 	 * Default constructor. Initializes all collections of the region.
 	 */
 	public ServerInstance() {
-	}
-
-	public ServerInstance(JSONObject json, Function<String, Region> regionFunction) {
-		this();
-		if (json.has("id") && !json.isNull("id"))
-			this.id = json.getLong("id");
-		if (json.has("name") && !json.isNull("name"))
-			this.name = json.getString("name");
-		if (json.has("apiUrl") && !json.isNull("apiUrl"))
-			this.apiUrl = json.getString("apiUrl");
-		if (json.has("userName") && !json.isNull("userName"))
-			this.userName = json.getString("userName");
-		if (json.has("password") && !json.isNull("password"))
-			this.password = json.getString("password");
-		if (json.has("externalServer") && !json.isNull("externalServer"))
-			this.externalServer = json.getBoolean("externalServer");
-		if (json.has("publishAt5PM") && !json.isNull("publishAt5PM"))
-			this.publishAt5PM = json.getBoolean("publishAt5PM");
-		if (json.has("publishAt8AM") && !json.isNull("publishAt8AM"))
-			this.publishAt8AM = json.getBoolean("publishAt8AM");
-		if (json.has("pdfDirectory") && !json.isNull("pdfDirectory"))
-			this.pdfDirectory = json.getString("pdfDirectory");
-		if (json.has("htmlDirectory") && !json.isNull("htmlDirectory"))
-			this.htmlDirectory = json.getString("htmlDirectory");
-		if (json.has("mapsPath") && !json.isNull("mapsPath"))
-			this.mapsPath = json.getString("mapsPath");
-		if (json.has("mediaPath") && !json.isNull("mediaPath"))
-			this.mediaPath = json.getString("mediaPath");
-		if (json.has("mapProductionUrl") && !json.isNull("mapProductionUrl"))
-			this.mapProductionUrl = json.getString("mapProductionUrl");
-		if (json.has("serverImagesUrl") && !json.isNull("serverImagesUrl"))
-			this.serverImagesUrl = json.getString("serverImagesUrl");
-		if (json.has("dangerLevelElevationDependency") && !json.isNull("dangerLevelElevationDependency"))
-			this.dangerLevelElevationDependency = json.getBoolean("dangerLevelElevationDependency");
 	}
 
 	public Long getId() {
@@ -246,34 +209,6 @@ public class ServerInstance implements AvalancheInformationObject, Serializable 
 
 	public void setDangerLevelElevationDependency(boolean dangerLevelElevationDependency) {
 		this.dangerLevelElevationDependency = dangerLevelElevationDependency;
-	}
-
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-		json.put("id", getId());
-		json.put("name", getName());
-		json.put("apiUrl", getApiUrl());
-		json.put("userName", getUserName());
-		json.put("password", getPassword());
-		json.put("externalServer", isExternalServer());
-		json.put("publishAt5PM", isPublishAt5PM());
-		json.put("publishAt8AM", isPublishAt8AM());
-		json.put("pdfDirectory", getPdfDirectory());
-		json.put("htmlDirectory", getHtmlDirectory());
-		json.put("mapsPath", getMapsPath());
-		json.put("mediaPath", getMediaPath());
-		json.put("mapProductionUrl", getMapProductionUrl());
-		json.put("serverImagesUrl", getServerImagesUrl());
-		json.put("dangerLevelElevationDependency", isDangerLevelElevationDependency());
-		return json;
-	}
-
-	public JSONObject toPublicJSON() {
-		JSONObject json = new JSONObject();
-		json.put("name", getName());
-		json.put("apiUrl", getApiUrl());
-		return json;
 	}
 
 	@Override

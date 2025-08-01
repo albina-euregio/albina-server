@@ -46,7 +46,6 @@ import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.model.publication.WhatsAppConfiguration;
 import eu.albina.util.GlobalVariables;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -55,9 +54,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 
 import eu.albina.controller.ServerInstanceController;
 import eu.albina.exception.AlbinaException;
@@ -82,10 +78,9 @@ public class ServerInstanceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update server configuration")
 	public Response updateServerConfiguration(
-		@Parameter(schema = @Schema(implementation = ServerInstance.class)) String serverInstance) {
+		ServerInstance serverInstance) {
 		try {
-			JSONObject serverInstanceJson = new JSONObject(serverInstance);
-			ServerInstanceController.getInstance().updateServerInstance(new ServerInstance(serverInstanceJson, RegionController.getInstance()::getRegion));
+			ServerInstanceController.getInstance().updateServerInstance(serverInstance);
 			return Response.ok().build();
 		} catch (AlbinaException e) {
 			logger.warn("Error updating local server configuration", e);
@@ -100,23 +95,30 @@ public class ServerInstanceService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create server configuration")
 	public Response createServerConfiguration(
-		@Parameter(schema = @Schema(implementation = ServerInstance.class)) String serverString,
+		ServerInstance serverInstance,
 		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON server");
-		JSONObject serverJson = new JSONObject(serverString);
-		ServerInstance serverInstance = new ServerInstance(serverJson, RegionController.getInstance()::getRegion);
 
 		// check if id already exists
 		if (serverInstance.getId() == null || !ServerInstanceController.getInstance().serverInstanceExists(serverInstance.getId())) {
 			ServerInstanceController.getInstance().createServerInstance(serverInstance);
-			JSONObject jsonObject = new JSONObject();
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
 		} else {
-			logger.warn("Error creating server instance - Server instance already exists");
-			JSONObject json = new JSONObject();
-			json.append("message", "Error creating server instance - Server instance already exists");
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			String msg = "Error creating server instance - Server instance already exists";
+			logger.warn(msg);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(msg).build();
+		}
+	}
+
+	static class PublicLocalServerConfiguration {
+		public final String name;
+		public final String apiUrl;
+		public final String version;
+
+		public PublicLocalServerConfiguration(String name, String apiUrl, String version) {
+			this.name = name;
+			this.apiUrl = apiUrl;
+			this.version = version;
 		}
 	}
 
@@ -125,13 +127,12 @@ public class ServerInstanceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get public local server configuration")
-	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
+	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
 	public Response getPublicLocalServerConfiguration() {
 		try {
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-			JSONObject json = serverInstance.toPublicJSON();
-			json.put("version", GlobalVariables.version);
-            return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+			PublicLocalServerConfiguration r = new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), GlobalVariables.version);
+            return Response.ok(r, MediaType.APPLICATION_JSON).build();
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
@@ -149,9 +150,7 @@ public class ServerInstanceService {
 		logger.debug("GET JSON server");
 		try {
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-			JSONObject json = serverInstance.toJSON();
-			String str = json.toString();
-			return Response.ok(str, MediaType.APPLICATION_JSON).build();
+			return Response.ok(serverInstance, MediaType.APPLICATION_JSON).build();
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
@@ -170,14 +169,7 @@ public class ServerInstanceService {
 		logger.debug("GET JSON external servers");
 		try {
 			List<ServerInstance> externalServerInstances = ServerInstanceController.getInstance().getExternalServerInstances();
-			if (externalServerInstances != null) {
-				JSONArray jsonResult = new JSONArray();
-				for (ServerInstance serverInstance : externalServerInstances)
-					jsonResult.put(serverInstance.toJSON());
-				return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-			} else {
-				return Response.ok("", MediaType.APPLICATION_JSON).build();
-			}
+			return Response.ok(externalServerInstances, MediaType.APPLICATION_JSON).build();
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
