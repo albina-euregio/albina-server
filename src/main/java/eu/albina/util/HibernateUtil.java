@@ -53,7 +53,6 @@ public class HibernateUtil {
 
 	public static String queryGetLatestDate = "from AvalancheReport as r where r.status = 3 or r.status = 0 order by r.date desc";
 
-	public static String queryGetRegions = "from Region as r";
 	public static String queryGetLocalServerInstance = "from ServerInstance as i where i.externalServer = false";
 	public static String queryGetExternalServerInstances = "from ServerInstance as i where i.externalServer = true";
 	public static String queryGetTelegramConfiguration = "from TelegramConfiguration as c where c.region = :region and c.lang = :lang";

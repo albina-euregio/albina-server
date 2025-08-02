@@ -56,7 +56,7 @@ public class JsonUtil {
 			JSONArray jsonArray = JsonUtil.createJSONString(avalancheReport.getBulletins(), avalancheReport.getRegion(), true);
 			String jsonString = jsonArray.toString();
 
-			Files.write(path, jsonString.getBytes(StandardCharsets.UTF_8));
+			Files.writeString(path, jsonString, StandardCharsets.UTF_8);
 		}
 	}
 

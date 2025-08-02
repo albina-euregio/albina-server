@@ -111,13 +111,13 @@ public class PublicationController {
 	 */
 	public void createJson(AvalancheReport avalancheReport) {
 		try {
-			logger.info("JSON production for {} started", avalancheReport.getRegion().getId());
+			logger.info("JSON production for {} started", avalancheReport);
 			JsonUtil.createJsonFile(avalancheReport);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setJsonCreated);
-			logger.info("JSON production for {} finished", avalancheReport.getRegion().getId());
+			logger.info("JSON production for {} finished", avalancheReport);
 		} catch (IOException e) {
-			logger.error("Error producing JSON for " + avalancheReport.getRegion().getId(), e);
+			logger.error("Error producing JSON for " + avalancheReport, e);
 		}
 	}
 
@@ -126,13 +126,13 @@ public class PublicationController {
 	 */
 	public void createCaamlV5(AvalancheReport avalancheReport) {
 		try {
-			logger.info("CAAMLv5 production for {} started", avalancheReport.getRegion().getId());
+			logger.info("CAAMLv5 production for {} started", avalancheReport);
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV5Created);
-			logger.info("CAAMLv5 production for {} finished", avalancheReport.getRegion().getId());
+			logger.info("CAAMLv5 production for {} finished", avalancheReport);
 		} catch (IOException e) {
-			logger.error("Error producing CAAMLv5 for " + avalancheReport.getRegion().getId(), e);
+			logger.error("Error producing CAAMLv5 for " + avalancheReport, e);
 		}
 	}
 
@@ -141,14 +141,14 @@ public class PublicationController {
 	 */
 	public void createCaamlV6(AvalancheReport avalancheReport) {
 		try {
-			logger.info("CAAMLv6 production for {} started", avalancheReport.getRegion().getId());
+			logger.info("CAAMLv6 production for {} started", avalancheReport);
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
 			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
-			logger.info("CAAMLv6 production for {} finished", avalancheReport.getRegion().getId());
+			logger.info("CAAMLv6 production for {} finished", avalancheReport);
 		} catch (IOException e) {
-			logger.error("Error producing CAAMLv6 for " + avalancheReport.getRegion().getId(), e);
+			logger.error("Error producing CAAMLv6 for " + avalancheReport, e);
 		}
 	}
 
@@ -156,15 +156,14 @@ public class PublicationController {
 	 * Trigger the creation of the maps.
 	 */
 	public void createMaps(AvalancheReport avalancheReport) {
-		final String regionId = avalancheReport.getRegion().getId();
 		try {
-			logger.info("Map production for {} started", regionId);
+			logger.info("Map production for {} started", avalancheReport);
 			MapUtil.createMapyrusMaps(avalancheReport);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setMapCreated);
-			logger.info("Map production {} finished", regionId);
+			logger.info("Map production {} finished", avalancheReport);
 		} catch (Exception e) {
-			logger.error("Error producing maps for " + regionId, e);
+			logger.error("Error producing maps for " + avalancheReport, e);
 		}
 	}
 
@@ -173,12 +172,12 @@ public class PublicationController {
 	 */
 	public void createPdf(AvalancheReport avalancheReport) {
 		try {
-			logger.info("PDF production for {} started", avalancheReport.getRegion().getId());
+			logger.info("PDF production for {} started", avalancheReport);
 			PdfUtil.createRegionPdfs(avalancheReport);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setPdfCreated);
 		} finally {
-			logger.info("PDF production {} finished", avalancheReport.getRegion().getId());
+			logger.info("PDF production {} finished", avalancheReport);
 		}
 	}
 
@@ -187,26 +186,26 @@ public class PublicationController {
 	 */
 	public void createSimpleHtml(AvalancheReport avalancheReport) {
 		try {
-			logger.info("Simple HTML production for {} started", avalancheReport.getRegion().getId());
+			logger.info("Simple HTML production for {} started", avalancheReport);
 			SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setHtmlCreated);
 		} catch (Exception e) {
-			logger.error("Error creating simple HTML for " + avalancheReport.getRegion().getId(), e);
+			logger.error("Error creating simple HTML for " + avalancheReport, e);
 		} finally {
-			logger.info("Simple HTML production for {} finished", avalancheReport.getRegion().getId());
+			logger.info("Simple HTML production for {} finished", avalancheReport);
 		}
 	}
 
 	public void createAudioFiles(AvalancheReport avalancheReport) {
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
-			logger.info("Synthesize speech for {} started", avalancheReport.getRegion().getId());
+			logger.info("Synthesize speech for {} started", avalancheReport);
 			TextToSpeech.createAudioFiles(avalancheReport);
 		} catch (Exception e) {
-			logger.error("Synthesize speech error for " + avalancheReport.getRegion().getId(), e);
+			logger.error("Synthesize speech error for " + avalancheReport, e);
 		} finally {
-			logger.info("Synthesize speech for {} finished in {}", avalancheReport.getRegion().getId(), stopwatch);
+			logger.info("Synthesize speech for {} finished in {}", avalancheReport, stopwatch);
 		}
 	}
 

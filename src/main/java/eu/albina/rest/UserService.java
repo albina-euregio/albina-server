@@ -17,6 +17,8 @@
 package eu.albina.rest;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -33,6 +35,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
+import eu.albina.model.Region;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -116,11 +119,8 @@ public class UserService {
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 		try {
-			JSONArray jsonArray = RegionController.getInstance().getRegionsJson();
-			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading regions", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			List<String> ids = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			return Response.ok(ids, MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}

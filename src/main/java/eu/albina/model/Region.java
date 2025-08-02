@@ -17,9 +17,6 @@
 package eu.albina.model;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -58,7 +55,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.io.Resources;
 
 /**
  * This class holds all information about one region.
@@ -816,14 +812,6 @@ public class Region {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-
-    public static Region readRegion(URL resource) throws UncheckedIOException {
-		try {
-			return new Region(Resources.toString(resource, StandardCharsets.UTF_8), Region::new);
-		} catch (IOException e) {
-			throw new UncheckedIOException(e);
-		}
-    }
 
 	@JsonIgnore
 	public boolean isCreateAudioFiles() {

@@ -2,6 +2,7 @@ package eu.albina.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
+import eu.albina.RegionTestUtils;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -38,10 +39,10 @@ public class PdfUtilRebuildTest {
 		serverInstance.setPdfDirectory("/tmp/bulletins/");
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 
-		Region regionTyrol = Region.readRegion(Resources.getResource("region_AT-07.json"));
-		Region regionSouthTyrol = Region.readRegion(Resources.getResource("region_IT-32-BZ.json"));
-		Region regionTrentino = Region.readRegion(Resources.getResource("region_IT-32-TN.json"));
-		Region regionEuregio = Region.readRegion(Resources.getResource("region_EUREGIO.json"));
+		Region regionTyrol = RegionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
+		Region regionSouthTyrol = RegionTestUtils.readRegion(Resources.getResource("region_IT-32-BZ.json"));
+		Region regionTrentino = RegionTestUtils.readRegion(Resources.getResource("region_IT-32-TN.json"));
+		Region regionEuregio = RegionTestUtils.readRegion(Resources.getResource("region_EUREGIO.json"));
 		regionEuregio.addSubRegion(regionTyrol);
 		regionEuregio.addSubRegion(regionSouthTyrol);
 		regionEuregio.addSubRegion(regionTrentino);

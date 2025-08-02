@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -388,5 +389,15 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			.filter(Objects::nonNull)
 			.max(Comparator.naturalOrder())
 			.orElse(null);
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+			.add("region", region)
+			.add("date", date)
+			.add("timestamp", timestamp)
+			.add("bulletins", bulletins)
+			.toString();
 	}
 }

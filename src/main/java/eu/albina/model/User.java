@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.CollectionTable;
@@ -257,6 +258,12 @@ public class User {
 		json.put("deleted", isDeleted());
 
 		return json;
+	}
+
+	public JSONObject toMediumJSON() throws JsonProcessingException {
+		JSONObject u = toJSON();
+		u.put("regions", new JSONArray(getRegions().stream().map(Region::getId).collect(Collectors.toList())));
+		return u;
 	}
 
 	public JSONObject toSmallJSON() {

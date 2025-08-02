@@ -16,14 +16,12 @@
  ******************************************************************************/
 package eu.albina.controller;
 
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.github.openjson.JSONArray;
 import jakarta.persistence.EntityManager;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -43,16 +41,15 @@ import eu.albina.util.HibernateUtil;
  */
 public class RegionController {
 
-	private static Logger logger = LoggerFactory.getLogger(RegionController.class);
+	private static final Logger logger = LoggerFactory.getLogger(RegionController.class);
 
 	private static RegionController instance = null;
-	private final List<RegionLock> regionLocks;
+	private final List<RegionLock> regionLocks = new ArrayList<>();
 
 	/**
 	 * Private constructor.
 	 */
 	private RegionController() {
-		regionLocks = new ArrayList<RegionLock>();
 	}
 
 	/**
@@ -83,30 +80,22 @@ public class RegionController {
 	/**
 	 * Save a {@code region} to the database.
 	 *
-	 * @param region
-	 *            the region to be saved
-	 * @return the id of the saved region
+	 * @param region the region to be saved
 	 */
-	public Serializable createRegion(Region region) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			entityManager.persist(region);
-			return region.getId();
-		});
+	public void createRegion(Region region) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.persist(region), () -> null);
 	}
 
-	public Region updateRegion(Region region) throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			entityManager.merge(region);
-			return region;
-		});
+	public void updateRegion(Region region) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.merge(region));
 	}
 
-	private List<Region> getActiveRegions() throws AlbinaException {
+	private List<Region> getActiveRegions() {
 		return HibernateUtil.getInstance().run(this::getActiveRegions);
 	}
 
 	private List<Region> getActiveRegions(EntityManager entityManager) {
-		return entityManager.createQuery(HibernateUtil.queryGetRegions, Region.class).getResultList();
+		return entityManager.createQuery("from Region as r", Region.class).getResultList();
 	}
 
 	public Region getRegion(String regionId) {
@@ -143,21 +132,11 @@ public class RegionController {
 	}
 
 	public List<Region> getPublishBulletinRegions() {
-		try {
-			return getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
-		} catch (AlbinaException ae) {
-			logger.warn("Active region ids could not be loaded!", ae);
-			return new ArrayList<Region>();
-		}
+		return getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
 	}
 
 	public List<Region> getPublishBlogRegions() {
-		try {
-			return getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList());
-		} catch (AlbinaException ae) {
-			logger.warn("Active regions could not be loaded!", ae);
-			return new ArrayList<Region>();
-		}
+		return getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList());
 	}
 
 	/**
@@ -227,11 +206,6 @@ public class RegionController {
 			.filter(regionLock -> regionLock.getRegion().equals(region))
 			.map(regionLock -> regionLock.getDate().toInstant())
 			.collect(Collectors.toList());
-	}
-
-	public JSONArray getRegionsJson() throws AlbinaException {
-		List<String> regions = getActiveRegions().stream().filter(region -> !region.getServerInstance().isExternalServer()).map(Region::getId).collect(Collectors.toList());
-		return new JSONArray(regions);
 	}
 
 	public List<Region> getRegionsOrBulletinRegions(List<String> regionIds) {

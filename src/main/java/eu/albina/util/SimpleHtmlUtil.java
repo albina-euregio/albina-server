@@ -118,34 +118,27 @@ public class SimpleHtmlUtil {
 		return instance;
 	}
 
-	public boolean createRegionSimpleHtml(AvalancheReport avalancheReport) {
-		boolean result = true;
-
-		if (!avalancheReport.getBulletins().isEmpty())
-			for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
-				if (!createSimpleHtml(avalancheReport, lang))
-					result = false;
-			}
-		return result;
+	public void createRegionSimpleHtml(AvalancheReport avalancheReport) {
+		if (avalancheReport.getBulletins().isEmpty()) {
+			return;
+		}
+		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
+			createSimpleHtml(avalancheReport, lang);
+		}
 	}
 
-	public boolean createSimpleHtml(AvalancheReport avalancheReport, LanguageCode lang) {
+	public void createSimpleHtml(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
-			if (avalancheReport.getBulletins() != null && !avalancheReport.getBulletins().isEmpty()) {
-				String simpleHtmlString = createSimpleHtmlString(avalancheReport, lang);
-				String filename = avalancheReport.getRegion().getId() + "_" + lang.toString() + ".html";
-				Path dirPath = avalancheReport.getHtmlDirectory();
-				Files.createDirectories(dirPath);
-				Path newHtmlFile = dirPath.resolve(filename);
-				Files.write(newHtmlFile, simpleHtmlString.getBytes(StandardCharsets.UTF_8));
-				return true;
-			} else
-				return false;
+			String simpleHtmlString = createSimpleHtmlString(avalancheReport, lang);
+			String filename = avalancheReport.getRegion().getId() + "_" + lang.toString() + ".html";
+			Path dirPath = avalancheReport.getHtmlDirectory();
+			Files.createDirectories(dirPath);
+			Path newHtmlFile = dirPath.resolve(filename);
+			Files.writeString(newHtmlFile, simpleHtmlString, StandardCharsets.UTF_8);
 		} catch (IOException | TemplateException e) {
 			logger.error("Simple html could not be created", e);
 		}
 
-		return false;
 	}
 
 	public String createSimpleHtmlString(AvalancheReport avalancheReport, LanguageCode lang)
