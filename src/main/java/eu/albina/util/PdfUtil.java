@@ -430,6 +430,7 @@ public class PdfUtil {
 
 		// snowpack structure and tendency
 		if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
+				|| avalancheBulletin.getSynopsisCommentIn(lang) != null
 				|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
 				|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null
 				|| avalancheBulletin.getTendencyCommentIn(lang) != null) {
