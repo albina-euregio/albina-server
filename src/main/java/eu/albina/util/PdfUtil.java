@@ -430,6 +430,7 @@ public class PdfUtil {
 
 		// snowpack structure and tendency
 		if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
+				|| avalancheBulletin.getSynopsisCommentIn(lang) != null
 				|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
 				|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null
 				|| avalancheBulletin.getTendencyCommentIn(lang) != null) {
@@ -507,6 +508,31 @@ public class PdfUtil {
 					cell.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(cell);
 				}
+			}
+
+			if (avalancheBulletin.getSynopsisCommentIn(lang) != null) {
+				Paragraph weatherHeadline = new Paragraph(lang.getBundleString("headline.synopsis"))
+					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
+					.setMultipliedLeading(leadingHeadline);
+				cell = new Cell(1, 1).add(weatherHeadline);
+				cell.setTextAlignment(TextAlignment.LEFT);
+				cell.setPaddingLeft(paddingLeft);
+				cell.setBorder(Border.NO_BORDER);
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
+				table.addCell(cell);
+
+				Paragraph weatherComment = new Paragraph(
+					replaceLinebreaks(avalancheBulletin.getSynopsisCommentIn(lang))).setFont(openSansRegularFont)
+					.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
+					.setMarginBottom(5);
+				cell = new Cell(1, 1).add(weatherComment);
+				cell.setTextAlignment(TextAlignment.LEFT);
+				cell.setPaddingLeft(paddingLeft);
+				cell.setBorder(Border.NO_BORDER);
+				cell.setBorderLeft(new SolidBorder(blue, 4));
+				cell.setBackgroundColor(greyVeryVeryLight);
+				table.addCell(cell);
 			}
 
 			if (avalancheBulletin.getTendencyCommentIn(lang) != null) {

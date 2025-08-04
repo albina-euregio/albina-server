@@ -44,6 +44,12 @@
   <entry key="email.IT-32-TN">info@avalanche.report</entry>
   <entry key="email.ES-CT-L">lauegi@aran.org</entry>
   <entry key="email.AT-02">info@avalanche.report</entry>
+  <entry key="email.AT-03">no-reply@lawinen-warnung.eu</entry>
+  <entry key="email.AT-04">no-reply@lawinen-warnung.eu</entry>
+  <entry key="email.AT-05">no-reply@lawinen-warnung.eu</entry>
+  <entry key="email.AT-06">no-reply@lawinen-warnung.eu</entry>
+  <entry key="email.AT-08">no-reply@lawinen-warnung.eu</entry>
+  <entry key="email.DE-BY">no-reply@lawinen-warnung.eu</entry>
   <entry key="logo.path">logo/color/avalanche_report.png</entry>
   <entry key="logo.path.AT-07">logo/color/avalanche_report.png</entry>
   <entry key="logo.path.IT-32-BZ">logo/color/avalanche_report.png</entry>
@@ -90,6 +96,7 @@
   <entry key="headline">Avalanche Forecast</entry>
   <entry key="headline.update">UPDATE on Avalanche Forecast </entry>
   <entry key="headline.tendency">Tendency</entry>
+  <entry key="headline.synopsis">Weather</entry>
   <entry key="headline.regions">Regions</entry>
   <entry key="headline.avalanche-problem">Avalanche Problem</entry>
   <entry key="headline.danger-patterns">Danger patterns</entry>

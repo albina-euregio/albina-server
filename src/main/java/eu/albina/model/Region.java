@@ -195,6 +195,9 @@ public class Region {
 	@Column(name = "ENABLE_GENERAL_HEADLINE")
 	private boolean enableGeneralHeadline;
 
+	@Column(name = "ENABLE_WEATHER_TEXT_FIELD")
+	private boolean enableWeatherTextField;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "SERVER_INSTANCE_ID")
 	private ServerInstance serverInstance;
@@ -750,6 +753,10 @@ public class Region {
 	public boolean isEnableEditableFields() { return enableEditableFields; }
 
 	public void setEnableEditableField(boolean enableEditableFields) { this.enableEditableFields = enableEditableFields; }
+
+	public boolean isEnableWeatherTextField() { return enableWeatherTextField; }
+
+	public void setEnableWeatherTextField(boolean enableWeatherTextField) { this.enableWeatherTextField = enableWeatherTextField; }
 
 	public boolean isEnableWeatherbox() {
 		return enableWeatherbox;
