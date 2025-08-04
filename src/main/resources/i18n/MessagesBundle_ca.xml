@@ -2,43 +2,8 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
   <entry key="website.name">Avalanche.report</entry>
-  <entry key="warning-service.name">Avalanche.report</entry>
-  <entry key="warning-service.name.AT-07">Servei d'alerta d'allaus del Tirol</entry>
-  <entry key="warning-service.name.IT-32-BZ">Servei d'alerta d'allaus del Sud-Tirol</entry>
-  <entry key="warning-service.name.IT-32-TN">Servei d'alerta d'allaus del Trentino</entry>
-  <entry key="warning-service.name.ES-CT-L">Centre de Lauegi Val d'Aran</entry>
-  <entry key="warning-service.name.AT-02">Avalanche Warning Service Carinthia</entry>
   <entry key="media-file.name">avalanchereport</entry>
   <entry key="website.url">https://avalanche.report</entry>
-  <entry key="website.url.AT-07">https://avalanche.report</entry>
-  <entry key="website.url.IT-32-BZ">https://avalanche.report</entry>
-  <entry key="website.url.IT-32-TN">https://avalanche.report</entry>
-  <entry key="website.url.ES-CT-L">https://lauegi.report/</entry>
-  <entry key="website.url.AT-02">https://lawinenwarndienst.ktn.gv.at/</entry>
-  <entry key="website.url.format">%s/bulletin/%s</entry>
-  <entry key="website.url.format.AT-07">%s/bulletin/%s</entry>
-  <entry key="website.url.format.IT-32-BZ">%s/bulletin/%s</entry>
-  <entry key="website.url.format.IT-32-TN">%s/bulletin/%s</entry>
-  <entry key="website.url.format.ES-CT-L">%s/bulletin/%s</entry>
-  <entry key="website.url.format.AT-02">%s?date=%s</entry>
-  <entry key="website.url.capitalized">WWW.AVALANCHE.REPORT</entry>
-  <entry key="website.url.capitalized.AT-07">WWW.AVALANCHE.REPORT</entry>
-  <entry key="website.url.capitalized.IT-32-BZ">WWW.AVALANCHE.REPORT</entry>
-  <entry key="website.url.capitalized.IT-32-TN">WWW.AVALANCHE.REPORT</entry>
-  <entry key="website.url.capitalized.ES-CT-L">WWW.LAUEGI.REPORT</entry>
-  <entry key="website.url.capitalized.AT-02">LAWINENWARNDIENST.KTN.GV.AT</entry>
-  <entry key="website.static.url">https://static.avalanche.report</entry>
-  <entry key="website.static.url.AT-07">https://static.avalanche.report</entry>
-  <entry key="website.static.url.IT-32-BZ">https://static.avalanche.report</entry>
-  <entry key="website.static.url.IT-32-TN">https://static.avalanche.report</entry>
-  <entry key="website.static.url.ES-CT-L">https://static.lauegi.report/</entry>
-  <entry key="website.static.url.AT-02">https://static.avalanche.report</entry>
-  <entry key="email">info@avalanche.report</entry>
-  <entry key="email.AT-07">info@avalanche.report</entry>
-  <entry key="email.IT-32-BZ">info@avalanche.report</entry>
-  <entry key="email.IT-32-TN">info@avalanche.report</entry>
-  <entry key="email.ES-CT-L">lauegi@aran.org</entry>
-  <entry key="email.AT-02">info@avalanche.report</entry>
   <entry key="logo.path">logo/color/avalanche_report.png</entry>
   <entry key="logo.path.AT-07">logo/color/avalanche_report.png</entry>
   <entry key="logo.path.IT-32-BZ">logo/color/avalanche_report.png</entry>

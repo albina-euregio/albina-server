@@ -414,6 +414,22 @@ public class Region {
 		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getWebsiteName, "");
 	}
 
+	public String getWarningServiceEmail(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getWarningServiceEmail, "");
+	}
+
+	public String getWebsiteUrl(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrl, "");
+	}
+
+	public String getWebsiteUrlWithDate(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrlWithDate, "");
+	}
+
+	public String getStaticUrl(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getStaticUrl, "");
+	}
+
 	public void setLanguageConfigurations(Set<RegionLanguageConfiguration> languageConfigurations) {
 		this.languageConfigurations = languageConfigurations;
 	}

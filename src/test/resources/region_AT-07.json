@@ -68,7 +68,17 @@
 	"languageConfigurations": [
 		{
 			"lang": "en",
-			"websiteName": "Avalanche.report"
+			"websiteName": "Avalanche.report",
+			"url": "https://avalanche.report",
+			"urlWithDate": "https://avalanche.report/bulletin/%s",
+			"staticUrl": "https://static.avalanche.report"
+		},
+		{
+			"lang": "de",
+			"websiteName": "Lawinen.report",
+			"url": "https://lawinen.report",
+			"urlWithDate": "https://lawinen.report/bulletin/%s",
+			"staticUrl": "https://static.avalanche.report"
 		}
 	]
 }

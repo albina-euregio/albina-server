@@ -27,6 +27,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,6 +91,11 @@ public class AvalancheReportTest {
 	public void testDates() throws Exception {
 		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/bulletins");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
+		RegionLanguageConfiguration configuration = new RegionLanguageConfiguration();
+		configuration.setLang(LanguageCode.de);
+		configuration.setUrlWithDate("https://lawinen.report/bulletin/%s");
+		configuration.setStaticUrl("https://static.avalanche.report");
+		regionEuregio.setLanguageConfigurations(Set.of(configuration));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);

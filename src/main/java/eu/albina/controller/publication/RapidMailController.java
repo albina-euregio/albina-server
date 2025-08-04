@@ -181,7 +181,7 @@ public interface RapidMailController {
 			.description("mail-content.zip")
 			.type("application/zip")
 			.content(createZipFile(emailHtml, null));
-		final String fromEmail = lang.getBundleString("email", region);
+		final String fromEmail = region.getWarningServiceEmail(lang);
 		final String fromName = region.getWebsiteName(lang);
 		PostMailingsRequest request = new PostMailingsRequest()
 			.fromEmail(fromEmail)

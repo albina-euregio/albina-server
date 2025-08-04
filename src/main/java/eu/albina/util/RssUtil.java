@@ -42,7 +42,7 @@ public interface RssUtil {
 
 	String ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd";
 
-	static String getRss(LanguageCode language, Region region, java.nio.file.Path directory, String websiteName) throws ParserConfigurationException, IOException, TransformerException {
+	static String getRss(LanguageCode language, Region region, java.nio.file.Path directory) throws ParserConfigurationException, IOException, TransformerException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
 		docBuilder = docFactory.newDocumentBuilder();
@@ -54,10 +54,10 @@ public interface RssUtil {
 		channel.appendChild(document.createElement("description")).setTextContent("albina media files");
 		channel.appendChild(document.createElement("language")).setTextContent(language.name());
 		channel.appendChild(document.createElement("link")).setTextContent(LinkUtil.getWebsiteUrl(language, region));
-		channel.appendChild(document.createElementNS(ITUNES_NS, "author")).setTextContent(websiteName);
+		channel.appendChild(document.createElementNS(ITUNES_NS, "author")).setTextContent(region.getWebsiteName(language));
 		Node owner = channel.appendChild(document.createElementNS(ITUNES_NS, "owner"));
-		owner.appendChild(document.createElementNS(ITUNES_NS, "name")).setTextContent(websiteName);
-		owner.appendChild(document.createElementNS(ITUNES_NS, "email")).setTextContent(language.getBundleString("email", region));
+		owner.appendChild(document.createElementNS(ITUNES_NS, "name")).setTextContent(region.getWebsiteName(language));
+		owner.appendChild(document.createElementNS(ITUNES_NS, "email")).setTextContent(region.getWarningServiceEmail(language));
 
 
 		list(directory).sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder())).limit(10).forEach(path -> {

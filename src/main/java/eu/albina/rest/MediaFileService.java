@@ -167,8 +167,7 @@ public class MediaFileService {
 		final String rss = RssUtil.getRss(
 			language,
 			region,
-			getMediaPath(serverInstance, region, language),
-			websiteName);
+			getMediaPath(serverInstance, region, language));
 		return Response.ok(rss, MediaType.APPLICATION_XML).build();
 	}
 

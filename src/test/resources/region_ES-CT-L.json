@@ -34,10 +34,14 @@
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",
     "imageColorbarBwPath" : "logo\/grey\/colorbar.gif",
+	"defaultLang": "en",
 	"languageConfigurations": [
 		{
 			"lang": "en",
-			"websiteName": "Avalanche.report"
+			"websiteName": "Avalanche.report",
+			"url": "https://lauegi.report",
+			"urlWithDate": "https://lauegi.report/bulletin/%s",
+			"staticUrl": "https://static.lauegi.report"
 		}
 	]
 }

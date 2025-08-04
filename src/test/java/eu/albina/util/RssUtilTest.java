@@ -3,6 +3,7 @@ package eu.albina.util;
 import com.google.common.io.MoreFiles;
 import eu.albina.RegionTestUtils;
 import eu.albina.model.Region;
+import eu.albina.model.RegionLanguageConfiguration;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.MediaFileService;
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,7 +22,14 @@ public class RssUtilTest {
 
 	@Test
 	public void rss(@TempDir Path folder) throws Exception {
-		String websiteName = "Lawinen.report";
+		RegionLanguageConfiguration configuration = new RegionLanguageConfiguration();
+		configuration.setLang(LanguageCode.de);
+		configuration.setWebsiteName("Lawinen.report");
+		configuration.setWarningServiceEmail("info@lawinen.report");
+		configuration.setStaticUrl("https://static.avalanche.report");
+		configuration.setUrl("https://lawinen.report");
+		Region region = new Region("AT-07");
+		region.setLanguageConfigurations(Set.of(configuration));
 		ServerInstance serverInstance = new ServerInstance();
 		serverInstance.setMediaPath(folder.resolve("media_files").toString());
 		Path directory = MediaFileService.getMediaPath(serverInstance, RegionTestUtils.regionTyrol, LanguageCode.de);
@@ -30,7 +39,7 @@ public class RssUtilTest {
 		MoreFiles.touch(directory.resolve("2022-12-14.mp3"));
 		Files.setLastModifiedTime(directory.resolve("2020-12-12.mp3"), FileTime.from(Instant.parse("2020-12-12T17:30:00Z")));
 		Files.setLastModifiedTime(directory.resolve("2022-12-14.mp3"), FileTime.from(Instant.parse("2022-12-14T17:45:00Z")));
-		final String rss = RssUtil.getRss(LanguageCode.de, new Region("AT-07"), directory, websiteName).replace("\r\n", "\n");
+		final String rss = RssUtil.getRss(LanguageCode.de, region, directory).replace("\r\n", "\n");
 		assertEquals("" +
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
 			"<rss version=\"2.0\">\n" +

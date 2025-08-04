@@ -196,7 +196,7 @@ public class PdfUtil {
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 			.showText(copyright).endText();
 
-		String urlString = lang.getBundleString("website.url.capitalized", region);
+		String urlString = region.getWebsiteUrl(lang);
 		Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 		pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)

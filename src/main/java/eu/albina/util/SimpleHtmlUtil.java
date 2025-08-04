@@ -171,8 +171,7 @@ public class SimpleHtmlUtil {
 		root.put("text", text);
 
 		Map<String, Object> link = new HashMap<>();
-		link.put("website", lang.getBundleString("website.url") + "/bulletin/"
-				+ avalancheReport.getValidityDateString());
+		link.put("website", String.format(region.getWebsiteUrlWithDate(lang),  avalancheReport.getValidityDateString()));
 		link.put("previousDay", LinkUtil.getBulletinLink(avalancheReport, lang, region, Period.ofDays(-1), serverInstance));
 		link.put("nextDay", LinkUtil.getBulletinLink(avalancheReport, lang, region, Period.ofDays(1), serverInstance));
 		String prefix = LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"

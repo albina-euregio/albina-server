@@ -18,12 +18,12 @@ import eu.albina.model.enumerations.LanguageCode;
 public interface LinkUtil {
 
 	static String getWebsiteUrl(LanguageCode lang, Region region) {
-		String url = lang.getBundleString("website.url", region);
+		String url = region.getWebsiteUrl(lang);
 		return url.replaceAll("/$", "");
 	}
 
 	static String getStaticContentUrl(LanguageCode lang, Region region) {
-		String url = lang.getBundleString("website.static.url", region);
+		String url = region.getStaticUrl(lang);
 		return url.replaceAll("/$", "");
 	}
 
@@ -44,7 +44,7 @@ public interface LinkUtil {
 
 	static String getBulletinUrl(AvalancheReport avalancheReport, LanguageCode lang, Region region) {
 		String date = avalancheReport.getValidityDateString();
-		return String.format(lang.getBundleString("website.url.format", region), getWebsiteUrl(lang, avalancheReport.getRegion()), date);
+		return String.format(region.getWebsiteUrlWithDate(lang), date);
 	}
 
 	static String getPdfLink(AvalancheReport avalancheReport, LanguageCode lang) {
