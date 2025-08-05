@@ -6,15 +6,15 @@ ALTER TABLE regions
 
 -- changeset albina:007_000500-2
 ALTER TABLE regions
-    ADD DEFAULT_LANG VARCHAR(191) NULL;
+    ADD DEFAULT_LANG VARCHAR(191) DEFAULT 'de';
 
 -- changeset albina:007_000500-3
 ALTER TABLE regions
-    ADD LOGO_PATH VARCHAR(191) NULL;
+    ADD LOGO_PATH VARCHAR(191) DEFAULT 'logo/color/avalanche_report.png';
 
 -- changeset albina:007_000500-4
 ALTER TABLE regions
-    ADD LOGO_BW_PATH VARCHAR(191) NULL;
+    ADD LOGO_BW_PATH VARCHAR(191) DEFAULT 'logo/grey/avalanche_report.png';
 
 -- changeset albina:007_000500-5
 CREATE TABLE region_language_configurations
