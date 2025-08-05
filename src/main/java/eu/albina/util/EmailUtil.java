@@ -324,9 +324,9 @@ public class EmailUtil {
 		links.put("pdf", LinkUtil.getPdfLink(avalancheReport, lang));
 		links.put("imprint", LinkUtil.getImprintLink(lang, region));
 		Map<String, Object> socialMediaLinks = new HashMap<>();
-		socialMediaLinks.put("facebook", lang.getBundleString("website.url") + "/#followDialog");
-		socialMediaLinks.put("instagram", lang.getBundleString("website.url") + "/#followDialog");
-		socialMediaLinks.put("youtube", lang.getBundleString("website.url") + "/#followDialog");
+		socialMediaLinks.put("facebook", region.getWebsiteUrl(lang) + "/#followDialog");
+		socialMediaLinks.put("instagram", region.getWebsiteUrl(lang) + "/#followDialog");
+		socialMediaLinks.put("youtube", region.getWebsiteUrl(lang) + "/#followDialog");
 		links.put("socialmedia", socialMediaLinks);
 		root.put("link", links);
 

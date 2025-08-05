@@ -3,7 +3,6 @@
 <properties>
   <entry key="website.name">Avalanche.report</entry>
   <entry key="media-file.name">avalanchereport</entry>
-  <entry key="website.url">https://avalanche.report</entry>
   <entry key="preview"> - PREVIEW</entry>
   <entry key="standard.link.text">Load standard view</entry>
   <entry key="danger-rating.elevation">{0} below {1}, {2} above {3}</entry>

@@ -3,7 +3,6 @@
 <properties>
   <entry key="website.name">Valanghe.report</entry>
   <entry key="media-file.name">valanghereport</entry>
-  <entry key="website.url">https://valanghe.report</entry>
   <entry key="preview">  - ANTEPRIMA</entry>
   <entry key="standard.link.text">Vista standard del carico</entry>
   <entry key="danger-rating.elevation">{0} sotto i {1}, {2} sopra i {3}</entry>
