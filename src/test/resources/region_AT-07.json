@@ -65,6 +65,8 @@
     "mapCenterLng": 11.44,
     "imageColorbarColorPath": "logo/color/colorbar.gif",
     "imageColorbarBwPath": "logo/grey/colorbar.gif",
+	"logoPath": "logo/color/avalanche_report.png",
+	"logoBwPath": "logo/grey/avalanche_report.png",
 	"languageConfigurations": [
 		{
 			"lang": "en",

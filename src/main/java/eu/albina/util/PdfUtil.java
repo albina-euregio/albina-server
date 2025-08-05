@@ -221,9 +221,9 @@ public class PdfUtil {
 		// Add logo
 		Image logoImg;
 		if (grayscale)
-			logoImg = PdfUtil.this.getImage(lang.getBundleString("logo.path.bw", region));
+			logoImg = PdfUtil.this.getImage(region.getLogoBwPath());
 		else
-			logoImg = PdfUtil.this.getImage(lang.getBundleString("logo.path", region));
+			logoImg = PdfUtil.this.getImage(region.getLogoPath());
 		logoImg.scaleToFit(130, 55);
 		logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 		canvas.add(logoImg);

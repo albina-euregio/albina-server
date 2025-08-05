@@ -76,7 +76,7 @@ public class EmailUtil {
 		final Region region = avalancheReport.getRegion();
 		final List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 
-		image.put("logo", serverImagesUrl + lang.getBundleString("logo.path", region));
+		image.put("logo", serverImagesUrl + region.getLogoPath());
 		image.put("dangerLevel5Style", "background=\"" + serverImagesUrl + "bg_checkered.png"
 			+ "\" height=\"10\" width=\"75\" bgcolor=\"#FF0000\"");
 		image.put("ci", serverImagesUrl + region.getImageColorbarColorPath());

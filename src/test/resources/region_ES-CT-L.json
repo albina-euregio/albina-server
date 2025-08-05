@@ -34,6 +34,8 @@
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",
     "imageColorbarBwPath" : "logo\/grey\/colorbar.gif",
+	"logoPath": "logo/color/lauegi.png",
+	"logoBwPath": "logo/grey/lauegi.png",
 	"defaultLang": "en",
 	"languageConfigurations": [
 		{

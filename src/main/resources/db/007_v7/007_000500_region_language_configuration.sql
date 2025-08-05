@@ -10,21 +10,13 @@ ALTER TABLE regions
 
 -- changeset albina:007_000500-3
 ALTER TABLE regions
-    ADD LOGO LONGBLOB NULL;
+    ADD LOGO_PATH VARCHAR(191) NULL;
 
 -- changeset albina:007_000500-4
 ALTER TABLE regions
-    ADD LOGO_BW LONGBLOB NULL;
+    ADD LOGO_BW_PATH VARCHAR(191) NULL;
 
 -- changeset albina:007_000500-5
-ALTER TABLE regions
-    ADD LOGO_SECONDARY LONGBLOB NULL;
-
--- changeset albina:007_000500-6
-ALTER TABLE regions
-    ADD LOGO_SECONDARY_BW LONGBLOB NULL;
-
--- changeset albina:007_000500-7
 CREATE TABLE region_language_configurations
 (
     REGION_ID             VARCHAR(191) NOT NULL,
@@ -38,6 +30,6 @@ CREATE TABLE region_language_configurations
     CONSTRAINT region_language_configurationsPK PRIMARY KEY (LANGUAGE_CODE, REGION_ID)
 );
 
--- changeset albina:007_000500-8
+-- changeset albina:007_000500-6
 ALTER TABLE region_language_configurations
     ADD CONSTRAINT FK_REGION_LANGUAGE_CONFIGURATION FOREIGN KEY (REGION_ID) REFERENCES regions (ID);

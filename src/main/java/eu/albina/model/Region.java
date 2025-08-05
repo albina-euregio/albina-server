@@ -268,17 +268,11 @@ public class Region {
 	@Column(name = "DEFAULT_LANG", length = 191)
 	private LanguageCode defaultLang;
 
-	@Column(name = "LOGO", columnDefinition = "LONGBLOB")
-	private String logo;
+	@Column(name = "LOGO_PATH", length = 191)
+	private String logoPath;
 
-	@Column(name = "LOGO_BW", columnDefinition = "LONGBLOB")
-	private String logoBw;
-
-	@Column(name = "LOGO_SECONDARY", columnDefinition = "LONGBLOB")
-	private String logoSecondary;
-
-	@Column(name = "LOGO_SECONDARY_BW", columnDefinition = "LONGBLOB")
-	private String logoSecondaryBw;
+	@Column(name = "LOGO_BW_PATH", columnDefinition = "LONGBLOB")
+	private String logoBwPath;
 
 	@Column(name = "COAT_OF_ARMS", columnDefinition = "LONGBLOB")
 	private String coatOfArms;
@@ -838,36 +832,20 @@ public class Region {
 		this.defaultLang = defaultLang;
 	}
 
-	public String getLogo() {
-		return logo;
+	public String getLogoPath() {
+		return logoPath;
 	}
 
-	public void setLogo(String logo) {
-		this.logo = logo;
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
 	}
 
-	public void setLogoBw(String logoBw) {
-		this.logoBw = logoBw;
+	public void setLogoBwPath(String logoBw) {
+		this.logoBwPath = logoBw;
 	}
 
-	public String getLogoBw() {
-		return logoBw;
-	}
-
-	public String getLogoSecondary() {
-		return logoSecondary;
-	}
-
-	public void setLogoSecondary(String logoSecondary) {
-		this.logoSecondary = logoSecondary;
-	}
-
-	public String getLogoSecondaryBw() {
-		return logoSecondaryBw;
-	}
-
-	public void setLogoSecondaryBw(String logoSecondaryBw) {
-		this.logoSecondaryBw = logoSecondaryBw;
+	public String getLogoBwPath() {
+		return logoBwPath;
 	}
 
 	public String getCoatOfArms() {
@@ -877,7 +855,6 @@ public class Region {
 	public void setCoatOfArms(String coatOfArms) {
 		this.coatOfArms = coatOfArms;
 	}
-
 
 	public boolean isEnableGeneralHeadline() {
 		return enableGeneralHeadline;
