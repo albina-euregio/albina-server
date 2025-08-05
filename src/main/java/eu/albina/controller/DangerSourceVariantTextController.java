@@ -546,7 +546,7 @@ public class DangerSourceVariantTextController {
 		if (naturalRelease != null) {
 			switch (naturalRelease) {
 				case likely:
-					result = result.replaceAll(textcatPlaceholder.get("möglich"),
+					result = result.replaceAll(textcatPlaceholder.get("möglich."),
 							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
 					break;
 				case possible:
