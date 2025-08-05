@@ -152,8 +152,8 @@ public class SimpleHtmlUtil {
 
 		Map<String, Object> text = new HashMap<>();
 		text.put("standardView", lang.getBundleString("standard.link.text"));
-		text.put("tabtitle", lang.getBundleString("website.name") + " " + avalancheReport.getDate(lang));
-		text.put("title", lang.getBundleString("website.name"));
+		text.put("tabtitle", region.getWebsiteName(lang) + " " + avalancheReport.getDate(lang));
+		text.put("title", region.getWebsiteName(lang));
 		text.put("subtitle", avalancheReport.getDate(lang));
 		String publicationDate = avalancheReport.getPublicationDate(lang);
 		text.put("publicationDate", publicationDate);

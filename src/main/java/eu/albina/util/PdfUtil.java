@@ -134,7 +134,7 @@ public class PdfUtil {
 			pdf.getCatalog().setLang(new PdfString(lang.toString()));
 			pdf.getCatalog().setViewerPreferences(new PdfViewerPreferences().setDisplayDocTitle(true));
 			PdfDocumentInfo info = pdf.getDocumentInfo();
-			info.setTitle(lang.getBundleString("website.name"));
+			info.setTitle(avalancheReport.getRegion().getWebsiteName(lang));
 
 			openSansRegularFont = createFont("fonts/open-sans/OpenSans-Regular.ttf");
 			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");

@@ -126,7 +126,7 @@ public class MediaFileService {
 
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 
-			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), language.getBundleString("website.name"), formattedDate, user.getName());
+			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), region.getWebsiteName(language), formattedDate, user.getName());
 			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
 				mediaText.replace("\n", "<br>"),
 				LinkUtil.createHtmlLink(language.getBundleString("email.media.link.mp3"), mp3FileUrl),
@@ -135,7 +135,7 @@ public class MediaFileService {
 			RapidMailController.sendEmail(config, emailHtml, subject);
 
 			if (important) {
-				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), language.getBundleString("website.name"), formattedDate, user.getName());
+				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), region.getWebsiteName(language), formattedDate, user.getName());
 				config = RapidMailController.getConfiguration(region, language, "media+").orElseThrow();
 				RapidMailController.sendEmail(config, emailHtml, subject);
 			}

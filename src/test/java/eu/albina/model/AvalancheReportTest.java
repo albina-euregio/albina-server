@@ -95,6 +95,7 @@ public class AvalancheReportTest {
 		configuration.setLang(LanguageCode.de);
 		configuration.setUrlWithDate("https://lawinen.report/bulletin/%s");
 		configuration.setStaticUrl("https://static.avalanche.report");
+		configuration.setWebsiteName("Lawinen.report");
 		regionEuregio.setLanguageConfigurations(Set.of(configuration));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);

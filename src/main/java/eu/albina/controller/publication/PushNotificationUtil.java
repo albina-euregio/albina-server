@@ -63,7 +63,7 @@ public class PushNotificationUtil {
 
 	public void send(MultichannelMessage posting) {
 		final JSONObject payload = new JSONObject();
-		payload.put("title", posting.getLanguageCode().getBundleString("website.name"));
+		payload.put("title", posting.getWebsiteName());
 		payload.put("body", posting.getSocialMediaText());
 		payload.put("image", posting.getAttachmentUrl());
 		payload.put("url", posting.getWebsiteUrl());
@@ -77,6 +77,7 @@ public class PushNotificationUtil {
 
 	public void sendWelcomePushMessage(PushSubscription subscription) {
 		final JSONObject payload = new JSONObject();
+		// TODO: get rid of bundle string
 		payload.put("title", subscription.getLanguage().getBundleString("website.name"));
 		payload.put("body", "Hello World!");
 		sendPushMessage(subscription, payload, null);
