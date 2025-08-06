@@ -59,7 +59,6 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.LinkUtil;
 import eu.albina.util.RssUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -127,9 +126,10 @@ public class MediaFileService {
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 
 			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), region.getWebsiteName(language), formattedDate, user.getName());
+			String text = language.getBundleString("email.media.link.mp3");
 			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
 				mediaText.replace("\n", "<br>"),
-				LinkUtil.createHtmlLink(language.getBundleString("email.media.link.mp3"), mp3FileUrl),
+				String.format("<a href=\"%s\">%s</a>", mp3FileUrl, text),
 				MessageFormat.format(language.getBundleString("email.media.text"), user.getName()));
 			RapidMailConfiguration config = RapidMailController.getConfiguration(region, language, "media").orElseThrow();
 			RapidMailController.sendEmail(config, emailHtml, subject);

@@ -1,7 +1,6 @@
 package eu.albina.controller.publication;
 
 import eu.albina.model.publication.BlogConfiguration;
-import eu.albina.util.LinkUtil;
 
 import java.time.OffsetDateTime;
 

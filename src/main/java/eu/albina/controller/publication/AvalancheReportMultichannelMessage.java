@@ -22,12 +22,13 @@ import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
 
+import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.EmailUtil;
-import eu.albina.util.LinkUtil;
 import freemarker.template.TemplateException;
 
 class AvalancheReportMultichannelMessage implements MultichannelMessage {
@@ -59,12 +60,12 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 
 	@Override
 	public String getWebsiteUrl() {
-		return LinkUtil.getBulletinUrl(avalancheReport, lang);
+		return avalancheReport.getRegion().getWebsiteUrlWithDate(lang, avalancheReport);
 	}
 
 	@Override
 	public String getAttachmentUrl() {
-		return LinkUtil.getSocialMediaAttachmentUrl(avalancheReport, lang);
+		return avalancheReport.getRegion().getMapsUrl(lang, avalancheReport, avalancheReport) + "/" + MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), DaytimeDependency.fd, false);
 	}
 
 	@Override
@@ -81,7 +82,7 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 	@Override
 	public String getSocialMediaText() {
 		String dateString = avalancheReport.getDate(lang);
-		String bulletinUrl = LinkUtil.getBulletinUrl(avalancheReport, lang);
+		String bulletinUrl = avalancheReport.getRegion().getWebsiteUrlWithDate(lang, avalancheReport);
 		return avalancheReport.getStatus() == BulletinStatus.republished
 			? MessageFormat.format(lang.getBundleString("social-media.message.update"), getWebsiteName(), dateString, bulletinUrl)
 			: MessageFormat.format(lang.getBundleString("social-media.message"), getWebsiteName(), dateString, bulletinUrl);
