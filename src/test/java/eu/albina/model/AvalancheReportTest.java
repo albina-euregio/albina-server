@@ -44,14 +44,14 @@ import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.LinkUtil;
 
+import static eu.albina.RegionTestUtils.regionEuregio;
+
 public class AvalancheReportTest {
 
 	private final ServerInstance serverInstanceEuregio = new ServerInstance();
 
 	private List<AvalancheBulletin> bulletins;
 	private List<AvalancheBulletin> bulletinsAmPm;
-
-	private final Region regionEuregio = new Region("EUREGIO");
 
 	@BeforeEach
 	public void setUp() throws IOException {
@@ -91,12 +91,6 @@ public class AvalancheReportTest {
 	public void testDates() throws Exception {
 		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/bulletins");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
-		RegionLanguageConfiguration configuration = new RegionLanguageConfiguration();
-		configuration.setLang(LanguageCode.de);
-		configuration.setUrlWithDate("https://lawinen.report/bulletin/%s");
-		configuration.setStaticUrl("https://static.avalanche.report");
-		configuration.setWebsiteName("Lawinen.report");
-		regionEuregio.setLanguageConfigurations(Set.of(configuration));
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
@@ -119,7 +113,7 @@ public class AvalancheReportTest {
 		Assertions.assertEquals("Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		avalancheReport.setStatus(BulletinStatus.republished);
 		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
-		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de, regionEuregio));
+		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", LinkUtil.getBulletinUrl(avalancheReport, LanguageCode.de));
 		Assertions.assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf", LinkUtil.getPdfLink(avalancheReport, LanguageCode.de));
 		Assertions.assertTrue(avalancheReport.isLatest(
 			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
