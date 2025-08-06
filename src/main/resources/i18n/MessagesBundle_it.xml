@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="website.name">Valanghe.report</entry>
   <entry key="media-file.name">valanghereport</entry>
   <entry key="preview">  - ANTEPRIMA</entry>
   <entry key="standard.link.text">Vista standard del carico</entry>

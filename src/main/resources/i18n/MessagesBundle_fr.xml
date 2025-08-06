@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-  <entry key="website.name">Avalanche.report</entry>
   <entry key="media-file.name">avalanchereport</entry>
   <entry key="preview"> - PRÉVIEW</entry>
   <entry key="standard.link.text">Charger la vue standard</entry>
