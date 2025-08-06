@@ -112,14 +112,6 @@ public enum LanguageCode {
 		return bundleString;
 	}
 
-	public String getBundleString(String key, Region region) {
-		try {
-			return getBundleString(key + "." + region.getId());
-		} catch (MissingResourceException e) {
-			return getBundleString(key);
-		}
-	}
-
 	public static LanguageCode fromString(String text) {
 		if (text != null) {
 			return Arrays.stream(LanguageCode.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);

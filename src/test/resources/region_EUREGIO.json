@@ -33,5 +33,21 @@
     "mapLogoBwPath": "images\/logo/grey/euregio.png",
     "mapLogoPosition": "bottomright",
     "imageColorbarColorPath": "logo/color/colorbar.gif",
-    "imageColorbarBwPath": "logo/grey/colorbar.gif"
+    "imageColorbarBwPath": "logo/grey/colorbar.gif",
+	"logoPath": "logo/color/avalanche_report.png",
+	"logoBwPath": "logo/grey/avalanche_report.png",
+	"defaultLang": "de",
+	"languageConfigurations": [
+		{
+			"lang": "en",
+			"websiteName": "Avalanche.report"
+		},
+		{
+			"lang": "de",
+			"websiteName": "Lawinen.report",
+			"url": "https://lawinen.report",
+			"urlWithDate": "https://lawinen.report/bulletin/%s",
+			"staticUrl": "https://static.avalanche.report"
+		}
+	]
 }

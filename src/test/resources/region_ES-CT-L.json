@@ -33,5 +33,17 @@
     "mapLogoBwPath" : "images\/logo\/grey\/lauegi.png",
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",
-    "imageColorbarBwPath" : "logo\/grey\/colorbar.gif"
+    "imageColorbarBwPath" : "logo\/grey\/colorbar.gif",
+	"logoPath": "logo/color/lauegi.png",
+	"logoBwPath": "logo/grey/lauegi.png",
+	"defaultLang": "en",
+	"languageConfigurations": [
+		{
+			"lang": "en",
+			"websiteName": "Avalanche.report",
+			"url": "https://lauegi.report",
+			"urlWithDate": "https://lauegi.report/bulletin/%s",
+			"staticUrl": "https://static.lauegi.report"
+		}
+	]
 }

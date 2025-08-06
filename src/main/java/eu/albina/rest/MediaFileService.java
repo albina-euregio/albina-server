@@ -126,7 +126,7 @@ public class MediaFileService {
 
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 
-			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), language.getBundleString("website.name"), formattedDate, user.getName());
+			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), region.getWebsiteName(language), formattedDate, user.getName());
 			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
 				mediaText.replace("\n", "<br>"),
 				LinkUtil.createHtmlLink(language.getBundleString("email.media.link.mp3"), mp3FileUrl),
@@ -135,7 +135,7 @@ public class MediaFileService {
 			RapidMailController.sendEmail(config, emailHtml, subject);
 
 			if (important) {
-				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), language.getBundleString("website.name"), formattedDate, user.getName());
+				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), region.getWebsiteName(language), formattedDate, user.getName());
 				config = RapidMailController.getConfiguration(region, language, "media+").orElseThrow();
 				RapidMailController.sendEmail(config, emailHtml, subject);
 			}
@@ -163,6 +163,7 @@ public class MediaFileService {
 	) throws Exception {
 		final ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 		final Region region = new Region(regionId);
+		final String websiteName = region.getWebsiteName(language);
 		final String rss = RssUtil.getRss(
 			language,
 			region,
@@ -179,7 +180,7 @@ public class MediaFileService {
 
 	public static String getMediaFileUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
 		String mediaFileDirectory = Paths.get(serverInstance.getMediaPath()).getFileName().toString();
-		return String.format("%s/%s/%s/%s", LinkUtil.getStaticContentUrl(lang, region), mediaFileDirectory, region.getId(), lang);
+		return String.format("%s/%s/%s/%s", region.getStaticUrl(lang), mediaFileDirectory, region.getId(), lang);
 	}
 
 	public static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {

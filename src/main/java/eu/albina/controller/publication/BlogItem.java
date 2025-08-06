@@ -21,6 +21,6 @@ public interface BlogItem {
 	}
 
 	default String getAvalancheReportUrl(BlogConfiguration config) {
-		return LinkUtil.getWebsiteUrl(config.getLanguageCode(), config.getRegion()) + "/blog/" + config.getBlogUrl() + "/" + getId();
+		return  config.getRegion().getWebsiteUrl(config.getLanguageCode()) + "/blog/" + config.getBlogUrl() + "/" + getId();
 	}
 }

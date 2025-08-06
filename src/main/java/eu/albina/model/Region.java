@@ -17,13 +17,24 @@
 package eu.albina.model;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import eu.albina.util.JsonUtil;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import eu.albina.model.converter.LanguageCodeConverter;
+import eu.albina.model.enumerations.LanguageCode;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -36,10 +47,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import eu.albina.model.converter.LanguageCodeConverter;
-import eu.albina.model.enumerations.LanguageCode;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -52,7 +61,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -114,6 +122,9 @@ public class Region {
 	@JsonSerialize(contentUsing = RegionSerializer.class)
 	@JsonDeserialize(contentUsing = RegionDeserializer.class)
 	private Set<Region> neighborRegions;
+
+	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<RegionLanguageConfiguration> languageConfigurations;
 
 	@Column(name = "ENABLED_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
 	@Convert(converter = LanguageCodeConverter.class)
@@ -272,6 +283,19 @@ public class Region {
 	@Column(name = "IMAGE_COLORBAR_BW_PATH", length = 191)
 	private String imageColorbarBwPath;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DEFAULT_LANG", length = 191)
+	private LanguageCode defaultLang;
+
+	@Column(name = "LOGO_PATH", length = 191)
+	private String logoPath;
+
+	@Column(name = "LOGO_BW_PATH", columnDefinition = "LONGBLOB")
+	private String logoBwPath;
+
+	@Column(name = "COAT_OF_ARMS", columnDefinition = "LONGBLOB")
+	private String coatOfArms;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -279,6 +303,7 @@ public class Region {
 		this.superRegions = new HashSet<Region>();
 		this.subRegions = new HashSet<Region>();
 		this.neighborRegions = new HashSet<Region>();
+		this.languageConfigurations = new HashSet<RegionLanguageConfiguration>();
 		this.enabledLanguages = new HashSet<LanguageCode>();
 		this.ttsLanguages = new HashSet<LanguageCode>();
 	}
@@ -370,6 +395,79 @@ public class Region {
 
 	public void addNeighborRegion(Region neighborRegion) {
 		this.neighborRegions.add(neighborRegion);
+	}
+
+	public Set<RegionLanguageConfiguration> getLanguageConfigurations() {
+		return languageConfigurations;
+	}
+
+	@JsonIgnore
+	public Optional<RegionLanguageConfiguration> getDefaultLanguageConfiguration() {
+		return getLanguageConfiguration(defaultLang);
+	}
+
+	public Optional<RegionLanguageConfiguration> getLanguageConfiguration(LanguageCode lang) {
+		return languageConfigurations.stream()
+			.filter(config -> config.getLang() == lang)
+			.findFirst();
+	}
+	private <T> T getFromLanguageConfig(
+		LanguageCode languageCode,
+		Function<RegionLanguageConfiguration, T> extractor,
+		T fallbackValue) {
+
+		return getLanguageConfiguration(languageCode)
+			.map(extractor)
+			.orElseGet(() -> getDefaultLanguageConfiguration()
+				.map(extractor)
+				.orElse(fallbackValue));
+	}
+
+	public String getWebsiteName(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getWebsiteName, "");
+	}
+
+	public String getWarningServiceEmail(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getWarningServiceEmail, "");
+	}
+
+	public String getWebsiteUrl(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrl, "").replaceAll("/$", "");
+	}
+
+	public String getWebsiteUrlWithDate(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrlWithDate, "");
+	}
+
+	public String getStaticUrl(LanguageCode languageCode) {
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getStaticUrl, "").replaceAll("/$", "");
+	}
+
+	public String getSimpleHtmlUrl(LanguageCode lang) {
+		String htmlDirectory = Paths.get(serverInstance.getHtmlDirectory()).getFileName().toString();
+		return String.format("%s/%s", getStaticUrl(lang), htmlDirectory);
+	}
+
+	public String getMapsUrl(LanguageCode lang) {
+		String mapsDirectory = Paths.get(serverInstance.getMapsPath()).getFileName().toString();
+		return String.format("%s/%s", getStaticUrl(lang), mapsDirectory);
+	}
+
+	public String getPdfUrl(LanguageCode lang) {
+		String pdfDirectory = Paths.get(serverInstance.getPdfDirectory()).getFileName().toString();
+		return String.format("%s/%s", getStaticUrl(lang), pdfDirectory);
+	}
+
+	public String getImprintLink(LanguageCode lang) {
+		return String.format("%s/more/imprint", getWebsiteUrl(lang));
+	}
+
+	public void setLanguageConfigurations(Set<RegionLanguageConfiguration> languageConfigurations) {
+		this.languageConfigurations = languageConfigurations;
+	}
+
+	public void addLanguageConfiguration(RegionLanguageConfiguration languageConfiguration) {
+		this.languageConfigurations.add(languageConfiguration);
 	}
 
 	public Set<LanguageCode> getEnabledLanguages() {
@@ -764,6 +862,36 @@ public class Region {
 
 	public void setEnableWeatherbox(boolean enableWeatherbox) {
 		this.enableWeatherbox = enableWeatherbox;
+	}
+
+	public LanguageCode getDefaultLang() { return defaultLang; }
+
+	public void setDefaultLang(LanguageCode defaultLang) {
+		this.defaultLang = defaultLang;
+	}
+
+	public String getLogoPath() {
+		return logoPath;
+	}
+
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
+	}
+
+	public void setLogoBwPath(String logoBw) {
+		this.logoBwPath = logoBw;
+	}
+
+	public String getLogoBwPath() {
+		return logoBwPath;
+	}
+
+	public String getCoatOfArms() {
+		return coatOfArms;
+	}
+
+	public void setCoatOfArms(String coatOfArms) {
+		this.coatOfArms = coatOfArms;
 	}
 
 	public boolean isEnableGeneralHeadline() {

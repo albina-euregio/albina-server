@@ -53,11 +53,11 @@ public interface RssUtil {
 		channel.appendChild(document.createElement("title")).setTextContent("albina media files");
 		channel.appendChild(document.createElement("description")).setTextContent("albina media files");
 		channel.appendChild(document.createElement("language")).setTextContent(language.name());
-		channel.appendChild(document.createElement("link")).setTextContent(LinkUtil.getWebsiteUrl(language, region));
-		channel.appendChild(document.createElementNS(ITUNES_NS, "author")).setTextContent(language.getBundleString("website.name", region));
+		channel.appendChild(document.createElement("link")).setTextContent(region.getWebsiteUrl(language));
+		channel.appendChild(document.createElementNS(ITUNES_NS, "author")).setTextContent(region.getWebsiteName(language));
 		Node owner = channel.appendChild(document.createElementNS(ITUNES_NS, "owner"));
-		owner.appendChild(document.createElementNS(ITUNES_NS, "name")).setTextContent(language.getBundleString("website.name", region));
-		owner.appendChild(document.createElementNS(ITUNES_NS, "email")).setTextContent(language.getBundleString("email", region));
+		owner.appendChild(document.createElementNS(ITUNES_NS, "name")).setTextContent(region.getWebsiteName(language));
+		owner.appendChild(document.createElementNS(ITUNES_NS, "email")).setTextContent(region.getWarningServiceEmail(language));
 
 
 		list(directory).sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder())).limit(10).forEach(path -> {
@@ -72,7 +72,7 @@ public interface RssUtil {
 				guid.setTextContent(UUID.nameUUIDFromBytes((path.getFileName() + pubDate.toString()).getBytes(StandardCharsets.UTF_8)).toString());
 				Element enclosure = (Element) item.appendChild(document.createElement("enclosure"));
 				enclosure.setAttribute("url", String.format("%s/%s/%s/%s/%s",
-					LinkUtil.getStaticContentUrl(language, region),
+					region.getStaticUrl(language),
 					directory.getName(directory.getNameCount() - 3),
 					directory.getName(directory.getNameCount() - 2),
 					directory.getName(directory.getNameCount() - 1),

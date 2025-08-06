@@ -43,6 +43,10 @@ public interface MultichannelMessage {
 
 	LanguageCode getLanguageCode();
 
+	default String getWebsiteName() {
+		return getRegion().getWebsiteName(getLanguageCode());
+	}
+
 	String getWebsiteUrl();
 
 	String getAttachmentUrl();
@@ -57,6 +61,7 @@ public interface MultichannelMessage {
 		return MoreObjects.toStringHelper(getClass())
 			.add("region", getRegion().getId())
 			.add("lang", getLanguageCode())
+			.add("websiteName", getWebsiteName())
 			.add("websiteUrl", getWebsiteUrl())
 			.add("attachmentUrl", getAttachmentUrl())
 			.add("subject", getSubject())

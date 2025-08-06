@@ -33,5 +33,11 @@
     "mapLogoBwPath": "",
     "mapLogoPosition": "bottomright",
     "imageColorbarColorPath": "logo/color/colorbar.gif",
-    "imageColorbarBwPath": "logo/grey/colorbar.gif"
+    "imageColorbarBwPath": "logo/grey/colorbar.gif",
+	"languageConfigurations": [
+		{
+			"lang": "en",
+			"websiteName": "Avalanche.report"
+		}
+	]
 }

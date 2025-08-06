@@ -45,7 +45,7 @@ interface Caaml5 {
 				ZonedDateTime publicationDate = avalancheReport.getPublicationDate().withZoneSameInstant(ZoneOffset.UTC);
 
 				// metaData
-				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, language);
+				Element metaDataProperty = createMetaDataProperty(doc, publicationDate, avalancheReport.getRegion().getWebsiteName(language));
 				rootElement.appendChild(metaDataProperty);
 
 				// observations
@@ -98,7 +98,7 @@ interface Caaml5 {
 		rootElement.setAttribute("xml:lang", languageCode.toString());
 
 		// metaData
-		Element metaDataProperty = createMetaDataProperty(doc, bulletin.getPublicationDate(), languageCode);
+		Element metaDataProperty = createMetaDataProperty(doc, bulletin.getPublicationDate(), region.getWebsiteName(languageCode));
 		rootElement.appendChild(metaDataProperty);
 
 		// validTime
@@ -410,7 +410,7 @@ interface Caaml5 {
 		}
 	}
 
-	static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime, LanguageCode language) {
+	static Element createMetaDataProperty(Document doc, ZonedDateTime dateTime, String websiteName) {
 		Element metaDataProperty = doc.createElement("metaDataProperty");
 		Element metaData = doc.createElement("MetaData");
 		Element dateTimeReport = doc.createElement("dateTimeReport");
@@ -422,7 +422,7 @@ interface Caaml5 {
 		Element srcRef = doc.createElement("srcRef");
 		Element operation = doc.createElement("Operation");
 		Element name = doc.createElement("name");
-		name.appendChild(doc.createTextNode(language.getBundleString("website.name")));
+		name.appendChild(doc.createTextNode(websiteName));
 		operation.appendChild(name);
 		srcRef.appendChild(operation);
 		metaData.appendChild(srcRef);

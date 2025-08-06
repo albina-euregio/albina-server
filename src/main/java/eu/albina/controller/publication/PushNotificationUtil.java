@@ -26,7 +26,9 @@ import ch.rasc.webpush.PushController;
 import ch.rasc.webpush.ServerKeys;
 import ch.rasc.webpush.dto.Subscription;
 import ch.rasc.webpush.dto.SubscriptionKeys;
+import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
@@ -63,7 +65,7 @@ public class PushNotificationUtil {
 
 	public void send(MultichannelMessage posting) {
 		final JSONObject payload = new JSONObject();
-		payload.put("title", posting.getLanguageCode().getBundleString("website.name"));
+		payload.put("title", posting.getWebsiteName());
 		payload.put("body", posting.getSocialMediaText());
 		payload.put("image", posting.getAttachmentUrl());
 		payload.put("url", posting.getWebsiteUrl());
@@ -77,7 +79,8 @@ public class PushNotificationUtil {
 
 	public void sendWelcomePushMessage(PushSubscription subscription) {
 		final JSONObject payload = new JSONObject();
-		payload.put("title", subscription.getLanguage().getBundleString("website.name"));
+		Region region = RegionController.getInstance().getRegion(subscription.getRegion());
+		payload.put("title", region.getWebsiteName(subscription.getLanguage()));
 		payload.put("body", "Hello World!");
 		sendPushMessage(subscription, payload, null);
 	}

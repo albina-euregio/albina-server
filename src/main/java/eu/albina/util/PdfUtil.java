@@ -134,7 +134,7 @@ public class PdfUtil {
 			pdf.getCatalog().setLang(new PdfString(lang.toString()));
 			pdf.getCatalog().setViewerPreferences(new PdfViewerPreferences().setDisplayDocTitle(true));
 			PdfDocumentInfo info = pdf.getDocumentInfo();
-			info.setTitle(lang.getBundleString("website.name"));
+			info.setTitle(avalancheReport.getRegion().getWebsiteName(lang));
 
 			openSansRegularFont = createFont("fonts/open-sans/OpenSans-Regular.ttf");
 			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");
@@ -164,7 +164,7 @@ public class PdfUtil {
 		Color blue = grayscale ? blueColorBw : PdfUtil.getColor(region.getPdfColor());
 
 		// Add headline
-		String headline = lang.getBundleString("website.name", region);
+		String headline = region.getWebsiteName(lang);
 		pdfCanvas.beginText().setFontAndSize(openSansLightFont, 14).moveText(20, pageSize.getTop() - 40)
 			.setColor(greyDarkColor, true).showText(headline).endText();
 		String date = avalancheReport.getDate(lang);
@@ -196,7 +196,7 @@ public class PdfUtil {
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 8).moveText(20, 20).setColor(blue, true)
 			.showText(copyright).endText();
 
-		String urlString = lang.getBundleString("website.url.capitalized", region);
+		String urlString = region.getWebsiteUrl(lang);
 		Rectangle buttonRectangle = new Rectangle(pageSize.getWidth() - 150, 12, 130, 24);
 		pdfCanvas.rectangle(buttonRectangle).setColor(blue, true).fill();
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 8)
@@ -221,9 +221,9 @@ public class PdfUtil {
 		// Add logo
 		Image logoImg;
 		if (grayscale)
-			logoImg = PdfUtil.this.getImage(lang.getBundleString("logo.path.bw", region));
+			logoImg = PdfUtil.this.getImage(region.getLogoBwPath());
 		else
-			logoImg = PdfUtil.this.getImage(lang.getBundleString("logo.path", region));
+			logoImg = PdfUtil.this.getImage(region.getLogoPath());
 		logoImg.scaleToFit(130, 55);
 		logoImg.setFixedPosition(pageSize.getWidth() - 110, pageSize.getHeight() - 75);
 		canvas.add(logoImg);
