@@ -127,11 +127,11 @@ public class RegionService {
 			// check if region id already exists
 			if (RegionController.getInstance().regionExists(region.getId())) {
 				Region existing =  RegionController.getInstance().getRegion(region.getId());
+				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
+				// This happens whenever new fields are added to the backend but not yet to the frontend.
 				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
 				RegionController.getInstance().updateRegion(existing);
-				JSONObject json = new JSONObject();
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(json.toString()).build();
+				return Response.ok(existing.toJSON()).build();
 			} else {
 				logger.warn("Error updating region - Region does not exist");
 				JSONObject json = new JSONObject();
