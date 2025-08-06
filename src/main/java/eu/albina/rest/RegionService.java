@@ -34,7 +34,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.albina.util.JsonUtil;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,6 @@ import com.github.openjson.JSONObject;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -127,10 +126,12 @@ public class RegionService {
 
 			// check if region id already exists
 			if (RegionController.getInstance().regionExists(region.getId())) {
-				RegionController.getInstance().updateRegion(region);
-				JSONObject jsonObject = new JSONObject();
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.entity(jsonObject.toString()).build();
+				Region existing =  RegionController.getInstance().getRegion(region.getId());
+				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
+				// This happens whenever new fields are added to the backend but not yet to the frontend.
+				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
+				RegionController.getInstance().updateRegion(existing);
+				return Response.ok(existing.toJSON()).build();
 			} else {
 				logger.warn("Error updating region - Region does not exist");
 				JSONObject json = new JSONObject();

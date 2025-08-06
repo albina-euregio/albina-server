@@ -2,8 +2,10 @@ package eu.albina.rest;
 
 import eu.albina.util.JsonUtil;
 
+import javax.annotation.Priority;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.Priorities;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -20,6 +22,7 @@ import java.lang.reflect.Type;
 @Singleton
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Priority(Priorities.ENTITY_CODER)
 public class JsonUtilProvider<T> implements MessageBodyReader<T>, MessageBodyWriter<T> {
 
 	@Override
