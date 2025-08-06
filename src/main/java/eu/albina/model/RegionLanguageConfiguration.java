@@ -122,8 +122,11 @@ public class RegionLanguageConfiguration {
 	}
 
 	public static final class RegionLanguageConfigurationID {
-		private final Region region;
-		private final LanguageCode lang;
+		private Region region;
+		private LanguageCode lang;
+
+		public RegionLanguageConfigurationID() {
+		}
 
 		public RegionLanguageConfigurationID(Region region, LanguageCode lang) {
 			this.region = region;
