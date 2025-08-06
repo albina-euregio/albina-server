@@ -174,7 +174,7 @@ public class SimpleHtmlUtil {
 		link.put("website", String.format(region.getWebsiteUrlWithDate(lang),  avalancheReport.getValidityDateString()));
 		link.put("previousDay", LinkUtil.getBulletinLink(avalancheReport, lang, region, Period.ofDays(-1), serverInstance));
 		link.put("nextDay", LinkUtil.getBulletinLink(avalancheReport, lang, region, Period.ofDays(1), serverInstance));
-		String prefix = LinkUtil.getSimpleHtmlUrl(lang, region, serverInstance) + "/"
+		String prefix = region.getSimpleHtmlUrl(lang) + "/"
 			+ avalancheReport.getValidityDateString() + "/" + region.getId();
 		link.put("linkDe", prefix + "_de.html");
 		link.put("linkIt", prefix + "_it.html");
@@ -193,21 +193,21 @@ public class SimpleHtmlUtil {
 
 				// maps
 				if (avalancheBulletin.isHasDaytimeDependency()) {
-					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
+					bulletin.put("mapAMjpg", region.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.jpg));
-					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
+					bulletin.put("mapAMwebp", region.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.webp));
-					bulletin.put("mapPMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
+					bulletin.put("mapPMjpg", region.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.jpg));
-					bulletin.put("mapPMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
+					bulletin.put("mapPMwebp", region.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.webp));
 					bulletin.put("widthPM", "width=\"150\"");
 					bulletin.put("heightPMSmall", "height=\"50\"");
 					bulletin.put("fontSize", "");
 				} else {
-					bulletin.put("mapAMjpg", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
+					bulletin.put("mapAMjpg", region.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.fd, false, MapImageFormat.jpg));
-					bulletin.put("mapAMwebp", LinkUtil.getMapsUrl(lang, region, serverInstance) + "/"
+					bulletin.put("mapAMwebp", region.getMapsUrl(lang) + "/"
 							+ avalancheBulletin.getValidityDateString() + "/" + MapUtil.filename(region, avalancheBulletin, DaytimeDependency.fd, false, MapImageFormat.webp));
 					bulletin.put("mapPMjpg", serverInstance.getServerImagesUrl() + "empty.png");
 					bulletin.put("mapPMwebp", serverInstance.getServerImagesUrl() + "empty.webp");

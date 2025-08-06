@@ -58,6 +58,9 @@ public class SimpleHtmlUtilTest {
 		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
 		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
 		serverInstanceAran.setHtmlDirectory("/mnt/simple_local");
+		regionEuregio.setServerInstance(serverInstanceEuregio);
+		regionTyrol.setServerInstance(serverInstanceEuregio);
+		regionAran.setServerInstance(serverInstanceAran);
 	}
 
 	@Test

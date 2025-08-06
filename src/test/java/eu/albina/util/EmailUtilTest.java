@@ -51,6 +51,8 @@ public class EmailUtilTest {
 		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
 		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
 		serverInstanceAran.setPdfDirectory("/mnt/albina_files_local/");
+		regionTyrol.setServerInstance(serverInstanceEuregio);
+		regionAran.setServerInstance(serverInstanceAran);
 	}
 
 	@Test

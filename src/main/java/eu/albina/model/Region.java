@@ -17,6 +17,7 @@
 package eu.albina.model;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,11 +25,30 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import eu.albina.util.JsonUtil;
-import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import eu.albina.model.converter.LanguageCodeConverter;
 import eu.albina.model.enumerations.LanguageCode;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,7 +61,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -413,7 +432,7 @@ public class Region {
 	}
 
 	public String getWebsiteUrl(LanguageCode languageCode) {
-		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrl, "");
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrl, "").replaceAll("/$", "");
 	}
 
 	public String getWebsiteUrlWithDate(LanguageCode languageCode) {
@@ -421,7 +440,26 @@ public class Region {
 	}
 
 	public String getStaticUrl(LanguageCode languageCode) {
-		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getStaticUrl, "");
+		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getStaticUrl, "").replaceAll("/$", "");
+	}
+
+	public String getSimpleHtmlUrl(LanguageCode lang) {
+		String htmlDirectory = Paths.get(serverInstance.getHtmlDirectory()).getFileName().toString();
+		return String.format("%s/%s", getStaticUrl(lang), htmlDirectory);
+	}
+
+	public String getMapsUrl(LanguageCode lang) {
+		String mapsDirectory = Paths.get(serverInstance.getMapsPath()).getFileName().toString();
+		return String.format("%s/%s", getStaticUrl(lang), mapsDirectory);
+	}
+
+	public String getPdfUrl(LanguageCode lang) {
+		String pdfDirectory = Paths.get(serverInstance.getPdfDirectory()).getFileName().toString();
+		return String.format("%s/%s", getStaticUrl(lang), pdfDirectory);
+	}
+
+	public String getImprintLink(LanguageCode lang) {
+		return String.format("%s/more/imprint", getWebsiteUrl(lang));
 	}
 
 	public void setLanguageConfigurations(Set<RegionLanguageConfiguration> languageConfigurations) {
