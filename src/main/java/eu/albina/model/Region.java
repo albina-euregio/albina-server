@@ -435,8 +435,10 @@ public class Region {
 		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrl, "").replaceAll("/$", "");
 	}
 
-	public String getWebsiteUrlWithDate(LanguageCode languageCode) {
-		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getUrlWithDate, "");
+	public String getWebsiteUrlWithDate(LanguageCode lang, HasValidityDate avalancheReport) {
+		String url = getFromLanguageConfig(lang, RegionLanguageConfiguration::getUrlWithDate, "");
+		String date = avalancheReport.getValidityDateString();
+		return String.format(url, date);
 	}
 
 	public String getStaticUrl(LanguageCode languageCode) {
@@ -448,14 +450,15 @@ public class Region {
 		return String.format("%s/%s", getStaticUrl(lang), htmlDirectory);
 	}
 
-	public String getMapsUrl(LanguageCode lang) {
+	public String getMapsUrl(LanguageCode lang, HasValidityDate validityDate, HasPublicationDate publicationDate) {
 		String mapsDirectory = Paths.get(serverInstance.getMapsPath()).getFileName().toString();
-		return String.format("%s/%s", getStaticUrl(lang), mapsDirectory);
+		return String.format("%s/%s/%s/%s", getStaticUrl(lang), mapsDirectory, validityDate.getValidityDateString(), publicationDate.getPublicationTimeString());
 	}
 
-	public String getPdfUrl(LanguageCode lang) {
+	public String getPdfUrl(LanguageCode lang, HasValidityDate avalancheReport) {
 		String pdfDirectory = Paths.get(serverInstance.getPdfDirectory()).getFileName().toString();
-		return String.format("%s/%s", getStaticUrl(lang), pdfDirectory);
+		String date = avalancheReport.getValidityDateString();
+		return String.format("%s/%s/%s/%s_%s_%s.pdf", getStaticUrl(lang), pdfDirectory, date, date, getId(), lang);
 	}
 
 	public String getImprintLink(LanguageCode lang) {
