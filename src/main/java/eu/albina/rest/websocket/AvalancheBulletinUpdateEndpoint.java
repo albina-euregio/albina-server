@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.model.BulletinUpdate;
 
-@ServerEndpoint(value = "/update/{username}", decoders = BulletinUpdateDecoder.class, encoders = BulletinUpdateEncoder.class)
+@ServerEndpoint(value = "/update/{username}")
 public class AvalancheBulletinUpdateEndpoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinUpdateEndpoint.class);
@@ -37,7 +37,7 @@ public class AvalancheBulletinUpdateEndpoint {
 
 	@OnMessage
 	public void onMessage(Session session, String lock) {
-		// BulletinUpdate bulletinUpdate = new BulletinUpdate(new JSONObject(lock));
+		// BulletinUpdate bulletinUpdate = JsonUtil.parseUsingJackson(lock, BulletinUpdate.class);
 		// broadcast(bulletinUpdate);
 	}
 

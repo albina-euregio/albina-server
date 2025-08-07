@@ -17,13 +17,14 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import com.github.openjson.JSONObject;
+import eu.albina.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.ChatController;
 import eu.albina.model.ChatMessage;
 
-@ServerEndpoint(value = "/chat/{username}", decoders = ChatMessageDecoder.class, encoders = ChatMessageEncoder.class)
+@ServerEndpoint(value = "/chat/{username}")
 public class ChatEndpoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(ChatEndpoint.class);
@@ -51,7 +52,7 @@ public class ChatEndpoint {
 
 	@OnMessage
 	public void onMessage(Session session, String message) {
-		ChatMessage chatMessage = new ChatMessage(new JSONObject(message));
+		ChatMessage chatMessage = JsonUtil.parseUsingJackson(message, ChatMessage.class);
 		ChatController.getInstance().saveChatMessage(chatMessage);
 		broadcast(chatMessage);
 	}

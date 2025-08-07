@@ -15,6 +15,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import com.github.openjson.JSONObject;
+import eu.albina.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.BulletinLock;
 
-@ServerEndpoint(value = "/bulletin/{username}", decoders = BulletinLockDecoder.class, encoders = BulletinLockEncoder.class)
+@ServerEndpoint(value = "/bulletin/{username}")
 public class AvalancheBulletinEndpoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEndpoint.class);
@@ -40,7 +41,7 @@ public class AvalancheBulletinEndpoint {
 
 	@OnMessage
 	public void onMessage(Session session, String lock) throws AlbinaException {
-		BulletinLock bulletinLock = new BulletinLock(new JSONObject(lock));
+		BulletinLock bulletinLock = JsonUtil.parseUsingJackson(lock, BulletinLock.class);
 		bulletinLock.setSessionId(session.getId());
 		if (bulletinLock.getLock())
 			AvalancheBulletinController.getInstance().lockBulletin(bulletinLock);

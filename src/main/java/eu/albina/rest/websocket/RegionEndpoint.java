@@ -15,6 +15,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import com.github.openjson.JSONObject;
+import eu.albina.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.RegionLock;
 
-@ServerEndpoint(value = "/region/{username}", decoders = RegionLockDecoder.class, encoders = RegionLockEncoder.class)
+@ServerEndpoint(value = "/region/{username}")
 public class RegionEndpoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegionEndpoint.class);
@@ -40,7 +41,7 @@ public class RegionEndpoint {
 
 	@OnMessage
 	public void onMessage(Session session, String lock) throws AlbinaException {
-		RegionLock regionLock = new RegionLock(new JSONObject(lock));
+		RegionLock regionLock = JsonUtil.parseUsingJackson(lock, RegionLock.class);
 		regionLock.setSessionId(session.getId());
 		if (regionLock.getLock())
 			RegionController.getInstance().lockRegion(regionLock);
