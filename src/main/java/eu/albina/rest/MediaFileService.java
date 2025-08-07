@@ -180,7 +180,7 @@ public class MediaFileService {
 
 	public static String getMediaFileUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
 		String mediaFileDirectory = Paths.get(serverInstance.getMediaPath()).getFileName().toString();
-		return String.format("%s/%s/%s/%s", region.getStaticUrl(lang), mediaFileDirectory, region.getId(), lang);
+		return String.format("%s/%s/%s/%s", region.getStaticUrl(), mediaFileDirectory, region.getId(), lang);
 	}
 
 	public static String getMediaFileName(String date, User user, LanguageCode language, String fileExtension) {

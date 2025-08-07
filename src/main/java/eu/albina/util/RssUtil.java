@@ -72,7 +72,7 @@ public interface RssUtil {
 				guid.setTextContent(UUID.nameUUIDFromBytes((path.getFileName() + pubDate.toString()).getBytes(StandardCharsets.UTF_8)).toString());
 				Element enclosure = (Element) item.appendChild(document.createElement("enclosure"));
 				enclosure.setAttribute("url", String.format("%s/%s/%s/%s/%s",
-					region.getStaticUrl(language),
+					region.getStaticUrl(),
 					directory.getName(directory.getNameCount() - 3),
 					directory.getName(directory.getNameCount() - 2),
 					directory.getName(directory.getNameCount() - 1),

@@ -67,21 +67,20 @@
     "imageColorbarBwPath": "logo/grey/colorbar.gif",
 	"logoPath": "logo/color/avalanche_report.png",
 	"logoBwPath": "logo/grey/avalanche_report.png",
+	"staticUrl": "https://static.avalanche.report",
 	"languageConfigurations": [
 		{
 			"lang": "en",
 			"websiteName": "Avalanche.report",
 			"url": "https://avalanche.report",
-			"urlWithDate": "https://avalanche.report/bulletin/%s",
-			"staticUrl": "https://static.avalanche.report"
+			"urlWithDate": "https://avalanche.report/bulletin/%s"
 		},
 		{
 			"lang": "de",
 			"warningServiceEmail": "info@lawinen.report",
 			"websiteName": "Lawinen.report",
 			"url": "https://lawinen.report",
-			"urlWithDate": "https://lawinen.report/bulletin/%s",
-			"staticUrl": "https://static.avalanche.report"
+			"urlWithDate": "https://lawinen.report/bulletin/%s"
 		}
 	]
 }
