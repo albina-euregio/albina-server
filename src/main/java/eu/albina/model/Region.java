@@ -296,6 +296,9 @@ public class Region {
 	@Column(name = "COAT_OF_ARMS", columnDefinition = "LONGBLOB")
 	private String coatOfArms;
 
+	@Column(name = "STATIC_URL", length = 191)
+	private String staticUrl;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -441,24 +444,20 @@ public class Region {
 		return String.format(url, date);
 	}
 
-	public String getStaticUrl(LanguageCode languageCode) {
-		return getFromLanguageConfig(languageCode, RegionLanguageConfiguration::getStaticUrl, "").replaceAll("/$", "");
-	}
-
 	public String getSimpleHtmlUrl(LanguageCode lang) {
 		String htmlDirectory = Paths.get(serverInstance.getHtmlDirectory()).getFileName().toString();
-		return String.format("%s/%s", getStaticUrl(lang), htmlDirectory);
+		return String.format("%s/%s", getStaticUrl(), htmlDirectory);
 	}
 
 	public String getMapsUrl(LanguageCode lang, HasValidityDate validityDate, HasPublicationDate publicationDate) {
 		String mapsDirectory = Paths.get(serverInstance.getMapsPath()).getFileName().toString();
-		return String.format("%s/%s/%s/%s", getStaticUrl(lang), mapsDirectory, validityDate.getValidityDateString(), publicationDate.getPublicationTimeString());
+		return String.format("%s/%s/%s/%s", getStaticUrl(), mapsDirectory, validityDate.getValidityDateString(), publicationDate.getPublicationTimeString());
 	}
 
 	public String getPdfUrl(LanguageCode lang, HasValidityDate avalancheReport) {
 		String pdfDirectory = Paths.get(serverInstance.getPdfDirectory()).getFileName().toString();
 		String date = avalancheReport.getValidityDateString();
-		return String.format("%s/%s/%s/%s_%s_%s.pdf", getStaticUrl(lang), pdfDirectory, date, date, getId(), lang);
+		return String.format("%s/%s/%s/%s_%s_%s.pdf", getStaticUrl(), pdfDirectory, date, date, getId(), lang);
 	}
 
 	public String getImprintLink(LanguageCode lang) {
@@ -471,6 +470,14 @@ public class Region {
 
 	public void addLanguageConfiguration(RegionLanguageConfiguration languageConfiguration) {
 		this.languageConfigurations.add(languageConfiguration);
+	}
+
+	public void setStaticUrl(String staticUrl) {
+		this.staticUrl = staticUrl;
+	}
+
+	public String getStaticUrl() {
+		return staticUrl.replaceAll("/$", "");
 	}
 
 	public Set<LanguageCode> getEnabledLanguages() {

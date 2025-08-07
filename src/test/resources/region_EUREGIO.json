@@ -37,6 +37,7 @@
 	"logoPath": "logo/color/avalanche_report.png",
 	"logoBwPath": "logo/grey/avalanche_report.png",
 	"defaultLang": "de",
+	"staticUrl": "https://static.avalanche.report",
 	"languageConfigurations": [
 		{
 			"lang": "en",
@@ -46,8 +47,7 @@
 			"lang": "de",
 			"websiteName": "Lawinen.report",
 			"url": "https://lawinen.report",
-			"urlWithDate": "https://lawinen.report/bulletin/%s",
-			"staticUrl": "https://static.avalanche.report"
+			"urlWithDate": "https://lawinen.report/bulletin/%s"
 		}
 	]
 }

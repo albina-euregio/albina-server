@@ -54,9 +54,6 @@ public class RegionLanguageConfiguration {
 	@Column(name = "URL_WITH_DATE", length = 191)
 	private String urlWithDate;
 
-	@Column(name = "STATIC_URL", length = 191)
-	private String staticUrl;
-
 	public Region getRegion() {
 		return region;
 	}
@@ -111,14 +108,6 @@ public class RegionLanguageConfiguration {
 
 	public void setUrlWithDate(String urlWithDate) {
 		this.urlWithDate = urlWithDate;
-	}
-
-	public String getStaticUrl() {
-		return staticUrl;
-	}
-
-	public void setStaticUrl(String staticUrl) {
-		this.staticUrl = staticUrl;
 	}
 
 	public static final class RegionLanguageConfigurationID {
