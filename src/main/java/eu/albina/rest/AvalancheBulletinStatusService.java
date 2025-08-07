@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
@@ -31,10 +29,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 @Path("/bulletins/status")
 @Tag(name = "bulletins/status")
@@ -43,9 +41,15 @@ public class AvalancheBulletinStatusService {
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinStatusService.class);
 
 	static class Status {
-		public String date;
-		public BulletinStatus status;
-		public String report;
+		public final Instant date;
+		public final BulletinStatus status;
+		public final AvalancheReport report;
+
+		public Status(Instant date, BulletinStatus status, AvalancheReport report) {
+			this.date = date;
+			this.status = status;
+			this.report = report;
+		}
 	}
 
 	@GET
@@ -70,18 +74,11 @@ public class AvalancheBulletinStatusService {
 				status = AvalancheReportController.getInstance().getStatus(startDate, endDate, RegionController.getInstance().getRegion(regionId));
 			}
 
-			JSONArray jsonResult = new JSONArray();
+			List<Status> result = status.entrySet().stream()
+				.map(entry -> new Status(entry.getKey(), entry.getValue(), null))
+				.collect(Collectors.toList());
 
-			for (Entry<Instant, BulletinStatus> entry : status.entrySet()) {
-				JSONObject json = new JSONObject();
-				final ZonedDateTime dateTime = entry.getKey().atZone(zoneId);
-				final String iso8601 = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(dateTime);
-				json.put("date", iso8601);
-				json.put("status", entry.getValue().toString());
-				jsonResult.put(json);
-			}
-
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			return Response.ok(result, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -104,18 +101,12 @@ public class AvalancheBulletinStatusService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
-			Map<Instant, BulletinStatus> status = AvalancheReportController.getInstance().getInternalStatus(startDate,
-					endDate, region);
-			JSONArray jsonResult = new JSONArray();
+			List<Status> result = AvalancheReportController.getInstance()
+				.getInternalStatus(startDate, endDate, region).entrySet().stream()
+				.map(entry -> new Status(entry.getKey(), entry.getValue(), null))
+				.collect(Collectors.toList());
 
-			for (Entry<Instant, BulletinStatus> entry : status.entrySet()) {
-				JSONObject json = new JSONObject();
-				json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
-				json.put("status", entry.getValue().toString());
-				jsonResult.put(json);
-			}
-
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			return Response.ok(result, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -144,18 +135,14 @@ public class AvalancheBulletinStatusService {
 			return Response.noContent().build();
 		}
 
-		Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance().getPublicationStatus(startDate,
-				endDate, RegionController.getInstance().getRegion(regionId));
-		JSONArray jsonResult = new JSONArray();
+		Region region = RegionController.getInstance().getRegion(regionId);
+		List<Status> result = AvalancheReportController.getInstance()
+			.getPublicationStatus(startDate, endDate, region)
+			.entrySet().stream()
+			.map(entry -> new Status(entry.getKey(), null, entry.getValue()))
+			.collect(Collectors.toList());
 
-		for (Entry<Instant, AvalancheReport> entry : status.entrySet()) {
-			JSONObject json = new JSONObject();
-			json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
-			json.put("report", entry.getValue().toJSON());
-			jsonResult.put(json);
-		}
-
-		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		return Response.ok(result, MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -181,11 +168,8 @@ public class AvalancheBulletinStatusService {
 				throw new AlbinaException("No publication found!");
 
 			Entry<Instant, AvalancheReport> entry = status.entrySet().iterator().next();
-			JSONObject json = new JSONObject();
-			json.put("date", DateTimeFormatter.ISO_INSTANT.format(entry.getKey()));
-			json.put("report", entry.getValue().toJSON());
-
-			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+			Status result = new Status(entry.getKey(), null, entry.getValue());
+			return Response.ok(result, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();

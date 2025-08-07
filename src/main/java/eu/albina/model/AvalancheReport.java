@@ -23,9 +23,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-import com.github.openjson.JSONObject;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 import eu.albina.model.enumerations.BulletinStatus;
@@ -39,7 +37,7 @@ import eu.albina.model.enumerations.BulletinStatus;
 @Table(name = "avalanche_reports", indexes = {
 	@Index(name = "avalanche_reports_DATE_IDX", columnList = "DATE"),
 })
-public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject, HasValidityDate, HasPublicationDate {
+public class AvalancheReport extends AbstractPersistentObject implements HasValidityDate, HasPublicationDate {
 
 	/**
 	 * Information about the author of the avalanche bulletin
@@ -311,46 +309,6 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		return !this.bulletins.isEmpty()
 			? this.bulletins.get(0).getGeneralHeadlineCommentIn(lang)
 			: "";
-	}
-
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		if (!Strings.isNullOrEmpty(id))
-			json.put("id", id);
-
-		if (user != null && !Strings.isNullOrEmpty(user.getName()))
-			json.put("user", user.getName());
-
-		if (region != null && !Strings.isNullOrEmpty(region.getId()))
-			json.put("region", region.getId());
-
-		if (date != null)
-			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));
-
-		if (timestamp != null)
-			json.put("timestamp", DateTimeFormatter.ISO_INSTANT.format(timestamp));
-
-		if (status != null)
-			json.put("status", status.toString());
-
-		json.put("caamlV5Created", caamlV5Created);
-		json.put("caamlV6Created", caamlV6Created);
-		json.put("jsonCreated", jsonCreated);
-		json.put("pdfCreated", pdfCreated);
-		json.put("htmlCreated", htmlCreated);
-		json.put("mapCreated", mapCreated);
-		json.put("emailCreated", emailCreated);
-		json.put("telegramSent", telegramSent);
-		json.put("whatsAppSent", whatsAppSent);
-		json.put("pushSent", pushSent);
-		json.put("mediaFileUploaded", mediaFileUploaded);
-
-		if (jsonString != null)
-			json.put("jsonString", jsonString);
-
-		return json;
 	}
 
 	public boolean hasDaytimeDependency() {
