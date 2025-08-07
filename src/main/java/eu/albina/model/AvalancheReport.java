@@ -395,6 +395,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("region", region)
+			.add("region.enabledLanguages", region.getEnabledLanguages())
 			.add("date", date)
 			.add("timestamp", timestamp)
 			.add("bulletins", bulletins)
