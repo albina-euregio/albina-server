@@ -16,8 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.github.openjson.JSONArray;
-
 import eu.albina.rest.AuthenticationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.hibernate.HibernateException;
@@ -71,13 +69,7 @@ public class ChatService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getActiveUsers() {
 		logger.debug("GET JSON active users");
-
-		// List<User> activeUsers = ChatController.getInstance().getActiveUsers();
 		Collection<String> activeUsers = ChatEndpoint.getActiveUsers();
-		JSONArray json = new JSONArray();
-		for (String entry : activeUsers)
-			json.put(entry);
-
-		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+		return Response.ok(activeUsers, MediaType.APPLICATION_JSON).build();
 	}
 }

@@ -16,7 +16,6 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import com.github.openjson.JSONObject;
 import eu.albina.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
