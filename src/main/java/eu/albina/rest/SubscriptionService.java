@@ -22,8 +22,6 @@ import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import org.hibernate.HibernateException;
-import com.github.openjson.JSONException;
-import com.github.openjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,28 +82,30 @@ public class SubscriptionService {
 	// @Path("/unsubscribe")
 	// @Produces(MediaType.APPLICATION_JSON)
 	// @Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteSubscriber(String email) {
-		JSONObject json = new JSONObject(email);
-        logger.debug("DELETE JSON subscriber: {}", json.getString("email"));
+	public Response deleteSubscriber(EmailSubscription json) {
+        logger.debug("DELETE JSON subscriber: {}", json.email);
 
 		try {
-			SubscriberController.getInstance().deleteSubscriber(json.getString("email"));
+			SubscriberController.getInstance().deleteSubscriber(json.email);
 			return Response.ok().build();
-		} catch (HibernateException | JSONException he) {
+		} catch (HibernateException he) {
 			logger.warn("Error unsubscribe", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
 		}
+	}
+
+	static class Token {
+		String token;
 	}
 
 	// @PUT
 	// @Path("/confirm")
 	// @Consumes(MediaType.APPLICATION_JSON)
 	// @Produces(MediaType.APPLICATION_JSON)
-	public Response confirmSubscription(String token) {
+	public Response confirmSubscription(Token json) {
 		try {
-			JSONObject json = new JSONObject(token);
-            logger.debug("POST JSON confirm: {}", json.getString("token"));
-			DecodedJWT decodedToken = AuthenticationController.getInstance().decodeToken(json.getString("token"));
+            logger.debug("POST JSON confirm: {}", json.token);
+			DecodedJWT decodedToken = AuthenticationController.getInstance().decodeToken(json.token);
 			Date currentDate = new Date();
 			if (currentDate.after(decodedToken.getExpiresAt())) {
 				logger.warn("Token expired!");
@@ -116,7 +116,7 @@ public class SubscriptionService {
 		} catch (AlbinaException e) {
 			logger.warn("Error confirm", e);
 			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (HibernateException | JSONException he) {
+		} catch (HibernateException he) {
 			logger.warn("Error confirm", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
 		}
