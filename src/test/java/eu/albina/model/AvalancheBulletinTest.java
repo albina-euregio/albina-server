@@ -7,10 +7,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 public class AvalancheBulletinTest {
@@ -19,7 +19,7 @@ public class AvalancheBulletinTest {
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("validBulletin.json"), StandardCharsets.UTF_8);
 		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json"));
-		Assertions.assertEquals(new JSONObject(expected).toString(4), b.toJSON().toString(4));
+		JSONAssert.assertEquals(expected, b.toJSON().toString(), JSONCompareMode.LENIENT);
 	}
 
 	@Test
