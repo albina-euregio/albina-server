@@ -2,10 +2,12 @@
 package eu.albina.controller;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.albina.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,11 @@ public class StatisticsControllerTest {
 	private List<AvalancheBulletin> bulletinsAmPm;
 	private List<DangerSourceVariant> dangerSourceVariants;
 
+	public static DangerSourceVariant readDangerSourceVariant(final URL resource) throws IOException {
+		final String json = Resources.toString(resource, StandardCharsets.UTF_8);
+		return JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
+	}
+
 	@BeforeEach
 	public void setUp() throws Exception {
 		bulletinsAmPm = Arrays.asList(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")),
@@ -31,7 +38,7 @@ public class StatisticsControllerTest {
 				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_6.json")),
 				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_7.json")));
 
-		dangerSourceVariants = Arrays.asList(DangerSourceVariant.readDangerSourceVariant(Resources.getResource("danger_source_variants.json")));
+		dangerSourceVariants = Arrays.asList(readDangerSourceVariant(Resources.getResource("danger_source_variants.json")));
 	}
 
 	@Test
