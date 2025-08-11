@@ -8,6 +8,7 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.ws.rs.Consumes;
@@ -27,8 +28,6 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.openjson.JSONObject;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
@@ -128,7 +127,7 @@ public class MediaFileService {
 			// set publication flag
 			AvalancheReportController.getInstance().setMediaFileFlag(date, region);
 
-			return Response.status(200).type(MediaType.APPLICATION_JSON).entity(new JSONObject().append("file", fileLocation)).build();
+			return Response.status(200).type(MediaType.APPLICATION_JSON).entity(Map.of("file", fileLocation)).build();
 		} catch (AlbinaException e) {
 			logger.warn("Failed to save media file", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
