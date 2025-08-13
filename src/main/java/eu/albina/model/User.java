@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,7 +9,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -36,6 +40,13 @@ import eu.albina.model.enumerations.Role;
 @Entity
 @Table(name = "users")
 public class User {
+
+	static class UserNameSerializer extends JsonSerializer<User> {
+		@Override
+		public void serialize(User value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+			gen.writeString(value.getName());
+		}
+	}
 
 	/** Email address of the user */
 	@Id

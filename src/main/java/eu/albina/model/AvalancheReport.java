@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.Column;
@@ -44,10 +46,13 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
+	@JsonSerialize(using = User.UserNameSerializer.class)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
+	@JsonSerialize(using = Region.RegionSerializer.class)
+	@JsonDeserialize(using = Region.RegionDeserializer.class)
 	private Region region;
 
 	@Column(name = "DATE")
@@ -94,6 +99,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 
 	@Lob
 	@Column(name = "JSON_STRING")
+	@JsonIgnore
 	private String jsonString;
 
 	@Transient
