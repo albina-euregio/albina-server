@@ -23,6 +23,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import org.w3c.dom.Document;
@@ -71,6 +73,7 @@ public class User {
 
 	/** The avalanche bulletins of the user */
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<AvalancheBulletin> bulletins;
 
 	/** Prefered language of the user */

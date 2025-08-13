@@ -5,12 +5,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.Column;
@@ -293,14 +293,17 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		}
 	}
 
+	@JsonIgnore
 	public Path getMapsPath() {
 		return Paths.get(getServerInstance().getMapsPath(), getValidityDateString(), getPublicationTimeString());
 	}
 
+	@JsonIgnore
 	public Path getPdfDirectory() {
 		return Paths.get(getServerInstance().getPdfDirectory(), getValidityDateString(), getPublicationTimeString());
 	}
 
+	@JsonIgnore
 	public Path getHtmlDirectory() {
 		return Paths.get(getServerInstance().getHtmlDirectory(), getValidityDateString());
 	}
@@ -317,6 +320,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 
 
 	@Override
+	@JsonIgnore
 	public LocalDate getValidityDate() {
 		return globalBulletins.stream()
 			.map(AvalancheBulletin::getValidityDate)
@@ -326,6 +330,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	}
 
 	@Override
+	@JsonIgnore
 	public ZonedDateTime getPublicationDate() {
 		return globalBulletins.stream()
 			.map(AvalancheBulletin::getPublicationDate)

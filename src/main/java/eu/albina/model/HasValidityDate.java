@@ -8,11 +8,13 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZonedDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.albina.model.enumerations.LanguageCode;
 
 public interface HasValidityDate {
 	LocalDate getValidityDate();
 
+	@JsonIgnore
 	default String getValidityDateString() {
 		return getValidityDate().toString();
 	}
@@ -44,6 +46,7 @@ public interface HasValidityDate {
 		return getValidityDateString(Period.ofDays(1), lang);
 	}
 
+	@JsonIgnore
 	default boolean isLatest() {
 		return isLatest(Clock.system(localZone()));
 	}
