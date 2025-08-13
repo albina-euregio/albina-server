@@ -22,8 +22,15 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.BulletinLock;
 
-@ServerEndpoint(value = "/bulletin/{username}")
+@ServerEndpoint(value = "/bulletin/{username}", decoders = AvalancheBulletinEndpoint.BulletinLockDecoder.class, encoders = AvalancheBulletinEndpoint.BulletinLockEncoder.class)
 public class AvalancheBulletinEndpoint {
+
+	public static class BulletinLockEncoder extends JsonEncoder<BulletinLock> {}
+	public static class BulletinLockDecoder extends JsonDecoder<BulletinLock> {
+		public BulletinLockDecoder() {
+        	super(BulletinLock.class);
+    	}	
+	}
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEndpoint.class);
 
