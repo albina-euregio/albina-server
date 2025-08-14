@@ -53,7 +53,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.caaml.CaamlVersion;

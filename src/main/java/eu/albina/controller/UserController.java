@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.openjson.JSONArray;
 
-import com.github.openjson.JSONObject;
 import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
