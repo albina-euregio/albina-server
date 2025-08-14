@@ -115,7 +115,7 @@ public class SubscriptionService {
 			return Response.ok().build();
 		} catch (AlbinaException e) {
 			logger.warn("Error confirm", e);
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (HibernateException he) {
 			logger.warn("Error confirm", he);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();

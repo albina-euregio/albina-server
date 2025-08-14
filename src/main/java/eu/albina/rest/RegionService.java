@@ -20,6 +20,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import eu.albina.exception.AlbinaException;
 import eu.albina.util.JsonUtil;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -118,7 +119,7 @@ public class RegionService {
 			} else {
 				String message = "Error updating region - Region does not exist";
 				logger.warn(message);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(Map.of("message", message)).build();
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
 			}
 		} catch (HibernateException e) {
 			logger.warn("Error updating region", e);
@@ -151,7 +152,7 @@ public class RegionService {
 			} else {
 				String message = "Error creating region - Region already exists";
 				logger.warn(message);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(Map.of("message", message)).build();
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
 			}
 		} catch (JsonProcessingException e) {
 			logger.warn("Error deserializing region", e);

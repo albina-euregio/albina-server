@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.exception;
 
-import com.github.openjson.JSONObject;
-
-import eu.albina.model.AvalancheInformationObject;
+import java.util.Map;
 
 /**
  * Custom exception for the ALBINA project.
@@ -11,7 +9,7 @@ import eu.albina.model.AvalancheInformationObject;
  * @author Norbert Lanzanasto
  *
  */
-public class AlbinaException extends Exception implements AvalancheInformationObject {
+public class AlbinaException extends Exception {
 
 	/**
 	 *
@@ -35,11 +33,8 @@ public class AlbinaException extends Exception implements AvalancheInformationOb
 	 * @return a {@code JSONObject} representing the exception (only containing the
 	 *         message)
 	 */
-	@Override
-	public JSONObject toJSON() {
-		JSONObject result = new JSONObject();
-		result.put("message", this.getMessage());
-		return result;
+	public Map<String, String> toJSON() {
+		return Map.of("message", this.getMessage());
 	}
 
 }

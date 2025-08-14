@@ -66,7 +66,7 @@ public class UserService {
 			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading users", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
@@ -87,7 +87,7 @@ public class UserService {
 			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading roles", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
@@ -133,10 +133,9 @@ public class UserService {
 			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 					.entity(jsonObject.toString()).build();
 		} else {
-			logger.warn("Error creating user - User already exists");
-			JSONObject json = new JSONObject();
-			json.append("message", "Error creating user - User already exists");
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			String message = "Error creating user - User already exists";
+			logger.warn(message);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
 		}
 	}
 
@@ -164,10 +163,7 @@ public class UserService {
 				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 						.entity(jsonObject.toString()).build();
 			} else {
-				logger.warn("Updating user not allowed");
-				JSONObject json = new JSONObject();
-				json.append("message", "Updating user not allowed");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+				throw new AlbinaException("Updating user not allowed");
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Error updating user", e);
@@ -290,10 +286,7 @@ public class UserService {
 				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 						.entity(jsonObject.toString()).build();
 			} else {
-				logger.warn("Error updating user - User does not exist");
-				JSONObject json = new JSONObject();
-				json.append("message", "Error updating user - User does not exists");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+				throw new AlbinaException("User does not exist");
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Error updating user", e);

@@ -378,7 +378,7 @@ public class AvalancheBulletinService {
 			return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading highest danger rating", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
 
@@ -419,7 +419,7 @@ public class AvalancheBulletinService {
 				.header(HttpHeaders.CONTENT_TYPE, PdfUtil.MEDIA_TYPE).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error creating PDFs", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
 			logger.warn("Error creating PDFs", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -440,9 +440,7 @@ public class AvalancheBulletinService {
 		try {
 			AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin(bulletinId);
 			if (bulletin == null) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.append("message", "Bulletin not found for ID: " + bulletinId);
-				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
+				return Response.status(Response.Status.NOT_FOUND).entity(new AlbinaException("Bulletin not found for ID: " + bulletinId).toJSON()).build();
 			}
 			String json = JsonUtil.writeValueUsingJackson(bulletin, JsonUtil.Views.Internal.class);
 			return Response.ok(json, MediaType.APPLICATION_JSON).build();
@@ -751,7 +749,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error submitting bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
 
@@ -784,7 +782,7 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
 
@@ -804,7 +802,7 @@ public class AvalancheBulletinService {
 			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletin locks", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		}
 	}
 }
