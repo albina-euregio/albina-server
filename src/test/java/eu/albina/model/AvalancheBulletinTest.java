@@ -43,10 +43,6 @@ public class AvalancheBulletinTest {
 	private static void runTest(URL bulletin) throws IOException, JSONException {
 		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
 		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletins(bulletin);
-		String actual = avalancheBulletins.stream()
-			.map(AvalancheBulletin::toSmallJSON).map(Objects::toString)
-			.collect(Collectors.joining(",", "[", "]"));
-		JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE);
 		String actual3 = JsonUtil.writeValueUsingJackson(avalancheBulletins, JsonUtil.Views.Public.class);
 		JSONAssert.assertEquals(expected, actual3, JSONCompareMode.NON_EXTENSIBLE);
 	}
