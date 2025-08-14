@@ -53,7 +53,6 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.caaml.CaamlVersion;
@@ -796,10 +795,8 @@ public class AvalancheBulletinService {
 		logger.debug("GET JSON locked bulletins");
 
 		try {
-			JSONArray json = new JSONArray();
-			for (BulletinLock bulletinLock : AvalancheBulletinController.getInstance().getLockedBulletins(DateControllerUtil.parseDateOrThrow(date)))
-				json.put(bulletinLock);
-			return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+			List<BulletinLock> lockedBulletins = AvalancheBulletinController.getInstance().getLockedBulletins(DateControllerUtil.parseDateOrThrow(date));
+			return Response.ok(lockedBulletins, MediaType.APPLICATION_JSON).build();
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletin locks", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
