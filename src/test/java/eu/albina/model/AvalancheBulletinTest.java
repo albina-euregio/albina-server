@@ -2,6 +2,8 @@
 package eu.albina.model;
 
 import com.google.common.io.Resources;
+import eu.albina.RegionTestUtils;
+import eu.albina.util.JsonUtil;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -40,10 +42,13 @@ public class AvalancheBulletinTest {
 
 	private static void runTest(URL bulletin) throws IOException, JSONException {
 		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
-		String actual = AvalancheBulletin.readBulletins(bulletin).stream()
+		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletins(bulletin);
+		String actual = avalancheBulletins.stream()
 			.map(AvalancheBulletin::toSmallJSON).map(Objects::toString)
 			.collect(Collectors.joining(",", "[", "]"));
 		JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE);
+		String actual2 = JsonUtil.createJSONString(avalancheBulletins, RegionTestUtils.regionEuregio, true).toString();
+		JSONAssert.assertEquals(expected, actual2, JSONCompareMode.NON_EXTENSIBLE);
 	}
 
 	@Test
