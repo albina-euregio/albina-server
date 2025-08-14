@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -56,6 +57,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	@CollectionTable(name = "avalanche_problem_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_PROBLEM_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
 	@Fetch(FetchMode.JOIN)
+	@JsonDeserialize(as = LinkedHashSet.class)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")

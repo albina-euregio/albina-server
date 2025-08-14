@@ -3,6 +3,7 @@ package eu.albina.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -31,6 +32,7 @@ public class JsonUtil {
 	public static final ObjectMapper ALBINA_OBJECT_MAPPER = new ObjectMapper()
 		.registerModule(new JavaTimeModule())
 		.registerModule(hbm)
+		.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
 		.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
 		.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
 		.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)

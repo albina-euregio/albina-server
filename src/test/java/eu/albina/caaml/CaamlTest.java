@@ -48,7 +48,7 @@ public class CaamlTest {
 
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport.of(bulletins, null, serverInstanceEuregio); // test without region for eu.albina.rest.AvalancheBulletinService.getJSONBulletins
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		return Caaml.createCaaml(avalancheReport, LanguageCode.en, version);
@@ -112,7 +112,7 @@ public class CaamlTest {
 	private AvalancheReport loadFromURL(LocalDate date) throws Exception {
 		URL url = new URL(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date));
 		LoggerFactory.getLogger(getClass()).info("Fetching bulletins from {}", url);
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(url);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(url);
 		return AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 	}
 
@@ -129,7 +129,7 @@ public class CaamlTest {
 
 	private static void toCAAMLv6(String bulletinResource, String expectedCaamlResource) throws Exception {
 		final URL resource = Resources.getResource(bulletinResource);
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 
 		toCAAMLv6(avalancheReport, expectedCaamlResource, CaamlVersion.V6_JSON);
