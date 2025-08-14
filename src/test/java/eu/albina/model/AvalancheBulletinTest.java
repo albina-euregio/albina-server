@@ -1,25 +1,49 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import com.google.common.io.Resources;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import com.google.common.io.Resources;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AvalancheBulletinTest {
 
 	@Test
-	public void testCreateObjectFromJSONAndBack() throws Exception {
-		final String expected = Resources.toString(Resources.getResource("validBulletin.json"), StandardCharsets.UTF_8);
-		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json"));
-		JSONAssert.assertEquals(expected, b.toJSON().toString(), JSONCompareMode.LENIENT);
+	public void testCreateObjectFromJSONAndBack1() throws Exception {
+		runTest(Resources.getResource("2023-12-01.json"));
+	}
+
+	@Test
+	public void testCreateObjectFromJSONAndBack2() throws Exception {
+		runTest(Resources.getResource("2023-12-21.json"));
+	}
+
+	@Test
+	public void testCreateObjectFromJSONAndBack3() throws Exception {
+		runTest(Resources.getResource("2024-01-28.json"));
+	}
+
+	@Test
+	public void testCreateObjectFromJSONAndBack4() throws Exception {
+		runTest(Resources.getResource("2025-03-14.json"));
+	}
+
+	private static void runTest(URL bulletin) throws IOException, JSONException {
+		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
+		String actual = AvalancheBulletin.readBulletins(bulletin).stream()
+			.map(AvalancheBulletin::toSmallJSON).map(Objects::toString)
+			.collect(Collectors.joining(",", "[", "]"));
+		JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE);
 	}
 
 	@Test
