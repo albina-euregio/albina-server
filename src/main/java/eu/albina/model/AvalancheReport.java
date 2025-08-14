@@ -1,20 +1,26 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.JsonUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -123,6 +129,19 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		avalancheReport.setRegion(region);
 		avalancheReport.setBulletins(bulletins); // after region
 		return avalancheReport;
+	}
+
+	public void createJsonFile() throws IOException {
+		Path pdfDirectory = getPdfDirectory();
+		Files.createDirectories(pdfDirectory);
+		Path path = pdfDirectory.resolve(getRegion().getId() + ".json");
+		if (getBulletins().isEmpty()) {
+			return;
+		}
+		Region region = getRegion();
+		Collection<AvalancheBulletin> bulletins = getBulletins().stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+		String jsonString = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
+		Files.writeString(path, jsonString, StandardCharsets.UTF_8);
 	}
 
 	public void setBulletins(List<AvalancheBulletin> bulletins) {

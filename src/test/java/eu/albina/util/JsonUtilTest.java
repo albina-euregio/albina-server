@@ -47,6 +47,6 @@ public class JsonUtilTest {
 		serverInstanceEuregio.setMapsPath(folder.toString());
 		serverInstanceEuregio.setPdfDirectory(folder.toString());
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTirol, serverInstanceEuregio);
-		JsonUtil.createJsonFile(avalancheReport);
+		avalancheReport.createJsonFile();
 	}
 }

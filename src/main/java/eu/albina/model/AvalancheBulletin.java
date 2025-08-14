@@ -340,6 +340,16 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			this.afternoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("afternoon"));
 	}
 
+	public AvalancheBulletin withRegionFilter(Region region) {
+		AvalancheBulletin b = new AvalancheBulletin();
+		b.copy(this);
+		b.setId(getId());
+		b.getPublishedRegions().removeIf(region::isForeign);
+		b.getSavedRegions().removeIf(region::isForeign);
+		b.getSuggestedRegions().removeIf(region::isForeign);
+		return b;
+	}
+
 	public Set<String> regions(boolean preview) {
 		return preview ? getPublishedAndSavedRegions() : getPublishedRegions();
 	}
@@ -1052,13 +1062,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void copy(AvalancheBulletin bulletin) {
 		setUser(bulletin.getUser());
-		setAdditionalAuthors(bulletin.getAdditionalAuthors());
+		setAdditionalAuthors(bulletin.getAdditionalAuthors() != null ? new LinkedHashSet<>(bulletin.getAdditionalAuthors()) : new LinkedHashSet<>());
 		setPublicationDate(bulletin.getPublicationDate());
 		setValidFrom(bulletin.getValidFrom());
 		setValidUntil(bulletin.getValidUntil());
-		setSuggestedRegions(bulletin.getSuggestedRegions());
-		setPublishedRegions(bulletin.getPublishedRegions());
-		setSavedRegions(bulletin.getSavedRegions());
+		setSuggestedRegions(bulletin.getSuggestedRegions() != null ? new LinkedHashSet<>(bulletin.getSuggestedRegions()) : new LinkedHashSet<>());
+		setPublishedRegions(bulletin.getPublishedRegions() != null ? new LinkedHashSet<>(bulletin.getPublishedRegions()) : new LinkedHashSet<>());
+		setSavedRegions(bulletin.getSavedRegions() != null ? new LinkedHashSet<>(bulletin.getSavedRegions()) : new LinkedHashSet<>());
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
 		setTendency(bulletin.getTendency());
 		setStrategicMindset(bulletin.getStrategicMindset());

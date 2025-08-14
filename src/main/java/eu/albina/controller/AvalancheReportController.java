@@ -410,8 +410,8 @@ public class AvalancheReportController {
 		avalancheReport.setUser(user);
 		avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
-		avalancheReport
-				.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region, false).toString());
+		Collection<AvalancheBulletin> bulletins = avalancheBulletins.values().stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+		avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Internal.class));
 
 		entityManager.persist(avalancheReport);
 
@@ -515,7 +515,8 @@ public class AvalancheReportController {
 				}
 			}
 
-			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
+			Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+			avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins1, JsonUtil.Views.Internal.class));
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
@@ -593,7 +594,8 @@ public class AvalancheReportController {
 			}
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
+			Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+			avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins1, JsonUtil.Views.Internal.class));
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
@@ -771,7 +773,7 @@ public class AvalancheReportController {
 				entityManager.persist(result);
 				entityManager.flush();
 			}
-			
+
 			return null;
 		});
 	}

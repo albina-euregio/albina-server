@@ -35,6 +35,7 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
 import eu.albina.util.HibernateUtil;
+import eu.albina.util.JsonUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -341,11 +342,9 @@ public class AvalancheBulletinService {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
-
-		JSONArray jsonResult = new JSONArray();
-		for (AvalancheBulletin bulletin : AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions))
-			jsonResult.put(bulletin.toSmallJSON());
-		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions);
+		String json = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
+		return Response.ok(json, MediaType.APPLICATION_JSON).build();
 	}
 
 	static class Highest {
