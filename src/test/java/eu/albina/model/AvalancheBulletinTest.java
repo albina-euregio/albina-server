@@ -49,6 +49,11 @@ public class AvalancheBulletinTest {
 		JSONAssert.assertEquals(expected, actual, JSONCompareMode.NON_EXTENSIBLE);
 		String actual2 = JsonUtil.createJSONString(avalancheBulletins, RegionTestUtils.regionEuregio, true).toString();
 		JSONAssert.assertEquals(expected, actual2, JSONCompareMode.NON_EXTENSIBLE);
+
+		String actual3 = JsonUtil.ALBINA_OBJECT_MAPPER
+			.writerWithView(JsonUtil.Views.Public.class)
+			.writeValueAsString(avalancheBulletins);
+		JSONAssert.assertEquals(expected, actual3, JSONCompareMode.NON_EXTENSIBLE);
 	}
 
 	@Test

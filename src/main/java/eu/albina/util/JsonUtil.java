@@ -24,6 +24,14 @@ import java.util.stream.Collectors;
 
 public class JsonUtil {
 
+	public interface Views {
+		class Public {
+		}
+
+		class Internal extends Public {
+		}
+	}
+
 	// When fetching an entity lazily, Hibernate returns a proxy object instead of the real entity, this causes problems when serializing.
 	// Moreover transient properties should never be serialized.
     public static final Hibernate6Module hbm = new Hibernate6Module()

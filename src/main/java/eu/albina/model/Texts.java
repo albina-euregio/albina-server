@@ -4,6 +4,7 @@ package eu.albina.model;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +23,7 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
+	@JsonValue
 	private Set<Text> texts;
 
 	public Texts() {

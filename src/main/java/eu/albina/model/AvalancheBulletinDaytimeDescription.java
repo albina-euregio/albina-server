@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
@@ -30,6 +32,7 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObject
 		implements AvalancheInformationObject {
 
@@ -45,9 +48,11 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private DangerRating dangerRatingAbove;
 
 	@Column(name = "ELEVATION")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private int elevation;
 
 	@Column(name = "TREELINE")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private boolean treeline;
 
 	@Lob
@@ -184,7 +189,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.treeline = treeline;
 	}
 
-	private DangerRating getDangerRatingAbove() {
+	public DangerRating getDangerRatingAbove() {
 		return dangerRatingAbove;
 	}
 
@@ -216,7 +221,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.terrainFeatureAbove.add(terrainFeature);
 	}
 
-	private DangerRating getDangerRatingBelow() {
+	public DangerRating getDangerRatingBelow() {
 		return dangerRatingBelow;
 	}
 
@@ -296,6 +301,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.avalancheProblem5 = avalancheProblem5;
 	}
 
+	@JsonIgnore
 	public List<AvalancheProblem> getAvalancheProblems() {
 		return Arrays.asList(avalancheProblem1, avalancheProblem2, avalancheProblem3, avalancheProblem4,
 				avalancheProblem5);

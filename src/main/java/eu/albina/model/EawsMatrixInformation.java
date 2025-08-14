@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -20,6 +21,7 @@ import jakarta.persistence.Enumerated;
 import java.util.Comparator;
 
 @Embeddable
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EawsMatrixInformation implements AvalancheInformationObject, Comparable<EawsMatrixInformation> {
 
 	@Enumerated(EnumType.STRING)

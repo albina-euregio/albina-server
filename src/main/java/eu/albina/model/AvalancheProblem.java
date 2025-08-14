@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -36,6 +37,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "avalanche_problems")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvalancheProblem extends AbstractPersistentObject implements AvalancheInformationObject {
 
 	@OneToOne
@@ -57,15 +59,19 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private int elevationHigh;
 
 	@Column(name = "TREELINE_HIGH")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private boolean treelineHigh;
 
 	@Column(name = "ELEVATION_LOW")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private int elevationLow;
 
 	@Column(name = "TREELINE_LOW")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private boolean treelineLow;
 
 	@Enumerated(EnumType.STRING)
@@ -100,6 +106,7 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@Column(name = "TERRAIN_FEATURE")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private Set<Text> terrainFeature;
 
 	public AvalancheProblem() {

@@ -19,6 +19,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
+import eu.albina.util.JsonUtil;
 import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
@@ -59,6 +63,8 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "avalanche_bulletins")
+@JsonView(JsonUtil.Views.Public.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvalancheBulletin extends AbstractPersistentObject
 		implements AvalancheInformationObject, Comparable<AvalancheBulletin>, HasValidityDate, HasPublicationDate {
 
@@ -73,6 +79,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_additional_users", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "ADDITIONAL_USER_NAME", length = 191)
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private Set<String> additionalAuthors;
 
 	@Column(name = "PUBLICATION_DATE")
@@ -80,26 +87,32 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	/** Validity of the avalanche bulletin */
 	@Column(name = "VALID_FROM")
+	@JsonIgnore
 	private ZonedDateTime validFrom;
+
 	@Column(name = "VALID_UNTIL")
+	@JsonIgnore
 	private ZonedDateTime validUntil;
 
 	/** The recommended regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_suggested_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID", length = 191)
+	@JsonView(JsonUtil.Views.Internal.class)
 	private Set<String> suggestedRegions;
 
 	/** The published regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_published_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID",  length = 191)
+	@JsonView(JsonUtil.Views.Internal.class)
 	private Set<String> publishedRegions;
 
 	/** The saved regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_saved_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID", length = 191)
+	@JsonView(JsonUtil.Views.Internal.class)
 	private Set<String> savedRegions;
 
 	@Enumerated(EnumType.STRING)
@@ -190,6 +203,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@MapKeyEnumerated(EnumType.STRING)
 	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
+	@JsonIgnore
 	private Map<TextPart, Texts> textPartsMap;
 
 	/**
@@ -668,6 +682,44 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.validUntil = validUntil;
 	}
 
+	public Validity getValidity() {
+		return new Validity(validFrom, validUntil);
+	}
+
+	public void setValidity(Validity v) {
+		validFrom = v.from;
+		validUntil = v.until;
+	}
+
+	public static class Validity {
+		private ZonedDateTime from;
+		private ZonedDateTime until;
+
+		public Validity() {
+		}
+
+		public Validity(ZonedDateTime from, ZonedDateTime until) {
+			this.from = from;
+			this.until = until;
+		}
+
+		public ZonedDateTime getFrom() {
+			return from;
+		}
+
+		public void setFrom(ZonedDateTime from) {
+			this.from = from;
+		}
+
+		public ZonedDateTime getUntil() {
+			return until;
+		}
+
+		public void setUntil(ZonedDateTime until) {
+			this.until = until;
+		}
+	}
+
 	public Set<String> getSuggestedRegions() {
 		return suggestedRegions;
 	}
@@ -690,6 +742,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void addSavedRegion(String region) {
 		this.savedRegions.add(region);
+	}
+
+	@JsonView(JsonUtil.Views.Public.class)
+	public Set<String> getRegions() {
+		return publishedRegions;
 	}
 
 	public Set<String> getPublishedRegions() {
@@ -728,6 +785,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.afternoon = afternoon;
 	}
 
+	@JsonIgnore
 	public Set<String> getPublishedAndSavedRegions() {
 		Set<String> result = new LinkedHashSet<>();
 		result.addAll(savedRegions);
@@ -766,6 +824,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			.orElse(DangerRating.missing);
 	}
 
+	@JsonIgnore
 	public DangerRating getHighestDangerRating() {
 		DangerRating result = DangerRating.missing;
 		if (forenoon != null && forenoon.dangerRating(true) != null
@@ -785,6 +844,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return result;
 	}
 
+	@JsonIgnore
 	public int getHighestDangerRatingDouble() {
 		int sum = 0;
 		if (forenoon != null) {
@@ -815,6 +875,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	@Override
+	@JsonIgnore
 	public LocalDate getValidityDate() {
 		ZonedDateTime zonedDateTime = validUntil.withZoneSameInstant(AlbinaUtil.localZone());
 		LocalTime localTime = zonedDateTime.toLocalTime();
