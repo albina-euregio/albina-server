@@ -1,186 +1,354 @@
-{
-	"tendencyCommentTextcat": "86[6417,7750,7100,14257,3990,9413]",
-	"publishedRegions": [
-		"IT-32-BZ-20",
-		"IT-32-BZ-10",
-		"IT-32-BZ-12",
-		"IT-32-BZ-13",
-		"AT-07-25",
-		"IT-32-BZ-18",
-		"AT-07-26",
-		"IT-32-BZ-08",
-		"IT-32-BZ-19",
-		"AT-07-27",
-		"IT-32-BZ-09",
-		"AT-07-28",
-		"AT-07-29"
-	],
-	"tendency": "increasing",
-	"forenoon": {
-		"hasElevationDependency": true,
-		"treeline": true,
-		"dangerRatingBelow": "moderate",
-		"avalancheProblem2": {
-			"aspects": [
-				"nw",
-				"ne",
-				"n"
-			],
-			"avalancheProblem": "wet_snow"
+[
+	{
+		"tendencyCommentTextcat": "86[6417,7750,7100,14257,3990,9413]",
+		"publishedRegions": [
+			"IT-32-BZ-20",
+			"IT-32-BZ-10",
+			"IT-32-BZ-12",
+			"IT-32-BZ-13",
+			"AT-07-25",
+			"IT-32-BZ-18",
+			"AT-07-26",
+			"IT-32-BZ-08",
+			"IT-32-BZ-19",
+			"AT-07-27",
+			"IT-32-BZ-09",
+			"AT-07-28",
+			"AT-07-29"
+		],
+		"tendency": "increasing",
+		"forenoon": {
+			"hasElevationDependency": true,
+			"treeline": true,
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem2": {
+				"aspects": [
+					"nw",
+					"ne",
+					"n"
+				],
+				"avalancheProblem": "wet_snow"
+			},
+			"avalancheProblem1": {
+				"treelineLow": true,
+				"elevationHigh": 2500,
+				"aspects": [
+					"nw",
+					"ne",
+					"e",
+					"se",
+					"s",
+					"n",
+					"sw",
+					"w"
+				],
+				"avalancheProblem": "new_snow"
+			},
+			"id": "9a351c23-4111-4092-bde0-2c086363792f",
+			"dangerRatingAbove": "considerable"
 		},
-		"avalancheProblem1": {
-			"treelineLow": true,
-			"elevationHigh": 2500,
-			"aspects": [
-				"nw",
-				"ne",
-				"e",
-				"se",
-				"s",
-				"n",
-				"sw",
-				"w"
-			],
-			"avalancheProblem": "new_snow"
+		"afternoon": {
+			"hasElevationDependency": true,
+			"treeline": true,
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem2": {
+				"aspects": [
+					"nw",
+					"ne",
+					"n"
+				],
+				"avalancheProblem": "persistent_weak_layers"
+			},
+			"avalancheProblem1": {
+				"treelineLow": true,
+				"aspects": [
+					"nw",
+					"ne",
+					"e",
+					"se",
+					"s",
+					"n",
+					"sw",
+					"w"
+				],
+				"avalancheProblem": "wind_slab"
+			},
+			"id": "9a351c23-4111-4092-bde0-2c086363792f",
+			"dangerRatingAbove": "considerable"
 		},
-		"id": "9a351c23-4111-4092-bde0-2c086363792f",
-		"dangerRatingAbove": "considerable"
+		"highlightsTextcat": "16[1428,7751,9413]",
+		"avActivityHighlightsTextcat": "16[1428,7751,9413]",
+		"hasDaytimeDependency": true,
+		"avActivityCommentTextcat": "110[6144[10032,12062,10209],14928,8412,7523[12006,14187],4190,5890,9413].4[1402,861,10398,6391[10398],9413].15[6226,4152,5890,871,7224[10213,5932[4170,3773],10186,3907],9413].25[10395[2769,14930,12929],6170,5859,9430[6932],9413].10[8420,9594[11203,12225],12345]",
+		"avActivityComment": [
+			{
+				"text": " Des accumulations de neige soufflée étendues se forment avec le vent de secteur nord-ouest tendant vers la tempête spécialement à proximité des crêtes ainsi qu'au-dessus de la limite de la forêt. Les endroits dangereux se trouvent Surtout sur les pentes où s'est accumulée la neige soufflée à toutes les expositions ainsi qu'aux transitions entre les endroits faiblement et fortement enneigés. Les accumulations de neige soufflée fragiles peuvent être déjà déclenchées facilement par un seul amateur de sports d'hiver au-dessus de la limite de la forêt. En outre, des avalanches peuvent par endroits se déclencher dans les couches du manteau neigeux proches du sol et atteindre une taille moyenne de manière isolée. En dehors des pistes sécurisées situation avalancheuse critique en général.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " As a consequence of a gathering storm force wind from northwesterly directions, large surface-area wind slabs will form especially adjacent to ridgelines as well as above the tree line. The avalanche prone locations are to be found in particular on wind-loaded slopes of all aspects and at transitions from a shallow to a deep snowpack. The avalanche-prone wind slabs can be released easily, even by a single winter sport participant, above the tree line. In some places avalanches can also penetrate near-ground layers of the snowpack and reach medium size in isolated cases. Outside marked and open pistes a critical avalanche situation will be encountered over a wide area.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Con vento progressivamente sempre più tempestoso proveniente dai quadranti nord occidentali principalmente nelle zone in prossimità delle creste così come al di sopra del limite del bosco si formeranno estesi accumuli di neve ventata. I punti pericolosi si trovano soprattutto sui pendii carichi di neve soffiata esposti in tutte le direzioni come pure nelle zone di passaggio da poca a molta neve. Gli accumuli di neve ventata instabili possono facilmente subire un distacco già in seguito al passaggio di un singolo appassionato di sport invernali al di sopra del limite del bosco. In alcuni punti, le valanghe possono anche distaccarsi coinvolgendo gli strati basali del manto e raggiungere dimensioni medie a livello isolato. Al di fuori delle piste assicurate, la situazione valanghiva è in molti punti critica.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Mit zunehmend stürmischem Wind aus nordwestlichen Richtungen entstehen besonders in Kammlagen sowie oberhalb der Waldgrenze flächige Triebschneeansammlungen. Die Gefahrenstellen liegen vor allem an Triebschneehängen aller Expositionen sowie an Übergängen von wenig zu viel Schnee. Die störanfälligen Triebschneeansammlungen können oberhalb der Waldgrenze schon von einzelnen Wintersportlern leicht ausgelöst werden. Stellenweise können Lawinen auch in bodennahe Schichten der Schneedecke durchreissen und vereinzelt mittlere Grösse erreichen. Abseits gesicherter Pisten verbreitet kritische Lawinensituation.",
+				"languageCode": "de"
+			}
+		],
+		"tendencyComment": [
+			{
+				"text": " Hardly any decrease in danger.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Kaum Rückgang der Gefahr.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Scarso calo del pericolo.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Diminution à peine marquée du danger.",
+				"languageCode": "fr"
+			}
+		],
+		"additionalAuthors": [
+			"Fabio Gheser",
+			"Rudi Mair",
+			"Sergio Benigni"
+		],
+		"dangerPattern2": "dp1",
+		"dangerPattern1": "dp6",
+		"highlights": [
+			{
+				"text": " The wind slabs represent the main danger.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Les accumulations de neige soufflée constituent le danger principal.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Die Triebschneeansammlungen bilden die Hauptgefahr.",
+				"languageCode": "de"
+			}
+		],
+		"avActivityHighlights": [
+			{
+				"text": " The wind slabs represent the main danger.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Les accumulations de neige soufflée constituent le danger principal.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Die Triebschneeansammlungen bilden die Hauptgefahr.",
+				"languageCode": "de"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"text": " In the past few hours the wind has been stronger than expected in some regions. The sometimes strong wind will transport the fresh snow and, in some cases, old snow as well. As the day progresses the previously small wind slabs will increase in size once again. The fresh wind slabs are bonding poorly with the old snowpack. Distinct weak layers exist in the bottom section of the snowpack in all aspects. Weak layers near the ground are difficult to recognise.",
+				"languageCode": "en"
+			},
+			{
+				"text": " In alcune regioni, nelle ultime ore il vento è stato più forte del previsto. Il vento a tratti forte causerà il trasporto della neve fresca e, in parte, anche della neve vecchia. Nel corso della giornata gli accumuli di neve ventata, prima piccoli, cresceranno ulteriormente. Gli accumuli di neve ventata di più recente formazione non si legheranno bene con la neve vecchia. A tutte le esposizioni, nella parte basale del manto nevoso si trovano pronunciati strati fragili. I deboli strati basali sono individuabili solo con difficoltà.",
+				"languageCode": "it"
+			},
+			{
+				"text": " In den letzten Stunden blies der Wind gebietsweise kräftiger als erwartet. Der teilweise starke Wind verfrachtet den Neuschnee und teilweise auch Altschnee. Im Tagesverlauf wachsen die zuvor kleinen Triebschneeansammlungen nochmals an. Die frischen Triebschneeansammlungen verbinden sich schlecht mit dem Altschnee. Im unteren Teil der Schneedecke sind an allen Expositionen ausgeprägte Schwachschichten vorhanden. Bodennahe Schwachschichten sind nur schwer erkennbar.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Au cours des dernières heures le vent a soufflé plus fort qu'attendu dans certaines régions. Le vent parfois fort transporte la neige fraîche et partiellement aussi la neige ancienne. En cours de journée les accumulations de neige soufflée auparavant petites se développent encore davantage. Les accumulations de neige soufflée fraîches se lient mal avec la neige ancienne. Dans la partie inférieure du manteau neigeux des couches fragiles importantes sont présentes à toutes les expositions. Les couches fragiles proches du sol ne sont que difficilement identifiables.",
+				"languageCode": "fr"
+			}
+		],
+		"id": "e09a0d27-4306-4202-8f4c-6e20dcf8eea1",
+		"validity": {
+			"from": "2030-02-15T16:00:00Z",
+			"until": "2030-02-16T11:00:00Z"
+		},
+		"snowpackStructureCommentTextcat": "94[2939[9226],2920,1460[1471],9413].19[6003,9858].117[6910[6754],11098,6520,6480,11613].15[6226,4163,5890,871,7236[10213,5929],9413].22[5936,3739,5928,6444,1538,6420].27[3853,6861]",
+		"publicationDate": "2018-10-03T05:27:23Z"
 	},
-	"afternoon": {
-		"hasElevationDependency": true,
-		"treeline": true,
-		"dangerRatingBelow": "moderate",
-		"avalancheProblem2": {
-			"aspects": [
-				"nw",
-				"ne",
-				"n"
-			],
-			"avalancheProblem": "persistent_weak_layers"
+	{
+		"tendencyCommentTextcat": "86[6417,7750,7100,14257,3990,9413]",
+		"publishedRegions": [
+			"IT-32-BZ-20",
+			"IT-32-BZ-10",
+			"IT-32-BZ-12",
+			"IT-32-BZ-13",
+			"AT-07-25",
+			"IT-32-BZ-18",
+			"AT-07-26",
+			"IT-32-BZ-08",
+			"IT-32-BZ-19",
+			"AT-07-27",
+			"IT-32-BZ-09",
+			"AT-07-28",
+			"AT-07-29"
+		],
+		"tendency": "increasing",
+		"forenoon": {
+			"hasElevationDependency": true,
+			"treeline": true,
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem2": {
+				"aspects": [
+					"nw",
+					"ne",
+					"n"
+				],
+				"avalancheProblem": "persistent_weak_layers"
+			},
+			"avalancheProblem1": {
+				"treelineLow": true,
+				"aspects": [
+					"nw",
+					"ne",
+					"e",
+					"se",
+					"s",
+					"n",
+					"sw",
+					"w"
+				],
+				"avalancheProblem": "wind_slab"
+			},
+			"id": "9a351c23-4111-4092-bde0-2c086363792f",
+			"dangerRatingAbove": "considerable"
 		},
-		"avalancheProblem1": {
-			"treelineLow": true,
-			"aspects": [
-				"nw",
-				"ne",
-				"e",
-				"se",
-				"s",
-				"n",
-				"sw",
-				"w"
-			],
-			"avalancheProblem": "wind_slab"
+		"afternoon": {
+			"hasElevationDependency": true,
+			"treeline": true,
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem2": {
+				"aspects": [
+					"nw",
+					"ne",
+					"n"
+				],
+				"avalancheProblem": "persistent_weak_layers"
+			},
+			"avalancheProblem1": {
+				"treelineLow": true,
+				"aspects": [
+					"nw",
+					"ne",
+					"e",
+					"se",
+					"s",
+					"n",
+					"sw",
+					"w"
+				],
+				"avalancheProblem": "wind_slab"
+			},
+			"id": "9a351c23-4111-4092-bde0-2c086363792f",
+			"dangerRatingAbove": "considerable"
 		},
-		"id": "9a351c23-4111-4092-bde0-2c086363792f",
-		"dangerRatingAbove": "considerable"
-	},
-	"highlightsTextcat": "16[1428,7751,9413]",
-	"avActivityHighlightsTextcat": "16[1428,7751,9413]",
-	"hasDaytimeDependency": true,
-	"avActivityCommentTextcat": "110[6144[10032,12062,10209],14928,8412,7523[12006,14187],4190,5890,9413].4[1402,861,10398,6391[10398],9413].15[6226,4152,5890,871,7224[10213,5932[4170,3773],10186,3907],9413].25[10395[2769,14930,12929],6170,5859,9430[6932],9413].10[8420,9594[11203,12225],12345]",
-	"avActivityComment": [
-		{
-			"text": " Des accumulations de neige soufflée étendues se forment avec le vent de secteur nord-ouest tendant vers la tempête spécialement à proximité des crêtes ainsi qu'au-dessus de la limite de la forêt. Les endroits dangereux se trouvent Surtout sur les pentes où s'est accumulée la neige soufflée à toutes les expositions ainsi qu'aux transitions entre les endroits faiblement et fortement enneigés. Les accumulations de neige soufflée fragiles peuvent être déjà déclenchées facilement par un seul amateur de sports d'hiver au-dessus de la limite de la forêt. En outre, des avalanches peuvent par endroits se déclencher dans les couches du manteau neigeux proches du sol et atteindre une taille moyenne de manière isolée. En dehors des pistes sécurisées situation avalancheuse critique en général.",
-			"languageCode": "fr"
+		"avActivityHighlightsTextcat": "16[1428,7751,9413]",
+		"hasDaytimeDependency": true,
+		"avActivityCommentTextcat": "110[6144[10032,12062,10209],14928,8412,7523[12006,14187],4190,5890,9413].4[1402,861,10398,6391[10398],9413].15[6226,4152,5890,871,7224[10213,5932[4170,3773],10186,3907],9413].25[10395[2769,14930,12929],6170,5859,9430[6932],9413].10[8420,9594[11203,12225],12345]",
+		"avActivityComment": [
+			{
+				"text": " Des accumulations de neige soufflée étendues se forment avec le vent de secteur nord-ouest tendant vers la tempête spécialement à proximité des crêtes ainsi qu'au-dessus de la limite de la forêt. Les endroits dangereux se trouvent Surtout sur les pentes où s'est accumulée la neige soufflée à toutes les expositions ainsi qu'aux transitions entre les endroits faiblement et fortement enneigés. Les accumulations de neige soufflée fragiles peuvent être déjà déclenchées facilement par un seul amateur de sports d'hiver au-dessus de la limite de la forêt. En outre, des avalanches peuvent par endroits se déclencher dans les couches du manteau neigeux proches du sol et atteindre une taille moyenne de manière isolée. En dehors des pistes sécurisées situation avalancheuse critique en général.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " As a consequence of a gathering storm force wind from northwesterly directions, large surface-area wind slabs will form especially adjacent to ridgelines as well as above the tree line. The avalanche prone locations are to be found in particular on wind-loaded slopes of all aspects and at transitions from a shallow to a deep snowpack. The avalanche-prone wind slabs can be released easily, even by a single winter sport participant, above the tree line. In some places avalanches can also penetrate near-ground layers of the snowpack and reach medium size in isolated cases. Outside marked and open pistes a critical avalanche situation will be encountered over a wide area.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Con vento progressivamente sempre più tempestoso proveniente dai quadranti nord occidentali principalmente nelle zone in prossimità delle creste così come al di sopra del limite del bosco si formeranno estesi accumuli di neve ventata. I punti pericolosi si trovano soprattutto sui pendii carichi di neve soffiata esposti in tutte le direzioni come pure nelle zone di passaggio da poca a molta neve. Gli accumuli di neve ventata instabili possono facilmente subire un distacco già in seguito al passaggio di un singolo appassionato di sport invernali al di sopra del limite del bosco. In alcuni punti, le valanghe possono anche distaccarsi coinvolgendo gli strati basali del manto e raggiungere dimensioni medie a livello isolato. Al di fuori delle piste assicurate, la situazione valanghiva è in molti punti critica.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Mit zunehmend stürmischem Wind aus nordwestlichen Richtungen entstehen besonders in Kammlagen sowie oberhalb der Waldgrenze flächige Triebschneeansammlungen. Die Gefahrenstellen liegen vor allem an Triebschneehängen aller Expositionen sowie an Übergängen von wenig zu viel Schnee. Die störanfälligen Triebschneeansammlungen können oberhalb der Waldgrenze schon von einzelnen Wintersportlern leicht ausgelöst werden. Stellenweise können Lawinen auch in bodennahe Schichten der Schneedecke durchreissen und vereinzelt mittlere Grösse erreichen. Abseits gesicherter Pisten verbreitet kritische Lawinensituation.",
+				"languageCode": "de"
+			}
+		],
+		"tendencyComment": [
+			{
+				"text": " Hardly any decrease in danger.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Kaum Rückgang der Gefahr.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Scarso calo del pericolo.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Diminution à peine marquée du danger.",
+				"languageCode": "fr"
+			}
+		],
+		"additionalAuthors": [
+			"Fabio Gheser",
+			"Rudi Mair",
+			"Sergio Benigni"
+		],
+		"dangerPattern2": "dp1",
+		"dangerPattern1": "dp6",
+		"avActivityHighlights": [
+			{
+				"text": " The wind slabs represent the main danger.",
+				"languageCode": "en"
+			},
+			{
+				"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo.",
+				"languageCode": "it"
+			},
+			{
+				"text": " Les accumulations de neige soufflée constituent le danger principal.",
+				"languageCode": "fr"
+			},
+			{
+				"text": " Die Triebschneeansammlungen bilden die Hauptgefahr.",
+				"languageCode": "de"
+			}
+		],
+		"snowpackStructureComment": [
+			{
+				"text": " In the past few hours the wind has been stronger than expected in some regions. The sometimes strong wind will transport the fresh snow and, in some cases, old snow as well. As the day progresses the previously small wind slabs will increase in size once again. The fresh wind slabs are bonding poorly with the old snowpack. Distinct weak layers exist in the bottom section of the snowpack in all aspects. Weak layers near the ground are difficult to recognise.",
+				"languageCode": "en"
+			},
+			{
+				"text": " In alcune regioni, nelle ultime ore il vento è stato più forte del previsto. Il vento a tratti forte causerà il trasporto della neve fresca e, in parte, anche della neve vecchia. Nel corso della giornata gli accumuli di neve ventata, prima piccoli, cresceranno ulteriormente. Gli accumuli di neve ventata di più recente formazione non si legheranno bene con la neve vecchia. A tutte le esposizioni, nella parte basale del manto nevoso si trovano pronunciati strati fragili. I deboli strati basali sono individuabili solo con difficoltà.",
+				"languageCode": "it"
+			},
+			{
+				"text": " In den letzten Stunden blies der Wind gebietsweise kräftiger als erwartet. Der teilweise starke Wind verfrachtet den Neuschnee und teilweise auch Altschnee. Im Tagesverlauf wachsen die zuvor kleinen Triebschneeansammlungen nochmals an. Die frischen Triebschneeansammlungen verbinden sich schlecht mit dem Altschnee. Im unteren Teil der Schneedecke sind an allen Expositionen ausgeprägte Schwachschichten vorhanden. Bodennahe Schwachschichten sind nur schwer erkennbar.",
+				"languageCode": "de"
+			},
+			{
+				"text": " Au cours des dernières heures le vent a soufflé plus fort qu'attendu dans certaines régions. Le vent parfois fort transporte la neige fraîche et partiellement aussi la neige ancienne. En cours de journée les accumulations de neige soufflée auparavant petites se développent encore davantage. Les accumulations de neige soufflée fraîches se lient mal avec la neige ancienne. Dans la partie inférieure du manteau neigeux des couches fragiles importantes sont présentes à toutes les expositions. Les couches fragiles proches du sol ne sont que difficilement identifiables.",
+				"languageCode": "fr"
+			}
+		],
+		"id": "e09a0d27-4306-4202-8f4c-6e20dcf8eea1",
+		"validity": {
+			"from": "2030-02-16T11:00:00Z",
+			"until": "2030-02-16T16:00:00Z"
 		},
-		{
-			"text": " As a consequence of a gathering storm force wind from northwesterly directions, large surface-area wind slabs will form especially adjacent to ridgelines as well as above the tree line. The avalanche prone locations are to be found in particular on wind-loaded slopes of all aspects and at transitions from a shallow to a deep snowpack. The avalanche-prone wind slabs can be released easily, even by a single winter sport participant, above the tree line. In some places avalanches can also penetrate near-ground layers of the snowpack and reach medium size in isolated cases. Outside marked and open pistes a critical avalanche situation will be encountered over a wide area.",
-			"languageCode": "en"
-		},
-		{
-			"text": " Con vento progressivamente sempre più tempestoso proveniente dai quadranti nord occidentali principalmente nelle zone in prossimità delle creste così come al di sopra del limite del bosco si formeranno estesi accumuli di neve ventata. I punti pericolosi si trovano soprattutto sui pendii carichi di neve soffiata esposti in tutte le direzioni come pure nelle zone di passaggio da poca a molta neve. Gli accumuli di neve ventata instabili possono facilmente subire un distacco già in seguito al passaggio di un singolo appassionato di sport invernali al di sopra del limite del bosco. In alcuni punti, le valanghe possono anche distaccarsi coinvolgendo gli strati basali del manto e raggiungere dimensioni medie a livello isolato. Al di fuori delle piste assicurate, la situazione valanghiva è in molti punti critica.",
-			"languageCode": "it"
-		},
-		{
-			"text": " Mit zunehmend stürmischem Wind aus nordwestlichen Richtungen entstehen besonders in Kammlagen sowie oberhalb der Waldgrenze flächige Triebschneeansammlungen. Die Gefahrenstellen liegen vor allem an Triebschneehängen aller Expositionen sowie an Übergängen von wenig zu viel Schnee. Die störanfälligen Triebschneeansammlungen können oberhalb der Waldgrenze schon von einzelnen Wintersportlern leicht ausgelöst werden. Stellenweise können Lawinen auch in bodennahe Schichten der Schneedecke durchreissen und vereinzelt mittlere Grösse erreichen. Abseits gesicherter Pisten verbreitet kritische Lawinensituation.",
-			"languageCode": "de"
-		}
-	],
-	"tendencyComment": [
-		{
-			"text": " Hardly any decrease in danger.",
-			"languageCode": "en"
-		},
-		{
-			"text": " Kaum Rückgang der Gefahr.",
-			"languageCode": "de"
-		},
-		{
-			"text": " Scarso calo del pericolo.",
-			"languageCode": "it"
-		},
-		{
-			"text": " Diminution à peine marquée du danger.",
-			"languageCode": "fr"
-		}
-	],
-	"additionalAuthors": [
-		"Fabio Gheser",
-		"Rudi Mair",
-		"Sergio Benigni"
-	],
-	"dangerPattern2": "dp1",
-	"dangerPattern1": "dp6",
-	"highlights": [
-		{
-			"text": " The wind slabs represent the main danger.",
-			"languageCode": "en"
-		},
-		{
-			"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo.",
-			"languageCode": "it"
-		},
-		{
-			"text": " Les accumulations de neige soufflée constituent le danger principal.",
-			"languageCode": "fr"
-		},
-		{
-			"text": " Die Triebschneeansammlungen bilden die Hauptgefahr.",
-			"languageCode": "de"
-		}
-	],
-	"avActivityHighlights": [
-		{
-			"text": " The wind slabs represent the main danger.",
-			"languageCode": "en"
-		},
-		{
-			"text": " Gli accumuli di neve ventata rappresentano la principale fonte di pericolo.",
-			"languageCode": "it"
-		},
-		{
-			"text": " Les accumulations de neige soufflée constituent le danger principal.",
-			"languageCode": "fr"
-		},
-		{
-			"text": " Die Triebschneeansammlungen bilden die Hauptgefahr.",
-			"languageCode": "de"
-		}
-	],
-	"snowpackStructureComment": [
-		{
-			"text": " In the past few hours the wind has been stronger than expected in some regions. The sometimes strong wind will transport the fresh snow and, in some cases, old snow as well. As the day progresses the previously small wind slabs will increase in size once again. The fresh wind slabs are bonding poorly with the old snowpack. Distinct weak layers exist in the bottom section of the snowpack in all aspects. Weak layers near the ground are difficult to recognise.",
-			"languageCode": "en"
-		},
-		{
-			"text": " In alcune regioni, nelle ultime ore il vento è stato più forte del previsto. Il vento a tratti forte causerà il trasporto della neve fresca e, in parte, anche della neve vecchia. Nel corso della giornata gli accumuli di neve ventata, prima piccoli, cresceranno ulteriormente. Gli accumuli di neve ventata di più recente formazione non si legheranno bene con la neve vecchia. A tutte le esposizioni, nella parte basale del manto nevoso si trovano pronunciati strati fragili. I deboli strati basali sono individuabili solo con difficoltà.",
-			"languageCode": "it"
-		},
-		{
-			"text": " In den letzten Stunden blies der Wind gebietsweise kräftiger als erwartet. Der teilweise starke Wind verfrachtet den Neuschnee und teilweise auch Altschnee. Im Tagesverlauf wachsen die zuvor kleinen Triebschneeansammlungen nochmals an. Die frischen Triebschneeansammlungen verbinden sich schlecht mit dem Altschnee. Im unteren Teil der Schneedecke sind an allen Expositionen ausgeprägte Schwachschichten vorhanden. Bodennahe Schwachschichten sind nur schwer erkennbar.",
-			"languageCode": "de"
-		},
-		{
-			"text": " Au cours des dernières heures le vent a soufflé plus fort qu'attendu dans certaines régions. Le vent parfois fort transporte la neige fraîche et partiellement aussi la neige ancienne. En cours de journée les accumulations de neige soufflée auparavant petites se développent encore davantage. Les accumulations de neige soufflée fraîches se lient mal avec la neige ancienne. Dans la partie inférieure du manteau neigeux des couches fragiles importantes sont présentes à toutes les expositions. Les couches fragiles proches du sol ne sont que difficilement identifiables.",
-			"languageCode": "fr"
-		}
-	],
-	"id": "e09a0d27-4306-4202-8f4c-6e20dcf8eea1",
-	"validity": {
-		"from": "2030-02-15T16:00:00Z",
-		"until": "2030-02-16T11:00:00Z"
-	},
-	"snowpackStructureCommentTextcat": "94[2939[9226],2920,1460[1471],9413].19[6003,9858].117[6910[6754],11098,6520,6480,11613].15[6226,4163,5890,871,7236[10213,5929],9413].22[5936,3739,5928,6444,1538,6420].27[3853,6861]",
-	"publicationDate": "2018-10-03T05:27:23Z"
-}
+		"snowpackStructureCommentTextcat": "94[2939[9226],2920,1460[1471],9413].19[6003,9858].117[6910[6754],11098,6520,6480,11613].15[6226,4163,5890,871,7236[10213,5929],9413].22[5936,3739,5928,6444,1538,6420].27[3853,6861]",
+		"publicationDate": "2018-10-03T05:27:23Z"
+	}
+]

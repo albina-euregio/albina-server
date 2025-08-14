@@ -4,6 +4,7 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,14 +31,9 @@ public class StatisticsControllerTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		bulletinsAmPm = Arrays.asList(AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_1.json")),
-				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_2.json")),
-				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_3.json")),
-				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_4.json")),
-				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_5.json")),
-				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_6.json")),
-				AvalancheBulletin.readBulletin(Resources.getResource("2030-02-16_7.json")));
-
+		bulletinsAmPm = new ArrayList<>();
+		bulletinsAmPm.addAll(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
+		bulletinsAmPm.addAll(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_6.json")));
 		dangerSourceVariants = Arrays.asList(readDangerSourceVariant(Resources.getResource("danger_source_variants.json")));
 	}
 

@@ -1036,11 +1036,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
 	}
 
-	public static AvalancheBulletin readBulletin(final URL resource) throws IOException {
-		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), User::new);
-	}
-
 	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);

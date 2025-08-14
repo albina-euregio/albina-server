@@ -4,6 +4,7 @@ package eu.albina.model;
 import com.google.common.io.Resources;
 import eu.albina.util.JsonUtil;
 import org.json.JSONException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -11,9 +12,10 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AvalancheBulletinTest {
 
@@ -51,17 +53,9 @@ public class AvalancheBulletinTest {
 
 	@Test
 	public void testSortByDangerRating() throws IOException {
-		List<AvalancheBulletin> bulletins = Arrays.asList(
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json")),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin2.json")),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin3.json")),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin4.json"))
-		);
-
+		List<AvalancheBulletin> bulletins = new ArrayList<>(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
 		Collections.sort(bulletins);
-
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			System.out.println(avalancheBulletin.getHighestDangerRatingDouble());
-		}
+		List<Integer> actual = bulletins.stream().map(AvalancheBulletin::getHighestDangerRatingDouble).collect(Collectors.toList());
+		Assertions.assertEquals(List.of(14, 10, 8, 6, 4), actual);
 	}
 }
