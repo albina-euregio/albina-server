@@ -39,7 +39,7 @@ import eu.albina.model.enumerations.Role;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements NameAndEmail {
 
 	static class UserNameSerializer extends JsonSerializer<User> {
 		@Override

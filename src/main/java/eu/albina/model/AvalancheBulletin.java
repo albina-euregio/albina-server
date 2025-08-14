@@ -20,7 +20,9 @@ import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.albina.util.JsonUtil;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +71,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	/** Information about the author of the avalanche bulletin */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
+	@JsonProperty("author")
+	@JsonSerialize(as = NameAndEmail.class)
 	private User user;
 
 	@Column(name = "OWNER_REGION", length = 191)
@@ -1042,6 +1046,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		final JSONArray array = new JSONArray(validBulletinStringFromResource);
 		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(u -> new AvalancheBulletin(u, User::new))
 				.collect(Collectors.toList());
+	}
+
+	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
+		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);
+		return List.of(bulletins);
 	}
 
 }

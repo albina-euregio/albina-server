@@ -2,7 +2,6 @@
 package eu.albina.model;
 
 import com.google.common.io.Resources;
-import eu.albina.RegionTestUtils;
 import eu.albina.util.JsonUtil;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -15,35 +14,38 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class AvalancheBulletinTest {
 
 	@Test
 	public void testCreateObjectFromJSONAndBack1() throws Exception {
-		runTest(Resources.getResource("2023-12-01.json"));
+		runTest(Resources.getResource("2023-12-01.json"), JsonUtil.Views.Public.class);
 	}
 
 	@Test
 	public void testCreateObjectFromJSONAndBack2() throws Exception {
-		runTest(Resources.getResource("2023-12-21.json"));
+		runTest(Resources.getResource("2023-12-21.json"), JsonUtil.Views.Public.class);
 	}
 
 	@Test
 	public void testCreateObjectFromJSONAndBack3() throws Exception {
-		runTest(Resources.getResource("2024-01-28.json"));
+		runTest(Resources.getResource("2024-01-28.json"), JsonUtil.Views.Public.class);
 	}
 
 	@Test
 	public void testCreateObjectFromJSONAndBack4() throws Exception {
-		runTest(Resources.getResource("2025-03-14.json"));
+		runTest(Resources.getResource("2025-03-14.json"), JsonUtil.Views.Public.class);
 	}
 
-	private static void runTest(URL bulletin) throws IOException, JSONException {
+	@Test
+	public void testCreateObjectFromJSONAndBackInternal() throws Exception {
+		runTest(Resources.getResource("2025-03-14.internal.json"), JsonUtil.Views.Internal.class);
+	}
+
+	private static void runTest(URL bulletin, Class<?> view) throws IOException, JSONException {
 		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
-		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletins(bulletin);
-		String actual3 = JsonUtil.writeValueUsingJackson(avalancheBulletins, JsonUtil.Views.Public.class);
+		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletinsUsingJackson(bulletin);
+		String actual3 = JsonUtil.writeValueUsingJackson(avalancheBulletins, view);
 		JSONAssert.assertEquals(expected, actual3, JSONCompareMode.NON_EXTENSIBLE);
 	}
 

@@ -4,6 +4,7 @@ package eu.albina.model;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -28,6 +29,11 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 
 	public Texts() {
 		texts = new TreeSet<>(); // sort texts by language to allow caching of API calls
+	}
+
+	@JsonCreator
+	public Texts(Set<Text> texts) {
+		this.texts = texts;
 	}
 
 	public Texts(JSONArray json) {
