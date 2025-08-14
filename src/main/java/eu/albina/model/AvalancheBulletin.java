@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,10 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.albina.util.JsonUtil;
-import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import com.google.common.io.Resources;
 
 import eu.albina.model.enumerations.DangerPattern;
@@ -217,129 +211,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		publishedRegions = new LinkedHashSet<>();
 		savedRegions = new LinkedHashSet<>();
 		suggestedRegions = new LinkedHashSet<>();
-	}
-
-	/**
-	 * Custom constructor that creates an avalanche bulletin object from JSON input.
-	 *
-	 * @param json
-	 *            JSONObject holding information about an avalanche bulletin.
-	 */
-	public AvalancheBulletin(JSONObject json, Function<String, User> userFunction) {
-		this();
-
-		if (json.has("id"))
-			this.id = json.getString("id");
-
-		if (json.has("author")) {
-			JSONObject author = json.getJSONObject("author");
-			if (author.has("email")) {
-				try {
-					this.user = userFunction.apply(author.getString("email"));
-				} catch (Exception e) {
-					LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
-				}
-			}
-		}
-
-		if (json.has("additionalAuthors")) {
-			JSONArray additionalAuthors = json.getJSONArray("additionalAuthors");
-			for (Object entry : additionalAuthors) {
-				this.additionalAuthors.add((String) entry);
-			}
-		}
-
-		if (json.has("ownerRegion"))
-			this.ownerRegion = json.getString("ownerRegion");
-		if (json.has("highlightsTextcat"))
-			this.highlightsTextcat = json.getString("highlightsTextcat");
-		if (json.has("avActivityHighlightsTextcat"))
-			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
-		if (json.has("avActivityCommentTextcat"))
-			this.avActivityCommentTextcat = json.getString("avActivityCommentTextcat");
-		if (json.has("snowpackStructureHighlightsTextcat"))
-			this.snowpackStructureHighlightsTextcat = json.getString("snowpackStructureHighlightsTextcat");
-		if (json.has("snowpackStructureCommentTextcat"))
-			this.snowpackStructureCommentTextcat = json.getString("snowpackStructureCommentTextcat");
-		if (json.has("tendencyCommentTextcat"))
-			this.tendencyCommentTextcat = json.getString("tendencyCommentTextcat");
-		if (json.has("generalHeadlineCommentTextcat"))
-			this.generalHeadlineCommentTextcat = json.getString("generalHeadlineCommentTextcat");
-		if (json.has("synopsisCommentTextcat"))
-			this.synopsisCommentTextcat = json.getString("synopsisCommentTextcat");
-		if (json.has("avActivityHighlightsNotes"))
-			this.avActivityHighlightsNotes = json.getString("avActivityHighlightsNotes");
-		if (json.has("avActivityCommentNotes"))
-			this.avActivityCommentNotes = json.getString("avActivityCommentNotes");
-		if (json.has("snowpackStructureHighlightsNotes"))
-			this.snowpackStructureHighlightsNotes = json.getString("snowpackStructureHighlightsNotes");
-		if (json.has("snowpackStructureCommentNotes"))
-			this.snowpackStructureCommentNotes = json.getString("snowpackStructureCommentNotes");
-		if (json.has("tendencyCommentNotes"))
-			this.tendencyCommentNotes = json.getString("tendencyCommentNotes");
-		if (json.has("generalHeadlinesCommentNotes"))
-			this.generalHeadlineCommentNotes = json.getString("generalHeadlinesCommentNotes");
-
-		if (json.has("tendency"))
-			this.tendency = Tendency.valueOf(json.getString("tendency").toLowerCase());
-
-		if (json.has("dangerPattern1"))
-			this.dangerPattern1 = DangerPattern.valueOf(json.getString("dangerPattern1").toLowerCase());
-		if (json.has("dangerPattern2"))
-			this.dangerPattern2 = DangerPattern.valueOf(json.getString("dangerPattern2").toLowerCase());
-
-		for (TextPart part : TextPart.values()) {
-			if (json.has(part.toString())) {
-				this.textPartsMap.put(part, new Texts(json.getJSONArray(part.toString())));
-			}
-		}
-
-		if (json.has("publicationDate"))
-			this.publicationDate = ZonedDateTime.parse(json.getString("publicationDate"));
-
-		if (json.has("validity")) {
-			JSONObject validity = json.getJSONObject("validity");
-			this.validFrom = ZonedDateTime.parse(validity.getString("from"));
-			this.validUntil = ZonedDateTime.parse(validity.getString("until"));
-		}
-
-		if (json.has("suggestedRegions")) {
-			JSONArray regions = json.getJSONArray("suggestedRegions");
-			for (Object entry : regions) {
-				this.suggestedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("publishedRegions")) {
-			JSONArray regions = json.getJSONArray("publishedRegions");
-			for (Object entry : regions) {
-				this.publishedRegions.add((String) entry);
-			}
-		} else if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
-			for (Object entry : regions) {
-				this.publishedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("savedRegions")) {
-			JSONArray regions = json.getJSONArray("savedRegions");
-			for (Object entry : regions) {
-				this.savedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("strategicMindset"))
-			this.strategicMindset = StrategicMindset.valueOf(json.getString("strategicMindset"));
-
-		if (json.has("hasDaytimeDependency"))
-			this.hasDaytimeDependency = json.getBoolean("hasDaytimeDependency");
-
-		if (json.has("forenoon"))
-			this.forenoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("forenoon"));
-
-		if (json.has("afternoon"))
-			this.afternoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("afternoon"));
 	}
 
 	public AvalancheBulletin withRegionFilter(Region region) {

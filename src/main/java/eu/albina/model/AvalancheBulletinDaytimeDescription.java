@@ -9,8 +9,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.Complexity;
 import eu.albina.model.enumerations.DangerRating;
@@ -33,8 +31,7 @@ import jakarta.persistence.Transient;
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObject
-		implements AvalancheInformationObject {
+public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObject {
 
 	@OneToOne
 	@PrimaryKeyJoinColumn
@@ -107,50 +104,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	public AvalancheBulletinDaytimeDescription() {
 		this.terrainFeatureAbove = new HashSet<Text>();
 		this.terrainFeatureBelow = new HashSet<Text>();
-	}
-
-	public AvalancheBulletinDaytimeDescription(JSONObject json) {
-		this();
-
-		if (json.has("id"))
-			this.id = json.getString("id");
-		if (json.has("hasElevationDependency"))
-			this.hasElevationDependency = json.getBoolean("hasElevationDependency");
-		if (json.has("elevation"))
-			this.elevation = json.getInt("elevation");
-		if (json.has("treeline"))
-			this.treeline = json.getBoolean("treeline");
-		if (json.has("dangerRatingAbove"))
-			this.dangerRatingAbove = DangerRating.valueOf(json.getString("dangerRatingAbove").toLowerCase());
-		if (json.has("terrainFeatureAboveTextcat"))
-			this.terrainFeatureAboveTextcat = json.getString("terrainFeatureAboveTextcat");
-		if (json.has("terrainFeatureAbove"))
-			for (Object entry : json.getJSONArray("terrainFeatureAbove"))
-				terrainFeatureAbove.add(new Text((JSONObject) entry));
-		if (json.has("dangerRatingBelow"))
-			this.dangerRatingBelow = DangerRating.valueOf(json.getString("dangerRatingBelow").toLowerCase());
-		if (json.has("terrainFeatureBelowTextcat"))
-			this.terrainFeatureBelowTextcat = json.getString("terrainFeatureBelowTextcat");
-		if (json.has("terrainFeatureBelow"))
-			for (Object entry : json.getJSONArray("terrainFeatureBelow"))
-				terrainFeatureBelow.add(new Text((JSONObject) entry));
-		if (json.has("complexity"))
-			this.complexity = Complexity.valueOf(json.getString("complexity").toLowerCase());
-		if (json.has("avalancheProblem1"))
-			this.avalancheProblem1 = new eu.albina.model.AvalancheProblem(
-					json.getJSONObject("avalancheProblem1"));
-		if (json.has("avalancheProblem2"))
-			this.avalancheProblem2 = new eu.albina.model.AvalancheProblem(
-					json.getJSONObject("avalancheProblem2"));
-		if (json.has("avalancheProblem3"))
-			this.avalancheProblem3 = new eu.albina.model.AvalancheProblem(
-					json.getJSONObject("avalancheProblem3"));
-		if (json.has("avalancheProblem4"))
-			this.avalancheProblem4 = new eu.albina.model.AvalancheProblem(
-					json.getJSONObject("avalancheProblem4"));
-		if (json.has("avalancheProblem5"))
-			this.avalancheProblem5 = new eu.albina.model.AvalancheProblem(
-					json.getJSONObject("avalancheProblem5"));
 	}
 
 	public boolean isHasElevationDependency() {
@@ -392,105 +345,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 	void serverInstance(ServerInstance serverInstance) {
 		this.serverInstance = serverInstance;
-	}
-
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-		if (id != null)
-			json.put("id", id);
-		json.put("hasElevationDependency", hasElevationDependency);
-		if (hasElevationDependency) {
-			if (treeline) {
-				json.put("treeline", treeline);
-			} else {
-				json.put("elevation", elevation);
-			}
-		}
-		if (dangerRating(true) != null)
-			json.put("dangerRatingAbove", this.dangerRating(true).toString());
-		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureAboveTextcat))
-			json.put("terrainFeatureAboveTextcat", terrainFeatureTextcat(true));
-		if (terrainFeature(true) != null && !terrainFeature(true).isEmpty()) {
-			JSONArray arrayAbove = new JSONArray();
-			for (Text text : terrainFeature(true)) {
-				arrayAbove.put(text.toJSON());
-			}
-			json.put("terrainFeatureAbove", arrayAbove);
-		}
-		if (dangerRating(false) != null)
-			json.put("dangerRatingBelow", this.dangerRating(false).toString());
-		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureTextcat(false)))
-			json.put("terrainFeatureBelowTextcat", terrainFeatureTextcat(false));
-		if (terrainFeature(false) != null && !terrainFeature(false).isEmpty()) {
-			JSONArray arrayBelow = new JSONArray();
-			for (Text text : terrainFeature(false)) {
-				arrayBelow.put(text.toJSON());
-			}
-			json.put("terrainFeatureBelow", arrayBelow);
-		}
-		if (complexity != null)
-			json.put("complexity", this.complexity.toString());
-		if (avalancheProblem1 != null)
-			json.put("avalancheProblem1", avalancheProblem1.toJSON());
-		if (avalancheProblem2 != null)
-			json.put("avalancheProblem2", avalancheProblem2.toJSON());
-		if (avalancheProblem3 != null)
-			json.put("avalancheProblem3", avalancheProblem3.toJSON());
-		if (avalancheProblem4 != null)
-			json.put("avalancheProblem4", avalancheProblem4.toJSON());
-		if (avalancheProblem5 != null)
-			json.put("avalancheProblem5", avalancheProblem5.toJSON());
-		return json;
-	}
-
-	public JSONObject toSmallJSON() {
-		JSONObject json = new JSONObject();
-		if (id != null)
-			json.put("id", id);
-		json.put("hasElevationDependency", hasElevationDependency);
-		if (hasElevationDependency) {
-			if (treeline) {
-				json.put("treeline", treeline);
-			} else {
-				json.put("elevation", elevation);
-			}
-		}
-		if (dangerRating(true) != null)
-			json.put("dangerRatingAbove", this.dangerRating(true).toString());
-		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureAboveTextcat))
-			json.put("terrainFeatureAboveTextcat", terrainFeatureTextcat(true));
-		if (terrainFeature(true) != null && !terrainFeature(true).isEmpty()) {
-			JSONArray arrayAbove = new JSONArray();
-			for (Text text : terrainFeature(true)) {
-				arrayAbove.put(text.toJSON());
-			}
-			json.put("terrainFeatureAbove", arrayAbove);
-		}
-		if (dangerRating(false) != null)
-			json.put("dangerRatingBelow", this.dangerRating(false).toString());
-		if (!com.google.common.base.Strings.isNullOrEmpty(terrainFeatureTextcat(false)))
-			json.put("terrainFeatureBelowTextcat", terrainFeatureTextcat(false));
-		if (terrainFeature(false) != null && !terrainFeature(false).isEmpty()) {
-			JSONArray arrayBelow = new JSONArray();
-			for (Text text : terrainFeature(false)) {
-				arrayBelow.put(text.toJSON());
-			}
-			json.put("terrainFeatureBelow", arrayBelow);
-		}
-		if (complexity != null)
-			json.put("complexity", this.complexity.toString());
-		if (avalancheProblem1 != null)
-			json.put("avalancheProblem1", avalancheProblem1.toJSON());
-		if (avalancheProblem2 != null)
-			json.put("avalancheProblem2", avalancheProblem2.toJSON());
-		if (avalancheProblem3 != null)
-			json.put("avalancheProblem3", avalancheProblem3.toJSON());
-		if (avalancheProblem4 != null)
-			json.put("avalancheProblem4", avalancheProblem4.toJSON());
-		if (avalancheProblem5 != null)
-			json.put("avalancheProblem5", avalancheProblem5.toJSON());
-		return json;
 	}
 
 	@Override

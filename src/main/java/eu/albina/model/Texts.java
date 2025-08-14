@@ -13,14 +13,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Table;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
-
 import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "texts")
-public class Texts extends AbstractPersistentObject implements AvalancheInformationObject {
+public class Texts extends AbstractPersistentObject {
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
@@ -34,13 +31,6 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 	@JsonCreator
 	public Texts(Set<Text> texts) {
 		this.texts = texts;
-	}
-
-	public Texts(JSONArray json) {
-		this();
-		for (Object entry : json) {
-			texts.add(new Text((JSONObject) entry));
-		}
 	}
 
 	public Set<Text> getTexts() {
@@ -57,18 +47,5 @@ public class Texts extends AbstractPersistentObject implements AvalancheInformat
 
 	public void addText(Text text) {
 		this.texts.add(text);
-	}
-
-	public JSONArray toJSONArray() {
-		JSONArray array = new JSONArray();
-		for (Text text : new TreeSet<>(texts)) {
-			array.put(text.toJSON());
-		}
-		return array;
-	}
-
-	@Override
-	public JSONObject toJSON() {
-		return null;
 	}
 }

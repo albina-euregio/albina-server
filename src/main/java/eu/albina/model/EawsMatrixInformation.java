@@ -2,11 +2,8 @@
 package eu.albina.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.openjson.JSONObject;
 
 import eu.albina.model.enumerations.AvalancheSize;
 import eu.albina.model.enumerations.DangerRating;
@@ -22,7 +19,7 @@ import java.util.Comparator;
 
 @Embeddable
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EawsMatrixInformation implements AvalancheInformationObject, Comparable<EawsMatrixInformation> {
+public class EawsMatrixInformation implements Comparable<EawsMatrixInformation> {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING", length = 191)
@@ -54,27 +51,6 @@ public class EawsMatrixInformation implements AvalancheInformationObject, Compar
 	private int frequencyValue;
 
 	public EawsMatrixInformation() {
-	}
-
-	public EawsMatrixInformation(JSONObject json) {
-		this();
-
-		if (json.has("dangerRating"))
-			this.dangerRating = DangerRating.fromString(json.getString("dangerRating"));
-		if (json.has("dangerRatingModificator"))
-			this.dangerRatingModificator = DangerRatingModificator.fromString(json.getString("dangerRatingModificator"));
-		if (json.has("avalancheSize"))
-			this.avalancheSize = AvalancheSize.fromString(json.getString("avalancheSize"));
-		if (json.has("snowpackStability"))
-			this.snowpackStability = SnowpackStability.fromString(json.getString("snowpackStability"));
-		if (json.has("frequency"))
-			this.frequency = Frequency.fromString(json.getString("frequency"));
-		if (json.has("avalancheSizeValue"))
-			this.avalancheSizeValue = json.getInt("avalancheSizeValue");
-		if (json.has("snowpackStabilityValue"))
-			this.snowpackStabilityValue = json.getInt("snowpackStabilityValue");
-		if (json.has("frequencyValue"))
-			this.frequencyValue = json.getInt("frequencyValue");
 	}
 
 	public DangerRating getDangerRating() {
@@ -466,54 +442,6 @@ public class EawsMatrixInformation implements AvalancheInformationObject, Compar
 				}
 			default:
 				return DangerRating.missing;
-		}
-	}
-
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-		if (dangerRating != null)
-			json.put("dangerRating", this.dangerRating.toString());
-		if (dangerRatingModificator != null)
-			json.put("dangerRatingModificator", this.dangerRatingModificator.toString());
-		if (avalancheSize != null)
-			json.put("avalancheSize", this.avalancheSize.toString());
-		if (snowpackStability != null)
-			json.put("snowpackStability", this.snowpackStability.toString());
-		if (frequency != null)
-			json.put("frequency", this.frequency.toString());
-		json.put("avalancheSizeValue", this.avalancheSizeValue);
-		json.put("snowpackStabilityValue", this.snowpackStabilityValue);
-		json.put("frequencyValue", this.frequencyValue);
-
-		return json;
-	}
-
-	public void toCAAMLv6(Document doc, Element rootElement) {
-		/*
-		// does not exist in CAAMLv6 specification
-		if (dangerRating != null) {
-			Element dangerRatingElement = doc.createElement("dangerRating");
-			dangerRatingElement.appendChild(doc.createTextNode(DangerRating.getCAAMLv6String(dangerRating)));
-			rootElement.appendChild(dangerRatingElement);
-		}
-		*/
-		if (avalancheSize != null) {
-			Element avalancheSizeElement = doc.createElement("avalancheSize");
-			avalancheSizeElement.appendChild(doc.createTextNode(avalancheSize.toCaamlString()));
-			rootElement.appendChild(avalancheSizeElement);
-		}
-		if (snowpackStability != null) {
-			Element snowpackStabilityElement = doc.createElement("snowpackStability");
-			snowpackStabilityElement
-					.appendChild(doc.createTextNode(snowpackStability.toCaamlv6String()));
-			rootElement.appendChild(snowpackStabilityElement);
-		}
-		if (frequency != null) {
-			Element frequencyElement = doc.createElement("frequency");
-			frequencyElement
-					.appendChild(doc.createTextNode(frequency.toCaamlv6String()));
-			rootElement.appendChild(frequencyElement);
 		}
 	}
 

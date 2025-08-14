@@ -11,10 +11,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
-import com.google.common.base.Strings;
-
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Direction;
@@ -39,7 +35,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "avalanche_problems")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AvalancheProblem extends AbstractPersistentObject implements AvalancheInformationObject {
+public class AvalancheProblem extends AbstractPersistentObject {
 
 	@OneToOne
 	@PrimaryKeyJoinColumn
@@ -114,44 +110,6 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 	public AvalancheProblem() {
 		this.aspects = new LinkedHashSet<Aspect>();
 		this.terrainFeature = new TreeSet<>(); // sort texts by language to allow caching of API calls
-	}
-
-	public AvalancheProblem(JSONObject json) {
-		this();
-
-		if (json.has("avalancheType")) {
-			this.avalancheType = eu.albina.model.enumerations.AvalancheType
-					.valueOf(json.getString("avalancheType").toLowerCase());
-		}
-		if (json.has("avalancheProblem")) {
-			this.avalancheProblem = eu.albina.model.enumerations.AvalancheProblem
-					.valueOf(json.getString("avalancheProblem").toLowerCase());
-		}
-		if (json.has("aspects")) {
-			JSONArray aspects = json.getJSONArray("aspects");
-			for (Object entry : aspects) {
-				this.aspects.add(Aspect.valueOf(((String) entry).toUpperCase()));
-			}
-		}
-		if (json.has("elevationHigh"))
-			this.elevationHigh = json.getInt("elevationHigh");
-		if (json.has("treelineHigh"))
-			this.treelineHigh = json.getBoolean("treelineHigh");
-		if (json.has("elevationLow"))
-			this.elevationLow = json.getInt("elevationLow");
-		if (json.has("treelineLow"))
-			this.treelineLow = json.getBoolean("treelineLow");
-		if (json.has("dangerRatingDirection"))
-			this.dangerRatingDirection = Direction.valueOf(json.getString("dangerRatingDirection").toLowerCase());
-		if (json.has("matrixInformation"))
-			this.matrixInformation = new MatrixInformation(json.getJSONObject("matrixInformation"));
-		if (json.has("eawsMatrixInformation"))
-			this.eawsMatrixInformation = new EawsMatrixInformation(json.getJSONObject("eawsMatrixInformation"));
-		if (json.has("terrainFeatureTextcat"))
-			this.terrainFeatureTextcat = json.getString("terrainFeatureTextcat");
-		if (json.has("terrainFeature"))
-			for (Object entry : json.getJSONArray("terrainFeature"))
-				terrainFeature.add(new Text((JSONObject) entry));
 	}
 
 	public AvalancheType getAvalancheType() {
@@ -262,49 +220,6 @@ public class AvalancheProblem extends AbstractPersistentObject implements Avalan
 
 	public void addTerrainFeature(Text terrainFeature) {
 		this.terrainFeature.add(terrainFeature);
-	}
-
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-		if (avalancheType != null)
-			json.put("avalancheType", this.avalancheType.toString());
-		if (avalancheProblem != null)
-			json.put("avalancheProblem", this.avalancheProblem.toString());
-		if (aspects != null && aspects.size() > 0) {
-			JSONArray aspects = new JSONArray();
-			for (Aspect aspect : this.aspects) {
-				aspects.put(aspect.toString());
-			}
-			json.put("aspects", aspects);
-		}
-
-		if (treelineHigh)
-			json.put("treelineHigh", treelineHigh);
-		else if (elevationHigh > 0)
-			json.put("elevationHigh", elevationHigh);
-		if (treelineLow)
-			json.put("treelineLow", treelineLow);
-		else if (elevationLow > 0)
-			json.put("elevationLow", elevationLow);
-		if (dangerRatingDirection != null)
-			json.put("dangerRatingDirection", this.dangerRatingDirection.toString());
-		if (matrixInformation != null)
-			json.put("matrixInformation", matrixInformation.toJSON());
-		if (eawsMatrixInformation != null)
-			json.put("eawsMatrixInformation", eawsMatrixInformation.toJSON());
-
-		if (!Strings.isNullOrEmpty(terrainFeatureTextcat))
-			json.put("terrainFeatureTextcat", terrainFeatureTextcat);
-		if (terrainFeature != null && !terrainFeature.isEmpty()) {
-			JSONArray array = new JSONArray();
-			for (Text text : new TreeSet<>(terrainFeature)) {
-				array.put(text.toJSON());
-			}
-			json.put("terrainFeature", array);
-		}
-
-		return json;
 	}
 
 	@Override
