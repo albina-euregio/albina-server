@@ -1,7 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
-
-import com.github.openjson.JSONObject;
-import com.google.common.io.Resources;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -13,6 +11,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import com.github.openjson.JSONObject;
+import com.google.common.io.Resources;
 
 public class XMLResourceBundleControl extends ResourceBundle.Control {
 	private static final String XML = "xml";

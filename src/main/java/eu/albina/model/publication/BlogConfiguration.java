@@ -1,24 +1,13 @@
-/*******************************************************************************
- * Copyright (C) 2020 Avalanche.report
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.publication;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
+import com.google.common.base.MoreObjects;
+
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,10 +18,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
-import com.google.common.base.MoreObjects;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "blog_configurations")

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

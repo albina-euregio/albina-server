@@ -1,14 +1,16 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
 import java.nio.charset.StandardCharsets;
+
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
 
 import eu.albina.RegionTestUtils;
-import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class RegionTest {
 

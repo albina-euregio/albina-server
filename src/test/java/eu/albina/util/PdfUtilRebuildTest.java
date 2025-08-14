@@ -1,19 +1,5 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
-
-import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Resources;
-import eu.albina.RegionTestUtils;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
-import eu.albina.model.enumerations.DaytimeDependency;
-import eu.albina.model.enumerations.LanguageCode;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -25,6 +11,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Resources;
+
+import eu.albina.RegionTestUtils;
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.model.enumerations.LanguageCode;
 
 public class PdfUtilRebuildTest {
 	private static final Logger logger = LoggerFactory.getLogger(PdfUtilRebuildTest.class);

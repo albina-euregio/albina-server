@@ -1,16 +1,19 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static eu.albina.util.DBEnvConfig.NO_MAX_POOL_SIZE;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static eu.albina.util.DBEnvConfig.NO_MAX_POOL_SIZE;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class DBEnvConfigTest {
 

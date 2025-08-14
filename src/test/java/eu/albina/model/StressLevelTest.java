@@ -1,13 +1,15 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import eu.albina.util.JsonUtil;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.Test;
+
+import eu.albina.util.JsonUtil;
 
 class StressLevelTest {
 

@@ -1,19 +1,4 @@
-/*******************************************************************************
- * Copyright (C) 2021 albina
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
 import java.net.URI;
@@ -21,34 +6,34 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import ch.rasc.webpush.CryptoService;
-import ch.rasc.webpush.PushController;
-import ch.rasc.webpush.ServerKeys;
-import ch.rasc.webpush.dto.Subscription;
-import ch.rasc.webpush.dto.SubscriptionKeys;
-import eu.albina.controller.RegionController;
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.Region;
-import eu.albina.util.HibernateUtil;
-import eu.albina.util.HttpClientUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.openjson.JSONObject;
-
-import eu.albina.controller.PushSubscriptionController;
-import eu.albina.model.PushSubscription;
-import eu.albina.model.publication.PushConfiguration;
-
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Variant;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.openjson.JSONObject;
+
+import ch.rasc.webpush.CryptoService;
+import ch.rasc.webpush.PushController;
+import ch.rasc.webpush.ServerKeys;
+import ch.rasc.webpush.dto.Subscription;
+import ch.rasc.webpush.dto.SubscriptionKeys;
+import eu.albina.controller.PushSubscriptionController;
+import eu.albina.controller.RegionController;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.PushSubscription;
+import eu.albina.model.Region;
+import eu.albina.model.publication.PushConfiguration;
+import eu.albina.util.HibernateUtil;
+import eu.albina.util.HttpClientUtil;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 
 public class PushNotificationUtil {
 

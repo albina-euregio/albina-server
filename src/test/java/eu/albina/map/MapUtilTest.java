@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.map;
 
 import static eu.albina.RegionTestUtils.regionAran;
@@ -17,22 +18,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import eu.albina.ImageTestUtils;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.enumerations.DaytimeDependency;
-import eu.albina.model.ServerInstance;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
-import eu.albina.util.PdfUtil;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
 
+import eu.albina.ImageTestUtils;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
+import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.GlobalVariables;
+import eu.albina.util.PdfUtil;
 
 public class MapUtilTest {
 

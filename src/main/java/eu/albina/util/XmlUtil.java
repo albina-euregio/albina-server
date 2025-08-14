@@ -1,6 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import org.w3c.dom.Document;
+import java.io.StringWriter;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -8,7 +9,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
+
+import org.w3c.dom.Document;
 
 public interface XmlUtil {
 	static String convertDocToString(Document doc) throws TransformerException {

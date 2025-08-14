@@ -1,23 +1,22 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import com.google.common.io.MoreFiles;
-import eu.albina.RegionTestUtils;
-import eu.albina.model.Region;
-import eu.albina.model.RegionLanguageConfiguration;
-import eu.albina.model.ServerInstance;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.rest.MediaFileService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static eu.albina.RegionTestUtils.regionTyrol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
-import java.util.Set;
 
-import static eu.albina.RegionTestUtils.regionTyrol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import com.google.common.io.MoreFiles;
+
+import eu.albina.model.ServerInstance;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.rest.MediaFileService;
 
 public class RssUtilTest {
 

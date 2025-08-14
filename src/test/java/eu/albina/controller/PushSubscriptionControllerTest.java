@@ -1,15 +1,17 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller;
-
-import eu.albina.model.PushSubscription;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.HibernateUtil;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import eu.albina.model.PushSubscription;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.HibernateUtil;
 
 public class PushSubscriptionControllerTest {
 

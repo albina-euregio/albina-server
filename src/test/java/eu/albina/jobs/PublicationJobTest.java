@@ -1,12 +1,14 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
-import eu.albina.util.AlbinaUtil;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Clock;
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import eu.albina.util.AlbinaUtil;
 
 class PublicationJobTest {
 

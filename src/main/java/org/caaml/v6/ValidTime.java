@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
+
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-
-import java.time.Instant;
 
 /**
  * Valid time defines two ISO 8601 timestamps in UTC or with time zone information.

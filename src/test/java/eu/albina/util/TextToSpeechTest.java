@@ -1,14 +1,7 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import com.google.common.io.Resources;
-import eu.albina.caaml.Caaml6;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.enumerations.LanguageCode;
-import org.caaml.v6.AvalancheBulletins;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import static eu.albina.RegionTestUtils.regionTyrol;
 
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -17,7 +10,17 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static eu.albina.RegionTestUtils.regionTyrol;
+import org.caaml.v6.AvalancheBulletins;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import com.google.common.io.Resources;
+
+import eu.albina.caaml.Caaml6;
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.enumerations.LanguageCode;
 
 class TextToSpeechTest {
 

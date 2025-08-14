@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina;
 
-import javax.imageio.ImageIO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -10,8 +13,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import javax.imageio.ImageIO;
 
 public interface ImageTestUtils {
 

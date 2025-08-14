@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.converter;
-
-import jakarta.persistence.AttributeConverter;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import jakarta.persistence.AttributeConverter;
 
 public abstract class EnumSetToStringConverter<E extends Enum<E>> implements AttributeConverter<Set<E>, String> {
 

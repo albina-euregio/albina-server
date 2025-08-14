@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest.filter;
 
-import com.google.common.hash.Hashing;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -10,8 +12,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
+
+import com.google.common.hash.Hashing;
 
 /**
  * Handles ETag generation as well as If-None-Match request Header. This filter will erase the contents of the

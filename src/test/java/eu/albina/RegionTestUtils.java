@@ -1,12 +1,14 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina;
-
-import com.google.common.io.Resources;
-import eu.albina.model.Region;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+
+import com.google.common.io.Resources;
+
+import eu.albina.model.Region;
 
 public interface RegionTestUtils {
 

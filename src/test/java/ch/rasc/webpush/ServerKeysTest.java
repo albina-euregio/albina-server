@@ -1,11 +1,14 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package ch.rasc.webpush;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import eu.albina.controller.AuthenticationController;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import eu.albina.controller.AuthenticationController;
 
 class ServerKeysTest {
 	@Test

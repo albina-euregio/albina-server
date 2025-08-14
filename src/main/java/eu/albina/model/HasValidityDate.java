@@ -1,13 +1,14 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import eu.albina.model.enumerations.LanguageCode;
+import static eu.albina.util.AlbinaUtil.localZone;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZonedDateTime;
 
-import static eu.albina.util.AlbinaUtil.localZone;
+import eu.albina.model.enumerations.LanguageCode;
 
 public interface HasValidityDate {
 	LocalDate getValidityDate();

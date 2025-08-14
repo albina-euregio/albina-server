@@ -1,23 +1,18 @@
-/*******************************************************************************
- * Copyright (C) 2021 albina
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+// SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
+
+import static com.google.common.base.Strings.nullToEmpty;
+
+import java.nio.charset.StandardCharsets;
+import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Stopwatch;
+
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -25,14 +20,6 @@ import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.model.publication.WhatsAppConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.nio.charset.StandardCharsets;
-import java.util.NoSuchElementException;
-import java.util.concurrent.Callable;
-
-import static com.google.common.base.Strings.nullToEmpty;
 
 /**
  * A digital communication message meant to be sent via email, push notification, telegram, etc.
