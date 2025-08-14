@@ -9,10 +9,12 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import eu.albina.util.JsonUtil;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -39,6 +41,7 @@ import eu.albina.model.enumerations.Role;
 
 @Entity
 @Table(name = "users")
+@JsonView(JsonUtil.Views.Internal.class)
 public class User implements NameAndEmail {
 
 	static class UserNameSerializer extends JsonSerializer<User> {
@@ -51,14 +54,17 @@ public class User implements NameAndEmail {
 	/** Email address of the user */
 	@Id
 	@Column(name = "EMAIL", length = 191)
+	@JsonView({JsonUtil.Views.Internal.class, JsonUtil.Views.Public.class})
 	private String email;
 
 	/** Password of the user */
 	@Column(name = "PASSWORD", length = 191)
+	@JsonIgnore
 	private String password;
 
 	/** Name of the user **/
 	@Column(name = "NAME",  length = 191)
+	@JsonView({JsonUtil.Views.Internal.class, JsonUtil.Views.Public.class})
 	private String name;
 
 	@ElementCollection(fetch = FetchType.EAGER)
