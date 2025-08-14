@@ -163,12 +163,9 @@ public class AvalancheBulletinService {
 		}
 
 		List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, endDate, regions, entityManager);
-		JSONArray jsonResult = new JSONArray();
 		Collections.sort(bulletins);
-		for (AvalancheBulletin bulletin : bulletins) {
-			jsonResult.put(bulletin.toJSON());
-		}
-		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		String jsonResult = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Internal.class);
+		return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -447,11 +444,11 @@ public class AvalancheBulletinService {
 				jsonObject.append("message", "Bulletin not found for ID: " + bulletinId);
 				return Response.status(Response.Status.NOT_FOUND).entity(jsonObject.toString()).build();
 			}
-			String json = bulletin.toJSON().toString();
+			String json = JsonUtil.writeValueUsingJackson(bulletin, JsonUtil.Views.Internal.class);
 			return Response.ok(json, MediaType.APPLICATION_JSON).build();
 		} catch (HibernateException e) {
 			logger.warn("Error loading bulletin", e);
-			return Response.status(400).type(MediaType.TEXT_PLAIN).entity(e.toString().toString()).build();
+			return Response.status(400).type(MediaType.TEXT_PLAIN).entity(e.toString()).build();
 		}
 	}
 

@@ -18,7 +18,7 @@ public class JsonUtil {
 		class Public {
 		}
 
-		class Internal extends Public {
+		class Internal {
 		}
 	}
 
@@ -52,7 +52,7 @@ public class JsonUtil {
 		}
 	}
 
-	public static String writeValueUsingJackson(Object value, Class<? extends JsonUtil.Views.Public> view) {
+	public static String writeValueUsingJackson(Object value, Class<?> view) {
 		try {
 			return ALBINA_OBJECT_MAPPER.writerWithView(view).writeValueAsString(value);
 		} catch (JsonProcessingException e) {
