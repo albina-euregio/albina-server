@@ -26,7 +26,7 @@ public class AvalancheBulletinJsonValidatorTest {
 	@Test
 	public void testValidateAvalancheBulletinValid() throws IOException {
 		final URL resource = Resources.getResource("2019-01-16.json");
-		for (AvalancheBulletin bulletin : AvalancheBulletin.readBulletins(resource)) {
+		for (AvalancheBulletin bulletin : AvalancheBulletin.readBulletinsUsingJackson(resource)) {
 			final String json = JsonUtil.writeValueUsingJackson(bulletin, JsonUtil.Views.Internal.class);
 			Assertions.assertEquals(Set.of(), JsonValidator.validateAvalancheBulletin(json));
 		}

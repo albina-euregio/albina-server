@@ -1041,13 +1041,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), User::new);
 	}
 
-	public static List<AvalancheBulletin> readBulletins(final URL resource) throws IOException {
-		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		final JSONArray array = new JSONArray(validBulletinStringFromResource);
-		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(u -> new AvalancheBulletin(u, User::new))
-				.collect(Collectors.toList());
-	}
-
 	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);

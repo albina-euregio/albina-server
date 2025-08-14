@@ -53,7 +53,7 @@ public class AvalancheReportTest {
 	@Test
 	public void testIsUpdate() throws Exception {
 		Assertions.assertTrue(AvalancheReport.of(bulletins, null, null).isUpdate());
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(Resources.getResource("2019-01-17.json"));
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2019-01-17.json"));
 		Assertions.assertFalse(AvalancheReport.of(bulletins, null, null).isUpdate());
 	}
 
@@ -75,7 +75,7 @@ public class AvalancheReportTest {
 		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/bulletins");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		regionEuregio.setServerInstance(serverInstanceEuregio);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Assertions.assertEquals("16.01.2019, 17:00:00", avalancheReport.getPublicationDate(LanguageCode.de));
