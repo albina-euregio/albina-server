@@ -19,8 +19,6 @@ import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
 
 import eu.albina.exception.AlbinaException;
@@ -628,7 +626,8 @@ public class AvalancheReportController {
 
 		for (Region region : regions) {
 			// get bulletins for this region
-			List<AvalancheBulletin> publishedBulletinsForRegion = getPublishedBulletinsForRegion(date, region);
+			AvalancheReport report = getPublicReport(date, region);
+			List<AvalancheBulletin> publishedBulletinsForRegion = report.getPublishedBulletins();
 			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
 				if (resultMap.containsKey(bulletin.getId())) {
 					boolean match = false;
@@ -684,38 +683,6 @@ public class AvalancheReportController {
 			.filter(report -> report.getStatus() == BulletinStatus.published || report.getStatus() == BulletinStatus.republished)
 			.map(AbstractPersistentObject::getId)
 			.collect(Collectors.toList());
-	}
-
-	/**
-	 * Return all published bulletins for a specific time period and region.
-	 *
-	 * @param date
-	 *            start of the time period
-	 * @param endDate
-	 *            end of the time period
-	 * @param region
-	 *            the region of interest
-	 * @return all published bulletins for a specific time period and region
-	 */
-	private List<AvalancheBulletin> getPublishedBulletinsForRegion(Instant date, Region region) {
-		// get report for date and region
-		AvalancheReport report = getPublicReport(date, region);
-
-		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-		if (report != null
-				&& (report.getStatus() == BulletinStatus.published || report.getStatus() == BulletinStatus.republished)
-				&& report.getJsonString() != null) {
-			JSONArray jsonArray = new JSONArray(report.getJsonString());
-			for (Object object : jsonArray)
-				if (object instanceof JSONObject) {
-					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
-					// only add bulletins with published regions
-					if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
-						results.add(bulletin);
-				}
-		}
-
-		return results;
 	}
 
 	/**

@@ -6,11 +6,11 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
@@ -398,7 +398,7 @@ public class AvalancheBulletinService {
 		try {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			ZonedDateTime publicationDate = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-			List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString).stream()
+			List<AvalancheBulletin> bulletins = Arrays.stream(JsonUtil.parseUsingJackson(bulletinsString, AvalancheBulletin[].class))
 				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
 				.sorted()
 				.collect(Collectors.toList());
@@ -478,8 +478,8 @@ public class AvalancheBulletinService {
 					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
 					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-						JSONObject bulletinJson = new JSONObject(bulletinString);
-						AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, u -> entityManager.find(User.class, u));
+						AvalancheBulletin bulletin = JsonUtil.parseUsingJackson(bulletinString, AvalancheBulletin.class);
+						loadUser(entityManager, bulletin);
 						AvalancheBulletinController.getInstance().updateBulletin(bulletin, startDate, endDate, region, user, entityManager);
 					} else
 						throw new AlbinaException("User is not authorized for this region!");
@@ -490,6 +490,12 @@ public class AvalancheBulletinService {
 					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 				}
 			});
+		}
+	}
+
+	private static void loadUser(EntityManager entityManager, AvalancheBulletin bulletin) {
+		if (bulletin.getUser() != null && bulletin.getUser().getEmail() != null) {
+			bulletin.setUser(entityManager.find(User.class, bulletin.getUser().getEmail()));
 		}
 	}
 
@@ -517,8 +523,8 @@ public class AvalancheBulletinService {
 					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
 					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-						JSONObject bulletinJson = new JSONObject(bulletinString);
-						AvalancheBulletin bulletin = new AvalancheBulletin(bulletinJson, u -> entityManager.find(User.class, u));
+						AvalancheBulletin bulletin = JsonUtil.parseUsingJackson(bulletinString, AvalancheBulletin.class);
+						loadUser(entityManager, bulletin);
 						Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
 							.createBulletin(bulletin, startDate, endDate, region, entityManager);
 						AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user, entityManager);
@@ -600,7 +606,11 @@ public class AvalancheBulletinService {
 				Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 				if (region != null && user.hasPermissionForRegion(region.getId())) {
-					List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
+					List<AvalancheBulletin> bulletins = List.of(JsonUtil.parseUsingJackson(bulletinsString, AvalancheBulletin[].class));
+					HibernateUtil.getInstance().run(entityManager -> {
+						bulletins.forEach(b -> loadUser(entityManager, b));
+						return null;
+					});
 					AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
 				} else
 					throw new AlbinaException("User is not authorized for this region!");
@@ -612,14 +622,6 @@ public class AvalancheBulletinService {
 				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 			}
 		}
-	}
-
-	private static List<AvalancheBulletin> getAvalancheBulletins(String bulletinsString) {
-		JSONArray bulletinsJson = new JSONArray(bulletinsString);
-		return IntStream.range(0, bulletinsJson.length())
-			.mapToObj(bulletinsJson::getJSONObject)
-			.map(bulletinJson -> new AvalancheBulletin(bulletinJson, UserController.getInstance()::getUser))
-			.collect(Collectors.toList());
 	}
 
 	@POST
@@ -647,7 +649,8 @@ public class AvalancheBulletinService {
 				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
 
 				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted)) {
-					List<AvalancheBulletin> bulletins = getAvalancheBulletins(bulletinsString);
+					List<AvalancheBulletin> bulletins = List.of(JsonUtil.parseUsingJackson(bulletinsString, AvalancheBulletin[].class));
+
 					AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
 
 					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime

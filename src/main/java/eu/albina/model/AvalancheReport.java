@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -35,6 +37,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 import eu.albina.model.enumerations.BulletinStatus;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class holds all information about one avalanche report.
@@ -129,6 +132,22 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		avalancheReport.setRegion(region);
 		avalancheReport.setBulletins(bulletins); // after region
 		return avalancheReport;
+	}
+
+	@JsonIgnore
+	public List<AvalancheBulletin> getPublishedBulletins() {
+		if (getStatus() != BulletinStatus.published && getStatus() != BulletinStatus.republished) {
+			LoggerFactory.getLogger(AvalancheReport.class).warn("Report has not been published!");
+			return List.of();
+		}
+		if (getJsonString() == null || getJsonString().isEmpty()) {
+			LoggerFactory.getLogger(AvalancheReport.class).warn("JSON string empty: {}, {}", getDate(), getRegion());
+			return List.of();
+		}
+		return Arrays.stream(JsonUtil.parseUsingJackson(getJsonString(), AvalancheBulletin[].class))
+			// only add bulletins with published regions
+			.filter(bulletin -> bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
+			.collect(Collectors.toList());
 	}
 
 	public void createJsonFile() throws IOException {
