@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -775,8 +776,8 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				JSONArray result = AvalancheBulletinController.getInstance().checkBulletins(startDate, endDate, region);
-				return Response.ok(result.toString(), MediaType.APPLICATION_JSON).build();
+				Set<String> result = AvalancheBulletinController.getInstance().checkBulletins(startDate, endDate, region);
+				return Response.ok(result, MediaType.APPLICATION_JSON).build();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
