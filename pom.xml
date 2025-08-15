@@ -219,12 +219,6 @@
 
 		<!-- JSON -->
 		<dependency>
-			<groupId>com.github.openjson</groupId>
-			<artifactId>openjson</artifactId>
-			<version>1.0.12</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.networknt</groupId>
 			<artifactId>json-schema-validator</artifactId>
 			<version>1.5.8</version>
