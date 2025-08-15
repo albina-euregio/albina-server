@@ -316,9 +316,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.skyscreamer</groupId>
-			<artifactId>jsonassert</artifactId>
-			<version>1.5.3</version>
+			<groupId>net.javacrumbs.json-unit</groupId>
+			<artifactId>json-unit</artifactId>
+			<version>4.1.1</version>
 			<scope>test</scope>
 		</dependency>
 

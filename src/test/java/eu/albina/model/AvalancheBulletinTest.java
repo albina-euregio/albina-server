@@ -3,11 +3,11 @@ package eu.albina.model;
 
 import com.google.common.io.Resources;
 import eu.albina.util.JsonUtil;
-import org.json.JSONException;
+import net.javacrumbs.jsonunit.JsonAssert;
+import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +18,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AvalancheBulletinTest {
+
+	@BeforeEach
+	void setUp() {
+		JsonAssert.setOptions(Option.IGNORING_ARRAY_ORDER, Option.IGNORING_EXTRA_FIELDS);
+	}
 
 	@Test
 	public void testCreateObjectFromJSONAndBack1() throws Exception {
@@ -44,11 +49,11 @@ public class AvalancheBulletinTest {
 		runTest(Resources.getResource("2025-03-14.internal.json"), JsonUtil.Views.Internal.class);
 	}
 
-	private static void runTest(URL bulletin, Class<?> view) throws IOException, JSONException {
+	private static void runTest(URL bulletin, Class<?> view) throws IOException {
 		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
 		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletinsUsingJackson(bulletin);
 		String actual3 = JsonUtil.writeValueUsingJackson(avalancheBulletins, view);
-		JSONAssert.assertEquals(expected, actual3, JSONCompareMode.NON_EXTENSIBLE);
+		JsonAssert.assertJsonEquals(expected, actual3);
 	}
 
 	@Test
