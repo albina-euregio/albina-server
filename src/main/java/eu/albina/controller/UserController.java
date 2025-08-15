@@ -3,20 +3,12 @@ package eu.albina.controller;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.openjson.JSONArray;
 
 import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import eu.albina.exception.AlbinaException;
-import eu.albina.model.Region;
 import eu.albina.model.User;
-import eu.albina.model.UserRegionRoleLink;
-import eu.albina.model.enumerations.Role;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -60,8 +52,8 @@ public class UserController {
 		return HibernateUtil.getInstance().run(entityManager -> entityManager.find(User.class, username) != null);
 	}
 
-	public User updateUser(User user) throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+	public void updateUser(User user) throws AlbinaException {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User originalUser = entityManager.find(User.class, user.getEmail());
 			if (originalUser == null) {
 				throw new HibernateException("No user with username: " + user.getEmail());
@@ -74,7 +66,7 @@ public class UserController {
 			originalUser.setLanguage(user.getLanguage());
 			entityManager.persist(originalUser);
 
-			return user;
+			return null;
 		});
 	}
 
@@ -105,66 +97,28 @@ public class UserController {
 			entityManager.createQuery(HibernateUtil.queryGetUsers, User.class).getResultList());
 	}
 
-	public JSONArray getUsersJson() throws AlbinaException {
-		List<User> users = this.getUsers();
-		if (users != null) {
-			JSONArray jsonResult = new JSONArray();
-			users.stream().filter(user -> !user.isDeleted()).forEach(user -> {
-				try {
-					jsonResult.put(user.toMediumJSON());
-				} catch (JsonProcessingException e) {
-					throw new RuntimeException(e);
-				}
-			});
-
-			return jsonResult;
-		} else
-			throw new AlbinaException("Users could not be loaded!");
-	}
-
-	public JSONArray getRolesJson() throws AlbinaException {
-		List<String> roles = Stream.of(Role.values())
-                               .map(Enum::name)
-                               .collect(Collectors.toList());
-		if (roles != null) {
-			JSONArray jsonResult = new JSONArray();
-			for (String role : roles)
-				jsonResult.put(role);
-
-			return jsonResult;
-		} else
-			throw new AlbinaException("Roles could not be loaded!");
-	}
-
 	/**
 	 * Save a {@code user} to the database.
 	 *
-	 * @param user
-	 *            the user to be saved
-	 * @return the email address of the saved user
+	 * @param user the user to be saved
 	 */
-	public Serializable createUser(User user) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+	public void createUser(User user) {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			entityManager.persist(user);
-			return user.getEmail();
+			return null;
 		});
 	}
 
 	/**
 	 * Change the password of a user.
 	 *
-	 * @param username
-	 *            the username of the user whose password should be changed
-	 * @param oldPassword
-	 *            the old password
-	 * @param newPassword
-	 *            the new password
-	 * @return the email address of the user whose password was changed
-	 * @throws AlbinaException
-	 *             if the user does not exist or the password is wrong
+	 * @param username    the username of the user whose password should be changed
+	 * @param oldPassword the old password
+	 * @param newPassword the new password
+	 * @throws AlbinaException if the user does not exist or the password is wrong
 	 */
-	public Serializable changePassword(String username, String oldPassword, String newPassword) throws AlbinaException {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
+	public void changePassword(String username, String oldPassword, String newPassword) throws AlbinaException {
+		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			User user = entityManager.find(User.class, username);
 			if (user == null) {
 				throw new HibernateException("No user with username: " + username);
@@ -174,7 +128,7 @@ public class UserController {
 			} else {
 				throw new HibernateException("Password incorrect");
 			}
-			return user.getEmail();
+			return null;
 		});
 	}
 
@@ -245,17 +199,6 @@ public class UserController {
 			user.setDeleted(true);
 			entityManager.persist(user);
 			return null;
-		});
-	}
-
-	public boolean isUserInRegionRole(String userEmail, String regionId, Role role) {
-		return HibernateUtil.getInstance().run(entityManager -> {
-			Region region = entityManager.find(Region.class, regionId);
-			List<UserRegionRoleLink> links = entityManager.createQuery(HibernateUtil.queryGetUserRegionRoleLinks, UserRegionRoleLink.class)
-				.setParameter("userEmail", userEmail)
-				.setParameter("region", region)
-				.getResultList();
-			return links.stream().anyMatch(link -> link.getRole().equals(role));
 		});
 	}
 }

@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import java.security.Principal;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,10 +14,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import com.github.openjson.JSONObject;
-
 import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
+import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.rest.filter.Secured;
@@ -50,7 +50,9 @@ public class AuthenticationService {
 		public String access_token;
 	}
 
-	static class UserAndToken extends User {
+	static class AuthenticationResponse {
+		public User user;
+		public Set<Region> regions;
 		public String access_token;
 	}
 
@@ -62,7 +64,7 @@ public class AuthenticationService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Authenticate user")
-	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = UserAndToken.class)))
+	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = AuthenticationResponse.class)))
 	public Response login(Credentials credentials) {
 		String username = credentials.username.toLowerCase();
 		String password = credentials.password;
@@ -72,10 +74,12 @@ public class AuthenticationService {
 			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
 
 			User user = UserController.getInstance().getUser(username);
-			JSONObject jsonResult = user.toJSON();
-			jsonResult.put("access_token", accessToken);
+			AuthenticationResponse result = new AuthenticationResponse();
+			result.user = user;
+			result.regions = user.getRegions();
+			result.access_token = accessToken;
 
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			return Response.ok(result, MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
@@ -95,10 +99,9 @@ public class AuthenticationService {
 
 			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
 
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("access_token", accessToken);
-
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			Token jsonResult = new Token();
+			jsonResult.access_token = accessToken;
+			return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
@@ -117,10 +120,9 @@ public class AuthenticationService {
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.put("username", username);
-
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+			Username jsonResult = new Username();
+			jsonResult.username = username;
+			return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
