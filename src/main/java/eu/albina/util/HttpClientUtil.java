@@ -3,8 +3,8 @@ package eu.albina.util;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.ClientRequestFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

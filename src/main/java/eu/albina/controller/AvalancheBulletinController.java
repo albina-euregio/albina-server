@@ -27,7 +27,6 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
@@ -802,7 +801,7 @@ public class AvalancheBulletinController {
 		for (BulletinLock bulletinLock : hits) {
 			bulletinLocks.remove(bulletinLock);
 			bulletinLock.setLock(false);
-			AvalancheBulletinEndpoint.broadcast(bulletinLock);
+			// AvalancheBulletinEndpoint.broadcast(bulletinLock);
 		}
 	}
 

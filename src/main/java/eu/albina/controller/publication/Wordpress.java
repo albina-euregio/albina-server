@@ -5,8 +5,8 @@ import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 import org.apache.commons.text.StringEscapeUtils;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.WebTarget;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;

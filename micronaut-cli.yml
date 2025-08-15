@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: eu.albina
+testFramework: junit
+sourceLanguage: java
+buildTool: maven
+features: [ app-name, data, data-jpa, hibernate-jpa, http-client-test, jackson-databind, jackson-xml, java, java-application, jax-rs, jdbc-hikari, jul-to-slf4j, junit, liquibase, logback, mariadb, maven, maven-enforcer-plugin, micronaut-aot, micronaut-http-validation, openapi, properties, readme, serialization-jackson, shade, static-resources, test-resources, tomcat-server, websocket ]

@@ -4,8 +4,8 @@ package eu.albina.controller.publication;
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.WebTarget;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;

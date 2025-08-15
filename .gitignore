@@ -1,15 +1,15 @@
-.classpath
-.project
-.settings/
+Thumbs.db
+.DS_Store
+.gradle
+build/
 target/
-WebContent/
-logs/
-debug-backup*
-org.junit.rules.TemporaryFolder*
-
-# JetBrains IntelliJ
-.idea/
+out/
+.micronaut/
+.idea
 *.iml
 *.ipr
 *.iws
-out/
+.project
+.settings
+.classpath
+.factorypath

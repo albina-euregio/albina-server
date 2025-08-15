@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
@@ -10,22 +9,22 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
-import javax.servlet.annotation.MultipartConfig;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
+import jakarta.ws.rs.FormParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.EntityPart;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.UriInfo;
 
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,12 +69,11 @@ public class MediaFileService {
 		@QueryParam("region") String regionId,
 		@QueryParam("lang") LanguageCode language,
 		@QueryParam("important") boolean important,
-		@FormDataParam("text") String mediaText,
-		@FormDataParam("file") InputStream uploadedInputStream,
-		@FormDataParam("file") FormDataContentDisposition fileDetail,
+		@FormParam("text") String mediaText,
+		@FormParam("file") EntityPart file,
 		@Context SecurityContext securityContext) {
 		try {
-			logger.info("Saving media file: {} (size={}, type={})", fileDetail.getFileName(), fileDetail.getSize(), fileDetail.getType());
+			logger.info("Saving media file: {} (size={}, type={})", file.getFileName(), 0, file.getMediaType());
 
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
@@ -94,7 +92,7 @@ public class MediaFileService {
 			// save mp3 file
 			String mp3FileName = getMediaFileName(dateString, user, language, ".mp3");
 			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
-			Files.copy(uploadedInputStream, mp3File, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(file.getContent(), mp3File, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 			logger.info("{} successfully uploaded to: {}", mp3FileName, mp3File);
 
 			// save text file

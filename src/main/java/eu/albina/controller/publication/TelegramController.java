@@ -11,10 +11,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 import org.hibernate.HibernateException;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
@@ -26,11 +22,11 @@ import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HibernateUtil;
 
 import jakarta.persistence.PersistenceException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 public interface TelegramController {
 	Logger logger = LoggerFactory.getLogger(TelegramController.class);

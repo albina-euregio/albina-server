@@ -22,7 +22,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
-import javax.ws.rs.client.Client;
+import jakarta.ws.rs.client.Client;
 
 public interface BlogController {
 	Logger logger = LoggerFactory.getLogger(BlogController.class);

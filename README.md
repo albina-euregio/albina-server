@@ -1,91 +1,63 @@
-# albina-server
+## Micronaut 4.9.2 Documentation
 
-The server stores and processes all relevant information for the ALBINA system such as bulletins.
+- [User Guide](https://docs.micronaut.io/4.9.2/guide/index.html)
+- [API Reference](https://docs.micronaut.io/4.9.2/api/index.html)
+- [Configuration Reference](https://docs.micronaut.io/4.9.2/guide/configurationreference.html)
+- [Micronaut Guides](https://guides.micronaut.io/index.html)
+---
 
-## Bulletin status/workflow
+- [Micronaut Maven Plugin documentation](https://micronaut-projects.github.io/micronaut-maven-plugin/latest/)
+## Feature liquibase documentation
 
-```mermaid
-flowchart TD
-    missing --> |edit| draft
-    draft --> |submit| submitted
-    submitted --> |edit| draft
-    submitted --> |publish, automated publication at 5PM| published
-    published --> |edit| updated
-    updated --> |submit| resubmitted
-    resubmitted --> |edit| updated
-    resubmitted --> |publish, automated update at 8AM or manually at any time| republished
-    republished --> |edit| updated
-```
+- [Micronaut Liquibase Database Migration documentation](https://micronaut-projects.github.io/micronaut-liquibase/latest/guide/index.html)
 
-## Translations
-
-This project uses Transifex for its translations: https://app.transifex.com/albina-euregio/albina-server/dashboard/
+- [https://www.liquibase.org/](https://www.liquibase.org/)
 
 
-## Database Migrations
-Database migrations are handled by Liquibase. To activate automatic deployment of new changesets,
-make sure that you have the environment variable
-`ALBINA_DB_RUN_MIGRATION` set to `true`.
+## Feature tomcat-server documentation
 
-### Liquibase for Automatic Database Migrations
+- [Micronaut Tomcat Server documentation](https://micronaut-projects.github.io/micronaut-servlet/latest/guide/index.html#tomcat)
 
-1. Apply appropriate hibernate annotations in Java source
-2. Generate liquibase changesets (Note: You can also skip steps ii. and iii. and just write the changeset yourself):
-   1. extend `resources/hibernate.cfg.xml` if necessary
-   2. `mvn compile`
-   3. `mvn liquibase:diff` --> this generates the file `resourcees/db/generated_changelog.mariadb.sql`
-   4. check the contents of the file and adapt if necessary. Once you are satisfied, rename it, update the lines `-- changeset albina:000_000000 failOnError:true` accordingly, and move into appropriate sub-folder under `resources/db`
-3. Deploy changesets in your local test environment:
-   1. run `mvn compile` followed by `mvn liquibase:update`, or,
-   2. check that `ALBINA_DB_RUN_MIGRATION=true` and start local server with `mvn jetty:run`
-4. Commit changes to Java source and liquibase changesets together.
 
-### Tips
-- If you only want changes for a specific table of the database you can use `diffIncludeObjects`. E.g.
-` mvn liquibase:diff -Dliquibase.diffIncludeObjects="regions"`
-- similarly, `diffExcludeObjects` can be used to ignore tables
-- use `mvn liquibase:status` to check what changes will be applied before you run `mvn liquibase:update`
-- The JPA Buddy plugin for Intellij (Ultimate) provides nice GUI features for automatic changeset generation.
-  You can specify a connection to your development database and it will detect when columns are missing and automatically
-  suggest to generate changesets.
-- It is a best practice to specify only one type of change per changeset. Doing so avoids failed auto-commit statements
-that can leave the database in an unexpected state. When you deploy your changes, each changeset either succeeds or fails;
+## Feature maven-enforcer-plugin documentation
 
-## Update CHANGELOG (for new releases)
+- [https://maven.apache.org/enforcer/maven-enforcer-plugin/](https://maven.apache.org/enforcer/maven-enforcer-plugin/)
 
-[git-cliff](https://git-cliff.org/docs/) needs to be installed on your system.
 
-Please use the following workflow when releasing new versions:
+## Feature jul-to-slf4j documentation
 
-1. determine new version number `<TAG>` and
-   run `git-cliff -u -p CHANGELOG.md -t <TAG>`
-2. edit `CHANGELOG.md` by hand if necessary and commit
-3. create `<TAG>` with git
+- [https://www.slf4j.org/legacy.html#jul-to-slf4jBridge](https://www.slf4j.org/legacy.html#jul-to-slf4jBridge)
 
-If you forgot to update the changelog before creating a new tag in git, use
-`git-cliff -l -p CHANGELOG.md`. This will add all commits for the
-**latest** tag to the CHANGELOG. The downside compared to the workflow above is, that the
-changes to CHANGELOG itself are not included in the release.
 
-If there have been several new releases since the last update to CHANGELOG,
-use e.g. `git-cliff -p CHANGELOG.md v7.0.6..` to prepend all changes that
-happened *after* version v7.0.6 was released.
+## Feature jdbc-hikari documentation
 
-## Development Setup
+- [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
 
-The `env-local` profile defined in _pom.xml_ is used to configure the server for local development.
-Follow these steps to set up and run the server locally.
 
-1. Ensure that a database with the appropriate schema and entries is accessible on port 3306. If the database is hosted remotely and requires an SSH tunnel, use the following command to set up the connection:
+## Feature serialization-jackson documentation
 
-```bash
-ssh example-server -L 3306:localhost:3306
-```
+- [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
 
-2. Start the server:
 
-```bash
-mvn jetty:run
-```
+## Feature micronaut-aot documentation
 
-3. Once the server is running, you can access and test the API by navigating to: http://0.0.0.0:8080/albina/
+- [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
+
+
+## Feature jackson-xml documentation
+
+- [Micronaut Jackson XML serialization/deserialization documentation](https://micronaut-projects.github.io/micronaut-jackson-xml/latest/guide/index.html)
+
+- [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
+
+
+## Feature jax-rs documentation
+
+- [Micronaut JAX-RS support documentation](https://micronaut-projects.github.io/micronaut-jaxrs/latest/guide/index.html)
+
+
+## Feature hibernate-jpa documentation
+
+- [Micronaut Hibernate JPA documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#hibernate)
+
+

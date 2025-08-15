@@ -29,7 +29,6 @@ import eu.albina.model.BulletinUpdate;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
@@ -414,7 +413,7 @@ public class AvalancheReportController {
 		entityManager.persist(avalancheReport);
 
 		BulletinUpdate bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
-		AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+		// AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
 		logger.info("Report for region {} saved by {}", region.getId(), user);
 	}
