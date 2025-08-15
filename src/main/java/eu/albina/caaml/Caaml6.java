@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.logging.log4j.util.Strings;
+import com.google.common.base.Strings;
 import org.caaml.v6.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -50,7 +50,7 @@ public interface Caaml6 {
 		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
 		// TODO (general-headline): insert conditional - only set general headline if activated in backend
 		String generalHeadline = avalancheReport.getGeneralHeadline(lang);
-		if (Strings.isNotEmpty(generalHeadline)) {
+		if (!Strings.isNullOrEmpty(generalHeadline)) {
 			bulletins.setCustomData(new AvalancheBulletinsCustomData(
 				new AvalancheBulletinsCustomData.ALBINA(generalHeadline)
 			));
