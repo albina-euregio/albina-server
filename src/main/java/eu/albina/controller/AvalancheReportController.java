@@ -627,6 +627,9 @@ public class AvalancheReportController {
 		for (Region region : regions) {
 			// get bulletins for this region
 			AvalancheReport report = getPublicReport(date, region);
+			if (report == null) {
+				continue;
+			}
 			List<AvalancheBulletin> publishedBulletinsForRegion = report.getPublishedBulletins();
 			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
 				if (resultMap.containsKey(bulletin.getId())) {
