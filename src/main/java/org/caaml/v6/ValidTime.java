@@ -15,9 +15,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
  */
 @JsonPropertyOrder({"startTime", "endTime"})
 public class ValidTime {
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(as = String.class)
     private Instant endTime;
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(as = String.class)
     private Instant startTime;
 
 	public ValidTime() {

@@ -72,8 +72,7 @@ public class User implements NameAndEmail {
 	 joinColumns=@JoinColumn(name="USER_EMAIL"),
 	 inverseJoinColumns=@JoinColumn(name="REGION_ID")
 	)
-	@JsonSerialize(contentUsing = Region.RegionSerializer.class)
-	@JsonDeserialize(contentUsing = Region.RegionDeserializer.class)
+	@JsonSerialize(as = PersistentObject.class)
 	private Set<Region> regions = new HashSet<Region>();
 
 	/** Image of the user **/

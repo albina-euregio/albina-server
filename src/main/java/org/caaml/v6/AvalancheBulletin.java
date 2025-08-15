@@ -29,10 +29,10 @@ public class AvalancheBulletin {
 	@JacksonXmlProperty(isAttribute = true)
     private String lang;
     private MetaData metaData;
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(as = String.class)
 	@JacksonXmlProperty(localName = "nextUpdate")
     private Instant nextUpdate;
-	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonSerialize(as = String.class)
 	@JacksonXmlProperty(localName = "publicationTime")
 	private Instant publicationTime;
 	@JacksonXmlElementWrapper(useWrapping = false)

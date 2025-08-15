@@ -517,7 +517,7 @@ public class AvalancheReportController {
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
-			AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+			// AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 
 			logger.info("Report for region {} published by {}", region.getId(), user);
 
@@ -598,7 +598,7 @@ public class AvalancheReportController {
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
 
 			if (bulletinUpdate != null) {
-				AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
+				// AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
 			}
 
 			logger.info("Report for region {} submitted by {}", region.getId(), user);

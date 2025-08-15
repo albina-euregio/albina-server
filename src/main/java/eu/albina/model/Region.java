@@ -55,8 +55,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "regions")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Region.class)
-public class Region {
+public class Region implements PersistentObject {
 
 	static class RegionSerializer extends JsonSerializer<Region> {
 		@Override
