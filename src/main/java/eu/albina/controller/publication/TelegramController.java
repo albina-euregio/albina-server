@@ -4,6 +4,7 @@ package eu.albina.controller.publication;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
@@ -11,6 +12,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import jakarta.ws.rs.core.EntityPart;
+import jakarta.ws.rs.core.GenericEntity;
 import org.hibernate.HibernateException;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
@@ -82,29 +85,29 @@ public interface TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#inputfile">https://core.telegram.org/bots/api#inputfile</a>
 	 */
 	static Response sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
-			throws IOException, HibernateException {
+		throws IOException, HibernateException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending photo {} and message {} to telegram channel using config {}", attachmentUrl, message, config);
 
-		MultiPart multiPart = new FormDataMultiPart();
-		multiPart.bodyPart(new StreamDataBodyPart(
-			"photo",
-			new URL(attachmentUrl).openStream(),
-			attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1),
-			MediaType.APPLICATION_OCTET_STREAM_TYPE));
+		List<EntityPart> parts = List.of(
+			EntityPart.withName("photo")
+				.fileName(attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1))
+				.content(new URL(attachmentUrl).openStream())
+				.mediaType(MediaType.APPLICATION_OCTET_STREAM_TYPE).build()
+		);
+		GenericEntity<List<EntityPart>> multiPart = new GenericEntity<>(parts) {
+		};
 
 		Response response = HttpClientUtil
 			.newClientBuilder(80000) // sending photos may a while
-			.register(MultiPartFeature.class)
 			.build()
 			.target(String.format("https://api.telegram.org/bot%s/sendPhoto", apiToken))
-			.register(MultiPartFeature.class)
 			.queryParam("chat_id", chatId)
 			.queryParam("caption", message)
 			.request()
-			.post(Entity.entity(multiPart, multiPart.getMediaType()));
+			.post(Entity.entity(multiPart, MediaType.MULTIPART_FORM_DATA));
 
 		if (response.getStatusInfo().getStatusCode() != 200) {
 			// FIXME throw exception?
