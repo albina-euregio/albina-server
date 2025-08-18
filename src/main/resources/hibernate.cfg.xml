@@ -20,7 +20,6 @@
 		<mapping class="eu.albina.model.AvalancheBulletinDaytimeDescription"/>
 		<mapping class="eu.albina.model.AvalancheBulletin"/>
 		<mapping class="eu.albina.model.AvalancheReport"/>
-		<mapping class="eu.albina.model.ChatMessage"/>
 		<mapping class="eu.albina.model.DangerSource"/>
 		<mapping class="eu.albina.model.DangerSourceVariant"/>
 		<mapping class="eu.albina.model.DangerSourceVariantText"/>
