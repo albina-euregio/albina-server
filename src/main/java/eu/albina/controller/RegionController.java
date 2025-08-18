@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.RegionLock;
-import eu.albina.rest.websocket.RegionEndpoint;
 import eu.albina.util.HibernateUtil;
 
 /**
@@ -160,23 +159,6 @@ public class RegionController {
 			regionLocks.remove(hit);
 		else
 			throw new AlbinaException("Region not locked!");
-	}
-
-	/**
-	 * Unlock all regions locked by a specific {@code sessionId}.
-	 *
-	 * @param sessionId
-	 *            the session id
-	 */
-	public void unlockRegions(String sessionId) {
-		List<RegionLock> hits = regionLocks.stream()
-			.filter(regionLock -> Objects.equals(regionLock.getSessionId(), sessionId))
-			.collect(Collectors.toList());
-		for (RegionLock regionLock : hits) {
-			regionLocks.remove(regionLock);
-			regionLock.setLock(false);
-			RegionEndpoint.broadcast(regionLock);
-		}
 	}
 
 	/**
