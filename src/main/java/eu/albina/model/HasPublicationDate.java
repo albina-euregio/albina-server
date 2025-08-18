@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.albina.model.enumerations.LanguageCode;
 
 public interface HasPublicationDate {
@@ -20,11 +21,13 @@ public interface HasPublicationDate {
 		return lang.getDateTime(dateTime);
 	}
 
+	@JsonIgnore
 	default String getPublicationTimeString() {
 		DateTimeFormatter formatterPublicationTime = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss").withZone(ZoneId.of("UTC"));
 		return getPublicationDate().withZoneSameInstant(ZoneId.of("UTC")).format(formatterPublicationTime);
 	}
 
+	@JsonIgnore
 	default boolean isUpdate() {
 		LocalTime localTime = getPublicationDate().withZoneSameInstant(localZone()).toLocalTime();
 		return !LocalTime.of(17, 0).equals(localTime);

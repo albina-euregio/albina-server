@@ -15,7 +15,6 @@ import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.JsonUtil;
 import eu.albina.util.PdfUtil;
 import eu.albina.util.SimpleHtmlUtil;
 import eu.albina.util.TextToSpeech;
@@ -97,7 +96,7 @@ public class PublicationController {
 	public void createJson(AvalancheReport avalancheReport) {
 		try {
 			logger.info("JSON production for {} started", avalancheReport);
-			JsonUtil.createJsonFile(avalancheReport);
+			avalancheReport.createJsonFile();
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setJsonCreated);
 			logger.info("JSON production for {} finished", avalancheReport);

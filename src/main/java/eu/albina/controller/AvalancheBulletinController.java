@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,8 +18,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.openjson.JSONArray;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AbstractPersistentObject;
@@ -672,11 +671,11 @@ public class AvalancheBulletinController {
 	 *            the end date of the time period
 	 * @param region
 	 *            the region of interest
-	 * @return a JSON array containing all warnings (empty if no warning was found)
+	 * @return a set containing all warnings (empty if no warning was found)
 	 */
-	public JSONArray checkBulletins(Instant startDate, Instant endDate, Region region) {
+	public Set<String> checkBulletins(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			JSONArray json = new JSONArray();
+			Set<String> json = new LinkedHashSet<>();
 			boolean missingAvActivityHighlights = false;
 			boolean missingAvActivityComment = false;
 			boolean missingSnowpackStructureHighlights = false;
@@ -693,7 +692,7 @@ public class AvalancheBulletinController {
 			// select bulletins within the region
 
 			if (checkBulletinsForDuplicateRegion(bulletins, region))
-				json.put("duplicateRegion");
+				json.add("duplicateRegion");
 
 			Set<String> definedRegions = new HashSet<String>();
 			for (AvalancheBulletin bulletin : results) {
@@ -735,19 +734,19 @@ public class AvalancheBulletinController {
 			}
 
 			if (definedRegions.size() < region.getMicroRegions())
-				json.put("missingRegion");
+				json.add("missingRegion");
 			if (missingAvActivityHighlights)
-				json.put("missingAvActivityHighlights");
+				json.add("missingAvActivityHighlights");
 			if (missingAvActivityComment)
-				json.put("missingAvActivityComment");
+				json.add("missingAvActivityComment");
 			if (missingSnowpackStructureHighlights)
-				json.put("missingSnowpackStructureHighlights");
+				json.add("missingSnowpackStructureHighlights");
 			if (missingSnowpackStructureComment)
-				json.put("missingSnowpackStructureComment");
+				json.add("missingSnowpackStructureComment");
 			if (pendingSuggestions)
-				json.put("pendingSuggestions");
+				json.add("pendingSuggestions");
 			if (missingDangerRating)
-				json.put("missingDangerRating");
+				json.add("missingDangerRating");
 
 			return json;
 		});

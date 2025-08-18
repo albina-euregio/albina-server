@@ -51,7 +51,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("2019-01-17.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
@@ -61,7 +61,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlStringTyrol() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("2019-01-17.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		final List<AvalancheBulletin> bulletinsTyrol = bulletins.stream()
 			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(regionTyrol))
 			.collect(Collectors.toList());
@@ -74,7 +74,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.ca);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
@@ -84,7 +84,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlStringAranDaytimeDependency() throws Exception {
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String html = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.en);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.simple.html"), StandardCharsets.UTF_8);

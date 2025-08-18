@@ -32,6 +32,7 @@
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<param-value>
 				eu.albina.rest
+				eu.albina.rest.websocket
 				io.swagger.v3.jaxrs2.integration.resources
 			</param-value>
 		</init-param>

@@ -16,8 +16,6 @@ import javax.ws.rs.core.Variant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONObject;
-
 import ch.rasc.webpush.CryptoService;
 import ch.rasc.webpush.PushController;
 import ch.rasc.webpush.ServerKeys;
@@ -31,6 +29,8 @@ import eu.albina.model.Region;
 import eu.albina.model.publication.PushConfiguration;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.HttpClientUtil;
+import eu.albina.util.JsonUtil;
+
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -48,13 +48,27 @@ public class PushNotificationUtil {
 		this.client = client;
 	}
 
-	public void send(MultichannelMessage posting) {
-		final JSONObject payload = new JSONObject();
-		payload.put("title", posting.getWebsiteName());
-		payload.put("body", posting.getSocialMediaText());
-		payload.put("image", posting.getAttachmentUrl());
-		payload.put("url", posting.getWebsiteUrl());
+	public static class Message {
+		public final String title;
+		public final String body;
+		public final String image;
+		public final String url;
 
+		public Message(String title, String body, String image, String url) {
+			this.title = title;
+			this.body = body;
+			this.image = image;
+			this.url = url;
+		}
+	}
+
+	public void send(MultichannelMessage posting) {
+		Message payload = new Message(
+			posting.getWebsiteName(),
+			posting.getSocialMediaText(),
+			posting.getAttachmentUrl(),
+			posting.getWebsiteUrl()
+		);
         List<PushSubscription> subscriptions = PushSubscriptionController.get(posting.getLanguageCode(), Collections.singleton(posting.getRegion().getId()));
         logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), posting.getLanguageCode(), posting.getRegion(), payload);
         for (PushSubscription subscription : subscriptions) {
@@ -63,10 +77,13 @@ public class PushNotificationUtil {
     }
 
 	public void sendWelcomePushMessage(PushSubscription subscription) {
-		final JSONObject payload = new JSONObject();
 		Region region = RegionController.getInstance().getRegion(subscription.getRegion());
-		payload.put("title", region.getWebsiteName(subscription.getLanguage()));
-		payload.put("body", "Hello World!");
+		Message payload = new Message(
+			region.getWebsiteName(subscription.getLanguage()),
+			"Hello World!",
+			null,
+			null
+		);
 		sendPushMessage(subscription, payload, null);
 	}
 
@@ -85,7 +102,7 @@ public class PushNotificationUtil {
 		});
 	}
 
-	public void sendPushMessage(PushSubscription subscription, JSONObject payload, ServerKeys serverKeys) {
+	public void sendPushMessage(PushSubscription subscription, Object payload, ServerKeys serverKeys) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
 			if (serverKeys == null) {
@@ -94,7 +111,8 @@ public class PushNotificationUtil {
 			}
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
-			final byte[] encrypted = new CryptoService().encrypt(payload.toString(), subscriptionKeys, 0);
+			final String json = JsonUtil.writeValueUsingJackson(payload);
+			final byte[] encrypted = new CryptoService().encrypt(json, subscriptionKeys, 0);
 			final URI endpointURI = URI.create(subscription1.getEndpoint());
 			final Invocation.Builder builder = client.target(endpointURI).request();
 			builder.header("Content-Type", "application/octet-stream");

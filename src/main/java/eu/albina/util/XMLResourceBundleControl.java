@@ -1,19 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import java.io.BufferedInputStream;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import com.github.openjson.JSONObject;
-import com.google.common.io.Resources;
+import java.util.TreeMap;
 
 public class XMLResourceBundleControl extends ResourceBundle.Control {
 	private static final String XML = "xml";
@@ -25,7 +24,7 @@ public class XMLResourceBundleControl extends ResourceBundle.Control {
 
 	@Override
 	public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
-			throws IllegalAccessException, InstantiationException, IOException {
+		throws IOException {
 
 		if ((baseName == null) || (locale == null) || (format == null) || (loader == null)) {
 			throw new NullPointerException();
@@ -35,38 +34,19 @@ public class XMLResourceBundleControl extends ResourceBundle.Control {
 		}
 
 		if ("micro-regions_names".equals(baseName)) {
-			String resourceName = "micro-regions_names/" + locale + ".json";
-			URL url = loader.getResource(resourceName);
-			if (url == null) {
-				return null;
-			}
-			JSONObject object = new JSONObject(Resources.toString(url, StandardCharsets.UTF_8));
+			URL resource = loader.getResource("micro-regions_names/" + locale + ".json");
+			TreeMap<String, String> strings = new ObjectMapper().readValue(resource, new TypeReference<>() {
+			});
 			XMLResourceBundle bundle = new XMLResourceBundle();
-			object.keySet().forEach(key -> bundle.put(key, object.get(key)));
+			strings.forEach(bundle::put);
 			return bundle;
 		}
 
 		String resourceName = toResourceName(toBundleName(baseName, locale), format);
-		URL url = loader.getResource(resourceName);
-		if (url == null) {
-			return null;
+		try (InputStream stream = loader.getResource(resourceName).openStream()) {
+			XMLResourceBundle bundle = new XMLResourceBundle();
+			bundle.loadFromXML(stream);
+			return bundle;
 		}
-		URLConnection connection = url.openConnection();
-		if (connection == null) {
-			return null;
-		}
-		if (reload) {
-			connection.setUseCaches(false);
-		}
-		InputStream stream = connection.getInputStream();
-		if (stream == null) {
-			return null;
-		}
-		BufferedInputStream bis = new BufferedInputStream(stream);
-		XMLResourceBundle bundle = new XMLResourceBundle();
-		bundle.loadFromXML(stream);
-		bis.close();
-
-		return bundle;
 	}
 }

@@ -74,7 +74,7 @@ public class BlogService {
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -98,7 +98,7 @@ public class BlogService {
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -122,7 +122,7 @@ public class BlogService {
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -146,7 +146,7 @@ public class BlogService {
 			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();

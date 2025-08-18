@@ -19,6 +19,7 @@
     "naturalRelease": "likely",
     "originalDangerSourceVariantId": "originalId",
     "ownerRegion": "AT-07",
+	"penetrateDeepLayers": false,
     "remoteTriggering": "likely",
     "runoutIntoGreen": true,
     "slabDistribution": "widespread",

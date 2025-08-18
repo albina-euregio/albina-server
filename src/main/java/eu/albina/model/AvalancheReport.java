@@ -1,18 +1,27 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.JsonUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,12 +32,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-import com.github.openjson.JSONObject;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 
 import eu.albina.model.enumerations.BulletinStatus;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class holds all information about one avalanche report.
@@ -39,17 +47,20 @@ import eu.albina.model.enumerations.BulletinStatus;
 @Table(name = "avalanche_reports", indexes = {
 	@Index(name = "avalanche_reports_DATE_IDX", columnList = "DATE"),
 })
-public class AvalancheReport extends AbstractPersistentObject implements AvalancheInformationObject, HasValidityDate, HasPublicationDate {
+public class AvalancheReport extends AbstractPersistentObject implements HasValidityDate, HasPublicationDate {
 
 	/**
 	 * Information about the author of the avalanche bulletin
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
+	@JsonSerialize(using = User.UserNameSerializer.class)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
+	@JsonSerialize(using = Region.RegionSerializer.class)
+	@JsonDeserialize(using = Region.RegionDeserializer.class)
 	private Region region;
 
 	@Column(name = "DATE")
@@ -96,6 +107,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 
 	@Lob
 	@Column(name = "JSON_STRING")
+	@JsonIgnore
 	private String jsonString;
 
 	@Transient
@@ -119,6 +131,35 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		avalancheReport.setRegion(region);
 		avalancheReport.setBulletins(bulletins); // after region
 		return avalancheReport;
+	}
+
+	@JsonIgnore
+	public List<AvalancheBulletin> getPublishedBulletins() {
+		if (getStatus() != BulletinStatus.published && getStatus() != BulletinStatus.republished) {
+			LoggerFactory.getLogger(AvalancheReport.class).warn("Report has not been published!");
+			return List.of();
+		}
+		if (getJsonString() == null || getJsonString().isEmpty()) {
+			LoggerFactory.getLogger(AvalancheReport.class).warn("JSON string empty: {}, {}", getDate(), getRegion());
+			return List.of();
+		}
+		return Arrays.stream(JsonUtil.parseUsingJackson(getJsonString(), AvalancheBulletin[].class))
+			// only add bulletins with published regions
+			.filter(bulletin -> bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
+			.collect(Collectors.toList());
+	}
+
+	public void createJsonFile() throws IOException {
+		Path pdfDirectory = getPdfDirectory();
+		Files.createDirectories(pdfDirectory);
+		Path path = pdfDirectory.resolve(getRegion().getId() + ".json");
+		if (getBulletins().isEmpty()) {
+			return;
+		}
+		Region region = getRegion();
+		Collection<AvalancheBulletin> bulletins = getBulletins().stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+		String jsonString = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
+		Files.writeString(path, jsonString, StandardCharsets.UTF_8);
 	}
 
 	public void setBulletins(List<AvalancheBulletin> bulletins) {
@@ -295,14 +336,17 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 		}
 	}
 
+	@JsonIgnore
 	public Path getMapsPath() {
 		return Paths.get(getServerInstance().getMapsPath(), getValidityDateString(), getPublicationTimeString());
 	}
 
+	@JsonIgnore
 	public Path getPdfDirectory() {
 		return Paths.get(getServerInstance().getPdfDirectory(), getValidityDateString(), getPublicationTimeString());
 	}
 
+	@JsonIgnore
 	public Path getHtmlDirectory() {
 		return Paths.get(getServerInstance().getHtmlDirectory(), getValidityDateString());
 	}
@@ -313,52 +357,13 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 			: "";
 	}
 
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		if (!Strings.isNullOrEmpty(id))
-			json.put("id", id);
-
-		if (user != null && !Strings.isNullOrEmpty(user.getName()))
-			json.put("user", user.getName());
-
-		if (region != null && !Strings.isNullOrEmpty(region.getId()))
-			json.put("region", region.getId());
-
-		if (date != null)
-			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));
-
-		if (timestamp != null)
-			json.put("timestamp", DateTimeFormatter.ISO_INSTANT.format(timestamp));
-
-		if (status != null)
-			json.put("status", status.toString());
-
-		json.put("caamlV5Created", caamlV5Created);
-		json.put("caamlV6Created", caamlV6Created);
-		json.put("jsonCreated", jsonCreated);
-		json.put("pdfCreated", pdfCreated);
-		json.put("htmlCreated", htmlCreated);
-		json.put("mapCreated", mapCreated);
-		json.put("emailCreated", emailCreated);
-		json.put("telegramSent", telegramSent);
-		json.put("whatsAppSent", whatsAppSent);
-		json.put("pushSent", pushSent);
-		json.put("mediaFileUploaded", mediaFileUploaded);
-
-		if (jsonString != null)
-			json.put("jsonString", jsonString);
-
-		return json;
-	}
-
 	public boolean hasDaytimeDependency() {
 		return getBulletins().stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 
 
 	@Override
+	@JsonIgnore
 	public LocalDate getValidityDate() {
 		return globalBulletins.stream()
 			.map(AvalancheBulletin::getValidityDate)
@@ -368,6 +373,7 @@ public class AvalancheReport extends AbstractPersistentObject implements Avalanc
 	}
 
 	@Override
+	@JsonIgnore
 	public ZonedDateTime getPublicationDate() {
 		return globalBulletins.stream()
 			.map(AvalancheBulletin::getPublicationDate)

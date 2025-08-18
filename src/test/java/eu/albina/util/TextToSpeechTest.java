@@ -26,7 +26,7 @@ class TextToSpeechTest {
 
 	private static void toCAAMLv6(String bulletinResource) throws Exception {
 		URL resource = Resources.getResource(bulletinResource);
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, null);
 		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
@@ -75,7 +75,7 @@ class TextToSpeechTest {
 	public void test20231201mp3() throws Exception {
 		// GOOGLE_APPLICATION_CREDENTIALS
 		URL resource = Resources.getResource("2023-12-01.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(resource);
+		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.de);
 		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().get(0);
