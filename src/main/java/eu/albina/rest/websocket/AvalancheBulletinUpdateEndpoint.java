@@ -1,73 +1,59 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest.websocket;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-import javax.websocket.EncodeException;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
+import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.websocket.WebSocketSession;
+import io.micronaut.websocket.annotation.OnClose;
+import io.micronaut.websocket.annotation.OnError;
+import io.micronaut.websocket.annotation.OnMessage;
+import io.micronaut.websocket.annotation.OnOpen;
+import io.micronaut.websocket.annotation.ServerWebSocket;
+import io.micronaut.websocket.exceptions.WebSocketSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.BulletinUpdate;
 
-@ServerEndpoint(value = "/update/{username}", decoders = AvalancheBulletinUpdateEndpoint.BulletinUpdateDecoder.class, encoders = AvalancheBulletinUpdateEndpoint.BulletinUpdateEncoder.class)
+@ServerWebSocket(value = "/update/{username}")
 public class AvalancheBulletinUpdateEndpoint {
-
-	public static class BulletinUpdateEncoder extends JsonEncoder<BulletinUpdate> {}
-	public static class BulletinUpdateDecoder extends JsonDecoder<BulletinUpdate> {
-		public BulletinUpdateDecoder() {
-        	super(BulletinUpdate.class);
-    	}	
-	}
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinUpdateEndpoint.class);
 
-	private Session session;
-	private static final Set<AvalancheBulletinUpdateEndpoint> updateEndpoints = new CopyOnWriteArraySet<>();
+	private final ConcurrentMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
 	@OnOpen
-	public void onOpen(Session session, @PathParam("username") String username) {
-		this.session = session;
-		this.session.setMaxIdleTimeout(0); // never timeout due to inactivity
-		updateEndpoints.add(this);
-        logger.info("Client connected: {}", username);
+	public void onOpen(WebSocketSession session, @PathVariable String username) {
+		sessions.put(session.getId(), session);
+		logger.info("Client connected: {}", username);
 	}
 
+
 	@OnMessage
-	public void onMessage(Session session, String lock) {
-		// BulletinUpdate bulletinUpdate = JsonUtil.parseUsingJackson(lock, BulletinUpdate.class);
-		// broadcast(bulletinUpdate);
+	public void onMessage(WebSocketSession session, BulletinUpdate bulletinUpdate) {
+		// Micronaut automatically deserializes JSON into BulletinUpdate
+		broadcast(bulletinUpdate);
 	}
 
 	@OnClose
-	public void onClose(Session session) {
-		updateEndpoints.remove(this);
-        logger.info("Client disconnected: {}", session.getId());
+	public void onClose(WebSocketSession session) {
+		sessions.remove(session.getId());
+		logger.info("Client disconnected: {}", session.getId());
 	}
 
 	@OnError
-	public void onError(Session session, Throwable throwable) {
-		// Do error handling here
-		logger.debug("Bulletin update error", throwable);
+	public void onError(WebSocketSession session, Throwable throwable) {
+		logger.warn("Bulletin update error", throwable);
 	}
 
-	public static void broadcast(BulletinUpdate lock) {
-		updateEndpoints.forEach(endpoint -> {
-			synchronized (endpoint) {
-				try {
-					endpoint.session.getBasicRemote().sendObject(lock);
-				} catch (IOException | EncodeException e) {
-					logger.warn("Broadcasting error", e);
-				}
+	private void broadcast(BulletinUpdate update) {
+		sessions.values().forEach(session -> {
+			try {
+				session.send(update);
+			} catch (WebSocketSessionException e) {
+				logger.warn("Session closed while broadcasting", e);
 			}
 		});
 	}
