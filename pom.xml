@@ -9,7 +9,7 @@
 
 	<parent>
 		<groupId>io.micronaut.platform</groupId>
-		<artifactId>micronaut-parent</artifactId>
+		<artifactId>micronaut-platform</artifactId>
 		<version>4.9.2</version>
 	</parent>
 
@@ -344,10 +344,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.0</version>
 				<configuration>
 					<!-- Uncomment to enable incremental compilation -->
 					<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
-
+					<release>17</release>
 					<annotationProcessorPaths combine.self="override">
 						<path>
 							<groupId>io.micronaut</groupId>
