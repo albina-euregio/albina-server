@@ -76,9 +76,9 @@ public class AvalancheReportTest {
 		Assertions.assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
 		Assertions.assertEquals("2019-01-17", avalancheReport.getValidityDateString());
 		Assertions.assertEquals("2019-01-24", avalancheReport.getValidityDateString(Period.ofDays(7)));
-		Assertions.assertEquals("Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
+		Assertions.assertEquals("Lawinenvorhersage für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		avalancheReport.setStatus(BulletinStatus.republished);
-		Assertions.assertEquals("UPDATE zum Lawinen.report für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
+		Assertions.assertEquals("UPDATE der Lawinenvorhersage für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
 		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", avalancheReport.getRegion().getWebsiteUrlWithDate(LanguageCode.de, avalancheReport));
 		Assertions.assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf", avalancheReport.getRegion().getPdfUrl(LanguageCode.de, avalancheReport));
 		Assertions.assertTrue(avalancheReport.isLatest(

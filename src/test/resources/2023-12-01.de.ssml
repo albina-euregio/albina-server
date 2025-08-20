@@ -3,7 +3,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zur Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
+<p><s>Update der Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
 <p><emphasis><s>Schwacher Altschnee oberhalb von rund 2000 m. Gleitschnee in mittleren Lagen.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -42,7 +42,7 @@ Wir finden die folgenden Gefahrenmuster: gm.4: kalt auf warm / warm auf kalt, gm
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zur Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
+<p><s>Update der Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
 <p><emphasis><s>Mit Neuschnee und Wind steigt die Gefahr im Tagesverlauf allmählich an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -81,7 +81,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zur Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
+<p><s>Update der Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
 <p><emphasis><s>Mit Neuschnee und Wind steigt die Gefahr im Tagesverlauf allmählich an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -120,7 +120,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.4: k
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zur Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
+<p><s>Update der Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
 <p><emphasis><s>Mit Neuschnee und Wind steigt die Gefahr im Tagesverlauf etwas an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -156,7 +156,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zur Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
+<p><s>Update der Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
 <p><emphasis><s>Frischen Triebschnee kritisch beurteilen.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -192,7 +192,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zur Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
+<p><s>Update der Lawinenvorhersage für Freitag, 1. Dezember 2023.</s></p>
 <p><emphasis><s>An allen Expositionen in allen Höhenlagen liegt wenig Schnee. Frischen Triebschnee kritisch beurteilen.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>

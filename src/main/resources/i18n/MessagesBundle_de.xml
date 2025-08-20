@@ -20,9 +20,9 @@
   <entry key="elevation.band">Zwischen {0} und {1}</entry>
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} für {1}: {2}</entry>
-  <entry key="social-media.message.update">UPDATE zur {0} für {1}: {2}</entry>
+  <entry key="social-media.message.update">UPDATE der {0} für {1}: {2}</entry>
   <entry key="headline">Lawinenvorhersage</entry>
-  <entry key="headline.update">UPDATE zur Lawinenvorhersage</entry>
+  <entry key="headline.update">UPDATE der Lawinenvorhersage</entry>
   <entry key="headline.tendency">Tendenz</entry>
   <entry key="headline.synopsis">Wetter</entry>
   <entry key="headline.regions">Regionen</entry>
@@ -34,7 +34,7 @@
   <entry key="email.follow-us">Folge uns</entry>
   <entry key="email.unsubscribe">Abmelden</entry>
   <entry key="email.subject">{0} für {1}, </entry>
-  <entry key="email.subject.update">UPDATE zum {0} für {1}, </entry>
+  <entry key="email.subject.update">UPDATE der {0} für {1}, </entry>
   <entry key="email.imprint">Impressum</entry>
   <entry key="email.media.subject">{0} für {1} von {2}</entry>
   <entry key="email.media.important.subject">WICHTIG {0} für {1} von {2}</entry>
