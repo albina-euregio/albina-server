@@ -14,10 +14,6 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONException;
-import com.github.openjson.JSONObject;
-
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
@@ -115,7 +111,7 @@ public class StatisticsController {
 					endDate, region);
 
 			// get bulletins from report json
-			List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports, lang);
+			List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports);
 
 			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
@@ -148,7 +144,7 @@ public class StatisticsController {
 		return HibernateUtil.getInstance().run(entityManager -> {
 			List<AvalancheBulletin> bulletins = regions.stream()
 				.map(region -> AvalancheReportController.getInstance().getPublicReports(startDate,
-					endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports, lang).stream())
+					endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports).stream())
 				.collect(Collectors.toList());
 			// get latest reports
 			// get bulletins from report json
@@ -202,27 +198,8 @@ public class StatisticsController {
 		return new ArrayList<AvalancheBulletin>(resultMap.values());
 	}
 
-	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports, LanguageCode lang) {
-		List<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>();
-		for (AvalancheReport avalancheReport : reports) {
-			try {
-				if (avalancheReport.getJsonString() == null || avalancheReport.getJsonString().isEmpty()) {
-					logger.warn("JSON string empty: {}, {}", avalancheReport.getDate(), avalancheReport.getRegion());
-				}
-				JSONArray jsonArray = new JSONArray(avalancheReport.getJsonString());
-				for (Object object : jsonArray) {
-					if (object instanceof JSONObject) {
-						AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
-						// only add bulletins with published regions
-						if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
-							bulletins.add(bulletin);
-					}
-				}
-			} catch (JSONException e) {
-				logger.warn("Error parsing report JSON: {}, {}", avalancheReport.getDate(), avalancheReport.getRegion());
-			}
-		}
-		return bulletins;
+	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {
+		return reports.stream().flatMap(r -> r.getPublishedBulletins().stream()).collect(Collectors.toList());
 	}
 
 	/**
@@ -333,7 +310,7 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("ZeroDegreeIsotherm");
 		sb.append(csvDeliminator);
-		
+
 		// SLAB AVALANCHES
 		sb.append("SlabGrainShape");
 		sb.append(csvDeliminator);
@@ -381,7 +358,7 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("terrainTypes");
 		sb.append(csvDeliminator);
-		
+
 		// LOOSE SNOW AVALANCHES
 		sb.append("LooseSnowGrainShape");
 		sb.append(csvDeliminator);

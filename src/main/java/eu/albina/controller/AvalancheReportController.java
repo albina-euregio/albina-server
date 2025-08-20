@@ -19,8 +19,6 @@ import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
 
 import eu.albina.exception.AlbinaException;
@@ -410,8 +408,8 @@ public class AvalancheReportController {
 		avalancheReport.setUser(user);
 		avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
-		avalancheReport
-				.setJsonString(JsonUtil.createJSONString(avalancheBulletins.values(), region, false).toString());
+		Collection<AvalancheBulletin> bulletins = avalancheBulletins.values().stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+		avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Internal.class));
 
 		entityManager.persist(avalancheReport);
 
@@ -515,7 +513,8 @@ public class AvalancheReportController {
 				}
 			}
 
-			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
+			Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+			avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins1, JsonUtil.Views.Internal.class));
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
@@ -593,7 +592,8 @@ public class AvalancheReportController {
 			}
 
 			// set json string after status is published/republished
-			avalancheReport.setJsonString(JsonUtil.createJSONString(bulletins, region, false).toString());
+			Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+			avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins1, JsonUtil.Views.Internal.class));
 
 			entityManager.persist(avalancheReport);
 			bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
@@ -626,7 +626,11 @@ public class AvalancheReportController {
 
 		for (Region region : regions) {
 			// get bulletins for this region
-			List<AvalancheBulletin> publishedBulletinsForRegion = getPublishedBulletinsForRegion(date, region);
+			AvalancheReport report = getPublicReport(date, region);
+			if (report == null) {
+				continue;
+			}
+			List<AvalancheBulletin> publishedBulletinsForRegion = report.getPublishedBulletins();
 			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
 				if (resultMap.containsKey(bulletin.getId())) {
 					boolean match = false;
@@ -685,38 +689,6 @@ public class AvalancheReportController {
 	}
 
 	/**
-	 * Return all published bulletins for a specific time period and region.
-	 *
-	 * @param date
-	 *            start of the time period
-	 * @param endDate
-	 *            end of the time period
-	 * @param region
-	 *            the region of interest
-	 * @return all published bulletins for a specific time period and region
-	 */
-	private List<AvalancheBulletin> getPublishedBulletinsForRegion(Instant date, Region region) {
-		// get report for date and region
-		AvalancheReport report = getPublicReport(date, region);
-
-		List<AvalancheBulletin> results = new ArrayList<AvalancheBulletin>();
-		if (report != null
-				&& (report.getStatus() == BulletinStatus.published || report.getStatus() == BulletinStatus.republished)
-				&& report.getJsonString() != null) {
-			JSONArray jsonArray = new JSONArray(report.getJsonString());
-			for (Object object : jsonArray)
-				if (object instanceof JSONObject) {
-					AvalancheBulletin bulletin = new AvalancheBulletin((JSONObject) object, UserController.getInstance()::getUser);
-					// only add bulletins with published regions
-					if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
-						results.add(bulletin);
-				}
-		}
-
-		return results;
-	}
-
-	/**
 	 * Initialize and unproxy fields of entity.
 	 *
 	 * @param entity
@@ -771,7 +743,7 @@ public class AvalancheReportController {
 				entityManager.persist(result);
 				entityManager.flush();
 			}
-			
+
 			return null;
 		});
 	}

@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
-
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import eu.albina.util.HibernateUtil;
@@ -44,12 +42,5 @@ public class UserControllerTest {
 	public void getUserTest() throws AlbinaException {
 		User user = UserController.getInstance().getUser("info@avalanche.report");
 		logger.info(user.getEmail());
-	}
-
-	@Test
-	@Disabled
-	public void getRolesTest() throws AlbinaException {
-		JSONArray rolesJson = UserController.getInstance().getRolesJson();
-		logger.info(rolesJson.toString());
 	}
 }

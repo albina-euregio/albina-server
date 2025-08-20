@@ -41,7 +41,6 @@ import com.google.common.collect.Streams;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 import com.google.errorprone.annotations.CheckReturnValue;
-import com.google.gson.Gson;
 
 import eu.albina.caaml.Caaml6;
 import eu.albina.model.enumerations.DangerPattern;
@@ -362,7 +361,7 @@ public interface TextToSpeech {
 		AccessToken token = credentials.getAccessToken();
 
 		// https://cloud.google.com/text-to-speech/docs/create-audio#text-to-speech-text-protocol
-		String json = new Gson().toJson(Map.of(
+		String json = JsonUtil.writeValueUsingJackson(Map.of(
 			"input", Map.of("ssml", ssml),
 			"voice", voice,
 			"audioConfig", Map.of("audioEncoding", "MP3")
@@ -378,7 +377,7 @@ public interface TextToSpeech {
 			.connectTimeout(Duration.ofSeconds(10))
 			.build()
 			.send(request, HttpResponse.BodyHandlers.ofString());
-		Response audio = new Gson().fromJson(response.body(), Response.class);
+		Response audio = JsonUtil.parseUsingJackson(response.body(), Response.class);
 		return audio.asBytes();
 	}
 

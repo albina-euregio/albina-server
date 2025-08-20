@@ -3,9 +3,10 @@ package eu.albina.model;
 
 import java.nio.charset.StandardCharsets;
 
+import net.javacrumbs.jsonunit.JsonAssert;
+import net.javacrumbs.jsonunit.core.Option;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
@@ -13,12 +14,16 @@ import com.google.common.io.Resources;
 import eu.albina.RegionTestUtils;
 
 public class RegionTest {
+	@BeforeEach
+	void setUp() {
+		JsonAssert.setOptions(Option.IGNORING_ARRAY_ORDER, Option.IGNORING_EXTRA_FIELDS);
+	}
 
 	@Test
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("region_AT-07.json"), StandardCharsets.UTF_8);
 		Region region = RegionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
-		JSONAssert.assertEquals(expected, region.toJSON(), JSONCompareMode.LENIENT);
+		JsonAssert.assertJsonEquals(expected, region.toJSON());
 	}
 
 	@Test
@@ -27,6 +32,6 @@ public class RegionTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Region region = objectMapper.readValue(expected, Region.class);
 		String json = objectMapper.writeValueAsString(region);
-		JSONAssert.assertEquals(expected, json, JSONCompareMode.LENIENT);
+		JsonAssert.assertJsonEquals(expected, json);
 	}
 }

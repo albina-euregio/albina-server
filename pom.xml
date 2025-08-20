@@ -102,7 +102,7 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson</groupId>
 				<artifactId>jackson-bom</artifactId>
-				<version>2.18.1</version>
+				<version>2.19.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -219,15 +219,9 @@
 
 		<!-- JSON -->
 		<dependency>
-			<groupId>com.github.openjson</groupId>
-			<artifactId>openjson</artifactId>
-			<version>1.0.12</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.networknt</groupId>
 			<artifactId>json-schema-validator</artifactId>
-			<version>1.0.48</version>
+			<version>1.5.8</version>
 		</dependency>
 
 		<!-- logging -->
@@ -322,9 +316,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.skyscreamer</groupId>
-			<artifactId>jsonassert</artifactId>
-			<version>1.5.3</version>
+			<groupId>net.javacrumbs.json-unit</groupId>
+			<artifactId>json-unit</artifactId>
+			<version>4.1.1</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -371,6 +365,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-hibernate6</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.mapyrus</groupId>
 			<artifactId>mapyrus</artifactId>
 			<version>2.106</version>
@@ -413,7 +412,7 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<!-- https://stackoverflow.com/questions/66361859/jetty-11-doesnt-detect-servlets -->
-				<version>9.4.55.v20240627</version>
+				<version>9.4.58.v20250814</version>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<webApp>

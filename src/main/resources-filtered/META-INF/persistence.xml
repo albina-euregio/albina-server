@@ -13,7 +13,6 @@
 		<class>eu.albina.model.AvalancheBulletinDaytimeDescription</class>
 		<class>eu.albina.model.AvalancheBulletin</class>
 		<class>eu.albina.model.AvalancheReport</class>
-		<class>eu.albina.model.ChatMessage</class>
 		<class>eu.albina.model.publication.TelegramConfiguration</class>
 		<class>eu.albina.model.publication.WhatsAppConfiguration</class>
 		<class>eu.albina.model.publication.RapidMailConfiguration</class>

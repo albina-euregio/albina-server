@@ -16,11 +16,10 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import eu.albina.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-
-import com.github.openjson.JSONObject;
 
 import ch.rasc.webpush.ServerKeys;
 import eu.albina.model.PushSubscription;
@@ -49,9 +48,13 @@ public class PushNotificationUtilTest {
 		Client client = mock(Client.class);
 		when(client.target(eq(URI.create(subscription.getEndpoint())))).thenReturn(webTarget);
 
-		final JSONObject payload = new JSONObject();
-		payload.put("title", "Avalanche.report");
-		payload.put("body", "Hello World!");
+		PushNotificationUtil.Message payload = new PushNotificationUtil.Message(
+			"Avalanche.report",
+			"Hello World!",
+			null,
+			null
+		);
+		Assertions.assertEquals("{\"title\":\"Avalanche.report\",\"body\":\"Hello World!\",\"image\":null,\"url\":null}", JsonUtil.writeValueUsingJackson(payload));
 		new PushNotificationUtil(client).sendPushMessage(subscription, payload, serverKeys);
 
 		verify(builder).header(eq("Content-Type"), eq("application/octet-stream"));

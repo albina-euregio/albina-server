@@ -70,7 +70,7 @@ public class PdfUtilRebuildTest {
 		try {
 			URL url = new URL("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json");
 			logger.info("Fetching bulletins from {}", url);
-			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletins(url);
+			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(url);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setServerInstance(serverInstance);
 			return avalancheReport;

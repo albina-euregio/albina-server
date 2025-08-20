@@ -1,40 +1,66 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import com.google.common.io.Resources;
+import eu.albina.util.JsonUtil;
+import net.javacrumbs.jsonunit.JsonAssert;
+import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.openjson.JSONObject;
-import com.google.common.io.Resources;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AvalancheBulletinTest {
 
+	@BeforeEach
+	void setUp() {
+		JsonAssert.setOptions(Option.IGNORING_ARRAY_ORDER, Option.IGNORING_EXTRA_FIELDS);
+	}
+
 	@Test
-	public void testCreateObjectFromJSONAndBack() throws Exception {
-		final String expected = Resources.toString(Resources.getResource("validBulletin.json"), StandardCharsets.UTF_8);
-		AvalancheBulletin b = AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json"));
-		Assertions.assertEquals(new JSONObject(expected).toString(4), b.toJSON().toString(4));
+	public void testCreateObjectFromJSONAndBack1() throws Exception {
+		runTest(Resources.getResource("2023-12-01.json"), JsonUtil.Views.Public.class);
+	}
+
+	@Test
+	public void testCreateObjectFromJSONAndBack2() throws Exception {
+		runTest(Resources.getResource("2023-12-21.json"), JsonUtil.Views.Public.class);
+	}
+
+	@Test
+	public void testCreateObjectFromJSONAndBack3() throws Exception {
+		runTest(Resources.getResource("2024-01-28.json"), JsonUtil.Views.Public.class);
+	}
+
+	@Test
+	public void testCreateObjectFromJSONAndBack4() throws Exception {
+		runTest(Resources.getResource("2025-03-14.json"), JsonUtil.Views.Public.class);
+	}
+
+	@Test
+	public void testCreateObjectFromJSONAndBackInternal() throws Exception {
+		runTest(Resources.getResource("2025-03-14.internal.json"), JsonUtil.Views.Internal.class);
+	}
+
+	private static void runTest(URL bulletin, Class<?> view) throws IOException {
+		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
+		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletinsUsingJackson(bulletin);
+		String actual3 = JsonUtil.writeValueUsingJackson(avalancheBulletins, view);
+		JsonAssert.assertJsonEquals(expected, actual3);
 	}
 
 	@Test
 	public void testSortByDangerRating() throws IOException {
-		List<AvalancheBulletin> bulletins = Arrays.asList(
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin.json")),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin2.json")),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin3.json")),
-			AvalancheBulletin.readBulletin(Resources.getResource("validBulletin4.json"))
-		);
-
+		List<AvalancheBulletin> bulletins = new ArrayList<>(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
 		Collections.sort(bulletins);
-
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			System.out.println(avalancheBulletin.getHighestDangerRatingDouble());
-		}
+		List<Integer> actual = bulletins.stream().map(AvalancheBulletin::getHighestDangerRatingDouble).collect(Collectors.toList());
+		Assertions.assertEquals(List.of(14, 10, 8, 6, 4), actual);
 	}
 }

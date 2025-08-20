@@ -914,6 +914,10 @@ public class Region {
 		return subRegions.stream().anyMatch(subRegion -> regionId.startsWith(subRegion.getId()));
 	}
 
+	public boolean isForeign(String regionId) {
+		return !affects(regionId);
+	}
+
 	public String toJSON() throws JsonProcessingException {
 		return JsonUtil.ALBINA_OBJECT_MAPPER.writeValueAsString(this);
 	}

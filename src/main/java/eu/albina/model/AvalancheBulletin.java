@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -15,15 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import eu.albina.util.JsonUtil;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
-import com.google.common.base.Strings;
 import com.google.common.io.Resources;
 
 import eu.albina.model.enumerations.DangerPattern;
@@ -59,12 +57,16 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "avalanche_bulletins")
+@JsonView({JsonUtil.Views.Public.class, JsonUtil.Views.Internal.class})
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvalancheBulletin extends AbstractPersistentObject
-		implements AvalancheInformationObject, Comparable<AvalancheBulletin>, HasValidityDate, HasPublicationDate {
+		implements Comparable<AvalancheBulletin>, HasValidityDate, HasPublicationDate {
 
 	/** Information about the author of the avalanche bulletin */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
+	@JsonProperty("author")
+	@JsonSerialize(as = NameAndEmail.class)
 	private User user;
 
 	@Column(name = "OWNER_REGION", length = 191)
@@ -73,6 +75,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_additional_users", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "ADDITIONAL_USER_NAME", length = 191)
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private Set<String> additionalAuthors;
 
 	@Column(name = "PUBLICATION_DATE")
@@ -80,26 +83,32 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	/** Validity of the avalanche bulletin */
 	@Column(name = "VALID_FROM")
+	@JsonIgnore
 	private ZonedDateTime validFrom;
+
 	@Column(name = "VALID_UNTIL")
+	@JsonIgnore
 	private ZonedDateTime validUntil;
 
 	/** The recommended regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_suggested_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID", length = 191)
+	@JsonView(JsonUtil.Views.Internal.class)
 	private Set<String> suggestedRegions;
 
 	/** The published regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_published_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID",  length = 191)
+	@JsonView(JsonUtil.Views.Internal.class)
 	private Set<String> publishedRegions;
 
 	/** The saved regions the avalanche bulletin is for. */
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_bulletin_saved_regions", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"))
 	@Column(name = "REGION_ID", length = 191)
+	@JsonView(JsonUtil.Views.Internal.class)
 	private Set<String> savedRegions;
 
 	@Enumerated(EnumType.STRING)
@@ -190,6 +199,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@MapKeyEnumerated(EnumType.STRING)
 	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
+	@JsonIgnore
 	private Map<TextPart, Texts> textPartsMap;
 
 	/**
@@ -203,127 +213,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		suggestedRegions = new LinkedHashSet<>();
 	}
 
-	/**
-	 * Custom constructor that creates an avalanche bulletin object from JSON input.
-	 *
-	 * @param json
-	 *            JSONObject holding information about an avalanche bulletin.
-	 */
-	public AvalancheBulletin(JSONObject json, Function<String, User> userFunction) {
-		this();
-
-		if (json.has("id"))
-			this.id = json.getString("id");
-
-		if (json.has("author")) {
-			JSONObject author = json.getJSONObject("author");
-			if (author.has("email")) {
-				try {
-					this.user = userFunction.apply(author.getString("email"));
-				} catch (Exception e) {
-					LoggerFactory.getLogger(getClass()).warn("Failed to get user", e);
-				}
-			}
-		}
-
-		if (json.has("additionalAuthors")) {
-			JSONArray additionalAuthors = json.getJSONArray("additionalAuthors");
-			for (Object entry : additionalAuthors) {
-				this.additionalAuthors.add((String) entry);
-			}
-		}
-
-		if (json.has("ownerRegion"))
-			this.ownerRegion = json.getString("ownerRegion");
-		if (json.has("highlightsTextcat"))
-			this.highlightsTextcat = json.getString("highlightsTextcat");
-		if (json.has("avActivityHighlightsTextcat"))
-			this.avActivityHighlightsTextcat = json.getString("avActivityHighlightsTextcat");
-		if (json.has("avActivityCommentTextcat"))
-			this.avActivityCommentTextcat = json.getString("avActivityCommentTextcat");
-		if (json.has("snowpackStructureHighlightsTextcat"))
-			this.snowpackStructureHighlightsTextcat = json.getString("snowpackStructureHighlightsTextcat");
-		if (json.has("snowpackStructureCommentTextcat"))
-			this.snowpackStructureCommentTextcat = json.getString("snowpackStructureCommentTextcat");
-		if (json.has("tendencyCommentTextcat"))
-			this.tendencyCommentTextcat = json.getString("tendencyCommentTextcat");
-		if (json.has("generalHeadlineCommentTextcat"))
-			this.generalHeadlineCommentTextcat = json.getString("generalHeadlineCommentTextcat");
-		if (json.has("synopsisCommentTextcat"))
-			this.synopsisCommentTextcat = json.getString("synopsisCommentTextcat");
-		if (json.has("avActivityHighlightsNotes"))
-			this.avActivityHighlightsNotes = json.getString("avActivityHighlightsNotes");
-		if (json.has("avActivityCommentNotes"))
-			this.avActivityCommentNotes = json.getString("avActivityCommentNotes");
-		if (json.has("snowpackStructureHighlightsNotes"))
-			this.snowpackStructureHighlightsNotes = json.getString("snowpackStructureHighlightsNotes");
-		if (json.has("snowpackStructureCommentNotes"))
-			this.snowpackStructureCommentNotes = json.getString("snowpackStructureCommentNotes");
-		if (json.has("tendencyCommentNotes"))
-			this.tendencyCommentNotes = json.getString("tendencyCommentNotes");
-		if (json.has("generalHeadlinesCommentNotes"))
-			this.generalHeadlineCommentNotes = json.getString("generalHeadlinesCommentNotes");
-
-		if (json.has("tendency"))
-			this.tendency = Tendency.valueOf(json.getString("tendency").toLowerCase());
-
-		if (json.has("dangerPattern1"))
-			this.dangerPattern1 = DangerPattern.valueOf(json.getString("dangerPattern1").toLowerCase());
-		if (json.has("dangerPattern2"))
-			this.dangerPattern2 = DangerPattern.valueOf(json.getString("dangerPattern2").toLowerCase());
-
-		for (TextPart part : TextPart.values()) {
-			if (json.has(part.toString())) {
-				this.textPartsMap.put(part, new Texts(json.getJSONArray(part.toString())));
-			}
-		}
-
-		if (json.has("publicationDate"))
-			this.publicationDate = ZonedDateTime.parse(json.getString("publicationDate"));
-
-		if (json.has("validity")) {
-			JSONObject validity = json.getJSONObject("validity");
-			this.validFrom = ZonedDateTime.parse(validity.getString("from"));
-			this.validUntil = ZonedDateTime.parse(validity.getString("until"));
-		}
-
-		if (json.has("suggestedRegions")) {
-			JSONArray regions = json.getJSONArray("suggestedRegions");
-			for (Object entry : regions) {
-				this.suggestedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("publishedRegions")) {
-			JSONArray regions = json.getJSONArray("publishedRegions");
-			for (Object entry : regions) {
-				this.publishedRegions.add((String) entry);
-			}
-		} else if (json.has("regions")) {
-			JSONArray regions = json.getJSONArray("regions");
-			for (Object entry : regions) {
-				this.publishedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("savedRegions")) {
-			JSONArray regions = json.getJSONArray("savedRegions");
-			for (Object entry : regions) {
-				this.savedRegions.add((String) entry);
-			}
-		}
-
-		if (json.has("strategicMindset"))
-			this.strategicMindset = StrategicMindset.valueOf(json.getString("strategicMindset"));
-
-		if (json.has("hasDaytimeDependency"))
-			this.hasDaytimeDependency = json.getBoolean("hasDaytimeDependency");
-
-		if (json.has("forenoon"))
-			this.forenoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("forenoon"));
-
-		if (json.has("afternoon"))
-			this.afternoon = new AvalancheBulletinDaytimeDescription(json.getJSONObject("afternoon"));
+	public AvalancheBulletin withRegionFilter(Region region) {
+		AvalancheBulletin b = new AvalancheBulletin();
+		b.copy(this);
+		b.setId(getId());
+		b.getPublishedRegions().removeIf(region::isForeign);
+		b.getSavedRegions().removeIf(region::isForeign);
+		b.getSuggestedRegions().removeIf(region::isForeign);
+		return b;
 	}
 
 	public Set<String> regions(boolean preview) {
@@ -668,6 +565,44 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.validUntil = validUntil;
 	}
 
+	public Validity getValidity() {
+		return new Validity(validFrom, validUntil);
+	}
+
+	public void setValidity(Validity v) {
+		validFrom = v.from;
+		validUntil = v.until;
+	}
+
+	public static class Validity {
+		private ZonedDateTime from;
+		private ZonedDateTime until;
+
+		public Validity() {
+		}
+
+		public Validity(ZonedDateTime from, ZonedDateTime until) {
+			this.from = from;
+			this.until = until;
+		}
+
+		public ZonedDateTime getFrom() {
+			return from;
+		}
+
+		public void setFrom(ZonedDateTime from) {
+			this.from = from;
+		}
+
+		public ZonedDateTime getUntil() {
+			return until;
+		}
+
+		public void setUntil(ZonedDateTime until) {
+			this.until = until;
+		}
+	}
+
 	public Set<String> getSuggestedRegions() {
 		return suggestedRegions;
 	}
@@ -690,6 +625,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void addSavedRegion(String region) {
 		this.savedRegions.add(region);
+	}
+
+	@JsonView(JsonUtil.Views.Public.class)
+	public Set<String> getRegions() {
+		return publishedRegions;
 	}
 
 	public Set<String> getPublishedRegions() {
@@ -728,6 +668,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.afternoon = afternoon;
 	}
 
+	@JsonIgnore
 	public Set<String> getPublishedAndSavedRegions() {
 		Set<String> result = new LinkedHashSet<>();
 		result.addAll(savedRegions);
@@ -766,6 +707,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			.orElse(DangerRating.missing);
 	}
 
+	@JsonIgnore
 	public DangerRating getHighestDangerRating() {
 		DangerRating result = DangerRating.missing;
 		if (forenoon != null && forenoon.dangerRating(true) != null
@@ -785,6 +727,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return result;
 	}
 
+	@JsonIgnore
 	public int getHighestDangerRatingDouble() {
 		int sum = 0;
 		if (forenoon != null) {
@@ -815,6 +758,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	@Override
+	@JsonIgnore
 	public LocalDate getValidityDate() {
 		ZonedDateTime zonedDateTime = validUntil.withZoneSameInstant(AlbinaUtil.localZone());
 		LocalTime localTime = zonedDateTime.toLocalTime();
@@ -830,174 +774,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 	}
 
-	@Override
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		if (!Strings.isNullOrEmpty(id))
-			json.put("id", id);
-
-		if (user != null && !Strings.isNullOrEmpty(user.getName()))
-			json.put("author", user.toSmallJSON());
-
-		if (additionalAuthors != null && additionalAuthors.size() > 0) {
-			JSONArray users = new JSONArray();
-			for (String user : additionalAuthors) {
-				users.put(user);
-			}
-			json.put("additionalAuthors", users);
-		}
-
-		if (user != null && user.getRoles() != null)
-			json.put("ownerRegion", ownerRegion);
-
-		if (!Strings.isNullOrEmpty(highlightsTextcat))
-			json.put("highlightsTextcat", highlightsTextcat);
-		if (!Strings.isNullOrEmpty(avActivityHighlightsTextcat))
-			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
-		if (!Strings.isNullOrEmpty(avActivityCommentTextcat))
-			json.put("avActivityCommentTextcat", avActivityCommentTextcat);
-		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsTextcat))
-			json.put("snowpackStructureHighlightsTextcat", snowpackStructureHighlightsTextcat);
-		if (!Strings.isNullOrEmpty(snowpackStructureCommentTextcat))
-			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
-		if (!Strings.isNullOrEmpty(tendencyCommentTextcat))
-			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
-		if (!Strings.isNullOrEmpty(generalHeadlineCommentTextcat))
-			json.put("generalHeadlineCommentTextcat", generalHeadlineCommentTextcat);
-		if (!Strings.isNullOrEmpty(synopsisCommentTextcat))
-			json.put("synopsisCommentTextcat", synopsisCommentTextcat);
-
-		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
-			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
-		if (!Strings.isNullOrEmpty(avActivityCommentNotes))
-			json.put("avActivityCommentNotes", avActivityCommentNotes);
-		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsNotes))
-			json.put("snowpackStructureHighlightsNotes", snowpackStructureHighlightsNotes);
-		if (!Strings.isNullOrEmpty(snowpackStructureCommentNotes))
-			json.put("snowpackStructureCommentNotes", snowpackStructureCommentNotes);
-		if (!Strings.isNullOrEmpty(tendencyCommentNotes))
-			json.put("tendencyCommentNotes", tendencyCommentNotes);
-		if (!Strings.isNullOrEmpty(generalHeadlineCommentNotes))
-			json.put("generalHeadlineCommentNotes", generalHeadlineCommentNotes);
-
-		for (TextPart part : TextPart.values())
-			if ((textPartsMap.get(part) != null))
-				json.put(part.toString(), textPartsMap.get(part).toJSONArray());
-
-		if (tendency != null)
-			json.put("tendency", this.tendency.toString());
-
-		if (dangerPattern1 != null)
-			json.put("dangerPattern1", this.dangerPattern1.toString());
-		if (dangerPattern2 != null)
-			json.put("dangerPattern2", this.dangerPattern2.toString());
-
-		if (publicationDate != null)
-			json.put("publicationDate",	DateTimeFormatter.ISO_INSTANT.format(publicationDate));
-
-		JSONObject validity = new JSONObject();
-		validity.put("from", DateTimeFormatter.ISO_INSTANT.format(validFrom));
-		validity.put("until", DateTimeFormatter.ISO_INSTANT.format(validUntil));
-		json.put("validity", validity);
-
-		json.put("suggestedRegions", suggestedRegions);
-		json.put("savedRegions", savedRegions);
-		json.put("publishedRegions", publishedRegions);
-
-		if (strategicMindset != null)
-			json.put("strategicMindset", strategicMindset);
-
-		json.put("hasDaytimeDependency", hasDaytimeDependency);
-
-		if (forenoon != null)
-			json.put("forenoon", forenoon.toJSON());
-
-		if (hasDaytimeDependency && afternoon != null)
-			json.put("afternoon", afternoon.toJSON());
-
-		return json;
-	}
-
-	public JSONObject toSmallJSON() {
-		JSONObject json = new JSONObject();
-
-		if (!Strings.isNullOrEmpty(id))
-			json.put("id", id);
-
-		if (!Strings.isNullOrEmpty(highlightsTextcat))
-			json.put("highlightsTextcat", highlightsTextcat);
-		if (!Strings.isNullOrEmpty(avActivityHighlightsTextcat))
-			json.put("avActivityHighlightsTextcat", avActivityHighlightsTextcat);
-		if (!Strings.isNullOrEmpty(avActivityCommentTextcat))
-			json.put("avActivityCommentTextcat", avActivityCommentTextcat);
-		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsTextcat))
-			json.put("snowpackStructureHighlightsTextcat", snowpackStructureHighlightsTextcat);
-		if (!Strings.isNullOrEmpty(snowpackStructureCommentTextcat))
-			json.put("snowpackStructureCommentTextcat", snowpackStructureCommentTextcat);
-		if (!Strings.isNullOrEmpty(tendencyCommentTextcat))
-			json.put("tendencyCommentTextcat", tendencyCommentTextcat);
-		if (!Strings.isNullOrEmpty(generalHeadlineCommentTextcat))
-			json.put("generalHeadlineCommentTextcat", generalHeadlineCommentTextcat);
-		if (!Strings.isNullOrEmpty(synopsisCommentTextcat))
-			json.put("synopsisCommentTextcat", synopsisCommentTextcat);
-
-		if (!Strings.isNullOrEmpty(avActivityHighlightsNotes))
-			json.put("avActivityHighlightsNotes", avActivityHighlightsNotes);
-		if (!Strings.isNullOrEmpty(avActivityCommentNotes))
-			json.put("avActivityCommentNotes", avActivityCommentNotes);
-		if (!Strings.isNullOrEmpty(snowpackStructureHighlightsNotes))
-			json.put("snowpackStructureHighlightsNotes", snowpackStructureHighlightsNotes);
-		if (!Strings.isNullOrEmpty(snowpackStructureCommentNotes))
-			json.put("snowpackStructureCommentNotes", snowpackStructureCommentNotes);
-		if (!Strings.isNullOrEmpty(tendencyCommentNotes))
-			json.put("tendencyCommentNotes", tendencyCommentNotes);
-		if (!Strings.isNullOrEmpty(generalHeadlineCommentNotes))
-			json.put("generalHeadlineCommentNotes", generalHeadlineCommentNotes);
-
-		for (TextPart part : TextPart.values())
-			if ((textPartsMap.get(part) != null))
-				json.put(part.toString(), textPartsMap.get(part).toJSONArray());
-
-		if (tendency != null)
-			json.put("tendency", this.tendency.toString());
-
-		if (dangerPattern1 != null)
-			json.put("dangerPattern1", this.dangerPattern1.toString());
-		if (dangerPattern2 != null)
-			json.put("dangerPattern2", this.dangerPattern2.toString());
-
-		if (publicationDate != null)
-			json.put("publicationDate",
-				DateTimeFormatter.ISO_INSTANT.format(publicationDate));
-
-		JSONObject validity = new JSONObject();
-		validity.put("from", DateTimeFormatter.ISO_INSTANT.format(validFrom));
-		validity.put("until", DateTimeFormatter.ISO_INSTANT.format(validUntil));
-		json.put("validity", validity);
-
-		json.put("regions", publishedRegions);
-
-		json.put("hasDaytimeDependency", hasDaytimeDependency);
-
-		if (forenoon != null)
-			json.put("forenoon", forenoon.toSmallJSON());
-
-		if (hasDaytimeDependency && afternoon != null)
-			json.put("afternoon", afternoon.toSmallJSON());
-
-		return json;
-	}
-
 	public void copy(AvalancheBulletin bulletin) {
 		setUser(bulletin.getUser());
-		setAdditionalAuthors(bulletin.getAdditionalAuthors());
+		setAdditionalAuthors(bulletin.getAdditionalAuthors() != null ? new LinkedHashSet<>(bulletin.getAdditionalAuthors()) : new LinkedHashSet<>());
 		setPublicationDate(bulletin.getPublicationDate());
 		setValidFrom(bulletin.getValidFrom());
 		setValidUntil(bulletin.getValidUntil());
-		setSuggestedRegions(bulletin.getSuggestedRegions());
-		setPublishedRegions(bulletin.getPublishedRegions());
-		setSavedRegions(bulletin.getSavedRegions());
+		setSuggestedRegions(bulletin.getSuggestedRegions() != null ? new LinkedHashSet<>(bulletin.getSuggestedRegions()) : new LinkedHashSet<>());
+		setPublishedRegions(bulletin.getPublishedRegions() != null ? new LinkedHashSet<>(bulletin.getPublishedRegions()) : new LinkedHashSet<>());
+		setSavedRegions(bulletin.getSavedRegions() != null ? new LinkedHashSet<>(bulletin.getSavedRegions()) : new LinkedHashSet<>());
 		setHasDaytimeDependency(bulletin.isHasDaytimeDependency());
 		setTendency(bulletin.getTendency());
 		setStrategicMindset(bulletin.getStrategicMindset());
@@ -1122,16 +907,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
 	}
 
-	public static AvalancheBulletin readBulletin(final URL resource) throws IOException {
+	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		return new AvalancheBulletin(new JSONObject(validBulletinStringFromResource), User::new);
-	}
-
-	public static List<AvalancheBulletin> readBulletins(final URL resource) throws IOException {
-		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		final JSONArray array = new JSONArray(validBulletinStringFromResource);
-		return IntStream.range(0, array.length()).mapToObj(array::getJSONObject).map(u -> new AvalancheBulletin(u, User::new))
-				.collect(Collectors.toList());
+		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);
+		return List.of(bulletins);
 	}
 
 }

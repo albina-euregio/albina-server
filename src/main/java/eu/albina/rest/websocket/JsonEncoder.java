@@ -5,13 +5,13 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-import eu.albina.model.ChatMessage;
+import eu.albina.util.JsonUtil;
 
-public class ChatMessageEncoder implements Encoder.Text<ChatMessage> {
+public class JsonEncoder<T> implements Encoder.Text<T> {
 
 	@Override
-	public String encode(ChatMessage message) throws EncodeException {
-		return message.toJSON().toString();
+	public String encode(T object) throws EncodeException {
+		return JsonUtil.writeValueUsingJackson(object);
 	}
 
 	@Override

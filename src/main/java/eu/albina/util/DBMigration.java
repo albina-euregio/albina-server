@@ -335,7 +335,7 @@ public class DBMigration {
 		admin.setEmail("info@albina.local");
 		admin.setName("info@albina.local");
 		admin.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-		admin.setRoles(List.of(Role.ADMIN, Role.FORECASTER));
+		admin.setRoles(EnumSet.of(Role.ADMIN, Role.FORECASTER));
 		em.persist(admin);
 		return admin;
 	}

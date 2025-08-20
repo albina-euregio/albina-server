@@ -4,7 +4,9 @@ package eu.albina.json;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
+import eu.albina.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,15 +20,15 @@ public class AvalancheBulletinJsonValidatorTest {
 	public void testValidateAvalancheBulletinJSONValid() throws IOException {
 		final URL resource = Resources.getResource("validBulletin.json");
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		Assertions.assertEquals(0, JsonValidator.validateAvalancheBulletin(validBulletinStringFromResource).size());
+		Assertions.assertEquals(Set.of(), JsonValidator.validateAvalancheBulletin(validBulletinStringFromResource));
 	}
 
 	@Test
 	public void testValidateAvalancheBulletinValid() throws IOException {
 		final URL resource = Resources.getResource("2019-01-16.json");
-		for (AvalancheBulletin bulletin : AvalancheBulletin.readBulletins(resource)) {
-			final String json = bulletin.toJSON().toString();
-			Assertions.assertEquals(0, JsonValidator.validateAvalancheBulletin(json).size());
+		for (AvalancheBulletin bulletin : AvalancheBulletin.readBulletinsUsingJackson(resource)) {
+			final String json = JsonUtil.writeValueUsingJackson(bulletin, JsonUtil.Views.Internal.class);
+			Assertions.assertEquals(Set.of(), JsonValidator.validateAvalancheBulletin(json));
 		}
 	}
 

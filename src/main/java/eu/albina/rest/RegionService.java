@@ -2,8 +2,8 @@
 package eu.albina.rest;
 
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -19,13 +19,11 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import eu.albina.exception.AlbinaException;
 import eu.albina.util.JsonUtil;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
@@ -118,10 +116,9 @@ public class RegionService {
 				RegionController.getInstance().updateRegion(existing);
 				return Response.ok(existing.toJSON()).build();
 			} else {
-				logger.warn("Error updating region - Region does not exist");
-				JSONObject json = new JSONObject();
-				json.append("message", "Error updating region - Region does not exists");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+				String message = "Error updating region - Region does not exist";
+				logger.warn(message);
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
 			}
 		} catch (HibernateException e) {
 			logger.warn("Error updating region", e);
@@ -149,14 +146,12 @@ public class RegionService {
 			// check if id already exists
 			if (!RegionController.getInstance().regionExists(region.getId())) {
 				RegionController.getInstance().createRegion(region);
-				JSONObject jsonObject = new JSONObject();
 				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.entity(jsonObject.toString()).build();
+						.entity(Map.of()).build();
 			} else {
-				logger.warn("Error creating region - Region already exists");
-				JSONObject json = new JSONObject();
-				json.append("message", "Error creating region - Region already exists");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+				String message = "Error creating region - Region already exists";
+				logger.warn(message);
+				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
 			}
 		} catch (JsonProcessingException e) {
 			logger.warn("Error deserializing region", e);
@@ -172,10 +167,7 @@ public class RegionService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response getLockedRegions(@QueryParam("region") String region, @Context SecurityContext securityContext) {
 		logger.debug("GET JSON locked regions");
-
-		JSONArray json = new JSONArray();
-		for (Instant date : RegionController.getInstance().getLockedRegions(region))
-			json.put(DateTimeFormatter.ISO_INSTANT.format(date));
-		return Response.ok(json.toString(), MediaType.APPLICATION_JSON).build();
+		List<Instant> lockedRegions = RegionController.getInstance().getLockedRegions(region);
+		return Response.ok(lockedRegions, MediaType.APPLICATION_JSON).build();
 	}
 }

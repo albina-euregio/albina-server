@@ -14,8 +14,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
 import com.google.common.base.Strings;
 
 import eu.albina.model.enumerations.LanguageCode;
@@ -98,24 +96,6 @@ public class Subscriber {
 
 	public void setPdfAttachment(boolean pdfAttachment) {
 		this.pdfAttachment = pdfAttachment;
-	}
-
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		json.put("email", getEmail());
-		json.put("confirmed", getConfirmed());
-		if (regions != null && regions.size() > 0) {
-			JSONArray jsonRegions = new JSONArray();
-			for (Region region : regions) {
-				jsonRegions.put(region.getId());
-			}
-			json.put("regions", jsonRegions);
-		}
-		json.put("language", getLanguage());
-		json.put("pdfAttachment", getPdfAttachment());
-
-		return json;
 	}
 
 	public boolean affectsRegion(Region region) {

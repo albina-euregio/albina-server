@@ -16,11 +16,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import eu.albina.util.JsonUtil;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -83,7 +82,7 @@ public interface WhatsAppController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending photo {} and message {} to whatsapp channel using config {}", attachmentUrl, message, config);
 
-		String payload = new Gson().toJson(Map.of(
+		String payload = JsonUtil.writeValueUsingJackson(Map.of(
 			"to", chatId,
 			"media", attachmentUrl,
 			"caption", message
@@ -107,7 +106,7 @@ public interface WhatsAppController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending message {} to whatsapp channel using config {}", message, config);
 
-		String payload = new Gson().toJson(Map.of(
+		String payload = JsonUtil.writeValueUsingJackson(Map.of(
 			"to", chatId,
 			"body", message
 		));

@@ -2,9 +2,6 @@
 package eu.albina.model;
 
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
-import com.github.openjson.JSONObject;
 
 public class RegionLock {
 
@@ -14,23 +11,14 @@ public class RegionLock {
 	private ZonedDateTime date;
 	private boolean lock;
 
+	public RegionLock() {
+	}
+
 	public RegionLock(String username, String region, ZonedDateTime date, boolean lock) {
 		this.username = username;
 		this.region = region;
 		this.date = date;
 		this.lock = lock;
-	}
-
-	public RegionLock(JSONObject json) {
-		if (json.has("sessionId"))
-			this.sessionId = json.getString("sessionId");
-		if (json.has("username"))
-			this.username = json.getString("username");
-		if (json.has("region"))
-			this.region = json.getString("region");
-		if (json.has("date"))
-			this.date = ZonedDateTime.parse(json.getString("date"));
-		this.lock = json.getBoolean("lock");
 	}
 
 	public String getSessionId() {
@@ -71,21 +59,5 @@ public class RegionLock {
 
 	public void setLock(boolean lock) {
 		this.lock = lock;
-	}
-
-	public JSONObject toJSON() {
-		JSONObject json = new JSONObject();
-
-		if (sessionId != null)
-			json.put("sessionId", sessionId);
-		if (username != null)
-			json.put("username", username);
-		if (region != null)
-			json.put("region", region);
-		if (date != null)
-			json.put("date", DateTimeFormatter.ISO_INSTANT.format(date));
-		json.put("lock", lock);
-
-		return json;
 	}
 }

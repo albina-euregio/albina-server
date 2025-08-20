@@ -33,9 +33,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
-import com.github.openjson.JSONObject;
-
 import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
@@ -62,12 +59,10 @@ public class UserService {
 	public Response getUsers(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON users");
 		try {
-			JSONArray jsonArray = UserController.getInstance().getUsersJson();
-			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading users", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
+			List<User> users = UserController.getInstance().getUsers();
+			return Response.ok(users, MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
+			logger.warn("Error loading users", e);
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 	}
@@ -78,19 +73,12 @@ public class UserService {
 	@Path("/roles")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Operation(summary = "Get roles of logged-in user")
-	@ApiResponse(description = "roles", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
+	@Operation(summary = "Get all roles")
+	@ApiResponse(description = "roles", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Role.class))))
 	public Response getRoles(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON roles");
-		try {
-			JSONArray jsonArray = UserController.getInstance().getRolesJson();
-			return Response.ok(jsonArray.toString(), MediaType.APPLICATION_JSON).build();
-		} catch (AlbinaException e) {
-			logger.warn("Error loading roles", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON().toString()).build();
-		} catch (Exception e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
-		}
+		Role[] roles = Role.values();
+		return Response.ok(roles, MediaType.APPLICATION_JSON).build();
 	}
 
 	@GET
@@ -99,7 +87,7 @@ public class UserService {
 	@Path("/regions")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Operation(summary = "Get regions of logged-in user")
+	@Operation(summary = "Get all regions")
 	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
 	public Response getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
@@ -107,6 +95,7 @@ public class UserService {
 			List<String> ids = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
 			return Response.ok(ids, MediaType.APPLICATION_JSON).build();
 		} catch (Exception e) {
+			logger.warn("Error loading regions", e);
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 	}
@@ -119,24 +108,19 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create user")
 	public Response createUser(
-		@Parameter(schema = @Schema(implementation = User.class)) String userString,
+		@Parameter(schema = @Schema(implementation = User.class)) User user,
 		@Context SecurityContext securityContext) {
 		logger.debug("POST JSON user");
-		JSONObject userJson = new JSONObject(userString);
-		User user = new User(userJson, RegionController.getInstance()::getRegion);
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
 		// check if email already exists
 		if (!UserController.getInstance().userExists(user.getEmail())) {
 			UserController.getInstance().createUser(user);
-			JSONObject jsonObject = new JSONObject();
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-					.entity(jsonObject.toString()).build();
+			return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
 		} else {
-			logger.warn("Error creating user - User already exists");
-			JSONObject json = new JSONObject();
-			json.append("message", "Error creating user - User already exists");
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+			String message = "Error creating user - User already exists";
+			logger.warn(message);
+			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
 		}
 	}
 
@@ -147,27 +131,19 @@ public class UserService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update own user")
 	public Response updateOwnUser(
-		@Parameter(schema = @Schema(implementation = User.class)) String userString,
+		@Parameter(schema = @Schema(implementation = User.class)) User user,
 		@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON user");
 		try {
-			JSONObject userJson = new JSONObject(userString);
-			User user = new User(userJson, RegionController.getInstance()::getRegion);
-
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
 			// check if email already exists
 			if (user.getEmail().equals(username)) {
 				UserController.getInstance().updateUser(user);
-				JSONObject jsonObject = new JSONObject();
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.entity(jsonObject.toString()).build();
+				return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
 			} else {
-				logger.warn("Updating user not allowed");
-				JSONObject json = new JSONObject();
-				json.append("message", "Updating user not allowed");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+				throw new AlbinaException("Updating user not allowed");
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Error updating user", e);
@@ -199,8 +175,7 @@ public class UserService {
 
 			UserController.getInstance().changePassword(username, data.oldPassword, data.newPassword);
 
-			JSONObject jsonObject = new JSONObject();
-			return Response.ok().type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
+			return Response.ok().build();
 		} catch (AlbinaException e) {
 			logger.warn("Error changing password", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -224,11 +199,11 @@ public class UserService {
 			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
-			if (UserController.getInstance().checkPassword(username, data.password))
-				return Response.ok(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.build();
-			else
+			if (UserController.getInstance().checkPassword(username, data.password)) {
+				return Response.ok().build();
+			} else {
 				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
+			}
 		} catch (HibernateException e) {
 			logger.warn("Error checking password", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
@@ -259,8 +234,7 @@ public class UserService {
 		try {
 			UserController.getInstance().resetPassword(id, data.newPassword);
 
-			JSONObject jsonObject = new JSONObject();
-			return Response.ok().type(MediaType.APPLICATION_JSON).entity(jsonObject.toString()).build();
+			return Response.ok().build();
 		} catch (AlbinaException e) {
 			logger.warn("Error changing password", e);
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
@@ -276,24 +250,16 @@ public class UserService {
 	@Operation(summary = "Update user")
 	public Response updateUser(
 		@PathParam("id") String id,
-		@Parameter(schema = @Schema(implementation = User.class)) String userString,
+		@Parameter(schema = @Schema(implementation = User.class)) User user,
 		@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON user");
 		try {
-			JSONObject userJson = new JSONObject(userString);
-			User user = new User(userJson, RegionController.getInstance()::getRegion);
-
 			// check if email already exists
 			if (UserController.getInstance().userExists(user.getEmail())) {
 				UserController.getInstance().updateUser(user);
-				JSONObject jsonObject = new JSONObject();
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.entity(jsonObject.toString()).build();
+				return Response.ok().build();
 			} else {
-				logger.warn("Error updating user - User does not exist");
-				JSONObject json = new JSONObject();
-				json.append("message", "Error updating user - User does not exists");
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(json).build();
+				throw new AlbinaException("User does not exist");
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Error updating user", e);

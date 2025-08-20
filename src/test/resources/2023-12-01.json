@@ -1685,6 +1685,7 @@
 			"id": "c7ecbd9b-f85d-4ce9-9c95-de2aba558af3",
 			"hasElevationDependency": false,
 			"dangerRatingAbove": "low",
+			"dangerRatingBelow": "low",
 			"avalancheProblem1": {
 				"avalancheProblem": "new_snow",
 				"aspects": [
