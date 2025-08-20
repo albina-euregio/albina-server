@@ -3,7 +3,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
+<p><s>Lawinenvorhersage für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Schwacher Altschnee ist die Hauptgefahr.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -37,7 +37,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
+<p><s>Lawinenvorhersage für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Die Altschneedecke bleibt störanfällig.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -71,7 +71,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
+<p><s>Lawinenvorhersage für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Die Altschneedecke bleibt störanfällig.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -106,7 +106,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
+<p><s>Lawinenvorhersage für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Schwacher Altschnee ist die Hauptgefahr.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -140,7 +140,7 @@ Wir finden die folgenden Gefahrenmuster: gm.1: bodennahe schwachschicht, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Dienstag, 20. Dezember 2022.</s></p>
+<p><s>Lawinenvorhersage für Dienstag, 20. Dezember 2022.</s></p>
 <p><emphasis><s>Schwacher Altschnee ist die Hauptgefahr. <break time="1s"/></s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>

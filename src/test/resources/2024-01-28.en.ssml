@@ -3,7 +3,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
+<p><s>Update of the avalanche forecast for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>Weak layers in the upper part of the snowpack necessitate caution and restraint. In addition a latent danger of gliding avalanches exists.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -39,7 +39,7 @@ We have the following danger patterns: dp.4: cold following warm / warm followin
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
+<p><s>Update of the avalanche forecast for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>Wind slabs and gliding snow require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -74,7 +74,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
+<p><s>Update of the avalanche forecast for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -108,7 +108,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
+<p><s>Update of the avalanche forecast for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -142,7 +142,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
+<p><s>Update of the avalanche forecast for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>The conditions are favourable over a wide area.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -177,7 +177,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update of the avalanche report for Sunday 28 January 2024.</s></p>
+<p><s>Update of the avalanche forecast for Sunday 28 January 2024.</s></p>
 <p><emphasis><s>Fresh and older wind slabs at high altitude. Moist snow slides are possible during the day.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>

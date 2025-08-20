@@ -3,7 +3,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The avalanche danger will increase quickly during the day.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -40,7 +40,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Fresh wind slabs require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -73,7 +73,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -107,7 +107,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Single winter sport participants can release avalanches in many places, including dangerously large ones. Areas with glide cracks are to be avoided.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -142,7 +142,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.2: gl
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Fresh wind slabs require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -176,7 +176,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The sometimes large wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -209,7 +209,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>Fresh snow and wind slabs require caution.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -243,7 +243,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>In all regions from a snow sport perspective, in most cases insufficient snow is lying.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -276,7 +276,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The backcountry touring conditions are to some extent critical.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -310,7 +310,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The fresh wind slabs are prone to triggering.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -345,7 +345,7 @@ We have the following danger patterns: dp.6: cold, loose snow and wind, dp.4: co
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Avalanche report for Wednesday 16 January 2019.</s></p>
+<p><s>Avalanche forecast for Wednesday 16 January 2019.</s></p>
 <p><emphasis><s>The wind slabs represent the main danger.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>

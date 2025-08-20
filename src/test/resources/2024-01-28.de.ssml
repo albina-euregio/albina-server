@@ -3,7 +3,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zum Lawinenreport für Sonntag, 28. Jänner 2024.</s></p>
+<p><s>Update zur Lawinenvorhersage für Sonntag, 28. Jänner 2024.</s></p>
 <p><emphasis><s>Schwachschichten im oberen Teil der Schneedecke erfordern Vorsicht und Zurückhaltung. Zudem besteht eine latente Gefahr von Gleitschneelawinen.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -39,7 +39,7 @@ Wir finden die folgenden Gefahrenmuster: gm.4: kalt auf warm / warm auf kalt, gm
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zum Lawinenreport für Sonntag, 28. Jänner 2024.</s></p>
+<p><s>Update zur Lawinenvorhersage für Sonntag, 28. Jänner 2024.</s></p>
 <p><emphasis><s>Triebschnee und Gleitschnee beachten.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -74,7 +74,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zum Lawinenreport für Sonntag, 28. Jänner 2024.</s></p>
+<p><s>Update zur Lawinenvorhersage für Sonntag, 28. Jänner 2024.</s></p>
 <p><emphasis><s>Die Triebschneeansammlungen bilden die Hauptgefahr.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -108,7 +108,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zum Lawinenreport für Sonntag, 28. Jänner 2024.</s></p>
+<p><s>Update zur Lawinenvorhersage für Sonntag, 28. Jänner 2024.</s></p>
 <p><emphasis><s>Die Triebschneeansammlungen bilden die Hauptgefahr.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -142,7 +142,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zum Lawinenreport für Sonntag, 28. Jänner 2024.</s></p>
+<p><s>Update zur Lawinenvorhersage für Sonntag, 28. Jänner 2024.</s></p>
 <p><emphasis><s>Die Verhältnisse sind verbreitet günstig.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -177,7 +177,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Update zum Lawinenreport für Sonntag, 28. Jänner 2024.</s></p>
+<p><s>Update zur Lawinenvorhersage für Sonntag, 28. Jänner 2024.</s></p>
 <p><emphasis><s>Frischer und älterer Triebschnee in hohen Lagen. Feuchte Rutsche sind tagsüber möglich.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
