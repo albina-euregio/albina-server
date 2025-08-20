@@ -3,7 +3,7 @@
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Donnerstag, 27. Dezember 2018.</s></p>
+<p><s>Lawinenvorhersage für Donnerstag, 27. Dezember 2018.</s></p>
 <p><emphasis><s>Vorsicht vor Triebschnee, besonders oberhalb von rund 2200 m, v.a. an sehr steilen Schattenhängen und in Kammlagen. Schwacher Altschnee in mittleren und hohen Lagen. Leichter Anstieg der Gefahr von feuchten und nassen Lawinen mit der tageszeitlichen Erwärmung und der Sonneneinstrahlung.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -41,7 +41,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.5: s
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Donnerstag, 27. Dezember 2018.</s></p>
+<p><s>Lawinenvorhersage für Donnerstag, 27. Dezember 2018.</s></p>
 <p><emphasis><s>Vorsicht vor Triebschnee, besonders oberhalb von rund 2200 m. Gleitschneelawinen und Rutsche an Grashängen. Dies vor allem unterhalb von rund 2400 m. Die Gefahr von feuchten und nassen Lawinen steigt im Tagesverlauf etwas an.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -76,7 +76,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.2: g
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Donnerstag, 27. Dezember 2018.</s></p>
+<p><s>Lawinenvorhersage für Donnerstag, 27. Dezember 2018.</s></p>
 <p><emphasis><s>Frischer Triebschnee ist die Hauptgefahr. Dies vor allem in Kammlagen. Schwacher Altschnee besonders an West-, Nord- und Osthängen, v.a. zwischen etwa 2200 und 2700 m.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -111,7 +111,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.5: s
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Donnerstag, 27. Dezember 2018.</s></p>
+<p><s>Lawinenvorhersage für Donnerstag, 27. Dezember 2018.</s></p>
 <p><emphasis><s>Die Triebschneeansammlungen bilden die Hauptgefahr.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -145,7 +145,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind, gm.5: s
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Donnerstag, 27. Dezember 2018.</s></p>
+<p><s>Lawinenvorhersage für Donnerstag, 27. Dezember 2018.</s></p>
 <p><emphasis><s>Frischen Triebschnee beachten, vor allem in Kammlagen.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
@@ -179,7 +179,7 @@ Wir finden die folgenden Gefahrenmuster: gm.6: lockerer schnee und wind.
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
-<p><s>Lawinenreport für Donnerstag, 27. Dezember 2018.</s></p>
+<p><s>Lawinenvorhersage für Donnerstag, 27. Dezember 2018.</s></p>
 <p><emphasis><s>Es liegt an Südhängen kaum Schnee.</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
