@@ -24,6 +24,7 @@
   <entry key="headline">Lawinenvorhersage</entry>
   <entry key="headline.update">UPDATE zur Lawinenvorhersage</entry>
   <entry key="headline.tendency">Tendenz</entry>
+  <entry key="headline.synopsis">Wetter</entry>
   <entry key="headline.regions">Regionen</entry>
   <entry key="headline.avalanche-problem">Lawinenproblem</entry>
   <entry key="headline.danger-patterns">Gefahrenmuster</entry>
@@ -64,8 +65,8 @@
   <entry key="valid-time-period.earlier.long">Früher am Tag</entry>
   <entry key="valid-time-period.later">später</entry>
   <entry key="valid-time-period.later.long">Später am Tag</entry>
-  <entry key="speech.bulletin.update">Update zum Lawinenreport für {validityDate}.</entry>
-  <entry key="speech.bulletin">Lawinenreport für {validityDate}.</entry>
+  <entry key="speech.bulletin.update">Update der Lawinenvorhersage für {validityDate}.</entry>
+  <entry key="speech.bulletin">Lawinenvorhersage für {validityDate}.</entry>
   <entry key="speech.furthermore">Des Weiteren, {text}</entry>
   <entry key="speech.highlights">Achtung, eine spezielle Warnung: {highlights}</entry>
   <entry key="speech.snowpack">Und nun zur Schneedecke:</entry>

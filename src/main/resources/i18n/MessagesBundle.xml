@@ -66,8 +66,8 @@
   <entry key="valid-time-period.later">later</entry>
   <entry key="valid-time-period.later.long">later in the day</entry>
 
-  <entry key="speech.bulletin.update">Update of the avalanche report for {validityDate}.</entry>
-  <entry key="speech.bulletin">Avalanche report for {validityDate}.</entry>
+  <entry key="speech.bulletin.update">Update of the avalanche forecast for {validityDate}.</entry>
+  <entry key="speech.bulletin">Avalanche forecast for {validityDate}.</entry>
   <entry key="speech.furthermore">Furthermore, {text}</entry>
   <entry key="speech.highlights">Attention, a special warning: {highlights}</entry>
   <entry key="speech.snowpack">And now the snowpack:</entry>
