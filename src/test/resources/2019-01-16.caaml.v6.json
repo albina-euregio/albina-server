@@ -103,7 +103,7 @@
       "name" : "Schnals Ridge",
       "regionID" : "IT-32-BZ-03"
     }, {
-      "name" : "Southern Stubai Alps",
+      "name" : "Stubai Alps South",
       "regionID" : "IT-32-BZ-04"
     }, {
       "name" : "Southern Zillertal Alps and High Tauern",
@@ -337,13 +337,13 @@
     } ],
     "lang" : "en",
     "regions" : [ {
-      "name" : "Western Verwall Mountains",
+      "name" : "Verwall Mountains Central",
       "regionID" : "AT-07-10"
     }, {
-      "name" : "Eastern Verwall Mountains",
+      "name" : "Verwall Mountains East",
       "regionID" : "AT-07-11"
     }, {
-      "name" : "Silvretta",
+      "name" : "Silvretta East",
       "regionID" : "AT-07-12"
     }, {
       "name" : "Samnaun Mountains",
@@ -352,16 +352,16 @@
       "name" : "Northern Oetz and Stubai Alps",
       "regionID" : "AT-07-14"
     }, {
-      "name" : "Western Tuxer Alps",
+      "name" : "Tuxer Alps West",
       "regionID" : "AT-07-15"
     }, {
-      "name" : "Eastern Tuxer Alps",
+      "name" : "Tuxer Alps East",
       "regionID" : "AT-07-16"
     }, {
-      "name" : "Western Kitzbühel Alps",
+      "name" : "Kitzbühel Alps Brixental",
       "regionID" : "AT-07-17"
     }, {
-      "name" : "Eastern Kitzbühel Alps",
+      "name" : "Kitzbühel Alps Wildseeloder",
       "regionID" : "AT-07-18"
     }, {
       "name" : "Glockturm Range",
@@ -373,16 +373,16 @@
       "name" : "Gurgler Range",
       "regionID" : "AT-07-21"
     }, {
-      "name" : "Central Stubai Alps",
+      "name" : "Stubai Alps Central",
       "regionID" : "AT-07-22"
     }, {
       "name" : "Northern Zillertal Alps",
       "regionID" : "AT-07-23"
     }, {
-      "name" : "Allgäu Alps",
+      "name" : "Allgäu Alps East",
       "regionID" : "AT-07-01"
     }, {
-      "name" : "Venediger Range",
+      "name" : "Venediger Range South",
       "regionID" : "AT-07-24"
     }, {
       "name" : "Eastern Lechtal Alps - Ammergau Alps",
@@ -403,10 +403,10 @@
       "name" : "Wilder Kaiser Mountains - Waidring Alps",
       "regionID" : "AT-07-06"
     }, {
-      "name" : "Western Lechtal Alps",
+      "name" : "Lechtal Alps West",
       "regionID" : "AT-07-07"
     }, {
-      "name" : "Central Lechtal Alps",
+      "name" : "Lechtal Alps Central",
       "regionID" : "AT-07-08"
     }, {
       "name" : "Grieskogel Mountains",
@@ -704,7 +704,7 @@
       "name" : "Western Nonsberg Alps",
       "regionID" : "IT-32-TN-17"
     }, {
-      "name" : "Folgaria - Laverone",
+      "name" : "Folgaria - Lavarone",
       "regionID" : "IT-32-TN-06"
     }, {
       "name" : "Southern Lagorai",
@@ -795,13 +795,13 @@
     } ],
     "lang" : "en",
     "regions" : [ {
-      "name" : "Western Pfunderer Mountains",
+      "name" : "Pfunderer Mountains West",
       "regionID" : "IT-32-BZ-09"
     }, {
-      "name" : "Eastern Pfunderer Mountains",
+      "name" : "Pfunderer Mountains East",
       "regionID" : "IT-32-BZ-10"
     }, {
-      "name" : "Western Deferegger Alps",
+      "name" : "Deferegger Alps West",
       "regionID" : "IT-32-BZ-13"
     }, {
       "name" : "Saldurn-Mastaun Ridge",
@@ -880,10 +880,10 @@
     } ],
     "lang" : "en",
     "regions" : [ {
-      "name" : "Eastern Deferegger Alps",
+      "name" : "Deferegger Alps East",
       "regionID" : "AT-07-27"
     }, {
-      "name" : "Schober Mountains",
+      "name" : "Schober Mountains West",
       "regionID" : "AT-07-28"
     }, {
       "name" : "Lasörling Range",
@@ -941,10 +941,10 @@
     } ],
     "lang" : "en",
     "regions" : [ {
-      "name" : "Eastern Nonsberger Alps",
+      "name" : "Nonsberger Alps East",
       "regionID" : "IT-32-BZ-16"
     }, {
-      "name" : "Northern Dolomites of Fiemme",
+      "name" : "Dolomites of Fiemme North",
       "regionID" : "IT-32-BZ-17"
     } ]
   } ]

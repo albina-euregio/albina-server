@@ -7,19 +7,19 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-10">
-      <name>Western Verwall Mountains</name>
+      <name>Verwall Mountains Central</name>
     </region>
     <region regionID="AT-07-11">
-      <name>Eastern Verwall Mountains</name>
+      <name>Verwall Mountains East</name>
     </region>
     <region regionID="AT-07-01">
-      <name>Allgäu Alps</name>
+      <name>Allgäu Alps East</name>
     </region>
     <region regionID="AT-07-12">
-      <name>Silvretta</name>
+      <name>Silvretta East</name>
     </region>
     <region regionID="AT-07-24">
-      <name>Venediger Range</name>
+      <name>Venediger Range South</name>
     </region>
     <region regionID="AT-07-13">
       <name>Samnaun Mountains</name>
@@ -33,26 +33,29 @@
     <region regionID="AT-07-04">
       <name>Karwendel Mountains</name>
     </region>
-    <region regionID="AT-07-26">
-      <name>Glockner Range</name>
+    <region regionID="AT-07-26-01">
+      <name>Glockner Range South</name>
+    </region>
+    <region regionID="AT-07-26-02">
+      <name>Goldried</name>
     </region>
     <region regionID="AT-07-05">
       <name>Brandenberg Alps</name>
     </region>
     <region regionID="AT-07-17">
-      <name>Western Kitzbühel Alps</name>
+      <name>Kitzbühel Alps Brixental</name>
     </region>
     <region regionID="AT-07-06">
       <name>Wilder Kaiser Mountains - Waidring Alps</name>
     </region>
     <region regionID="AT-07-18">
-      <name>Eastern Kitzbühel Alps</name>
+      <name>Kitzbühel Alps Wildseeloder</name>
     </region>
     <region regionID="AT-07-07">
-      <name>Western Lechtal Alps</name>
+      <name>Lechtal Alps West</name>
     </region>
     <region regionID="AT-07-08">
-      <name>Central Lechtal Alps</name>
+      <name>Lechtal Alps Central</name>
     </region>
     <dangerRating>
       <mainValue>considerable</mainValue>
@@ -119,10 +122,10 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-27">
-      <name>Eastern Deferegger Alps</name>
+      <name>Deferegger Alps East</name>
     </region>
     <region regionID="AT-07-28">
-      <name>Schober Mountains</name>
+      <name>Schober Mountains West</name>
     </region>
     <region regionID="AT-07-25">
       <name>Lasörling Range</name>
@@ -202,10 +205,10 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-15">
-      <name>Western Tuxer Alps</name>
+      <name>Tuxer Alps West</name>
     </region>
     <region regionID="AT-07-16">
-      <name>Eastern Tuxer Alps</name>
+      <name>Tuxer Alps East</name>
     </region>
     <region regionID="AT-07-19">
       <name>Glockturm Range</name>
@@ -220,10 +223,13 @@
       <name>Gurgler Range</name>
     </region>
     <region regionID="AT-07-22">
-      <name>Central Stubai Alps</name>
+      <name>Stubai Alps Central</name>
     </region>
-    <region regionID="AT-07-23">
-      <name>Northern Zillertal Alps</name>
+    <region regionID="AT-07-23-01">
+      <name>Zillertal Alps Northwest</name>
+    </region>
+    <region regionID="AT-07-23-02">
+      <name>Zillertal Alps Northeast</name>
     </region>
     <region regionID="AT-07-14">
       <name>Northern Oetz and Stubai Alps</name>
@@ -481,7 +487,7 @@
       <name>Western Nonsberg Alps</name>
     </region>
     <region regionID="IT-32-TN-06">
-      <name>Folgaria - Laverone</name>
+      <name>Folgaria - Lavarone</name>
     </region>
     <region regionID="IT-32-TN-08">
       <name>Southern Lagorai</name>
@@ -546,10 +552,10 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="IT-32-BZ-16">
-      <name>Eastern Nonsberger Alps</name>
+      <name>Nonsberger Alps East</name>
     </region>
     <region regionID="IT-32-BZ-17">
-      <name>Northern Dolomites of Fiemme</name>
+      <name>Dolomites of Fiemme North</name>
     </region>
     <dangerRating>
       <mainValue>low</mainValue>
@@ -602,10 +608,10 @@
       <name>Texel Mountains</name>
     </region>
     <region regionID="IT-32-BZ-09">
-      <name>Western Pfunderer Mountains</name>
+      <name>Pfunderer Mountains West</name>
     </region>
     <region regionID="IT-32-BZ-10">
-      <name>Eastern Pfunderer Mountains</name>
+      <name>Pfunderer Mountains East</name>
     </region>
     <region regionID="IT-32-BZ-11">
       <name>Durreck Range</name>
@@ -617,7 +623,7 @@
       <name>Val Müstair Alps</name>
     </region>
     <region regionID="IT-32-BZ-13">
-      <name>Western Deferegger Alps</name>
+      <name>Deferegger Alps West</name>
     </region>
     <region regionID="IT-32-BZ-02">
       <name>Langtaufers</name>
@@ -626,7 +632,7 @@
       <name>Schnals Ridge</name>
     </region>
     <region regionID="IT-32-BZ-04">
-      <name>Southern Stubai Alps</name>
+      <name>Stubai Alps South</name>
     </region>
     <region regionID="IT-32-BZ-05">
       <name>Southern Zillertal Alps and High Tauern</name>
@@ -704,8 +710,14 @@
       <endTime>2019-01-17T16:00:00Z</endTime>
     </validTime>
     <unscheduled>false</unscheduled>
-    <region regionID="AT-07-29">
+    <region regionID="AT-07-29-01">
+      <name>Carnic Alps Osttirol</name>
+    </region>
+    <region regionID="AT-07-29-02">
       <name>Lienzer Dolomites</name>
+    </region>
+    <region regionID="AT-07-29-03">
+      <name>Kreuzeck Mountains Osttirol</name>
     </region>
     <dangerRating>
       <mainValue>low</mainValue>
