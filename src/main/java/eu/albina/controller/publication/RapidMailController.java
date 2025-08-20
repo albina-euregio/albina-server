@@ -165,7 +165,7 @@ public interface RapidMailController {
 			.type("application/zip")
 			.content(createZipFile(emailHtml, null));
 		final String fromEmail = region.getWarningServiceEmail(lang);
-		final String fromName = region.getWebsiteName(lang);
+		final String fromName = region.getWarningServiceName(lang);
 		PostMailingsRequest request = new PostMailingsRequest()
 			.fromEmail(fromEmail)
 			.fromName(fromName)
