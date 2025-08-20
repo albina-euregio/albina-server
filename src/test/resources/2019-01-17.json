@@ -11,7 +11,8 @@
 			"AT-07-02",
 			"AT-07-03",
 			"AT-07-04",
-			"AT-07-26",
+			"AT-07-26-01",
+			"AT-07-26-02",
 			"AT-07-05",
 			"AT-07-17",
 			"AT-07-06",
@@ -209,7 +210,8 @@
 			"AT-07-20",
 			"AT-07-21",
 			"AT-07-22",
-			"AT-07-23",
+			"AT-07-23-01",
+			"AT-07-23-02",
 			"AT-07-14"
 		],
 		"tendency": "decreasing",
@@ -775,7 +777,11 @@
 	},
 	{
 		"tendencyCommentTextcat": "86[6415,7750,7100,14258,3990,9413]",
-		"regions": ["AT-07-29"],
+		"regions": [
+			"AT-07-29-01",
+			"AT-07-29-02",
+			"AT-07-29-03"
+		],
 		"tendency": "decreasing",
 		"forenoon": {
 			"hasElevationDependency": true,
