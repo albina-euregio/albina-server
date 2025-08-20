@@ -18,31 +18,16 @@ public class Application {
 
 	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    public static void main(String[] args) {
-		GlobalVariables.loadConfigProperties();
+	public static void main(String[] args) {
+//		GlobalVariables.loadConfigProperties();
+//
+//		SchedulerUtil.getInstance().setUp();
+//		SchedulerUtil.getInstance().start();
+		// TODO use micronaut way of schedulers by creating a Startup Listener Bean?
 
-		HibernateUtil.getInstance().setUp();
-
-		Enumeration<Driver> drivers = DriverManager.getDrivers();
-		Driver d = null;
-		while (drivers.hasMoreElements()) {
-			try {
-				d = drivers.nextElement();
-				DriverManager.deregisterDriver(d);
-				logger.warn(String.format("Driver %s deregistered", d));
-			} catch (SQLException ex) {
-				logger.warn(String.format("Error deregistering driver %s", d), ex);
-			}
-		}
-
-		SchedulerUtil.getInstance().setUp();
-		SchedulerUtil.getInstance().start();
-
-		DBMigration.executeMigration();
-		DBMigration.createAutoConfiguration();
 		logger.debug("ServletContextListener started");
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();
-        Micronaut.run(Application.class, args);
-    }
+		SLF4JBridgeHandler.removeHandlersForRootLogger();
+		SLF4JBridgeHandler.install();
+		Micronaut.run(Application.class, args);
+	}
 }
