@@ -25,6 +25,8 @@ import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.model.publication.WhatsAppConfiguration;
 import eu.albina.util.GlobalVariables;
+import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -81,7 +83,8 @@ public class ServerInstanceService {
 		}
 	}
 
-	static class PublicLocalServerConfiguration {
+	@Serdeable
+	public static class PublicLocalServerConfiguration {
 		public final String name;
 		public final String apiUrl;
 		public final String version;
@@ -91,20 +94,27 @@ public class ServerInstanceService {
 			this.apiUrl = apiUrl;
 			this.version = version;
 		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getApiUrl() {
+			return apiUrl;
+		}
+
+		public String getVersion() {
+			return version;
+		}
 	}
 
 	@Get("/info")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Get public local server configuration")
 	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
-	public HttpResponse<?> getPublicLocalServerConfiguration() {
-		try {
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-			PublicLocalServerConfiguration r = new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), GlobalVariables.version);
-            return HttpResponse.ok(r);
-		} catch (HibernateException he) {
-			logger.warn("Error loading local server configuration", he);
-			return HttpResponse.badRequest().body(he.toString());
-		}
+	public PublicLocalServerConfiguration getPublicLocalServerConfiguration() {
+		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+		return new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), GlobalVariables.version);
 	}
 
 	@Get
