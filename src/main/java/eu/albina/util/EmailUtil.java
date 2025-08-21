@@ -130,8 +130,9 @@ public class EmailUtil {
 			text.put("pm", "");
 		}
 
-		// TODO: (general-headline): add conditional - only set general headline if activated in backend
-		text.put("generalHeadline", avalancheReport.getGeneralHeadline(lang));
+		if (!region.isEnableGeneralHeadline()) {
+			text.put("generalHeadline", avalancheReport.getGeneralHeadline(lang));
+		}
 
 		Map<String, Object> dangerRatings = new HashMap<>();
 		dangerRatings.put("low", DangerRating.low.toString(lang.getLocale(), false));
@@ -241,12 +242,11 @@ public class EmailUtil {
 				}
 
 				// weather
-				if (avalancheBulletin.getSynopsisCommentIn(lang) != null) {
-					bulletin.put("synopsisHeadline", lang.getBundleString("headline.synopsis"));
-					bulletin.put("synopsisComment", avalancheBulletin.getSynopsisCommentIn(lang));
-				} else {
-					bulletin.put("synopsisHeadline", null);
-					bulletin.put("synopsisComment", null);
+				if (!region.isEnableWeatherTextField()) {
+					if (avalancheBulletin.getSynopsisCommentIn(lang) != null) {
+						bulletin.put("synopsisHeadline", lang.getBundleString("headline.synopsis"));
+						bulletin.put("synopsisComment", avalancheBulletin.getSynopsisCommentIn(lang));
+					}
 				}
 
 				// tendency
