@@ -8,7 +8,13 @@ import eu.albina.model.StressLevel;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.model.Region;
-import eu.albina.rest.filter.Secured;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,16 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -35,50 +32,47 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Path("/user/stress-level")
+@Controller("/user/stress-level")
 @Tag(name = "user")
 public class StressLevelService {
 
 	private static final Logger logger = LoggerFactory.getLogger(StressLevelService.class);
 
-	@GET
-	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Get
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "List stress level entries of user")
-	public Response getStressLevels(
-			@Context SecurityContext securityContext,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+	public HttpResponse<?> getStressLevels(
+			Principal principal,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String start,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String end) {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+		User user = UserController.getInstance().getUser(principal.getName());
 		Set<User> users = Collections.singleton(user);
 		List<StressLevel> stressLevels = StressLevelController.get(users, startDate, endDate);
-		return Response.ok(stressLevels).build();
+		return HttpResponse.ok(stressLevels);
 	}
 
-	@GET
-	@Path("/team")
-	@Secured({Role.FORECASTER})
+	@Get("/team")
+	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "List stress level entries of team")
-	public Response getTeamStressLevels(
-			@Context SecurityContext securityContext,
-			@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String end) {
+	public HttpResponse<?> getTeamStressLevels(
+			Principal principal,
+			@QueryValue String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String start,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String end) {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+		User user = UserController.getInstance().getUser(principal.getName());
 		try {
 			// check that user is member of requested region
 			Region region = RegionController.getInstance().getRegion(regionId);
 			if (!user.hasPermissionForRegion(region.getId())) {
-				return Response.status(403).build();
+				return HttpResponse.status(HttpStatus.FORBIDDEN);
 			}
 			List<User> users = UserController.getInstance().getUsers().stream()
 					.filter(u -> !u.isDeleted())
@@ -87,28 +81,26 @@ public class StressLevelService {
 					.filter(u -> u.hasPermissionForRegion(region.getId()))
 					.collect(Collectors.toList());
 			Map<UUID, List<StressLevel>> stressLevels = StressLevel.randomizeUsers(StressLevelController.get(users, startDate, endDate));
-			return Response.ok(stressLevels).build();
+			return HttpResponse.ok(stressLevels);
 		} catch (Exception e) {
 			logger.warn("Failed to get stress levels for region: " + regionId, e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Post
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create stress level entry")
-	public Response postStressLevel(
-			@Context SecurityContext securityContext,
+	public HttpResponse<?> postStressLevel(
+			Principal principal,
 			StressLevel stressLevel) {
 
-		User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+		User user = UserController.getInstance().getUser(principal.getName());
 		stressLevel.setUser(user);
 		stressLevel = StressLevelController.create(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);
-		return Response.ok(stressLevel).build();
+		return HttpResponse.ok(stressLevel);
 	}
 
 }

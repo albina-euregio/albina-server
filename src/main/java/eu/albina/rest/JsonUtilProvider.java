@@ -4,45 +4,36 @@ package eu.albina.rest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-
-import jakarta.annotation.Priority;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.Priorities;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.MultivaluedMap;
-import jakarta.ws.rs.ext.MessageBodyReader;
-import jakarta.ws.rs.ext.MessageBodyWriter;
-import jakarta.ws.rs.ext.Provider;
+import java.io.UncheckedIOException;
 
 import eu.albina.util.JsonUtil;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.type.Argument;
+import io.micronaut.core.type.Headers;
+import io.micronaut.core.type.MutableHeaders;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.body.MessageBodyReader;
+import io.micronaut.http.body.MessageBodyWriter;
+import io.micronaut.http.codec.CodecException;
 
-@Provider
-@jakarta.inject.Singleton
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-@Priority(Priorities.ENTITY_CODER)
 public class JsonUtilProvider<T> implements MessageBodyReader<T>, MessageBodyWriter<T> {
 
 	@Override
-	public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-		return true;
+	public @Nullable T read(@NonNull Argument<T> type, @Nullable MediaType mediaType, @NonNull Headers httpHeaders, @NonNull InputStream inputStream) throws CodecException {
+		try {
+			return JsonUtil.parseUsingJackson(inputStream, type.getType());
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
 	@Override
-	public T readFrom(Class<T> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
-		return JsonUtil.parseUsingJackson(entityStream, type);
-	}
-
-	@Override
-	public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-		return true;
-	}
-
-	@Override
-	public void writeTo(T t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
-		JsonUtil.writeValueUsingJackson(entityStream, t);
+	public void writeTo(@NonNull Argument<T> type, @NonNull MediaType mediaType, T object, @NonNull MutableHeaders outgoingHeaders, @NonNull OutputStream outputStream) throws CodecException {
+		try {
+			JsonUtil.writeValueUsingJackson(outputStream, object);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }

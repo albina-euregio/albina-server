@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import java.nio.file.Path;
+import java.security.Principal;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -14,21 +16,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.core.UriInfo;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Consumes;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.http.annotation.Produces;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.RateLimiter;
@@ -71,14 +71,13 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import eu.albina.util.GlobalVariables;
 import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 
-@Path("/bulletins")
+@Controller("/bulletins")
 @Tag(name = "bulletins")
 @OpenAPIDefinition(info = @Info(
 	title = "albina-server",
@@ -91,20 +90,14 @@ public class AvalancheBulletinService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
 
-	@Context
-	UriInfo uri;
-
-	@GET
-	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Get("/edit")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/edit")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get bulletins for date")
-	public Response getJSONBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("regions") List<String> regionIds) {
+	public HttpResponse<?> getJSONBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue List<String> regionIds) {
 
 		List<Region> regions = new ArrayList<Region>();
 		regionIds.forEach(regionId -> {
@@ -118,18 +111,15 @@ public class AvalancheBulletinService {
 		return HibernateUtil.getInstance().run(entityManager -> getJSONBulletins(date, regions, entityManager));
 	}
 
-	@GET
-	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Get("/edit/caaml/json")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/edit/caaml/json")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get bulletins for date as CAAML JSON")
-	public Response getCaamlJsonBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("regions") List<String> regionIds,
-		@QueryParam("lang") LanguageCode language,
-		@QueryParam("version") CaamlVersion version) {
+	public HttpResponse<?> getCaamlJsonBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue List<String> regionIds,
+		@QueryValue LanguageCode language,
+		@QueryValue CaamlVersion version) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -146,11 +136,11 @@ public class AvalancheBulletinService {
 			return makeCAAML(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
-			return Response.noContent().build();
+			return HttpResponse.noContent();
 		}
 	}
 
-	private Response getJSONBulletins(String date, List<Region> regions, EntityManager entityManager) {
+	private HttpResponse<String> getJSONBulletins(String date, List<Region> regions, EntityManager entityManager) {
 		logger.debug("GET JSON bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -158,49 +148,48 @@ public class AvalancheBulletinService {
 
 		if (regions.isEmpty()) {
 			logger.warn("No region defined.");
-			return Response.noContent().build();
+			return HttpResponse.noContent();
 		}
 
 		List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, endDate, regions, entityManager);
 		Collections.sort(bulletins);
 		String jsonResult = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Internal.class);
-		return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
+		return HttpResponse.ok(jsonResult);
 	}
 
-	@GET
+	@Get
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(deprecated = true)
-	public Response getPublishedXMLBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("region") String regionId,
-		@QueryParam("lang") LanguageCode language,
-		@QueryParam("version") CaamlVersion version) {
+	public HttpResponse<?> getPublishedXMLBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue String regionId,
+		@QueryValue LanguageCode language,
+		@QueryValue CaamlVersion version) {
 		List<String> regionIds = regionId != null ? Collections.singletonList(regionId) : Collections.emptyList();
 		return getPublishedCaamlBulletins(date, regionIds, language, version);
 	}
 
-	private static Response makeCAAML(AvalancheReport avalancheReport, LanguageCode language, CaamlVersion version) {
+	private static HttpResponse<?> makeCAAML(AvalancheReport avalancheReport, LanguageCode language, CaamlVersion version) {
 		String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
 		if (caaml != null) {
 			final String type = version != CaamlVersion.V6_JSON ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
-			return Response.ok(caaml, type).build();
+			return HttpResponse.ok(caaml).contentType(type);
 		} else {
 			logger.debug("No bulletins for this request.");
-			return Response.noContent().build();
+			return HttpResponse.noContent();
 		}
 	}
 
-	@GET
-	@Path("/caaml")
+	@Get("/caaml")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(summary = "Get published bulletins for date as CAAML XML")
-	public Response getPublishedCaamlBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("regions") List<String> regionIds,
-		@QueryParam("lang") LanguageCode language,
-		@QueryParam("version") CaamlVersion version) {
+	public HttpResponse<?> getPublishedCaamlBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue List<String> regionIds,
+		@QueryValue LanguageCode language,
+		@QueryValue CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -213,20 +202,17 @@ public class AvalancheBulletinService {
 			return makeCAAML(avalancheReport, language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_XML).build();
+			return HttpResponse.badRequest();
 		}
 	}
 
-	@GET
-	@Path("/caaml/json")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Get("/caaml/json")
 	@Operation(summary = "Get published bulletins for date as CAAML JSON")
-	public Response getPublishedCaamlJsonBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("regions") List<String> regionIds,
-		@QueryParam("lang") LanguageCode language,
-		@QueryParam("version") CaamlVersion version) {
+	public HttpResponse<?> getPublishedCaamlJsonBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue List<String> regionIds,
+		@QueryValue LanguageCode language,
+		@QueryValue CaamlVersion version) {
 		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 	}
 
@@ -234,47 +220,41 @@ public class AvalancheBulletinService {
 		public Instant date;
 	}
 
-	@GET
-	@Path("/latest")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Get("/latest")
 	@ApiResponse(description = "latest", content = @Content(schema = @Schema(implementation = LatestBulletin.class)))
 	@Operation(summary = "Get latest bulletin date")
-	public Response getLatest() {
+	public HttpResponse<?> getLatest() {
 		logger.debug("GET latest date");
 		try {
 			LatestBulletin json = new LatestBulletin();
 			json.date = AvalancheReportController.getInstance().getLatestDate();
 
-			return Response.ok(json, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(json);
 		} catch (AlbinaException e) {
 			logger.warn("Error loading latest date", e);
-			return Response.status(400).type(MediaType.APPLICATION_XML).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@GET
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Get
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(deprecated = true)
-	public Response getPublishedJSONBulletins0(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> getPublishedJSONBulletins0(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue List<String> regionIds, @QueryValue LanguageCode language) {
 		return getPublishedJSONBulletins(date, regionIds, language);
 	}
 
 	private final RateLimiter pdfRateLimiter = RateLimiter.create(2.0); // allow 2 PDFs per second
 
-	@GET
-	@Path("/pdf")
+	@Get("/pdf")
 	@Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get published bulletins as PDF")
-	public Response getPublishedBulletinsAsPDF(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("region") String regionId,
-		@QueryParam("grayscale") boolean grayscale,
-		@QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> getPublishedBulletinsAsPDF(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue String regionId,
+		@QueryValue boolean grayscale,
+		@QueryValue LanguageCode language) {
 
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		logger.info("Get published bulletins as PDF {}", regionId);
@@ -286,25 +266,24 @@ public class AvalancheBulletinService {
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
-			java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
-			return Response.ok(pdf.toFile(), PdfUtil.MEDIA_TYPE).build();
+			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
+			return HttpResponse.ok(pdf.toFile()).contentType(PdfUtil.MEDIA_TYPE);
 		} catch (Exception e) {
 			logger.warn("Error creating PDF", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		} finally {
 			logger.info("Get published bulletin as PDF {} took {}", regionId, stopwatch);
 		}
 	}
 
-	@GET
-	@Path("/{bulletinId}/pdf")
+	@Get("/{bulletinId}/pdf")
 	@Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get published bulletin as PDF")
-	public Response getPublishedBulletinAsPDF(
-		@PathParam("bulletinId") String bulletinId,
-		@QueryParam("region") String regionId,
-		@QueryParam("grayscale") boolean grayscale,
-		@QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> getPublishedBulletinAsPDF(
+		@PathVariable("bulletinId") String bulletinId,
+		@QueryValue String regionId,
+		@QueryValue boolean grayscale,
+		@QueryValue LanguageCode language) {
 
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		logger.info("Get published bulletin as PDF {}", bulletinId);
@@ -315,54 +294,48 @@ public class AvalancheBulletinService {
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
-			java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
-			return Response.ok(pdf.toFile(), PdfUtil.MEDIA_TYPE).build();
+			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
+			return HttpResponse.ok(pdf.toFile()).contentType(PdfUtil.MEDIA_TYPE);
 		} catch (Exception e) {
 			logger.warn("Error creating PDF", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		} finally {
 			logger.info("Get published bulletin as PDF {} took {}", bulletinId, stopwatch);
 		}
 	}
 
-	@GET
-	@Path("/json")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Get("/json")
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get published bulletins for date")
-	public Response getPublishedJSONBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("regions") List<String> regionIds, @QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> getPublishedJSONBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue List<String> regionIds, @QueryValue LanguageCode language) {
 		logger.debug("GET published JSON bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
 		List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions);
 		String json = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
-		return Response.ok(json, MediaType.APPLICATION_JSON).build();
+		return HttpResponse.ok(json);
 	}
 
 	static class Highest {
 		public DangerRating dangerRating;
 	}
 
-	@GET
-	@Path("/highest")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Get("/highest")
 	@ApiResponse(description = "latest", content = @Content(schema = @Schema(implementation = Highest.class)))
 	@Operation(summary = "Get highest danger rating")
-	public Response getHighestDangerRating(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("regions") List<String> regionIds) {
+	public HttpResponse<?> getHighestDangerRating(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue List<String> regionIds) {
 		logger.debug("GET highest danger rating");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 
 		if (regionIds.isEmpty()) {
 			logger.warn("No region defined.");
-			return Response.noContent().build();
+			return HttpResponse.noContent();
 		}
 
 		List<Region> regions = new ArrayList<Region>();
@@ -374,23 +347,22 @@ public class AvalancheBulletinService {
 
 			Highest jsonResult = new Highest();
 			jsonResult.dangerRating = highestDangerRating;
-			return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(jsonResult);
 		} catch (AlbinaException e) {
 			logger.warn("Error loading highest danger rating", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
-	@POST
-	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Post("/preview")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/preview")
 	@Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get bulletin preview as PDF")
-	public Response getPreviewPdf(
+	public HttpResponse<?> getPreviewPdf(
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
-		@QueryParam("region") String regionId,
-		@QueryParam("lang") LanguageCode language) {
+		@QueryValue String regionId,
+		@QueryValue LanguageCode language) {
 
 		logger.debug("POST PDF preview {}", regionId);
 
@@ -411,57 +383,51 @@ public class AvalancheBulletinService {
 
 			MapUtil.createMapyrusMaps(avalancheReport);
 
-			final java.nio.file.Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
+			final Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
 
-			return Response.ok(pdf.toFile())
+			return HttpResponse.ok(pdf.toFile())
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + pdf.getFileName() + "\"")
-				.header(HttpHeaders.CONTENT_TYPE, PdfUtil.MEDIA_TYPE).build();
+				.header(HttpHeaders.CONTENT_TYPE, PdfUtil.MEDIA_TYPE);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating PDFs", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error creating PDFs", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@GET
-	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Get("/{bulletinId}")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{bulletinId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@ApiResponse(description = "bulletin", content = @Content(schema = @Schema(implementation = AvalancheBulletin.class)))
 	@Operation(summary = "Get bulletin by ID")
-	public Response getJSONBulletin(@PathParam("bulletinId") String bulletinId) {
+	public HttpResponse<?> getJSONBulletin(@PathVariable("bulletinId") String bulletinId) {
 		logger.debug("GET JSON bulletin: {}", bulletinId);
 
 		try {
 			AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin(bulletinId);
 			if (bulletin == null) {
-				return Response.status(Response.Status.NOT_FOUND).entity(new AlbinaException("Bulletin not found for ID: " + bulletinId).toJSON()).build();
+				return HttpResponse.notFound().body(new AlbinaException("Bulletin not found for ID: " + bulletinId).toJSON());
 			}
 			String json = JsonUtil.writeValueUsingJackson(bulletin, JsonUtil.Views.Internal.class);
-			return Response.ok(json, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(json);
 		} catch (HibernateException e) {
 			logger.warn("Error loading bulletin", e);
-			return Response.status(400).type(MediaType.TEXT_PLAIN).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({Role.FORECASTER, Role.FOREMAN})
+	@Post("/{bulletinId}")
+	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{bulletinId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update bulletin")
-	public Response updateJSONBulletin(
-		@PathParam("bulletinId") String bulletinId,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+	public HttpResponse<?> updateJSONBulletin(
+		@PathVariable("bulletinId") String bulletinId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
-		@QueryParam("region") String regionId,
-		@Context SecurityContext securityContext) {
+		@QueryValue String regionId,
+		Principal principal) {
 
 		synchronized (regionId.intern()) {
 			logger.info("POST JSON bulletin {} from date {}", bulletinId, date);
@@ -470,7 +436,7 @@ public class AvalancheBulletinService {
 					Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 					Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-					User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
+					User user = entityManager.find(User.class, principal.getName());
 					Region region = entityManager.find(Region.class, regionId);
 					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
@@ -484,7 +450,7 @@ public class AvalancheBulletinService {
 					return getJSONBulletins(date, regions, entityManager);
 				} catch (AlbinaException e) {
 					logger.warn("Error creating bulletin", e);
-					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+					return HttpResponse.badRequest().body(e.toJSON());
 				}
 			});
 		}
@@ -496,17 +462,15 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	@PUT
-	@Secured({Role.FORECASTER, Role.FOREMAN})
+	@Put
+	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create bulletin")
-	public Response createJSONBulletin(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+	public HttpResponse<?> createJSONBulletin(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
-		@QueryParam("region") String regionId,
-		@Context SecurityContext securityContext) {
+		@QueryValue String regionId,
+		Principal principal) {
 
 		synchronized (regionId.intern()) {
 			logger.info("PUT JSON bulletin from date {}", date);
@@ -515,7 +479,7 @@ public class AvalancheBulletinService {
 					Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 					Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-					User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
+					User user = entityManager.find(User.class, principal.getName());
 					Region region = entityManager.find(Region.class, regionId);
 					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
@@ -536,24 +500,21 @@ public class AvalancheBulletinService {
 					return getJSONBulletins(date, regions, entityManager);
 				} catch (AlbinaException e) {
 					logger.warn("Error creating bulletin", e);
-					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+					return HttpResponse.badRequest().body(e.toJSON());
 				}
 			});
 		}
 	}
 
-	@DELETE
-	@Secured({Role.FORECASTER, Role.FOREMAN})
+	@Delete("/{bulletinId}")
+	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{bulletinId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Delete bulletin")
-	public Response deleteJSONBulletin(
-		@PathParam("bulletinId") String bulletinId,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-		@QueryParam("region") String regionId,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> deleteJSONBulletin(
+		@PathVariable("bulletinId") String bulletinId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@QueryValue String regionId,
+		Principal principal) {
 
 		synchronized (regionId.intern()) {
 			logger.info("DELETE JSON bulletin {} from date {}", bulletinId, date);
@@ -562,7 +523,7 @@ public class AvalancheBulletinService {
 					Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 					Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-					User user = entityManager.find(User.class, securityContext.getUserPrincipal().getName());
+					User user = entityManager.find(User.class, principal.getName());
 					Region region = entityManager.find(Region.class, regionId);
 					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
@@ -575,23 +536,21 @@ public class AvalancheBulletinService {
 					return getJSONBulletins(date, regions, entityManager);
 				} catch (AlbinaException e) {
 					logger.warn("Error creating bulletin", e);
-					return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+					return HttpResponse.badRequest().body(e.toJSON());
 				}
 			});
 		}
 	}
 
-	@POST
-	@Secured({Role.FORECASTER, Role.FOREMAN})
+	@Post
+	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create bulletins")
-	public Response createJSONBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+	public HttpResponse<?> createJSONBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
-		@QueryParam("region") String regionId,
-		@Context SecurityContext securityContext) {
+		@QueryValue String regionId,
+		Principal principal) {
 
 		synchronized (regionId.intern()) {
 			logger.debug("POST JSON bulletins for date {}", date);
@@ -599,7 +558,7 @@ public class AvalancheBulletinService {
 				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+				User user = UserController.getInstance().getUser(principal.getName());
 				Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 				if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -616,30 +575,27 @@ public class AvalancheBulletinService {
 				return getJSONBulletins(date, regionIDs);
 			} catch (AlbinaException e) {
 				logger.warn("Error creating bulletin", e);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+				return HttpResponse.badRequest().body(e.toJSON());
 			}
 		}
 	}
 
-	@POST
-	@Secured({Role.FORECASTER})
+	@Post("/change")
+	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/change")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Change bulletins")
-	public Response changeBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
+	public HttpResponse<?> changeBulletins(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
-		@QueryParam("region") String regionId,
-		@Context SecurityContext securityContext) {
+		@QueryValue String regionId,
+		Principal principal) {
 		logger.debug("POST JSON bulletins change");
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			User user = UserController.getInstance().getUser(principal.getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -696,32 +652,29 @@ public class AvalancheBulletinService {
 					}.execute(null);
 				}, "changeBulletins").start();
 
-				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+				return HttpResponse.noContent();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error creating bulletin", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
-	@POST
-	@Secured({Role.FORECASTER})
+	@Post("/submit")
+	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/submit")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Submit bulletins")
-	public Response submitBulletins(@QueryParam("region") String regionId,
-									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-									@Context SecurityContext securityContext) {
+	public HttpResponse<?> submitBulletins(@QueryValue String regionId,
+									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+										   Principal principal) {
 		logger.debug("POST submit bulletins");
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			User user = UserController.getInstance().getUser(principal.getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (regionId != null && user.hasPermissionForRegion(regionId)) {
@@ -743,25 +696,22 @@ public class AvalancheBulletinService {
 					AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
 				}
 
-				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+				return HttpResponse.noContent();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error submitting bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
-	@GET
-	@Secured({Role.FORECASTER, Role.FOREMAN})
+	@Get("/check")
+	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/check")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Check bulletins")
-	public Response checkBulletins(@QueryParam("region") String regionId,
-								   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-								   @Context SecurityContext securityContext) {
+	public HttpResponse<?> checkBulletins(@QueryValue String regionId,
+								   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+										  Principal principal) {
 		logger.debug("GET check bulletins");
 
 		try {
@@ -772,34 +722,31 @@ public class AvalancheBulletinService {
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			User user = UserController.getInstance().getUser(principal.getName());
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				Set<String> result = AvalancheBulletinController.getInstance().checkBulletins(startDate, endDate, region);
-				return Response.ok(result, MediaType.APPLICATION_JSON).build();
+				return HttpResponse.ok(result);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
-	@GET
-	@Secured({Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Get("/locked")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/locked")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getLockedBulletins(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date, @Context SecurityContext securityContext) {
+	public HttpResponse<?> getLockedBulletins(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date) {
 		logger.debug("GET JSON locked bulletins");
 
 		try {
 			List<BulletinLock> lockedBulletins = AvalancheBulletinController.getInstance().getLockedBulletins(DateControllerUtil.parseDateOrThrow(date));
-			return Response.ok(lockedBulletins, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(lockedBulletins);
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletin locks", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 }

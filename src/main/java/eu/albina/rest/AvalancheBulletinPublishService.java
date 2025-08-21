@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import java.security.Principal;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -9,15 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.security.annotation.Secured;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,12 +34,11 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/bulletins/publish")
+@Controller("/bulletins/publish")
 @Tag(name = "bulletins/publish")
 public class AvalancheBulletinPublishService {
 
@@ -50,28 +46,19 @@ public class AvalancheBulletinPublishService {
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
-	 *
-	 * @param regionId
-	 *            The region to publish the bulletins for.
-	 * @param date
-	 *            The date to publish the bulletins for.
-	 * @param securityContext
-	 * @return
 	 */
-	@POST
-	@Secured({ Role.FORECASTER })
+	@Post
+	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response publishBulletins(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@Context SecurityContext securityContext) {
+	public HttpResponse<?> publishBulletins(@QueryValue String regionId,
+											@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+											Principal principal) {
 		logger.debug("POST publish bulletins");
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			User user = UserController.getInstance().getUser(principal.getName());
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 			List<Region> regions = Stream.concat(
 				Stream.of(region),
@@ -96,33 +83,24 @@ public class AvalancheBulletinPublishService {
 					}
 				}.execute(null);
 
-				return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+				return HttpResponse.noContent();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
-	 *
-	 * @param date
-	 *            The date to publish the bulletins for.
-	 * @param securityContext
-	 * @return
 	 */
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/all")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/all")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response publishAllBulletins(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("change") boolean change,
-			@Context SecurityContext securityContext) {
+	public HttpResponse<?> publishAllBulletins(
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+			@QueryValue boolean change) {
 		logger.debug("POST publish all bulletins");
 
 		try {
@@ -145,107 +123,91 @@ public class AvalancheBulletinPublishService {
 					}
 				}.execute(null);
 				}, "publishAllBulletins").start();
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/email")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/email")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendEmail(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public HttpResponse<?> sendEmail(@QueryValue String regionId,
+							  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+							  @QueryValue LanguageCode language) {
 		try {
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendMails();
 			}
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending emails", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending emails", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/telegram")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/telegram")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response triggerTelegramChannel(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public HttpResponse<?> triggerTelegramChannel(@QueryValue String regionId,
+										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+										   @QueryValue LanguageCode language) {
 		try {
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendTelegramMessage();
 			}
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering telegram channel", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error triggering telegram channel", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/whatsapp")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/whatsapp")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response triggerWhatsAppChannel(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public HttpResponse<?> triggerWhatsAppChannel(@QueryValue String regionId,
+										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+										   @QueryValue LanguageCode language) {
 		try {
 			logger.debug("POST trigger whatsapp channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendWhatsAppMessage();
 			}
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering whatsapp channel", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error triggering whatsapp channel", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/push")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/push")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response triggerPushNotifications(@QueryParam("region") String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("lang") LanguageCode language,
-			@Context SecurityContext securityContext) {
+	public HttpResponse<?> triggerPushNotifications(@QueryValue String regionId,
+											 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+											 @QueryValue LanguageCode language) {
 		try {
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendPushNotifications();
 			}
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error triggering push notifications", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 

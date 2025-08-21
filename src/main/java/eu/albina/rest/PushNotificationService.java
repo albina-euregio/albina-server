@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +15,12 @@ import eu.albina.model.PushSubscription;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/push")
+@Controller("/push")
 @Tag(name = "push")
 public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
-	@GET
-	@Path("/key")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Get("/key")
 	@Operation(summary = "Get VAPID public key")
 	public Object key() {
 		return new Object() {
@@ -33,26 +28,20 @@ public class PushNotificationService {
 		};
 	}
 
-	@POST
-	@Path("/subscribe")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Post("/subscribe")
 	@Operation(summary = "Subscribe push notification")
-	public Response subscribe(PushSubscription subscription) {
+	public HttpResponse<?> subscribe(PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
 		PushSubscriptionController.create(subscription);
 		new PushNotificationUtil().sendWelcomePushMessage(subscription);
-		return Response.ok().build();
+		return HttpResponse.noContent();
 	}
 
-	@POST
-	@Path("/unsubscribe")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Post("/unsubscribe")
 	@Operation(summary = "Unsubscribe push notification")
-	public Response unsubscribe(PushSubscription subscription) {
+	public HttpResponse<?> unsubscribe(PushSubscription subscription) {
 		logger.info("Unsubscribing {}", subscription);
 		PushSubscriptionController.delete(subscription);
-		return Response.ok().build();
+		return HttpResponse.noContent();
 	}
 }

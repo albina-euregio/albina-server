@@ -5,10 +5,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Objects;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Post;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -33,7 +32,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/email")
+@Controller("/email")
 @Tag(name = "email")
 public class SubscriptionService {
 
@@ -50,12 +49,9 @@ public class SubscriptionService {
 		public LanguageCode language;
 	}
 
-	@POST
-	@Path("/subscribe")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Post("/subscribe")
 	@Operation(summary = "Subscribe email notification")
-	public Response addSubscriber(EmailSubscription json) {
+	public HttpResponse<?> addSubscriber(EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		Objects.requireNonNull(json.language, "language");
 		final Region region = RegionController.getInstance().getRegion(json.regions);
@@ -71,10 +67,10 @@ public class SubscriptionService {
 			RapidMailConfiguration config = RapidMailController.getConfiguration(region, subscriber.getLanguage(), null).orElseThrow();
 			SubscriberController.getInstance().createSubscriber(subscriber);
 			RapidMailController.createRecipient(config, recipient);
-			return Response.ok().build();
+			return HttpResponse.ok();
 		} catch (Exception e) {
 			logger.warn("Error subscribe", e);
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.getMessage()).build();
+			return HttpResponse.badRequest().body(e.getMessage());
 		}
 	}
 
@@ -82,15 +78,15 @@ public class SubscriptionService {
 	// @Path("/unsubscribe")
 	// @Produces(MediaType.APPLICATION_JSON)
 	// @Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteSubscriber(EmailSubscription json) {
+	public HttpResponse<?> deleteSubscriber(EmailSubscription json) {
         logger.debug("DELETE JSON subscriber: {}", json.email);
 
 		try {
 			SubscriberController.getInstance().deleteSubscriber(json.email);
-			return Response.ok().build();
+			return HttpResponse.ok();
 		} catch (HibernateException he) {
 			logger.warn("Error unsubscribe", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
+			return HttpResponse.badRequest().body(he.getMessage());
 		}
 	}
 
@@ -102,7 +98,7 @@ public class SubscriptionService {
 	// @Path("/confirm")
 	// @Consumes(MediaType.APPLICATION_JSON)
 	// @Produces(MediaType.APPLICATION_JSON)
-	public Response confirmSubscription(Token json) {
+	public HttpResponse<?> confirmSubscription(Token json) {
 		try {
             logger.debug("POST JSON confirm: {}", json.token);
 			DecodedJWT decodedToken = AuthenticationController.getInstance().decodeToken(json.token);
@@ -112,13 +108,13 @@ public class SubscriptionService {
 				throw new AlbinaException("Token expired!");
 			}
 			SubscriberController.getInstance().confirmSubscriber(decodedToken.getSubject());
-			return Response.ok().build();
+			return HttpResponse.ok();
 		} catch (AlbinaException e) {
 			logger.warn("Error confirm", e);
-			return Response.status(404).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (HibernateException he) {
 			logger.warn("Error confirm", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.getMessage()).build();
+			return HttpResponse.badRequest().body(he.getMessage());
 		}
 	}
 }

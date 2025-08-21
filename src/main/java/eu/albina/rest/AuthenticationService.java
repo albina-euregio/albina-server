@@ -4,22 +4,17 @@ package eu.albina.rest;
 import java.security.Principal;
 import java.util.Set;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.security.annotation.Secured;
 
 import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,7 +24,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/authentication")
+@Controller("/authentication")
 @Tag(name = "authentication")
 @SecurityScheme(
 	name = AuthenticationService.SECURITY_SCHEME,
@@ -60,12 +55,10 @@ public class AuthenticationService {
 		public String username;
 	}
 
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Post
 	@Operation(summary = "Authenticate user")
 	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = AuthenticationResponse.class)))
-	public Response login(Credentials credentials) {
+	public HttpResponse<?> login(Credentials credentials) {
 		String username = credentials.username.toLowerCase();
 		String password = credentials.password;
 
@@ -79,52 +72,45 @@ public class AuthenticationService {
 			result.regions = user.getRegions();
 			result.access_token = accessToken;
 
-			return Response.ok(result, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(result);
 		} catch (Exception e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return HttpResponse.unauthorized();
 		}
 	}
 
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Get
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Refresh token")
 	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Token.class)))
-	public Response refreshToken(@Context SecurityContext securityContext) {
+	public HttpResponse<?> refreshToken(Principal principal) {
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
 			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
 
 			Token jsonResult = new Token();
 			jsonResult.access_token = accessToken;
-			return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(jsonResult);
 		} catch (Exception e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return HttpResponse.unauthorized();
 		}
 	}
 
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Get("/test")
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Test access token")
 	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Username.class)))
-	@Path("/test")
-	public Response testAuth(@Context SecurityContext securityContext) {
+	public HttpResponse<?> testAuth(Principal principal) {
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
 			Username jsonResult = new Username();
 			jsonResult.username = username;
-			return Response.ok(jsonResult, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(jsonResult);
 		} catch (Exception e) {
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return HttpResponse.unauthorized();
 		}
 	}
 }

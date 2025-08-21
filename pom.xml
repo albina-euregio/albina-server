@@ -237,11 +237,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.micronaut.jaxrs</groupId>
-			<artifactId>micronaut-jaxrs-server</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>io.micronaut.liquibase</groupId>
 			<artifactId>micronaut-liquibase</artifactId>
 			<scope>compile</scope>
@@ -326,6 +321,10 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.ws.rs</groupId>
+			<artifactId>jakarta.ws.rs-api</artifactId>
 		</dependency>
 	</dependencies>
 	<build>

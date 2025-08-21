@@ -5,17 +5,16 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.security.annotation.Secured;
 import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.UriInfo;
 
@@ -37,10 +36,9 @@ import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/user")
+@Controller("/user")
 @Tag(name = "user")
 public class UserService {
 
@@ -49,88 +47,74 @@ public class UserService {
 	@Context
 	UriInfo uri;
 
-	@GET
-	@Secured({ Role.ADMIN })
+	@Get
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all users")
 	@ApiResponse(description = "users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
-	public Response getUsers(@Context SecurityContext securityContext) {
+	public HttpResponse<?> getUsers(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON users");
 		try {
 			List<User> users = UserController.getInstance().getUsers();
-			return Response.ok(users, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(users);
 		} catch (Exception e) {
 			logger.warn("Error loading users", e);
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return HttpResponse.unauthorized();
 		}
 	}
 
-	@GET
-	@Secured({ Role.ADMIN })
+	@Get("/roles")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/roles")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all roles")
 	@ApiResponse(description = "roles", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Role.class))))
-	public Response getRoles(@Context SecurityContext securityContext) {
+	public HttpResponse<?> getRoles(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON roles");
 		Role[] roles = Role.values();
-		return Response.ok(roles, MediaType.APPLICATION_JSON).build();
+		return HttpResponse.ok(roles);
 	}
 
-	@GET
-	@Secured({ Role.ADMIN })
+	@Get("/regions")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/regions")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all regions")
 	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
-	public Response getRegions(@Context SecurityContext securityContext) {
+	public HttpResponse<?> getRegions(@Context SecurityContext securityContext) {
 		logger.debug("GET JSON regions");
 		try {
 			List<String> ids = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return Response.ok(ids, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(ids);
 		} catch (Exception e) {
 			logger.warn("Error loading regions", e);
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return HttpResponse.unauthorized();
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/create")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/create")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create user")
-	public Response createUser(
-		@Parameter(schema = @Schema(implementation = User.class)) User user,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> createUser(
+		@Parameter(schema = @Schema(implementation = User.class)) User user) {
 		logger.debug("POST JSON user");
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
 		// check if email already exists
 		if (!UserController.getInstance().userExists(user.getEmail())) {
 			UserController.getInstance().createUser(user);
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
+			return HttpResponse.created(uri.getAbsolutePathBuilder().path("").build());
 		} else {
 			String message = "Error creating user - User already exists";
 			logger.warn(message);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
+			return HttpResponse.badRequest().body(new AlbinaException(message).toJSON());
 		}
 	}
 
 	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update own user")
-	public Response updateOwnUser(
+	public HttpResponse<?> updateOwnUser(
 		@Parameter(schema = @Schema(implementation = User.class)) User user,
 		@Context SecurityContext securityContext) {
 		logger.debug("PUT JSON user");
@@ -141,13 +125,13 @@ public class UserService {
 			// check if email already exists
 			if (user.getEmail().equals(username)) {
 				UserController.getInstance().updateUser(user);
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
+				return HttpResponse.created(uri.getAbsolutePathBuilder().path("").build());
 			} else {
 				throw new AlbinaException("Updating user not allowed");
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Error updating user", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
@@ -160,25 +144,21 @@ public class UserService {
 		public String newPassword;
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Put("/change")
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/change")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Change password")
-	public Response changePassword(ChangePassword data, @Context SecurityContext securityContext) {
+	public HttpResponse<?> changePassword(ChangePassword data, Principal principal) {
 		logger.debug("PUT JSON password");
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
 			UserController.getInstance().changePassword(username, data.oldPassword, data.newPassword);
 
-			return Response.ok().build();
+			return HttpResponse.ok();
 		} catch (AlbinaException e) {
 			logger.warn("Error changing password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
@@ -186,84 +166,70 @@ public class UserService {
 		public String password;
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Put("/check")
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/check")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Check password")
-	public Response checkPassword(CheckPassword data, @Context SecurityContext securityContext) {
+	public HttpResponse<?> checkPassword(CheckPassword data, Principal principal) {
 		logger.debug("GET JSON check password");
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
 			if (UserController.getInstance().checkPassword(username, data.password)) {
-				return Response.ok().build();
+				return HttpResponse.ok();
 			} else {
-				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
+				return HttpResponse.badRequest();
 			}
 		} catch (HibernateException e) {
 			logger.warn("Error checking password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@DELETE
-	@Secured({ Role.ADMIN })
+	@Delete("/{id}")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Delete user")
-	public void deleteUser(@PathParam("id") String id) {
+	public void deleteUser(@PathVariable("id") String id) {
 		logger.info("DELETE JSON user {}", id);
 		UserController.delete(id);
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN })
+	@Put("/{id}/reset")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{id}/reset")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Reset user password")
-	public Response resetPassword(@PathParam("id") String id, ResetPassword data, @Context SecurityContext securityContext) {
+	public HttpResponse<?> resetPassword(@PathVariable("id") String id, ResetPassword data) {
 		logger.debug("PUT JSON user password");
 		try {
 			UserController.getInstance().resetPassword(id, data.newPassword);
 
-			return Response.ok().build();
+			return HttpResponse.ok();
 		} catch (AlbinaException e) {
 			logger.warn("Error changing password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN })
+	@Put("/{id}")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update user")
-	public Response updateUser(
-		@PathParam("id") String id,
-		@Parameter(schema = @Schema(implementation = User.class)) User user,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> updateUser(
+		@PathVariable("id") String id,
+		@Parameter(schema = @Schema(implementation = User.class)) User user) {
 		logger.debug("PUT JSON user");
 		try {
 			// check if email already exists
 			if (UserController.getInstance().userExists(user.getEmail())) {
 				UserController.getInstance().updateUser(user);
-				return Response.ok().build();
+				return HttpResponse.ok();
 			} else {
 				throw new AlbinaException("User does not exist");
 			}
 		} catch (AlbinaException e) {
 			logger.warn("Error updating user", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
 

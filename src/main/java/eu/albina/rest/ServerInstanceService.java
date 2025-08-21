@@ -4,18 +4,13 @@ package eu.albina.rest;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.core.UriInfo;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.security.annotation.Secured;
 
 import com.google.common.base.MoreObjects;
 import eu.albina.controller.RegionController;
@@ -44,54 +39,45 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/server")
+@Controller("/server")
 @Tag(name = "server")
 public class ServerInstanceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerInstanceService.class);
 
-	@Context
-	UriInfo uri;
-
-	@PUT
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Put
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update server configuration")
-	public Response updateServerConfiguration(
+	public HttpResponse<?> updateServerConfiguration(
 		ServerInstance serverInstance) {
 		try {
 			ServerInstanceController.getInstance().updateServerInstance(serverInstance);
-			return Response.ok().build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error updating local server configuration", e);
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return HttpResponse.badRequest();
 		}
 	}
 
-	@POST
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Post
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create server configuration")
-	public Response createServerConfiguration(
-		ServerInstance serverInstance,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> createServerConfiguration(
+		ServerInstance serverInstance) {
 		logger.debug("POST JSON server");
 
 		// check if id already exists
 		if (serverInstance.getId() == null || !ServerInstanceController.getInstance().serverInstanceExists(serverInstance.getId())) {
 			ServerInstanceController.getInstance().createServerInstance(serverInstance);
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
+			return HttpResponse.created(serverInstance);
 		} else {
 			String msg = "Error creating server instance - Server instance already exists";
 			logger.warn(msg);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(msg).build();
+			return HttpResponse.badRequest().body(msg);
 		}
 	}
 
@@ -107,78 +93,67 @@ public class ServerInstanceService {
 		}
 	}
 
-	@GET
-	@Path("/info")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Get("/info")
 	@Operation(summary = "Get public local server configuration")
 	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
-	public Response getPublicLocalServerConfiguration() {
+	public HttpResponse<?> getPublicLocalServerConfiguration() {
 		try {
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			PublicLocalServerConfiguration r = new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), GlobalVariables.version);
-            return Response.ok(r, MediaType.APPLICATION_JSON).build();
+            return HttpResponse.ok(r);
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
 
-	@GET
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Get
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get local server configuration")
 	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
-	public Response getLocalServerConfiguration() {
+	public HttpResponse<?> getLocalServerConfiguration() {
 		logger.debug("GET JSON server");
 		try {
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-			return Response.ok(serverInstance, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(serverInstance);
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
 
-	@GET
-	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Get("/external")
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/external")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get external server configurations")
 	@ApiResponse(description = "configuration", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ServerInstance.class))))
-	public Response getExternalServerConfigurations() {
+	public HttpResponse<?> getExternalServerConfigurations() {
 		logger.debug("GET JSON external servers");
 		try {
 			List<ServerInstance> externalServerInstances = ServerInstanceController.getInstance().getExternalServerInstances();
-			return Response.ok(externalServerInstances, MediaType.APPLICATION_JSON).build();
+			return HttpResponse.ok(externalServerInstances);
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
 
-	@GET
-	@Secured({Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
+	@Get("/health")
+	@Secured({Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/health")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Perform health checks")
 	public Map<String, Object> getHealth(
-		@QueryParam("region") String regionId,
-		@QueryParam("lang") LanguageCode language
+		@QueryValue String regionId,
+		@QueryValue LanguageCode language
 	) throws Exception {
 		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 		logger.info("Testing TelegramController");
 		TelegramConfiguration telegramConfig = TelegramController.getConfiguration(region, language).orElseThrow();
-		Response me = TelegramController.getMe(telegramConfig);
+		Object me = TelegramController.getMe(telegramConfig);
 		logger.info("Testing WhatsAppController");
 		WhatsAppConfiguration whatsAppConfiguration = WhatsAppController.getConfiguration(region, language).orElseThrow();
-		Response whapiResponse = WhatsAppController.getHealth(whatsAppConfiguration);
+		Object whapiResponse = WhatsAppController.getHealth(whatsAppConfiguration);
 		logger.info("Testing Blog");
 		BlogConfiguration config = BlogController.getConfiguration(region, language);
 		BlogItem latestBlogPost = BlogController.getLatestBlogPost(config);
