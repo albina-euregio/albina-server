@@ -47,10 +47,6 @@ polygon_feature_danger_levels micro_regions_elevation_a
 line_feature_rivers rivers_l, level
 polygon_feature_lakes lakes_a, level
 
-# Province and Country borders
-line_feature_provinces provinces_l, level
-line_feature_country countries_l, level
-
 # Cities
 point_feature_city_marker cities_p, level
 
@@ -64,6 +60,10 @@ point_feature_labels labels_p, level
 
 # Passe Partout
 polygon_feature_pp passe_partout, level
+
+# Province and Country borders
+line_feature_provinces provinces_l, level
+line_feature_country countries_l, level
 
 # Scale bar
 if scalebar eq "on" then
