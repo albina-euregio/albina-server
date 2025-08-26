@@ -517,7 +517,7 @@ end
 # --- Country Borders ---
 # -------------------------------------------------------------
 
-begin line_feature_country file, level, in_out
+begin line_feature_country file, level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -529,17 +529,15 @@ begin line_feature_country file, level, in_out
 				clearpath
 				addpath GEOMETRY
 				eval country_line_color
-				if EUREGIO == in_out then
-					if map_level eq "thumbnail" then
-						eval country_line_1
-					elif map_level eq "standard" then
-						eval country_line_2
-					elif map_level eq "overlay" then
-						eval country_line_3
-					endif
-					if style == 2100 then
-						stroke
-					endif
+				if map_level eq "thumbnail" then
+					eval country_line_1
+				elif map_level eq "standard" then
+					eval country_line_2
+				elif map_level eq "overlay" then
+					eval country_line_3
+				endif
+				if style == 2100 then
+					stroke
 				endif
 			done
 
@@ -551,7 +549,7 @@ end
 # --- Province Borders ---
 # -------------------------------------------------------------
 
-begin line_feature_provinces file, level, in_out
+begin line_feature_provinces file, level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -563,7 +561,7 @@ begin line_feature_provinces file, level, in_out
 				clearpath
 				addpath GEOMETRY
 				eval prov_line_color
-				if EUREGIO == in_out and style == 2110 then
+				if style == 2110 then
 					if map_level eq "thumbnail" then
 						eval prov_line_1
 					elif map_level eq "standard" then
@@ -572,7 +570,7 @@ begin line_feature_provinces file, level, in_out
 						eval prov_line_3
 					endif
 					stroke
-				elif EUREGIO == in_out and style == 2111 then
+				elif style == 2111 then
 					if map_level eq "thumbnail" then
 						eval autonom_line_1
 					elif map_level eq "standard" then
@@ -693,7 +691,7 @@ begin CIRCLEMARKER scalefactor, fillcolor, strokecolor, linewidth
 	stroke
 end
 
-begin point_feature_city_marker file, level					#, in_out
+begin point_feature_city_marker file, level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -704,34 +702,32 @@ begin point_feature_city_marker file, level					#, in_out
 			fetch
 			clearpath
 			addpath GEOMETRY
-			#if EUREGIO == in_out then
-				if (map_level eq "thumbnail" and ALBINA_1 == 1) then
-					if category <= 3 then
-						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
-						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
-							LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-						else
-							LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-						endif
-					endif
-				elif (map_level eq "standard" and ALBINA_2 == 1 and bulletin_id ne not_in_map) or (map_level eq "overlay" and ALBINA_3 == 1) then
-					if category <= 3 then
-						SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
-						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
-							LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-						else
-							LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-						endif
+			if (map_level eq "thumbnail" and ALBINA_1 == 1) then
+				if category <= 3 then
+					SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
+					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+						LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					else
-						CIRCLEMARKER marker_scale, marker_color, marker_line_color, marker_line
-						if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
-							LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-						else
-							LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
-						endif
+						LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					endif
 				endif
-			#endif
+			elif (map_level eq "standard" and ALBINA_2 == 1 and bulletin_id ne not_in_map) or (map_level eq "overlay" and ALBINA_3 == 1) then
+				if category <= 3 then
+					SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
+					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+						LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+					else
+						LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+					endif
+				else
+					CIRCLEMARKER marker_scale, marker_color, marker_line_color, marker_line
+					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+						LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+					else
+						LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
+					endif
+				endif
+			endif
 		done
 
 	print "Cities drawn"
