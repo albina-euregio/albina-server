@@ -584,7 +584,7 @@ begin line_feature_provinces file, level, in_out
 				endif
 			done
 
-	print "Prvince borders drawn"
+	print "Province borders drawn"
 
 end
 
