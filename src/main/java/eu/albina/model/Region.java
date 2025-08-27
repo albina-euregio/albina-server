@@ -16,6 +16,7 @@ import io.micronaut.serde.Deserializer;
 import io.micronaut.serde.Encoder;
 import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Singleton;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -54,6 +55,7 @@ import jakarta.persistence.Table;
 @Serdeable
 public class Region implements PersistentObject {
 
+	@Singleton
 	public static class RegionSerializer implements Serializer<Region> {
 		@Override
 		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends Region> type, Region value) throws IOException {
@@ -61,6 +63,7 @@ public class Region implements PersistentObject {
 		}
 	}
 
+	@Singleton
 	public static class RegionSetSerializer implements Serializer<Set<Region>> {
 		@Override
 		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends Set<Region>> type, Set<Region> value) throws IOException {
@@ -72,6 +75,7 @@ public class Region implements PersistentObject {
 		}
 	}
 
+	@Singleton
 	public static class RegionDeserializer implements Deserializer<Region> {
 		@Override
 		public Region deserialize(Decoder decoder, DecoderContext context, Argument<? super Region> type) throws IOException {
@@ -79,6 +83,7 @@ public class Region implements PersistentObject {
 		}
 	}
 
+	@Singleton
 	public static class RegionSetDeserializer implements Deserializer<Set<Region>> {
 		@Override
 		public Set<Region> deserialize(Decoder decoder, DecoderContext context, Argument<? super Set<Region>> type) throws IOException {

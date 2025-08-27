@@ -22,6 +22,7 @@ import io.micronaut.serde.Deserializer;
 import io.micronaut.serde.Encoder;
 import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Singleton;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,6 +38,7 @@ import jakarta.persistence.Table;
 @Serdeable
 public class StressLevel {
 
+	@Singleton
 	public static class ToStringSerializer implements Serializer<Object> {
 		@Override
 		public void serialize(Encoder encoder, EncoderContext context, Argument<?> type, Object value) throws IOException {
@@ -44,6 +46,7 @@ public class StressLevel {
 		}
 	}
 
+	@Singleton
 	public static class LocalDateFromStringDeserializer implements Deserializer<LocalDate> {
 		@Override
 		public @Nullable LocalDate deserialize(Decoder decoder, DecoderContext context, Argument<? super LocalDate> type) throws IOException {
@@ -51,6 +54,7 @@ public class StressLevel {
 		}
 	}
 
+	@Singleton
 	public static class InstantFromStringDeserializer implements Deserializer<Instant> {
 		@Override
 		public @Nullable Instant deserialize(Decoder decoder, DecoderContext context, Argument<? super Instant> type) throws IOException {

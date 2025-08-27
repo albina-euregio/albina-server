@@ -13,6 +13,7 @@ import io.micronaut.core.type.Argument;
 import io.micronaut.serde.Encoder;
 import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Singleton;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -38,7 +39,8 @@ import eu.albina.model.enumerations.Role;
 @JsonView(JsonUtil.Views.Internal.class)
 public class User implements NameAndEmail {
 
-	static class UserNameSerializer implements Serializer<User> {
+	@Singleton
+	public static class UserNameSerializer implements Serializer<User> {
 		@Override
 		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends User> type, User value) throws IOException {
 			encoder.encodeString(value.getName());
