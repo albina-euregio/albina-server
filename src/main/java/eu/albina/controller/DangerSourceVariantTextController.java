@@ -13,6 +13,7 @@ import eu.albina.model.DangerSourceVariantText;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.AddOns;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheProblem;
 import eu.albina.model.enumerations.AvalancheSize;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.DangerSign;
@@ -448,6 +449,7 @@ public class DangerSourceVariantTextController {
 		}
 		if (dangerSourceVariant.getHighestDangerAspect() != null) {
 			String aspectsText = replaceAspects(
+					dangerSourceVariant,
 					java.util.Collections.singleton(dangerSourceVariant.getHighestDangerAspect()),
 					addOnSentences.get(AddOns.highest_danger_aspect));
 			result = concatTexts(result, aspectsText);
@@ -505,7 +507,7 @@ public class DangerSourceVariantTextController {
 
 	private String doReplacements(DangerSourceVariant dangerSourceVariant, String result) {
 		// ASPECTS
-		result = replaceAspects(dangerSourceVariant.getAspects(), result);
+		result = replaceAspects(dangerSourceVariant, dangerSourceVariant.getAspects(), result);
 
 		// ELEVATION
 		result = replaceElevations(dangerSourceVariant.getTreelineHigh(), dangerSourceVariant.getTreelineLow(),
@@ -957,7 +959,7 @@ public class DangerSourceVariantTextController {
 		return result;
 	}
 
-	private String replaceAspects(Set<Aspect> aspects, String result) {
+	private String replaceAspects(DangerSourceVariant dangerSourceVariant, Set<Aspect> aspects, String result) {
 		if (aspects != null && !aspects.isEmpty()) {
 			// phrase: Gefahrenstellen05§an_Expositionen
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects1.entrySet()) {
@@ -969,14 +971,22 @@ public class DangerSourceVariantTextController {
 			}
 			// phrase: es_warum_Ort_wann
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects2.entrySet()) {
-				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
+				if (entry.getKey().size() == 8 && dangerSourceVariant.deriveAvalancheProblem() == AvalancheProblem.gliding_snow) {
+					result = result.replaceAll(textcatPlaceholder.get("es_warum_Ort_wann"),
+							"{\"curlyName\":\"es_warum_Ort_wann\",\"line\":30,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":0}}}");
+					break;
+				} else if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
 					result = result.replaceAll(textcatPlaceholder.get("es_warum_Ort_wann"), entry.getValue());
 					break;
 				}
 			}
 			// phrase: Hangart1
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects3.entrySet()) {
-				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
+				if (entry.getKey().size() == 8 && dangerSourceVariant.deriveAvalancheProblem() == AvalancheProblem.gliding_snow) {
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen"),
+							"{\"curlyName\":\"Hangart1\",\"line\":5}");
+					break;
+				} else if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
 					result = result.replaceAll(textcatPlaceholder.get("Hangart1"), entry.getValue());
 					break;
 				}
