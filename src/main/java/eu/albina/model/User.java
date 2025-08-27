@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -9,11 +8,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.util.JsonUtil;
-import io.micronaut.core.type.Argument;
-import io.micronaut.serde.Encoder;
-import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.inject.Singleton;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -38,13 +33,6 @@ import eu.albina.model.enumerations.Role;
 @Serdeable
 @JsonView(JsonUtil.Views.Internal.class)
 public class User implements NameAndEmail {
-
-	public static class UserNameSerializer implements Serializer<User> {
-		@Override
-		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends User> type, User value) throws IOException {
-			encoder.encodeString(value.getName());
-		}
-	}
 
 	/** Email address of the user */
 	@Id

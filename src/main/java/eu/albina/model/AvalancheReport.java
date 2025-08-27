@@ -17,7 +17,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
@@ -56,7 +55,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
-	@Serdeable.Serializable(using = User.UserNameSerializer.class)
+	@JsonSerialize(as = NameAndEmail.class)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
