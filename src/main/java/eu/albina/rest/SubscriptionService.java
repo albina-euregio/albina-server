@@ -73,48 +73,4 @@ public class SubscriptionService {
 			return HttpResponse.badRequest().body(e.getMessage());
 		}
 	}
-
-	// @DELETE
-	// @Path("/unsubscribe")
-	// @Produces(MediaType.APPLICATION_JSON)
-	// @Consumes(MediaType.APPLICATION_JSON)
-	public HttpResponse<?> deleteSubscriber(EmailSubscription json) {
-        logger.debug("DELETE JSON subscriber: {}", json.email);
-
-		try {
-			SubscriberController.getInstance().deleteSubscriber(json.email);
-			return HttpResponse.ok();
-		} catch (HibernateException he) {
-			logger.warn("Error unsubscribe", he);
-			return HttpResponse.badRequest().body(he.getMessage());
-		}
-	}
-
-	static class Token {
-		String token;
-	}
-
-	// @PUT
-	// @Path("/confirm")
-	// @Consumes(MediaType.APPLICATION_JSON)
-	// @Produces(MediaType.APPLICATION_JSON)
-	public HttpResponse<?> confirmSubscription(Token json) {
-		try {
-            logger.debug("POST JSON confirm: {}", json.token);
-			DecodedJWT decodedToken = AuthenticationController.getInstance().decodeToken(json.token);
-			Date currentDate = new Date();
-			if (currentDate.after(decodedToken.getExpiresAt())) {
-				logger.warn("Token expired!");
-				throw new AlbinaException("Token expired!");
-			}
-			SubscriberController.getInstance().confirmSubscriber(decodedToken.getSubject());
-			return HttpResponse.ok();
-		} catch (AlbinaException e) {
-			logger.warn("Error confirm", e);
-			return HttpResponse.badRequest().body(e.toJSON());
-		} catch (HibernateException he) {
-			logger.warn("Error confirm", he);
-			return HttpResponse.badRequest().body(he.getMessage());
-		}
-	}
 }
