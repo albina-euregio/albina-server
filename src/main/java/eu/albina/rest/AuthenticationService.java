@@ -12,7 +12,6 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 
-import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.UserController;
 import eu.albina.model.Region;
 import eu.albina.model.User;
