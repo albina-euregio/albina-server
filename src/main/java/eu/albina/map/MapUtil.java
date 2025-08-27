@@ -167,9 +167,9 @@ public interface MapUtil {
 		bindings.put("cities_p", MapUtil.mapProductionResource(geodataPath, "cities_p.shp"));
 		bindings.put("labels_p", MapUtil.mapProductionResource(geodataPath, "labels_p.shp"));
 		bindings.put("labels_l", MapUtil.mapProductionResource(geodataPath, "labels_l.shp"));
-		bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout.shp"));
 		switch (mapLevel) {
 			case thumbnail:
+				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout_simplified.shp"));
 				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l_simplified.shp"));
 				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l_simplified.shp"));
 				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a_simplified.shp"));
@@ -180,6 +180,7 @@ public interface MapUtil {
 			case overlay:
 			case standard:
 			default:
+				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout.shp"));
 				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l.shp"));
 				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l.shp"));
 				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a.shp"));
