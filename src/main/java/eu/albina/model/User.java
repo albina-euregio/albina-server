@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.albina.util.JsonUtil;
+import io.micronaut.core.type.Argument;
+import io.micronaut.serde.Encoder;
+import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -40,10 +38,10 @@ import eu.albina.model.enumerations.Role;
 @JsonView(JsonUtil.Views.Internal.class)
 public class User implements NameAndEmail {
 
-	static class UserNameSerializer extends JsonSerializer<User> {
+	static class UserNameSerializer implements Serializer<User> {
 		@Override
-		public void serialize(User value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-			gen.writeString(value.getName());
+		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends User> type, User value) throws IOException {
+			encoder.encodeString(value.getName());
 		}
 	}
 
@@ -74,7 +72,7 @@ public class User implements NameAndEmail {
 	 joinColumns=@JoinColumn(name="USER_EMAIL"),
 	 inverseJoinColumns=@JoinColumn(name="REGION_ID")
 	)
-	@JsonSerialize(as = PersistentObject.class)
+	@JsonIgnore
 	private Set<Region> regions = new HashSet<Region>();
 
 	/** Image of the user **/

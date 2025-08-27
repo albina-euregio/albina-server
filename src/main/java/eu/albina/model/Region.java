@@ -10,24 +10,19 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import io.micronaut.core.type.Argument;
+import io.micronaut.serde.Decoder;
+import io.micronaut.serde.Deserializer;
+import io.micronaut.serde.Encoder;
+import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import eu.albina.model.converter.LanguageCodeConverter;
 import eu.albina.model.enumerations.LanguageCode;
@@ -59,17 +54,41 @@ import jakarta.persistence.Table;
 @Serdeable
 public class Region implements PersistentObject {
 
-	static class RegionSerializer extends JsonSerializer<Region> {
+	public static class RegionSerializer implements Serializer<Region> {
 		@Override
-		public void serialize(Region value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-			gen.writeString(value.getId());
+		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends Region> type, Region value) throws IOException {
+			encoder.encodeString(value.getId());
 		}
 	}
 
-	static class RegionDeserializer extends JsonDeserializer<Region> {
+	public static class RegionSetSerializer implements Serializer<Set<Region>> {
 		@Override
-		public Region deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-			return new Region(p.getValueAsString());
+		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends Set<Region>> type, Set<Region> value) throws IOException {
+			try (Encoder array = encoder.encodeArray(type)) {
+				for (Region region : value) {
+					array.encodeString(region.getId());
+				}
+			}
+		}
+	}
+
+	public static class RegionDeserializer implements Deserializer<Region> {
+		@Override
+		public Region deserialize(Decoder decoder, DecoderContext context, Argument<? super Region> type) throws IOException {
+			return new Region(decoder.decodeString());
+		}
+	}
+
+	public static class RegionSetDeserializer implements Deserializer<Set<Region>> {
+		@Override
+		public Set<Region> deserialize(Decoder decoder, DecoderContext context, Argument<? super Set<Region>> type) throws IOException {
+			HashSet<Region> regions = new HashSet<>();
+			try (Decoder array = decoder.decodeArray()) {
+				while (array.hasNextArrayValue()) {
+					regions.add(new Region(array.decodeString()));
+				}
+			}
+			return regions;
 		}
 	}
 
@@ -85,8 +104,8 @@ public class Region implements PersistentObject {
 	 joinColumns=@JoinColumn(name="SUPER_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
-	@JsonSerialize(contentUsing = RegionSerializer.class)
-	@JsonDeserialize(contentUsing = RegionDeserializer.class)
+	@Serdeable.Serializable(using = RegionSetSerializer.class)
+	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> subRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -94,8 +113,8 @@ public class Region implements PersistentObject {
 	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
 	)
-	@JsonSerialize(contentUsing = RegionSerializer.class)
-	@JsonDeserialize(contentUsing = RegionDeserializer.class)
+	@Serdeable.Serializable(using = RegionSetSerializer.class)
+	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> superRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -103,8 +122,8 @@ public class Region implements PersistentObject {
 	 joinColumns=@JoinColumn(name="REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
 	)
-	@JsonSerialize(contentUsing = RegionSerializer.class)
-	@JsonDeserialize(contentUsing = RegionDeserializer.class)
+	@Serdeable.Serializable(using = RegionSetSerializer.class)
+	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> neighborRegions;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

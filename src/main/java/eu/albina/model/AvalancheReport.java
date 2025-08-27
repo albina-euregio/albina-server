@@ -56,13 +56,13 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
-	@JsonSerialize(using = User.UserNameSerializer.class)
+	@Serdeable.Serializable(using = User.UserNameSerializer.class)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
-	@JsonSerialize(using = Region.RegionSerializer.class)
-	@JsonDeserialize(using = Region.RegionDeserializer.class)
+	@Serdeable.Serializable(using = Region.RegionSerializer.class)
+	@Serdeable.Deserializable(using = Region.RegionDeserializer.class)
 	private Region region;
 
 	@Column(name = "DATE")
