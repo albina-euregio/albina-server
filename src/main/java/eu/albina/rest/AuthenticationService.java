@@ -2,6 +2,8 @@
 package eu.albina.rest;
 
 import java.security.Principal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -75,14 +77,14 @@ public class AuthenticationService {
 	@Serdeable
 	public static class AuthenticationResponse {
 		public User user;
-		public Set<Region> regions;
+		public Collection<Region> regions;
 		public String access_token;
 
 		public User getUser() {
 			return user;
 		}
 
-		public Set<Region> getRegions() {
+		public Collection<Region> getRegions() {
 			return regions;
 		}
 

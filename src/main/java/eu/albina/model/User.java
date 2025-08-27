@@ -39,7 +39,6 @@ import eu.albina.model.enumerations.Role;
 @JsonView(JsonUtil.Views.Internal.class)
 public class User implements NameAndEmail {
 
-	@Singleton
 	public static class UserNameSerializer implements Serializer<User> {
 		@Override
 		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends User> type, User value) throws IOException {

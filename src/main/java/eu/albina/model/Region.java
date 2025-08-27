@@ -56,14 +56,6 @@ import jakarta.persistence.Table;
 public class Region implements PersistentObject {
 
 	@Singleton
-	public static class RegionSerializer implements Serializer<Region> {
-		@Override
-		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends Region> type, Region value) throws IOException {
-			encoder.encodeString(value.getId());
-		}
-	}
-
-	@Singleton
 	public static class RegionSetSerializer implements Serializer<Set<Region>> {
 		@Override
 		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends Set<Region>> type, Set<Region> value) throws IOException {
@@ -72,14 +64,6 @@ public class Region implements PersistentObject {
 					array.encodeString(region.getId());
 				}
 			}
-		}
-	}
-
-	@Singleton
-	public static class RegionDeserializer implements Deserializer<Region> {
-		@Override
-		public Region deserialize(Decoder decoder, DecoderContext context, Argument<? super Region> type) throws IOException {
-			return new Region(decoder.decodeString());
 		}
 	}
 
