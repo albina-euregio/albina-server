@@ -2,16 +2,11 @@
 package eu.albina.rest;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.Objects;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.RapidMailController;
@@ -20,15 +15,10 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
-
-import eu.albina.controller.AuthenticationController;
 import eu.albina.controller.SubscriberController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.Subscriber;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -37,9 +27,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class SubscriptionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
-
-	@Context
-	UriInfo uri;
 
 	static class EmailSubscription {
 		public String email;
