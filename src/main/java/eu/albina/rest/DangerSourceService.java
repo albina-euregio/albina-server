@@ -16,6 +16,7 @@ import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 
+import io.micronaut.serde.annotation.Serdeable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,12 +61,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class DangerSourceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(DangerSourceService.class);
-
-	static class Status {
-		public String date;
-		public boolean forecast;
-		public boolean analysis;
-	}
 
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
@@ -114,7 +109,6 @@ public class DangerSourceService {
 	@Get("/status")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
 	public String getInternalStatus(@QueryValue("region") String regionId,
 									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {

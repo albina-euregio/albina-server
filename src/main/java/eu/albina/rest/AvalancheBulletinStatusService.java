@@ -13,6 +13,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,6 +38,7 @@ public class AvalancheBulletinStatusService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinStatusService.class);
 
+	@Serdeable
 	static class Status {
 		public final Instant date;
 		public final BulletinStatus status;
@@ -46,6 +48,18 @@ public class AvalancheBulletinStatusService {
 			this.date = date;
 			this.status = status;
 			this.report = report;
+		}
+
+		public Instant getDate() {
+			return date;
+		}
+
+		public BulletinStatus getStatus() {
+			return status;
+		}
+
+		public AvalancheReport getReport() {
+			return report;
 		}
 	}
 
