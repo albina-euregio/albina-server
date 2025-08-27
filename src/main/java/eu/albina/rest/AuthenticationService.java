@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.Set;
 
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
@@ -15,6 +16,8 @@ import eu.albina.controller.UserController;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
+import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,19 +39,49 @@ public class AuthenticationService {
 
 	public static final String SECURITY_SCHEME = "authentication";
 
-	static class Credentials {
+	@Serdeable
+	public static class Credentials {
 		public String username;
 		public String password;
+
+		public String getUsername() {
+			return username;
+		}
+
+		public void setUsername(String username) {
+			this.username = username;
+		}
+
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		}
 	}
 
 	static class Token {
 		public String access_token;
 	}
 
-	static class AuthenticationResponse {
+	@Serdeable
+	public static class AuthenticationResponse {
 		public User user;
 		public Set<Region> regions;
 		public String access_token;
+
+		public User getUser() {
+			return user;
+		}
+
+		public Set<Region> getRegions() {
+			return regions;
+		}
+
+		public String getAccess_token() {
+			return access_token;
+		}
 	}
 
 	static class Username {
@@ -56,9 +89,10 @@ public class AuthenticationService {
 	}
 
 	@Post
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Authenticate user")
 	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = AuthenticationResponse.class)))
-	public HttpResponse<?> login(Credentials credentials) {
+	public HttpResponse<?> login(@Body Credentials credentials) {
 		String username = credentials.username.toLowerCase();
 		String password = credentials.password;
 
