@@ -1,6 +1,5 @@
 package eu.albina;
 
-import eu.albina.util.DBMigration;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.SchedulerUtil;
@@ -15,9 +14,6 @@ public class Application {
 
 		SchedulerUtil.getInstance().setUp();
 		SchedulerUtil.getInstance().start();
-
-		DBMigration.executeMigration();
-		DBMigration.createAutoConfiguration();
 
 		Micronaut.run(Application.class, args);
 	}
