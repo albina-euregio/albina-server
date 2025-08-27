@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 import io.micronaut.http.HttpResponse;
@@ -16,7 +17,10 @@ import eu.albina.controller.UserController;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
+import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.security.token.generator.AccessRefreshTokenGenerator;
+import io.micronaut.security.token.render.AccessRefreshToken;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -26,6 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/authentication")
 @Tag(name = "authentication")
@@ -36,6 +41,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 	scheme = "bearer",
 	bearerFormat = "JWT")
 public class AuthenticationService {
+
+	@Inject
+	AccessRefreshTokenGenerator tokenGenerator;
 
 	public static final String SECURITY_SCHEME = "authentication";
 
@@ -98,13 +106,15 @@ public class AuthenticationService {
 
 		try {
 			UserController.getInstance().authenticate(username, password);
-			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
+			List<String> roles = UserController.getInstance().getUser(username).getRoles().stream().map(Role::toString).toList();
+			Authentication authentication = Authentication.build(username, roles);
+			AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
 
 			User user = UserController.getInstance().getUser(username);
 			AuthenticationResponse result = new AuthenticationResponse();
 			result.user = user;
 			result.regions = user.getRegions();
-			result.access_token = accessToken;
+			result.access_token = token.getAccessToken();
 
 			return HttpResponse.ok(result);
 		} catch (Exception e) {
@@ -118,17 +128,7 @@ public class AuthenticationService {
 	@Operation(summary = "Refresh token")
 	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Token.class)))
 	public HttpResponse<?> refreshToken(Principal principal) {
-		try {
-			String username = principal.getName();
-
-			String accessToken = AuthenticationController.getInstance().issueAccessToken(username);
-
-			Token jsonResult = new Token();
-			jsonResult.access_token = accessToken;
-			return HttpResponse.ok(jsonResult);
-		} catch (Exception e) {
-			return HttpResponse.unauthorized();
-		}
+		return HttpResponse.serverError();
 	}
 
 	@Get("/test")
