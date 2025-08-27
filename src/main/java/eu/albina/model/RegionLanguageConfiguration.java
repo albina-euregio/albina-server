@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,6 +22,7 @@ import jakarta.persistence.Table;
 @Entity
 @IdClass(RegionLanguageConfiguration.RegionLanguageConfigurationID.class)
 @Table(name = "region_language_configurations")
+@Serdeable
 public class RegionLanguageConfiguration {
 
 	@Id

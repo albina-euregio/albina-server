@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import io.micronaut.serde.annotation.Serdeable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -55,6 +56,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "regions")
+@Serdeable
 public class Region implements PersistentObject {
 
 	static class RegionSerializer extends JsonSerializer<Region> {

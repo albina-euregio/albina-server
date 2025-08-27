@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import eu.albina.model.enumerations.Role;
 
 @Entity
 @Table(name = "user_region_role_links")
+@Serdeable
 public class UserRegionRoleLink {
 
 	@Id

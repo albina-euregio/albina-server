@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.micronaut.serde.annotation.Serdeable;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -34,6 +35,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "avalanche_problems")
+@Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvalancheProblem extends AbstractPersistentObject {
 

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import com.google.common.base.MoreObjects;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +33,7 @@ import jakarta.persistence.Table;
 @Entity
 @IdClass(StressLevel.StressLevelID.class)
 @Table(name = "user_stress_levels")
+@Serdeable
 public class StressLevel {
 
 	@Id

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import eu.albina.model.enumerations.Complexity;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -30,6 +31,7 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
+@Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObject {
 

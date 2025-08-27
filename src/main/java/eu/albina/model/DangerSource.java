@@ -3,6 +3,7 @@ package eu.albina.model;
 
 import java.time.Instant;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -15,6 +16,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "danger_sources")
+@Serdeable
 public class DangerSource extends AbstractPersistentObject {
 
 	@Column(name = "CREATION_DATE")

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.JsonUtil;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -47,6 +48,7 @@ import org.slf4j.LoggerFactory;
 @Table(name = "avalanche_reports", indexes = {
 	@Index(name = "avalanche_reports_DATE_IDX", columnList = "DATE"),
 })
+@Serdeable
 public class AvalancheReport extends AbstractPersistentObject implements HasValidityDate, HasPublicationDate {
 
 	/**

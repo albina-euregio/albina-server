@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import com.google.common.base.MoreObjects;
 
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,6 +20,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "push_subscriptions")
+@Serdeable
 public class PushSubscription {
 
 	@Id

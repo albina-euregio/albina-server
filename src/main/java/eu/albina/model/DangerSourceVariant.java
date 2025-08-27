@@ -5,10 +5,9 @@ import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import io.micronaut.serde.annotation.Serdeable;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblemType;
@@ -54,6 +53,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "danger_source_variants")
+@Serdeable
 public class DangerSourceVariant extends AbstractPersistentObject
 		implements Comparable<DangerSourceVariant> {
 
@@ -106,7 +106,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "ASPECT")
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
 

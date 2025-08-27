@@ -3,6 +3,7 @@ package eu.albina.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -14,6 +15,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import java.util.Comparator;
 
 @Embeddable
+@Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Text implements Comparable<Text> {
 

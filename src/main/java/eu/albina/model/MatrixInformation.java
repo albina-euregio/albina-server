@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -13,6 +14,7 @@ import eu.albina.model.enumerations.HazardSiteDistribution;
 import eu.albina.model.enumerations.NaturalAvalancheReleaseProbability;
 
 @Embeddable
+@Serdeable
 public class MatrixInformation {
 
 	@Enumerated(EnumType.STRING)

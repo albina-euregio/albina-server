@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.albina.util.JsonUtil;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -35,6 +36,7 @@ import eu.albina.model.enumerations.Role;
 
 @Entity
 @Table(name = "users")
+@Serdeable
 @JsonView(JsonUtil.Views.Internal.class)
 public class User implements NameAndEmail {
 
