@@ -51,10 +51,10 @@ public class AvalancheBulletinStatusService {
 
 	@Get
 	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
-	public HttpResponse<?> getStatus(@QueryValue String regionId,
-									 @QueryValue String timezone,
-									 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String start,
-									 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String end) {
+	public HttpResponse<?> getStatus(@QueryValue("region") String regionId,
+									 @QueryValue("timezone") String timezone,
+									 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
+									 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(start);
 		Instant endDate = DateControllerUtil.parseDateOrToday(end);
@@ -84,9 +84,9 @@ public class AvalancheBulletinStatusService {
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
-	public HttpResponse<?> getInternalStatus(@QueryValue String regionId,
-									  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String start,
-									  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String end) {
+	public HttpResponse<?> getInternalStatus(@QueryValue("region") String regionId,
+									  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
+									  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		try {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
@@ -112,9 +112,9 @@ public class AvalancheBulletinStatusService {
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
-	public HttpResponse<?> getPublicationsStatus(@QueryValue String regionId,
-										  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String start,
-										  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String end) {
+	public HttpResponse<?> getPublicationsStatus(@QueryValue("region") String regionId,
+										  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
+										  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(start);
 		Instant endDate = DateControllerUtil.parseDateOrNull(end);
@@ -138,8 +138,8 @@ public class AvalancheBulletinStatusService {
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "status", content = @Content(schema = @Schema(implementation = Status.class)))
-	public HttpResponse<?> getPublicationStatus(@QueryValue String regionId,
-										 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date) {
+	public HttpResponse<?> getPublicationStatus(@QueryValue("region") String regionId,
+										 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate;

@@ -44,8 +44,8 @@ public class StressLevelService {
 	@Operation(summary = "List stress level entries of user")
 	public HttpResponse<?> getStressLevels(
 			Principal principal,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String end) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
@@ -61,9 +61,9 @@ public class StressLevelService {
 	@Operation(summary = "List stress level entries of team")
 	public HttpResponse<?> getTeamStressLevels(
 			Principal principal,
-			@QueryValue String regionId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String end) {
+			@QueryValue("region") String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();

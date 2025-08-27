@@ -50,8 +50,8 @@ public class AvalancheBulletinPublishService {
 	@Post
 	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> publishBulletins(@QueryValue String regionId,
-											@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+	public HttpResponse<?> publishBulletins(@QueryValue("region") String regionId,
+											@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 											Principal principal) {
 		logger.debug("POST publish bulletins");
 
@@ -99,8 +99,8 @@ public class AvalancheBulletinPublishService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	public HttpResponse<?> publishAllBulletins(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-			@QueryValue boolean change) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			@QueryValue("change") boolean change) {
 		logger.debug("POST publish all bulletins");
 
 		try {
@@ -133,9 +133,9 @@ public class AvalancheBulletinPublishService {
 	@Post("/email")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendEmail(@QueryValue String regionId,
-							  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-							  @QueryValue LanguageCode language) {
+	public HttpResponse<?> sendEmail(@QueryValue("region") String regionId,
+							  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+							  @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
@@ -154,9 +154,9 @@ public class AvalancheBulletinPublishService {
 	@Post("/telegram")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> triggerTelegramChannel(@QueryValue String regionId,
-										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-										   @QueryValue LanguageCode language) {
+	public HttpResponse<?> triggerTelegramChannel(@QueryValue("region") String regionId,
+										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+										   @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
@@ -175,9 +175,9 @@ public class AvalancheBulletinPublishService {
 	@Post("/whatsapp")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> triggerWhatsAppChannel(@QueryValue String regionId,
-										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-										   @QueryValue LanguageCode language) {
+	public HttpResponse<?> triggerWhatsAppChannel(@QueryValue("region") String regionId,
+										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+										   @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST trigger whatsapp channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
@@ -196,9 +196,9 @@ public class AvalancheBulletinPublishService {
 	@Post("/push")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> triggerPushNotifications(@QueryValue String regionId,
-											 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-											 @QueryValue LanguageCode language) {
+	public HttpResponse<?> triggerPushNotifications(@QueryValue("region") String regionId,
+											 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+											 @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {

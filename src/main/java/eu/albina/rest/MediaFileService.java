@@ -60,10 +60,10 @@ public class MediaFileService {
 	@Consumes({MediaType.MULTIPART_FORM_DATA})
 	@Operation(summary = "Save media file")
 	public HttpResponse<?> saveMediaFile(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String dateString,
-		@QueryValue String regionId,
-		@QueryValue LanguageCode language,
-		@QueryValue boolean important,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String dateString,
+		@QueryValue("region") String regionId,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue("important") boolean important,
 		String mediaText,
 		StreamingFileUpload file,
 		Principal principal) {
@@ -134,8 +134,8 @@ public class MediaFileService {
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(summary = "Get media files as RSS feed")
 	public HttpResponse<?> getRssFeed(
-		@QueryValue(defaultValue = "AT-07") String regionId,
-		@QueryValue(defaultValue = "de") LanguageCode language
+		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
+		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language
 	) throws Exception {
 		final ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 		final Region region = new Region(regionId);

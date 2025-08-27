@@ -57,12 +57,12 @@ public class StatisticsService {
 	@Produces("text/csv")
 	@Operation(summary = "Get bulletin statistics")
 	public HttpResponse<?> getBulletinCsv(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String startDate,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String endDate,
-		@QueryValue LanguageCode language, @QueryValue boolean extended,
-		@QueryValue boolean duplicate,
-		@QueryValue List<String> regionIds,
-		@QueryValue boolean obsoleteMatrix) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate,
+		@QueryValue("lang") LanguageCode language, @QueryValue("extended") boolean extended,
+		@QueryValue("duplicate") boolean duplicate,
+		@QueryValue("regions") List<String> regionIds,
+		@QueryValue("obsoleteMatrix") boolean obsoleteMatrix) {
 		logger.debug("GET CSV bulletins");
 
 		Instant start = null;
@@ -117,8 +117,8 @@ public class StatisticsService {
 	@Produces("text/csv")
 	@Operation(summary = "Get danger source statistics")
 	public HttpResponse<?> getDangerSourceCsv(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String startDate,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String endDate) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
 		logger.debug("GET CSV danger sources");
 
 		Instant start = null;

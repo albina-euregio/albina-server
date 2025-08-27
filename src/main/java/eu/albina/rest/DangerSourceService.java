@@ -73,8 +73,8 @@ public class DangerSourceService {
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSource.class))))
 	@Operation(summary = "Get danger sources for season")
 	public String getDangerSources(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger sources");
 
 		Range<Instant> instantRange = DateControllerUtil.parseHydrologicalYearInstantRange(date);
@@ -101,8 +101,8 @@ public class DangerSourceService {
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for date")
 	public String getVariants(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-			@QueryValue List<String> regionIds) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			@QueryValue("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger source variants");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
@@ -115,9 +115,9 @@ public class DangerSourceService {
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "status", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Status.class))))
-	public String getInternalStatus(@QueryValue String regionId,
-									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String startDate,
-									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String endDate) {
+	public String getInternalStatus(@QueryValue("region") String regionId,
+									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
 
 		Range<Instant> instantRangeStart = DateControllerUtil.parseInstantRange(startDate);
 		Range<Instant> instantRangeEnd = DateControllerUtil.parseInstantRange(endDate);
@@ -134,8 +134,8 @@ public class DangerSourceService {
 	@Operation(summary = "Get danger source variants for danger source and date")
 	public String getVariantsForDangerSource(
 			@PathVariable("dangerSourceId") String dangerSourceId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-			@QueryValue List<String> regionIds) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			@QueryValue("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger source variants for danger source");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
@@ -149,8 +149,8 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create variants")
 	public String createVariants(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-			@QueryValue String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			@QueryValue("region") String regionId,
 			Principal principal,
 			String json) {
 		logger.debug("POST JSON variants");
@@ -197,8 +197,8 @@ public class DangerSourceService {
 	@Operation(summary = "Update danger source variant")
 	public String updateDangerSource(
 			@PathVariable("variantId") String variantId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-			@QueryValue String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			@QueryValue("region") String regionId,
 			Principal principal,
 			String json) {
 		logger.debug("POST JSON danger source variant");
@@ -232,8 +232,8 @@ public class DangerSourceService {
 	@Operation(summary = "Delete danger source variant")
 	public String deleteVariant(
 			@PathVariable("variantId") String variantId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-			@QueryValue String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			@QueryValue("region") String regionId,
 			Principal principal) {
 		logger.debug("DELETE JSON danger source variant");
 
@@ -261,8 +261,8 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create danger source variant")
 	public String createVariant(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-			@QueryValue String regionId,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			@QueryValue("region") String regionId,
 			Principal principal,
 			String json) {
 		logger.debug("PUT JSON danger source variant");

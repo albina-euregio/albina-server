@@ -96,8 +96,8 @@ public class AvalancheBulletinService {
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get bulletins for date")
 	public HttpResponse<?> getJSONBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds) {
 
 		List<Region> regions = new ArrayList<Region>();
 		regionIds.forEach(regionId -> {
@@ -116,10 +116,10 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get bulletins for date as CAAML JSON")
 	public HttpResponse<?> getCaamlJsonBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds,
-		@QueryValue LanguageCode language,
-		@QueryValue CaamlVersion version) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue("version") CaamlVersion version) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -162,10 +162,10 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(deprecated = true)
 	public HttpResponse<?> getPublishedXMLBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue String regionId,
-		@QueryValue LanguageCode language,
-		@QueryValue CaamlVersion version) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue("version") CaamlVersion version) {
 		List<String> regionIds = regionId != null ? Collections.singletonList(regionId) : Collections.emptyList();
 		return getPublishedCaamlBulletins(date, regionIds, language, version);
 	}
@@ -186,10 +186,10 @@ public class AvalancheBulletinService {
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(summary = "Get published bulletins for date as CAAML XML")
 	public HttpResponse<?> getPublishedCaamlBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds,
-		@QueryValue LanguageCode language,
-		@QueryValue CaamlVersion version) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue("version") CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -209,10 +209,10 @@ public class AvalancheBulletinService {
 	@Get("/caaml/json")
 	@Operation(summary = "Get published bulletins for date as CAAML JSON")
 	public HttpResponse<?> getPublishedCaamlJsonBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds,
-		@QueryValue LanguageCode language,
-		@QueryValue CaamlVersion version) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue("version") CaamlVersion version) {
 		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 	}
 
@@ -240,8 +240,8 @@ public class AvalancheBulletinService {
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(deprecated = true)
 	public HttpResponse<?> getPublishedJSONBulletins0(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds, @QueryValue LanguageCode language) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds, @QueryValue("lang") LanguageCode language) {
 		return getPublishedJSONBulletins(date, regionIds, language);
 	}
 
@@ -251,10 +251,10 @@ public class AvalancheBulletinService {
 	@Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get published bulletins as PDF")
 	public HttpResponse<?> getPublishedBulletinsAsPDF(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue String regionId,
-		@QueryValue boolean grayscale,
-		@QueryValue LanguageCode language) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId,
+		@QueryValue("grayscale") boolean grayscale,
+		@QueryValue("lang") LanguageCode language) {
 
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		logger.info("Get published bulletins as PDF {}", regionId);
@@ -281,9 +281,9 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Get published bulletin as PDF")
 	public HttpResponse<?> getPublishedBulletinAsPDF(
 		@PathVariable("bulletinId") String bulletinId,
-		@QueryValue String regionId,
-		@QueryValue boolean grayscale,
-		@QueryValue LanguageCode language) {
+		@QueryValue("region") String regionId,
+		@QueryValue("grayscale") boolean grayscale,
+		@QueryValue("lang") LanguageCode language) {
 
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		logger.info("Get published bulletin as PDF {}", bulletinId);
@@ -308,8 +308,8 @@ public class AvalancheBulletinService {
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get published bulletins for date")
 	public HttpResponse<?> getPublishedJSONBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds, @QueryValue LanguageCode language) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds, @QueryValue("lang") LanguageCode language) {
 		logger.debug("GET published JSON bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -327,8 +327,8 @@ public class AvalancheBulletinService {
 	@ApiResponse(description = "latest", content = @Content(schema = @Schema(implementation = Highest.class)))
 	@Operation(summary = "Get highest danger rating")
 	public HttpResponse<?> getHighestDangerRating(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue List<String> regionIds) {
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds) {
 		logger.debug("GET highest danger rating");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -361,8 +361,8 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Get bulletin preview as PDF")
 	public HttpResponse<?> getPreviewPdf(
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
-		@QueryValue String regionId,
-		@QueryValue LanguageCode language) {
+		@QueryValue("region") String regionId,
+		@QueryValue("lang") LanguageCode language) {
 
 		logger.debug("POST PDF preview {}", regionId);
 
@@ -424,9 +424,9 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Update bulletin")
 	public HttpResponse<?> updateJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
-		@QueryValue String regionId,
+		@QueryValue("region") String regionId,
 		Principal principal) {
 
 		synchronized (regionId.intern()) {
@@ -467,9 +467,9 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create bulletin")
 	public HttpResponse<?> createJSONBulletin(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
-		@QueryValue String regionId,
+		@QueryValue("region") String regionId,
 		Principal principal) {
 
 		synchronized (regionId.intern()) {
@@ -512,8 +512,8 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Delete bulletin")
 	public HttpResponse<?> deleteJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
-		@QueryValue String regionId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId,
 		Principal principal) {
 
 		synchronized (regionId.intern()) {
@@ -547,9 +547,9 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create bulletins")
 	public HttpResponse<?> createJSONBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
-		@QueryValue String regionId,
+		@QueryValue("region") String regionId,
 		Principal principal) {
 
 		synchronized (regionId.intern()) {
@@ -585,9 +585,9 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Change bulletins")
 	public HttpResponse<?> changeBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
-		@QueryValue String regionId,
+		@QueryValue("region") String regionId,
 		Principal principal) {
 		logger.debug("POST JSON bulletins change");
 
@@ -665,8 +665,8 @@ public class AvalancheBulletinService {
 	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Submit bulletins")
-	public HttpResponse<?> submitBulletins(@QueryValue String regionId,
-									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+	public HttpResponse<?> submitBulletins(@QueryValue("region") String regionId,
+									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 										   Principal principal) {
 		logger.debug("POST submit bulletins");
 
@@ -709,8 +709,8 @@ public class AvalancheBulletinService {
 	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Check bulletins")
-	public HttpResponse<?> checkBulletins(@QueryValue String regionId,
-								   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date,
+	public HttpResponse<?> checkBulletins(@QueryValue("region") String regionId,
+								   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 										  Principal principal) {
 		logger.debug("GET check bulletins");
 
@@ -738,7 +738,7 @@ public class AvalancheBulletinService {
 	@Get("/locked")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> getLockedBulletins(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue String date) {
+	public HttpResponse<?> getLockedBulletins(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date) {
 		logger.debug("GET JSON locked bulletins");
 
 		try {

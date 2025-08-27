@@ -31,7 +31,7 @@ public class BlogService {
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<String> sendLatestBlogPost(@QueryValue String regionId, @QueryValue LanguageCode language) {
+	public HttpResponse<String> sendLatestBlogPost(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {}", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
@@ -49,7 +49,7 @@ public class BlogService {
 	@Post("/publish/latest/email")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostEmail(@QueryValue String regionId, @QueryValue LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostEmail(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
@@ -70,7 +70,7 @@ public class BlogService {
 	@Post("/publish/latest/telegram")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostTelegram(@QueryValue String regionId, @QueryValue LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostTelegram(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
@@ -91,7 +91,7 @@ public class BlogService {
 	@Post("/publish/latest/whatsapp")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostWhatsApp(@QueryValue String regionId, @QueryValue LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostWhatsApp(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via whatsapp", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
@@ -112,7 +112,7 @@ public class BlogService {
 	@Post("/publish/latest/push")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostPush(@QueryValue String regionId, @QueryValue LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostPush(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);

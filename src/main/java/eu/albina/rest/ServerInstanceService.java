@@ -154,8 +154,8 @@ public class ServerInstanceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Perform health checks")
 	public Map<String, Object> getHealth(
-		@QueryValue String regionId,
-		@QueryValue LanguageCode language
+		@QueryValue("region") String regionId,
+		@QueryValue("lang") LanguageCode language
 	) throws Exception {
 		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 		logger.info("Testing TelegramController");

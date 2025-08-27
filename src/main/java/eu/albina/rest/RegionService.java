@@ -62,7 +62,7 @@ public class RegionService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get region for ID")
 	@ApiResponse(description = "region", content = @Content(schema = @Schema(implementation = Region.class)))
-	public HttpResponse<?> getRegion(@QueryValue String regionId) {
+	public HttpResponse<?> getRegion(@QueryValue("region") String regionId) {
 		logger.debug("GET JSON region");
 
 		// TODO check if user has ADMIN rights for this region
@@ -140,7 +140,7 @@ public class RegionService {
 	@Get("/locked")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> getLockedRegions(@QueryValue String region) {
+	public HttpResponse<?> getLockedRegions(@QueryValue("region") String region) {
 		logger.debug("GET JSON locked regions");
 		List<Instant> lockedRegions = RegionController.getInstance().getLockedRegions(region);
 		return HttpResponse.ok(lockedRegions);
