@@ -4,7 +4,6 @@ package eu.albina.controller;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -551,7 +550,7 @@ public class DangerSourceVariantTextController {
 		// phrase: Alarmzeichen
 		for (Map.Entry<Set<DangerSign>, String> entry : textcatSubstitutionsDangerSigns.entrySet()) {
 			if (entry.getKey().size() == dangerSigns.size() && entry.getKey().containsAll(dangerSigns)) {
-				result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Alarmzeichen")), entry.getValue());
+				result = result.replaceAll(textcatPlaceholder.get("Alarmzeichen"), entry.getValue());
 				break;
 			}
 		}
@@ -563,15 +562,15 @@ public class DangerSourceVariantTextController {
 		if (naturalRelease != null) {
 			switch (naturalRelease) {
 				case likely:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("möglich.")),
+					result = result.replaceAll(textcatPlaceholder.get("möglich."),
 							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
 					break;
 				case possible:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("möglich.")),
+					result = result.replaceAll(textcatPlaceholder.get("möglich."),
 							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				case unlikely:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("möglich.")),
+					result = result.replaceAll(textcatPlaceholder.get("möglich."),
 							"{\"curlyName\":\"wieviele\",\"line\":5}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				default:
@@ -586,54 +585,54 @@ public class DangerSourceVariantTextController {
 		if (slopeGradient != null) {
 			switch (slopeGradient) {
 				case moderately_steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"an_steilen\",\"line\":0}");
 					break;
 				case steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"an_steilen\",\"line\":1}");
 					break;
 				case very_steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"an_steilen\",\"line\":2}");
 					break;
 				case extremely_steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"an_steilen\",\"line\":3}");
 					break;
 				default:
 					break;
 			}
 		} else {
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+			result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 					"{\"curlyName\":\"an_steilen\",\"line\":0}");
 		}
 		// phrase: steilen
 		if (slopeGradient != null) {
 			switch (slopeGradient) {
 				case moderately_steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":0}");
 					break;
 				case steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":1}");
 					break;
 				case very_steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":2}");
 					break;
 				case extremely_steep:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":3}");
 					break;
 				default:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")),
+					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":0}");
 					break;
 			}
 		} else {
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("an_steilen")), "{\"curlyName\":\"steilen\",\"line\":0}");
+			result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
 		}
 		return result;
 	}
@@ -643,25 +642,25 @@ public class DangerSourceVariantTextController {
 		if (dangerPeak != null) {
 			switch (dangerPeak) {
 				case evening:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit")), "{\"curlyName\":\"Zeit\",\"line\":16}");
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":16}");
 					break;
 				case morning:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit")), "{\"curlyName\":\"Zeit\",\"line\":8}");
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":8}");
 					break;
 				case forenoon:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit")), "{\"curlyName\":\"Zeit\",\"line\":10");
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":10");
 					break;
 				case afternoon:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit")), "{\"curlyName\":\"Zeit\",\"line\":13}");
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":13}");
 					break;
 				case first_night_half:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit")), "{\"curlyName\":\"Zeit\",\"line\":3}");
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":3}");
 					break;
 				case second_night_half:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit")), "{\"curlyName\":\"Zeit\",\"line\":4}");
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":4}");
 					break;
 				default:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit")), "{\"curlyName\":\"Zeit\",\"line\":0}");
+					result = result.replaceAll(textcatPlaceholder.get("Zeit"), "{\"curlyName\":\"Zeit\",\"line\":0}");
 					break;
 			}
 		}
@@ -669,36 +668,36 @@ public class DangerSourceVariantTextController {
 		if (dangerPeak != null) {
 			switch (dangerPeak) {
 				case evening:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":18}");
 					break;
 				case morning:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":10}");
 					break;
 				case forenoon:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":12}");
 					break;
 				case afternoon:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":17}");
 					break;
 				case first_night_half:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":5}");
 					break;
 				case second_night_half:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":6}");
 					break;
 				default:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+					result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
 					break;
 			}
 		} else {
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Zeit_optional1")),
+			result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
 					"{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
 		}
 
@@ -710,24 +709,24 @@ public class DangerSourceVariantTextController {
 		if (looseSnowMoisture != null) {
 			switch (looseSnowMoisture) {
 				case dry:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("trockene")),
+					result = result.replaceAll(textcatPlaceholder.get("trockene"),
 							"{\"curlyName\":\"Lawinenart5\",\"line\":12}");
 					break;
 				case moist:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("trockene")),
+					result = result.replaceAll(textcatPlaceholder.get("trockene"),
 							"{\"curlyName\":\"Lawinenart5\",\"line\":14}");
 					break;
 				case wet:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("trockene")),
+					result = result.replaceAll(textcatPlaceholder.get("trockene"),
 							"{\"curlyName\":\"Lawinenart5\",\"line\":15}");
 					break;
 				default:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("trockene")),
+					result = result.replaceAll(textcatPlaceholder.get("trockene"),
 							"{\"curlyName\":\"Lawinenart5\",\"line\":12}");
 					break;
 			}
 		} else {
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("trockene")),
+			result = result.replaceAll(textcatPlaceholder.get("trockene"),
 					"{\"curlyName\":\"Lawinenart5\",\"line\":12}");
 		}
 		return result;
@@ -737,7 +736,7 @@ public class DangerSourceVariantTextController {
 		// phrase: Hangart1
 		for (Map.Entry<Set<TerrainType>, String> entry : textcatSubstitutionsTerrainTypes.entrySet()) {
 			if (entry.getKey().size() == terrainTypes.size() && entry.getKey().containsAll(terrainTypes)) {
-				result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Geländeformen")), entry.getValue());
+				result = result.replaceAll(textcatPlaceholder.get("Geländeformen"), entry.getValue());
 				break;
 			}
 		}
@@ -749,19 +748,19 @@ public class DangerSourceVariantTextController {
 		if (remoteTriggering != null) {
 			switch (remoteTriggering) {
 				case likely:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Auslösung07§möglich.")),
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."),
 							"{\"curlyName\":\"Auslösung07§möglich.\",\"line\":2}");
 					break;
 				case possible:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Auslösung07§möglich.")),
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."),
 							"{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1}");
 					break;
 				case unlikely:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Auslösung07§möglich.")),
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."),
 							"{\"curlyName\":\"Auslösung07§möglich.\",\"line\":0}");
 					break;
 				default:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Auslösung07§möglich.")),
+					result = result.replaceAll(textcatPlaceholder.get("Auslösung07§möglich."),
 							"{\"curlyName\":\"Auslösung07§möglich.\",\"line\":0}");
 					break;
 			}
@@ -775,23 +774,23 @@ public class DangerSourceVariantTextController {
 		if (dangerSpotRecognizability != null) {
 			switch (dangerSpotRecognizability) {
 				case very_easy:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar.")),
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."),
 							"{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":1,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":0}}}");
 					break;
 				case easy:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar.")),
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."),
 							"{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":2,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":0}}}");
 					break;
 				case hard:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar.")),
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."),
 							"{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":3,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":0}}}");
 					break;
 				case very_hard:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar.")),
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."),
 							"{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":6,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":0}}}");
 					break;
 				default:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar.")),
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."),
 							"{\"curlyName\":\"Gefahrenstellen02§und_erkennbar.\",\"line\":0,\"args\":{\"aber_und\":{\"curlyName\":\"aber_und\",\"line\":0}}}");
 					break;
 			}
@@ -810,7 +809,7 @@ public class DangerSourceVariantTextController {
 						(eawsMatrixInformation.getFrequency() == Frequency.many
 								&& dangerSpotRecognizability == Recognizability.very_hard)) {
 					// und
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("aber_und")),
+					result = result.replaceAll(textcatPlaceholder.get("aber_und"),
 							"{\"curlyName\":\"aber_und\",\"line\":2}");
 				} else if ((eawsMatrixInformation.getFrequency() == Frequency.few
 						&& dangerSpotRecognizability == Recognizability.hard) ||
@@ -823,21 +822,21 @@ public class DangerSourceVariantTextController {
 						(eawsMatrixInformation.getFrequency() == Frequency.many
 								&& dangerSpotRecognizability == Recognizability.very_easy)) {
 					// aber
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("aber_und")),
+					result = result.replaceAll(textcatPlaceholder.get("aber_und"),
 							"{\"curlyName\":\"aber_und\",\"line\":1}");
 				}
 
 				switch (eawsMatrixInformation.getFrequency()) {
 					case few:
-						result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("aber_und")),
+						result = result.replaceAll(textcatPlaceholder.get("aber_und"),
 								"{\"curlyName\":\"aber_und\",\"line\":0}");
 						break;
 					case many:
-						result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("aber_und")),
+						result = result.replaceAll(textcatPlaceholder.get("aber_und"),
 								"{\"curlyName\":\"aber_und\",\"line\":2}");
 						break;
 					default:
-						result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("aber_und")),
+						result = result.replaceAll(textcatPlaceholder.get("aber_und"),
 								"{\"curlyName\":\"aber_und\",\"line\":0}");
 						break;
 				}
@@ -846,7 +845,7 @@ public class DangerSourceVariantTextController {
 		} else {
 			if (eawsMatrixInformation == null
 					|| eawsMatrixInformation.getFrequency() == null) {
-				result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar.")), "");
+				result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen02§und_erkennbar."), "");
 			}
 		}
 		return result;
@@ -857,28 +856,28 @@ public class DangerSourceVariantTextController {
 		if (dangerSourceVariant.getWeakLayerPosition() != null) {
 			switch (dangerSourceVariant.getWeakLayerPosition()) {
 				case upper:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Schwachschichten")),
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"),
 							"{\"curlyName\":\"Schwachschichten\",\"line\":8}");
 					break;
 				case lower:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Schwachschichten")),
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"),
 							"{\"curlyName\":\"Schwachschichten\",\"line\":6}");
 					break;
 				case middle:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Schwachschichten")),
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"),
 							"{\"curlyName\":\"Schwachschichten\",\"line\":0}");
 					break;
 				case ground:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Schwachschichten")),
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"),
 							"{\"curlyName\":\"Schwachschichten\",\"line\":5}");
 					break;
 				default:
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Schwachschichten")),
+					result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"),
 							"{\"curlyName\":\"Schwachschichten\",\"line\":0}");
 					break;
 			}
 		} else {
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Schwachschichten")),
+			result = result.replaceAll(textcatPlaceholder.get("Schwachschichten"),
 					"{\"curlyName\":\"Schwachschichten\",\"line\":0}");
 		}
 		return result;
@@ -890,56 +889,56 @@ public class DangerSourceVariantTextController {
 		if (elevationHigh != null || (treelineHigh != null && treelineHigh)) {
 			if (elevationHigh != null) {
 				// below [m]
-				result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhe_Höhenlage")),
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"),
 						"{\"curlyName\":\"Höhe_Höhenlage\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 			} else {
 				// below treeline
-				result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhe_Höhenlage")),
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"),
 						"{\"curlyName\":\"Höhe_Höhenlage\",\"line\":12}");
 			}
 		} else if (elevationLow != null || (treelineLow != null && treelineLow)) {
 			if (elevationLow != null) {
 				// above [m]
-				result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhe_Höhenlage")),
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"),
 						"{\"curlyName\":\"Höhe_Höhenlage\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 			} else {
 				// above treeline
-				result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhe_Höhenlage")),
+				result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"),
 						"{\"curlyName\":\"Höhe_Höhenlage\",\"line\":13}");
 			}
 		} else {
 			// no elevation information
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhe_Höhenlage")),
+			result = result.replaceAll(textcatPlaceholder.get("Höhe_Höhenlage"),
 					"{\"curlyName\":\"Höhe_Höhenlage\",\"line\":0}");
 		}
 
 		// phrase: Höhenlage3
 		if (elevationHigh != null) {
 			// below [m]
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhenlage3")),
+			result = result.replaceAll(textcatPlaceholder.get("Höhenlage3"),
 					"{\"curlyName\":\"Höhenlage3\",\"line\":2,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 		} else if (elevationLow != null) {
 			// above [m]
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhenlage3")),
+			result = result.replaceAll(textcatPlaceholder.get("Höhenlage3"),
 					"{\"curlyName\":\"Höhenlage3\",\"line\":1,\"args\":{\"und_vor_allem\":{\"curlyName\":\"und_vor_allem\",\"line\":0},\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 		} else {
 			// no elevation information
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhenlage3")),
+			result = result.replaceAll(textcatPlaceholder.get("Höhenlage3"),
 					"{\"curlyName\":\"Höhenlage3\",\"line\":0}");
 		}
 
 		// phrase: oberhalb_von_Höhe_optional
 		if (elevationHigh != null) {
 			// below [m]
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("oberhalb_von_Höhe_optional")),
+			result = result.replaceAll(textcatPlaceholder.get("oberhalb_von_Höhe_optional"),
 					"{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":2,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 		} else if (elevationLow != null) {
 			// above [m]
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("oberhalb_von_Höhe_optional")),
+			result = result.replaceAll(textcatPlaceholder.get("oberhalb_von_Höhe_optional"),
 					"{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":1,\"args\":{\"Höhe_m\":{\"curlyName\":\"Höhe_m\",\"line\":0}}}");
 		} else {
 			// no elevation information
-			result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("oberhalb_von_Höhe_optional")),
+			result = result.replaceAll(textcatPlaceholder.get("oberhalb_von_Höhe_optional"),
 					"{\"curlyName\":\"oberhalb_von_Höhe_optional\",\"line\":0}");
 		}
 
@@ -947,7 +946,7 @@ public class DangerSourceVariantTextController {
 		if (elevationHigh != null) {
 			for (Map.Entry<Integer, String> entry : textcatSubstitutionsElevation1.entrySet()) {
 				if (elevationHigh == entry.getKey().intValue()) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhe_m")), entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Höhe_m"), entry.getValue());
 					break;
 				}
 			}
@@ -955,7 +954,7 @@ public class DangerSourceVariantTextController {
 		if (elevationLow != null) {
 			for (Map.Entry<Integer, String> entry : textcatSubstitutionsElevation1.entrySet()) {
 				if (elevationLow == entry.getKey().intValue()) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Höhe_m")), entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Höhe_m"), entry.getValue());
 					break;
 				}
 			}
@@ -968,7 +967,7 @@ public class DangerSourceVariantTextController {
 			// phrase: Gefahrenstellen05§an_Expositionen
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects1.entrySet()) {
 				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen")),
+					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen"),
 							entry.getValue());
 					break;
 				}
@@ -976,29 +975,29 @@ public class DangerSourceVariantTextController {
 			// phrase: es_warum_Ort_wann
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects2.entrySet()) {
 				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects) && dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("es_warum_Ort_wann")),
+					result = result.replaceAll(textcatPlaceholder.get("es_warum_Ort_wann"),
 							"{\"curlyName\":\"es_warum_Ort_wann\",\"line\":30,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":0}}}");
 					break;
 				} else if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("es_warum_Ort_wann")), entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("es_warum_Ort_wann"), entry.getValue());
 					break;
 				}
 			}
 			// phrase: Hangart1
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects3.entrySet()) {
 				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects) && dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Hangart1")),
+					result = result.replaceAll(textcatPlaceholder.get("Hangart1"),
 							"{\"curlyName\":\"Hangart1\",\"line\":5}");
 					break;
 				} else if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Hangart1")), entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Hangart1"), entry.getValue());
 					break;
 				}
 			}
 			// phrase: Hangart_Höhe2
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects4.entrySet()) {
 				if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Hangart_Höhe2")), entry.getValue());
+					result = result.replaceAll(textcatPlaceholder.get("Hangart_Höhe2"), entry.getValue());
 					break;
 				}
 			}
@@ -1007,7 +1006,7 @@ public class DangerSourceVariantTextController {
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect1.entrySet()) {
 				if (!sortedAspects.isEmpty()) {
 					if (entry.getKey() == sortedAspects.get(0)) {
-						result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Expo")), entry.getValue());
+						result = result.replaceAll(textcatPlaceholder.get("Expo"), entry.getValue());
 						break;
 					}
 				}
@@ -1016,11 +1015,11 @@ public class DangerSourceVariantTextController {
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect2.entrySet()) {
 				if (sortedAspects.size() > 2) {
 					if (entry.getKey() == sortedAspects.get(1)) {
-						result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Komma_Expo")), entry.getValue());
+						result = result.replaceAll(textcatPlaceholder.get("Komma_Expo"), entry.getValue());
 						break;
 					}
 				} else {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("Komma_Expo")),
+					result = result.replaceAll(textcatPlaceholder.get("Komma_Expo"),
 							"{\"curlyName\":\"Komma_Expo\",\"line\":0}");
 					break;
 				}
@@ -1029,16 +1028,16 @@ public class DangerSourceVariantTextController {
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect3.entrySet()) {
 				if (sortedAspects.size() > 2) {
 					if (entry.getKey() == sortedAspects.get(2)) {
-						result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("und_Expo")), entry.getValue());
+						result = result.replaceAll(textcatPlaceholder.get("und_Expo"), entry.getValue());
 						break;
 					}
 				} else if (sortedAspects.size() > 1) {
 					if (entry.getKey() == sortedAspects.get(1)) {
-						result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("und_Expo")), entry.getValue());
+						result = result.replaceAll(textcatPlaceholder.get("und_Expo"), entry.getValue());
 						break;
 					}
 				} else {
-					result = result.replaceAll(Pattern.quote(textcatPlaceholder.get("und_Expo")),
+					result = result.replaceAll(textcatPlaceholder.get("und_Expo"),
 							"{\"curlyName\":\"und_Expo\",\"line\":0}");
 					break;
 				}
