@@ -13,10 +13,6 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.core.UriInfo;
 
 import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
@@ -44,15 +40,12 @@ public class UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-	@Context
-	UriInfo uri;
-
 	@Get
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get all users")
 	@ApiResponse(description = "users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
-	public HttpResponse<?> getUsers(@Context SecurityContext securityContext) {
+	public HttpResponse<?> getUsers() {
 		logger.debug("GET JSON users");
 		try {
 			List<User> users = UserController.getInstance().getUsers();
@@ -68,7 +61,7 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get all roles")
 	@ApiResponse(description = "roles", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Role.class))))
-	public HttpResponse<?> getRoles(@Context SecurityContext securityContext) {
+	public HttpResponse<?> getRoles() {
 		logger.debug("GET JSON roles");
 		Role[] roles = Role.values();
 		return HttpResponse.ok(roles);
@@ -79,7 +72,7 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get all regions")
 	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
-	public HttpResponse<?> getRegions(@Context SecurityContext securityContext) {
+	public HttpResponse<?> getRegions() {
 		logger.debug("GET JSON regions");
 		try {
 			List<String> ids = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
@@ -102,7 +95,7 @@ public class UserService {
 		// check if email already exists
 		if (!UserController.getInstance().userExists(user.getEmail())) {
 			UserController.getInstance().createUser(user);
-			return HttpResponse.created(uri.getAbsolutePathBuilder().path("").build());
+			return HttpResponse.noContent();
 		} else {
 			String message = "Error creating user - User already exists";
 			logger.warn(message);
@@ -110,22 +103,21 @@ public class UserService {
 		}
 	}
 
-	@PUT
+	@Put
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update own user")
 	public HttpResponse<?> updateOwnUser(
 		@Parameter(schema = @Schema(implementation = User.class)) User user,
-		@Context SecurityContext securityContext) {
+		Principal principal) {
 		logger.debug("PUT JSON user");
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
 
 			// check if email already exists
 			if (user.getEmail().equals(username)) {
 				UserController.getInstance().updateUser(user);
-				return HttpResponse.created(uri.getAbsolutePathBuilder().path("").build());
+				return HttpResponse.noContent();
 			} else {
 				throw new AlbinaException("Updating user not allowed");
 			}
