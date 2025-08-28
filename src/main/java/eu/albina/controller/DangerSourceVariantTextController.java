@@ -611,28 +611,28 @@ public class DangerSourceVariantTextController {
 		if (slopeGradient != null) {
 			switch (slopeGradient) {
 				case moderately_steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":0}");
 					break;
 				case steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":1}");
 					break;
 				case very_steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":2}");
 					break;
 				case extremely_steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":3}");
 					break;
 				default:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":0}");
 					break;
 			}
 		} else {
-			result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
+			result = result.replaceAll(textcatPlaceholder.get("steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
 		}
 		return result;
 	}
