@@ -39,7 +39,7 @@ public class DangerSourceVariantTextController {
 
 	// phrase "Gefahrenstellen05§an_Expositionen"
 	// placeholder:
-	// {"curlyName":"Gefahrenstellen05§an_Expositionen","line":3,"args":{"vor_allem_an":{"curlyName":"vor_allem_an","line":0},"Expo1":{"curlyName":"Expo1","line":2},"steilen":{"curlyName":"steilen","line":0},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":0},"und_Expo":{"curlyName":"und_Expo","line":0}}}
+	// {"curlyName":"Gefahrenstellen05§an_Expositionen","line":3,"args":{"vor_allem_an":{"curlyName":"vor_allem_an","line":0},"steilen":{"curlyName":"steilen","line":0},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":0},"und_Expo":{"curlyName":"und_Expo","line":0}}}
 	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects1 = Map.of(
 			Set.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW),
 			"{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":1}",
