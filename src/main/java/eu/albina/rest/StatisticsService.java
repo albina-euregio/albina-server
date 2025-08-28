@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
@@ -23,11 +24,6 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.security.annotation.Secured;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,9 +44,6 @@ public class StatisticsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
 
-	@Context
-	UriInfo uri;
-
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -59,10 +52,11 @@ public class StatisticsService {
 	public HttpResponse<?> getBulletinCsv(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate,
-		@QueryValue("lang") LanguageCode language, @QueryValue("extended") boolean extended,
-		@QueryValue("duplicate") boolean duplicate,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue(value = "extended", defaultValue = "false") boolean extended,
+		@QueryValue(value = "duplicate", defaultValue = "false") boolean duplicate,
 		@QueryValue("regions") List<String> regionIds,
-		@QueryValue("obsoleteMatrix") boolean obsoleteMatrix) {
+		@QueryValue(value = "obsoleteMatrix", defaultValue = "false") boolean obsoleteMatrix) {
 		logger.debug("GET CSV bulletins");
 
 		Instant start = null;
