@@ -10,6 +10,7 @@ public class Application {
 	public static void main(String[] args) {
 		GlobalVariables.loadConfigProperties();
 
+		System.setProperty("org.jboss.logging.provider", "slf4j");
 		HibernateUtil.getInstance().setUp();
 
 		SchedulerUtil.getInstance().setUp();
