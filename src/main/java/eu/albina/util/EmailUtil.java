@@ -242,7 +242,7 @@ public class EmailUtil {
 				}
 
 				// weather
-				if (!region.isEnableWeatherTextField()) {
+				if (region.isEnableWeatherTextField()) {
 					if (avalancheBulletin.getSynopsisCommentIn(lang) != null) {
 						bulletin.put("synopsisHeadline", lang.getBundleString("headline.synopsis"));
 						bulletin.put("synopsisComment", avalancheBulletin.getSynopsisCommentIn(lang));
