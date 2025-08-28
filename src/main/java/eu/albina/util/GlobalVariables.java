@@ -16,9 +16,6 @@ public class GlobalVariables {
 
 	public static String propertiesFilePath = "META-INF/config.properties";
 
-	// TODO use schema from caaml.org
-	public static String albinaXmlSchemaUrl = "https://api.avalanche.report/caaml/albina.xsd";
-
 	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
 
 	public static String getTmpMapsPath() {
