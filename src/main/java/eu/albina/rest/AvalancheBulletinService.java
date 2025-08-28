@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
@@ -360,7 +361,7 @@ public class AvalancheBulletinService {
 	@Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get bulletin preview as PDF")
 	public HttpResponse<?> getPreviewPdf(
-		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
+		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language) {
 
@@ -425,7 +426,7 @@ public class AvalancheBulletinService {
 	public HttpResponse<?> updateJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
+		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 
@@ -468,7 +469,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Create bulletin")
 	public HttpResponse<?> createJSONBulletin(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
+		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 
@@ -548,7 +549,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Create bulletins")
 	public HttpResponse<?> createJSONBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
+		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 
@@ -586,7 +587,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Change bulletins")
 	public HttpResponse<?> changeBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
+		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 		logger.debug("POST JSON bulletins change");

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
@@ -16,8 +17,8 @@ import io.micronaut.security.annotation.Secured;
 
 import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -88,7 +89,7 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create user")
 	public HttpResponse<?> createUser(
-		@Parameter(schema = @Schema(implementation = User.class)) User user) {
+		@Body User user) {
 		logger.debug("POST JSON user");
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
@@ -108,7 +109,7 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update own user")
 	public HttpResponse<?> updateOwnUser(
-		@Parameter(schema = @Schema(implementation = User.class)) User user,
+		@Body User user,
 		Principal principal) {
 		logger.debug("PUT JSON user");
 		try {
@@ -127,20 +128,46 @@ public class UserService {
 		}
 	}
 
+	@Serdeable
 	static class ChangePassword {
 		public String oldPassword;
 		public String newPassword;
+
+		public String getOldPassword() {
+			return oldPassword;
+		}
+
+		public void setOldPassword(String oldPassword) {
+			this.oldPassword = oldPassword;
+		}
+
+		public String getNewPassword() {
+			return newPassword;
+		}
+
+		public void setNewPassword(String newPassword) {
+			this.newPassword = newPassword;
+		}
 	}
 
+	@Serdeable
 	static class ResetPassword {
 		public String newPassword;
+
+		public String getNewPassword() {
+			return newPassword;
+		}
+
+		public void setNewPassword(String newPassword) {
+			this.newPassword = newPassword;
+		}
 	}
 
 	@Put("/change")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Change password")
-	public HttpResponse<?> changePassword(ChangePassword data, Principal principal) {
+	public HttpResponse<?> changePassword(@Body ChangePassword data, Principal principal) {
 		logger.debug("PUT JSON password");
 		try {
 			String username = principal.getName();
@@ -154,15 +181,24 @@ public class UserService {
 		}
 	}
 
+	@Serdeable
 	static class CheckPassword {
 		public String password;
+
+		public String getPassword() {
+			return password;
+		}
+
+		public void setPassword(String password) {
+			this.password = password;
+		}
 	}
 
 	@Put("/check")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Check password")
-	public HttpResponse<?> checkPassword(CheckPassword data, Principal principal) {
+	public HttpResponse<?> checkPassword(@Body CheckPassword data, Principal principal) {
 		logger.debug("GET JSON check password");
 		try {
 			String username = principal.getName();
@@ -191,7 +227,7 @@ public class UserService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Reset user password")
-	public HttpResponse<?> resetPassword(@PathVariable("id") String id, ResetPassword data) {
+	public HttpResponse<?> resetPassword(@PathVariable("id") String id, @Body ResetPassword data) {
 		logger.debug("PUT JSON user password");
 		try {
 			UserController.getInstance().resetPassword(id, data.newPassword);
@@ -209,7 +245,7 @@ public class UserService {
 	@Operation(summary = "Update user")
 	public HttpResponse<?> updateUser(
 		@PathVariable("id") String id,
-		@Parameter(schema = @Schema(implementation = User.class)) User user) {
+		@Body User user) {
 		logger.debug("PUT JSON user");
 		try {
 			// check if email already exists

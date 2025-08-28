@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
@@ -53,8 +54,7 @@ public class ServerInstanceService {
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update server configuration")
-	public HttpResponse<?> updateServerConfiguration(
-		ServerInstance serverInstance) {
+	public HttpResponse<?> updateServerConfiguration(@Body ServerInstance serverInstance) {
 		try {
 			ServerInstanceController.getInstance().updateServerInstance(serverInstance);
 			return HttpResponse.noContent();
@@ -68,8 +68,7 @@ public class ServerInstanceService {
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create server configuration")
-	public HttpResponse<?> createServerConfiguration(
-		ServerInstance serverInstance) {
+	public HttpResponse<?> createServerConfiguration(@Body ServerInstance serverInstance) {
 		logger.debug("POST JSON server");
 
 		// check if id already exists

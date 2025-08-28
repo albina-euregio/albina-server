@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 
@@ -14,6 +15,7 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,17 +30,42 @@ public class SubscriptionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
 
+	@Serdeable
 	static class EmailSubscription {
 		public String email;
 
 		public String regions;
 
 		public LanguageCode language;
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
+
+		public String getRegions() {
+			return regions;
+		}
+
+		public void setRegions(String regions) {
+			this.regions = regions;
+		}
+
+		public LanguageCode getLanguage() {
+			return language;
+		}
+
+		public void setLanguage(LanguageCode language) {
+			this.language = language;
+		}
 	}
 
 	@Post("/subscribe")
 	@Operation(summary = "Subscribe email notification")
-	public HttpResponse<?> addSubscriber(EmailSubscription json) {
+	public HttpResponse<?> addSubscriber(@Body EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		Objects.requireNonNull(json.language, "language");
 		final Region region = RegionController.getInstance().getRegion(json.regions);

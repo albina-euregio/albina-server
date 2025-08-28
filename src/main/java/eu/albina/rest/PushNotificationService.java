@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
@@ -30,7 +31,7 @@ public class PushNotificationService {
 
 	@Post("/subscribe")
 	@Operation(summary = "Subscribe push notification")
-	public HttpResponse<?> subscribe(PushSubscription subscription) {
+	public HttpResponse<?> subscribe(@Body PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
 		PushSubscriptionController.create(subscription);
 		new PushNotificationUtil().sendWelcomePushMessage(subscription);
@@ -39,7 +40,7 @@ public class PushNotificationService {
 
 	@Post("/unsubscribe")
 	@Operation(summary = "Unsubscribe push notification")
-	public HttpResponse<?> unsubscribe(PushSubscription subscription) {
+	public HttpResponse<?> unsubscribe(@Body PushSubscription subscription) {
 		logger.info("Unsubscribing {}", subscription);
 		PushSubscriptionController.delete(subscription);
 		return HttpResponse.noContent();

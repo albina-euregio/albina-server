@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
@@ -83,7 +84,7 @@ public class DangerSourceService {
 	@Operation(summary = "Update danger source")
 	public void updateDangerSource(
 			@PathVariable("dangerSourceId") String dangerSourceId,
-			String json) {
+			@Body String json) {
 		logger.debug("POST JSON danger source");
 
 		DangerSource dangerSource = JsonUtil.parseUsingJackson(json, DangerSource.class);
@@ -146,7 +147,7 @@ public class DangerSourceService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 			@QueryValue("region") String regionId,
 			Principal principal,
-			String json) {
+			@Body String json) {
 		logger.debug("POST JSON variants");
 
 		try {
@@ -194,7 +195,7 @@ public class DangerSourceService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 			@QueryValue("region") String regionId,
 			Principal principal,
-			String json) {
+			@Body String json) {
 		logger.debug("POST JSON danger source variant");
 
 		try {
@@ -258,7 +259,7 @@ public class DangerSourceService {
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 			@QueryValue("region") String regionId,
 			Principal principal,
-			String json) {
+			@Body String json) {
 		logger.debug("PUT JSON danger source variant");
 
 		try {

@@ -64,8 +64,8 @@ public class MediaFileService {
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language,
 		@QueryValue("important") boolean important,
-		String mediaText,
-		StreamingFileUpload file,
+		String mediaText, // FIXME
+		StreamingFileUpload file, // FIXME
 		Principal principal) {
 		try {
 			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());

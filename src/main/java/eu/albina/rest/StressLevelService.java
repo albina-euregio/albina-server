@@ -10,6 +10,7 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.model.Region;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
@@ -94,7 +95,7 @@ public class StressLevelService {
 	@Operation(summary = "Create stress level entry")
 	public HttpResponse<?> postStressLevel(
 			Principal principal,
-			StressLevel stressLevel) {
+			@Body StressLevel stressLevel) {
 
 		User user = UserController.getInstance().getUser(principal.getName());
 		stressLevel.setUser(user);

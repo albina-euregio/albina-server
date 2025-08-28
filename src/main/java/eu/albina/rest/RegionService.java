@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.List;
 
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
@@ -81,7 +82,7 @@ public class RegionService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update region")
 	public HttpResponse<?> updateRegion(
-		@Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
+		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("PUT JSON region");
 
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
@@ -116,7 +117,7 @@ public class RegionService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create region")
 	public HttpResponse<?> createRegion(
-		@Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
+		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("POST JSON region");
 		try {
 			Region region = new Region(regionString, RegionController.getInstance()::getRegion);
