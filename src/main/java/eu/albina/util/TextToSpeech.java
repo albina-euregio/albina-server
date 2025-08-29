@@ -80,7 +80,9 @@ public interface TextToSpeech {
 				lang.getBundleString("speech.bulletin.update", Map.of("validityDate", validityDate)) :
 				lang.getBundleString("speech.bulletin", Map.of("validityDate", validityDate))));
 
-			paragraph(emphasis(sentence(bulletin.getAvalancheActivity().getHighlights())));
+			if (bulletin.getAvalancheActivity() != null) {
+				paragraph(emphasis(sentence(bulletin.getAvalancheActivity().getHighlights())));
+			}
 			break1s();
 
 			paragraph(dangerRatingTexts(bulletin.getDangerRatings()).map(this::sentence));
@@ -103,11 +105,15 @@ public interface TextToSpeech {
 				paragraph(sentence(lang.getBundleString("speech.highlights", Map.of("highlights", bulletin.getHighlights()))));
 			}
 
-			paragraph(sentence(bulletin.getAvalancheActivity().getComment()));
+			if (bulletin.getAvalancheActivity() != null) {
+				paragraph(sentence(bulletin.getAvalancheActivity().getComment()));
+			}
 			break1s();
 
 			paragraph(sentence(lang.getBundleString("speech.snowpack")));
-			paragraph(bulletin.getSnowpackStructure().getComment());
+			if (bulletin.getSnowpackStructure() != null) {
+				paragraph(bulletin.getSnowpackStructure().getComment());
+			}
 			dangerPatterns();
 			break1s();
 

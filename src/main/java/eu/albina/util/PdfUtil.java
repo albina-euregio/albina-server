@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
+import eu.albina.model.enumerations.DangerPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -386,11 +387,12 @@ public class PdfUtil {
 		table.addCell(cell);
 
 		// avalanche activity
-		if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null) {
-			Paragraph avActivityHighlights = new Paragraph(
-					replaceLinebreaks(avalancheBulletin.getAvActivityHighlightsIn(lang))).setFont(openSansRegularFont)
+		String avActivityHighlights = avalancheBulletin.getAvActivityHighlightsIn(lang);
+		if (avActivityHighlights != null) {
+			Paragraph paragraph = new Paragraph(
+					replaceLinebreaks(avActivityHighlights)).setFont(openSansRegularFont)
 							.setFontSize(14).setFontColor(blackColor).setMultipliedLeading(leadingHeadline);
-			cell = new Cell(1, 1).add(avActivityHighlights);
+			cell = new Cell(1, 1).add(paragraph);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			cell.setPaddingLeft(paddingLeft);
 			cell.setBorder(Border.NO_BORDER);
@@ -399,12 +401,13 @@ public class PdfUtil {
 			table.addCell(cell);
 		}
 
-		if (avalancheBulletin.getAvActivityCommentIn(lang) != null) {
-			Paragraph avActivityComment = new Paragraph(
-					replaceLinebreaks(avalancheBulletin.getAvActivityCommentIn(lang))).setFont(openSansRegularFont)
+		String avActivityComment = avalancheBulletin.getAvActivityCommentIn(lang);
+		if (avActivityComment != null) {
+			Paragraph paragraph = new Paragraph(
+					replaceLinebreaks(avActivityComment)).setFont(openSansRegularFont)
 							.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
 							.setMarginBottom(5);
-			cell = new Cell(1, 1).add(avActivityComment);
+			cell = new Cell(1, 1).add(paragraph);
 			cell.setTextAlignment(TextAlignment.LEFT);
 			cell.setPaddingLeft(paddingLeft);
 			cell.setBorder(Border.NO_BORDER);
@@ -414,15 +417,21 @@ public class PdfUtil {
 		}
 
 		// snowpack structure and tendency
-		if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
-				|| avalancheBulletin.getSynopsisCommentIn(lang) != null
-				|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
-				|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null
-				|| avalancheBulletin.getTendencyCommentIn(lang) != null) {
+		DangerPattern dangerPattern1 = avalancheBulletin.getDangerPattern1();
+		DangerPattern dangerPattern2 = avalancheBulletin.getDangerPattern2();
+		String synopsisComment = avalancheBulletin.getSynopsisCommentIn(lang);
+		String snowpackStructureComment = avalancheBulletin.getSnowpackStructureCommentIn(lang);
+		String snowpackStructureHighlights = avalancheBulletin.getSnowpackStructureHighlightsIn(lang);
+		String tendencyComment = avalancheBulletin.getTendencyCommentIn(lang);
+		if (dangerPattern1 != null || dangerPattern2 != null
+				|| synopsisComment != null
+				|| snowpackStructureComment != null
+				|| snowpackStructureHighlights != null
+				|| tendencyComment != null) {
 
-			if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
-					|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
-					|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null) {
+			if (dangerPattern1 != null || dangerPattern2 != null
+					|| snowpackStructureComment != null
+					|| snowpackStructureHighlights != null) {
 				cell = new Cell(1, 10).add(new Paragraph(lang.getBundleString("headline.snowpack"))
 						.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(5)
 						.setMultipliedLeading(leadingHeadline));
@@ -434,7 +443,7 @@ public class PdfUtil {
 				table.addCell(cell);
 
 				// add danger patterns
-				if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null) {
+				if (dangerPattern1 != null || dangerPattern2 != null) {
 					float[] dangerPatternColumnWidths = { 1, 1, 1 };
 					Table dangerPatternTable = new Table(dangerPatternColumnWidths);
 					Paragraph dangerPatternHeadline = new Paragraph(lang.getBundleString("headline.danger-patterns"))
@@ -444,9 +453,9 @@ public class PdfUtil {
 					cell.setBorder(Border.NO_BORDER);
 					dangerPatternTable.addCell(cell);
 
-					if (avalancheBulletin.getDangerPattern1() != null) {
+					if (dangerPattern1 != null) {
                         Paragraph paragraph = new Paragraph(
-								avalancheBulletin.getDangerPattern1().toString(lang.getLocale()))
+								dangerPattern1.toString(lang.getLocale()))
 										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -457,9 +466,9 @@ public class PdfUtil {
 						cell = new Cell(1, 1).setBorder(null);
 						dangerPatternTable.addCell(cell);
 					}
-					if (avalancheBulletin.getDangerPattern2() != null) {
+					if (dangerPattern2 != null) {
                         Paragraph paragraph = new Paragraph(
-								avalancheBulletin.getDangerPattern2().toString(lang.getLocale()))
+								dangerPattern2.toString(lang.getLocale()))
 										.setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 						cell = new RoundedCornersCell(1, 1).add(paragraph);
 						cell.setTextAlignment(TextAlignment.LEFT);
@@ -480,12 +489,12 @@ public class PdfUtil {
 					table.addCell(cell);
 				}
 
-				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null) {
-					Paragraph snowpackStructureComment = new Paragraph(
-							replaceLinebreaks(avalancheBulletin.getSnowpackStructureCommentIn(lang)))
+				if (snowpackStructureComment != null) {
+					Paragraph paragraph = new Paragraph(
+							replaceLinebreaks(snowpackStructureComment))
 									.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor)
 									.setMultipliedLeading(leadingText);
-					cell = new Cell(1, 1).add(snowpackStructureComment);
+					cell = new Cell(1, 1).add(paragraph);
 					cell.setTextAlignment(TextAlignment.LEFT);
 					cell.setPaddingLeft(paddingLeft);
 					cell.setBorder(Border.NO_BORDER);
@@ -495,7 +504,7 @@ public class PdfUtil {
 				}
 			}
 
-			if (avalancheBulletin.getSynopsisCommentIn(lang) != null) {
+			if (synopsisComment != null) {
 				Paragraph weatherHeadline = new Paragraph(lang.getBundleString("headline.synopsis"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
@@ -508,7 +517,7 @@ public class PdfUtil {
 				table.addCell(cell);
 
 				Paragraph weatherComment = new Paragraph(
-					replaceLinebreaks(avalancheBulletin.getSynopsisCommentIn(lang))).setFont(openSansRegularFont)
+					replaceLinebreaks(synopsisComment)).setFont(openSansRegularFont)
 					.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
 					.setMarginBottom(5);
 				cell = new Cell(1, 1).add(weatherComment);
@@ -520,7 +529,7 @@ public class PdfUtil {
 				table.addCell(cell);
 			}
 
-			if (avalancheBulletin.getTendencyCommentIn(lang) != null) {
+			if (tendencyComment != null) {
 				Paragraph tendencyHeadline = new Paragraph(lang.getBundleString("headline.tendency"))
 						.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 						.setMultipliedLeading(leadingHeadline);
@@ -532,11 +541,11 @@ public class PdfUtil {
 				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 
-				Paragraph tendencyComment = new Paragraph(
-						replaceLinebreaks(avalancheBulletin.getTendencyCommentIn(lang))).setFont(openSansRegularFont)
+				Paragraph paragraph = new Paragraph(
+						replaceLinebreaks(tendencyComment)).setFont(openSansRegularFont)
 								.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
 								.setMarginBottom(5);
-				cell = new Cell(1, 1).add(tendencyComment);
+				cell = new Cell(1, 1).add(paragraph);
 				cell.setTextAlignment(TextAlignment.LEFT);
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
