@@ -13,7 +13,6 @@
     "snowpackStructure" : {
       "comment" : "Up to 1600 m rain has fallen since yesterday. Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. <br/> <br/> In its middle, the snowpack is faceted and weak. This applies in particular above approximately 2000 m, and below approximately 2600 m. Field observations confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution.",
       "tendencyType" : "increasing",
@@ -156,7 +155,6 @@
     "snowpackStructure" : {
       "comment" : "Over a wide area 20 to 40 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. These weather conditions will foster a weakening of the snowpack in particular on very steep slopes. <br/> <br/> Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.",
       "tendencyType" : "increasing",
@@ -284,7 +282,6 @@
     "snowpackStructure" : {
       "comment" : "Over a wide area 20 to 40 cm of snow will fall from midday. From the Venediger Range to the Glockner Range up to 60 cm of snow will fall. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. <br/> <br/> In its middle, the snowpack is faceted and weak. This applies in particular above the tree line, and below approximately 2600 m. Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.",
       "tendencyType" : "increasing",
@@ -520,7 +517,6 @@
     "snowpackStructure" : {
       "comment" : "Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger.",
       "tendencyType" : "increasing",
@@ -612,7 +608,6 @@
     "snowpackStructure" : {
       "comment" : "15 to 30 cm of snow will fall on Friday, in particular above the tree line. <br/> The old snowpack is largely stable and its surface has a crust, in particular on steep sunny slopes in all altitude zones, as well as on shady slopes below approximately 2400 m. <br/> The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "As a consequence of new snow and wind there will be an increase in the avalanche danger. Over a wide area 15 to 30 cm of snow will fall on Saturday. In the Sexten Dolomites and in the Lienzer Dolomites in some localities up to 50 cm of snow will fall. A critical avalanche situation will be encountered in some regions.",
       "tendencyType" : "increasing",
@@ -731,7 +726,6 @@
     "snowpackStructure" : {
       "comment" : "Below approximately 1800 m a little snow is lying. Over a wide area new snow and wind slabs are lying on a hard crust. At higher altitudes there are 10 to 20 cm of snow, and even more in some localities."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will increase.",
       "tendencyType" : "increasing",

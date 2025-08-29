@@ -13,7 +13,6 @@
     "snowpackStructure" : {
       "comment" : "Weak layers in the upper part of the snowpack represent the main danger. The somewhat older wind slabs are in some cases still prone to triggering especially on steep shady slopes above approximately 2200 m. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will be moist at low and intermediate altitudes."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -117,7 +116,6 @@
     "snowpackStructure" : {
       "comment" : "The snowpack will be quite prone to triggering, especially in areas close to the tree line as well as above the tree line. Faceted weak layers exist in the bottom section of the snowpack. The somewhat older wind slabs have settled a little."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -188,7 +186,6 @@
     "snowpackStructure" : {
       "comment" : "Weak layers in the upper part of the snowpack represent the main danger. The somewhat older wind slabs are in some cases still prone to triggering especially on steep shady slopes above approximately 2200 m. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will be moist at low and intermediate altitudes."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -280,7 +277,6 @@
     "snowpackStructure" : {
       "comment" : "The fresh snow and wind slabs of the last few days are lying on the quite favourable surface of an old snowpack in particular on east to south to southwest facing aspects. Faceted weak layers exist in the snowpack especially on steep, rather lightly snow-covered shady slopes. Below approximately 2000 m thus far only a little snow is lying."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",
@@ -372,7 +368,6 @@
     "snowpackStructure" : {
       "comment" : "In some cases fresh snow and wind slabs are lying on soft layers. Isolated avalanche prone weak layers exist in the old snowpack. The snowpack will be generally prone to triggering."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Fresh wind slabs represent the main danger.",
       "tendencyType" : "steady",
@@ -430,7 +425,6 @@
     "snowpackStructure" : {
       "comment" : "The snowpack remains generally well bonded. In all regions from a snow sport perspective, in most cases insufficient snow is lying."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
@@ -509,7 +503,6 @@
     "snowpackStructure" : {
       "comment" : "The snowpack will be subject to considerable local variations. In some places wind slabs are lying on a weakly bonded old snowpack. Only a little snow is lying."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
@@ -561,7 +554,6 @@
     "snowpackStructure" : {
       "comment" : "The somewhat older wind slabs are lying on soft layers in all aspects. Avalanche prone weak layers exist in the centre of the old snowpack in all aspects. In some cases the wind slabs have bonded still only poorly with each other and the old snowpack. In some cases avalanches can penetrate even deep layers and reach large size in isolated cases."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "In some localities some fresh snow.",
       "tendencyType" : "steady",
@@ -657,7 +649,6 @@
     "snowpackStructure" : {
       "comment" : "Thus far only a little snow is lying. The snowpack will be subject to considerable local variations. In some cases the wind slabs have bonded still only poorly with the old snowpack."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Slight decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -721,7 +712,6 @@
     "snowpackStructure" : {
       "comment" : "In some cases the wind slabs have bonded poorly with the old snowpack. They are barely recognisable because of the poor visibility. The snowpack will be subject to considerable local variations."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",

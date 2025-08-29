@@ -13,7 +13,6 @@
     "snowpackStructure" : {
       "comment" : "The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The somewhat older wind slabs are bonding only slowly with the old snowpack in all aspects above approximately 2200 m. The surface of the snowpack will soften during the day. This applies on steep sunny slopes in particular at low and intermediate altitudes in these regions."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
@@ -151,7 +150,6 @@
     "snowpackStructure" : {
       "comment" : "By the evening the wind has been strong over a wide area. The fresh snow and wind slabs of the last few days are lying on soft layers above approximately 2200 m. Isolated avalanche prone weak layers exist in the centre of the snowpack, in particular between approximately 2200 and 2700 m. The surface of the snowpack will soften during the day."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
@@ -222,7 +220,6 @@
     "snowpackStructure" : {
       "comment" : "In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2200 m. The fresh wind slabs are rather small and in some cases prone to triggering. These are clearly recognisable to the trained eye. Faceted weak layers exist in the centre of the snowpack in particular on west, north and east facing slopes, especially between approximately 2200 and 2700 m. Whumpfing and hissing sounds can indicate the danger. The surface of the snowpack will soften during the day."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Gradual decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -294,7 +291,6 @@
     "snowpackStructure" : {
       "comment" : "The snowpack will be subject to considerable local variations. In many cases fresh snow and wind slabs are lying on the soft surface of an old snowpack. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack are a clear indication of a weakly bonded snowpack."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",
@@ -386,7 +382,6 @@
     "snowpackStructure" : {
       "comment" : "The fresh wind slabs of Tuesday represent the main danger. They are in some cases prone to triggering. In some places fresh snow and wind slabs are lying on soft layers, in particular above approximately 2000 m. The somewhat older wind slabs have bonded quite well with the old snowpack. The surface of the snowpack will soften during the day."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
@@ -444,7 +439,6 @@
     "snowpackStructure" : {
       "comment" : "From a snow sport perspective, in most cases insufficient snow is lying. The sometimes strong wind has transported only a little snow."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
