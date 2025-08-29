@@ -134,7 +134,6 @@
       <aspect>SW</aspect>
       <validTimePeriod>later</validTimePeriod>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>Wind slabs require caution, especially above approximately 2200 m, in particular on very steep shady slopes and adjacent to ridgelines. Weakly bonded old snow at intermediate and high altitudes. Slight increase in danger of moist and wet avalanches as a consequence of warming during the day and solar radiation.</highlights>
       <comment>The sometimes large wind slabs of the last three days represent the main danger, especially above approximately 2200 m. Single winter sport participants can release avalanches as before, including dangerously large ones, in particular, along the border with Italy. Dry avalanches can additionally be released in the old snowpack by a single winter sport participant, in particular in areas where the snow cover is rather shallow between approximately 2200 and 2700 m and on very steep slopes. The avalanche prone locations are to be found in all aspects. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. In the afternoon as a consequence of warming during the day and solar radiation there will be only a slight increase in the danger of moist and wet avalanches. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger.</comment>
@@ -212,7 +211,6 @@
       <aspect>SW</aspect>
       <validTimePeriod>all_day</validTimePeriod>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>Wind slabs require caution, especially above approximately 2200 m. Gliding avalanches and snow slides on grassy slopes. This applies in particular below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day.</highlights>
       <comment>The sometimes large wind slabs of the last three days represent the main danger. The fresh wind slabs can be released, in particular by large loads and reach large size in isolated cases. The number and size of avalanche prone locations will increase with altitude. Caution is to be exercised in areas with glide cracks. This applies in particular on steep grassy slopes below approximately 2400 m. The danger of moist and wet avalanches will increase a little during the day. Below approximately 2600 m small and medium-sized moist loose snow avalanches are possible. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger.</comment>
@@ -291,7 +289,6 @@
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>Fresh wind slabs represent the main danger. This applies in particular adjacent to ridgelines. Weakly bonded old snow especially on west, north and east facing slopes, in particular between approximately 2200 and 2700 m.</highlights>
       <comment>The wind slabs of the last few days are prone to triggering above approximately 2200 m. These represent the main danger. The number and size of avalanche prone locations will increase with altitude. In particular transitions from a shallow to a deep snowpack are unfavourable, especially on very steep shady slopes and adjacent to ridgelines. As a consequence of warming during the day and solar radiation more mostly small moist loose snow avalanches are possible.</comment>
@@ -391,7 +388,6 @@
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>The wind slabs represent the main danger.</highlights>
       <comment>As a consequence of fresh snow and a strong wind from northerly directions, wind slabs formed in particular adjacent to ridgelines and in gullies and bowls. In particular on wind-loaded slopes avalanches can be released easily and reach a dangerous size. Especially in regions with a lot of snow and in high Alpine regions avalanche prone locations are more prevalent and the danger is greater. The avalanche prone locations are clearly recognisable to the trained eye. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls.</comment>
@@ -448,7 +444,6 @@
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>Fresh wind slabs require caution, in particular adjacent to ridgelines.</highlights>
       <comment>The fresh wind slabs represent the main danger, especially on very steep shady slopes and adjacent to ridgelines, in particular above approximately 2200 m. The number and size of avalanche prone locations will increase with altitude. At low and intermediate altitudes a low avalanche danger will be encountered over a wide area.</comment>
@@ -553,7 +548,6 @@
       <aspect>N</aspect>
       <validTimePeriod>all_day</validTimePeriod>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>Hardly any snow is lying on south facing slopes.</highlights>
       <comment>The wind slabs represent the main danger. The wind slabs are to be found in particular adjacent to ridgelines and in gullies and bowls as well as in the high Alpine regions. The avalanche prone locations are rather rare and are easy to recognise.</comment>
