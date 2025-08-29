@@ -49,7 +49,9 @@ public interface Caaml6 {
 	}
 
 	static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
-		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang, avalancheReport.getRegion())).collect(Collectors.toList()));
+		boolean includeWeatherSynopsis = avalancheReport.getRegion().isEnableWeatherTextField();
+		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang, includeWeatherSynopsis)).collect(Collectors.toList()));
+		// TODO (general-headline): insert conditional - only set general headline if activated in backend
 		String generalHeadline = avalancheReport.getGeneralHeadline(lang);
 		if (Strings.isNotEmpty(generalHeadline)) {
 			bulletins.setCustomData(new AvalancheBulletinsCustomData(
@@ -60,10 +62,9 @@ public interface Caaml6 {
 	}
 
 	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
-		return toCAAML(avalancheBulletin, lang, null);
+		return toCAAML(avalancheBulletin, lang, false);
 	}
-
-	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang, Region region) {
+	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang, boolean includeWeatherSynopsis) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
 		bulletin.setUnscheduled(avalancheBulletin.isUpdate());
 		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
@@ -109,7 +110,7 @@ public interface Caaml6 {
 		bulletin.setTravelAdvisory(new org.caaml.v6.Texts(avalancheBulletin.getTravelAdvisoryHighlightsIn(lang), avalancheBulletin.getTravelAdvisoryCommentIn(lang)));
 		bulletin.setValidTime(new ValidTime(avalancheBulletin.getValidFrom().toInstant(), avalancheBulletin.getValidUntil().toInstant()));
 
-		if (region != null && region.isEnableWeatherTextField()) {
+		if (includeWeatherSynopsis) {
 			bulletin.setWeatherForecast(new org.caaml.v6.Texts(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
 		}
 
