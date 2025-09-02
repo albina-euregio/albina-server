@@ -729,23 +729,27 @@ public class DangerSourceVariantTextController {
 
 	private String replaceTerrainTypes(Set<TerrainType> terrainTypes, String result) {
 		// phrase: Hangart1
-		Set<TerrainType> bestMatchKey = null;
-		int maxCommon = 0;
-		for (Set<TerrainType> key : textcatSubstitutionsTerrainTypes.keySet()) {
-			int common = 0;
-			for (TerrainType t : terrainTypes) {
-				if (key.contains(t)) {
-					common++;
+		if (terrainTypes == null || terrainTypes.isEmpty()) {
+			Set<TerrainType> bestMatchKey = null;
+			int maxCommon = 0;
+			for (Set<TerrainType> key : textcatSubstitutionsTerrainTypes.keySet()) {
+				int common = 0;
+				for (TerrainType t : terrainTypes) {
+					if (key.contains(t)) {
+						common++;
+					}
+				}
+				if (common > maxCommon && common == key.size()) {
+					maxCommon = common;
+					bestMatchKey = key;
 				}
 			}
-			if (common > maxCommon && common == key.size()) {
-				maxCommon = common;
-				bestMatchKey = key;
+
+			if (bestMatchKey != null) {
+				result = result.replaceAll(textcatPlaceholder.get("Geländeformen"),
+						textcatSubstitutionsTerrainTypes.get(bestMatchKey));
 			}
 		}
-
-		result = result.replaceAll(textcatPlaceholder.get("Geländeformen"),
-				textcatSubstitutionsTerrainTypes.get(bestMatchKey));
 
 		return result;
 	}
