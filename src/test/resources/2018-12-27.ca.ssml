@@ -4,7 +4,6 @@
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>a primera hora hi ha Perill d'allaus marcat, doncs grau de perill tres.</s>
@@ -18,10 +17,8 @@
 <s>A més, al final del dia, per sota 2400 metres, tenim un problema de neu humida. Especialment en orientacions Est a Sud a Oest.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>I ara el mantell de neu:</s></p>
-<p>null</p>
 Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5: nevada després d'un període llarg fred.
 <break time="1s" strength="strong"></break>
 <p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
@@ -42,7 +39,6 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5:
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos.</s>
@@ -53,10 +49,8 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5:
 <s>A més, dia sencer, per sota 2400 metres, tenim un problema de lliscaments basals. Especialment en orientacions Est a Sud a Oest.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>I ara el mantell de neu:</s></p>
-<p>null</p>
 Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2: lliscaments.
 <break time="1s" strength="strong"></break>
 <p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
@@ -77,7 +71,6 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2:
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>dia sencer hi ha Perill d'allaus marcat, doncs grau de perill tres.</s>
@@ -88,10 +81,8 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2:
 <s>A més, dia sencer, entre 2200 metres i 2700 metres, tenim un problema de capa feble persistent. Especialment en orientacions Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>I ara el mantell de neu:</s></p>
-<p>null</p>
 Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5: nevada després d'un període llarg fred.
 <break time="1s" strength="strong"></break>
 <p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus en disminució.</s></p>
@@ -112,7 +103,6 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5:
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos.</s>
@@ -123,10 +113,8 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5:
 <s>A més, dia sencer, per sobre 2300 metres, tenim un problema de capa feble persistent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>I ara el mantell de neu:</s></p>
-<p>null</p>
 <break time="1s" strength="strong"></break>
 <p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>
@@ -146,7 +134,6 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5:
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>dia sencer hi ha Perill d'allaus moderat, doncs grau de perill dos.</s>
@@ -156,10 +143,8 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.5:
 <s>dia sencer, per sobre 2200 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Nord-Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>I ara el mantell de neu:</s></p>
-<p>null</p>
 Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 <break time="1s" strength="strong"></break>
 <p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
@@ -180,7 +165,6 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Butlletí d'allaus per dijous, 27 de desembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>dia sencer hi ha Perill d'allaus feble, doncs grau de perill 1.</s>
@@ -190,10 +174,8 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 <s>dia sencer, per sobre 2200 metres, tenim un problema de plaques de vent. Especialment en orientacions Nord-Oest a Nord a Est.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>I ara el mantell de neu:</s></p>
-<p>null</p>
 <break time="1s" strength="strong"></break>
 <p><s>La tendència per divendres, 28 de desembre de 2018 indica un perill d'allaus constant.</s></p>
 <break time="1s" strength="strong"></break>

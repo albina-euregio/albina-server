@@ -382,7 +382,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			return null;
 		}
 		String text = texts.getText(lang);
-		if (text == null) {
+		if (text == null || text.isBlank()) {
 			return null;
 		}
 		return text.trim();

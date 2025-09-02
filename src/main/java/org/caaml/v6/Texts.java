@@ -32,6 +32,13 @@ public class Texts {
 		this.highlights = highlights;
 	}
 
+	public static Texts of(String highlights, String comment) {
+		if (highlights == null && comment == null) {
+			return null;
+		}
+		return new Texts(highlights, comment);
+	}
+
 	public String getComment() { return comment; }
     public void setComment(String value) { this.comment = value; }
 

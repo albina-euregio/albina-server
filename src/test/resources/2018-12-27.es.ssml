@@ -4,7 +4,6 @@
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Boletín de aludes para jueves, 27 de diciembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>al inicio del día hay Peligro de aludes notable, por lo que el grado de peligro es tres..</s>
@@ -18,10 +17,8 @@
 <s>Además, al final del día, por debajo 2400 metros, tenemos un poblema de nieve húmeda. Especialmente en orientaciones Este a Sur a Oeste.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>Y ahora el manto de nieve:</s></p>
-<p>null</p>
 Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.5: nevada después de un largo periodo frío.
 <break time="1s" strength="strong"></break>
 <p><s>La tendencia para viernes, 28 de diciembre de 2018 indica un peligro de aludes constante.</s></p>
@@ -42,7 +39,6 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Boletín de aludes para jueves, 27 de diciembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos..</s>
@@ -53,10 +49,8 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <s>Además, día entero, por debajo 2400 metros, tenemos un problema de deslizamiento basal. Especialmente en orientaciones Este a Sur a Oeste.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>Y ahora el manto de nieve:</s></p>
-<p>null</p>
 Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.2: deslizamientos.
 <break time="1s" strength="strong"></break>
 <p><s>La tendencia para viernes, 28 de diciembre de 2018 indica un peligro de aludes constante.</s></p>
@@ -77,7 +71,6 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Boletín de aludes para jueves, 27 de diciembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>día entero hay Peligro de aludes notable, por lo que el grado de peligro es tres..</s>
@@ -88,10 +81,8 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <s>Además, día entero, entre 2200 metros y 2700 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Oeste a Norte a Este.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>Y ahora el manto de nieve:</s></p>
-<p>null</p>
 Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, pp.5: nevada después de un largo periodo frío.
 <break time="1s" strength="strong"></break>
 <p><s>La tendencia para viernes, 28 de diciembre de 2018 indica un peligro de aludes en disminución.</s></p>
@@ -112,7 +103,6 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Boletín de aludes para jueves, 27 de diciembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos..</s>
@@ -123,10 +113,8 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <s>Además, día entero, encima 2300 metros, tenemos un problema de capa débil persistente. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>Y ahora el manto de nieve:</s></p>
-<p>null</p>
 <break time="1s" strength="strong"></break>
 <p><s>La tendencia para viernes, 28 de diciembre de 2018 indica un peligro de aludes constante.</s></p>
 <break time="1s" strength="strong"></break>
@@ -146,7 +134,6 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Boletín de aludes para jueves, 27 de diciembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>día entero hay Peligro de aludes limitado, por lo que el grado de peligro es dos..</s>
@@ -156,10 +143,8 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 <s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Noreste.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>Y ahora el manto de nieve:</s></p>
-<p>null</p>
 Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento.
 <break time="1s" strength="strong"></break>
 <p><s>La tendencia para viernes, 28 de diciembre de 2018 indica un peligro de aludes constante.</s></p>
@@ -180,7 +165,6 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento.
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
 <media begin="+5s">
 <p><s>Boletín de aludes para jueves, 27 de diciembre de 2018.</s></p>
-<p><emphasis><s>null</s></emphasis></p>
 <break time="1s" strength="strong"></break>
 <p>
 <s>día entero hay Peligro de aludes débil, por lo que el grado de peligro es uno..</s>
@@ -190,10 +174,8 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento.
 <s>día entero, encima 2200 metros, tenemos un problema de placas de viento. Especialmente en orientaciones Noroeste a Norte a Este.</s>
 </p>
 <break time="1s" strength="strong"></break>
-<p><s>null</s></p>
 <break time="1s" strength="strong"></break>
 <p><s>Y ahora el manto de nieve:</s></p>
-<p>null</p>
 <break time="1s" strength="strong"></break>
 <p><s>La tendencia para viernes, 28 de diciembre de 2018 indica un peligro de aludes constante.</s></p>
 <break time="1s" strength="strong"></break>

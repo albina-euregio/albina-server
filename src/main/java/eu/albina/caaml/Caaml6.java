@@ -61,7 +61,7 @@ public interface Caaml6 {
 	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
 		bulletin.setUnscheduled(avalancheBulletin.isUpdate());
-		bulletin.setAvalancheActivity(new org.caaml.v6.Texts(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
+		bulletin.setAvalancheActivity(org.caaml.v6.Texts.of(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			bulletin.setAvalancheProblems(Stream.concat(
 				avalancheBulletin.getForenoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.EARLIER)),
@@ -94,16 +94,16 @@ public interface Caaml6 {
 		bulletin.setRegions(avalancheBulletin.getPublishedRegions().stream()
 			.map(id -> new org.caaml.v6.Region(id, lang.getRegionName(id)))
 			.collect(Collectors.toList()));
-		bulletin.setSnowpackStructure(new org.caaml.v6.Texts(avalancheBulletin.getSnowpackStructureHighlightsIn(lang), avalancheBulletin.getSnowpackStructureCommentIn(lang)));
+		bulletin.setSnowpackStructure(org.caaml.v6.Texts.of(avalancheBulletin.getSnowpackStructureHighlightsIn(lang), avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 		bulletin.setSource(null);
 		bulletin.setTendency(List.of(new Tendency(
 			avalancheBulletin.getTendencyCommentIn(lang),
 			avalancheBulletin.getTendency() != null ? TendencyType.forValue(avalancheBulletin.getTendency().name()) : null,
 			new ValidTime(avalancheBulletin.getValidFrom().plusDays(1).toInstant(), avalancheBulletin.getValidUntil().plusDays(1).toInstant())
 		)));
-		bulletin.setTravelAdvisory(new org.caaml.v6.Texts(avalancheBulletin.getTravelAdvisoryHighlightsIn(lang), avalancheBulletin.getTravelAdvisoryCommentIn(lang)));
+		bulletin.setTravelAdvisory(org.caaml.v6.Texts.of(avalancheBulletin.getTravelAdvisoryHighlightsIn(lang), avalancheBulletin.getTravelAdvisoryCommentIn(lang)));
 		bulletin.setValidTime(new ValidTime(avalancheBulletin.getValidFrom().toInstant(), avalancheBulletin.getValidUntil().toInstant()));
-		bulletin.setWeatherForecast(new org.caaml.v6.Texts(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
+		bulletin.setWeatherForecast(org.caaml.v6.Texts.of(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
 		return bulletin;
 	}
 

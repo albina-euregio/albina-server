@@ -157,7 +157,6 @@
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>Weakly bonded old snow above approximately 2000 m. Gliding snow at intermediate altitudes.</highlights>
       <comment>Avalanches can be triggered in the old snowpack, especially on steep slopes above approximately 2000 m. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack serve as an alarm indicating the danger. Experience in the assessment of avalanche danger is required. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> The fresh snow and the isolated winds slabs that are forming can be released by a single winter sport participant. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. As the snowfall becomes more intense the avalanche prone locations will become more prevalent as the day progresses. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> On steep grassy slopes small and, in isolated cases, medium-sized gliding avalanches are possible. In the regions exposed to rain this applies in particular.</comment>
@@ -165,7 +164,6 @@
     <snowpackStructure>
       <comment>Up to 1600 m rain has fallen since yesterday. Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. &lt;br/> &lt;br/> In its middle, the snowpack is faceted and weak. This applies in particular above approximately 2000 m, and below approximately 2600 m. Field observations confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
     </snowpackStructure>
-    <travelAdvisory/>
     <tendency>
       <highlights>Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution.</highlights>
       <tendencyType>increasing</tendencyType>
@@ -327,7 +325,6 @@
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</highlights>
       <comment>The new snow and wind slabs are lying on the unfavourable surface of an old snowpack in all aspects above approximately 2000 m. These conditions will foster a gradual rise in the avalanche danger as the day progresses in all aspects. Small and medium-sized avalanches are possible in particular on very steep slopes. The new snow and wind slabs can be released, especially by large additional loads, in all aspects above approximately 2000 m. The number and size of avalanche prone locations will increase with altitude. &lt;br/> Afternoon: The fresh snow and the sometimes large wind slabs that are forming over a wide area can be released easily, or, in isolated cases naturally. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. Avalanche prone locations are to be found in particular in places that are protected from the wind above approximately 2200 m. Experience in the assessment of avalanche danger is required. &lt;br/> On steep grassy slopes more small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</comment>
@@ -335,7 +332,6 @@
     <snowpackStructure>
       <comment>Over a wide area 20 to 40 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. These weather conditions will foster a weakening of the snowpack in particular on very steep slopes. &lt;br/> &lt;br/> Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
     </snowpackStructure>
-    <travelAdvisory/>
     <tendency>
       <highlights>Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.</highlights>
       <tendencyType>increasing</tendencyType>
@@ -605,7 +601,6 @@
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</highlights>
       <comment>Afternoon: The fresh snow and the sometimes large wind slabs that are forming over a wide area can be released easily, or, in isolated cases naturally. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. They are sometimes covered with new snow and are therefore difficult to recognise. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> Additionally avalanches can also be triggered in the old snowpack, especially on very steep slopes above approximately 2200 m. Avalanche prone locations are to be found in particular in places that are protected from the wind above approximately 2200 m. Experience in the assessment of avalanche danger is required. &lt;br/> &lt;br/> On steep grassy slopes more small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</comment>
@@ -613,7 +608,6 @@
     <snowpackStructure>
       <comment>Over a wide area 20 to 40 cm of snow will fall from midday. From the Venediger Range to the Glockner Range up to 60 cm of snow will fall. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind. &lt;br/> &lt;br/> In its middle, the snowpack is faceted and weak. This applies in particular above the tree line, and below approximately 2600 m. Field observations and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack confirm the unfavourable bonding of the snowpack. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
     </snowpackStructure>
-    <travelAdvisory/>
     <tendency>
       <highlights>Over a wide area 10 to 20 cm of snow will fall on Saturday. Especially in the east 30 to 50 cm of snow will fall. As a consequence of new snow and strong wind there will be an additional increase in the avalanche danger. Wind slabs and weakly bonded old snow require caution. A sometimes critical avalanche situation will prevail.</highlights>
       <tendencyType>increasing</tendencyType>
@@ -715,7 +709,6 @@
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>As the day progresses as a consequence of new snow and wind there will be only a slight increase in the danger.</highlights>
       <comment>The fresh snow and the isolated winds slabs that are forming can be released by a single winter sport participant. Avalanche prone locations are to be found above the tree line and in areas close to the tree line. As the snowfall becomes more intense the avalanche prone locations will become more prevalent as the day progresses. They are sometimes covered with new snow and are therefore difficult to recognise. Caution is to be exercised in particular adjacent to ridgelines and in gullies and bowls. Mostly avalanches are medium-sized. &lt;br/> &lt;br/> On steep grassy slopes small and, in isolated cases, medium-sized gliding avalanches are possible. This applies in particular in the regions with a lot of snow.</comment>
@@ -723,7 +716,6 @@
     <snowpackStructure>
       <comment>Over a wide area up to 20 cm of snow will fall from midday. The sometimes strong wind will transport the new snow. The new snow and wind slabs will be deposited on soft layers. This applies especially in places that are protected from the wind.</comment>
     </snowpackStructure>
-    <travelAdvisory/>
     <tendency>
       <highlights>Over a wide area 15 to 30 cm of snow, and even more in some localities, will fall on Friday. As a consequence of new snow and strong wind there will be an increase in the avalanche danger.</highlights>
       <tendencyType>increasing</tendencyType>
@@ -845,7 +837,6 @@
       <frequency>some</frequency>
       <avalancheSize>1</avalancheSize>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>Fresh wind slabs are to be evaluated critically.</highlights>
       <comment>As a consequence of new snow and a strong southwesterly wind, wind slabs will form on Friday especially in gullies and bowls and behind abrupt changes in the terrain. The wind slabs can be released by a single winter sport participant in all aspects above the tree line. As the snowfall becomes more intense the prevalence and size of the avalanche prone locations will increase as the day progresses. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls. &lt;br/> The Avalanche Warning Service currently has only a small amount of information, so that the avalanche danger should be investigated especially thoroughly in the relevant locality.</comment>
@@ -853,7 +844,6 @@
     <snowpackStructure>
       <comment>15 to 30 cm of snow will fall on Friday, in particular above the tree line. &lt;br/> The old snowpack is largely stable and its surface has a crust, in particular on steep sunny slopes in all altitude zones, as well as on shady slopes below approximately 2400 m. &lt;br/> The snowpack will be subject to considerable local variations. Snow depths vary greatly above the tree line, depending on the infuence of the wind.</comment>
     </snowpackStructure>
-    <travelAdvisory/>
     <tendency>
       <highlights>As a consequence of new snow and wind there will be an increase in the avalanche danger. Over a wide area 15 to 30 cm of snow will fall on Saturday. In the Sexten Dolomites and in the Lienzer Dolomites in some localities up to 50 cm of snow will fall. A critical avalanche situation will be encountered in some regions.</highlights>
       <tendencyType>increasing</tendencyType>
@@ -919,7 +909,6 @@
       <frequency>few</frequency>
       <avalancheSize>1</avalancheSize>
     </avalancheProblem>
-    <weatherForecast/>
     <avalancheActivity>
       <highlights>In all aspects in all altitude zones a little snow is lying. Fresh wind slabs are to be evaluated critically.</highlights>
       <comment>The avalanche prone locations are to be found especially in steep terrain at intermediate and high altitudes and on wind-loaded slopes. Avalanches can in some places be released by small loads, but they will be small in most cases.</comment>
@@ -927,7 +916,6 @@
     <snowpackStructure>
       <comment>Below approximately 1800 m a little snow is lying. Over a wide area new snow and wind slabs are lying on a hard crust. At higher altitudes there are 10 to 20 cm of snow, and even more in some localities.</comment>
     </snowpackStructure>
-    <travelAdvisory/>
     <tendency>
       <highlights>The avalanche danger will increase.</highlights>
       <tendencyType>increasing</tendencyType>

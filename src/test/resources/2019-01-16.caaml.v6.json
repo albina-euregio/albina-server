@@ -7,7 +7,6 @@
     },
     "unscheduled" : false,
     "highlights" : "Many starting zones have released the snow but not entirely.",
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The avalanche danger will increase quickly during the day.",
       "comment" : "Many starting zones have released the snow but not entirely. In the regions exposed to heavier precipitation and on steep east, south and west facing slopes more large and, in isolated cases, very large avalanches are to be expected as a consequence of warming during the day. On steep grassy slopes individual medium-sized and, in isolated cases, large gliding avalanches are possible below approximately 2400 m. The conditions are very dangerous for winter sport activities outside marked and open pistes. This also applies in areas close to the tree line and below the tree line. Precautionary closures of transportation routes may be necessary. Closures must be respected and safety instructions of the authorities must be followed."
@@ -15,7 +14,6 @@
     "snowpackStructure" : {
       "comment" : "Weak layers in the upper part of the snowpack represent the main danger. The wind slabs have bonded insufficiently with each other and the old snowpack. The fresh snow and wind slabs of last week are lying on the unfavourable surface of an old snowpack in all aspects. Dunes on the snow surface and whumpfing sounds and the formation of shooting cracks when stepping on the snowpack can indicate the danger. Remotely triggered avalanches are possible."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Gradual decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -116,7 +114,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution.",
       "comment" : "In particular adjacent to ridgelines and in gullies and bowls as well as in high Alpine regions mostly small wind slabs formed. These can be released by small loads. The prevalence of avalanche prone locations and likelihood of triggering will increase at high altitude and in the high Alpine regions."
@@ -124,7 +121,6 @@
     "snowpackStructure" : {
       "comment" : "In some cases the wind slabs have bonded poorly with the old snowpack. The snowpack will be subject to considerable local variations."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",
@@ -186,7 +182,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",
       "comment" : "As a consequence of northerly wind, mostly small wind slabs formed in particular adjacent to ridgelines and in gullies and bowls as well as above approximately 2300 m. They are in many cases small and can only be released by large loads in most cases. The avalanche prone locations are rather rare and are clearly recognisable to the trained eye. In particular at high altitude avalanche prone locations are more prevalent and the danger is greater. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls."
@@ -194,7 +189,6 @@
     "snowpackStructure" : {
       "comment" : "Faceted weak layers exist in the snowpack in particular on shady slopes. The mostly small wind slabs must be evaluated with care and prudence in all aspects above approximately 2500 m. In steep terrain there is a danger of falling on the hard crust. Below approximately 2000 m a little snow is lying."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "The avalanche danger will persist.",
       "tendencyType" : "steady",
@@ -271,7 +265,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Single winter sport participants can release avalanches in many places, including dangerously large ones. Areas with glide cracks are to be avoided.",
       "comment" : "As a consequence of fresh snow and wind from variable directions, extensive wind slabs formed in the last few days above approximately 1800 m. The fresh snow and wind slabs can be released easily, even by a single winter sport participant,. The avalanche prone locations are to be found in particular adjacent to ridgelines and in gullies and bowls in all aspects. This applies especially above the tree line as well as also in areas close to the tree line. In particular transitions from a shallow to a deep snowpack are dangerous. In addition as the day progresses individual large natural avalanches are possible, especially in case of releases originating from very steep, high-altitude, sunny starting zones that have retained the snow thus far. On steep grassy slopes a large number of medium-sized and, in isolated cases, large gliding avalanches are possible below approximately 2400 m. This applies in all aspects. As a consequence of warming during the day and the solar radiation, the likelihood of moist and wet avalanches being released will increase a little below the tree line. The conditions are dangerous for snow sport activities outside marked and open pistes."
@@ -279,7 +272,6 @@
     "snowpackStructure" : {
       "comment" : "By the evening the wind has been moderate to strong adjacent to ridgelines in some regions. The fresh wind slabs of the last few days are prone to triggering. Weak layers in the upper part of the snowpack represent the main danger. No distinct weak layers exist in the bottom section of the snowpack. The snowpack will become moist at low and intermediate altitudes."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -419,7 +411,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh wind slabs require caution.",
       "comment" : "As a consequence of fresh snow and a strong northwesterly wind, avalanche prone wind slabs formed in the last few days. The fresh wind slabs are mostly small but can be released easily. The avalanche prone locations are to be found in gullies and bowls above approximately 2000 m, and adjacent to ridgelines in all aspects. The prevalence of avalanche prone locations and likelihood of triggering will increase at high altitude and in the high Alpine regions."
@@ -427,7 +418,6 @@
     "snowpackStructure" : {
       "comment" : "Thus far only a little snow is lying. The snowpack will be subject to considerable local variations. In some cases the wind slabs have bonded poorly with the old snowpack."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Slight decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -483,7 +473,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The sometimes large wind slabs represent the main danger.",
       "comment" : "As a consequence of fresh snow and strong wind the wind slabs have increased in size additionally in the last few days. Even single backcountry tourers or freeriders can release avalanches in many places, including dangerously large ones. Especially on wind-loaded slopes medium-sized natural avalanches must be expected in isolated cases. The avalanche prone locations are to be found in particular on steep slopes above the tree line. They are widespread but are clearly recognisable to the trained eye. The conditions are sometimes unfavourable for backcountry touring and other off-piste activities."
@@ -491,7 +480,6 @@
     "snowpackStructure" : {
       "comment" : "In some cases fresh snow and wind slabs are lying on soft layers. Isolated avalanche prone weak layers exist in the old snowpack. The snowpack will be generally prone to triggering. As a consequence of warming during the day and the solar radiation, the likelihood of dry and moist avalanches being released will increase in particular on steep sunny slopes."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Fresh wind slabs represent the main danger.",
       "tendencyType" : "decreasing",
@@ -553,7 +541,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "Fresh snow and wind slabs require caution.",
       "comment" : "The fresh snow and wind slabs of Monday represent the main danger. Especially on wind-loaded slopes medium-sized natural avalanches must be expected in isolated cases. The mostly small wind slabs of the last few days can be released by a single winter sport participant in isolated cases in all aspects above approximately 2200 m. The avalanche prone locations are to be found in gullies and bowls, and adjacent to ridgelines in all aspects. These places are quite prevalent but are clearly recognisable to the trained eye. In particular on the Cevedale, in the Maddalene and in the regions neighbouring those that are subject to danger level 3 (considerable) and above approximately 2500 m avalanche prone locations are more prevalent and the danger is greater."
@@ -561,7 +548,6 @@
     "snowpackStructure" : {
       "comment" : "In many cases fresh snow and wind slabs are lying on a hard crust. The mostly small wind slabs of the day before yesterday must be evaluated with care and prudence in all aspects. Faceted weak layers exist in the snowpack especially on steep, rather lightly snow-covered shady slopes. Below approximately 2000 m thus far only a little snow is lying."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Moderate, level 2.",
       "tendencyType" : "steady",
@@ -644,7 +630,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "In all regions from a snow sport perspective, in most cases insufficient snow is lying.",
       "comment" : "The mostly small wind slabs represent the main danger. These are to be found especially adjacent to ridgelines and in gullies and bowls and generally at high altitudes. The avalanche prone locations are rather rare and are easy to recognise. Mostly the avalanches are small and can be released by large loads. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls."
@@ -652,7 +637,6 @@
     "snowpackStructure" : {
       "comment" : "The snowpack remains generally well bonded. Below approximately 1800 m only a little snow is lying."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
@@ -729,7 +713,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The backcountry touring conditions are to some extent critical.",
       "comment" : "The wind slabs are prone to triggering. These can in many cases be released by small loads. Especially in starting zones where no previous releases have taken place large natural avalanches must be expected in isolated cases. In particular transitions from a shallow to a deep snowpack are unfavourable. In particular in regions with a lot of snow and above approximately 2000 m avalanche prone locations are more prevalent and the danger is slightly greater. The conditions are sometimes critical for backcountry touring and other off-piste activities."
@@ -737,7 +720,6 @@
     "snowpackStructure" : {
       "comment" : "In the last few days extensive wind slabs formed in all aspects. Over a wide area fresh snow and wind slabs are lying on soft layers. Faceted weak layers exist in the old snowpack. The snowpack will be quite prone to triggering. Whumpfing sounds and the formation of shooting cracks when stepping on the snowpack serve as an alarm indicating the danger."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Fresh wind slabs represent the main danger.",
       "tendencyType" : "steady",
@@ -814,7 +796,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The fresh wind slabs are prone to triggering.",
       "comment" : "As a consequence of fresh snow and a strong to storm force northwesterly wind, avalanche prone wind slabs formed in the last few days in particular above the tree line. These can in many cases be released by small loads. The avalanche prone locations for dry avalanches are to be found adjacent to ridgelines in all aspects and in gullies and bowls, and behind abrupt changes in the terrain. These places are clearly recognisable to the trained eye. Additionally avalanches can be released in the old snowpack and reach large size in isolated cases, this applies in particular in case of a large load. In particular transitions from a shallow to a deep snowpack are unfavourable. Individual gliding avalanches are possible. Backcountry touring and other off-piste activities call for experience in the assessment of avalanche danger."
@@ -822,7 +803,6 @@
     "snowpackStructure" : {
       "comment" : "During the night the wind will be moderate to strong over a wide area. The wind will transport the fresh snow. In many cases various wind slab layers are lying on soft layers. Faceted weak layers exist in the old snowpack."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Further decrease in avalanche danger.",
       "tendencyType" : "decreasing",
@@ -896,7 +876,6 @@
       "endTime" : "2019-01-16T16:00:00Z"
     },
     "unscheduled" : false,
-    "weatherForecast" : { },
     "avalancheActivity" : {
       "highlights" : "The wind slabs represent the main danger.",
       "comment" : "The wind slabs are to be found especially adjacent to ridgelines and in gullies and bowls and generally at high altitudes. These avalanche prone locations are rather rare and are easy to recognise. Mostly the avalanches are small but can be released in some cases by a single winter sport participant. Apart from the danger of being buried, restraint should be exercised as well in view of the danger of avalanches sweeping people along and giving rise to falls."
@@ -904,7 +883,6 @@
     "snowpackStructure" : {
       "comment" : "0 to 10 cm of snow. has fallen in the last two days. The strong wind will transport the fresh snow. The snowpack will be subject to considerable local variations. In some places wind slabs are lying on a weakly bonded old snowpack. Only a little snow is lying."
     },
-    "travelAdvisory" : { },
     "tendency" : [ {
       "highlights" : "Low, level 1.",
       "tendencyType" : "steady",
