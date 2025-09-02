@@ -260,7 +260,7 @@ public class DangerSourceVariantTextController {
 			AddOns.highest_danger_aspect,
 			"{\"curlyName\":\"Änderung08\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet1\":{\"curlyName\":\"Hangart_Höhe_Gebiet1\",\"line\":1,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":0},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":0},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":0}}},\"und_Hangart_Höhe_Gebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet\",\"line\":0},\"Änderung08§Gefahr_höher\":{\"curlyName\":\"Änderung08§Gefahr_höher\",\"line\":2,\"args\":{\"Lawinengefahr2\":{\"curlyName\":\"Lawinengefahr2\",\"line\":0},\"etwas\":{\"curlyName\":\"etwas\",\"line\":0},\"höher\":{\"curlyName\":\"höher\",\"line\":0}}}}}",
 			AddOns.danger_peak,
-			"{\"curlyName\":\"Änderung03\",\"line\":0,\"args\":{\"wo_Gefahrenspitze2\":{\"curlyName\":\"wo_Gefahrenspitze2\",\"line\":0},\"Änderung03§erreicht\":{\"curlyName\":\"Änderung03§erreicht\",\"line\":0},\"Gefahrenspitze\":{\"curlyName\":\"Gefahrenspitze\",\"line\":1},\"wo_Gefahrenspitze1\":{\"curlyName\":\"wo_Gefahrenspitze1\",\"line\":1},\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":0}}}}",
+			"{\"curlyName\":\"Änderung03\",\"line\":0,\"args\":{\"wo_Gefahrenspitze2\":{\"curlyName\":\"wo_Gefahrenspitze2\",\"line\":0},\"Änderung03§erreicht\":{\"curlyName\":\"Änderung03§erreicht\",\"line\":0},\"Gefahrenspitze\":{\"curlyName\":\"Gefahrenspitze\",\"line\":1},\"wo_Gefahrenspitze1\":{\"curlyName\":\"wo_Gefahrenspitze1\",\"line\":1},\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":0}}}",
 			AddOns.runout_into_green,
 			"{\"curlyName\":\"Grösse05\",\"line\":0,\"args\":{\"Die_Lawinen\":{\"curlyName\":\"Die_Lawinen\",\"line\":1},\"Gebiet_auch\":{\"curlyName\":\"Gebiet_auch\",\"line\":0},\"Einzugsgebiet\":{\"curlyName\":\"Einzugsgebiet\",\"line\":1},\"oft5\":{\"curlyName\":\"oft5\",\"line\":0},\"vorstossen\":{\"curlyName\":\"vorstossen\",\"line\":3,\"args\":{\"bis_in_Täler\":{\"curlyName\":\"bis_in_Täler\",\"line\":13}}}}}",
 			AddOns.natural_release,
@@ -696,9 +696,6 @@ public class DangerSourceVariantTextController {
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
 					break;
 			}
-		} else {
-			result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
-					"{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
 		}
 
 		return result;
