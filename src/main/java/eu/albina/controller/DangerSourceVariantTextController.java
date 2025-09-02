@@ -412,8 +412,7 @@ public class DangerSourceVariantTextController {
 			Map.entry("möglich.",
 					"\\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
 			Map.entry("Alarmzeichen",
-					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\},\"Altschnee03§sowie_Alarmzeichen\":\\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0\\}")
-	);
+					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\},\"Altschnee03§sowie_Alarmzeichen\":\\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0\\}"));
 
 	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant,
 			DangerSourceVariantText dangerSourceVariantText) {
@@ -434,9 +433,7 @@ public class DangerSourceVariantTextController {
 
 	private String addAddOns(DangerSourceVariant dangerSourceVariant) {
 		String result = "";
-		if (dangerSourceVariant.getRemoteTriggering() != null
-				&& (dangerSourceVariant.getRemoteTriggering() == Probability.possible
-						|| dangerSourceVariant.getRemoteTriggering() == Probability.likely)) {
+		if (dangerSourceVariant.getRemoteTriggering() != null) {
 			String remoteTriggeringText = replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
 					addOnSentences.get(AddOns.remote_triggering));
 			result = concatTexts(result, remoteTriggeringText);
@@ -972,7 +969,8 @@ public class DangerSourceVariantTextController {
 			}
 			// phrase: es_warum_Ort_wann
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects2.entrySet()) {
-				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects) && dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
+				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects)
+						&& dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
 					result = result.replaceAll(textcatPlaceholder.get("es_warum_Ort_wann"),
 							"{\"curlyName\":\"es_warum_Ort_wann\",\"line\":30,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":0}}}");
 					break;
@@ -983,7 +981,8 @@ public class DangerSourceVariantTextController {
 			}
 			// phrase: Hangart1
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects3.entrySet()) {
-				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects) && dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
+				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects)
+						&& dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
 					result = result.replaceAll(textcatPlaceholder.get("Hangart1"),
 							"{\"curlyName\":\"Hangart1\",\"line\":5}");
 					break;
