@@ -44,26 +44,26 @@ endif
 polygon_feature_danger_levels micro_regions_elevation_a
 
 # Rivers & Lakes
-line_feature_rivers rivers_l, level
-polygon_feature_lakes lakes_a, level
+line_feature_rivers rivers_l, map_level
+polygon_feature_lakes lakes_a, map_level
 
 # Cities
-point_feature_city_marker cities_p, level
+point_feature_city_marker cities_p, map_level
 
 # Line labels
 if map_level eq "standard" and dynamic_region eq "all" then
-	line_feature_labels labels_l, level
+	line_feature_labels labels_l, map_level
 endif
 
 # Point labels
-point_feature_labels labels_p, level
+point_feature_labels labels_p, map_level
 
 # Passe Partout
-polygon_feature_pp passe_partout, level
+polygon_feature_pp passe_partout
 
 # Province and Country borders
-line_feature_provinces provinces_l, level
-line_feature_country countries_l, level
+line_feature_provinces provinces_l, map_level
+line_feature_country countries_l, map_level
 
 # Scale bar
 if scalebar eq "on" then
