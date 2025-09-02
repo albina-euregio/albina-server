@@ -76,6 +76,9 @@ public interface MapUtil {
 			case "AT-07-04": return Stream.of("AT-07-04-01", "AT-07-04-02");
 			case "AT-07-14": return Stream.of("AT-07-14-01", "AT-07-14-02", "AT-07-14-03", "AT-07-14-04", "AT-07-14-05");
 			case "AT-07-17": return Stream.of("AT-07-17-01", "AT-07-17-02");
+			case "AT-07-23": return Stream.of("AT-07-23-01", "AT-07-23-02");
+			case "AT-07-26": return Stream.of("AT-07-26-01", "AT-07-26-02");
+			case "AT-07-29": return Stream.of("AT-07-29-01", "AT-07-29-02", "AT-07-29-03");
 			case "IT-32-BZ-01": return Stream.of("IT-32-BZ-01-01", "IT-32-BZ-01-02");
 			case "IT-32-BZ-02": return Stream.of("IT-32-BZ-02-01", "IT-32-BZ-02-02");
 			case "IT-32-BZ-04": return Stream.of("IT-32-BZ-04-01", "IT-32-BZ-04-02");
