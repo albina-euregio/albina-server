@@ -168,19 +168,19 @@ public class DangerSourceVariantTextController {
 	// {"curlyName":"Altschnee03§sowie_Alarmzeichen","line":0,"args":{"Alarmzeichen2":{"curlyName":"Alarmzeichen2","line":0}}}
 	private static final Map<Set<DangerSign>, String> textcatSubstitutionsDangerSigns = Map.of(
 			Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":3},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":3},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
 			Set.of(DangerSign.shooting_cracks, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":4},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0}",
 			Set.of(DangerSign.shooting_cracks),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":4},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0}",
 			Set.of(DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":7}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}");
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":7},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0}");
 
 	// phrase "Hangart1"
 	// placeholder: {"curlyName":"Hangart1","line":9},
@@ -266,7 +266,7 @@ public class DangerSourceVariantTextController {
 			AddOns.natural_release,
 			"{\"curlyName\":\"Auslösung01\",\"line\":0,\"args\":{\"Zeit_optional1\":{\"curlyName\":\"Zeit_optional1\",\"line\":0},\"wieviele\":{\"curlyName\":\"wieviele\",\"line\":0},\"Lawinenart5\":{\"curlyName\":\"Lawinenart5\",\"line\":19},\"Auslösung01§möglich\":{\"curlyName\":\"Auslösung01§möglich\",\"line\":0},\"Auslösung01§auch_grosse\":{\"curlyName\":\"Auslösung01§auch_grosse\",\"line\":0}}}",
 			AddOns.danger_signs,
-			"{\"curlyName\":\"Altschnee03\",\"line\":0,\"args\":{\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0},\"Alarmzeichen\":{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§weisen_auf_Gefahr_hin\":{\"curlyName\":\"Altschnee03§weisen_auf_Gefahr_hin\",\"line\":5}}}",
+			"{\"curlyName\":\"Altschnee03\",\"line\":0,\"args\":{\"Alarmzeichen\":{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0},\"Altschnee03§weisen_auf_Gefahr_hin\":{\"curlyName\":\"Altschnee03§weisen_auf_Gefahr_hin\",\"line\":5}}}",
 			AddOns.penetrate_deep_layers,
 			"{\"curlyName\":\"Altschnee04\",\"line\":0,\"args\":{\"Altschnee04§Lawinen_können\":{\"curlyName\":\"Altschnee04§Lawinen_können\",\"line\":1,\"args\":{\"trockene\":{\"curlyName\":\"trockene\",\"line\":0},\"auch1\":{\"curlyName\":\"auch1\",\"line\":1},\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4}}},\"Altschnee04§Altschnee_Durchreissen\":{\"curlyName\":\"Altschnee04§Altschnee_Durchreissen\",\"line\":3},\"Altschnee04§und\":{\"curlyName\":\"Altschnee04§und\",\"line\":0},\"wo_gross_werden\":{\"curlyName\":\"wo_gross_werden\",\"line\":0}}}",
 			AddOns.outflow_areas_to_consider,
@@ -403,7 +403,7 @@ public class DangerSourceVariantTextController {
 			Map.entry("aber_und", "\\{\"curlyName\":\"aber_und\",\"line\":0\\}"),
 			Map.entry("Auslösung07§möglich.", "\\{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1\\}"),
 			Map.entry("Geländeformen",
-					"\\{\"curlyName\":\"Hangart1\",\"line\":9\\}, \\{\"curlyName\":\"Dies02§sowie\",\"line\":0\\}, \\{\"curlyName\":\"Hangart1°1\",\"line\":0\\}"),
+					"\\{\"curlyName\":\"Hangart1\",\"line\":9\\},\\{\"curlyName\":\"Dies02§sowie\",\"line\":0\\},\\{\"curlyName\":\"Hangart1°1\",\"line\":0\\}"),
 			Map.entry("trockene", "\\{\"curlyName\":\"Lawinenart5\",\"line\":12\\}"),
 			Map.entry("Zeit", "\\{\"curlyName\":\"Zeit\",\"line\":0\\}"),
 			Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0\\}"),
@@ -412,7 +412,8 @@ public class DangerSourceVariantTextController {
 			Map.entry("möglich.",
 					"\\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
 			Map.entry("Alarmzeichen",
-					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\}, \\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":\\{\"Alarmzeichen2\":\\{\"curlyName\":\"Alarmzeichen2\",\"line\":0\\}\\}\\}"));
+					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\},\"Altschnee03§sowie_Alarmzeichen\":\\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0\\}")
+	);
 
 	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant,
 			DangerSourceVariantText dangerSourceVariantText) {
