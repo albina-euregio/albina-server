@@ -464,9 +464,7 @@ public class DangerSourceVariantTextController {
 			String runoutIntoGreenText = addOnSentences.get(AddOns.runout_into_green);
 			result = concatTexts(result, runoutIntoGreenText);
 		}
-		if (dangerSourceVariant.getNaturalRelease() != null
-				&& (dangerSourceVariant.getNaturalRelease() == Probability.possible
-						|| dangerSourceVariant.getNaturalRelease() == Probability.likely)) {
+		if (dangerSourceVariant.getNaturalRelease() != null) {
 			String naturalAvalanchesText = replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
 					addOnSentences.get(AddOns.natural_release));
 			result = concatTexts(result, naturalAvalanchesText);
