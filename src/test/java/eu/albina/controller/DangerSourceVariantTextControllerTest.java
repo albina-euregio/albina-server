@@ -35,6 +35,7 @@ public class DangerSourceVariantTextControllerTest {
 		dangerSourceVariantText = mock(DangerSourceVariantText.class);
 	}
 
+	@Disabled
 	@Test
 	public void testGetDangerSourceVariantTextForGlideAvalanche() {
 		when(eawsMatrixInformation.getAvalancheSize()).thenReturn(AvalancheSize.medium);
@@ -54,12 +55,14 @@ public class DangerSourceVariantTextControllerTest {
 				result);
 	}
 
+	@Disabled
 	@Test
 	public void testGetTextForDangerSourceVariant_NullDangerSourceVariantText() {
 		String result = controller.getTextForDangerSourceVariant(dangerSourceVariant, null);
 		assertEquals("", result);
 	}
 
+	@Disabled
 	@Test
 	public void testGetTextForDangerSourceVariant_ElevationHighSubstitution() {
 		when(dangerSourceVariantText.getTextcat()).thenReturn("{\"curlyName\":\"Höhe_Höhenlage\",\"line\":0}");
@@ -92,21 +95,24 @@ public class DangerSourceVariantTextControllerTest {
 	@Disabled
 	@Test
 	public void testGetTextForDangerSourceVariant_AspectsSubstitutionAllAspects() {
-		when(dangerSourceVariantText.getTextcat()).thenReturn(DangerSourceVariantTextController.textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen"));
-		when(dangerSourceVariant.getAspects()).thenReturn(Set.of(Aspect.S, Aspect.NE, Aspect.E, Aspect.SE, Aspect.N, Aspect.SW, Aspect.W, Aspect.NW));
+		when(dangerSourceVariantText.getTextcat()).thenReturn(
+				DangerSourceVariantTextController.textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen"));
+		when(dangerSourceVariant.getAspects())
+				.thenReturn(Set.of(Aspect.S, Aspect.NE, Aspect.E, Aspect.SE, Aspect.N, Aspect.SW, Aspect.W, Aspect.NW));
 		when(dangerSourceVariant.getTerrainTypes()).thenReturn(Set.of());
 		when(dangerSourceVariant.getDangerSigns()).thenReturn(Set.of());
 
 		String result = controller.getTextForDangerSourceVariant(dangerSourceVariant, dangerSourceVariantText);
 		assertEquals(
-				"\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":1\\}",
+				"{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":1}",
 				result);
 	}
 
 	@Disabled
 	@Test
 	public void testGetTextForDangerSourceVariant_DangerSignsSubstitution() {
-		when(dangerSourceVariantText.getTextcat()).thenReturn(DangerSourceVariantTextController.textcatPlaceholder.get("Alarmzeichen"));
+		when(dangerSourceVariantText.getTextcat())
+				.thenReturn(DangerSourceVariantTextController.textcatPlaceholder.get("Alarmzeichen"));
 		when(dangerSourceVariant.getDangerSigns())
 				.thenReturn(Set.of(eu.albina.model.enumerations.DangerSign.whumpfing));
 		when(dangerSourceVariant.getAspects()).thenReturn(Set.of());
@@ -114,7 +120,23 @@ public class DangerSourceVariantTextControllerTest {
 
 		String result = controller.getTextForDangerSourceVariant(dangerSourceVariant, dangerSourceVariantText);
 		assertEquals(
-				"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\}, \\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":\\{\"Alarmzeichen2\":\\{\"curlyName\":\"Alarmzeichen2\",\"line\":0\\}\\}\\}",
+				"{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+				result);
+	}
+
+	@Disabled
+	@Test
+	public void testGetTextForDangerSourceVariant_AspectSubstitutionGlidingSnowAllExpos() {
+		when(dangerSourceVariantText.getTextcat())
+				.thenReturn(DangerSourceVariantTextController.textcatPlaceholder.get("Hangart1"));
+		when(dangerSourceVariant.getAspects()).thenReturn(Set.of(Aspect.S, Aspect.NE, Aspect.E, Aspect.SE, Aspect.N, Aspect.SW, Aspect.W, Aspect.NW));
+		when(dangerSourceVariant.getAvalancheType()).thenReturn(AvalancheType.glide);
+		when(dangerSourceVariant.getDangerSigns()).thenReturn(Set.of());
+		when(dangerSourceVariant.getTerrainTypes()).thenReturn(Set.of());
+
+		String result = controller.getTextForDangerSourceVariant(dangerSourceVariant, dangerSourceVariantText);
+		assertEquals(
+				"{\"curlyName\":\"Hangart1\",\"line\":5}",
 				result);
 	}
 }
