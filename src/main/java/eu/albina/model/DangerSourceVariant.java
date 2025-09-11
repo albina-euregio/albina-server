@@ -229,7 +229,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_weak_layer_grain_shapes", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "WEAK_LAYER_GRAIN_SHAPES")
+	@Column(name = "WEAK_LAYER_GRAIN_SHAPE")
 	@Enumerated(EnumType.STRING)
 	private Set<GrainShape> weakLayerGrainShapes;
 
