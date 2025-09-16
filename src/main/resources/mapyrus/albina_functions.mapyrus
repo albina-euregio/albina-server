@@ -332,6 +332,7 @@ begin polygon_feature_danger_levels file
 				addpath GEOMETRY
 				eval reg_line
 				eval reg_line_color
+				let ALB_ID = code . "-" . elevation
 				if dynamic_region eq "one" and colormode eq "bw" then
 					if bulletin_ids[ALB_ID] eq bulletin_id then
 						stroke
@@ -346,6 +347,8 @@ begin polygon_feature_danger_levels file
 				clearpath
 				addpath GEOMETRY
 				linestyle 0.01
+				let ALB_ID = code . "-" . elevation
+				let ALB_ID_LOW = code . "-low"
 				if dynamic_region eq "all" then
 					if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
 						eval danger_color[1]
@@ -389,8 +392,7 @@ begin polygon_feature_danger_levels file
 							stroke
 						endif
 					elif threshold < elevation_h[ALB_ID] then
-						let alb_id_low = code ."-l"
-						let high_color = danger_l[alb_id_low]
+						let high_color = danger_l[ALB_ID_LOW]
 						if high_color eq 5 then
 							eval danger_color[4]
 							fill
@@ -452,8 +454,7 @@ begin polygon_feature_danger_levels file
 								stroke
 							endif
 						elif threshold < elevation_h[ALB_ID] then
-							let alb_id_low = code ."-l"
-							let high_color = danger_l[alb_id_low]
+							let high_color = danger_l[ALB_ID_LOW]
 							if high_color eq 5 then
 								eval danger_color[4]
 								fill
