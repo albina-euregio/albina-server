@@ -107,7 +107,7 @@ public record PushNotificationUtil(HttpClient client) {
 			final URI endpointURI = URI.create(subscription1.getEndpoint());
 			final HttpRequest request = HttpRequest.newBuilder(endpointURI)
 				.header("Content-Type", "application/octet-stream")
-				// FIXME new Variant(MediaType.APPLICATION_OCTET_STREAM_TYPE, (String) null, "aes128gcm")
+				.header("Content-Encoding", "aes128gcm")
 				.header("TTL", "180")
 				.header("Authorization", new PushController(serverKeys).getAuthorization(endpointURI))
 				.POST(HttpRequest.BodyPublishers.ofByteArray(encrypted))
