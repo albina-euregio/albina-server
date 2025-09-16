@@ -2,20 +2,25 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import jakarta.ws.rs.core.EntityPart;
-import jakarta.ws.rs.core.GenericEntity;
-import org.hibernate.HibernateException;
 import eu.albina.util.HttpClientUtil;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,15 +30,10 @@ import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.util.HibernateUtil;
 
 import jakarta.persistence.PersistenceException;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 
 public interface TelegramController {
 	Logger logger = LoggerFactory.getLogger(TelegramController.class);
-	Client client = HttpClientUtil.newClientBuilder().build();
+	HttpClient client = HttpClientUtil.newClientBuilder().build();
 
 	static Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
 		Objects.requireNonNull(region, "region");
@@ -84,67 +84,76 @@ public interface TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#sendphoto">https://core.telegram.org/bots/api#sendphoto</a>
 	 * @see <a href="https://core.telegram.org/bots/api#inputfile">https://core.telegram.org/bots/api#inputfile</a>
 	 */
-	static Response sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
-		throws IOException, HibernateException {
+	static HttpResponse<String> sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
+		throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending photo {} and message {} to telegram channel using config {}", attachmentUrl, message, config);
 
-		List<EntityPart> parts = List.of(
-			EntityPart.withName("photo")
-				.fileName(attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1))
-				.content(new URL(attachmentUrl).openStream())
-				.mediaType(MediaType.APPLICATION_OCTET_STREAM_TYPE).build()
-		);
-		GenericEntity<List<EntityPart>> multiPart = new GenericEntity<>(parts) {
-		};
+		String boundary = UUID.randomUUID().toString();
+		String fileName = attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1);
 
-		Response response = HttpClientUtil
+		HttpClient client = HttpClientUtil
 			.newClientBuilder(80000) // sending photos may a while
-			.build()
-			.target(String.format("https://api.telegram.org/bot%s/sendPhoto", apiToken))
-			.queryParam("chat_id", chatId)
-			.queryParam("caption", message)
-			.request()
-			.post(Entity.entity(multiPart, MediaType.MULTIPART_FORM_DATA));
+			.build();
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s",
+				apiToken,
+				URLEncoder.encode(chatId, StandardCharsets.UTF_8),
+				URLEncoder.encode(message, StandardCharsets.UTF_8)
+			)))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=" + boundary)
+			.POST(HttpRequest.BodyPublishers.ofByteArrays(List.of(
+				"--%s\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8),
+				"Content-Disposition: form-data; name=\"photo\"; filename=\"%s\"\r\n".formatted(fileName).getBytes(StandardCharsets.UTF_8),
+				"Content-Type: %s\r\n".formatted(MediaType.APPLICATION_OCTET_STREAM).getBytes(StandardCharsets.UTF_8),
+				"\r\n".getBytes(StandardCharsets.UTF_8),
+				URI.create(attachmentUrl).toURL().openStream().readAllBytes(),
+				"\r\n".getBytes(StandardCharsets.UTF_8),
+				"--%s--\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8)
+			)))
+			.build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-		if (response.getStatusInfo().getStatusCode() != 200) {
+		if (response.statusCode() != 200) {
 			// FIXME throw exception?
 			logger.warn("Error publishing on telegram channel for "
 				+ config.getRegion().getId() + " (error code "
-				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
+				+ response.statusCode() + "): " + response.body());
 		}
 		return response;
 	}
 
-	static Response sendMessage(TelegramConfiguration config, String message) throws HibernateException {
+	static HttpResponse<String> sendMessage(TelegramConfiguration config, String message) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending message {} to telegram channel using config {}", message, config);
 
-		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendMessage", apiToken))
-			.queryParam("chat_id", chatId)
-			.queryParam("text", message);
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s",
+			apiToken,
+			URLEncoder.encode(chatId, StandardCharsets.UTF_8),
+			URLEncoder.encode(message, StandardCharsets.UTF_8)
+		))).build();
 		return execute(request, config);
 	}
 
 	/**
 	 * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
+	 *
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
-	static Response getMe(TelegramConfiguration config) throws HibernateException {
-		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()));
+	static HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
 		return execute(request, config);
 	}
 
-	static Response execute(WebTarget request, TelegramConfiguration config) {
-		final Response response = request.request().get();
-		if (response.getStatusInfo().getStatusCode() != 200) {
+	static HttpResponse<String> execute(HttpRequest request, TelegramConfiguration config) throws IOException, InterruptedException {
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		if (response.statusCode() != 200) {
 			logger.warn("Error publishing on telegram channel for "
 				+ config.getRegion().getId() + " (error code "
-				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
+				+ response.statusCode() + "): " + response.body());
 		}
 		return response;
 	}
