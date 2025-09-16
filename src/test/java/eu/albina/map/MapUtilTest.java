@@ -45,6 +45,7 @@ public class MapUtilTest {
 	private ServerInstance serverInstance;
 	private Path folder;
 	private Region regionAran;
+	private Region regionAragon;
 	private Region regionEuregio;
 	private Region regionSouthTyrol;
 	private Region regionTrentino;
@@ -59,6 +60,7 @@ public class MapUtilTest {
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 		serverInstance.setPdfDirectory(folder.toString());
 		regionAran = regionTestUtils.regionAran();
+		regionAragon = regionTestUtils.regionAragon();
 		regionEuregio = regionTestUtils.regionEuregio();
 		regionSouthTyrol = regionTestUtils.regionSouthTyrol();
 		regionTrentino = regionTestUtils.regionTrentino();
@@ -192,6 +194,23 @@ public class MapUtilTest {
 		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_AT-07_en.pdf",
 			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
+	}
+
+	@Test
+	@Disabled
+	public void testMapyrusMapsAragon() throws Exception {
+		URL resource = Resources.getResource("aludes.aragon.es/2025-09-17.json");
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAragon, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
+
+		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
+		byte[] actual = Files.readAllBytes(Path.of(serverInstance.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
+		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
+		});
+		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
+			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
+		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
 	}
 
 	@Test

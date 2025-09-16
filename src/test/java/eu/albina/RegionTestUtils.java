@@ -43,6 +43,10 @@ public class RegionTestUtils {
 		return readRegion(Resources.getResource("region_ES-CT-L.json"));
 	}
 
+	public Region regionAragon() {
+		return readRegion(Resources.getResource("region_ES-AR.json"));
+	}
+
 	public Region readRegion(URL resource) throws UncheckedIOException {
 		try {
 			String json = Resources.toString(resource, StandardCharsets.UTF_8);

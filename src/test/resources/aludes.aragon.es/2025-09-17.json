@@ -1,0 +1,120 @@
+[
+	{
+		"id": "b9d2203c-bdb1-476a-b74a-e5beb3db236b",
+		"ownerRegion": "ES-AR",
+		"publicationDate": "2025-09-16T17:00:00+02:00",
+		"validity": {
+			"from": "2025-09-16T17:00:00+02:00",
+			"until": "2025-09-17T17:00:00+02:00"
+		},
+		"regions": [
+			"ES-AR-01",
+			"ES-AR-02",
+			"ES-AR-03",
+			"ES-AR-04",
+			"ES-AR-09",
+			"ES-AR-10",
+			"ES-AR-11",
+			"ES-AR-12"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"dangerRatingAbove": "considerable",
+			"dangerRatingBelow": "low",
+			"avalancheProblem1": {
+				"avalancheProblem": "wind_slab",
+				"avalancheType": "slab",
+				"treelineLow": true,
+				"eawsMatrixInformation": {
+					"dangerRating": "considerable",
+					"avalancheSize": "very_large",
+					"snowpackStability": "poor",
+					"frequency": "few",
+					"avalancheSizeValue": 70,
+					"snowpackStabilityValue": 62,
+					"frequencyValue": 37
+				}
+			},
+			"avalancheSituation1": {
+				"avalancheSituation": "wind_drifted_snow",
+				"treelineLow": true
+			},
+			"hasElevationDependency": true,
+			"treeline": true
+		},
+		"highlights": [],
+		"avActivityHighlights": [],
+		"avActivityComment": [],
+		"snowpackStructureHighlights": [],
+		"snowpackStructureComment": [],
+		"tendencyComment": [],
+		"generalHeadlineComment": [],
+		"synopsisComment": []
+	},
+	{
+		"id": "c59b0452-a01a-44fe-bdd6-67bfc602a939",
+		"ownerRegion": "ES-AR",
+		"publicationDate": "2025-09-16T17:00:00+02:00",
+		"validity": {
+			"from": "2025-09-16T17:00:00+02:00",
+			"until": "2025-09-17T17:00:00+02:00"
+		},
+		"regions": [
+			"ES-AR-06",
+			"ES-AR-09",
+			"ES-AR-07",
+			"ES-AR-08",
+			"ES-AR-13",
+			"ES-AR-14",
+			"ES-AR-15"
+		],
+		"hasDaytimeDependency": false,
+		"forenoon": {
+			"dangerRatingAbove": "high",
+			"dangerRatingBelow": "moderate",
+			"avalancheProblem1": {
+				"avalancheProblem": "new_snow",
+				"treelineLow": true,
+				"eawsMatrixInformation": {
+					"dangerRating": "high",
+					"avalancheSize": "very_large",
+					"snowpackStability": "very_poor",
+					"frequency": "some",
+					"avalancheSizeValue": 70,
+					"snowpackStabilityValue": 87,
+					"frequencyValue": 62
+				}
+			},
+			"avalancheProblem2": {
+				"avalancheProblem": "gliding_snow",
+				"avalancheType": "glide",
+				"eawsMatrixInformation": {
+					"dangerRating": "moderate",
+					"avalancheSize": "medium",
+					"snowpackStability": "very_poor",
+					"frequency": "few",
+					"avalancheSizeValue": 35,
+					"snowpackStabilityValue": 87,
+					"frequencyValue": 42
+				}
+			},
+			"avalancheSituation1": {
+				"avalancheSituation": "new_snow",
+				"treelineLow": true
+			},
+			"avalancheSituation2": {
+				"avalancheSituation": "gliding_snow"
+			},
+			"hasElevationDependency": true,
+			"treeline": true
+		},
+		"highlights": [],
+		"avActivityHighlights": [],
+		"avActivityComment": [],
+		"snowpackStructureHighlights": [],
+		"snowpackStructureComment": [],
+		"tendencyComment": [],
+		"generalHeadlineComment": [],
+		"synopsisComment": []
+	}
+]
