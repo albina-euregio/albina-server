@@ -3,42 +3,52 @@ package eu.albina.controller.publication;
 
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
+import eu.albina.util.HttpClientUtil;
+import eu.albina.util.JsonUtil;
 import org.apache.commons.text.StringEscapeUtils;
 
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.WebTarget;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public interface Wordpress {
 
-	static List<Item> getBlogPosts(BlogConfiguration config, Client client) {
+	static List<Item> getBlogPosts(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
-		WebTarget request = client.target(config.getBlogApiUrl() + "posts")
-			.queryParam("lang", config.getLanguageCode())
-			.queryParam("after", lastPublishedTimestamp.toInstant().plusSeconds(1).toString())
-			.queryParam("order", "asc");
-		Item[] items = request.request().get(Item[].class);
+		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
+			"lang", config.getLanguageCode(),
+			"after", lastPublishedTimestamp.toInstant().plusSeconds(1).toString(),
+			"order", "asc"
+		)))).build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		Item[] items = JsonUtil.parseUsingJackson(response.body(), Item[].class);
 		return List.of(items);
 	}
 
-	static Item getLatestBlogPost(BlogConfiguration config, Client client) {
-		WebTarget request = client.target(config.getBlogApiUrl() + "posts")
-			.queryParam("lang", config.getLanguageCode())
-			.queryParam("per_page", Integer.toString(1));
-		Item[] items = request.request().get(Item[].class);
+	static Item getLatestBlogPost(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
+			"lang", config.getLanguageCode(),
+			"per_page", Integer.toString(1)
+		)))).build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		Item[] items = JsonUtil.parseUsingJackson(response.body(), Item[].class);
 		return Arrays.stream(items).collect(MoreCollectors.onlyElement());
 	}
 
-	static Item getBlogPost(BlogConfiguration config, String blogPostId, Client client) {
-		return client.target(config.getBlogApiUrl() + "posts/" + blogPostId)
-			.request()
-			.get(Item.class);
+	static Item getBlogPost(BlogConfiguration config, String blogPostId, HttpClient client) throws IOException, InterruptedException {
+		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts/" + blogPostId)).build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		return JsonUtil.parseUsingJackson(response.body(), Item.class);
 	}
 
 	class Item implements BlogItem {

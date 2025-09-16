@@ -2,6 +2,10 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
@@ -11,12 +15,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
+import com.google.common.net.HttpHeaders;
 import eu.albina.util.JsonUtil;
+import io.micronaut.http.MediaType;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ import jakarta.persistence.PersistenceException;
 
 public interface WhatsAppController {
 	Logger logger = LoggerFactory.getLogger(WhatsAppController.class);
-	Client client = HttpClientUtil.newClientBuilder().build();
+	HttpClient client = HttpClientUtil.newClientBuilder().build();
 
 	static Optional<WhatsAppConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
 		Objects.requireNonNull(region, "region");
@@ -75,8 +76,8 @@ public interface WhatsAppController {
 		return null;
 	}
 
-	static Response sendPhoto(WhatsAppConfiguration config, String message, String attachmentUrl)
-			throws IOException, HibernateException {
+	static void sendPhoto(WhatsAppConfiguration config, String message, String attachmentUrl)
+		throws IOException, HibernateException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
@@ -88,19 +89,21 @@ public interface WhatsAppController {
 			"caption", message
 		));
 
-		Response response = client.target("https://gate.whapi.cloud/messages/image")
-			.request(MediaType.APPLICATION_JSON)
-			.header("authorization", "Bearer " + apiToken)
-			.post(Entity.entity(payload, MediaType.APPLICATION_JSON));
-		if (response.getStatusInfo().getStatusCode() != 200) {
+		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/messages/image"))
+			.POST(HttpRequest.BodyPublishers.ofString(payload))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
+			.build();
+
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		if (response.statusCode() != 200) {
 			logger.warn("Error publishing on whatsapp channel for "
 				+ config.getRegion().getId() + " (error code "
-				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
+				+ response.statusCode() + "): " + response.body());
 		}
-		return response;
 	}
 
-	static Response sendMessage(WhatsAppConfiguration config, String message) throws HibernateException {
+	static void sendMessage(WhatsAppConfiguration config, String message) throws HibernateException, IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
@@ -111,29 +114,32 @@ public interface WhatsAppController {
 			"body", message
 		));
 
-		Response response = client.target("https://gate.whapi.cloud/messages/text")
-			.request(MediaType.APPLICATION_JSON)
-			.header("authorization", "Bearer " + apiToken)
-			.post(Entity.entity(payload, MediaType.APPLICATION_JSON));
-		if (response.getStatusInfo().getStatusCode() != 200) {
+		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/messages/text"))
+			.POST(HttpRequest.BodyPublishers.ofString(payload))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
+			.build();
+
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		if (response.statusCode() != 200) {
 			logger.warn("Error publishing on whatsapp channel for "
 				+ config.getRegion().getId() + " (error code "
-				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
+				+ response.statusCode() + "): " + response.body());
 		}
-		return response;
 	}
 
-	static Response getHealth(WhatsAppConfiguration config) throws HibernateException {
+	static String getHealth(WhatsAppConfiguration config) throws HibernateException, IOException, InterruptedException {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
-		Response response = client.target("https://gate.whapi.cloud/health")
-				.request(MediaType.APPLICATION_JSON)
-				.header("authorization", "Bearer " + apiToken)
-				.get();
 
-		if (response.getStatusInfo().getStatusCode() != 200) {
+		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
+			.build();
+
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		if (response.statusCode() != 200) {
 			logger.warn("Error connecting to whapi.cloud (error code "
-				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
+				+ response.statusCode() + "): " + response.body());
 		}
-		return response;
+		return response.body();
 	}
 }

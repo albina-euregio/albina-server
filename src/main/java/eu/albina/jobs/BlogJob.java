@@ -2,7 +2,6 @@
 package eu.albina.jobs;
 
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +11,8 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
+
+import java.io.IOException;
 
 /**
  * A {@code org.quartz.Job} handling all the tasks and logic necessary to
@@ -27,17 +28,24 @@ public class BlogJob implements org.quartz.Job {
 	/**
 	 * Execute all necessary tasks to publish new blog posts.
 	 *
-	 * @param arg0
 	 */
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute(JobExecutionContext arg0) {
 		for (Region region : RegionController.getInstance().getPublishBlogRegions()) {
 			logger.info("Blog job triggered for {}!", region.getId());
 			for (LanguageCode lang : region.getEnabledLanguages()) {
-				BlogController.sendNewBlogPosts(region, lang);
+				try {
+					BlogController.sendNewBlogPosts(region, lang);
+				} catch (IOException | InterruptedException e) {
+					logger.warn("Blog job failed", e);
+				}
 			}
 		}
-		BlogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, new Region("AT-07"));
+		try {
+			BlogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, new Region("AT-07"));
+		} catch (IOException | InterruptedException e) {
+			logger.warn("Blog job failed", e);
+		}
 	}
 
 }

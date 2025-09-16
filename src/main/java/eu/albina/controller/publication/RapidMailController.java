@@ -3,6 +3,10 @@ package eu.albina.controller.publication;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
@@ -11,12 +15,8 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.fasterxml.jackson.core.util.JacksonFeature;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
+import eu.albina.util.JsonUtil;
+import io.micronaut.http.MediaType;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +42,7 @@ import jakarta.persistence.criteria.Root;
 public interface RapidMailController {
 	Logger logger = LoggerFactory.getLogger(RapidMailController.class);
 	String baseUrl = "https://apiv3.emailsys.net";
-	Client client = HttpClientUtil.newClientBuilder().register(JacksonFeature.class).build();
+	HttpClient client = HttpClientUtil.newClientBuilder().build();
 
 	static Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
 		Objects.requireNonNull(languageCode, "languageCode");
@@ -73,35 +73,36 @@ public interface RapidMailController {
 		return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 	}
 
-	static RapidMailRecipientListResponse getRecipientsList(RapidMailConfiguration config) throws IOException, HibernateException {
+	static RapidMailRecipientListResponse getRecipientsList(RapidMailConfiguration config) throws IOException, HibernateException, InterruptedException {
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
-		Response response = client.target(baseUrl + "/recipientlists")
-			.request()
+		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/recipientlists"))
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
-			.get();
-		logger.info("Retrieving recipients -> {}", response.getStatusInfo());
-		return response.readEntity(RapidMailRecipientListResponse.class);
+			.build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		logger.info("Retrieving recipients -> {}", response.statusCode());
+		return JsonUtil.parseUsingJackson(response.body(), RapidMailRecipientListResponse.class);
 	}
 
 	static void createRecipient(RapidMailConfiguration config, PostRecipientsRequest recipient)
-		throws AlbinaException, IOException, HibernateException {
+		throws AlbinaException, IOException, HibernateException, InterruptedException {
 
 		if (recipient.getRecipientlistId() == null) {
 			int recipientListId = getRecipientId(config);
 			recipient.setRecipientlistId(recipientListId);
 		}
-		client.target(baseUrl + "/recipients")
-			.queryParam("send_activationmail", "yes")
-			.request()
+		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/recipients?send_activationmail=yes"))
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
-			.post(Entity.entity(recipient, MediaType.APPLICATION_JSON));
+			.header("Content-Type", MediaType.APPLICATION_JSON)
+			.POST(HttpRequest.BodyPublishers.ofString(JsonUtil.writeValueUsingJackson(recipient)))
+			.build();
+		client.send(request, HttpResponse.BodyHandlers.discarding());
 	}
 
 	static void sendMessage(PostMailingsRequest mailingsPost, RapidMailConfiguration config)
-		throws AlbinaException, IOException, HibernateException {
+		throws AlbinaException, IOException, HibernateException, InterruptedException {
 
 		if (mailingsPost.getDestinations() == null) {
 			int recipientListId = getRecipientId(config);
@@ -111,17 +112,19 @@ public interface RapidMailController {
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Mailings#/Mailings/post_mailings
 		logger.info("Sending {} ...", mailingsPost);
-		Response response = client.target(baseUrl + "/mailings")
-			.request()
+		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/mailings"))
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
-			.post(Entity.entity(mailingsPost, MediaType.APPLICATION_JSON));
+			.header("Content-Type", MediaType.APPLICATION_JSON)
+			.POST(HttpRequest.BodyPublishers.ofString(JsonUtil.writeValueUsingJackson(mailingsPost)))
+			.build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		logger.info("... returned {}", response);
-		PostMailingsResponse entity = response.readEntity(PostMailingsResponse.class);
+		PostMailingsResponse entity = JsonUtil.parseUsingJackson(response.body(), PostMailingsResponse.class);
 		logger.info("... returned {}", entity);
 	}
 
-	static int getRecipientId(RapidMailConfiguration config) throws AlbinaException, HibernateException, IOException {
+	static int getRecipientId(RapidMailConfiguration config) throws AlbinaException, HibernateException, IOException, InterruptedException {
 		String recipientName = config.getMailinglistName();
 		logger.info("Retrieving recipient for {} ...", recipientName);
 		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(config);
@@ -155,7 +158,7 @@ public interface RapidMailController {
 		}
 	}
 
-	static void sendEmail(RapidMailConfiguration config, String emailHtml, String subject) throws IOException, AlbinaException {
+	static void sendEmail(RapidMailConfiguration config, String emailHtml, String subject) throws IOException, AlbinaException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		logger.info("Sending [{}] email for {} ({} bytes)...", subject, config, emailHtml.getBytes(StandardCharsets.UTF_8).length);
 		LanguageCode lang = config.getLang();

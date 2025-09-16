@@ -2,6 +2,7 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
+import java.net.http.HttpClient;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,11 +23,9 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
-import jakarta.ws.rs.client.Client;
-
 public interface BlogController {
 	Logger logger = LoggerFactory.getLogger(BlogController.class);
-	Client client = HttpClientUtil.newClientBuilder().build();
+	HttpClient client = HttpClientUtil.newClientBuilder().build();
 
 	static BlogConfiguration getConfiguration(Region region, LanguageCode languageCode) throws NoResultException {
 		Objects.requireNonNull(region, "region");
@@ -57,7 +56,7 @@ public interface BlogController {
 		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.merge(config));
 	}
 
-	static List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException {
+	static List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		if (config == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
@@ -69,7 +68,7 @@ public interface BlogController {
 		return blogPosts;
 	}
 
-	static BlogItem getLatestBlogPost(BlogConfiguration config) {
+	static BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
@@ -80,7 +79,7 @@ public interface BlogController {
 		return blogPost;
 	}
 
-	static BlogItem getBlogPost(BlogConfiguration config, String blogPostId) {
+	static BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
@@ -89,12 +88,12 @@ public interface BlogController {
 			: Wordpress.getBlogPost(config, blogPostId, client);
 	}
 
-	static MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) {
+	static MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		BlogItem blogPost = getBlogPost(config, blogPostId);
 		return MultichannelMessage.of(config, blogPost);
 	}
 
-	static void sendNewBlogPosts(Region region, LanguageCode lang) {
+	static void sendNewBlogPosts(Region region, LanguageCode lang) throws IOException, InterruptedException {
 		if (!region.isPublishBlogs()) {
 			logger.debug("Publishing blogs is disabled for region {}", region);
 			return;
@@ -123,7 +122,7 @@ public interface BlogController {
 		}
 	}
 
-	static void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) {
+	static void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) throws IOException, InterruptedException {
 		BlogConfiguration config;
 		try {
 			config = HibernateUtil.getInstance().run(entityManager -> {
@@ -142,7 +141,7 @@ public interface BlogController {
 		List<? extends BlogItem> blogPosts;
 		try {
 			blogPosts = getBlogPosts(config);
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			logger.warn("Blog posts could not be retrieved: " + config, e);
 			return;
 		}

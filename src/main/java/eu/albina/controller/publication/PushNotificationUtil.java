@@ -2,16 +2,12 @@
 package eu.albina.controller.publication;
 
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Variant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +31,12 @@ import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 
-public class PushNotificationUtil {
+public record PushNotificationUtil(HttpClient client) {
 
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
-	private final Client client;
 
 	public PushNotificationUtil() {
 		this(HttpClientUtil.newClientBuilder().build());
-	}
-
-	protected PushNotificationUtil(Client client) {
-		this.client = client;
 	}
 
 	public static class Message {
@@ -114,14 +105,17 @@ public class PushNotificationUtil {
 			final String json = JsonUtil.writeValueUsingJackson(payload);
 			final byte[] encrypted = new CryptoService().encrypt(json, subscriptionKeys, 0);
 			final URI endpointURI = URI.create(subscription1.getEndpoint());
-			final Invocation.Builder builder = client.target(endpointURI).request();
-			builder.header("Content-Type", "application/octet-stream");
-			builder.header("TTL", "180");
-			builder.header("Authorization", new PushController(serverKeys).getAuthorization(endpointURI));
-			final Response response = builder.post(Entity.entity(encrypted, new Variant(MediaType.APPLICATION_OCTET_STREAM_TYPE, (String) null, "aes128gcm")));
-			logger.debug("Received response on POST: {}", response.getStatusInfo());
-			if (response.getStatusInfo().getStatusCode() != 200 && response.getStatusInfo().getStatusCode() != 201) {
-				throw new AlbinaException(response.getStatusInfo() + " " + response.readEntity(String.class));
+			final HttpRequest request = HttpRequest.newBuilder(endpointURI)
+				.header("Content-Type", "application/octet-stream")
+				// FIXME new Variant(MediaType.APPLICATION_OCTET_STREAM_TYPE, (String) null, "aes128gcm")
+				.header("TTL", "180")
+				.header("Authorization", new PushController(serverKeys).getAuthorization(endpointURI))
+				.POST(HttpRequest.BodyPublishers.ofByteArray(encrypted))
+				.build();
+			final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			logger.debug("Received response on POST: {}", response.statusCode());
+			if (response.statusCode() != 200 && response.statusCode() != 201) {
+				throw new AlbinaException(response.statusCode() + " " + response.body());
 			}
 			logger.debug("Successfully sent push notification to {}", subscription.getEndpoint());
 		} catch (Exception e) {
