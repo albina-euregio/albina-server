@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -96,6 +97,7 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get bulletins for date")
+	@JsonView(JsonUtil.Views.Internal.class)
 	public HttpResponse<?> getJSONBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds) {
@@ -141,7 +143,7 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	private HttpResponse<String> getJSONBulletins(String date, List<Region> regions, EntityManager entityManager) {
+	private HttpResponse<List<AvalancheBulletin>> getJSONBulletins(String date, List<Region> regions, EntityManager entityManager) {
 		logger.debug("GET JSON bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -154,8 +156,7 @@ public class AvalancheBulletinService {
 
 		List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, endDate, regions, entityManager);
 		Collections.sort(bulletins);
-		String jsonResult = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Internal.class);
-		return HttpResponse.ok(jsonResult);
+		return HttpResponse.ok(bulletins);
 	}
 
 	@Get
@@ -308,6 +309,7 @@ public class AvalancheBulletinService {
 	@Get("/json")
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get published bulletins for date")
+	@JsonView(JsonUtil.Views.Public.class)
 	public HttpResponse<?> getPublishedJSONBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds, @QueryValue("lang") LanguageCode language) {
@@ -316,8 +318,7 @@ public class AvalancheBulletinService {
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
 		List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions);
-		String json = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
-		return HttpResponse.ok(json);
+		return HttpResponse.ok(bulletins);
 	}
 
 	static class Highest {
@@ -403,6 +404,7 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "bulletin", content = @Content(schema = @Schema(implementation = AvalancheBulletin.class)))
 	@Operation(summary = "Get bulletin by ID")
+	@JsonView(JsonUtil.Views.Internal.class)
 	public HttpResponse<?> getJSONBulletin(@PathVariable("bulletinId") String bulletinId) {
 		logger.debug("GET JSON bulletin: {}", bulletinId);
 
@@ -411,8 +413,7 @@ public class AvalancheBulletinService {
 			if (bulletin == null) {
 				return HttpResponse.notFound().body(new AlbinaException("Bulletin not found for ID: " + bulletinId).toJSON());
 			}
-			String json = JsonUtil.writeValueUsingJackson(bulletin, JsonUtil.Views.Internal.class);
-			return HttpResponse.ok(json);
+			return HttpResponse.ok(bulletin);
 		} catch (HibernateException e) {
 			logger.warn("Error loading bulletin", e);
 			return HttpResponse.badRequest().body(e.toString());
@@ -423,6 +424,7 @@ public class AvalancheBulletinService {
 	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update bulletin")
+	@JsonView(JsonUtil.Views.Internal.class)
 	public HttpResponse<?> updateJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -467,6 +469,7 @@ public class AvalancheBulletinService {
 	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create bulletin")
+	@JsonView(JsonUtil.Views.Internal.class)
 	public HttpResponse<?> createJSONBulletin(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
@@ -511,6 +514,7 @@ public class AvalancheBulletinService {
 	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete bulletin")
+	@JsonView(JsonUtil.Views.Internal.class)
 	public HttpResponse<?> deleteJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
