@@ -23,7 +23,7 @@ public class AvalancheBulletinEndpoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinEndpoint.class);
 
-	private final ConcurrentMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
 	@OnOpen
 	public void onOpen(WebSocketSession session, @PathVariable String username) {
@@ -57,7 +57,7 @@ public class AvalancheBulletinEndpoint {
 		logger.warn("Bulletin lock error", throwable);
 	}
 
-	private void broadcast(BulletinLock lock) {
+	public static void broadcast(BulletinLock lock) {
 		sessions.values().forEach(session -> {
 			try {
 				session.send(lock);

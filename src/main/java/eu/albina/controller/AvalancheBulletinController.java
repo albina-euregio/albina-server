@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -801,7 +802,7 @@ public class AvalancheBulletinController {
 		for (BulletinLock bulletinLock : hits) {
 			bulletinLocks.remove(bulletinLock);
 			bulletinLock.setLock(false);
-			// AvalancheBulletinEndpoint.broadcast(bulletinLock);
+			AvalancheBulletinEndpoint.broadcast(bulletinLock);
 		}
 	}
 

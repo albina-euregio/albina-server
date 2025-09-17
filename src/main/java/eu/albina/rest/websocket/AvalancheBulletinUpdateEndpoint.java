@@ -22,7 +22,7 @@ public class AvalancheBulletinUpdateEndpoint {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinUpdateEndpoint.class);
 
-	private final ConcurrentMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
 	@OnOpen
 	public void onOpen(WebSocketSession session, @PathVariable String username) {
@@ -48,7 +48,7 @@ public class AvalancheBulletinUpdateEndpoint {
 		logger.warn("Bulletin update error", throwable);
 	}
 
-	private void broadcast(BulletinUpdate update) {
+	public static void broadcast(BulletinUpdate update) {
 		sessions.values().forEach(session -> {
 			try {
 				session.send(update);
