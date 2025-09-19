@@ -17,6 +17,9 @@ import jakarta.persistence.Table;
 @Table(name = "danger_sources")
 public class DangerSource extends AbstractPersistentObject {
 
+	@Column(name = "OWNER_REGION", length = 191)
+	private String ownerRegion;
+
 	@Column(name = "CREATION_DATE")
 	private Instant creationDate;
 
@@ -25,6 +28,14 @@ public class DangerSource extends AbstractPersistentObject {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+
+	public String getOwnerRegion() {
+		return ownerRegion;
+	}
+
+	public void setOwnerRegion(String ownerRegion) {
+		this.ownerRegion = ownerRegion;
+	}
 
 	public Instant getCreationDate() {
 		return this.creationDate;

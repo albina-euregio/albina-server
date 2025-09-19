@@ -54,13 +54,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Path("/danger-sources")
 @Tag(name = "danger-sources")
-@OpenAPIDefinition(info = @Info(
-	title = "albina-server",
-	version = "0.0",
-	description = "Server component to compose and publish multilingual avalanche bulletins",
-	license = @License(name = "GNU General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"),
-	contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")
-), servers = {@Server(url = "/albina/api")})
+@OpenAPIDefinition(info = @Info(title = "albina-server", version = "0.0", description = "Server component to compose and publish multilingual avalanche bulletins", license = @License(name = "GNU General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"), contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")), servers = {
+		@Server(url = "/albina/api") })
 public class DangerSourceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(DangerSourceService.class);
@@ -80,12 +75,13 @@ public class DangerSourceService {
 	@Operation(summary = "Get danger sources for season")
 	public String getDangerSources(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("regions") List<String> regionIds,
+			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger sources");
 
 		Range<Instant> instantRange = DateControllerUtil.parseHydrologicalYearInstantRange(date);
-		List<DangerSource> dangerSources = DangerSourceController.getInstance().getDangerSources(instantRange.lowerEndpoint(), instantRange.upperEndpoint());
+		List<DangerSource> dangerSources = DangerSourceController.getInstance()
+				.getDangerSourcesForRegion(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regionId);
 		return JsonUtil.writeValueUsingJackson(dangerSources);
 	}
 
@@ -115,13 +111,14 @@ public class DangerSourceService {
 	@Operation(summary = "Get danger source variants for date")
 	public String getVariants(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String date,
-			@QueryParam("regions") List<String> regionIds,
+			@QueryParam("region") String regionId,
 			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger source variants");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-		List<Region> regions = regionIds.stream().map(RegionController.getInstance()::getRegion).collect(Collectors.toList());
-		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance().getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions);
+		Region region = RegionController.getInstance().getRegion(regionId);
+		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance()
+				.getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 		return JsonUtil.writeValueUsingJackson(variants);
 	}
 
@@ -140,7 +137,8 @@ public class DangerSourceService {
 		Range<Instant> instantRangeEnd = DateControllerUtil.parseInstantRange(endDate);
 		Region region = RegionController.getInstance().getRegion(regionId);
 
-		List<DangerSourceVariantsStatus> status = DangerSourceVariantController.getInstance().getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
+		List<DangerSourceVariantsStatus> status = DangerSourceVariantController.getInstance()
+				.getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
 		return JsonUtil.writeValueUsingJackson(status);
 	}
 
@@ -159,8 +157,10 @@ public class DangerSourceService {
 		logger.debug("GET JSON danger source variants for danger source");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-		List<Region> regions = regionIds.stream().map(RegionController.getInstance()::getRegion).collect(Collectors.toList());
-		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance().getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
+		List<Region> regions = regionIds.stream().map(RegionController.getInstance()::getRegion)
+				.collect(Collectors.toList());
+		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance().getDangerSourceVariants(
+				instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
 		return JsonUtil.writeValueUsingJackson(variants);
 	}
 
@@ -185,18 +185,19 @@ public class DangerSourceService {
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				DangerSourceVariant[] variants = JsonUtil.parseUsingJackson(json, DangerSourceVariant[].class);
 				for (DangerSourceVariant variant : variants) {
-					variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant, DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
+					variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(
+							variant,
+							DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
 				}
-				DangerSourceVariantController.getInstance().saveDangerSourceVariants(Arrays.asList(variants), instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+				DangerSourceVariantController.getInstance().saveDangerSourceVariants(Arrays.asList(variants),
+						instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating variants", e);
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		}
 	}
 
@@ -209,9 +210,8 @@ public class DangerSourceService {
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
 	@Operation(summary = "Get variant by ID")
 	public String getVariantById(
-		@PathParam("variantId") String variantId,
-		@Context SecurityContext securityContext
-	) {
+			@PathParam("variantId") String variantId,
+			@Context SecurityContext securityContext) {
 		logger.debug("GET JSON danger source variant: {}", variantId);
 		DangerSourceVariant variant = DangerSourceVariantController.getInstance().getDangerSourceVariant(variantId);
 		return JsonUtil.writeValueUsingJackson(variant);
@@ -234,7 +234,8 @@ public class DangerSourceService {
 
 		try {
 			DangerSourceVariant variant = JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
-			variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant, DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
+			variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant,
+					DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
@@ -242,16 +243,15 @@ public class DangerSourceService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				DangerSourceVariantController.getInstance().updateDangerSourceVariant(variant, instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+				DangerSourceVariantController.getInstance().updateDangerSourceVariant(variant,
+						instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating danger source variant", e);
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		}
 	}
 
@@ -279,12 +279,10 @@ public class DangerSourceService {
 				throw new AlbinaException("User is not authorized for this region!");
 			}
 
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		} catch (AlbinaException e) {
 			logger.warn("Error deleting variant", e);
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		}
 	}
 
@@ -304,7 +302,8 @@ public class DangerSourceService {
 
 		try {
 			DangerSourceVariant variant = JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
-			variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant, DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
+			variant.setTextcat(DangerSourceVariantTextController.getInstance().getTextForDangerSourceVariant(variant,
+					DangerSourceVariantTextController.getInstance().getDangerSourceVariantText(variant)));
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
@@ -312,16 +311,15 @@ public class DangerSourceService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				DangerSourceVariantController.getInstance().createDangerSourceVariant(variant, instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+				DangerSourceVariantController.getInstance().createDangerSourceVariant(variant,
+						instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating danger source variant", e);
-			List<String> regionIDs = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return getVariants(date, regionIDs, securityContext);
+			return getVariants(date, regionId, securityContext);
 		}
 	}
 }

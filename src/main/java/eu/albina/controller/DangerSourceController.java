@@ -96,8 +96,8 @@ public class DangerSourceController {
 	 *
 	 * @return danger sources
 	 */
-	public List<DangerSource> getDangerSources(Instant startDate, Instant endDate) {
-		return HibernateUtil.getInstance().run(entityManager -> entityManager.createQuery(HibernateUtil.queryGetDangerSources, DangerSource.class).setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList());
+	public List<DangerSource> getDangerSourcesForRegion(Instant startDate, Instant endDate, String region) {
+		return HibernateUtil.getInstance().run(entityManager -> entityManager.createQuery(HibernateUtil.queryGetDangerSourcesForRegion, DangerSource.class).setParameter("startDate", startDate).setParameter("endDate", endDate).setParameter("region", region).getResultList());
 	}
 
 	public List<DangerSource> getAllDangerSources() {
