@@ -7,5 +7,6 @@
   <includeAll path="005_v5" relativeToChangelogFile="true"/>
   <includeAll path="006_v6" relativeToChangelogFile="true"/>
   <includeAll path="007_v7" relativeToChangelogFile="true"/>
+  <includeAll path="008_v8" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

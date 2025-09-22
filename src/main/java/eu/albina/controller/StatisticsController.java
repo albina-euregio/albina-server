@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -24,6 +22,7 @@ import eu.albina.model.MatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.DangerSign;
+import eu.albina.model.enumerations.GrainShape;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.util.HibernateUtil;
@@ -41,8 +40,6 @@ public class StatisticsController {
 	static String csvLineBreak = "\n";
 
 	static String notAvailableString = "N/A";
-
-	private static final Logger logger = LoggerFactory.getLogger(StatisticsController.class);
 
 	private static StatisticsController instance = null;
 
@@ -540,7 +537,7 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getSlabDistribution() != null ? dangerSourceVariant.getSlabDistribution() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getWeakLayerGrainShape() != null ? dangerSourceVariant.getWeakLayerGrainShape() : notAvailableString);
+		sb.append(dangerSourceVariant.getWeakLayerGrainShapes() != null ? dangerSourceVariant.getWeakLayerGrainShapes().stream().map(GrainShape::toString).collect(Collectors.joining(",")) : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getWeakLayerGrainSizeUpperLimit());
 		sb.append(csvDeliminator);

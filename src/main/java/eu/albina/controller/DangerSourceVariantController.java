@@ -23,7 +23,6 @@ import eu.albina.model.enumerations.DangerSourceVariantType;
 import eu.albina.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 
-
 /**
  * Controller for danger sources variants.
  *
@@ -60,7 +59,7 @@ public class DangerSourceVariantController {
 	 * Retrieve a variant from the database by {@code variantID}.
 	 *
 	 * @param variantId
-	 *            The ID of the desired variant.
+	 *                  The ID of the desired variant.
 	 * @return The variant with the given ID.
 	 */
 	public DangerSourceVariant getDangerSourceVariant(String variantId) {
@@ -78,17 +77,19 @@ public class DangerSourceVariantController {
 	 * Creates a {@code variant} in the database.
 	 *
 	 * @param startDate
-	 *            the start date the variant is valid from
+	 *                  the start date the variant is valid from
 	 * @param endDate
-	 *            the end date the variant is valid until
+	 *                  the end date the variant is valid until
 	 * @param region
-	 *            the active region of the user who is creating the variant
+	 *                  the active region of the user who is creating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
-	public synchronized void createDangerSourceVariant(DangerSourceVariant newVariant, Instant startDate, Instant endDate,
+	public synchronized void createDangerSourceVariant(DangerSourceVariant newVariant, Instant startDate,
+			Instant endDate,
 			Region region) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
+			List<DangerSourceVariant> loadedVariants = entityManager
+					.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 
 			this.removeDuplicateRegions(newVariant, entityManager, loadedVariants);
@@ -107,14 +108,14 @@ public class DangerSourceVariantController {
 	 * Deletes a {@code variant} from the database.
 	 *
 	 * @param startDate
-	 *            the start date the variant is valid from
+	 *                  the start date the variant is valid from
 	 * @param endDate
-	 *            the end date the variant is valid until
+	 *                  the end date the variant is valid until
 	 * @param region
-	 *            the active region of the user who is deleting the variant
+	 *                  the active region of the user who is deleting the variant
 	 * @return a list of all variants for this day
 	 */
-    public synchronized void deleteDangerSourceVariant(String variantId) {
+	public synchronized void deleteDangerSourceVariant(String variantId) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			DangerSourceVariant variant = entityManager.find(DangerSourceVariant.class, variantId);
 			entityManager.remove(variant);
@@ -122,9 +123,11 @@ public class DangerSourceVariantController {
 		});
 	}
 
-	public void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant startDate, Instant endDate, Region region) {
+	public void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant startDate, Instant endDate,
+			Region region) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
+			List<DangerSourceVariant> loadedVariants = entityManager
+					.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			Map<String, DangerSourceVariant> originalVariants = new HashMap<String, DangerSourceVariant>();
 
@@ -160,17 +163,18 @@ public class DangerSourceVariantController {
 	 * Update a {@code variant} in the database.
 	 *
 	 * @param startDate
-	 *            the start date the variant is valid from
+	 *                  the start date the variant is valid from
 	 * @param endDate
-	 *            the end date the variant is valid until
+	 *                  the end date the variant is valid until
 	 * @param region
-	 *            the active region of the user who is updating the variant
+	 *                  the active region of the user who is updating the variant
 	 * @return a map of all variant ids and variants for this day
 	 */
 	public void updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
 			Region region) {
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
-			List<DangerSourceVariant> loadedVariants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
+			List<DangerSourceVariant> loadedVariants = entityManager
+					.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
 					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			removeDuplicateRegions(updatedVariant, entityManager, loadedVariants);
 			entityManager.merge(updatedVariant);
@@ -186,21 +190,21 @@ public class DangerSourceVariantController {
 	 * {@code regions}.
 	 *
 	 * @param startDate
-	 *            the start date the variants should be valid from
+	 *                  the start date the variants should be valid from
 	 * @param endDate
-	 *            the end date the variants should be valid until
+	 *                  the end date the variants should be valid until
 	 * @param regions
-	 *            the regions of the variants
+	 *                  the regions of the variants
 	 * @return the most recent variants for the given time period and regions
 	 */
-	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions) {
+	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, Region region) {
 		return HibernateUtil.getInstance().run(entityManager -> {
-			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
-				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
+			List<DangerSourceVariant> variants = entityManager
+					.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<DangerSourceVariant> results = variants.stream()
-				.filter(variant -> regions.stream()
-					.anyMatch(variant::affectsRegion))
-				.collect(Collectors.toList());
+					.filter(variant -> variant.affectsRegion(region))
+					.collect(Collectors.toList());
 
 			for (DangerSourceVariant variant : results)
 				initializeDangerSourceVariant(variant);
@@ -214,14 +218,15 @@ public class DangerSourceVariantController {
 	 * {@code region}.
 	 *
 	 * @param startDate
-	 *            the start date the variants should be valid from
+	 *                  the start date the variants should be valid from
 	 * @param endDate
-	 *            the end date the variants should be valid until
+	 *                  the end date the variants should be valid until
 	 * @param region
-	 *            the region of the variants
+	 *                  the region of the variants
 	 * @return the most recent variants for the given time period and regions
 	 */
-	public List<DangerSourceVariantsStatus> getDangerSourceVariantsStatus(Range<Instant> startDate, Range<Instant> endDate, Region region) {
+	public List<DangerSourceVariantsStatus> getDangerSourceVariantsStatus(Range<Instant> startDate,
+			Range<Instant> endDate, Region region) {
 		List<DangerSourceVariantsStatus> result = new ArrayList<DangerSourceVariantsStatus>();
 		Instant date = startDate.lowerEndpoint();
 		while (date.isBefore(endDate.lowerEndpoint()) || date.equals(endDate.lowerEndpoint())) {
@@ -231,14 +236,15 @@ public class DangerSourceVariantController {
 		return result;
 	}
 
-	public DangerSourceVariantsStatus getDangerSourceVariantsStatusForDay(Instant startDate, Instant endDate, Region region) {
+	public DangerSourceVariantsStatus getDangerSourceVariantsStatusForDay(Instant startDate, Instant endDate,
+			Region region) {
 		DangerSourceVariantsStatus status = new DangerSourceVariantsStatus();
 		status.date = startDate;
-		ArrayList<Region> regions = new ArrayList<Region>();
-		regions.add(region);
-		List<DangerSourceVariant> dangerSourceVariants = this.getDangerSourceVariants(startDate, endDate, regions);
-		status.forecast = dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.forecast);
-		status.analysis = dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.analysis);
+		List<DangerSourceVariant> dangerSourceVariants = this.getDangerSourceVariants(startDate, endDate, region);
+		status.forecast = dangerSourceVariants.stream()
+				.anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.forecast);
+		status.analysis = dangerSourceVariants.stream()
+				.anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.analysis);
 		return status;
 	}
 
@@ -247,24 +253,26 @@ public class DangerSourceVariantController {
 	 * {@code regions} and {@code dangerSource}.
 	 *
 	 * @param startDate
-	 *            the start date the variants should be valid from
+	 *                       the start date the variants should be valid from
 	 * @param endDate
-	 *            the end date the variants should be valid until
+	 *                       the end date the variants should be valid until
 	 * @param regions
-	 *            the regions of the variants
+	 *                       the regions of the variants
 	 * @param dangerSourceId
-	 *            the id of the danger source
+	 *                       the id of the danger source
 	 * @return the most recent variants for the given time period and regions
 	 */
-	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions, String dangerSourceId) {
+	public List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions,
+			String dangerSourceId) {
 		return HibernateUtil.getInstance().run(entityManager -> {
-			List<DangerSourceVariant> variants = entityManager.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
-				.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
+			List<DangerSourceVariant> variants = entityManager
+					.createQuery(HibernateUtil.queryGetDangerSourceVariants, DangerSourceVariant.class)
+					.setParameter("startDate", startDate).setParameter("endDate", endDate).getResultList();
 			List<DangerSourceVariant> results = variants.stream()
-				.filter(variant -> regions.stream()
-					.anyMatch(variant::affectsRegion))
-				.filter(variant -> variant.getDangerSource().getId().equals(dangerSourceId))
-				.collect(Collectors.toList());
+					.filter(variant -> regions.stream()
+							.anyMatch(variant::affectsRegion))
+					.filter(variant -> variant.getDangerSource().getId().equals(dangerSourceId))
+					.collect(Collectors.toList());
 
 			for (DangerSourceVariant variant : results)
 				initializeDangerSourceVariant(variant);
@@ -274,15 +282,17 @@ public class DangerSourceVariantController {
 	}
 
 	public List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate) {
-		return HibernateUtil.getInstance().run(entityManager -> getAllDangerSourceVariants(startDate, endDate, entityManager));
+		return HibernateUtil.getInstance()
+				.run(entityManager -> getAllDangerSourceVariants(startDate, endDate, entityManager));
 	}
 
-	private List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate, EntityManager entityManager) {
+	private List<DangerSourceVariant> getAllDangerSourceVariants(Instant startDate, Instant endDate,
+			EntityManager entityManager) {
 		final List<DangerSourceVariant> variants = entityManager
-			.createQuery(HibernateUtil.queryGetDangerSourceVariantsForTimePeriod, DangerSourceVariant.class)
-			.setParameter("startDate", startDate)
-			.setParameter("endDate", endDate)
-			.getResultList();
+				.createQuery(HibernateUtil.queryGetDangerSourceVariantsForTimePeriod, DangerSourceVariant.class)
+				.setParameter("startDate", startDate)
+				.setParameter("endDate", endDate)
+				.getResultList();
 		for (DangerSourceVariant variant : variants) {
 			initializeDangerSourceVariant(variant);
 		}
@@ -290,11 +300,12 @@ public class DangerSourceVariantController {
 	}
 
 	/**
-	 * Initialize all fields of the {@code danger source variant} to be able to access it after
+	 * Initialize all fields of the {@code danger source variant} to be able to
+	 * access it after
 	 * the DB transaction was closed.
 	 *
 	 * @param variant
-	 *            the danger source variant that should be initialized
+	 *                the danger source variant that should be initialized
 	 */
 	private void initializeDangerSourceVariant(DangerSourceVariant variant) {
 		Hibernate.initialize(variant.getDangerSource());
@@ -307,11 +318,9 @@ public class DangerSourceVariantController {
 	private void removeDuplicateRegions(DangerSourceVariant updatedVariant, EntityManager entityManager,
 			List<DangerSourceVariant> loadedVariants) {
 		for (DangerSourceVariant loadedVariant : loadedVariants) {
-			if (
-				!loadedVariant.getId().equals(updatedVariant.getId()) &&
-				loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()) &&
-				loadedVariant.getDangerSourceVariantType().equals(updatedVariant.getDangerSourceVariantType()))
-			{
+			if (!loadedVariant.getId().equals(updatedVariant.getId()) &&
+					loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()) &&
+					loadedVariant.getDangerSourceVariantType().equals(updatedVariant.getDangerSourceVariantType())) {
 				// check micro-regions to prevent duplicates
 				for (String microRegion : updatedVariant.getRegions()) {
 					loadedVariant.getRegions().remove(microRegion);
