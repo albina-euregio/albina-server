@@ -160,33 +160,4 @@ public class ServerInstanceService {
 			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
 		}
 	}
-
-	@GET
-	@Secured({Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER})
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/health")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Operation(summary = "Perform health checks")
-	public Map<String, Object> getHealth(
-		@QueryParam("region") String regionId,
-		@QueryParam("lang") LanguageCode language
-	) throws Exception {
-		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-		logger.info("Testing TelegramController");
-		TelegramConfiguration telegramConfig = TelegramController.getConfiguration(region, language).orElseThrow();
-		Response me = TelegramController.getMe(telegramConfig);
-		logger.info("Testing WhatsAppController");
-		WhatsAppConfiguration whatsAppConfiguration = WhatsAppController.getConfiguration(region, language).orElseThrow();
-		Response whapiResponse = WhatsAppController.getHealth(whatsAppConfiguration);
-		logger.info("Testing Blog");
-		BlogConfiguration config = BlogController.getConfiguration(region, language);
-		BlogItem latestBlogPost = BlogController.getLatestBlogPost(config);
-		return Map.of(
-			"region", MoreObjects.firstNonNull(region, ""),
-			"telegram", MoreObjects.firstNonNull(me, ""),
-			"whatsapp", MoreObjects.firstNonNull(whapiResponse, ""),
-			"blog", MoreObjects.firstNonNull(latestBlogPost, "")
-		);
-	}
 }
