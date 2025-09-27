@@ -226,18 +226,6 @@ public class Region {
 	@Column(name = "PDF_FOOTER_LOGO_BW_PATH", length = 191)
 	private String pdfFooterLogoBwPath;
 
-	@Column(name = "MAP_X_MAX")
-	private int mapXmax;
-
-	@Column(name = "MAP_X_MIN")
-	private int mapXmin;
-
-	@Column(name = "MAP_Y_MAX")
-	private int mapYmax;
-
-	@Column(name = "MAP_Y_MIN")
-	private int mapYmin;
-
 	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME", length = 191)
 	private String simpleHtmlTemplateName;
 
@@ -297,15 +285,6 @@ public class Region {
 	public Region(String id) {
 		super();
 		this.id = id;
-	}
-
-	public Region(String id, String geoDataDirectory, int mapXmax, int mapXmin, int mapYmax, int mapYmin) {
-		this.id = id;
-		this.geoDataDirectory = geoDataDirectory;
-		this.mapXmax = mapXmax;
-		this.mapXmin = mapXmin;
-		this.mapYmax = mapYmax;
-		this.mapYmin = mapYmin;
 	}
 
 	public Region(String json, Function<String, Region> regionFunction) throws JsonProcessingException {
@@ -715,38 +694,6 @@ public class Region {
 
 	public void setPdfFooterLogoBwPath(String pdfFooterLogoBwPath) {
 		this.pdfFooterLogoBwPath = pdfFooterLogoBwPath;
-	}
-
-	public int getMapXmax() {
-		return mapXmax;
-	}
-
-	public void setMapXmax(int mapXmax) {
-		this.mapXmax = mapXmax;
-	}
-
-	public int getMapXmin() {
-		return mapXmin;
-	}
-
-	public void setMapXmin(int mapXmin) {
-		this.mapXmin = mapXmin;
-	}
-
-	public int getMapYmax() {
-		return mapYmax;
-	}
-
-	public void setMapYmax(int mapYmax) {
-		this.mapYmax = mapYmax;
-	}
-
-	public int getMapYmin() {
-		return mapYmin;
-	}
-
-	public void setMapYmin(int mapYmin) {
-		this.mapYmin = mapYmin;
 	}
 
 	public String getSimpleHtmlTemplateName() {
