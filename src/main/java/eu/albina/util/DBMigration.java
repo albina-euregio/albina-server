@@ -117,10 +117,6 @@ public class DBMigration {
 		ch.setMapLogoBwPath("");
 		ch.setMapLogoColorPath("");
 		ch.setMapLogoPosition(Position.topleft);
-		ch.setMapXmax(1176800);
-		ch.setMapXmin(646800);
-		ch.setMapYmax(6053000);
-		ch.setMapYmin(5710000);
 		ch.setMicroRegions(36);
 		ch.setPdfColor("00ACFB");
 		ch.setPdfFooterLogo(true);
@@ -162,10 +158,6 @@ public class DBMigration {
 		it32tn.setMapLogoBwPath("");
 		it32tn.setMapLogoColorPath("");
 		it32tn.setMapLogoPosition(Position.bottomright);
-		it32tn.setMapXmax(1358000);
-		it32tn.setMapXmin(1133000);
-		it32tn.setMapYmax(5842000);
-		it32tn.setMapYmin(5692000);
 		it32tn.setMicroRegions(21);
 		it32tn.setPdfColor("00ACFB");
 		it32tn.setPdfFooterLogo(true);
@@ -208,10 +200,6 @@ public class DBMigration {
 		it32bz.setMapLogoBwPath("");
 		it32bz.setMapLogoColorPath("");
 		it32bz.setMapLogoPosition(Position.bottomright);
-		it32bz.setMapXmax(1400000);
-		it32bz.setMapXmin(1145000);
-		it32bz.setMapYmax(5939000);
-		it32bz.setMapYmin(5769000);
 		it32bz.setMicroRegions(31);
 		it32bz.setPdfColor("00ACFB");
 		it32bz.setPdfFooterLogo(true);
@@ -254,10 +242,6 @@ public class DBMigration {
 		at07.setMapLogoBwPath("");
 		at07.setMapLogoColorPath("");
 		at07.setMapLogoPosition(Position.bottomright);
-		at07.setMapXmax(1452000);
-		at07.setMapXmin(1116000);
-		at07.setMapYmax(6053000);
-		at07.setMapYmin(5829000);
 		at07.setMicroRegions(36);
 		at07.setPdfColor("00ACFB");
 		at07.setPdfFooterLogo(true);
@@ -300,10 +284,6 @@ public class DBMigration {
 		euregio.setMapLogoBwPath("logo/color/colorbar.gif");
 		euregio.setMapLogoColorPath("images/logo/color/euregio.png");
 		euregio.setMapLogoPosition(Position.bottomright);
-		euregio.setMapXmax(1464000);
-		euregio.setMapXmin(1104000);
-		euregio.setMapYmax(6047000);
-		euregio.setMapYmin(5687000);
 		euregio.setMicroRegions(0);
 		euregio.setPdfColor("00ACFB");
 		euregio.setPdfFooterLogo(true);
