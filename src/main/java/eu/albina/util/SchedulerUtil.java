@@ -5,6 +5,7 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import eu.albina.jobs.HealthCheckJob;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -72,6 +73,12 @@ public class SchedulerUtil {
 			Trigger tmpDeletionTrigger = newTrigger().withIdentity("triggerTmpDeletion", "groupAlbina").startNow()
 					.withSchedule(cronSchedule("0 0 3 * * ?")).build();
 			scheduler.scheduleJob(tmpDeletionJob, tmpDeletionTrigger);
+
+			// start health check (4AM)
+			JobDetail healtchCheckJob = newJob(HealthCheckJob.class).withIdentity("healthCheck", "groupAlbina").build();
+			Trigger healthCheckTrigger = newTrigger().withIdentity("triggerHealthCheck", "groupAlbina").startNow()
+				.withSchedule(cronSchedule("0 0 4 * * ?")).build();
+			scheduler.scheduleJob(healtchCheckJob, healthCheckTrigger);
 
 		} catch (SchedulerException e) {
 			logger.error("Scheduler could not be started", e);

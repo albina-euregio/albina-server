@@ -44,6 +44,7 @@ public class HibernateUtil {
 	public static String queryGetDangerSourceVariants = "from DangerSourceVariant as v where v.validFrom = :startDate or v.validUntil = :endDate";
 	public static String queryGetDangerSourceVariantsForTimePeriod = "from DangerSourceVariant as v where v.validFrom between :startDate and :endDate";
 	public static String queryGetDangerSources = "from DangerSource as d where d.creationDate between :startDate and :endDate";
+	public static String queryGetDangerSourcesForRegion = "from DangerSource as d where d.creationDate between :startDate and :endDate and d.ownerRegion = :region";
 
 	public static String queryGetDangerSourceVariantTexts = "from DangerSourceVariantText as t where t.avalancheType = :avalancheType";
 

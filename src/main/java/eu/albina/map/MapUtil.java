@@ -5,10 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.DoubleSummaryStatistics;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +20,12 @@ import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.script.SimpleBindings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.MoreCollectors;
+import org.geojson.Feature;
+import org.geojson.FeatureCollection;
+import org.geojson.LngLatAlt;
+import org.geojson.Polygon;
 import org.mapyrus.Argument;
 import org.mapyrus.FileOrURL;
 import org.mapyrus.MapyrusException;
@@ -76,6 +84,9 @@ public interface MapUtil {
 			case "AT-07-04": return Stream.of("AT-07-04-01", "AT-07-04-02");
 			case "AT-07-14": return Stream.of("AT-07-14-01", "AT-07-14-02", "AT-07-14-03", "AT-07-14-04", "AT-07-14-05");
 			case "AT-07-17": return Stream.of("AT-07-17-01", "AT-07-17-02");
+			case "AT-07-23": return Stream.of("AT-07-23-01", "AT-07-23-02");
+			case "AT-07-26": return Stream.of("AT-07-26-01", "AT-07-26-02");
+			case "AT-07-29": return Stream.of("AT-07-29-01", "AT-07-29-02", "AT-07-29-03");
 			case "IT-32-BZ-01": return Stream.of("IT-32-BZ-01-01", "IT-32-BZ-01-02");
 			case "IT-32-BZ-02": return Stream.of("IT-32-BZ-02-01", "IT-32-BZ-02-02");
 			case "IT-32-BZ-04": return Stream.of("IT-32-BZ-04-01", "IT-32-BZ-04-02");
@@ -153,14 +164,22 @@ public interface MapUtil {
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		final Path geodataPath = Paths.get(avalancheReport.getServerInstance().getMapProductionUrl()).resolve(region.getGeoDataDirectory());
 
-		bindings.put("xmax", region.getMapXmax());
-		bindings.put("xmin", region.getMapXmin());
-		bindings.put("ymax", region.getMapYmax());
-		bindings.put("ymin", region.getMapYmin());
+		Path bounds = MapUtil.mapProductionResource(geodataPath, "bounds.geojson");
+		FeatureCollection features = new ObjectMapper().readValue(Files.readString(bounds, StandardCharsets.UTF_8), FeatureCollection.class);
+		Feature feature = features.getFeatures().stream().collect(MoreCollectors.onlyElement());
+		Polygon polygon = (Polygon) feature.getGeometry();
+		DoubleSummaryStatistics x = polygon.getExteriorRing().stream().mapToDouble(LngLatAlt::getLongitude).summaryStatistics();
+		DoubleSummaryStatistics y = polygon.getExteriorRing().stream().mapToDouble(LngLatAlt::getLatitude).summaryStatistics();
+		double aspectRatio = (x.getMax() - x.getMin()) / (y.getMax() - y.getMin());
+
+		bindings.put("xmax", x.getMax());
+		bindings.put("xmin", x.getMin());
+		bindings.put("ymax", y.getMax());
+		bindings.put("ymin", y.getMin());
 		bindings.put("image_type", "pdf");
 		bindings.put("mapFile", outputFile);
 		bindings.put("pagesize_x", mapLevel.width);
-		bindings.put("pagesize_y", mapLevel.width / aspectRatio(region));
+		bindings.put("pagesize_y", mapLevel.width / aspectRatio);
 		bindings.put("map_level", mapLevel.name());
 
 		bindings.put("raster", MapUtil.mapProductionResource(geodataPath, "raster.png"));
@@ -254,10 +273,6 @@ public interface MapUtil {
 		} else {
 			return geodataPath.getParent().resolve(filename);
 		}
-	}
-
-	static double aspectRatio(Region region) {
-		return ((double) region.getMapXmax() - (double) region.getMapXmin()) / ((double) region.getMapYmax() - (double) region.getMapYmin());
 	}
 
 	static String filename(Region region, MapLevel mapLevel, DaytimeDependency daytimeDependency, boolean grayscale, MapImageFormat format) {

@@ -13,7 +13,6 @@ import eu.albina.model.DangerSourceVariantText;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.AddOns;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.AvalancheProblem;
 import eu.albina.model.enumerations.AvalancheSize;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.DangerSign;
@@ -40,7 +39,7 @@ public class DangerSourceVariantTextController {
 
 	// phrase "Gefahrenstellen05§an_Expositionen"
 	// placeholder:
-	// {"curlyName":"Gefahrenstellen05§an_Expositionen","line":3,"args":{"vor_allem_an":{"curlyName":"vor_allem_an","line":0},"Expo1":{"curlyName":"Expo1","line":2},"steilen":{"curlyName":"steilen","line":0},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":0},"und_Expo":{"curlyName":"und_Expo","line":0}}}
+	// {"curlyName":"Gefahrenstellen05§an_Expositionen","line":3,"args":{"vor_allem_an":{"curlyName":"vor_allem_an","line":0},"steilen":{"curlyName":"steilen","line":0},"Expo":{"curlyName":"Expo","line":2},"Komma_Expo":{"curlyName":"Komma_Expo","line":0},"und_Expo":{"curlyName":"und_Expo","line":0}}}
 	private static final Map<Set<Aspect>, String> textcatSubstitutionsAspects1 = Map.of(
 			Set.of(Aspect.N, Aspect.NE, Aspect.E, Aspect.SE, Aspect.S, Aspect.SW, Aspect.W, Aspect.NW),
 			"{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":1}",
@@ -169,19 +168,19 @@ public class DangerSourceVariantTextController {
 	// {"curlyName":"Altschnee03§sowie_Alarmzeichen","line":0,"args":{"Alarmzeichen2":{"curlyName":"Alarmzeichen2","line":0}}}
 	private static final Map<Set<DangerSign>, String> textcatSubstitutionsDangerSigns = Map.of(
 			Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":3},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing, DangerSign.shooting_cracks),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":3}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":3},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
 			Set.of(DangerSign.shooting_cracks, DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":4},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":1,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":7}}}",
 			Set.of(DangerSign.whumpfing),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":0}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0}",
 			Set.of(DangerSign.shooting_cracks),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":4}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}",
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":4},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0}",
 			Set.of(DangerSign.fresh_avalanches),
-			"{\"curlyName\":\"Alarmzeichen\",\"line\":7}, {\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":{\"Alarmzeichen2\":{\"curlyName\":\"Alarmzeichen2\",\"line\":0}}}");
+			"{\"curlyName\":\"Alarmzeichen\",\"line\":7},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0}");
 
 	// phrase "Hangart1"
 	// placeholder: {"curlyName":"Hangart1","line":9},
@@ -190,61 +189,65 @@ public class DangerSourceVariantTextController {
 			Map.entry(
 					Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack, TerrainType.gullies_and_bowls,
 							TerrainType.little_used_backcountry_terrain),
-					"{\"curlyName\":\"Hangart1\",\"line\":23}, {\"curlyName\":\"Dies02§sowie\",\"line\":1}, {\"curlyName\":\"Hangart1°1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":23},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":1},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}"),
 			Map.entry(Set.of(TerrainType.adjacent_to_ridgelines, TerrainType.gullies_and_bowls),
-					"{\"curlyName\":\"Hangart1\",\"line\":9}, {\"curlyName\":\"Dies02§sowie\",\"line\":1}, {\"curlyName\":\"Hangart1°1\",\"line\":16}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":9},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":1},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":16}"),
 			Map.entry(Set.of(TerrainType.adjacent_to_ridgelines, TerrainType.pass_areas),
-					"{\"curlyName\":\"Hangart1\",\"line\":14}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":14},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.gullies_and_bowls, TerrainType.behind_abrupt_changes_in_the_terrain),
-					"{\"curlyName\":\"Hangart1\",\"line\":19}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":19},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.gullies_and_bowls, TerrainType.transitions_from_a_shallow_to_a_deep_snowpack),
-					"{\"curlyName\":\"Hangart1\",\"line\":23}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":23},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(
 					Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack,
 							TerrainType.little_used_backcountry_terrain),
-					"{\"curlyName\":\"Hangart1\",\"line\":22}, {\"curlyName\":\"Dies02§sowie\",\"line\":1}, {\"curlyName\":\"Hangart1°1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":22},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":1},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}"),
 			Map.entry(Set.of(TerrainType.base_of_rock_walls, TerrainType.behind_abrupt_changes_in_the_terrain),
-					"{\"curlyName\":\"Hangart1\",\"line\":18}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":18},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.cut_slopes, TerrainType.grassy_slopes),
-					"{\"curlyName\":\"Hangart1\",\"line\":6,\"args\":{\"an_Böschungen\":{\"curlyName\":\"an_Böschungen\",\"line\":3}}}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
-			Map.entry(Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack, TerrainType.areas_where_the_snow_cover_is_rather_shallow),
-					"{\"curlyName\":\"Hangart1\",\"line\":22}, {\"curlyName\":\"Dies02§sowie\",\"line\":1}, {\"curlyName\":\"Hangart1°1\",\"line\":21}"),
-			Map.entry(Set.of(TerrainType.little_used_backcountry_terrain, TerrainType.areas_where_the_snow_cover_is_rather_shallow),
-					"{\"curlyName\":\"Hangart1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}, {\"curlyName\":\"Dies02§sowie\",\"line\":1}, {\"curlyName\":\"Hangart1°1\",\"line\":21}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":6,\"args\":{\"an_Böschungen\":{\"curlyName\":\"an_Böschungen\",\"line\":3}}},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+			Map.entry(
+					Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack,
+							TerrainType.areas_where_the_snow_cover_is_rather_shallow),
+					"{\"curlyName\":\"Hangart1\",\"line\":22},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":1},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":21}"),
+			Map.entry(
+					Set.of(TerrainType.little_used_backcountry_terrain,
+							TerrainType.areas_where_the_snow_cover_is_rather_shallow),
+					"{\"curlyName\":\"Hangart1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":1},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":21}"),
 			Map.entry(Set.of(TerrainType.adjacent_to_ridgelines),
-					"{\"curlyName\":\"Hangart1\",\"line\":9}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":9},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.distant_from_ridgelines),
-					"{\"curlyName\":\"Hangart1\",\"line\":12}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":12},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.pass_areas),
-					"{\"curlyName\":\"Hangart1\",\"line\":13}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":13},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.gullies_and_bowls),
-					"{\"curlyName\":\"Hangart1\",\"line\":16}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":16},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.base_of_rock_walls),
-					"{\"curlyName\":\"Hangart1\",\"line\":17}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":17},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.little_used_backcountry_terrain),
-					"{\"curlyName\":\"Hangart1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":27,\"args\":{\"Tourengelände\":{\"curlyName\":\"Tourengelände\",\"line\":0}}},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.transitions_from_a_shallow_to_a_deep_snowpack),
-					"{\"curlyName\":\"Hangart1\",\"line\":22}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":22},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.in_the_vicinity_of_peaks),
-					"{\"curlyName\":\"Hangart1\",\"line\":11}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":11},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.cut_slopes),
-					"{\"curlyName\":\"Hangart1\",\"line\":6,\"args\":{\"an_Böschungen\":{\"curlyName\":\"an_Böschungen\",\"line\":0}}}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":6,\"args\":{\"an_Böschungen\":{\"curlyName\":\"an_Böschungen\",\"line\":0}}},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.wind_loaded_slopes),
-					"{\"curlyName\":\"Hangart1\",\"line\":8}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":8},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.areas_where_the_snow_cover_is_rather_shallow),
-					"{\"curlyName\":\"Hangart1\",\"line\":21}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":21},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.highly_frequented_off_piste_terrain),
-					"{\"curlyName\":\"Hangart1\",\"line\":26}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":26},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.places_that_are_protected_from_the_wind),
-					"{\"curlyName\":\"Hangart1\",\"line\":28}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":28},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.regions_with_a_lot_of_snow),
-					"{\"curlyName\":\"Hangart1\",\"line\":33}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":33},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.regions_exposed_to_precipitation),
-					"{\"curlyName\":\"Hangart1\",\"line\":34}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":34},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.regions_exposed_to_heavier_precipitation),
-					"{\"curlyName\":\"Hangart1\",\"line\":35}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"),
+					"{\"curlyName\":\"Hangart1\",\"line\":35},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"),
 			Map.entry(Set.of(TerrainType.grassy_slopes),
-					"{\"curlyName\":\"Hangart1\",\"line\":5,\"args\":{}}, {\"curlyName\":\"Dies02§sowie\",\"line\":0}, {\"curlyName\":\"Hangart1°1\",\"line\":0}"));
+					"{\"curlyName\":\"Hangart1\",\"line\":5,\"args\":{}},\"Höhenlage3\":{\"curlyName\":\"Höhenlage3\",\"line\":0},\"Dies02§sowie\":{\"curlyName\":\"Dies02§sowie\",\"line\":0},\"Hangart1°1\":{\"curlyName\":\"Hangart1°1\",\"line\":0}"));
 
 	// Add on sentences
 	private static final Map<AddOns, String> addOnSentences = Map.of(
@@ -257,13 +260,13 @@ public class DangerSourceVariantTextController {
 			AddOns.highest_danger_aspect,
 			"{\"curlyName\":\"Änderung08\",\"line\":0,\"args\":{\"Hangart_Höhe_Gebiet1\":{\"curlyName\":\"Hangart_Höhe_Gebiet1\",\"line\":1,\"args\":{\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":0},\"Expo\":{\"curlyName\":\"Expo\",\"line\":2},\"Komma_Expo\":{\"curlyName\":\"Komma_Expo\",\"line\":0},\"und_Expo\":{\"curlyName\":\"und_Expo\",\"line\":0}}},\"und_Hangart_Höhe_Gebiet\":{\"curlyName\":\"und_Hangart_Höhe_Gebiet\",\"line\":0},\"Änderung08§Gefahr_höher\":{\"curlyName\":\"Änderung08§Gefahr_höher\",\"line\":2,\"args\":{\"Lawinengefahr2\":{\"curlyName\":\"Lawinengefahr2\",\"line\":0},\"etwas\":{\"curlyName\":\"etwas\",\"line\":0},\"höher\":{\"curlyName\":\"höher\",\"line\":0}}}}}",
 			AddOns.danger_peak,
-			"{\"curlyName\":\"Änderung03\",\"line\":0,\"args\":{\"wo_Gefahrenspitze2\":{\"curlyName\":\"wo_Gefahrenspitze2\",\"line\":0},\"Änderung03§erreicht\":{\"curlyName\":\"Änderung03§erreicht\",\"line\":0},\"Gefahrenspitze\":{\"curlyName\":\"Gefahrenspitze\",\"line\":1},\"wo_Gefahrenspitze1\":{\"curlyName\":\"wo_Gefahrenspitze1\",\"line\":1},\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":0}}}}",
+			"{\"curlyName\":\"Änderung03\",\"line\":0,\"args\":{\"wo_Gefahrenspitze2\":{\"curlyName\":\"wo_Gefahrenspitze2\",\"line\":0},\"Änderung03§erreicht\":{\"curlyName\":\"Änderung03§erreicht\",\"line\":0},\"Gefahrenspitze\":{\"curlyName\":\"Gefahrenspitze\",\"line\":1},\"wo_Gefahrenspitze1\":{\"curlyName\":\"wo_Gefahrenspitze1\",\"line\":1},\"Zeit\":{\"curlyName\":\"Zeit\",\"line\":0}}}",
 			AddOns.runout_into_green,
 			"{\"curlyName\":\"Grösse05\",\"line\":0,\"args\":{\"Die_Lawinen\":{\"curlyName\":\"Die_Lawinen\",\"line\":1},\"Gebiet_auch\":{\"curlyName\":\"Gebiet_auch\",\"line\":0},\"Einzugsgebiet\":{\"curlyName\":\"Einzugsgebiet\",\"line\":1},\"oft5\":{\"curlyName\":\"oft5\",\"line\":0},\"vorstossen\":{\"curlyName\":\"vorstossen\",\"line\":3,\"args\":{\"bis_in_Täler\":{\"curlyName\":\"bis_in_Täler\",\"line\":13}}}}}",
 			AddOns.natural_release,
 			"{\"curlyName\":\"Auslösung01\",\"line\":0,\"args\":{\"Zeit_optional1\":{\"curlyName\":\"Zeit_optional1\",\"line\":0},\"wieviele\":{\"curlyName\":\"wieviele\",\"line\":0},\"Lawinenart5\":{\"curlyName\":\"Lawinenart5\",\"line\":19},\"Auslösung01§möglich\":{\"curlyName\":\"Auslösung01§möglich\",\"line\":0},\"Auslösung01§auch_grosse\":{\"curlyName\":\"Auslösung01§auch_grosse\",\"line\":0}}}",
 			AddOns.danger_signs,
-			"{\"curlyName\":\"Altschnee03\",\"line\":0,\"args\":{\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0},\"Alarmzeichen\":{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§weisen_auf_Gefahr_hin\":{\"curlyName\":\"Altschnee03§weisen_auf_Gefahr_hin\",\"line\":5}}}",
+			"{\"curlyName\":\"Altschnee03\",\"line\":0,\"args\":{\"Alarmzeichen\":{\"curlyName\":\"Alarmzeichen\",\"line\":0},\"Altschnee03§sowie_Alarmzeichen\":{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0},\"Altschnee03§weisen_auf_Gefahr_hin\":{\"curlyName\":\"Altschnee03§weisen_auf_Gefahr_hin\",\"line\":5}}}",
 			AddOns.penetrate_deep_layers,
 			"{\"curlyName\":\"Altschnee04\",\"line\":0,\"args\":{\"Altschnee04§Lawinen_können\":{\"curlyName\":\"Altschnee04§Lawinen_können\",\"line\":1,\"args\":{\"trockene\":{\"curlyName\":\"trockene\",\"line\":0},\"auch1\":{\"curlyName\":\"auch1\",\"line\":1},\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4}}},\"Altschnee04§Altschnee_Durchreissen\":{\"curlyName\":\"Altschnee04§Altschnee_Durchreissen\",\"line\":3},\"Altschnee04§und\":{\"curlyName\":\"Altschnee04§und\",\"line\":0},\"wo_gross_werden\":{\"curlyName\":\"wo_gross_werden\",\"line\":0}}}",
 			AddOns.outflow_areas_to_consider,
@@ -380,7 +383,7 @@ public class DangerSourceVariantTextController {
 	// value: placeholder regex
 	protected static final Map<String, String> textcatPlaceholder = Map.ofEntries(
 			Map.entry("Gefahrenstellen05§an_Expositionen",
-					"\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0},\"Expo1\":\\{\"curlyName\":\"Expo1\",\"line\":2},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":0\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":0\\}\\}\\}"),
+					"\\{\"curlyName\":\"Gefahrenstellen05§an_Expositionen\",\"line\":3,\"args\":\\{\"vor_allem_an\":\\{\"curlyName\":\"vor_allem_an\",\"line\":0\\},\"steilen\":\\{\"curlyName\":\"steilen\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":0\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":0\\}\\}\\}"),
 			Map.entry("es_warum_Ort_wann",
 					"\\{\"curlyName\":\"es_warum_Ort_wann\",\"line\":27,\"args\":\\{\"an_steilen\":\\{\"curlyName\":\"an_steilen\",\"line\":0\\},\"vor_allem\":\\{\"curlyName\":\"vor_allem\",\"line\":0\\},\"Expo\":\\{\"curlyName\":\"Expo\",\"line\":2\\},\"Komma_Expo\":\\{\"curlyName\":\"Komma_Expo\",\"line\":0\\},\"und_Expo\":\\{\"curlyName\":\"und_Expo\",\"line\":0\\}\\}\\}"),
 			Map.entry("Hangart1",
@@ -400,16 +403,16 @@ public class DangerSourceVariantTextController {
 			Map.entry("aber_und", "\\{\"curlyName\":\"aber_und\",\"line\":0\\}"),
 			Map.entry("Auslösung07§möglich.", "\\{\"curlyName\":\"Auslösung07§möglich.\",\"line\":1\\}"),
 			Map.entry("Geländeformen",
-					"\\{\"curlyName\":\"Hangart1\",\"line\":9\\}, \\{\"curlyName\":\"Dies02§sowie\",\"line\":0\\}, \\{\"curlyName\":\"Hangart1°1\",\"line\":0\\}"),
+					"\\{\"curlyName\":\"Hangart1\",\"line\":9\\},\"Höhenlage3\":\\{\"curlyName\":\"Höhenlage3\",\"line\":0\\},\"Dies02§sowie\":\\{\"curlyName\":\"Dies02§sowie\",\"line\":0\\},\"Hangart1°1\":\\{\"curlyName\":\"Hangart1°1\",\"line\":0\\}"),
 			Map.entry("trockene", "\\{\"curlyName\":\"Lawinenart5\",\"line\":12\\}"),
 			Map.entry("Zeit", "\\{\"curlyName\":\"Zeit\",\"line\":0\\}"),
 			Map.entry("Zeit_optional1", "\\{\"curlyName\":\"Zeit_optional1\",\"line\":0\\}"),
 			Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":0\\}"),
 			Map.entry("steilen", "\\{\"curlyName\":\"steilen\",\"line\":0\\}"),
 			Map.entry("möglich.",
-					"\\{\"curlyName\":\"wieviele\",\"line\":0\\}, \\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
+					"\\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
 			Map.entry("Alarmzeichen",
-					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\}, \\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0,\"args\":\\{\"Alarmzeichen2\":\\{\"curlyName\":\"Alarmzeichen2\",\"line\":0\\}\\}\\}"));
+					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\},\"Altschnee03§sowie_Alarmzeichen\":\\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0\\}"));
 
 	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant,
 			DangerSourceVariantText dangerSourceVariantText) {
@@ -430,9 +433,7 @@ public class DangerSourceVariantTextController {
 
 	private String addAddOns(DangerSourceVariant dangerSourceVariant) {
 		String result = "";
-		if (dangerSourceVariant.getRemoteTriggering() != null
-				&& (dangerSourceVariant.getRemoteTriggering() == Probability.possible
-						|| dangerSourceVariant.getRemoteTriggering() == Probability.likely)) {
+		if (dangerSourceVariant.getRemoteTriggering() != null) {
 			String remoteTriggeringText = replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
 					addOnSentences.get(AddOns.remote_triggering));
 			result = concatTexts(result, remoteTriggeringText);
@@ -463,9 +464,7 @@ public class DangerSourceVariantTextController {
 			String runoutIntoGreenText = addOnSentences.get(AddOns.runout_into_green);
 			result = concatTexts(result, runoutIntoGreenText);
 		}
-		if (dangerSourceVariant.getNaturalRelease() != null
-				&& (dangerSourceVariant.getNaturalRelease() == Probability.possible
-						|| dangerSourceVariant.getNaturalRelease() == Probability.likely)) {
+		if (dangerSourceVariant.getNaturalRelease() != null) {
 			String naturalAvalanchesText = replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
 					addOnSentences.get(AddOns.natural_release));
 			result = concatTexts(result, naturalAvalanchesText);
@@ -560,15 +559,15 @@ public class DangerSourceVariantTextController {
 			switch (naturalRelease) {
 				case likely:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
+							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
 					break;
 				case possible:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				case unlikely:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"wieviele\",\"line\":5}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				default:
 					break;
@@ -608,28 +607,28 @@ public class DangerSourceVariantTextController {
 		if (slopeGradient != null) {
 			switch (slopeGradient) {
 				case moderately_steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":0}");
 					break;
 				case steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":1}");
 					break;
 				case very_steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":2}");
 					break;
 				case extremely_steep:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":3}");
 					break;
 				default:
-					result = result.replaceAll(textcatPlaceholder.get("an_steilen"),
+					result = result.replaceAll(textcatPlaceholder.get("steilen"),
 							"{\"curlyName\":\"steilen\",\"line\":0}");
 					break;
 			}
 		} else {
-			result = result.replaceAll(textcatPlaceholder.get("an_steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
+			result = result.replaceAll(textcatPlaceholder.get("steilen"), "{\"curlyName\":\"steilen\",\"line\":0}");
 		}
 		return result;
 	}
@@ -693,9 +692,6 @@ public class DangerSourceVariantTextController {
 							"{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
 					break;
 			}
-		} else {
-			result = result.replaceAll(textcatPlaceholder.get("Zeit_optional1"),
-					"{\"curlyName\":\"Zeit_optional1\",\"line\":0}");
 		}
 
 		return result;
@@ -731,12 +727,28 @@ public class DangerSourceVariantTextController {
 
 	private String replaceTerrainTypes(Set<TerrainType> terrainTypes, String result) {
 		// phrase: Hangart1
-		for (Map.Entry<Set<TerrainType>, String> entry : textcatSubstitutionsTerrainTypes.entrySet()) {
-			if (entry.getKey().size() == terrainTypes.size() && entry.getKey().containsAll(terrainTypes)) {
-				result = result.replaceAll(textcatPlaceholder.get("Geländeformen"), entry.getValue());
-				break;
+		if (terrainTypes == null || terrainTypes.isEmpty()) {
+			Set<TerrainType> bestMatchKey = null;
+			int maxCommon = 0;
+			for (Set<TerrainType> key : textcatSubstitutionsTerrainTypes.keySet()) {
+				int common = 0;
+				for (TerrainType t : terrainTypes) {
+					if (key.contains(t)) {
+						common++;
+					}
+				}
+				if (common > maxCommon && common == key.size()) {
+					maxCommon = common;
+					bestMatchKey = key;
+				}
+			}
+
+			if (bestMatchKey != null) {
+				result = result.replaceAll(textcatPlaceholder.get("Geländeformen"),
+						textcatSubstitutionsTerrainTypes.get(bestMatchKey));
 			}
 		}
+
 		return result;
 	}
 
@@ -971,7 +983,8 @@ public class DangerSourceVariantTextController {
 			}
 			// phrase: es_warum_Ort_wann
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects2.entrySet()) {
-				if (entry.getKey().size() == 8 && dangerSourceVariant.deriveAvalancheProblem() == AvalancheProblem.gliding_snow) {
+				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects)
+						&& dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
 					result = result.replaceAll(textcatPlaceholder.get("es_warum_Ort_wann"),
 							"{\"curlyName\":\"es_warum_Ort_wann\",\"line\":30,\"args\":{\"vor_allem\":{\"curlyName\":\"vor_allem\",\"line\":0},\"an_steilen\":{\"curlyName\":\"an_steilen\",\"line\":0}}}");
 					break;
@@ -982,8 +995,9 @@ public class DangerSourceVariantTextController {
 			}
 			// phrase: Hangart1
 			for (Map.Entry<Set<Aspect>, String> entry : textcatSubstitutionsAspects3.entrySet()) {
-				if (entry.getKey().size() == 8 && dangerSourceVariant.deriveAvalancheProblem() == AvalancheProblem.gliding_snow) {
-					result = result.replaceAll(textcatPlaceholder.get("Gefahrenstellen05§an_Expositionen"),
+				if (entry.getKey().size() == 8 && entry.getKey().containsAll(aspects)
+						&& dangerSourceVariant.getAvalancheType() == AvalancheType.glide) {
+					result = result.replaceAll(textcatPlaceholder.get("Hangart1"),
 							"{\"curlyName\":\"Hangart1\",\"line\":5}");
 					break;
 				} else if (entry.getKey().size() == aspects.size() && entry.getKey().containsAll(aspects)) {

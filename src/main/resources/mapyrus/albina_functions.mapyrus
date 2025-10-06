@@ -167,7 +167,7 @@ end
 # --- Passe partout ---
 # -------------------------------------------------------------
 
-begin polygon_feature_pp file, level
+begin polygon_feature_pp file
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -213,7 +213,7 @@ end
 # --- Lakes & Rivers ---
 # -------------------------------------------------------------
 
-begin line_feature_rivers file, level
+begin line_feature_rivers file, map_level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -244,7 +244,7 @@ begin line_feature_rivers file, level
 end
 
 
-begin polygon_feature_lakes file, level
+begin polygon_feature_lakes file, map_level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -517,7 +517,7 @@ end
 # --- Country Borders ---
 # -------------------------------------------------------------
 
-begin line_feature_country file, level
+begin line_feature_country file, map_level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -549,7 +549,7 @@ end
 # --- Province Borders ---
 # -------------------------------------------------------------
 
-begin line_feature_provinces file, level
+begin line_feature_provinces file, map_level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -691,7 +691,7 @@ begin CIRCLEMARKER scalefactor, fillcolor, strokecolor, linewidth
 	stroke
 end
 
-begin point_feature_city_marker file, level
+begin point_feature_city_marker file, map_level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -738,7 +738,7 @@ end
 # --- Labels ---
 # -------------------------------------------------------------
 
-begin point_feature_labels file, level
+begin point_feature_labels file, map_level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"
@@ -766,7 +766,7 @@ begin point_feature_labels file, level
 
 end
 
-begin line_feature_labels file, level
+begin line_feature_labels file, map_level
 
 	worlds xmin, ymin, xmax, ymax, mx1, my1, mx2, my2, "distortion=true"
 	clip "inside"

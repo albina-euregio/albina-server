@@ -43,7 +43,7 @@
     "weakLayerCrustAbove": "partly",
     "weakLayerCrustBelow": "no",
     "weakLayerDistribution": "widespread",
-    "weakLayerGrainShape": "SH",
+    "weakLayerGrainShapes": ["SH"],
     "weakLayerGrainSizeLowerLimit": 0.5,
     "weakLayerGrainSizeUpperLimit": 2,
     "weakLayerPersistent": true,

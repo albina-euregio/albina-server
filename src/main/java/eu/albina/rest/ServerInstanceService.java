@@ -147,30 +147,4 @@ public class ServerInstanceService {
 			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
-
-	@Get("/health")
-	@Secured({Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Perform health checks")
-	public Map<String, Object> getHealth(
-		@QueryValue("region") String regionId,
-		@QueryValue("lang") LanguageCode language
-	) throws Exception {
-		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-		logger.info("Testing TelegramController");
-		TelegramConfiguration telegramConfig = TelegramController.getConfiguration(region, language).orElseThrow();
-		Object me = TelegramController.getMe(telegramConfig);
-		logger.info("Testing WhatsAppController");
-		WhatsAppConfiguration whatsAppConfiguration = WhatsAppController.getConfiguration(region, language).orElseThrow();
-		Object whapiResponse = WhatsAppController.getHealth(whatsAppConfiguration);
-		logger.info("Testing Blog");
-		BlogConfiguration config = BlogController.getConfiguration(region, language);
-		BlogItem latestBlogPost = BlogController.getLatestBlogPost(config);
-		return Map.of(
-			"region", MoreObjects.firstNonNull(region, ""),
-			"telegram", MoreObjects.firstNonNull(me, ""),
-			"whatsapp", MoreObjects.firstNonNull(whapiResponse, ""),
-			"blog", MoreObjects.firstNonNull(latestBlogPost, "")
-		);
-	}
 }

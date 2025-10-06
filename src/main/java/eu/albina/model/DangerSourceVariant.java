@@ -226,9 +226,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "SLAB_DISTRIBUTION")
 	private Distribution slabDistribution;
 
-	@Enumerated(EnumType.STRING)
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "danger_source_variant_weak_layer_grain_shapes", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "WEAK_LAYER_GRAIN_SHAPE")
-	private GrainShape weakLayerGrainShape;
+	@Enumerated(EnumType.STRING)
+	private Set<GrainShape> weakLayerGrainShapes;
 
 	@Column(name = "WEAK_LAYER_GRAIN_SIZE_UPPER_LIMIT", columnDefinition = "double")
 	private double weakLayerGrainSizeUpperLimit;
@@ -677,12 +679,12 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.slabDistribution = slabDistribution;
 	}
 
-	public GrainShape getWeakLayerGrainShape() {
-		return this.weakLayerGrainShape;
+	public Set<GrainShape> getWeakLayerGrainShapes() {
+		return this.weakLayerGrainShapes;
 	}
 
-	public void setWeakLayerGrainShape(GrainShape weakLayerGrainShape) {
-		this.weakLayerGrainShape = weakLayerGrainShape;
+	public void setWeakLayerGrainShapes(Set<GrainShape> weakLayerGrainShapes) {
+		this.weakLayerGrainShapes = weakLayerGrainShapes;
 	}
 
 	public double getWeakLayerGrainSizeUpperLimit() {
