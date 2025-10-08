@@ -9,7 +9,7 @@
 
 	<parent>
 		<groupId>io.micronaut.platform</groupId>
-		<artifactId>micronaut-platform</artifactId>
+		<artifactId>micronaut-parent</artifactId>
 		<version>4.9.2</version>
 	</parent>
 
@@ -198,7 +198,12 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
-			<version>1.10.0</version>
+			<version>1.14.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.19.0</version>
 		</dependency>
 
 		<dependency>
@@ -336,17 +341,15 @@
 			<plugin>
 				<groupId>io.micronaut.maven</groupId>
 				<artifactId>micronaut-maven-plugin</artifactId>
+				<version>4.10.2</version>
 				<configuration>
 					<configFile>aot-${packaging}.properties</configFile>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.1</version>
 				<configuration>
 					<!-- Uncomment to enable incremental compilation -->
 					<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
@@ -428,6 +431,7 @@
 					</compilerArgs>
 				</configuration>
 			</plugin>
+
 		</plugins>
 
 		<resources>
