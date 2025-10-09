@@ -293,6 +293,8 @@ public class Region {
 		// Use Jackson to populate all "normal" fields
 		JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(this).readValue(json);
 
+		fixLanguageConfigurations();
+
 		// Handle region references manually
 		JsonNode node = JsonUtil.ALBINA_OBJECT_MAPPER.readTree(json);
 		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
@@ -308,6 +310,15 @@ public class Region {
 		extractRegionsFromJSON.accept("subRegions", this.subRegions);
 		extractRegionsFromJSON.accept("superRegions", this.superRegions);
 		extractRegionsFromJSON.accept("neighborRegions", this.neighborRegions);
+	}
+
+	public void fixLanguageConfigurations() {
+		if (languageConfigurations == null) {
+			return;
+		}
+		for (RegionLanguageConfiguration languageConfiguration : languageConfigurations) {
+			languageConfiguration.setRegion(this);
+		}
 	}
 
 	public String getId() {

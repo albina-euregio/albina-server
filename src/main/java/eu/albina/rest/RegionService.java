@@ -113,6 +113,7 @@ public class RegionService {
 				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
 				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
+				existing.fixLanguageConfigurations();
 				RegionController.getInstance().updateRegion(existing);
 				return Response.ok(existing.toJSON()).build();
 			} else {
