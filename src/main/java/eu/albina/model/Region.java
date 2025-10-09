@@ -888,9 +888,4 @@ public class Region {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-
-	@JsonIgnore
-	public boolean isCreateAudioFiles() {
-		return superRegions == null || superRegions.isEmpty();
-	}
 }

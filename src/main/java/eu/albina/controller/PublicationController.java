@@ -80,7 +80,7 @@ public class PublicationController {
 					createPdf(avalancheReport);
 				}
 
-				if (region.isCreateAudioFiles()) {
+				if (region.getTTSLanguages() != null && !region.getTTSLanguages().isEmpty()) {
 					createAudioFiles(avalancheReport);
 				}
 
