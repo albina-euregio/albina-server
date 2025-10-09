@@ -146,6 +146,7 @@ public class RegionService {
 
 			// check if id already exists
 			if (!RegionController.getInstance().regionExists(region.getId())) {
+				region.fixLanguageConfigurations();
 				RegionController.getInstance().createRegion(region);
 				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
 						.entity(Map.of()).build();
