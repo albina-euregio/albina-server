@@ -109,11 +109,11 @@ public class Region {
 	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<RegionLanguageConfiguration> languageConfigurations;
 
-	@Column(name = "ENABLED_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
+	@Column(name = "ENABLED_LANGUAGES", columnDefinition = LanguageCodeConverter.COLUMN_DEFINITION)
 	@Convert(converter = LanguageCodeConverter.class)
 	private Set<LanguageCode> enabledLanguages;
 
-	@Column(name = "TTS_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
+	@Column(name = "TTS_LANGUAGES", columnDefinition = LanguageCodeConverter.COLUMN_DEFINITION)
 	@Convert(converter = LanguageCodeConverter.class)
 	private Set<LanguageCode> ttsLanguages;
 

@@ -6,6 +6,9 @@ import jakarta.persistence.Converter;
 
 @Converter
 public class LanguageCodeConverter extends EnumSetToStringConverter<LanguageCode> {
+
+	public static final String COLUMN_DEFINITION = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')";
+
 	@Override
 	protected Class<LanguageCode> getEnumClass() {
 		return LanguageCode.class;
