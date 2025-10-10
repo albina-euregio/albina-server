@@ -112,8 +112,6 @@ public class DBMigration {
 		ch.setGeoDataDirectory("geodata.CH/");
 		ch.setImageColorbarBwPath("logo/grey/colorbar.gif");
 		ch.setImageColorbarColorPath("logo/color/colorbar.gif");
-		ch.setMapCenterLat(46.8);
-		ch.setMapCenterLng(8.5);
 		ch.setMapLogoBwPath("");
 		ch.setMapLogoColorPath("");
 		ch.setMapLogoPosition(Position.topleft);
@@ -153,8 +151,6 @@ public class DBMigration {
 		it32tn.setGeoDataDirectory("geodata.Euregio/IT-32-TN/");
 		it32tn.setImageColorbarBwPath("logo/grey/colorbar.gif");
 		it32tn.setImageColorbarColorPath("logo/color/colorbar.gif");
-		it32tn.setMapCenterLat(46.05);
-		it32tn.setMapCenterLng(11.07);
 		it32tn.setMapLogoBwPath("");
 		it32tn.setMapLogoColorPath("");
 		it32tn.setMapLogoPosition(Position.bottomright);
@@ -195,8 +191,6 @@ public class DBMigration {
 		it32bz.setGeoDataDirectory("geodata.Euregio/IT-32-BZ/");
 		it32bz.setImageColorbarBwPath("logo/grey/colorbar.gif");
 		it32bz.setImageColorbarColorPath("logo/color/colorbar.gif");
-		it32bz.setMapCenterLat(46.65);
-		it32bz.setMapCenterLng(11.4);
 		it32bz.setMapLogoBwPath("");
 		it32bz.setMapLogoColorPath("");
 		it32bz.setMapLogoPosition(Position.bottomright);
@@ -237,8 +231,6 @@ public class DBMigration {
 		at07.setGeoDataDirectory("geodata.Euregio/AT-07/");
 		at07.setImageColorbarBwPath("logo/grey/colorbar.gif");
 		at07.setImageColorbarColorPath("logo/color/colorbar.gif");
-		at07.setMapCenterLat(47.1);
-		at07.setMapCenterLng(11.44);
 		at07.setMapLogoBwPath("");
 		at07.setMapLogoColorPath("");
 		at07.setMapLogoPosition(Position.bottomright);
@@ -279,8 +271,6 @@ public class DBMigration {
 		euregio.setGeoDataDirectory("geodata.Euregio/");
 		euregio.setImageColorbarBwPath("logo/grey/colorbar.gif");
 		euregio.setImageColorbarColorPath("logo/color/colorbar.gif");
-		euregio.setMapCenterLat(0.0);
-		euregio.setMapCenterLng(0.0);
 		euregio.setMapLogoBwPath("logo/color/colorbar.gif");
 		euregio.setMapLogoColorPath("images/logo/color/euregio.png");
 		euregio.setMapLogoPosition(Position.bottomright);

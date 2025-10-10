@@ -243,12 +243,6 @@ public class Region {
 	@Column(name = "MAP_LOGO_POSITION", length = 191)
 	private Position mapLogoPosition;
 
-	@Column(name = "MAP_CENTER_LAT", columnDefinition = "double")
-	private double mapCenterLat;
-
-	@Column(name = "MAP_CENTER_LNG", columnDefinition = "double")
-	private double mapCenterLng;
-
 	@Column(name = "IMAGE_COLORBAR_COLOR_PATH", length = 191)
 	private String imageColorbarColorPath;
 
@@ -746,22 +740,6 @@ public class Region {
 
 	public void setMapLogoPosition(Position mapLogoPosition) {
 		this.mapLogoPosition = mapLogoPosition;
-	}
-
-	public double getMapCenterLat() {
-		return mapCenterLat;
-	}
-
-	public void setMapCenterLat(double CenterLat) {
-		this.mapCenterLat = CenterLat;
-	}
-
-	public double getMapCenterLng() {
-		return mapCenterLng;
-	}
-
-	public void setMapCenterLng(double CenterLng) {
-		this.mapCenterLng = CenterLng;
 	}
 
 	public String getImageColorbarColorPath() {
