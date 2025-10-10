@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import eu.albina.model.converter.EnumSetToStringConverter;
 import eu.albina.util.XMLResourceBundleControl;
 
 /**
@@ -118,4 +119,14 @@ public enum LanguageCode {
 		return DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(getLocale()).format(date);
 	}
 
+    @jakarta.persistence.Converter
+    public static class Converter extends EnumSetToStringConverter<LanguageCode> {
+
+        public static final String COLUMN_DEFINITION = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')";
+
+        @Override
+        protected Class<LanguageCode> getEnumClass() {
+            return LanguageCode.class;
+        }
+    }
 }

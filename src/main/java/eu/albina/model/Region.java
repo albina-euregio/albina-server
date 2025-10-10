@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import eu.albina.model.converter.LanguageCodeConverter;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
 import eu.albina.util.JsonUtil;
@@ -109,12 +108,12 @@ public class Region {
 	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<RegionLanguageConfiguration> languageConfigurations;
 
-	@Column(name = "ENABLED_LANGUAGES", columnDefinition = LanguageCodeConverter.COLUMN_DEFINITION)
-	@Convert(converter = LanguageCodeConverter.class)
+	@Column(name = "ENABLED_LANGUAGES", columnDefinition = LanguageCode.Converter.COLUMN_DEFINITION)
+	@Convert(converter = LanguageCode.Converter.class)
 	private Set<LanguageCode> enabledLanguages;
 
-	@Column(name = "TTS_LANGUAGES", columnDefinition = LanguageCodeConverter.COLUMN_DEFINITION)
-	@Convert(converter = LanguageCodeConverter.class)
+	@Column(name = "TTS_LANGUAGES", columnDefinition = LanguageCode.Converter.COLUMN_DEFINITION)
+	@Convert(converter = LanguageCode.Converter.class)
 	private Set<LanguageCode> ttsLanguages;
 
 	@Column(name = "PUBLISH_BULLETINS")
