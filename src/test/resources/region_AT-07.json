@@ -57,8 +57,6 @@
     "mapLogoColorPath": "",
     "mapLogoBwPath": "",
     "mapLogoPosition": "bottomright",
-    "mapCenterLat": 47.1,
-    "mapCenterLng": 11.44,
     "imageColorbarColorPath": "logo/color/colorbar.gif",
     "imageColorbarBwPath": "logo/grey/colorbar.gif",
 	"logoPath": "logo/color/avalanche_report.png",
