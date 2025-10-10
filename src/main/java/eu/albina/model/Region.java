@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
+import eu.albina.model.enumerations.TextcatTextfield;
 import eu.albina.util.JsonUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -173,8 +174,9 @@ public class Region {
 	@Column(name = "ENABLE_WEATHERBOX")
 	private boolean enableWeatherbox;
 
-	@Column(name = "ENABLE_EDITABLE_FIELDS")
-	private boolean enableEditableFields;
+	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextcatTextfield.Converter.COLUMN_DEFINITION)
+	@Convert(converter = TextcatTextfield.Converter.class)
+	private Set<TextcatTextfield> enabledEditableFields;
 
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
@@ -802,9 +804,13 @@ public class Region {
 		this.enableModelling = enableModelling;
 	}
 
-	public boolean isEnableEditableFields() { return enableEditableFields; }
+	public Set<TextcatTextfield> getEnabledEditableFields() {
+		return enabledEditableFields;
+	}
 
-	public void setEnableEditableField(boolean enableEditableFields) { this.enableEditableFields = enableEditableFields; }
+	public void setEnabledEditableFields(Set<TextcatTextfield> enabledEditableFields) {
+		this.enabledEditableFields = enabledEditableFields;
+	}
 
 	public boolean isEnableWeatherTextField() { return enableWeatherTextField; }
 
