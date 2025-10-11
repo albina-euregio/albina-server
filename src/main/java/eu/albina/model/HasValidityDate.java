@@ -23,12 +23,12 @@ public interface HasValidityDate {
 
 	default String getTendencyDate(LanguageCode lang) {
 		LocalDate date = getValidityDate().plusDays(1);
-		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date.atStartOfDay(localZone()));
+		return lang.getBundleString("tendency.binding-word").strip() + " " + lang.getLongDate(date);
 	}
 
 	default String getDate(LanguageCode lang) {
 		LocalDate date = getValidityDate();
-		return lang.getLongDate(date.atStartOfDay(localZone()));
+		return lang.getLongDate(date);
 	}
 
 	default String getValidityDateString(Period offset) {
@@ -37,7 +37,7 @@ public interface HasValidityDate {
 
 	default String getValidityDateString(Period offset, LanguageCode lang) {
 		LocalDate date = getValidityDate().plus(offset);
-		return lang.getDate(date.atStartOfDay(localZone()));
+		return lang.getDate(date);
 	}
 
 	default String getPreviousValidityDateString(LanguageCode lang) {

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -53,12 +54,12 @@ public enum LanguageCode {
 		}
 
 		@Override
-		public String getDate(ZonedDateTime date) {
+		public String getDate(LocalDate date) {
 			return replaceAranes(super.getDate(date));
 		}
 
 		@Override
-		public String getLongDate(ZonedDateTime date) {
+		public String getLongDate(LocalDate date) {
 			return replaceAranes(super.getLongDate(date));
 		}
 	};
@@ -103,11 +104,11 @@ public enum LanguageCode {
 		return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM).withLocale(getLocale()).format(date);
 	}
 
-	public String getDate(ZonedDateTime date) {
+	public String getDate(LocalDate date) {
 		return DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getLocale()).format(date);
 	}
 
-	public String getLongDate(ZonedDateTime date) {
+	public String getLongDate(LocalDate date) {
 		return DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(getLocale()).format(date);
 	}
 

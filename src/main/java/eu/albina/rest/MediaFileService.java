@@ -7,8 +7,8 @@ import java.nio.file.Paths;
 import java.security.Principal;
 import java.text.MessageFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.Map;
 
 import eu.albina.controller.RegionRepository;
@@ -112,7 +112,7 @@ public class MediaFileService {
 			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
 
 			// send emails
-			ZonedDateTime localDate = date.atZone(AlbinaUtil.localZone());
+			LocalDate localDate = date.atZone(AlbinaUtil.localZone()).toLocalDate();
 			String formattedDate = language.getLongDate(localDate);
 
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
