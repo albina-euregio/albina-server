@@ -45,13 +45,6 @@
 				<hibernate.hikari.minimumIdle>10</hibernate.hikari.minimumIdle>
 				<hibernate.hikari.maximumPoolSize>20</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
-				<albina.log.prefix>LOCAL</albina.log.prefix>
-				<albina.log.level>DEBUG</albina.log.level>
-				<albina.log.level.c3p0>ERROR</albina.log.level.c3p0>
-				<albina.log.level.sql>INFO</albina.log.level.sql>
-				<albina.log.filepath>/opt/local/logs/</albina.log.filepath>
-				<albina.log.filename>albina_local.log</albina.log.filename>
-				<albina.log.dest>stdout</albina.log.dest>
 			</properties>
 		</profile>
 		<profile>
@@ -64,13 +57,6 @@
 				<hibernate.hikari.minimumIdle>10</hibernate.hikari.minimumIdle>
 				<hibernate.hikari.maximumPoolSize>50</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
-				<albina.log.prefix>DEV</albina.log.prefix>
-				<albina.log.level>DEBUG</albina.log.level>
-				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
-				<albina.log.level.sql>ERROR</albina.log.level.sql>
-				<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
-				<albina.log.filename>albina_dev.log</albina.log.filename>
-				<albina.log.dest>file</albina.log.dest>
 			</properties>
 		</profile>
 		<profile>
@@ -83,13 +69,6 @@
 				<hibernate.hikari.minimumIdle>20</hibernate.hikari.minimumIdle>
 				<hibernate.hikari.maximumPoolSize>100</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
-				<albina.log.prefix></albina.log.prefix>
-				<albina.log.level>INFO</albina.log.level>
-				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
-				<albina.log.level.sql>WARN</albina.log.level.sql>
-				<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
-				<albina.log.filename>albina.log</albina.log.filename>
-				<albina.log.dest>file</albina.log.dest>
 			</properties>
 		</profile>
 	</profiles>
