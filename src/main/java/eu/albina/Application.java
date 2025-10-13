@@ -1,14 +1,11 @@
 package eu.albina;
 
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
 import io.micronaut.runtime.Micronaut;
 
 public class Application {
 
 	public static void main(String[] args) {
-		GlobalVariables.loadConfigProperties();
-
 		System.setProperty("org.jboss.logging.provider", "slf4j");
 		HibernateUtil.getInstance().setUp();
 

@@ -54,6 +54,9 @@ public class ServerInstanceService {
 	@Inject
 	private ServerInstanceController serverInstanceController;
 
+	@Inject
+	private GlobalVariables globalVariables;
+
 	@Put
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -117,7 +120,7 @@ public class ServerInstanceService {
 	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
 	public PublicLocalServerConfiguration getPublicLocalServerConfiguration() {
 		ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
-		return new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), GlobalVariables.version);
+		return new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), globalVariables.version);
 	}
 
 	@Get
