@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityManager;
@@ -51,17 +52,6 @@ public class RegionController {
 	}
 
 	/**
-	 * Return {@code true} if the region with {@code id} exists.
-	 *
-	 * @param id
-	 *            the id of the desired region
-	 * @return {@code true} if the region with {@code id} exists
-	 */
-	public boolean regionExists(String id) {
-		return HibernateUtil.getInstance().run(entityManager -> entityManager.find(Region.class, id) != null);
-	}
-
-	/**
 	 * Save a {@code region} to the database.
 	 *
 	 * @param region the region to be saved
@@ -81,6 +71,10 @@ public class RegionController {
 	private List<Region> getActiveRegions(EntityManager entityManager) {
 		return entityManager.createQuery("from Region as r", Region.class).getResultList();
 	}
+
+	public Optional<Region> tryGetRegion(String regionId) {
+		return HibernateUtil.getInstance().run(entityManager -> Optional.ofNullable(entityManager.find(Region.class, regionId)));
+    }
 
 	public Region getRegion(String regionId) {
 		return HibernateUtil.getInstance().run(entityManager -> {

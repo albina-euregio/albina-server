@@ -25,9 +25,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import eu.albina.model.converter.LanguageCodeConverter;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
+import eu.albina.model.enumerations.TextcatTextfield;
 import eu.albina.util.JsonUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -118,12 +118,12 @@ public class Region implements PersistentObject {
 	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<RegionLanguageConfiguration> languageConfigurations;
 
-	@Column(name = "ENABLED_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
-	@Convert(converter = LanguageCodeConverter.class)
+	@Column(name = "ENABLED_LANGUAGES", columnDefinition = LanguageCode.Converter.COLUMN_DEFINITION)
+	@Convert(converter = LanguageCode.Converter.class)
 	private Set<LanguageCode> enabledLanguages;
 
-	@Column(name = "TTS_LANGUAGES", columnDefinition = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')")
-	@Convert(converter = LanguageCodeConverter.class)
+	@Column(name = "TTS_LANGUAGES", columnDefinition = LanguageCode.Converter.COLUMN_DEFINITION)
+	@Convert(converter = LanguageCode.Converter.class)
 	private Set<LanguageCode> ttsLanguages;
 
 	@Column(name = "PUBLISH_BULLETINS")
@@ -183,8 +183,9 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_WEATHERBOX")
 	private boolean enableWeatherbox;
 
-	@Column(name = "ENABLE_EDITABLE_FIELDS")
-	private boolean enableEditableFields;
+	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextcatTextfield.Converter.COLUMN_DEFINITION)
+	@Convert(converter = TextcatTextfield.Converter.class)
+	private Set<TextcatTextfield> enabledEditableFields;
 
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
@@ -251,12 +252,6 @@ public class Region implements PersistentObject {
 	@Column(name = "MAP_LOGO_POSITION", length = 191)
 	private Position mapLogoPosition;
 
-	@Column(name = "MAP_CENTER_LAT", columnDefinition = "double")
-	private double mapCenterLat;
-
-	@Column(name = "MAP_CENTER_LNG", columnDefinition = "double")
-	private double mapCenterLng;
-
 	@Column(name = "IMAGE_COLORBAR_COLOR_PATH", length = 191)
 	private String imageColorbarColorPath;
 
@@ -302,6 +297,8 @@ public class Region implements PersistentObject {
 		// Use Jackson to populate all "normal" fields
 		JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(this).readValue(json);
 
+		fixLanguageConfigurations();
+
 		// Handle region references manually
 		JsonNode node = JsonUtil.ALBINA_OBJECT_MAPPER.readTree(json);
 		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
@@ -317,6 +314,15 @@ public class Region implements PersistentObject {
 		extractRegionsFromJSON.accept("subRegions", this.subRegions);
 		extractRegionsFromJSON.accept("superRegions", this.superRegions);
 		extractRegionsFromJSON.accept("neighborRegions", this.neighborRegions);
+	}
+
+	public void fixLanguageConfigurations() {
+		if (languageConfigurations == null) {
+			return;
+		}
+		for (RegionLanguageConfiguration languageConfiguration : languageConfigurations) {
+			languageConfiguration.setRegion(this);
+		}
 	}
 
 	public String getId() {
@@ -745,22 +751,6 @@ public class Region implements PersistentObject {
 		this.mapLogoPosition = mapLogoPosition;
 	}
 
-	public double getMapCenterLat() {
-		return mapCenterLat;
-	}
-
-	public void setMapCenterLat(double CenterLat) {
-		this.mapCenterLat = CenterLat;
-	}
-
-	public double getMapCenterLng() {
-		return mapCenterLng;
-	}
-
-	public void setMapCenterLng(double CenterLng) {
-		this.mapCenterLng = CenterLng;
-	}
-
 	public String getImageColorbarColorPath() {
 		return imageColorbarColorPath;
 	}
@@ -801,9 +791,13 @@ public class Region implements PersistentObject {
 		this.enableModelling = enableModelling;
 	}
 
-	public boolean isEnableEditableFields() { return enableEditableFields; }
+	public Set<TextcatTextfield> getEnabledEditableFields() {
+		return enabledEditableFields;
+	}
 
-	public void setEnableEditableField(boolean enableEditableFields) { this.enableEditableFields = enableEditableFields; }
+	public void setEnabledEditableFields(Set<TextcatTextfield> enabledEditableFields) {
+		this.enabledEditableFields = enabledEditableFields;
+	}
 
 	public boolean isEnableWeatherTextField() { return enableWeatherTextField; }
 
@@ -896,10 +890,5 @@ public class Region implements PersistentObject {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
-	}
-
-	@JsonIgnore
-	public boolean isCreateAudioFiles() {
-		return superRegions == null || superRegions.isEmpty();
 	}
 }

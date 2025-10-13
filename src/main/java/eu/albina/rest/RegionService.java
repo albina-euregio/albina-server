@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.List;
 
 import io.micronaut.http.HttpResponse;
@@ -88,14 +89,14 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
 
 		try {
-			Region region = new Region(regionString, RegionController.getInstance()::getRegion);
-
-			// check if region id already exists
-			if (RegionController.getInstance().regionExists(region.getId())) {
-				Region existing =  RegionController.getInstance().getRegion(region.getId());
+			String id = new Region(regionString, Region::new).getId();
+			Optional<Region> optionalRegion = RegionController.getInstance().tryGetRegion(id);
+			if (optionalRegion.isPresent()) {
+				Region existing = optionalRegion.get();
 				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
 				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
+				existing.fixLanguageConfigurations();
 				RegionController.getInstance().updateRegion(existing);
 				return HttpResponse.ok(existing.toJSON());
 			} else {
@@ -120,11 +121,11 @@ public class RegionService {
 		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("POST JSON region");
 		try {
-			Region region = new Region(regionString, RegionController.getInstance()::getRegion);
-			region.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
+			Region region = new Region(regionString, Region::new);
 
 			// check if id already exists
-			if (!RegionController.getInstance().regionExists(region.getId())) {
+			if (RegionController.getInstance().tryGetRegion(region.getId()).isEmpty()) {
+				region.fixLanguageConfigurations();
 				RegionController.getInstance().createRegion(region);
 				return HttpResponse.created(region);
 			} else {
