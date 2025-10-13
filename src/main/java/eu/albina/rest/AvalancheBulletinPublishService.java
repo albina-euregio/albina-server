@@ -55,6 +55,10 @@ public class AvalancheBulletinPublishService {
 
 	@Inject
 	AvalancheBulletinController avalancheBulletinController;
+
+	@Inject
+	RegionController regionController;
+
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
 	 */
@@ -70,14 +74,14 @@ public class AvalancheBulletinPublishService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 
 			User user = UserController.getInstance().getUser(principal.getName());
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			List<Region> regions = Stream.concat(
 				Stream.of(region),
 				region.getSuperRegions().stream().filter(Region::isPublishBulletins)
 			).distinct().collect(Collectors.toList());
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController) {
+				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -117,7 +121,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			new Thread(() -> {
-				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController) {
+				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -223,7 +227,7 @@ public class AvalancheBulletinPublishService {
 	}
 
 	private List<MultichannelMessage> getMultichannelMessage(String regionId, String date, LanguageCode language) throws AlbinaException {
-		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+		Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 		Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 		ArrayList<AvalancheBulletin> bulletins = avalancheReportController
 			.getPublishedBulletins(startDate, Collections.singletonList(region));

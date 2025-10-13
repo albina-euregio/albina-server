@@ -9,6 +9,7 @@ import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +22,12 @@ public class HealthCheckJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(HealthCheckJob.class);
 
+	@Inject
+	RegionController regionController;
+
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
-		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
+		for (Region region : regionController.getPublishBulletinRegions()) {
 			LanguageCode language = region.getDefaultLang();
 			logger.info("Health check triggered for {}/{}", region.getId(), language);
 
@@ -49,7 +53,7 @@ public class HealthCheckJob {
 
 			// Blog (only if region publishes blogs)
 			String blogStatus;
-			if (RegionController.getInstance().getPublishBlogRegions().contains(region)) {
+			if (regionController.getPublishBlogRegions().contains(region)) {
 				try {
 					BlogConfiguration config = BlogController.getConfiguration(region, language);
 					BlogItem latest = BlogController.getLatestBlogPost(config);

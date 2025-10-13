@@ -4,6 +4,7 @@ package eu.albina.jobs;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.RegionController;
 import eu.albina.model.ServerInstance;
 
 /**
@@ -15,8 +16,8 @@ import eu.albina.model.ServerInstance;
  */
 public class ChangeJob extends PublicationJob {
 
-	public ChangeJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController) {
-		super(publicationController, avalancheReportController, avalancheBulletinController);
+	public ChangeJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController) {
+		super(publicationController, avalancheReportController, avalancheBulletinController, regionController);
 	}
 
 	@Override

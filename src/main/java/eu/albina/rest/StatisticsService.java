@@ -48,6 +48,9 @@ public class StatisticsService {
 	@Inject
 	StatisticsController statisticsController;
 
+	@Inject
+	RegionController regionController;
+
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -78,10 +81,10 @@ public class StatisticsService {
 		List<Region> regions = new ArrayList<Region>();
 		if (regionIds != null && !regionIds.isEmpty()) {
 			for (String regionId : regionIds) {
-				regions.add(RegionController.getInstance().getRegion(regionId));
+				regions.add(regionController.getRegion(regionId));
 			}
 		} else {
-			regions = RegionController.getInstance().getPublishBulletinRegions();
+			regions = regionController.getPublishBulletinRegions();
 		}
 
 		String statistics = statisticsController.getDangerRatingStatistics(start, end, language, regions, extended,

@@ -18,7 +18,6 @@ import ch.rasc.webpush.ServerKeys;
 import ch.rasc.webpush.dto.Subscription;
 import ch.rasc.webpush.dto.SubscriptionKeys;
 import eu.albina.controller.PushSubscriptionController;
-import eu.albina.controller.RegionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
@@ -67,8 +66,7 @@ public record PushNotificationUtil(HttpClient client) {
         }
     }
 
-	public void sendWelcomePushMessage(PushSubscription subscription) {
-		Region region = RegionController.getInstance().getRegion(subscription.getRegion());
+	public void sendWelcomePushMessage(PushSubscription subscription, Region region) {
 		Message payload = new Message(
 			region.getWebsiteName(subscription.getLanguage()),
 			"Hello World!",

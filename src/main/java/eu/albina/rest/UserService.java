@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.inject.Inject;
 import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -40,6 +41,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+	@Inject
+	RegionController regionController;
 
 	@Get
 	@Secured(Role.Str.ADMIN)
@@ -76,7 +80,7 @@ public class UserService {
 	public HttpResponse<?> getRegions() {
 		logger.debug("GET JSON regions");
 		try {
-			List<String> ids = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			List<String> ids = regionController.getRegions().stream().map(Region::getId).collect(Collectors.toList());
 			return HttpResponse.ok(ids);
 		} catch (Exception e) {
 			logger.warn("Error loading regions", e);

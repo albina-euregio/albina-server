@@ -17,6 +17,7 @@ import io.micronaut.security.annotation.Secured;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.albina.exception.AlbinaException;
 import eu.albina.util.JsonUtil;
+import jakarta.inject.Inject;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,9 @@ public class RegionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegionService.class);
 
+	@Inject
+	RegionController regionController;
+
 	@Get
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -51,7 +55,7 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region
 
 		try {
-			List<Region> regions = RegionController.getInstance().getRegions();
+			List<Region> regions = regionController.getRegions();
 			return HttpResponse.ok(regions);
 		} catch (HibernateException he) {
 			logger.warn("Error loading regions", he);
@@ -70,7 +74,7 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region
 
 		try {
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = regionController.getRegion(regionId);
 			return HttpResponse.ok(region);
 		} catch (HibernateException he) {
 			logger.warn("Error loading region", he);
@@ -90,14 +94,14 @@ public class RegionService {
 
 		try {
 			String id = new Region(regionString, Region::new).getId();
-			Optional<Region> optionalRegion = RegionController.getInstance().tryGetRegion(id);
+			Optional<Region> optionalRegion = regionController.tryGetRegion(id);
 			if (optionalRegion.isPresent()) {
 				Region existing = optionalRegion.get();
 				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
 				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
 				existing.fixLanguageConfigurations();
-				RegionController.getInstance().updateRegion(existing);
+				regionController.updateRegion(existing);
 				return HttpResponse.ok(existing.toJSON());
 			} else {
 				String message = "Error updating region - Region does not exist";
@@ -124,9 +128,9 @@ public class RegionService {
 			Region region = new Region(regionString, Region::new);
 
 			// check if id already exists
-			if (RegionController.getInstance().tryGetRegion(region.getId()).isEmpty()) {
+			if (regionController.tryGetRegion(region.getId()).isEmpty()) {
 				region.fixLanguageConfigurations();
-				RegionController.getInstance().createRegion(region);
+				regionController.createRegion(region);
 				return HttpResponse.created(region);
 			} else {
 				String message = "Error creating region - Region already exists";
@@ -144,7 +148,7 @@ public class RegionService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	public HttpResponse<?> getLockedRegions(@QueryValue("region") String region) {
 		logger.debug("GET JSON locked regions");
-		List<Instant> lockedRegions = RegionController.getInstance().getLockedRegions(region);
+		List<Instant> lockedRegions = regionController.getLockedRegions(region);
 		return HttpResponse.ok(lockedRegions);
 	}
 }

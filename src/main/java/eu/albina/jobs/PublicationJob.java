@@ -59,15 +59,16 @@ public class PublicationJob {
 	private final PublicationController publicationController;
 	private final AvalancheReportController avalancheReportController;
 	private final AvalancheBulletinController avalancheBulletinController;
+	protected final RegionController regionController;
 
-	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController) {
+	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController) {
 		this.publicationController = publicationController;
 		this.avalancheReportController = avalancheReportController;
 		this.avalancheBulletinController = avalancheBulletinController;
+		this.regionController = regionController;
 	}
 
 	private List<Runnable> execute0() {
-		RegionController regionController = RegionController.getInstance();
 		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 
 		if (!isEnabled(serverInstance)) {
@@ -303,7 +304,7 @@ public class PublicationJob {
 	}
 
 	protected List<Region> getRegions() {
-		return RegionController.getInstance().getPublishBulletinRegions();
+		return regionController.getPublishBulletinRegions();
 	}
 
 }

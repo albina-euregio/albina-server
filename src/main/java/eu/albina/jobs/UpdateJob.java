@@ -24,8 +24,8 @@ import eu.albina.util.AlbinaUtil;
  */
 public class UpdateJob extends PublicationJob {
 
-	public UpdateJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController) {
-		super(publicationController, avalancheReportController, avalancheBulletinController);
+	public UpdateJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController) {
+		super(publicationController, avalancheReportController, avalancheBulletinController, regionController);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class UpdateJob extends PublicationJob {
 
 	@Override
 	protected List<Region> getRegions() {
-		return RegionController.getInstance().getPublishBulletinRegions();
+		return regionController.getPublishBulletinRegions();
 	}
 
 }

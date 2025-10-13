@@ -68,6 +68,9 @@ public class DangerSourceService {
 	@Inject
 	DangerSourceVariantTextController dangerSourceVariantTextController;
 
+	@Inject
+	RegionController regionController;
+
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -108,7 +111,7 @@ public class DangerSourceService {
 		logger.debug("GET JSON danger source variants");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-		Region region = RegionController.getInstance().getRegion(regionId);
+		Region region = regionController.getRegion(regionId);
 		List<DangerSourceVariant> variants = dangerSourceVariantController
 				.getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 		return JsonUtil.writeValueUsingJackson(variants);
@@ -123,7 +126,7 @@ public class DangerSourceService {
 
 		Range<Instant> instantRangeStart = DateControllerUtil.parseInstantRange(startDate);
 		Range<Instant> instantRangeEnd = DateControllerUtil.parseInstantRange(endDate);
-		Region region = RegionController.getInstance().getRegion(regionId);
+		Region region = regionController.getRegion(regionId);
 
 		List<DangerSourceVariantsStatus> status = dangerSourceVariantController
 				.getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
@@ -142,7 +145,7 @@ public class DangerSourceService {
 		logger.debug("GET JSON danger source variants for danger source");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-		List<Region> regions = regionIds.stream().map(RegionController.getInstance()::getRegion)
+		List<Region> regions = regionIds.stream().map(regionController::getRegion)
 				.collect(Collectors.toList());
 		List<DangerSourceVariant> variants = dangerSourceVariantController.getDangerSourceVariants(
 				instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
@@ -163,7 +166,7 @@ public class DangerSourceService {
 		try {
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 			User user = UserController.getInstance().getUser(principal.getName());
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				DangerSourceVariant[] variants = JsonUtil.parseUsingJackson(json, DangerSourceVariant[].class);
@@ -217,7 +220,7 @@ public class DangerSourceService {
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
 			User user = UserController.getInstance().getUser(principal.getName());
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantController.updateDangerSourceVariant(variant,
@@ -245,7 +248,7 @@ public class DangerSourceService {
 
 		try {
 			User user = UserController.getInstance().getUser(principal.getName());
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantController.deleteDangerSourceVariant(variantId);
@@ -279,7 +282,7 @@ public class DangerSourceService {
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
 			User user = UserController.getInstance().getUser(principal.getName());
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantController.createDangerSourceVariant(variant,

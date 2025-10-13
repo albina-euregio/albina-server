@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import jakarta.inject.Singleton;
 import jakarta.persistence.EntityManager;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -24,32 +25,12 @@ import eu.albina.util.HibernateUtil;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class RegionController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegionController.class);
 
-	private static RegionController instance = null;
 	private final List<RegionLock> regionLocks = new ArrayList<>();
-
-	/**
-	 * Private constructor.
-	 */
-	private RegionController() {
-	}
-
-	/**
-	 * Returns the {@code RegionController} object associated with the current Java
-	 * application.
-	 *
-	 * @return the {@code RegionController} object associated with the current Java
-	 *         application.
-	 */
-	public static RegionController getInstance() {
-		if (instance == null) {
-			instance = new RegionController();
-		}
-		return instance;
-	}
 
 	/**
 	 * Save a {@code region} to the database.

@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,9 @@ import java.util.stream.Collectors;
 public class StressLevelService {
 
 	private static final Logger logger = LoggerFactory.getLogger(StressLevelService.class);
+
+	@Inject
+	RegionController regionController;
 
 	@Get
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
@@ -71,7 +75,7 @@ public class StressLevelService {
 		User user = UserController.getInstance().getUser(principal.getName());
 		try {
 			// check that user is member of requested region
-			Region region = RegionController.getInstance().getRegion(regionId);
+			Region region = regionController.getRegion(regionId);
 			if (!user.hasPermissionForRegion(region.getId())) {
 				return HttpResponse.status(HttpStatus.FORBIDDEN);
 			}

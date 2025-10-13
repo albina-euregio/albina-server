@@ -57,6 +57,9 @@ public class MediaFileService {
 	@Inject
 	private AvalancheReportController avalancheReportController;
 
+	@Inject
+	RegionController regionController;
+
 	@Post
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -73,7 +76,7 @@ public class MediaFileService {
 		try {
 			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());
 
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			User user = UserController.getInstance().getUser(principal.getName());
 
 			if (region == null || !user.hasPermissionForRegion(region.getId())) {

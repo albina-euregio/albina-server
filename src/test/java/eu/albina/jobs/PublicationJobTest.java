@@ -14,7 +14,7 @@ class PublicationJobTest {
 
     @Test
     public void testPublicationJob() {
-        PublicationJob job = new PublicationJob(null, null, null);
+        PublicationJob job = new PublicationJob(null, null, null, null);
         Clock clock = Clock.fixed(Instant.parse("2022-03-26T16:01:02Z"), AlbinaUtil.localZone());
         assertEquals(job.getStartDate(clock), Instant.parse("2022-03-26T16:00:00Z")); // ok
         assertEquals(job.getEndDate(clock), Instant.parse("2022-03-27T15:00:00Z")); // ok (time change)
@@ -22,7 +22,7 @@ class PublicationJobTest {
 
     @Test
     public void testUpdateJob() {
-        UpdateJob job = new UpdateJob(null, null, null);
+        UpdateJob job = new UpdateJob(null, null, null, null);
         Clock clock = Clock.fixed(Instant.parse("2022-03-27T06:01:02Z"), AlbinaUtil.localZone());
         assertEquals(job.getStartDate(clock), Instant.parse("2022-03-26T16:00:00Z")); // ok
         assertEquals(job.getEndDate(clock), Instant.parse("2022-03-27T15:00:00Z")); // ok (time change)

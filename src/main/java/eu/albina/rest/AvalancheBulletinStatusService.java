@@ -42,6 +42,9 @@ public class AvalancheBulletinStatusService {
 	@Inject
 	private AvalancheReportController avalancheReportController;
 
+	@Inject
+	RegionController regionController;
+
 	@Serdeable
 	static class Status {
 		public final Instant date;
@@ -82,9 +85,9 @@ public class AvalancheBulletinStatusService {
 			Map<Instant, BulletinStatus> status;
 			if (regionId == null || regionId.isEmpty()) {
 				status = avalancheReportController.getStatus(startDate, endDate,
-						RegionController.getInstance().getPublishBulletinRegions());
+						regionController.getPublishBulletinRegions());
 			} else {
-				status = avalancheReportController.getStatus(startDate, endDate, RegionController.getInstance().getRegion(regionId));
+				status = avalancheReportController.getStatus(startDate, endDate, regionController.getRegion(regionId));
 			}
 
 			List<Status> result = status.entrySet().stream()
@@ -107,7 +110,7 @@ public class AvalancheBulletinStatusService {
 									  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		try {
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
@@ -142,7 +145,7 @@ public class AvalancheBulletinStatusService {
 			return HttpResponse.noContent();
 		}
 
-		Region region = RegionController.getInstance().getRegion(regionId);
+		Region region = regionController.getRegion(regionId);
 		List<Status> result = avalancheReportController
 			.getPublicationStatus(startDate, endDate, region)
 			.entrySet().stream()
@@ -164,7 +167,7 @@ public class AvalancheBulletinStatusService {
 
 		try {
 			Map<Instant, AvalancheReport> status = avalancheReportController
-					.getPublicationStatus(startDate, endDate, RegionController.getInstance().getRegionOrThrowAlbinaException(regionId));
+					.getPublicationStatus(startDate, endDate, regionController.getRegionOrThrowAlbinaException(regionId));
 
 			if (status.size() > 1)
 				logger.warn("More than one report found!");

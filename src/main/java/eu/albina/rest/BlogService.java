@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class BlogService {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogService.class);
+
+	@Inject
+	RegionController regionController;
 
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
@@ -130,11 +134,11 @@ public class BlogService {
 		}
 	}
 
-	private static BlogConfiguration getBlogConfiguration(String regionId, LanguageCode language) throws AlbinaException {
+	private BlogConfiguration getBlogConfiguration(String regionId, LanguageCode language) throws AlbinaException {
 		if (language == null) {
 			throw new AlbinaException("No language defined!");
 		}
-		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+		Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 		if (!region.isPublishBlogs()) {
 			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
 		}

@@ -17,6 +17,7 @@ import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class SubscriptionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
+
+	@Inject
+	RegionController regionController;
+
+	@Inject
+	SubscriberController subscriberController;
 
 	@Serdeable
 	static class EmailSubscription {
@@ -68,7 +75,7 @@ public class SubscriptionService {
 	public HttpResponse<?> addSubscriber(@Body EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		Objects.requireNonNull(json.language, "language");
-		final Region region = RegionController.getInstance().getRegion(json.regions);
+		final Region region = regionController.getRegion(json.regions);
 		final Subscriber subscriber = new Subscriber();
 		subscriber.setEmail(json.email);
 		subscriber.setRegions(Collections.singletonList(region));
@@ -79,7 +86,7 @@ public class SubscriptionService {
 
 		try {
 			RapidMailConfiguration config = RapidMailController.getConfiguration(region, subscriber.getLanguage(), null).orElseThrow();
-			SubscriberController.getInstance().createSubscriber(subscriber);
+			subscriberController.createSubscriber(subscriber);
 			RapidMailController.createRecipient(config, recipient);
 			return HttpResponse.ok();
 		} catch (Exception e) {

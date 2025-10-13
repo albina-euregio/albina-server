@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 
@@ -24,31 +26,12 @@ import org.slf4j.LoggerFactory;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class SubscriberController {
-	// private static Logger logger =
-	// LoggerFactory.getLogger(SubscriberController.class);
-	private static SubscriberController instance = null;
 	private static final Logger logger = LoggerFactory.getLogger(SubscriberController.class);
 
-	/**
-	 * Private constructor.
-	 */
-	private SubscriberController() {
-	}
-
-	/**
-	 * Returns the {@code SubscriberController} object associated with the current
-	 * Java application.
-	 *
-	 * @return the {@code SubscriberController} object associated with the current
-	 *         Java application.
-	 */
-	public static SubscriberController getInstance() {
-		if (instance == null) {
-			instance = new SubscriberController();
-		}
-		return instance;
-	}
+	@Inject
+	RegionController regionController;
 
 	/**
 	 * Return the {@code Subscriber} object with {@code email} as primary key.
@@ -144,7 +127,7 @@ public class SubscriberController {
 			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage, Subscriber.class)
 					.setParameter("language", lang).getResultList();
 			List<Subscriber> results = subscribers.stream()
-				.filter(subscriber -> regionIds.stream().anyMatch(regionId -> subscriber.affectsRegion(RegionController.getInstance().getRegion(regionId))))
+				.filter(subscriber -> regionIds.stream().anyMatch(regionId -> subscriber.affectsRegion(regionController.getRegion(regionId))))
 				.collect(Collectors.toList());
 
 			for (Subscriber subscriber : results)
