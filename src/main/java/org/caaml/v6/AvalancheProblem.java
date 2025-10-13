@@ -23,7 +23,7 @@ public class AvalancheProblem {
     private List<Aspect> aspects;
     private Integer avalancheSize;
     private String comment;
-    private Object customData;
+    private AvalancheProblemCustomData customData;
     private DangerRatingValue dangerRatingValue;
     private ElevationBoundaryOrBand elevation;
     private ExpectedAvalancheFrequency frequency;
@@ -42,8 +42,8 @@ public class AvalancheProblem {
     public String getComment() { return comment; }
     public void setComment(String value) { this.comment = value; }
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
+    public AvalancheProblemCustomData getCustomData() { return customData; }
+    public void setCustomData(AvalancheProblemCustomData value) { this.customData = value; }
 
     public DangerRatingValue getDangerRatingValue() { return dangerRatingValue; }
     public void setDangerRatingValue(DangerRatingValue value) { this.dangerRatingValue = value; }

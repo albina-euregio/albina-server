@@ -13,6 +13,7 @@ public class AvalancheProblemCustomData {
 		this.ALBINA = ALBINA;
 	}
 
+	@JacksonXmlProperty(localName = "ALBINA")
 	public ALBINA getALBINA() {
 		return ALBINA;
 	}
