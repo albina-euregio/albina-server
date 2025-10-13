@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import io.micronaut.serde.annotation.Serdeable;
+
 import java.util.List;
 
 /**
  * Meta data for various uses. Can be used to link to external files like maps, thumbnails
  * etc.
  */
+@Serdeable
 public class MetaData {
     private String comment;
     private List<ExternalFile> extFiles;

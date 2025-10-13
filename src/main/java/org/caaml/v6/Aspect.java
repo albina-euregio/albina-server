@@ -2,12 +2,14 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * An aspect can be defined as a set of aspects. The aspects are the expositions as in a
  * eight part (45°) segments. The allowed aspects are the four main cardinal directions and
  * the four intercardinal directions.
  */
+@Serdeable
 public enum Aspect {
     E, N, NE, NW, N_A, S, SE, SW, W;
 

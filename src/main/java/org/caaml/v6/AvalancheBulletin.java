@@ -9,11 +9,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Avalanche Bulletin valid for a given set of regions.
  */
 @JsonPropertyOrder({"publicationTime", "validTime", "nextUpdate", "unscheduled", "source", "region", "dangerRating", "avalancheProblem", "highlights", "weatherForecast", "weatherReview", "avalancheActivity", "snowpackStructure", "travelAdvisory", "tendency", "metaData", "customData"})
+@Serdeable
 public class AvalancheBulletin {
     private Texts avalancheActivity;
 	@JacksonXmlElementWrapper(useWrapping = false)
@@ -29,10 +31,8 @@ public class AvalancheBulletin {
 	@JacksonXmlProperty(isAttribute = true)
     private String lang;
     private MetaData metaData;
-	@JsonSerialize(as = String.class)
 	@JacksonXmlProperty(localName = "nextUpdate")
     private Instant nextUpdate;
-	@JsonSerialize(as = String.class)
 	@JacksonXmlProperty(localName = "publicationTime")
 	private Instant publicationTime;
 	@JacksonXmlElementWrapper(useWrapping = false)

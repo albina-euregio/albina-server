@@ -2,11 +2,13 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Expected frequency of lowest snowpack stability, according to the EAWS definition. Three
  * stage scale (few, some, many).
  */
+@Serdeable
 public enum ExpectedAvalancheFrequency {
     FEW, MANY, NONE, SOME;
 

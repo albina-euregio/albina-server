@@ -2,10 +2,12 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Danger rating value, according to EAWS danger scale definition.
  */
+@Serdeable
 public enum DangerRatingValue {
     CONSIDERABLE, HIGH, LOW, MODERATE, NO_RATING, NO_SNOW, VERY_HIGH;
 

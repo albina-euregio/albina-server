@@ -2,11 +2,13 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Snowpack stability, according to the EAWS definition. Four stage scale (very poor, poor,
  * fair, good).
  */
+@Serdeable
 public enum ExpectedSnowpackStability {
     FAIR, GOOD, POOR, VERY_POOR;
 

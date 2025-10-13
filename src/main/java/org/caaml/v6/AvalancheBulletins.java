@@ -7,12 +7,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * JSON schema for EAWS avalanche bulletin collection following the CAAMLv6 schema
  */
 @JacksonXmlRootElement(localName = "bulletins")
 @JsonPropertyOrder({"bulletins", "customData", "metaData"})
+@Serdeable
 public class AvalancheBulletins {
     @JacksonXmlElementWrapper(useWrapping = false)
 	@JacksonXmlProperty(localName = "bulletin")

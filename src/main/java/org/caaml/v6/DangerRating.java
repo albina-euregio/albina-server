@@ -7,6 +7,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Defines a danger rating, its elevation constraints and the valid time period. If
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * dangerRating for all the other cases.
  */
 @JsonPropertyOrder({"mainValue", "elevation", "aspect", "validTimePeriod", "metaData", "customData"})
+@Serdeable
 public class DangerRating {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JacksonXmlProperty(localName = "aspect")

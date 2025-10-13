@@ -6,6 +6,7 @@ import java.time.Instant;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Valid time defines two ISO 8601 timestamps in UTC or with time zone information.
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
  * time zone information.
  */
 @JsonPropertyOrder({"startTime", "endTime"})
+@Serdeable
 public class ValidTime {
 	@JsonSerialize(as = String.class)
     private Instant endTime;

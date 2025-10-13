@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
+@Serdeable
 public class AvalancheBulletinCustomData {
 	public final ALBINA ALBINA;
 	public final LwdTyrol LWD_Tyrol;
@@ -15,14 +17,28 @@ public class AvalancheBulletinCustomData {
 		this.LWD_Tyrol = LWD_Tyrol;
 	}
 
+	public ALBINA getALBINA() {
+		return ALBINA;
+	}
+
+	public LwdTyrol getLWD_Tyrol() {
+		return LWD_Tyrol;
+	}
+
+	@Serdeable
 	public static class ALBINA {
 		public final String mainDate;
 
 		public ALBINA(String mainDate) {
 			this.mainDate = mainDate;
 		}
+
+		public String getMainDate() {
+			return mainDate;
+		}
 	}
 
+	@Serdeable
 	public static class LwdTyrol {
 		@JacksonXmlElementWrapper(useWrapping = false)
 		@JacksonXmlProperty(localName = "dangerPatterns")
@@ -30,6 +46,10 @@ public class AvalancheBulletinCustomData {
 
 		public LwdTyrol(List<String> dangerPatterns) {
 			this.dangerPatterns = dangerPatterns;
+		}
+
+		public List<String> getDangerPatterns() {
+			return dangerPatterns;
 		}
 	}
 }

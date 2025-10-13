@@ -2,10 +2,12 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Expected avalanche type.
  */
+@Serdeable
 public enum AvalancheTypeType {
     SLAB, LOOSE, GLIDE;
 

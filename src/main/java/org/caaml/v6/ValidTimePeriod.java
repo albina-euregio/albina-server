@@ -2,11 +2,13 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Valid time period can be used to limit the validity of an element to an earlier or later
  * period. It can be used to distinguish danger ratings or avalanche problems.
  */
+@Serdeable
 public enum ValidTimePeriod {
     ALL_DAY, EARLIER, LATER;
 

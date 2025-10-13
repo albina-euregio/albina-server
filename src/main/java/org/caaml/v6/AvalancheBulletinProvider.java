@@ -2,12 +2,14 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Information about the bulletin provider. Defines the name, website and/or contactPerson
  * (which could be the author) of the issuing AWS.
  */
 @JsonPropertyOrder({"name", "website", "metaData", "customData"})
+@Serdeable
 public class AvalancheBulletinProvider {
     private Person contactPerson;
     private Object customData;
