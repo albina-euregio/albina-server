@@ -29,13 +29,13 @@ import eu.albina.util.TextToSpeech;
 @Singleton
 public class PublicationController {
 
+	private static final Logger logger = LoggerFactory.getLogger(PublicationController.class);
+
 	@Inject
 	Caaml caaml;
 
 	@Inject
 	AvalancheReportController avalancheReportController;
-
-	private static final Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
@@ -158,7 +158,7 @@ public class PublicationController {
 	public void createSimpleHtml(AvalancheReport avalancheReport) {
 		try {
 			logger.info("Simple HTML production for {} started", avalancheReport);
-			SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
+			SimpleHtmlUtil.createRegionSimpleHtml(avalancheReport);
 			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setHtmlCreated);
 		} catch (Exception e) {

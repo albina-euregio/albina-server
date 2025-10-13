@@ -26,7 +26,7 @@ class AvalancheReportMultichannelMessage implements MultichannelMessage {
 		this.lang = lang;
 		this.htmlMessage = Suppliers.memoize(() -> {
 			try {
-				return EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, lang);
+				return EmailUtil.createBulletinEmailHtml(avalancheReport, lang);
 			} catch (IOException | TemplateException e) {
 				throw new RuntimeException("Failed to create bulletin email", e);
 			}

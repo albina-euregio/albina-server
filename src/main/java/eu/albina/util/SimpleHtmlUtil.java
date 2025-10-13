@@ -2,13 +2,9 @@
 package eu.albina.util;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,78 +28,38 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
-import freemarker.core.ParseException;
 import freemarker.template.Configuration;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.TemplateNotFoundException;
 
-public class SimpleHtmlUtil {
+public interface SimpleHtmlUtil {
 
-	private static final Logger logger = LoggerFactory.getLogger(SimpleHtmlUtil.class);
+	Logger logger = LoggerFactory.getLogger(SimpleHtmlUtil.class);
 
-	private static Configuration cfg;
+	Color blueColor = new Color(0, 172, 251);
+	Color greyLightColor = new Color(201, 201, 201);
+	Color greyDarkColor = new Color(85, 95, 96);
+	Color whiteColor = new Color(255, 255, 255);
+	Color greyVeryVeryLightColor = new Color(242, 247, 250);
+	Color dangerLevel1Color = new Color(197, 255, 118);
+	Color dangerLevel2Color = new Color(255, 255, 70);
+	Color dangerLevel3Color = new Color(255, 152, 44);
+	Color dangerLevel4Color = new Color(255, 0, 23);
+	Color dangerLevel5ColorRed = new Color(255, 0, 23);
+	Color dangerLevel5ColorBlack = new Color(0, 0, 0);
 
-	private static SimpleHtmlUtil instance = null;
-
-	public static final Color blueColor = new Color(0, 172, 251);
-	public static final Color greyLightColor = new Color(201, 201, 201);
-	public static final Color greyDarkColor = new Color(85, 95, 96);
-	public static final Color whiteColor = new Color(255, 255, 255);
-	public static final Color greyVeryVeryLightColor = new Color(242, 247, 250);
-	public static final Color dangerLevel1Color = new Color(197, 255, 118);
-	public static final Color dangerLevel2Color = new Color(255, 255, 70);
-	public static final Color dangerLevel3Color = new Color(255, 152, 44);
-	public static final Color dangerLevel4Color = new Color(255, 0, 23);
-	public static final Color dangerLevel5ColorRed = new Color(255, 0, 23);
-	public static final Color dangerLevel5ColorBlack = new Color(0, 0, 0);
-
-	protected SimpleHtmlUtil() throws IOException, URISyntaxException {
-		createFreemarkerConfigurationInstance();
-	}
-
-	private void createFreemarkerConfigurationInstance() throws IOException, URISyntaxException {
-		cfg = new Configuration(Configuration.VERSION_2_3_27);
-
-		// Specify the source where the template files come from. Here I set a
-		// plain directory for it, but non-file-system sources are possible too:
-		URL resource = this.getClass().getResource("/templates");
-
-		URI uri = resource.toURI();
-		File file = new File(uri);
-		cfg.setDirectoryForTemplateLoading(file);
-
-		// Set the preferred charset template files are stored in. UTF-8 is
-		// a good choice in most applications:
+	private static Configuration createFreemarkerConfigurationInstance()  {
+		Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
+		cfg.setClassForTemplateLoading(EmailUtil.class, "/templates");
 		cfg.setDefaultEncoding("UTF-8");
-
-		// Sets how errors will appear.
-		// During web page *development* TemplateExceptionHandler.HTML_DEBUG_HANDLER is
-		// better.
 		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-
-		// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
 		cfg.setLogTemplateExceptions(false);
-
-		// Wrap unchecked exceptions thrown during template processing into
-		// TemplateException-s.
 		cfg.setWrapUncheckedExceptions(true);
-	}
-
-	public Configuration getFreeMarkerConfiguration() {
 		return cfg;
 	}
 
-	public static SimpleHtmlUtil getInstance() throws IOException, URISyntaxException {
-		if (instance == null) {
-			instance = new SimpleHtmlUtil();
-		}
-		return instance;
-	}
-
-	public void createRegionSimpleHtml(AvalancheReport avalancheReport) {
+	static void createRegionSimpleHtml(AvalancheReport avalancheReport) {
 		if (avalancheReport.getBulletins().isEmpty()) {
 			return;
 		}
@@ -112,7 +68,7 @@ public class SimpleHtmlUtil {
 		}
 	}
 
-	public void createSimpleHtml(AvalancheReport avalancheReport, LanguageCode lang) {
+	static void createSimpleHtml(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			String simpleHtmlString = createSimpleHtmlString(avalancheReport, lang);
 			String filename = avalancheReport.getRegion().getId() + "_" + lang.toString() + ".html";
@@ -126,8 +82,8 @@ public class SimpleHtmlUtil {
 
 	}
 
-	public String createSimpleHtmlString(AvalancheReport avalancheReport, LanguageCode lang)
-			throws TemplateNotFoundException, MalformedTemplateNameException, ParseException, IOException,
+	static String createSimpleHtmlString(AvalancheReport avalancheReport, LanguageCode lang)
+			throws IOException,
 			TemplateException {
 		// Create data model
 		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
@@ -263,7 +219,7 @@ public class SimpleHtmlUtil {
 		root.put("bulletins", arrayList);
 
 		// Get template
-		Template temp = cfg.getTemplate(region.getSimpleHtmlTemplateName());
+		Template temp = createFreemarkerConfigurationInstance().getTemplate(region.getSimpleHtmlTemplateName());
 
 		// Merge template and model
 		Writer out = new StringWriter();
@@ -272,7 +228,7 @@ public class SimpleHtmlUtil {
 		return out.toString();
 	}
 
-	private Map<String, Object> getEmptyDaytime() {
+	private static Map<String, Object> getEmptyDaytime() {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> dangerLevel = new HashMap<>();
 		Map<String, Object> text = new HashMap<>();
@@ -290,7 +246,7 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private Map<String, Object> getEmptyAvalancheProblem() {
+	private static Map<String, Object> getEmptyAvalancheProblem() {
 		Map<String, Object> result = new HashMap<>();
 		result.put("exist", false);
 		result.put("avalancheProblemIcon", "");
@@ -302,7 +258,7 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private Map<String, Object> getDaytime(AvalancheBulletinDaytimeDescription daytimeDescription, LanguageCode lang, ServerInstance serverInstance) {
+	private static Map<String, Object> getDaytime(AvalancheBulletinDaytimeDescription daytimeDescription, LanguageCode lang, ServerInstance serverInstance) {
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> dangerLevel = new HashMap<>();
 		Map<String, Object> text = new HashMap<>();
@@ -360,7 +316,7 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private Map<String, Object> getAvalancheProblem(AvalancheProblem avalancheProblem, LanguageCode lang, ServerInstance serverInstance) {
+	private static Map<String, Object> getAvalancheProblem(AvalancheProblem avalancheProblem, LanguageCode lang, ServerInstance serverInstance) {
 		Map<String, Object> result = new HashMap<>();
 
 		result.put("exist", true);
@@ -376,7 +332,7 @@ public class SimpleHtmlUtil {
 		return result;
 	}
 
-	private String getElevationIcon(AvalancheProblem avalancheProblem) {
+	private static String getElevationIcon(AvalancheProblem avalancheProblem) {
 		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
@@ -394,7 +350,7 @@ public class SimpleHtmlUtil {
 		}
 	}
 
-	private String getElevationLowText(AvalancheProblem avalancheProblem, LanguageCode lang) {
+	private static String getElevationLowText(AvalancheProblem avalancheProblem, LanguageCode lang) {
 		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
@@ -419,7 +375,7 @@ public class SimpleHtmlUtil {
 		}
 	}
 
-	private String getElevationHighText(AvalancheProblem avalancheProblem, LanguageCode lang) {
+	private static String getElevationHighText(AvalancheProblem avalancheProblem, LanguageCode lang) {
 		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
@@ -444,7 +400,7 @@ public class SimpleHtmlUtil {
 		}
 	}
 
-	private String getElevationString(int elevation, boolean treeline, LanguageCode lang) {
+	private static String getElevationString(int elevation, boolean treeline, LanguageCode lang) {
 		StringBuilder sb = new StringBuilder();
 		if (treeline) {
 			sb.append(lang.getBundleString("elevation.treeline"));

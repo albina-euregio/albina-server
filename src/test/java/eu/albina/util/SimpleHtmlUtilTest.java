@@ -53,7 +53,7 @@ public class SimpleHtmlUtilTest {
 		URL resource = Resources.getResource("2019-01-17.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
+		String htmlString = SimpleHtmlUtil.createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
 		Assertions.assertEquals(expected.trim(), htmlString.trim());
 	}
@@ -67,7 +67,7 @@ public class SimpleHtmlUtilTest {
 			.collect(Collectors.toList());
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstanceEuregio);
 		avalancheReport.setBulletins(bulletinsTyrol, bulletins);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
+		String htmlString = SimpleHtmlUtil.createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
 		Assertions.assertFalse(htmlString.contains("853733e5-cb48-4cf1-91a2-ebde59dda31f")); // IT-32-TN
 	}
 
@@ -76,7 +76,7 @@ public class SimpleHtmlUtilTest {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
-		String htmlString = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.ca);
+		String htmlString = SimpleHtmlUtil.createSimpleHtmlString(avalancheReport, LanguageCode.ca);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
 		Assertions.assertEquals(expected.trim(), htmlString.trim());
 	}
@@ -86,7 +86,7 @@ public class SimpleHtmlUtilTest {
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
-		String html = SimpleHtmlUtil.getInstance().createSimpleHtmlString(avalancheReport, LanguageCode.en);
+		String html = SimpleHtmlUtil.createSimpleHtmlString(avalancheReport, LanguageCode.en);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.simple.html"), StandardCharsets.UTF_8);
 		Assertions.assertEquals(expected.trim(), html.trim());
 	}
