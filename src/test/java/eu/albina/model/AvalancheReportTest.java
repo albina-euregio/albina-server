@@ -100,7 +100,7 @@ public class AvalancheReportTest {
 	@Disabled
 	public void testDatesHibernate() throws Exception {
 		HibernateUtil.getInstance().setUp();
-		final AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin("4e5bbd7c-7ccf-4a2a-8ac7-5a0bfc322a14");
+		final AvalancheBulletin bulletin = new AvalancheBulletinController().getBulletin("4e5bbd7c-7ccf-4a2a-8ac7-5a0bfc322a14");
 		HibernateUtil.getInstance().shutDown();
 		final List<AvalancheBulletin> bulletins = List.of(bulletin);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);

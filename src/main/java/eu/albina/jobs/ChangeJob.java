@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
+import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.model.ServerInstance;
 
@@ -13,8 +15,8 @@ import eu.albina.model.ServerInstance;
  */
 public class ChangeJob extends PublicationJob {
 
-	public ChangeJob(PublicationController publicationController) {
-		super(publicationController);
+	public ChangeJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController) {
+		super(publicationController, avalancheReportController, avalancheBulletinController);
 	}
 
 	@Override

@@ -57,14 +57,16 @@ public class PublicationJob {
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
 	private final PublicationController publicationController;
+	private final AvalancheReportController avalancheReportController;
+	private final AvalancheBulletinController avalancheBulletinController;
 
-	public PublicationJob(PublicationController publicationController) {
+	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController) {
 		this.publicationController = publicationController;
+		this.avalancheReportController = avalancheReportController;
+		this.avalancheBulletinController = avalancheBulletinController;
 	}
 
 	private List<Runnable> execute0() {
-		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
-		AvalancheReportController avalancheReportController = AvalancheReportController.getInstance();
 		RegionController regionController = RegionController.getInstance();
 		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 

@@ -20,6 +20,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.multipart.StreamingFileUpload;
 import io.micronaut.security.annotation.Secured;
+import jakarta.inject.Inject;
 import jakarta.servlet.annotation.MultipartConfig;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Produces;
@@ -53,6 +54,8 @@ public class MediaFileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MediaFileService.class);
 
+	@Inject
+	private AvalancheReportController avalancheReportController;
 
 	@Post
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
@@ -118,7 +121,7 @@ public class MediaFileService {
 			}
 
 			// set publication flag
-			AvalancheReportController.getInstance().setMediaFileFlag(date, region);
+			avalancheReportController.setMediaFileFlag(date, region);
 
 			return HttpResponse.created(Map.of("file", fileLocation));
 		} catch (AlbinaException e) {

@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -38,33 +40,15 @@ import jakarta.persistence.EntityManager;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class AvalancheBulletinController {
 
-	private static Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
 
-	private static AvalancheBulletinController instance = null;
-	private final List<BulletinLock> bulletinLocks;
+	private final List<BulletinLock> bulletinLocks = new ArrayList<>();
 
-	/**
-	 * Private constructor.
-	 */
-	private AvalancheBulletinController() {
-		bulletinLocks = new ArrayList<BulletinLock>();
-	}
-
-	/**
-	 * Returns the {@code AvalancheBulletinController} object associated with the
-	 * current Java application.
-	 *
-	 * @return the {@code AvalancheBulletinController} object associated with the
-	 *         current Java application.
-	 */
-	public static AvalancheBulletinController getInstance() {
-		if (instance == null) {
-			instance = new AvalancheBulletinController();
-		}
-		return instance;
-	}
+	@Inject
+	AvalancheReportController avalancheReportController;
 
 	/**
 	 * Retrieve an avalanche bulletin from the database by {@code bulletinID}.
@@ -190,10 +174,10 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
 
-			AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, region, user, entityManager);
+			avalancheReportController.saveReport(resultBulletins, startDate, region, user, entityManager);
 			// save report for super regions
 			for (Region superRegion : region.getSuperRegions()) {
-				AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, superRegion, user, entityManager);
+				avalancheReportController.saveReport(resultBulletins, startDate, superRegion, user, entityManager);
 			}
 
 			return resultBulletins;
@@ -388,10 +372,10 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
 
-			AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, region, user, entityManager);
+			avalancheReportController.saveReport(resultBulletins, startDate, region, user, entityManager);
 			// save report for super regions
 			for (Region superRegion : region.getSuperRegions()) {
-				AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, superRegion, user, entityManager);
+				avalancheReportController.saveReport(resultBulletins, startDate, superRegion, user, entityManager);
 			}
 
 			logger.info("Bulletin {} for region {} updated by {}", updatedBulletin.getId(), region.getId(), user);
@@ -427,10 +411,10 @@ public class AvalancheBulletinController {
 			for (AvalancheBulletin bulletin : resultBulletins.values())
 				initializeBulletin(bulletin);
 
-			AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, region, user, entityManager);
+			avalancheReportController.saveReport(resultBulletins, startDate, region, user, entityManager);
 			// save report for super regions
 			for (Region superRegion : region.getSuperRegions()) {
-				AvalancheReportController.getInstance().saveReport(resultBulletins, startDate, superRegion, user, entityManager);
+				avalancheReportController.saveReport(resultBulletins, startDate, superRegion, user, entityManager);
 			}
 
 			return resultBulletins;
@@ -451,7 +435,7 @@ public class AvalancheBulletinController {
 	 *             region could not be loaded
 	 */
 	public DangerRating getHighestDangerRating(Instant date, List<Region> regions) throws AlbinaException {
-		Collection<AvalancheBulletin> result = AvalancheReportController.getInstance().getPublishedBulletins(date,
+		Collection<AvalancheBulletin> result = avalancheReportController.getPublishedBulletins(date,
 				regions);
 
 		if (result != null) {

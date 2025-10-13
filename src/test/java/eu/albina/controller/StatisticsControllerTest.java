@@ -41,7 +41,7 @@ public class StatisticsControllerTest {
 	public void getAvalancheBulletinCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, false, false, true);
+		String csvString = StatisticsController.getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, false, false, true);
 		Assertions.assertEquals(expected, csvString);
 	}
 
@@ -49,7 +49,7 @@ public class StatisticsControllerTest {
 	public void getExtendedAvalancheBulletinCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.extended.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, true, false, true);
+		String csvString = StatisticsController.getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, true, false, true);
 		Assertions.assertEquals(expected, csvString);
 	}
 
@@ -57,7 +57,7 @@ public class StatisticsControllerTest {
 	public void getDangerSourceVariantCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("danger_source_variants.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getDangerSourceVariantsCsvString(dangerSourceVariants);
+		String csvString = StatisticsController.getDangerSourceVariantsCsvString(dangerSourceVariants);
 		Assertions.assertEquals(expected, csvString);
 	}
 }

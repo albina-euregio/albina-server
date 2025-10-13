@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.PublicationController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -49,6 +50,11 @@ public class AvalancheBulletinPublishService {
 	@Inject
 	PublicationController publicationController;
 
+	@Inject
+	AvalancheReportController avalancheReportController;
+
+	@Inject
+	AvalancheBulletinController avalancheBulletinController;
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
 	 */
@@ -71,7 +77,7 @@ public class AvalancheBulletinPublishService {
 			).distinct().collect(Collectors.toList());
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				new UpdateJob(publicationController) {
+				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -111,7 +117,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			new Thread(() -> {
-				new PublicationJob(publicationController) {
+				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -216,12 +222,12 @@ public class AvalancheBulletinPublishService {
 		}
 	}
 
-	private static List<MultichannelMessage> getMultichannelMessage(String regionId, String date, LanguageCode language) throws AlbinaException {
+	private List<MultichannelMessage> getMultichannelMessage(String regionId, String date, LanguageCode language) throws AlbinaException {
 		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 		Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-		ArrayList<AvalancheBulletin> bulletins = AvalancheReportController.getInstance()
+		ArrayList<AvalancheBulletin> bulletins = avalancheReportController
 			.getPublishedBulletins(startDate, Collections.singletonList(region));
-		AvalancheReport avalancheReport = AvalancheReportController.getInstance().getInternalReport(startDate, region);
+		AvalancheReport avalancheReport = avalancheReportController.getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);
 		avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
 		return (language != null ? Collections.singleton(language) : region.getEnabledLanguages()).stream()

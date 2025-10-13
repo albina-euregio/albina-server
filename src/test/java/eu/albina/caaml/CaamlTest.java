@@ -125,7 +125,7 @@ public class CaamlTest {
 
 	private AvalancheReport loadFromDatabase(LocalDate date) throws Exception {
 		Instant instant = date.atStartOfDay(AlbinaUtil.localZone()).withZoneSameInstant(ZoneOffset.UTC).toInstant();
-		List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(instant, RegionController.getInstance().getPublishBulletinRegions());
+		List<AvalancheBulletin> bulletins = new AvalancheReportController().getPublishedBulletins(instant, RegionController.getInstance().getPublishBulletinRegions());
 		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));
 		Files.createDirectories(path.getParent());

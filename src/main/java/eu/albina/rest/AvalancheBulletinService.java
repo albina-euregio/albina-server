@@ -98,6 +98,12 @@ public class AvalancheBulletinService {
 	@Inject
 	PublicationController publicationController;
 
+	@Inject
+	private AvalancheBulletinController avalancheBulletinController;
+
+	@Inject
+	private AvalancheReportController avalancheReportController;
+
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
 
 	@Get("/edit")
@@ -139,7 +145,7 @@ public class AvalancheBulletinService {
 
 		try {
 			List<AvalancheBulletin> bulletins = HibernateUtil.getInstance().runTransaction(entityManager ->
-				AvalancheBulletinController.getInstance().getBulletins(startDate, endDate, regions, entityManager));
+				avalancheBulletinController.getBulletins(startDate, endDate, regions, entityManager));
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 			bulletins.forEach(b -> b.setPublishedRegions(b.getPublishedAndSavedRegions()));
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, ServerInstanceController.getInstance().getLocalServerInstance());
@@ -162,7 +168,7 @@ public class AvalancheBulletinService {
 			return HttpResponse.noContent();
 		}
 
-		List<AvalancheBulletin> bulletins = AvalancheBulletinController.getInstance().getBulletins(startDate, endDate, regions, entityManager);
+		List<AvalancheBulletin> bulletins = avalancheBulletinController.getBulletins(startDate, endDate, regions, entityManager);
 		Collections.sort(bulletins);
 		return HttpResponse.ok(bulletins);
 	}
@@ -207,7 +213,7 @@ public class AvalancheBulletinService {
 
 		try {
 			AvalancheReport avalancheReport = AvalancheReport.of(
-				AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions), null,
+				avalancheReportController.getPublishedBulletins(startDate, regions), null,
 				ServerInstanceController.getInstance().getLocalServerInstance());
 			return makeCAAML(avalancheReport, language, version);
 		} catch (RuntimeException e) {
@@ -237,7 +243,7 @@ public class AvalancheBulletinService {
 		logger.debug("GET latest date");
 		try {
 			LatestBulletin json = new LatestBulletin();
-			json.date = AvalancheReportController.getInstance().getLatestDate();
+			json.date = avalancheReportController.getLatestDate();
 
 			return HttpResponse.ok(json);
 		} catch (AlbinaException e) {
@@ -272,7 +278,7 @@ public class AvalancheBulletinService {
 			pdfRateLimiter.acquire();
 			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-			List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, List.of(region));
+			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
@@ -299,7 +305,7 @@ public class AvalancheBulletinService {
 		logger.info("Get published bulletin as PDF {}", bulletinId);
 		try {
 			pdfRateLimiter.acquire();
-			AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin(bulletinId);
+			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			Region region = RegionController.getInstance().getRegion(regionId);
 			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
@@ -325,7 +331,7 @@ public class AvalancheBulletinService {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		List<Region> regions = RegionController.getInstance().getRegionsOrBulletinRegions(regionIds);
-		List<AvalancheBulletin> bulletins = AvalancheReportController.getInstance().getPublishedBulletins(startDate, regions);
+		List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, regions);
 		return HttpResponse.ok(bulletins);
 	}
 
@@ -352,7 +358,7 @@ public class AvalancheBulletinService {
 		regionIds.forEach(regionId -> regions.add(RegionController.getInstance().getRegion(regionId)));
 
 		try {
-			DangerRating highestDangerRating = AvalancheBulletinController.getInstance()
+			DangerRating highestDangerRating = avalancheBulletinController
 				.getHighestDangerRating(startDate, regions);
 
 			Highest jsonResult = new Highest();
@@ -417,7 +423,7 @@ public class AvalancheBulletinService {
 		logger.debug("GET JSON bulletin: {}", bulletinId);
 
 		try {
-			AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin(bulletinId);
+			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			if (bulletin == null) {
 				return HttpResponse.notFound().body(new AlbinaException("Bulletin not found for ID: " + bulletinId).toJSON());
 			}
@@ -454,7 +460,7 @@ public class AvalancheBulletinService {
 					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
 						AvalancheBulletin bulletin = JsonUtil.parseUsingJackson(bulletinString, AvalancheBulletin.class);
 						loadUser(entityManager, bulletin);
-						AvalancheBulletinController.getInstance().updateBulletin(bulletin, startDate, endDate, region, user, entityManager);
+						avalancheBulletinController.updateBulletin(bulletin, startDate, endDate, region, user, entityManager);
 					} else
 						throw new AlbinaException("User is not authorized for this region!");
 
@@ -498,13 +504,13 @@ public class AvalancheBulletinService {
 					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
 						AvalancheBulletin bulletin = JsonUtil.parseUsingJackson(bulletinString, AvalancheBulletin.class);
 						loadUser(entityManager, bulletin);
-						Map<String, AvalancheBulletin> avalancheBulletins = AvalancheBulletinController.getInstance()
+						Map<String, AvalancheBulletin> avalancheBulletins = avalancheBulletinController
 							.createBulletin(bulletin, startDate, endDate, region, entityManager);
-						AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, region, user, entityManager);
+						avalancheReportController.saveReport(avalancheBulletins, startDate, region, user, entityManager);
 
 						// save report for super regions
 						for (Region superRegion : region.getSuperRegions()) {
-							AvalancheReportController.getInstance().saveReport(avalancheBulletins, startDate, superRegion, user, entityManager);
+							avalancheReportController.saveReport(avalancheBulletins, startDate, superRegion, user, entityManager);
 						}
 					} else
 						throw new AlbinaException("User is not authorized for this region!");
@@ -541,7 +547,7 @@ public class AvalancheBulletinService {
 					List<Region> regions = RegionController.getInstance().getRegions(entityManager);
 
 					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-						AvalancheBulletinController.getInstance().deleteBulletin(bulletinId, startDate, endDate, region, user, entityManager);
+						avalancheBulletinController.deleteBulletin(bulletinId, startDate, endDate, region, user, entityManager);
 
 					} else
 						throw new AlbinaException("User is not authorized for this region!");
@@ -580,7 +586,7 @@ public class AvalancheBulletinService {
 						bulletins.forEach(b -> loadUser(entityManager, b));
 						return null;
 					});
-					AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
+					avalancheBulletinController.saveBulletins(bulletins, startDate, endDate, region, user);
 				} else
 					throw new AlbinaException("User is not authorized for this region!");
 
@@ -612,12 +618,12 @@ public class AvalancheBulletinService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				BulletinStatus status = AvalancheReportController.getInstance().getInternalStatusForDay(startDate, region);
+				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
 
 				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted)) {
 					List<AvalancheBulletin> bulletins = List.of(JsonUtil.parseUsingJackson(bulletinsString, AvalancheBulletin[].class));
 
-					AvalancheBulletinController.getInstance().saveBulletins(bulletins, startDate, endDate, region, user);
+					avalancheBulletinController.saveBulletins(bulletins, startDate, endDate, region, user);
 
 					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
 					try {
@@ -625,18 +631,18 @@ public class AvalancheBulletinService {
 					} catch (InterruptedException e) {
 					}
 
-					List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
+					List<AvalancheBulletin> allBulletins = avalancheBulletinController.submitBulletins(startDate,
 						endDate, region, user);
 					List<AvalancheBulletin> regionBulletins = allBulletins.stream()
 						.filter(bulletin -> bulletin.affectsRegion(region))
 						.collect(Collectors.toList());
-					AvalancheReportController.getInstance().submitReport(regionBulletins, startDate, region, user);
+					avalancheReportController.submitReport(regionBulletins, startDate, region, user);
 					// submit report for super regions
 					for (Region superRegion : region.getSuperRegions()) {
 						List<AvalancheBulletin> superRegionBulletins = allBulletins.stream()
 							.filter(bulletin -> bulletin.affectsRegion(superRegion))
 							.collect(Collectors.toList());
-						AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
+						avalancheReportController.submitReport(superRegionBulletins, startDate, superRegion, user);
 					}
 
 					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
@@ -652,7 +658,7 @@ public class AvalancheBulletinService {
 				).distinct().collect(Collectors.toList());
 
 				new Thread(() -> {
-					new ChangeJob(publicationController) {
+					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController) {
 						@Override
 						protected Instant getStartDate(Clock clock) {
 							return startDate;
@@ -691,14 +697,14 @@ public class AvalancheBulletinService {
 			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
 
 			if (regionId != null && user.hasPermissionForRegion(regionId)) {
-				List<AvalancheBulletin> allBulletins = AvalancheBulletinController.getInstance().submitBulletins(startDate,
+				List<AvalancheBulletin> allBulletins = avalancheBulletinController.submitBulletins(startDate,
 					endDate, region, user);
 
 				List<AvalancheBulletin> regionBulletins = allBulletins.stream()
 					.filter(bulletin -> bulletin.affectsRegion(region))
 					.collect(Collectors.toList());
 
-				AvalancheReportController.getInstance().submitReport(regionBulletins, startDate, region, user);
+				avalancheReportController.submitReport(regionBulletins, startDate, region, user);
 
 				// submit report for super regions
 				for (Region superRegion : region.getSuperRegions()) {
@@ -706,7 +712,7 @@ public class AvalancheBulletinService {
 						.filter(bulletin -> bulletin.affectsRegion(superRegion))
 						.collect(Collectors.toList());
 
-					AvalancheReportController.getInstance().submitReport(superRegionBulletins, startDate, superRegion, user);
+					avalancheReportController.submitReport(superRegionBulletins, startDate, superRegion, user);
 				}
 
 				return HttpResponse.noContent();
@@ -738,7 +744,7 @@ public class AvalancheBulletinService {
 			User user = UserController.getInstance().getUser(principal.getName());
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
-				Set<String> result = AvalancheBulletinController.getInstance().checkBulletins(startDate, endDate, region);
+				Set<String> result = avalancheBulletinController.checkBulletins(startDate, endDate, region);
 				return HttpResponse.ok(result);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
@@ -755,7 +761,7 @@ public class AvalancheBulletinService {
 		logger.debug("GET JSON locked bulletins");
 
 		try {
-			List<BulletinLock> lockedBulletins = AvalancheBulletinController.getInstance().getLockedBulletins(DateControllerUtil.parseDateOrThrow(date));
+			List<BulletinLock> lockedBulletins = avalancheBulletinController.getLockedBulletins(DateControllerUtil.parseDateOrThrow(date));
 			return HttpResponse.ok(lockedBulletins);
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletin locks", e);

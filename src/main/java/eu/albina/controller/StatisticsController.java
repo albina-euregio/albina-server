@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.apache.commons.text.StringEscapeUtils;
 
 import eu.albina.model.AvalancheBulletin;
@@ -33,6 +35,7 @@ import eu.albina.util.HibernateUtil;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class StatisticsController {
 
 	static String csvDeliminator = ";";
@@ -41,27 +44,8 @@ public class StatisticsController {
 
 	static String notAvailableString = "N/A";
 
-	private static StatisticsController instance = null;
-
-	/**
-	 * Private constructor.
-	 */
-	private StatisticsController() {
-	}
-
-	/**
-	 * Returns the {@code RegionController} object associated with the current Java
-	 * application.
-	 *
-	 * @return the {@code RegionController} object associated with the current Java
-	 *         application.
-	 */
-	public static StatisticsController getInstance() {
-		if (instance == null) {
-			instance = new StatisticsController();
-		}
-		return instance;
-	}
+	@Inject
+	AvalancheReportController avalancheReportController;
 
 	/**
 	 * Return a CSV string with all danger source variants from {@code startDate}
@@ -104,7 +88,7 @@ public class StatisticsController {
 			boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		return HibernateUtil.getInstance().run(entityManager -> {
 			// get latest reports
-			Collection<AvalancheReport> reports = AvalancheReportController.getInstance().getPublicReports(startDate,
+			Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate,
 					endDate, region);
 
 			// get bulletins from report json
@@ -140,7 +124,7 @@ public class StatisticsController {
 			boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		return HibernateUtil.getInstance().run(entityManager -> {
 			List<AvalancheBulletin> bulletins = regions.stream()
-				.map(region -> AvalancheReportController.getInstance().getPublicReports(startDate,
+				.map(region -> avalancheReportController.getPublicReports(startDate,
 					endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports).stream())
 				.collect(Collectors.toList());
 			// get latest reports
@@ -206,7 +190,7 @@ public class StatisticsController {
 	 *            the bulletins that should be included in the CSV string
 	 * @return a CSV string representing all {@code bulletins} in {@code lang}
 	 */
-	public String getDangerSourceVariantsCsvString(List<DangerSourceVariant> dangerSourceVariants) {
+	public static String getDangerSourceVariantsCsvString(List<DangerSourceVariant> dangerSourceVariants) {
 		// sort variants by validity
 		dangerSourceVariants.sort(Comparator.comparing(DangerSourceVariant::getValidFrom));
 
@@ -379,7 +363,7 @@ public class StatisticsController {
 	 *            the variant that should be added to the {@code StringBuilder}
 	 *            instance
 	 */
-	private void addDangerSourceVariantCsvLines(StringBuilder sb, DangerSourceVariant dangerSourceVariant) {
+	private static void addDangerSourceVariantCsvLines(StringBuilder sb, DangerSourceVariant dangerSourceVariant) {
 		if (dangerSourceVariant == null) {
 			return;
 		}
@@ -588,8 +572,8 @@ public class StatisticsController {
 	 *            {@code true}
 	 * @return a CSV string representing all {@code bulletins} in {@code lang}
 	 */
-	public String getAvalancheBulletinCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended,
-			boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
+	public static String getAvalancheBulletinCsvString(LanguageCode lang, List<AvalancheBulletin> bulletins, boolean extended,
+													   boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		// sort bulletins by validity
 		bulletins.sort(Comparator.comparing(AvalancheBulletin::getValidFrom));
 
@@ -734,8 +718,8 @@ public class StatisticsController {
 	 * @param lang
 	 *            the desired language
 	 */
-	private void addAvalancheBulletinCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
-			LanguageCode lang, boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
+	private static void addAvalancheBulletinCsvLines(StringBuilder sb, AvalancheBulletin avalancheBulletin, boolean isAfternoon,
+													 LanguageCode lang, boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
 		AvalancheBulletinDaytimeDescription daytimeDescription;
 		if (!isAfternoon || duplicateBulletinForenoon)
 			daytimeDescription = avalancheBulletin.getForenoon();
@@ -852,7 +836,7 @@ public class StatisticsController {
 		}
 	}
 
-	private void addMatrixInformation(StringBuilder sb, MatrixInformation matrixInformation) {
+	private static void addMatrixInformation(StringBuilder sb, MatrixInformation matrixInformation) {
 		if (matrixInformation != null) {
 			if (matrixInformation.getArtificialDangerRating() != null)
 				sb.append(matrixInformation.getArtificialDangerRating());
@@ -905,7 +889,7 @@ public class StatisticsController {
 		}
 	}
 
-	private void addEawsMatrixInformation(StringBuilder sb, EawsMatrixInformation eawsMatrixInformation) {
+	private static void addEawsMatrixInformation(StringBuilder sb, EawsMatrixInformation eawsMatrixInformation) {
 		if (eawsMatrixInformation != null) {
 			if (eawsMatrixInformation.getDangerRating() != null)
 				sb.append(eawsMatrixInformation.getDangerRating());
@@ -966,7 +950,7 @@ public class StatisticsController {
 	 *            {@code StringBuilder} instance
 	 * @param lang
 	 */
-	private void addCsvAvalancheProblem(StringBuilder sb, AvalancheProblem avalancheProblem, boolean extended, LanguageCode lang, boolean obsoleteMatrix) {
+	private static void addCsvAvalancheProblem(StringBuilder sb, AvalancheProblem avalancheProblem, boolean extended, LanguageCode lang, boolean obsoleteMatrix) {
 		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
 			sb.append(avalancheProblem.getAvalancheProblem().toStringId());
 			sb.append(csvDeliminator);

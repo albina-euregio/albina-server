@@ -7,12 +7,13 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.util.AlbinaUtil;
-import jakarta.inject.Singleton;
 
 /**
  * A job handling all the tasks and logic necessary to
@@ -23,8 +24,8 @@ import jakarta.inject.Singleton;
  */
 public class UpdateJob extends PublicationJob {
 
-	public UpdateJob(PublicationController publicationController) {
-		super(publicationController);
+	public UpdateJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController) {
+		super(publicationController, avalancheReportController, avalancheBulletinController);
 	}
 
 	@Override

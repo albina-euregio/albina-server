@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
+import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.jobs.BlogJob;
 import eu.albina.jobs.HealthCheckJob;
@@ -15,16 +17,22 @@ import jakarta.inject.Singleton;
 public class SchedulerUtil {
 
 	@Inject
-	protected PublicationController publicationController;
+	PublicationController publicationController;
+
+	@Inject
+	AvalancheReportController avalancheReportController;
+
+	@Inject
+	AvalancheBulletinController avalancheBulletinController;
 
 	@Scheduled(cron = "0 0 17 * * ?")
 	public void triggerPublication() {
-		new PublicationJob(publicationController).execute();
+		new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController).execute();
 	}
 
 	@Scheduled(cron = "0 0 8 * * ?")
 	public void triggerUpdate() {
-		new UpdateJob(publicationController).execute();
+		new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController).execute();
 	}
 
 	@Scheduled(cron = "0 0/10 * * * ?")

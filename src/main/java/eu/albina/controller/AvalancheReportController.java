@@ -14,6 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
+import jakarta.inject.Singleton;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.proxy.HibernateProxy;
@@ -41,31 +42,10 @@ import jakarta.persistence.EntityManager;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class AvalancheReportController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheReportController.class);
-
-	private static AvalancheReportController instance = null;
-
-	/**
-	 * Private constructor.
-	 */
-	private AvalancheReportController() {
-	}
-
-	/**
-	 * Returns the {@code AvalancheReportController} object associated with the
-	 * current Java application.
-	 *
-	 * @return the {@code AvalancheReportController} object associated with the
-	 *         current Java application.
-	 */
-	public static AvalancheReportController getInstance() {
-		if (instance == null) {
-			instance = new AvalancheReportController();
-		}
-		return instance;
-	}
 
 	/**
 	 * Return the actual status of the bulletins for every day in a given time

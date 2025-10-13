@@ -12,6 +12,7 @@ import io.micronaut.websocket.annotation.OnMessage;
 import io.micronaut.websocket.annotation.OnOpen;
 import io.micronaut.websocket.annotation.ServerWebSocket;
 import io.micronaut.websocket.exceptions.WebSocketSessionException;
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,9 @@ public class AvalancheBulletinEndpoint {
 
 	private static final ConcurrentMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
+	@Inject
+	private AvalancheBulletinController avalancheBulletinController;
+
 	@OnOpen
 	public void onOpen(WebSocketSession session, @PathVariable String username) {
 		sessions.put(session.getId(), session);
@@ -37,9 +41,9 @@ public class AvalancheBulletinEndpoint {
 		bulletinLock.setSessionId(session.getId());
 
 		if (bulletinLock.getLock()) {
-			AvalancheBulletinController.getInstance().lockBulletin(bulletinLock);
+			avalancheBulletinController.lockBulletin(bulletinLock);
 		} else {
-			AvalancheBulletinController.getInstance().unlockBulletin(bulletinLock);
+			avalancheBulletinController.unlockBulletin(bulletinLock);
 		}
 
 		broadcast(bulletinLock);
@@ -48,7 +52,7 @@ public class AvalancheBulletinEndpoint {
 	@OnClose
 	public void onClose(WebSocketSession session) {
 		sessions.remove(session.getId());
-		AvalancheBulletinController.getInstance().unlockBulletins(session.getId());
+		avalancheBulletinController.unlockBulletins(session.getId());
 		logger.info("Client disconnected: {}", session.getId());
 	}
 

@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,9 @@ import java.util.stream.Collectors;
 public class AvalancheBulletinStatusService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinStatusService.class);
+
+	@Inject
+	private AvalancheReportController avalancheReportController;
 
 	@Serdeable
 	static class Status {
@@ -77,10 +81,10 @@ public class AvalancheBulletinStatusService {
 		try {
 			Map<Instant, BulletinStatus> status;
 			if (regionId == null || regionId.isEmpty()) {
-				status = AvalancheReportController.getInstance().getStatus(startDate, endDate,
+				status = avalancheReportController.getStatus(startDate, endDate,
 						RegionController.getInstance().getPublishBulletinRegions());
 			} else {
-				status = AvalancheReportController.getInstance().getStatus(startDate, endDate, RegionController.getInstance().getRegion(regionId));
+				status = avalancheReportController.getStatus(startDate, endDate, RegionController.getInstance().getRegion(regionId));
 			}
 
 			List<Status> result = status.entrySet().stream()
@@ -107,7 +111,7 @@ public class AvalancheBulletinStatusService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
-			List<Status> result = AvalancheReportController.getInstance()
+			List<Status> result = avalancheReportController
 				.getInternalStatus(startDate, endDate, region).entrySet().stream()
 				.map(entry -> new Status(entry.getKey(), entry.getValue(), null))
 				.collect(Collectors.toList());
@@ -139,7 +143,7 @@ public class AvalancheBulletinStatusService {
 		}
 
 		Region region = RegionController.getInstance().getRegion(regionId);
-		List<Status> result = AvalancheReportController.getInstance()
+		List<Status> result = avalancheReportController
 			.getPublicationStatus(startDate, endDate, region)
 			.entrySet().stream()
 			.map(entry -> new Status(entry.getKey(), null, entry.getValue()))
@@ -159,7 +163,7 @@ public class AvalancheBulletinStatusService {
 		Instant endDate = startDate;
 
 		try {
-			Map<Instant, AvalancheReport> status = AvalancheReportController.getInstance()
+			Map<Instant, AvalancheReport> status = avalancheReportController
 					.getPublicationStatus(startDate, endDate, RegionController.getInstance().getRegionOrThrowAlbinaException(regionId));
 
 			if (status.size() > 1)

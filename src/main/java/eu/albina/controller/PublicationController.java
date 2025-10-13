@@ -32,6 +32,9 @@ public class PublicationController {
 	@Inject
 	Caaml caaml;
 
+	@Inject
+	AvalancheReportController avalancheReportController;
+
 	private static final Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
@@ -81,7 +84,7 @@ public class PublicationController {
 		try {
 			logger.info("JSON production for {} started", avalancheReport);
 			avalancheReport.createJsonFile();
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setJsonCreated);
 			logger.info("JSON production for {} finished", avalancheReport);
 		} catch (IOException e) {
@@ -96,7 +99,7 @@ public class PublicationController {
 		try {
 			logger.info("CAAMLv5 production for {} started", avalancheReport);
 			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for {} finished", avalancheReport);
 		} catch (IOException e) {
@@ -112,7 +115,7 @@ public class PublicationController {
 			logger.info("CAAMLv6 production for {} started", avalancheReport);
 			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
 			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport);
 		} catch (IOException e) {
@@ -127,7 +130,7 @@ public class PublicationController {
 		try {
 			logger.info("Map production for {} started", avalancheReport);
 			MapUtil.createMapyrusMaps(avalancheReport);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setMapCreated);
 			logger.info("Map production {} finished", avalancheReport);
 		} catch (Exception e) {
@@ -142,7 +145,7 @@ public class PublicationController {
 		try {
 			logger.info("PDF production for {} started", avalancheReport);
 			PdfUtil.createRegionPdfs(avalancheReport);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setPdfCreated);
 		} finally {
 			logger.info("PDF production {} finished", avalancheReport);
@@ -156,7 +159,7 @@ public class PublicationController {
 		try {
 			logger.info("Simple HTML production for {} started", avalancheReport);
 			SimpleHtmlUtil.getInstance().createRegionSimpleHtml(avalancheReport);
-			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
+			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setHtmlCreated);
 		} catch (Exception e) {
 			logger.error("Error creating simple HTML for " + avalancheReport, e);
@@ -185,7 +188,7 @@ public class PublicationController {
 			MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
 			try {
 				posting.sendToAllChannels();
-				AvalancheReportController c = AvalancheReportController.getInstance();
+				AvalancheReportController c = avalancheReportController;
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setWhatsAppSent);

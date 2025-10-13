@@ -25,6 +25,7 @@ import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.security.annotation.Secured;
 
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class StatisticsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
+
+	@Inject
+	StatisticsController statisticsController;
 
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
@@ -80,7 +84,7 @@ public class StatisticsService {
 			regions = RegionController.getInstance().getPublishBulletinRegions();
 		}
 
-		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, regions, extended,
+		String statistics = statisticsController.getDangerRatingStatistics(start, end, language, regions, extended,
 				duplicate, obsoleteMatrix);
 
 		String filename = String.format("statistic_%s_%s%s%s%s_%s",
@@ -127,7 +131,7 @@ public class StatisticsService {
 		else
 			return HttpResponse.badRequest();
 
-		String statistics = StatisticsController.getInstance().getDangerSourceStatistics(start, end);
+		String statistics = statisticsController.getDangerSourceStatistics(start, end);
 
 		String filename = String.format("danger_source_statistic_%s_%s",
 			OffsetDateTime.parse(startDate).toLocalDate(),
