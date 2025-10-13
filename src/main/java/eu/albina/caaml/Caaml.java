@@ -7,10 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import eu.albina.model.AvalancheReport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.inject.Inject;
 
 import eu.albina.model.enumerations.LanguageCode;
+import jakarta.inject.Singleton;
 
 /**
  * CAAML (Canadian Avalanche Association Markup Language) is a standard for the electronic representation
@@ -19,11 +19,13 @@ import eu.albina.model.enumerations.LanguageCode;
  * @see <a href="http://caaml.org/">caaml.org</a>
  * @see <a href="https://gitlab.com/albina-euregio/albina-caaml">gitlab.com/albina-euregio/albina-caaml</a>
  */
-public interface Caaml {
+@Singleton
+public class Caaml {
 
-	Logger logger = LoggerFactory.getLogger(Caaml.class);
+	@Inject
+	private Caaml6 caaml6;
 
-	static void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws IOException {
+	public void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
 
@@ -34,11 +36,11 @@ public interface Caaml {
 		}
 	}
 
-	static String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
+	public String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V5) {
 			return Caaml5.createCaamlv5(avalancheReport, lang);
 		} else if (version == CaamlVersion.V6_JSON) {
-			return Caaml6.createJSON(avalancheReport, lang);
+			return caaml6.createJSON(avalancheReport, lang);
 		} else {
 			return Caaml6.createXML(avalancheReport, lang);
 		}

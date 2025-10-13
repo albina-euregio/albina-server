@@ -3,6 +3,8 @@ package eu.albina.controller;
 
 import java.io.IOException;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +26,11 @@ import eu.albina.util.TextToSpeech;
  *
  * @author Norbert Lanzanasto
  */
+@Singleton
 public class PublicationController {
+
+	@Inject
+	Caaml caaml;
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
@@ -111,7 +117,7 @@ public class PublicationController {
 	public void createCaamlV5(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv5 production for {} started", avalancheReport);
-			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
+			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV5Created);
 			logger.info("CAAMLv5 production for {} finished", avalancheReport);
@@ -126,8 +132,8 @@ public class PublicationController {
 	public void createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for {} started", avalancheReport);
-			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
-			Caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
+			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
+			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
 			AvalancheReportController.getInstance().setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport);

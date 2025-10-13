@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import net.javacrumbs.jsonunit.JsonAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -35,7 +38,11 @@ import eu.albina.util.AlbinaUtil;
 import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
 
+@MicronautTest()
 public class CaamlTest {
+
+	@Inject
+	Caaml caaml;
 
 	private ServerInstance serverInstanceEuregio;
 
@@ -51,7 +58,7 @@ public class CaamlTest {
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		AvalancheReport.of(bulletins, null, serverInstanceEuregio); // test without region for eu.albina.rest.AvalancheBulletinService.getJSONBulletins
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
-		return Caaml.createCaaml(avalancheReport, LanguageCode.en, version);
+		return caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 	}
 
 	@Disabled("<Operation> needs gml:id")
@@ -66,7 +73,7 @@ public class CaamlTest {
 		final String expected = Resources
 				.toString(Resources.getResource("2019-01-16.caaml.v5.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
 		final String xml = createCaaml(CaamlVersion.V5);
-		assertStringEquals(expected, xml);
+		JsonAssert.assertJsonEquals(expected, xml);
 	}
 
 	@Disabled
@@ -102,7 +109,7 @@ public class CaamlTest {
 		AvalancheReport avalancheReport = date.isAfter(LocalDate.parse("2020-10-01")) ? loadFromURL(date): loadFromDatabase(date);
 		for (LanguageCode language : avalancheReport.getRegion().getEnabledLanguages()) {
 			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, version.filenameSuffix()));
-			String caaml = Caaml.createCaaml(avalancheReport, language, version);
+			String caaml = this.caaml.createCaaml(avalancheReport, language, version);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.createDirectories(path.getParent());
 			Files.writeString(path, caaml, StandardCharsets.UTF_8);
@@ -127,7 +134,7 @@ public class CaamlTest {
 		return report;
 	}
 
-	private static void toCAAMLv6(String bulletinResource, String expectedCaamlResource) throws Exception {
+	private void toCAAMLv6(String bulletinResource, String expectedCaamlResource) throws Exception {
 		final URL resource = Resources.getResource(bulletinResource);
 		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
@@ -136,16 +143,12 @@ public class CaamlTest {
 		toCAAMLv6(avalancheReport, expectedCaamlResource.replaceFirst(".json$", ".xml"), CaamlVersion.V6);
 	}
 
-	private static void toCAAMLv6(AvalancheReport avalancheReport, String expectedCaamlResource, CaamlVersion version) throws IOException, SAXException {
-		String caaml = Caaml.createCaaml(avalancheReport, LanguageCode.en, version);
+	private void toCAAMLv6(AvalancheReport avalancheReport, String expectedCaamlResource, CaamlVersion version) throws IOException, SAXException {
+		String caaml = this.caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
         String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
-		assertStringEquals(expected, caaml);
+		JsonAssert.assertJsonEquals(expected, caaml);
 		CaamlValidator.validateCaamlBulletin(caaml, version);
-	}
-
-	private static void assertStringEquals(String expected, String actual) {
-		Assertions.assertEquals(expected.trim().replace("\r\n", "\n"), actual.trim().replace("\r\n", "\n"));
 	}
 
 	@Test

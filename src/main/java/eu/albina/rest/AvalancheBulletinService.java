@@ -50,6 +50,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -89,6 +90,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 	contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")
 ), servers = {@Server(url = "/albina/api")})
 public class AvalancheBulletinService {
+
+	@Inject
+	Caaml caaml;
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
 
@@ -172,8 +176,8 @@ public class AvalancheBulletinService {
 		return getPublishedCaamlBulletins(date, regionIds, language, version);
 	}
 
-	private static HttpResponse<?> makeCAAML(AvalancheReport avalancheReport, LanguageCode language, CaamlVersion version) {
-		String caaml = Caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
+	private HttpResponse<?> makeCAAML(AvalancheReport avalancheReport, LanguageCode language, CaamlVersion version) {
+		String caaml = this.caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
 		if (caaml != null) {
 			final String type = version != CaamlVersion.V6_JSON ? MediaType.APPLICATION_XML : MediaType.APPLICATION_JSON;
 			return HttpResponse.ok(caaml).contentType(type);
