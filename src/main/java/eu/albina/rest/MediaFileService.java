@@ -60,6 +60,9 @@ public class MediaFileService {
 	@Inject
 	RegionController regionController;
 
+	@Inject
+	private ServerInstanceController serverInstanceController;
+
 	@Post
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -85,7 +88,7 @@ public class MediaFileService {
 			}
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
-			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			ServerInstance localServerInstance = serverInstanceController.getLocalServerInstance();
 
 			Path fileLocation = getMediaPath(localServerInstance, region, language);
 			Files.createDirectories(fileLocation);
@@ -143,7 +146,7 @@ public class MediaFileService {
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language
 	) throws Exception {
-		final ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+		final ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
 		final Region region = new Region(regionId);
 		final String websiteName = region.getWebsiteName(language);
 		final String rss = RssUtil.getRss(

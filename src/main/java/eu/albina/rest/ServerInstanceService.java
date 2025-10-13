@@ -34,6 +34,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.inject.Inject;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,13 +51,16 @@ public class ServerInstanceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerInstanceService.class);
 
+	@Inject
+	private ServerInstanceController serverInstanceController;
+
 	@Put
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update server configuration")
 	public HttpResponse<?> updateServerConfiguration(@Body ServerInstance serverInstance) {
 		try {
-			ServerInstanceController.getInstance().updateServerInstance(serverInstance);
+			serverInstanceController.updateServerInstance(serverInstance);
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error updating local server configuration", e);
@@ -72,8 +76,8 @@ public class ServerInstanceService {
 		logger.debug("POST JSON server");
 
 		// check if id already exists
-		if (serverInstance.getId() == null || !ServerInstanceController.getInstance().serverInstanceExists(serverInstance.getId())) {
-			ServerInstanceController.getInstance().createServerInstance(serverInstance);
+		if (serverInstance.getId() == null || !serverInstanceController.serverInstanceExists(serverInstance.getId())) {
+			serverInstanceController.createServerInstance(serverInstance);
 			return HttpResponse.created(serverInstance);
 		} else {
 			String msg = "Error creating server instance - Server instance already exists";
@@ -112,7 +116,7 @@ public class ServerInstanceService {
 	@Operation(summary = "Get public local server configuration")
 	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
 	public PublicLocalServerConfiguration getPublicLocalServerConfiguration() {
-		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+		ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
 		return new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), GlobalVariables.version);
 	}
 
@@ -124,7 +128,7 @@ public class ServerInstanceService {
 	public HttpResponse<?> getLocalServerConfiguration() {
 		logger.debug("GET JSON server");
 		try {
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
 			return HttpResponse.ok(serverInstance);
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);
@@ -140,7 +144,7 @@ public class ServerInstanceService {
 	public HttpResponse<?> getExternalServerConfigurations() {
 		logger.debug("GET JSON external servers");
 		try {
-			List<ServerInstance> externalServerInstances = ServerInstanceController.getInstance().getExternalServerInstances();
+			List<ServerInstance> externalServerInstances = serverInstanceController.getExternalServerInstances();
 			return HttpResponse.ok(externalServerInstances);
 		} catch (HibernateException he) {
 			logger.warn("Error loading local server configuration", he);

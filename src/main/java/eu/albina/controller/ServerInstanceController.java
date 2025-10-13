@@ -4,6 +4,7 @@ package eu.albina.controller;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.inject.Singleton;
 import org.hibernate.HibernateException;
 
 import eu.albina.exception.AlbinaException;
@@ -17,31 +18,8 @@ import jakarta.persistence.EntityManager;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class ServerInstanceController {
-
-	// private static Logger logger = LoggerFactory.getLogger(ServerInstanceController.class);
-
-	private static ServerInstanceController instance = null;
-
-	/**
-	 * Private constructor.
-	 */
-	private ServerInstanceController() {
-	}
-
-	/**
-	 * Returns the {@code ServerInstanceController} object associated with the current Java
-	 * application.
-	 *
-	 * @return the {@code ServerInstanceController} object associated with the current Java
-	 *         application.
-	 */
-	public static ServerInstanceController getInstance() {
-		if (instance == null) {
-			instance = new ServerInstanceController();
-		}
-		return instance;
-	}
 
 	/**
 	 * Save a {@code serverInstance} to the database.

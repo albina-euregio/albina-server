@@ -50,6 +50,9 @@ public class AvalancheBulletinController {
 	@Inject
 	AvalancheReportController avalancheReportController;
 
+	@Inject
+	ServerInstanceController serverInstanceController;
+
 	/**
 	 * Retrieve an avalanche bulletin from the database by {@code bulletinID}.
 	 *
@@ -557,7 +560,7 @@ public class AvalancheBulletinController {
 				if (bulletin.affectsRegionWithoutSuggestions(region)) {
 
 					// set author
-					ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance(entityManager);
+					ServerInstance serverInstance = serverInstanceController.getLocalServerInstance(entityManager);
 					if (user != null && !Objects.equals(user.getEmail(), serverInstance.getUserName())) {
 						if (!bulletin.getAdditionalAuthors().contains(user.getName()))
 							bulletin.addAdditionalAuthor(user.getName());

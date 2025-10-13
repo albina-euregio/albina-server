@@ -5,6 +5,7 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
+import eu.albina.controller.ServerInstanceController;
 import eu.albina.jobs.BlogJob;
 import eu.albina.jobs.HealthCheckJob;
 import eu.albina.jobs.PublicationJob;
@@ -29,14 +30,17 @@ public class SchedulerUtil {
 	@Inject
 	RegionController regionController;
 
+	@Inject
+	private ServerInstanceController serverInstanceController;
+
 	@Scheduled(cron = "0 0 17 * * ?")
 	public void triggerPublication() {
-		new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController).execute();
+		new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()).execute();
 	}
 
 	@Scheduled(cron = "0 0 8 * * ?")
 	public void triggerUpdate() {
-		new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController).execute();
+		new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()).execute();
 	}
 
 	@Scheduled(cron = "0 0/10 * * * ?")

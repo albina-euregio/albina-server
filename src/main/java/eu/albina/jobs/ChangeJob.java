@@ -16,8 +16,8 @@ import eu.albina.model.ServerInstance;
  */
 public class ChangeJob extends PublicationJob {
 
-	public ChangeJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController) {
-		super(publicationController, avalancheReportController, avalancheBulletinController, regionController);
+	public ChangeJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController, ServerInstance serverInstance) {
+		super(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstance);
 	}
 
 	@Override

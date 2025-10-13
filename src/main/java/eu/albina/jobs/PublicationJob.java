@@ -35,7 +35,6 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.UserController;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
@@ -60,17 +59,17 @@ public class PublicationJob {
 	private final AvalancheReportController avalancheReportController;
 	private final AvalancheBulletinController avalancheBulletinController;
 	protected final RegionController regionController;
+	private final ServerInstance serverInstance;
 
-	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController) {
+	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController, ServerInstance serverInstance) {
 		this.publicationController = publicationController;
 		this.avalancheReportController = avalancheReportController;
 		this.avalancheBulletinController = avalancheBulletinController;
 		this.regionController = regionController;
+		this.serverInstance = serverInstance;
 	}
 
 	private List<Runnable> execute0() {
-		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-
 		if (!isEnabled(serverInstance)) {
 			return null;
 		}

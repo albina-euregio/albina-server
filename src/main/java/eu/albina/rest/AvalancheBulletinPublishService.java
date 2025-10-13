@@ -59,6 +59,9 @@ public class AvalancheBulletinPublishService {
 	@Inject
 	RegionController regionController;
 
+	@Inject
+	private ServerInstanceController serverInstanceController;
+
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
 	 */
@@ -81,7 +84,7 @@ public class AvalancheBulletinPublishService {
 			).distinct().collect(Collectors.toList());
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController) {
+				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -121,7 +124,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			new Thread(() -> {
-				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController) {
+				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -233,7 +236,7 @@ public class AvalancheBulletinPublishService {
 			.getPublishedBulletins(startDate, Collections.singletonList(region));
 		AvalancheReport avalancheReport = avalancheReportController.getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);
-		avalancheReport.setServerInstance(ServerInstanceController.getInstance().getLocalServerInstance());
+		avalancheReport.setServerInstance(serverInstanceController.getLocalServerInstance());
 		return (language != null ? Collections.singleton(language) : region.getEnabledLanguages()).stream()
 			.map(lang -> MultichannelMessage.of(avalancheReport, lang))
 			.collect(Collectors.toList());

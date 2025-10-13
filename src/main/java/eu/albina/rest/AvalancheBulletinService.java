@@ -108,6 +108,8 @@ public class AvalancheBulletinService {
 	RegionController regionController;
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
+	@Inject
+	private ServerInstanceController serverInstanceController;
 
 	@Get("/edit")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
@@ -151,7 +153,7 @@ public class AvalancheBulletinService {
 				avalancheBulletinController.getBulletins(startDate, endDate, regions, entityManager));
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 			bulletins.forEach(b -> b.setPublishedRegions(b.getPublishedAndSavedRegions()));
-			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, ServerInstanceController.getInstance().getLocalServerInstance());
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, serverInstanceController.getLocalServerInstance());
 			avalancheReport.setStatus(BulletinStatus.draft);
 			return makeCAAML(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 		} catch (RuntimeException e) {
@@ -217,7 +219,7 @@ public class AvalancheBulletinService {
 		try {
 			AvalancheReport avalancheReport = AvalancheReport.of(
 				avalancheReportController.getPublishedBulletins(startDate, regions), null,
-				ServerInstanceController.getInstance().getLocalServerInstance());
+				serverInstanceController.getLocalServerInstance());
 			return makeCAAML(avalancheReport, language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
@@ -282,7 +284,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
@@ -310,7 +312,7 @@ public class AvalancheBulletinService {
 			pdfRateLimiter.acquire();
 			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			Region region = regionController.getRegion(regionId);
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
@@ -394,7 +396,7 @@ public class AvalancheBulletinService {
 				.collect(Collectors.toList());
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
 			serverInstance.setMapsPath(GlobalVariables.getTmpPdfDirectory());
 			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
@@ -661,7 +663,7 @@ public class AvalancheBulletinService {
 				).distinct().collect(Collectors.toList());
 
 				new Thread(() -> {
-					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController, regionController) {
+					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()) {
 						@Override
 						protected Instant getStartDate(Clock clock) {
 							return startDate;
