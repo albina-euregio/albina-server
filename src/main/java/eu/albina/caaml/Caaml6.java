@@ -7,6 +7,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.Strings;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
@@ -43,6 +45,8 @@ public class Caaml6 {
 	public static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			return new XmlMapper()
+				.registerModule(new JavaTimeModule())
+				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 				.writerWithDefaultPrettyPrinter()
 				.writeValueAsString(toCAAML(avalancheReport, lang))

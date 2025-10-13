@@ -3,24 +3,27 @@ package org.caaml.v6;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
 public class AvalancheBulletinCustomData {
-	public final ALBINA ALBINA;
-	public final LwdTyrol LWD_Tyrol;
+	private final ALBINA ALBINA;
+	private final LwdTyrol LWD_Tyrol;
 
 	public AvalancheBulletinCustomData(ALBINA ALBINA, LwdTyrol LWD_Tyrol) {
 		this.ALBINA = ALBINA;
 		this.LWD_Tyrol = LWD_Tyrol;
 	}
 
+	@JacksonXmlProperty(localName = "ALBINA")
 	public ALBINA getALBINA() {
 		return ALBINA;
 	}
 
+	@JacksonXmlProperty(localName = "LWD_Tyrol")
 	public LwdTyrol getLWD_Tyrol() {
 		return LWD_Tyrol;
 	}

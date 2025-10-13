@@ -17,9 +17,7 @@ import io.micronaut.serde.annotation.Serdeable;
 @JsonPropertyOrder({"startTime", "endTime"})
 @Serdeable
 public class ValidTime {
-	@JsonSerialize(as = String.class)
     private Instant endTime;
-	@JsonSerialize(as = String.class)
     private Instant startTime;
 
 	public ValidTime() {
