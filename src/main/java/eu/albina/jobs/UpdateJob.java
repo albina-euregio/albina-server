@@ -7,19 +7,25 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.util.AlbinaUtil;
+import jakarta.inject.Singleton;
 
 /**
- * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * A job handling all the tasks and logic necessary to
  * automatically update the bulletins at 8AM or triggered manually.
  *
  * @author Norbert Lanzanasto
  *
  */
 public class UpdateJob extends PublicationJob {
+
+	public UpdateJob(PublicationController publicationController) {
+		super(publicationController);
+	}
 
 	@Override
 	protected boolean isEnabled(ServerInstance serverInstance) {

@@ -9,22 +9,19 @@ import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A {@code org.quartz.Job} to check status of the different publication channels (Telegram, WhatsApp, Blog).
+ * A job to check status of the different publication channels (Telegram, WhatsApp, Blog).
  * Also serves the purpose of keeping whapi.cloud channels active enough to not get deactivated during the off-season.
  *
  */
-public class HealthCheckJob implements org.quartz.Job {
+public class HealthCheckJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(HealthCheckJob.class);
 
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
 		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
 			LanguageCode language = region.getDefaultLang();

@@ -2,7 +2,6 @@ package eu.albina;
 
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.SchedulerUtil;
 import io.micronaut.runtime.Micronaut;
 
 public class Application {
@@ -12,9 +11,6 @@ public class Application {
 
 		System.setProperty("org.jboss.logging.provider", "slf4j");
 		HibernateUtil.getInstance().setUp();
-
-		SchedulerUtil.getInstance().setUp();
-		SchedulerUtil.getInstance().start();
 
 		Micronaut.run(Application.class, args);
 	}

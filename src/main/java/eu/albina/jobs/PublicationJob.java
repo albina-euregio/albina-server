@@ -25,7 +25,6 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,18 +47,22 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
 
 /**
- * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * A job handling all the tasks and logic necessary to
  * automatically publish the bulletins at 5PM.
  *
  * @author Norbert Lanzanasto
  */
-public class PublicationJob implements org.quartz.Job {
+public class PublicationJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
+	private final PublicationController publicationController;
+
+	public PublicationJob(PublicationController publicationController) {
+		this.publicationController = publicationController;
+	}
 
 	private List<Runnable> execute0() {
-		PublicationController publicationController = PublicationController.getInstance();
 		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
 		AvalancheReportController avalancheReportController = AvalancheReportController.getInstance();
 		RegionController regionController = RegionController.getInstance();
@@ -200,11 +203,8 @@ public class PublicationJob implements org.quartz.Job {
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
 	 * on the current settings.
-	 *
-	 * @param arg0
 	 */
-	@Override
-	public void execute(JobExecutionContext arg0) {
+	public void execute() {
 		List<Runnable> tasksAfterDirectoryUpdate;
 
 		synchronized (PublicationJob.class) {

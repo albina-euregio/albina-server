@@ -6,8 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,23 +14,20 @@ import com.google.common.io.MoreFiles;
 import eu.albina.util.GlobalVariables;
 
 /**
- * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * A job handling all the tasks and logic necessary to
  * automatically publish blog posts.
  *
  * @author Norbert Lanzanasto
  *
  */
-public class TmpDeletionJob implements org.quartz.Job {
+public class TmpDeletionJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(TmpDeletionJob.class);
 
 	/**
 	 * Execute all necessary tasks to delete tmp files.
-	 *
-	 * @param arg0
 	 */
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void execute() {
 		logger.info("TmpDeletion job triggered!");
 		try {
 			Path tmpDir = Paths.get(GlobalVariables.getTmpMapsPath());

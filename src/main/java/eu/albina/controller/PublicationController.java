@@ -34,28 +34,6 @@ public class PublicationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationController.class);
 
-	private static PublicationController instance = null;
-
-	/**
-	 * Private constructor.
-	 */
-	private PublicationController() {
-	}
-
-	/**
-	 * Returns the {@code PublicationController} object associated with the current
-	 * Java application.
-	 *
-	 * @return the {@code PublicationController} object associated with the current
-	 * Java application.
-	 */
-	public static PublicationController getInstance() {
-		if (instance == null) {
-			instance = new PublicationController();
-		}
-		return instance;
-	}
-
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
 		if (region.isCreateCaamlV5()) {

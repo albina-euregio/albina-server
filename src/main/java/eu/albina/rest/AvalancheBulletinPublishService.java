@@ -10,12 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import eu.albina.controller.PublicationController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,9 @@ public class AvalancheBulletinPublishService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinPublishService.class);
 
+	@Inject
+	PublicationController publicationController;
+
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
 	 */
@@ -66,7 +71,7 @@ public class AvalancheBulletinPublishService {
 			).distinct().collect(Collectors.toList());
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				new UpdateJob() {
+				new UpdateJob(publicationController) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -81,7 +86,7 @@ public class AvalancheBulletinPublishService {
 					protected List<Region> getRegions() {
 						return regions;
 					}
-				}.execute(null);
+				}.execute();
 
 				return HttpResponse.noContent();
 			} else
@@ -106,7 +111,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			new Thread(() -> {
-				new PublicationJob() {
+				new PublicationJob(publicationController) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -121,7 +126,7 @@ public class AvalancheBulletinPublishService {
 					protected boolean isChange() {
 						return change;
 					}
-				}.execute(null);
+				}.execute();
 				}, "publishAllBulletins").start();
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

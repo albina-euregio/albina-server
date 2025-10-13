@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import eu.albina.controller.PublicationController;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -93,6 +94,9 @@ public class AvalancheBulletinService {
 
 	@Inject
 	Caaml caaml;
+
+	@Inject
+	PublicationController publicationController;
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
 
@@ -648,7 +652,7 @@ public class AvalancheBulletinService {
 				).distinct().collect(Collectors.toList());
 
 				new Thread(() -> {
-					new ChangeJob() {
+					new ChangeJob(publicationController) {
 						@Override
 						protected Instant getStartDate(Clock clock) {
 							return startDate;
@@ -658,7 +662,7 @@ public class AvalancheBulletinService {
 						protected List<Region> getRegions() {
 							return regions;
 						}
-					}.execute(null);
+					}.execute();
 				}, "changeBulletins").start();
 
 				return HttpResponse.noContent();
