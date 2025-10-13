@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jakarta.inject.Singleton;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -29,31 +30,10 @@ import jakarta.persistence.EntityManager;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class DangerSourceVariantController {
 
-	private static Logger logger = LoggerFactory.getLogger(DangerSourceVariantController.class);
-
-	private static DangerSourceVariantController instance = null;
-
-	/**
-	 * Private constructor.
-	 */
-	private DangerSourceVariantController() {
-	}
-
-	/**
-	 * Returns the {@code DangerSourceController} object associated with the
-	 * current Java application.
-	 *
-	 * @return the {@code DangerSourceController} object associated with the
-	 *         current Java application.
-	 */
-	public static DangerSourceVariantController getInstance() {
-		if (instance == null) {
-			instance = new DangerSourceVariantController();
-		}
-		return instance;
-	}
+	private static final Logger logger = LoggerFactory.getLogger(DangerSourceVariantController.class);
 
 	/**
 	 * Retrieve a variant from the database by {@code variantID}.

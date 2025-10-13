@@ -4,6 +4,7 @@ package eu.albina.controller;
 import java.time.Instant;
 import java.util.List;
 
+import jakarta.inject.Singleton;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,31 +18,10 @@ import eu.albina.util.HibernateUtil;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class DangerSourceController {
 
-	private static Logger logger = LoggerFactory.getLogger(DangerSourceController.class);
-
-	private static DangerSourceController instance = null;
-
-	/**
-	 * Private constructor.
-	 */
-	private DangerSourceController() {
-	}
-
-	/**
-	 * Returns the {@code DangerSourceController} object associated with the
-	 * current Java application.
-	 *
-	 * @return the {@code DangerSourceController} object associated with the
-	 *         current Java application.
-	 */
-	public static DangerSourceController getInstance() {
-		if (instance == null) {
-			instance = new DangerSourceController();
-		}
-		return instance;
-	}
+	private static final Logger logger = LoggerFactory.getLogger(DangerSourceController.class);
 
 	/**
 	 * Retrieve a danger source from the database by {@code dangerSourceID}.

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,10 @@ import eu.albina.util.HibernateUtil;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class DangerSourceVariantTextController {
 
-	private static Logger logger = LoggerFactory.getLogger(DangerSourceVariantTextController.class);
-
-	private static DangerSourceVariantTextController instance = null;
+	private static final Logger logger = LoggerFactory.getLogger(DangerSourceVariantTextController.class);
 
 	// phrase "Gefahrenstellen05§an_Expositionen"
 	// placeholder:
@@ -271,28 +271,6 @@ public class DangerSourceVariantTextController {
 			"{\"curlyName\":\"Altschnee04\",\"line\":0,\"args\":{\"Altschnee04§Lawinen_können\":{\"curlyName\":\"Altschnee04§Lawinen_können\",\"line\":1,\"args\":{\"trockene\":{\"curlyName\":\"trockene\",\"line\":0},\"auch1\":{\"curlyName\":\"auch1\",\"line\":1},\"zudem_können\":{\"curlyName\":\"zudem_können\",\"line\":4}}},\"Altschnee04§Altschnee_Durchreissen\":{\"curlyName\":\"Altschnee04§Altschnee_Durchreissen\",\"line\":3},\"Altschnee04§und\":{\"curlyName\":\"Altschnee04§und\",\"line\":0},\"wo_gross_werden\":{\"curlyName\":\"wo_gross_werden\",\"line\":0}}}",
 			AddOns.outflow_areas_to_consider,
 			"{\"curlyName\":\"Empfehlung11\",\"line\":0,\"args\":{\"Empfehlung11§Absturzgefahr\":{\"curlyName\":\"Empfehlung11§Absturzgefahr\",\"line\":7,\"args\":{\"auch\":{\"curlyName\":\"auch\",\"line\":0},\"von_grossen_Lawinen\":{\"curlyName\":\"von_grossen_Lawinen\",\"line\":2}}}}}");
-
-	/**
-	 * Private constructor.
-	 */
-	private DangerSourceVariantTextController() {
-	}
-
-	/**
-	 * Returns the {@code DangerSourceVariantTextController} object associated with
-	 * the
-	 * current Java application.
-	 *
-	 * @return the {@code DangerSourceVariantTextController} object associated with
-	 *         the
-	 *         current Java application.
-	 */
-	public static DangerSourceVariantTextController getInstance() {
-		if (instance == null) {
-			instance = new DangerSourceVariantTextController();
-		}
-		return instance;
-	}
 
 	/**
 	 * Returns all danger source variant texts for the given {@code avalanche type}.

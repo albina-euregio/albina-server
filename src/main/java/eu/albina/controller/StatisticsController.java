@@ -47,6 +47,9 @@ public class StatisticsController {
 	@Inject
 	AvalancheReportController avalancheReportController;
 
+	@Inject
+	DangerSourceVariantController dangerSourceVariantController;
+
 	/**
 	 * Return a CSV string with all danger source variants from {@code startDate}
 	 * until {@code endDate} for {@code region}.
@@ -59,7 +62,7 @@ public class StatisticsController {
 	 *         until {@code endDate} in {@code lang}
 	 */
 	public String getDangerSourceStatistics(Instant startDate, Instant endDate) {
-		List<DangerSourceVariant> variants = DangerSourceVariantController.getInstance().getAllDangerSourceVariants(startDate,
+		List<DangerSourceVariant> variants = dangerSourceVariantController.getAllDangerSourceVariants(startDate,
 				endDate);
 		return getDangerSourceVariantsCsvString(variants);
 	}
