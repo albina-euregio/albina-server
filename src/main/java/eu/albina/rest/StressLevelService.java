@@ -43,6 +43,9 @@ public class StressLevelService {
 	@Inject
 	RegionController regionController;
 
+	@Inject
+	private UserController userController;
+
 	@Get
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -54,7 +57,7 @@ public class StressLevelService {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = UserController.getInstance().getUser(principal.getName());
+		User user = userController.getUser(principal.getName());
 		Set<User> users = Collections.singleton(user);
 		List<StressLevel> stressLevels = StressLevelController.get(users, startDate, endDate);
 		return HttpResponse.ok(stressLevels);
@@ -72,14 +75,14 @@ public class StressLevelService {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = UserController.getInstance().getUser(principal.getName());
+		User user = userController.getUser(principal.getName());
 		try {
 			// check that user is member of requested region
 			Region region = regionController.getRegion(regionId);
 			if (!user.hasPermissionForRegion(region.getId())) {
 				return HttpResponse.status(HttpStatus.FORBIDDEN);
 			}
-			List<User> users = UserController.getInstance().getUsers().stream()
+			List<User> users = userController.getUsers().stream()
 					.filter(u -> !u.isDeleted())
 					.filter(u -> u.hasRole(Role.FORECASTER) || u.hasRole(Role.FOREMAN))
 					.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
@@ -101,7 +104,7 @@ public class StressLevelService {
 			Principal principal,
 			@Body StressLevel stressLevel) {
 
-		User user = UserController.getInstance().getUser(principal.getName());
+		User user = userController.getUser(principal.getName());
 		stressLevel.setUser(user);
 		stressLevel = StressLevelController.create(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);

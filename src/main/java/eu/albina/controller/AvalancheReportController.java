@@ -14,6 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -46,6 +47,9 @@ import jakarta.persistence.EntityManager;
 public class AvalancheReportController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheReportController.class);
+
+	@Inject
+	UserController userController;
 
 	/**
 	 * Return the actual status of the bulletins for every day in a given time
@@ -443,8 +447,9 @@ public class AvalancheReportController {
 	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
 	 */
-	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user,
+	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, String username,
 										 Instant publicationDate) {
+		User user = username != null ? userController.getUser(username) : null;
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport report = getInternalReport(startDate, region);
 

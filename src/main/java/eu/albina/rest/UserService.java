@@ -45,6 +45,9 @@ public class UserService {
 	@Inject
 	RegionController regionController;
 
+	@Inject
+	private UserController userController;
+
 	@Get
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -53,7 +56,7 @@ public class UserService {
 	public HttpResponse<?> getUsers() {
 		logger.debug("GET JSON users");
 		try {
-			List<User> users = UserController.getInstance().getUsers();
+			List<User> users = userController.getUsers();
 			return HttpResponse.ok(users);
 		} catch (Exception e) {
 			logger.warn("Error loading users", e);
@@ -98,8 +101,8 @@ public class UserService {
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
 		// check if email already exists
-		if (!UserController.getInstance().userExists(user.getEmail())) {
-			UserController.getInstance().createUser(user);
+		if (!userController.userExists(user.getEmail())) {
+			userController.createUser(user);
 			return HttpResponse.noContent();
 		} else {
 			String message = "Error creating user - User already exists";
@@ -121,7 +124,7 @@ public class UserService {
 
 			// check if email already exists
 			if (user.getEmail().equals(username)) {
-				UserController.getInstance().updateUser(user);
+				userController.updateUser(user);
 				return HttpResponse.noContent();
 			} else {
 				throw new AlbinaException("Updating user not allowed");
@@ -176,7 +179,7 @@ public class UserService {
 		try {
 			String username = principal.getName();
 
-			UserController.getInstance().changePassword(username, data.oldPassword, data.newPassword);
+			userController.changePassword(username, data.oldPassword, data.newPassword);
 
 			return HttpResponse.ok();
 		} catch (AlbinaException e) {
@@ -207,7 +210,7 @@ public class UserService {
 		try {
 			String username = principal.getName();
 
-			if (UserController.getInstance().checkPassword(username, data.password)) {
+			if (userController.checkPassword(username, data.password)) {
 				return HttpResponse.ok();
 			} else {
 				return HttpResponse.badRequest();
@@ -234,7 +237,7 @@ public class UserService {
 	public HttpResponse<?> resetPassword(@PathVariable("id") String id, @Body ResetPassword data) {
 		logger.debug("PUT JSON user password");
 		try {
-			UserController.getInstance().resetPassword(id, data.newPassword);
+			userController.resetPassword(id, data.newPassword);
 
 			return HttpResponse.ok();
 		} catch (AlbinaException e) {
@@ -253,8 +256,8 @@ public class UserService {
 		logger.debug("PUT JSON user");
 		try {
 			// check if email already exists
-			if (UserController.getInstance().userExists(user.getEmail())) {
-				UserController.getInstance().updateUser(user);
+			if (userController.userExists(user.getEmail())) {
+				userController.updateUser(user);
 				return HttpResponse.ok();
 			} else {
 				throw new AlbinaException("User does not exist");

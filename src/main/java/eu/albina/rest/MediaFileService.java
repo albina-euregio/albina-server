@@ -63,6 +63,9 @@ public class MediaFileService {
 	@Inject
 	private ServerInstanceController serverInstanceController;
 
+	@Inject
+	private UserController userController;
+
 	@Post
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -80,7 +83,7 @@ public class MediaFileService {
 			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());
 
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
-			User user = UserController.getInstance().getUser(principal.getName());
+			User user = userController.getUser(principal.getName());
 
 			if (region == null || !user.hasPermissionForRegion(region.getId())) {
 				logger.warn("User is not authorized for this region!");

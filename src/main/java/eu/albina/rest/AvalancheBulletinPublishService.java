@@ -62,6 +62,9 @@ public class AvalancheBulletinPublishService {
 	@Inject
 	private ServerInstanceController serverInstanceController;
 
+	@Inject
+	private UserController userController;
+
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
 	 */
@@ -76,7 +79,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 
-			User user = UserController.getInstance().getUser(principal.getName());
+			User user = userController.getUser(principal.getName());
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			List<Region> regions = Stream.concat(
 				Stream.of(region),

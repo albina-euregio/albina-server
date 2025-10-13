@@ -71,6 +71,9 @@ public class DangerSourceService {
 	@Inject
 	RegionController regionController;
 
+	@Inject
+	private UserController userController;
+
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -165,7 +168,7 @@ public class DangerSourceService {
 
 		try {
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-			User user = UserController.getInstance().getUser(principal.getName());
+			User user = userController.getUser(principal.getName());
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -219,7 +222,7 @@ public class DangerSourceService {
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
-			User user = UserController.getInstance().getUser(principal.getName());
+			User user = userController.getUser(principal.getName());
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -247,7 +250,7 @@ public class DangerSourceService {
 		logger.debug("DELETE JSON danger source variant");
 
 		try {
-			User user = UserController.getInstance().getUser(principal.getName());
+			User user = userController.getUser(principal.getName());
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -281,7 +284,7 @@ public class DangerSourceService {
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
-			User user = UserController.getInstance().getUser(principal.getName());
+			User user = userController.getUser(principal.getName());
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {

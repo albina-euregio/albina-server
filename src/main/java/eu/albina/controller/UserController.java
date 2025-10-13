@@ -4,6 +4,7 @@ package eu.albina.controller;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.inject.Singleton;
 import org.hibernate.HibernateException;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -17,29 +18,8 @@ import eu.albina.util.HibernateUtil;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class UserController {
-	// private static Logger logger = LoggerFactory.getLogger(UserController.class);
-	private static UserController instance = null;
-
-	/**
-	 * Private constructor.
-	 */
-	private UserController() {
-	}
-
-	/**
-	 * Returns the {@code UserController} object associated with the current Java
-	 * application.
-	 *
-	 * @return the {@code UserController} object associated with the current Java
-	 *         application.
-	 */
-	public static UserController getInstance() {
-		if (instance == null) {
-			instance = new UserController();
-		}
-		return instance;
-	}
 
 	/**
 	 * Return {@code true} if the user with {@code username} exists.

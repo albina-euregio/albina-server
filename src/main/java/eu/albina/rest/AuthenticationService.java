@@ -43,10 +43,13 @@ import jakarta.inject.Inject;
 	bearerFormat = "JWT")
 public class AuthenticationService {
 
+	public static final String SECURITY_SCHEME = "authentication";
+
 	@Inject
 	AccessRefreshTokenGenerator tokenGenerator;
 
-	public static final String SECURITY_SCHEME = "authentication";
+	@Inject
+	private UserController userController;
 
 	@Serdeable
 	public static class Credentials {
@@ -106,12 +109,12 @@ public class AuthenticationService {
 		String password = credentials.password;
 
 		try {
-			UserController.getInstance().authenticate(username, password);
-			List<String> roles = UserController.getInstance().getUser(username).getRoles().stream().map(Role::toString).toList();
+			userController.authenticate(username, password);
+			List<String> roles = userController.getUser(username).getRoles().stream().map(Role::toString).toList();
 			Authentication authentication = Authentication.build(username, roles);
 			AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
 
-			User user = UserController.getInstance().getUser(username);
+			User user = userController.getUser(username);
 			AuthenticationResponse result = new AuthenticationResponse();
 			result.user = user;
 			result.regions = user.getRegions();

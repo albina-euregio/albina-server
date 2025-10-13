@@ -52,6 +52,8 @@ public class AvalancheBulletinController {
 
 	@Inject
 	ServerInstanceController serverInstanceController;
+	@Inject
+	private UserController userController;
 
 	/**
 	 * Retrieve an avalanche bulletin from the database by {@code bulletinID}.
@@ -545,12 +547,13 @@ public class AvalancheBulletinController {
 	 *            the region that should be published
 	 * @param publicationDate
 	 *            the timestamp of the publication
-	 * @param user
+	 * @param username
 	 *            the user who publishes the bulletins
 	 */
 	public void publishBulletins(Instant startDate, Instant endDate, Region region,
-			Instant publicationDate, User user) {
+								 Instant publicationDate, String username) {
 
+		User user = username != null ? userController.getUser(username) : null;
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = getAllBulletins(startDate, endDate, entityManager);
 

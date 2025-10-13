@@ -35,7 +35,6 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
 import eu.albina.controller.RegionController;
-import eu.albina.controller.UserController;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -89,7 +88,6 @@ public class PublicationJob {
 			logger.info("No bulletins to publish/update/change.");
 			return null;
 		}
-		User user = getUser(serverInstance);
 
 		for (Region region : regions) {
 			logger.info("Publish bulletins for region {}", region.getId());
@@ -98,7 +96,7 @@ public class PublicationJob {
 			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
 
 			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
-				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate, user);
+				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate, serverInstance.getUserName());
 			}
 		}
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
@@ -129,7 +127,7 @@ public class PublicationJob {
 				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
 				publicationTimeString);
 
-			avalancheReportController.publishReport(regionBulletins, startDate, region, user, publicationDate);
+			avalancheReportController.publishReport(regionBulletins, startDate, region, serverInstance.getUserName(), publicationDate);
 		}
 
 		// get all published bulletins
@@ -263,11 +261,6 @@ public class PublicationJob {
 				Files.move(path, target, StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
-	}
-
-	protected User getUser(ServerInstance serverInstance) {
-		String userName = serverInstance.getUserName();
-		return userName != null ? UserController.getInstance().getUser(userName) : null;
 	}
 
 	private static Set<Region> getSuperRegions(List<Region> regions) {
