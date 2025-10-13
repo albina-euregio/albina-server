@@ -6,12 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.lang3.SystemProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.MoreFiles;
-
-import eu.albina.util.GlobalVariables;
 
 /**
  * A job handling all the tasks and logic necessary to
@@ -30,7 +29,7 @@ public class TmpDeletionJob {
 	public void execute() {
 		logger.info("TmpDeletion job triggered!");
 		try {
-			Path tmpDir = Paths.get(GlobalVariables.getTmpMapsPath());
+			Path tmpDir = Paths.get(SystemProperties.getJavaIoTmpdir());
 			if (Files.exists(tmpDir)) {
 				MoreFiles.deleteDirectoryContents(tmpDir);
 			}

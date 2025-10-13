@@ -53,6 +53,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import org.apache.commons.lang3.SystemProperties;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +76,6 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
-import eu.albina.util.GlobalVariables;
 import eu.albina.map.MapUtil;
 import eu.albina.util.PdfUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -289,7 +289,7 @@ public class AvalancheBulletinService {
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
 			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
-			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
+			serverInstance.setPdfDirectory(SystemProperties.getJavaIoTmpdir());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return HttpResponse.ok(pdf.toFile()).contentType(PdfUtil.MEDIA_TYPE);
@@ -317,7 +317,7 @@ public class AvalancheBulletinService {
 			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			Region region = regionController.getRegion(regionId);
 			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
-			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
+			serverInstance.setPdfDirectory(SystemProperties.getJavaIoTmpdir());
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return HttpResponse.ok(pdf.toFile()).contentType(PdfUtil.MEDIA_TYPE);
@@ -401,8 +401,8 @@ public class AvalancheBulletinService {
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
 			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
-			serverInstance.setMapsPath(GlobalVariables.getTmpPdfDirectory());
-			serverInstance.setPdfDirectory(GlobalVariables.getTmpPdfDirectory());
+			serverInstance.setMapsPath(SystemProperties.getJavaIoTmpdir());
+			serverInstance.setPdfDirectory(SystemProperties.getJavaIoTmpdir());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setStatus(BulletinStatus.draft); // preview
 

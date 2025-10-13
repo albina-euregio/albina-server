@@ -16,16 +16,6 @@ public class GlobalVariables {
 
 	public static String propertiesFilePath = "META-INF/config.properties";
 
-	public static String tmpDirectory = System.getProperty("java.io.tmpdir");
-
-	public static String getTmpMapsPath() {
-		return tmpDirectory;
-	}
-
-	public static String getTmpPdfDirectory() {
-		return tmpDirectory;
-	}
-
 	public static void loadConfigProperties() {
 		try (InputStream inputStream = Resources.getResource(propertiesFilePath).openStream()) {
 			Properties properties = new Properties();
