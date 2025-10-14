@@ -7,11 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
-import eu.albina.util.JsonUtil;
-
+@MicronautTest
 class StressLevelTest {
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Test
 	void testRandomization() throws Exception {
@@ -22,7 +27,7 @@ class StressLevelTest {
 		l2.setUser(new User("secret2@example.com"));
 		l2.setStressLevel(45);
 		Map<UUID, List<StressLevel>> x = StressLevel.randomizeUsers(List.of(l1, l2));
-		assertFalse(JsonUtil.ALBINA_OBJECT_MAPPER.writeValueAsString(x).contains("@example.com"),
+		assertFalse(objectMapper.writeValueAsString(x).contains("@example.com"),
 			"Found unexpected '@'. Randomization of users emails does not work.");
 	}
 
