@@ -7,6 +7,7 @@ import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -56,6 +57,9 @@ public class PublicationController {
 	@Inject
 	private TextToSpeech textToSpeech;
 
+	@Inject
+	private ObjectMapper objectMapper;
+
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
 		if (region.isCreateCaamlV5()) {
@@ -102,7 +106,7 @@ public class PublicationController {
 	public void createJson(AvalancheReport avalancheReport) {
 		try {
 			logger.info("JSON production for {} started", avalancheReport);
-			avalancheReport.createJsonFile();
+			avalancheReport.createJsonFile(objectMapper);
 			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setJsonCreated);
 			logger.info("JSON production for {} finished", avalancheReport);

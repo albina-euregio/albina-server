@@ -3,7 +3,9 @@ package eu.albina.model;
 
 import static eu.albina.RegionTestUtils.regionEuregio;
 
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.Period;
@@ -13,6 +15,10 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import eu.albina.RegionTestUtils;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -24,10 +30,15 @@ import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
+import org.junit.jupiter.api.io.TempDir;
 
+@MicronautTest
 public class AvalancheReportTest {
 
 	private final ServerInstance serverInstanceEuregio = new ServerInstance();
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Test
 	public void testIsUpdate() throws Exception {
@@ -115,6 +126,17 @@ public class AvalancheReportTest {
 		AvalancheBulletin bulletin = new AvalancheBulletin();
 		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
 		Assertions.assertEquals(bulletin.getPublicationDate(), AvalancheReport.of(List.of(new AvalancheBulletin(), bulletin, new AvalancheBulletin()), null, null).getPublicationDate());
+	}
+
+	@Test
+	public void createJsonTest(@TempDir Path folder) throws IOException {
+		ServerInstance serverInstanceEuregio = new ServerInstance();
+		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		serverInstanceEuregio.setHtmlDirectory(folder.toString());
+		serverInstanceEuregio.setMapsPath(folder.toString());
+		serverInstanceEuregio.setPdfDirectory(folder.toString());
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, RegionTestUtils.regionTyrol, serverInstanceEuregio);
+		avalancheReport.createJsonFile(objectMapper);
 	}
 }
 

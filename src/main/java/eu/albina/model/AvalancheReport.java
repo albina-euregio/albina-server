@@ -154,7 +154,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		}
 	}
 
-	public void createJsonFile() throws IOException {
+	public void createJsonFile(ObjectMapper objectMapper) throws IOException {
 		Path pdfDirectory = getPdfDirectory();
 		Files.createDirectories(pdfDirectory);
 		Path path = pdfDirectory.resolve(getRegion().getId() + ".json");
@@ -163,7 +163,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		}
 		Region region = getRegion();
 		Collection<AvalancheBulletin> bulletins = getBulletins().stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
-		String jsonString = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
+		String jsonString = objectMapper.cloneWithViewClass(JsonUtil.Views.Public.class).writeValueAsString(bulletins);
 		Files.writeString(path, jsonString, StandardCharsets.UTF_8);
 	}
 
