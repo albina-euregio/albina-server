@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 import eu.albina.controller.RegionRepository;
+import eu.albina.controller.SubscriberRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -21,7 +22,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.SubscriberController;
 import eu.albina.model.Subscriber;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -35,7 +35,7 @@ public class SubscriptionService {
 	RegionRepository regionRepository;
 
 	@Inject
-	SubscriberController subscriberController;
+	SubscriberRepository subscriberRepository;
 
 	@Serdeable
 	static class EmailSubscription {
@@ -86,7 +86,7 @@ public class SubscriptionService {
 
 		try {
 			RapidMailConfiguration config = RapidMailController.getConfiguration(region, subscriber.getLanguage(), null).orElseThrow();
-			subscriberController.createSubscriber(subscriber);
+			subscriberRepository.save(subscriber);
 			RapidMailController.createRecipient(config, recipient);
 			return HttpResponse.ok();
 		} catch (Exception e) {
