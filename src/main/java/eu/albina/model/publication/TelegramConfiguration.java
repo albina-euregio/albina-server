@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,6 +20,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "telegram_configurations")
+@Serdeable
 public class TelegramConfiguration implements Serializable {
 
 	private static final long serialVersionUID = 1L;

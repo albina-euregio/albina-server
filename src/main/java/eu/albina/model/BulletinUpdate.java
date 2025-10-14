@@ -4,7 +4,9 @@ package eu.albina.model;
 import java.time.Instant;
 
 import eu.albina.model.enumerations.BulletinStatus;
+import io.micronaut.serde.annotation.Serdeable;
 
+@Serdeable
 public class BulletinUpdate {
 
 	private String region;

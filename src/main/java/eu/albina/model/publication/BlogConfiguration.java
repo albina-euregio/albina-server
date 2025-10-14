@@ -8,6 +8,7 @@ import com.google.common.base.MoreObjects;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,6 +22,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "blog_configurations")
+@Serdeable
 public class BlogConfiguration implements Serializable {
 
 	public static final String TECH_BLOG_ID = "tech";
