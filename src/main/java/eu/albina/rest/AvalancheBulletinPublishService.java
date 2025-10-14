@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -25,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
 import eu.albina.controller.ServerInstanceController;
-import eu.albina.controller.UserController;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
@@ -63,7 +63,7 @@ public class AvalancheBulletinPublishService {
 	private ServerInstanceController serverInstanceController;
 
 	@Inject
-	private UserController userController;
+	private UserRepository userRepository;
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
@@ -79,7 +79,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			List<Region> regions = Stream.concat(
 				Stream.of(region),

@@ -53,7 +53,7 @@ public class AvalancheBulletinController {
 	@Inject
 	ServerInstanceController serverInstanceController;
 	@Inject
-	private UserController userController;
+	private UserRepository userRepository;
 
 	/**
 	 * Retrieve an avalanche bulletin from the database by {@code bulletinID}.
@@ -553,7 +553,7 @@ public class AvalancheBulletinController {
 	public void publishBulletins(Instant startDate, Instant endDate, Region region,
 								 Instant publicationDate, String username) {
 
-		User user = username != null ? userController.getUser(username) : null;
+		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
 		HibernateUtil.getInstance().runTransaction(entityManager -> {
 			List<AvalancheBulletin> bulletins = getAllBulletins(startDate, endDate, entityManager);
 

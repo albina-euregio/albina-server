@@ -3,10 +3,9 @@ package eu.albina.rest;
 
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
+import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -14,7 +13,6 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 
-import eu.albina.controller.UserController;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -49,7 +47,7 @@ public class AuthenticationService {
 	AccessRefreshTokenGenerator tokenGenerator;
 
 	@Inject
-	private UserController userController;
+	private UserRepository userRepository;
 
 	@Serdeable
 	public static class Credentials {
@@ -111,12 +109,12 @@ public class AuthenticationService {
 		String password = credentials.password;
 
 		try {
-			userController.authenticate(username, password);
-			List<String> roles = userController.getUser(username).getRoles().stream().map(Role::toString).toList();
+			userRepository.authenticate(username, password);
+			User user = userRepository.findById(username).orElseThrow();
+			List<String> roles = user.getRoles().stream().map(Role::toString).toList();
 			Authentication authentication = Authentication.build(username, roles);
 			AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
 
-			User user = userController.getUser(username);
 			AuthenticationResponse result = new AuthenticationResponse();
 			result.user = user;
 			result.regions = user.getRegions();

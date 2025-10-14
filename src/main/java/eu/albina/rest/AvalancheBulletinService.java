@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.UserRepository;
 import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
@@ -64,7 +65,6 @@ import eu.albina.caaml.CaamlVersion;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
-import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.ChangeJob;
 import eu.albina.model.AvalancheBulletin;
@@ -113,7 +113,7 @@ public class AvalancheBulletinService {
 	private ServerInstanceController serverInstanceController;
 
 	@Inject
-	private UserController userController;
+	private UserRepository userRepository;
 
 	@Get("/edit")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
@@ -584,7 +584,7 @@ public class AvalancheBulletinService {
 				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = userController.getUser(principal.getName());
+				User user = userRepository.findById(principal.getName()).orElseThrow();
 				Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 				if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -621,7 +621,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -700,7 +700,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (regionId != null && user.hasPermissionForRegion(regionId)) {
@@ -748,7 +748,7 @@ public class AvalancheBulletinService {
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				Set<String> result = avalancheBulletinController.checkBulletins(startDate, endDate, region);

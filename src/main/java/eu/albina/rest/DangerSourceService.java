@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -28,7 +29,6 @@ import eu.albina.controller.DangerSourceController;
 import eu.albina.controller.DangerSourceVariantController;
 import eu.albina.controller.DangerSourceVariantTextController;
 import eu.albina.controller.RegionController;
-import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.DangerSource;
 import eu.albina.model.DangerSourceVariant;
@@ -71,7 +71,7 @@ public class DangerSourceService {
 	RegionController regionController;
 
 	@Inject
-	private UserController userController;
+	private UserRepository userRepository;
 
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
@@ -166,7 +166,7 @@ public class DangerSourceService {
 
 		try {
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -218,7 +218,7 @@ public class DangerSourceService {
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -246,7 +246,7 @@ public class DangerSourceService {
 		logger.debug("DELETE JSON danger source variant");
 
 		try {
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
@@ -279,7 +279,7 @@ public class DangerSourceService {
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
-			User user = userController.getUser(principal.getName());
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {

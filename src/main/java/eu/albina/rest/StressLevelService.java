@@ -3,7 +3,7 @@ package eu.albina.rest;
 
 import eu.albina.controller.RegionController;
 import eu.albina.controller.StressLevelController;
-import eu.albina.controller.UserController;
+import eu.albina.controller.UserRepository;
 import eu.albina.model.StressLevel;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -44,7 +44,7 @@ public class StressLevelService {
 	RegionController regionController;
 
 	@Inject
-	private UserController userController;
+	private UserRepository userRepository;
 
 	@Get
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
@@ -57,7 +57,7 @@ public class StressLevelService {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = userController.getUser(principal.getName());
+		User user = userRepository.findById(principal.getName()).orElseThrow();
 		Set<User> users = Collections.singleton(user);
 		List<StressLevel> stressLevels = StressLevelController.get(users, startDate, endDate);
 		return HttpResponse.ok(stressLevels);
@@ -75,14 +75,14 @@ public class StressLevelService {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = userController.getUser(principal.getName());
+		User user = userRepository.findById(principal.getName()).orElseThrow();
 		try {
 			// check that user is member of requested region
 			Region region = regionController.getRegion(regionId);
 			if (!user.hasPermissionForRegion(region.getId())) {
 				return HttpResponse.status(HttpStatus.FORBIDDEN);
 			}
-			List<User> users = userController.getUsers().stream()
+			List<User> users = userRepository.findAll().stream()
 					.filter(u -> !u.isDeleted())
 					.filter(u -> u.hasRole(Role.FORECASTER) || u.hasRole(Role.FOREMAN))
 					.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
@@ -104,7 +104,7 @@ public class StressLevelService {
 			Principal principal,
 			@Body StressLevel stressLevel) {
 
-		User user = userController.getUser(principal.getName());
+		User user = userRepository.findById(principal.getName()).orElseThrow();
 		stressLevel.setUser(user);
 		stressLevel = StressLevelController.create(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);

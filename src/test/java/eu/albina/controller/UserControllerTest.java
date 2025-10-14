@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import eu.albina.util.HibernateUtil;
 
@@ -20,7 +19,7 @@ public class UserControllerTest {
 	private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
 
 	@Inject
-	UserController userController;
+	UserRepository userRepository;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -35,7 +34,7 @@ public class UserControllerTest {
 	@Test
 	@Disabled
 	public void getUsersTest() {
-		List<User> users = userController.getUsers();
+		List<User> users = userRepository.findAll();
 		for (User user : users) {
 			logger.info(user.getEmail());
 		}
@@ -44,7 +43,7 @@ public class UserControllerTest {
 	@Test
 	@Disabled
 	public void getUserTest() {
-		User user = userController.getUser("info@avalanche.report");
+		User user = userRepository.findById("info@avalanche.report").orElseThrow();
 		logger.info(user.getEmail());
 	}
 }

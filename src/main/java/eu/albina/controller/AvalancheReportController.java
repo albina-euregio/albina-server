@@ -49,7 +49,7 @@ public class AvalancheReportController {
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheReportController.class);
 
 	@Inject
-	UserController userController;
+	UserRepository userRepository;
 
 	/**
 	 * Return the actual status of the bulletins for every day in a given time
@@ -449,7 +449,7 @@ public class AvalancheReportController {
 	 */
 	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, String username,
 										 Instant publicationDate) {
-		User user = username != null ? userController.getUser(username) : null;
+		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
 		return HibernateUtil.getInstance().runTransaction(entityManager -> {
 			AvalancheReport report = getInternalReport(startDate, region);
 

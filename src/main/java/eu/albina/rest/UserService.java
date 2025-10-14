@@ -5,7 +5,9 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
@@ -30,7 +32,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.UserController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -46,7 +47,7 @@ public class UserService {
 	RegionController regionController;
 
 	@Inject
-	private UserController userController;
+	UserRepository userRepository;
 
 	@Get
 	@Secured(Role.Str.ADMIN)
@@ -56,7 +57,7 @@ public class UserService {
 	public HttpResponse<?> getUsers() {
 		logger.debug("GET JSON users");
 		try {
-			List<User> users = userController.getUsers();
+			List<User> users = userRepository.findAll();
 			return HttpResponse.ok(users);
 		} catch (Exception e) {
 			logger.warn("Error loading users", e);
@@ -101,8 +102,8 @@ public class UserService {
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
 		// check if email already exists
-		if (!userController.userExists(user.getEmail())) {
-			userController.createUser(user);
+		if (!userRepository.existsById(user.getEmail())) {
+			userRepository.save(user);
 			return HttpResponse.noContent();
 		} else {
 			String message = "Error creating user - User already exists";
@@ -112,7 +113,7 @@ public class UserService {
 	}
 
 	@Put
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update own user")
 	public HttpResponse<?> updateOwnUser(
@@ -124,7 +125,7 @@ public class UserService {
 
 			// check if email already exists
 			if (user.getEmail().equals(username)) {
-				userController.updateUser(user);
+				userRepository.update(user);
 				return HttpResponse.noContent();
 			} else {
 				throw new AlbinaException("Updating user not allowed");
@@ -171,7 +172,7 @@ public class UserService {
 	}
 
 	@Put("/change")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Change password")
 	public HttpResponse<?> changePassword(@Body ChangePassword data, Principal principal) {
@@ -179,7 +180,7 @@ public class UserService {
 		try {
 			String username = principal.getName();
 
-			userController.changePassword(username, data.oldPassword, data.newPassword);
+			userRepository.changePassword(username, data.oldPassword, data.newPassword);
 
 			return HttpResponse.ok();
 		} catch (AlbinaException e) {
@@ -202,7 +203,7 @@ public class UserService {
 	}
 
 	@Put("/check")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Check password")
 	public HttpResponse<?> checkPassword(@Body CheckPassword data, Principal principal) {
@@ -210,12 +211,12 @@ public class UserService {
 		try {
 			String username = principal.getName();
 
-			if (userController.checkPassword(username, data.password)) {
+			if (userRepository.checkPassword(username, data.password)) {
 				return HttpResponse.ok();
 			} else {
 				return HttpResponse.badRequest();
 			}
-		} catch (HibernateException e) {
+		} catch (AlbinaException | HibernateException e) {
 			logger.warn("Error checking password", e);
 			return HttpResponse.badRequest().body(e.toString());
 		}
@@ -225,9 +226,15 @@ public class UserService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete user")
-	public void deleteUser(@PathVariable("id") String id) {
+	public MutableHttpResponse<String> deleteUser(@PathVariable("id") String id) {
 		logger.info("DELETE JSON user {}", id);
-		UserController.delete(id);
+		try {
+			userRepository.delete(id);
+			return HttpResponse.ok();
+		} catch (AlbinaException e) {
+			logger.warn("Error deleting user", e);
+			return HttpResponse.badRequest().body(e.toString());
+		}
 	}
 
 	@Put("/{id}/reset")
@@ -237,7 +244,7 @@ public class UserService {
 	public HttpResponse<?> resetPassword(@PathVariable("id") String id, @Body ResetPassword data) {
 		logger.debug("PUT JSON user password");
 		try {
-			userController.resetPassword(id, data.newPassword);
+			userRepository.resetPassword(id, data.newPassword);
 
 			return HttpResponse.ok();
 		} catch (AlbinaException e) {
@@ -256,8 +263,8 @@ public class UserService {
 		logger.debug("PUT JSON user");
 		try {
 			// check if email already exists
-			if (userController.userExists(user.getEmail())) {
-				userController.updateUser(user);
+			if (userRepository.existsById(user.getEmail())) {
+				userRepository.update(user);
 				return HttpResponse.ok();
 			} else {
 				throw new AlbinaException("User does not exist");
