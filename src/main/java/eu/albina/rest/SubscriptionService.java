@@ -16,6 +16,8 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.inject.Inject;
@@ -27,6 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Controller("/email")
 @Tag(name = "email")
+@Secured(SecurityRule.IS_ANONYMOUS)
 public class SubscriptionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
