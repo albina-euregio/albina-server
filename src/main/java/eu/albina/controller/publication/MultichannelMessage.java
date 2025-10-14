@@ -59,10 +59,10 @@ public interface MultichannelMessage {
 			.toString();
 	}
 
-	default void sendToAllChannels(PushNotificationUtil pushNotificationUtil) {
+	default void sendToAllChannels(WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) {
 		sendMails();
 		sendTelegramMessage();
-		sendWhatsAppMessage();
+		sendWhatsAppMessage(whatsAppController);
 		sendPushNotifications(pushNotificationUtil);
 	}
 
@@ -90,14 +90,14 @@ public interface MultichannelMessage {
 		});
 	}
 
-	default void sendWhatsAppMessage() {
+	default void sendWhatsAppMessage(WhatsAppController whatsAppController) {
 		if (!getRegion().isSendWhatsAppMessages()) {
 			return;
 		}
 		tryRunWithLogging("WhatsApp message", () -> {
-			WhatsAppConfiguration whatsAppConfig = WhatsAppController.getConfiguration(getRegion(), getLanguageCode()).
+			WhatsAppConfiguration whatsAppConfig = whatsAppController.getConfiguration(getRegion(), getLanguageCode()).
 				orElseThrow(() -> new NoSuchElementException(String.format("No WhatsAppConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			WhatsAppController.trySend(whatsAppConfig, this, 3);
+			whatsAppController.trySend(whatsAppConfig, this, 3);
 			return null;
 		});
 	}

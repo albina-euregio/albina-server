@@ -25,6 +25,9 @@ public class HealthCheckJob {
 	@Inject
 	RegionRepository regionRepository;
 
+	@Inject
+	WhatsAppController whatsAppController;
+
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
 		for (Region region : regionRepository.getPublishBulletinRegions()) {
@@ -41,10 +44,10 @@ public class HealthCheckJob {
 				})
 				.orElse("SKIPPED (no config)");
 
-			String whatsappStatus = WhatsAppController.getConfiguration(region, language)
+			String whatsappStatus = whatsAppController.getConfiguration(region, language)
 				.map(cfg -> {
 					try {
-						return WhatsAppController.getHealth(cfg);
+						return whatsAppController.getHealth(cfg);
 					} catch (Exception e){
 						return "FAILED (" + e.getMessage() + ")";
 					}

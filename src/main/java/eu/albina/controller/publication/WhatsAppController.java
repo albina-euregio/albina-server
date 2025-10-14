@@ -1,6 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
+import com.google.common.net.HttpHeaders;
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.WhatsAppConfiguration;
+import eu.albina.util.JsonUtil;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
+import io.micronaut.http.MediaType;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -15,43 +28,26 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.net.HttpHeaders;
-import eu.albina.util.JsonUtil;
-import io.micronaut.http.MediaType;
-import org.hibernate.HibernateException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+@Singleton
+public class WhatsAppController {
+	private static final Logger logger = LoggerFactory.getLogger(WhatsAppController.class);
 
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.WhatsAppConfiguration;
-import eu.albina.util.HibernateUtil;
-import eu.albina.util.HttpClientUtil;
-import jakarta.persistence.PersistenceException;
+	@Inject
+	HttpClient client;
 
-public interface WhatsAppController {
-	Logger logger = LoggerFactory.getLogger(WhatsAppController.class);
-	HttpClient client = HttpClientUtil.newClientBuilder().build();
+	@Inject
+	WhatsAppConfigurationRepository whatsAppConfigurationRepository;
 
-	static Optional<WhatsAppConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
-		Objects.requireNonNull(region, "region");
-		Objects.requireNonNull(region.getId(), "region.getId()");
-		Objects.requireNonNull(languageCode, "languageCode");
-
-		return HibernateUtil.getInstance().run(entityManager -> {
-			try {
-				WhatsAppConfiguration result = (WhatsAppConfiguration) entityManager.createQuery(HibernateUtil.queryGetWhatsAppConfiguration)
-					.setParameter("region", region)
-					.setParameter("lang", languageCode)
-					.getSingleResult();
-				return Optional.ofNullable(result);
-			} catch (PersistenceException e) {
-				return Optional.empty();
-			}
-		});
+	@Repository
+	public interface WhatsAppConfigurationRepository extends CrudRepository<WhatsAppConfiguration, Long> {
+		Optional<WhatsAppConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
 	}
 
-	static Void trySend(WhatsAppConfiguration config, MultichannelMessage posting, int retry) throws Exception {
+	public Optional<WhatsAppConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+		return whatsAppConfigurationRepository.findByRegionAndLanguageCode(region, languageCode);
+	}
+
+	public Void trySend(WhatsAppConfiguration config, MultichannelMessage posting, int retry) throws Exception {
 		try {
 			String message = posting.getSocialMediaText();
 			String attachmentUrl = posting.getAttachmentUrl();
@@ -76,8 +72,8 @@ public interface WhatsAppController {
 		return null;
 	}
 
-	static void sendPhoto(WhatsAppConfiguration config, String message, String attachmentUrl)
-		throws IOException, HibernateException, InterruptedException {
+	public void sendPhoto(WhatsAppConfiguration config, String message, String attachmentUrl)
+		throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
@@ -103,7 +99,7 @@ public interface WhatsAppController {
 		}
 	}
 
-	static void sendMessage(WhatsAppConfiguration config, String message) throws HibernateException, IOException, InterruptedException {
+	public void sendMessage(WhatsAppConfiguration config, String message) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
@@ -128,7 +124,7 @@ public interface WhatsAppController {
 		}
 	}
 
-	static String getHealth(WhatsAppConfiguration config) throws HibernateException, IOException, InterruptedException {
+	public String getHealth(WhatsAppConfiguration config) throws IOException, InterruptedException {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
 		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))

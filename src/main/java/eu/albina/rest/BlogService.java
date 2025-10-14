@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -35,6 +35,9 @@ public class BlogService {
 	RegionRepository regionRepository;
 
 	@Inject
+	private WhatsAppController whatsAppController;
+
+	@Inject
 	private PushNotificationUtil pushNotificationUtil;
 
 	@Post("/publish/latest")
@@ -46,7 +49,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
 			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendToAllChannels(pushNotificationUtil);
+			posting.sendToAllChannels(whatsAppController, pushNotificationUtil);
 
 			return HttpResponse.ok("{}");
 		} catch (Exception e) {
@@ -106,7 +109,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
 			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendWhatsAppMessage();
+			posting.sendWhatsAppMessage(whatsAppController);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

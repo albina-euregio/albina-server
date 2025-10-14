@@ -94,7 +94,7 @@ public interface BlogController {
 		return MultichannelMessage.of(config, blogPost);
 	}
 
-	static void sendNewBlogPosts(Region region, LanguageCode lang, PushNotificationUtil pushNotificationUtil) throws IOException, InterruptedException {
+	static void sendNewBlogPosts(Region region, LanguageCode lang, WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) throws IOException, InterruptedException {
 		if (!region.isPublishBlogs()) {
 			logger.debug("Publishing blogs is disabled for region {}", region);
 			return;
@@ -118,7 +118,7 @@ public interface BlogController {
 
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
-			posting.sendToAllChannels(pushNotificationUtil);
+			posting.sendToAllChannels(whatsAppController, pushNotificationUtil);
 			updateConfigurationLastPublished(config, object);
 		}
 	}

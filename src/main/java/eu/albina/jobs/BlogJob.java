@@ -4,6 +4,7 @@ package eu.albina.jobs;
 import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.scheduling.annotation.Scheduled;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -34,6 +35,9 @@ public class BlogJob {
 	RegionRepository regionRepository;
 
 	@Inject
+	WhatsAppController whatsAppController;
+
+	@Inject
 	PushNotificationUtil pushNotificationUtil;
 
 
@@ -46,7 +50,7 @@ public class BlogJob {
 			logger.info("Blog job triggered for {}!", region.getId());
 			for (LanguageCode lang : region.getEnabledLanguages()) {
 				try {
-					BlogController.sendNewBlogPosts(region, lang, pushNotificationUtil);
+					BlogController.sendNewBlogPosts(region, lang, whatsAppController, pushNotificationUtil);
 				} catch (IOException | InterruptedException e) {
 					logger.warn("Blog job failed", e);
 				}

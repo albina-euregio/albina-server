@@ -17,6 +17,7 @@ import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -66,6 +67,9 @@ public class AvalancheBulletinPublishService {
 
 	@Inject
 	private UserRepository userRepository;
+
+	@Inject
+	private WhatsAppController whatsAppController;
 
 	@Inject
 	private PushNotificationUtil pushNotificationUtil;
@@ -207,7 +211,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST trigger whatsapp channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendWhatsAppMessage();
+				posting.sendWhatsAppMessage(whatsAppController);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
