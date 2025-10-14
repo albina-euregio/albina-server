@@ -14,6 +14,8 @@ import com.google.common.collect.MoreCollectors;
 import eu.albina.model.enumerations.LanguageCode;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -29,12 +31,14 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
 import eu.albina.model.publication.PushConfiguration;
-import eu.albina.util.JsonUtil;
 
 @Singleton
 public class PushNotificationUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Inject
 	HttpClient client;
@@ -62,18 +66,8 @@ public class PushNotificationUtil {
 	public interface PushConfigurationRepository extends CrudRepository<PushConfiguration, Long> {
 	}
 
-	public static class Message {
-		public final String title;
-		public final String body;
-		public final String image;
-		public final String url;
-
-		public Message(String title, String body, String image, String url) {
-			this.title = title;
-			this.body = body;
-			this.image = image;
-			this.url = url;
-		}
+	@Serdeable
+	public record Message(String title, String body, String image, String url) {
 	}
 
 	public void send(MultichannelMessage posting) {
@@ -105,7 +99,7 @@ public class PushNotificationUtil {
 	}
 
 	@Transactional
-	public void sendPushMessage(PushSubscription subscription, Object payload, ServerKeys serverKeys) {
+	public void sendPushMessage(PushSubscription subscription, Message payload, ServerKeys serverKeys) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
 			if (serverKeys == null) {
@@ -114,7 +108,7 @@ public class PushNotificationUtil {
 			}
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
-			final String json = JsonUtil.writeValueUsingJackson(payload);
+			final String json = objectMapper.writeValueAsString(payload);
 			final byte[] encrypted = new CryptoService().encrypt(json, subscriptionKeys, 0);
 			final URI endpointURI = URI.create(subscription1.getEndpoint());
 			final HttpRequest request = HttpRequest.newBuilder(endpointURI)
