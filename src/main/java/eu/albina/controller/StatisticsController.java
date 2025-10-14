@@ -27,7 +27,6 @@ import eu.albina.model.enumerations.DangerSign;
 import eu.albina.model.enumerations.GrainShape;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TerrainType;
-import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for statistics.
@@ -88,18 +87,16 @@ public class StatisticsController {
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, Region region,
 			boolean extended, boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
-		return HibernateUtil.getInstance().run(entityManager -> {
-			// get latest reports
-			Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate,
-					endDate, region);
+		// get latest reports
+		Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate,
+				endDate, region);
 
-			// get bulletins from report json
-			List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports);
+		// get bulletins from report json
+		List<AvalancheBulletin> bulletins = getPublishedBulletinsFromReports(reports);
 
-			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
+		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-			return getAvalancheBulletinCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
-		});
+		return getAvalancheBulletinCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
 	}
 
 	/**
@@ -124,18 +121,16 @@ public class StatisticsController {
 	 */
 	public String getDangerRatingStatistics(Instant startDate, Instant endDate, LanguageCode lang, List<Region> regions, boolean extended,
 			boolean duplicateBulletinForenoon, boolean obsoleteMatrix) {
-		return HibernateUtil.getInstance().run(entityManager -> {
-			List<AvalancheBulletin> bulletins = regions.stream()
-				.map(region -> avalancheReportController.getPublicReports(startDate,
-					endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports).stream())
-				.collect(Collectors.toList());
-			// get latest reports
-			// get bulletins from report json
+		List<AvalancheBulletin> bulletins = regions.stream()
+			.map(region -> avalancheReportController.getPublicReports(startDate,
+				endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports).stream())
+			.collect(Collectors.toList());
+		// get latest reports
+		// get bulletins from report json
 
-			List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
+		List<AvalancheBulletin> mergedBulletins = mergeBulletins(bulletins);
 
-			return getAvalancheBulletinCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
-		});
+		return getAvalancheBulletinCsvString(lang, mergedBulletins, extended, duplicateBulletinForenoon, obsoleteMatrix);
 	}
 
 	private List<AvalancheBulletin> mergeBulletins(List<AvalancheBulletin> bulletins) {
