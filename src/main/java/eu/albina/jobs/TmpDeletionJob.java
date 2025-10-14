@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.lang3.SystemProperties;
+import com.google.common.base.StandardSystemProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,8 @@ public class TmpDeletionJob {
 	public void execute() {
 		logger.info("TmpDeletion job triggered!");
 		try {
-			Path tmpDir = Paths.get(SystemProperties.getJavaIoTmpdir());
+
+			Path tmpDir = Paths.get(StandardSystemProperty.JAVA_IO_TMPDIR.value());
 			if (Files.exists(tmpDir)) {
 				MoreFiles.deleteDirectoryContents(tmpDir);
 			}
