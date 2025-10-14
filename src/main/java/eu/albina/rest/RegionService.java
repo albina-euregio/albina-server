@@ -100,7 +100,7 @@ public class RegionService {
 				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
 				existing.fixLanguageConfigurations();
 				regionRepository.update(existing);
-				return HttpResponse.ok(existing.toJSON());
+				return HttpResponse.ok(existing);
 			} else {
 				String message = "Error updating region - Region does not exist";
 				logger.warn(message);

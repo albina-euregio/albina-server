@@ -458,7 +458,7 @@ public class Region implements PersistentObject {
 	}
 
 	public String getStaticUrl() {
-		return staticUrl.replaceAll("/$", "");
+		return staticUrl == null ? null : staticUrl.replaceAll("/$", "");
 	}
 
 	public Set<LanguageCode> getEnabledLanguages() {
@@ -866,10 +866,6 @@ public class Region implements PersistentObject {
 
 	public boolean isForeign(String regionId) {
 		return !affects(regionId);
-	}
-
-	public String toJSON() throws JsonProcessingException {
-		return JsonUtil.ALBINA_OBJECT_MAPPER.writeValueAsString(this);
 	}
 
 	@Override
