@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import eu.albina.model.AvalancheBulletinTest;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import net.javacrumbs.jsonunit.JsonAssert;
@@ -58,7 +59,7 @@ public class CaamlTest {
 
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
 		AvalancheReport.of(bulletins, null, serverInstanceEuregio); // test without region for eu.albina.rest.AvalancheBulletinService.getJSONBulletins
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		return caaml.createCaaml(avalancheReport, LanguageCode.en, version);
@@ -122,7 +123,7 @@ public class CaamlTest {
 	private AvalancheReport loadFromURL(LocalDate date) throws Exception {
 		URL url = new URL(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date));
 		LoggerFactory.getLogger(getClass()).info("Fetching bulletins from {}", url);
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(url);
+		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(url);
 		return AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 	}
 
@@ -139,7 +140,7 @@ public class CaamlTest {
 
 	private void toCAAMLv6(String bulletinResource, String expectedCaamlResource) throws Exception {
 		final URL resource = Resources.getResource(bulletinResource);
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 
 		toCAAMLv6(avalancheReport, expectedCaamlResource, CaamlVersion.V6_JSON);

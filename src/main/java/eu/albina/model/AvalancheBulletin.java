@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -21,8 +18,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.albina.util.JsonUtil;
-
-import com.google.common.io.Resources;
 
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
@@ -907,12 +902,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Override
 	public int compareTo(AvalancheBulletin other) {
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
-	}
-
-	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
-		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);
-		return List.of(bulletins);
 	}
 
 }

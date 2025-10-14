@@ -19,6 +19,12 @@ import java.util.stream.Collectors;
 
 public class AvalancheBulletinTest {
 
+	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
+		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
+		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);
+		return List.of(bulletins);
+	}
+
 	@BeforeEach
 	void setUp() {
 		JsonAssert.setOptions(Option.IGNORING_ARRAY_ORDER, Option.IGNORING_EXTRA_FIELDS);
@@ -51,14 +57,14 @@ public class AvalancheBulletinTest {
 
 	private static void runTest(URL bulletin, Class<?> view) throws IOException {
 		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
-		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletinsUsingJackson(bulletin);
+		List<AvalancheBulletin> avalancheBulletins = readBulletinsUsingJackson(bulletin);
 		String actual3 = JsonUtil.writeValueUsingJackson(avalancheBulletins, view);
 		JsonAssert.assertJsonEquals(expected, actual3);
 	}
 
 	@Test
 	public void testSortByDangerRating() throws IOException {
-		List<AvalancheBulletin> bulletins = new ArrayList<>(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
+		List<AvalancheBulletin> bulletins = new ArrayList<>(readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
 		Collections.sort(bulletins);
 		List<Integer> actual = bulletins.stream().map(AvalancheBulletin::getHighestDangerRatingDouble).collect(Collectors.toList());
 		Assertions.assertEquals(List.of(14, 10, 8, 6, 4), actual);

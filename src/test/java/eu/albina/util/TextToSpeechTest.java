@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import eu.albina.model.AvalancheBulletinTest;
 import org.caaml.v6.AvalancheBulletins;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -26,7 +27,7 @@ class TextToSpeechTest {
 
 	private static void toCAAMLv6(String bulletinResource) throws Exception {
 		URL resource = Resources.getResource(bulletinResource);
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, null);
 		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
@@ -75,7 +76,7 @@ class TextToSpeechTest {
 	public void test20231201mp3() throws Exception {
 		// GOOGLE_APPLICATION_CREDENTIALS
 		URL resource = Resources.getResource("2023-12-01.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.de);
 		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().get(0);

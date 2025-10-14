@@ -6,6 +6,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
+import eu.albina.model.AvalancheBulletinTest;
 import eu.albina.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class AvalancheBulletinJsonValidatorTest {
 	@Test
 	public void testValidateAvalancheBulletinValid() throws IOException {
 		final URL resource = Resources.getResource("2019-01-16.json");
-		for (AvalancheBulletin bulletin : AvalancheBulletin.readBulletinsUsingJackson(resource)) {
+		for (AvalancheBulletin bulletin : AvalancheBulletinTest.readBulletinsUsingJackson(resource)) {
 			final String json = JsonUtil.writeValueUsingJackson(bulletin, JsonUtil.Views.Internal.class);
 			Assertions.assertEquals(Set.of(), JsonValidator.validateAvalancheBulletin(json));
 		}

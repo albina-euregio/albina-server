@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import eu.albina.RegionTestUtils;
+import eu.albina.model.AvalancheBulletinTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -20,7 +21,7 @@ public class JsonUtilTest {
 	@Test
 	public void createJsonTest(@TempDir Path folder) throws IOException {
 		ServerInstance serverInstanceEuregio = new ServerInstance();
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
 		serverInstanceEuregio.setHtmlDirectory(folder.toString());
 		serverInstanceEuregio.setMapsPath(folder.toString());
 		serverInstanceEuregio.setPdfDirectory(folder.toString());

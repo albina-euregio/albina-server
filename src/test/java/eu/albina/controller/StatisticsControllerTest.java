@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import eu.albina.model.AvalancheBulletinTest;
 import eu.albina.util.JsonUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,8 +33,8 @@ public class StatisticsControllerTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		bulletinsAmPm = new ArrayList<>();
-		bulletinsAmPm.addAll(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
-		bulletinsAmPm.addAll(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_6.json")));
+		bulletinsAmPm.addAll(AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
+		bulletinsAmPm.addAll(AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_6.json")));
 		dangerSourceVariants = Arrays.asList(readDangerSourceVariant(Resources.getResource("danger_source_variants.json")));
 	}
 

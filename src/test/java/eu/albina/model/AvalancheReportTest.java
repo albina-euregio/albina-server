@@ -32,16 +32,16 @@ public class AvalancheReportTest {
 
 	@Test
 	public void testIsUpdate() throws Exception {
-		List<AvalancheBulletin> bulletins0 = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins0 = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
 		Assertions.assertTrue(AvalancheReport.of(bulletins0, null, null).isUpdate());
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2019-01-17.json"));
+		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2019-01-17.json"));
 		Assertions.assertFalse(AvalancheReport.of(bulletins, null, null).isUpdate());
 	}
 
 	@Disabled
 	@Test
 	public void sortBulletinsTest() throws Exception {
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
@@ -57,7 +57,7 @@ public class AvalancheReportTest {
 		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/bulletins");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
 		regionEuregio.setServerInstance(serverInstanceEuregio);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Assertions.assertEquals("16.01.2019, 17:00:00", avalancheReport.getPublicationDate(LanguageCode.de));

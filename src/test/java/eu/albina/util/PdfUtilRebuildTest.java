@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import eu.albina.model.AvalancheBulletinTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -70,7 +71,7 @@ public class PdfUtilRebuildTest {
 		try {
 			URL url = new URL("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json");
 			logger.info("Fetching bulletins from {}", url);
-			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(url);
+			List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(url);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setServerInstance(serverInstance);
 			return avalancheReport;
