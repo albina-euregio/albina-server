@@ -220,17 +220,17 @@ public interface MapUtil {
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
 
-		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
-			Resources.getResource("fonts/open-sans/OpenSans.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Italic.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Bold.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-BoldItalic.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Semibold.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-SemiboldItalic.otf").getFile());
+		final String ttf_mapyrus = String.format("let ttf_mapyrus = \" ttffiles=%s,%s,%s,%s,%s,%s \"",
+			getFont("OpenSans-Regular.ttf"),
+			getFont("OpenSans-Italic.ttf"),
+			getFont("OpenSans-Bold.ttf"),
+			getFont("OpenSans-BoldItalic.ttf"),
+			getFont("OpenSans-Semibold.ttf"),
+			getFont("OpenSans-SemiboldItalic.ttf"));
 
 		logger.debug("Creating map {} using {} with bindings {}", outputFile, dangerBindings, bindings);
 		final MapyrusInterpreter mapyrus = new MapyrusInterpreter(bindings);
-		mapyrus.interpret(new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"));
+		mapyrus.interpret(new FileOrURL(new StringReader(ttf_mapyrus), "ttf.mapyrus"));
 		mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
 		mapyrus.interpret(Resources.getResource("mapyrus/albina_functions.mapyrus"));
 		mapyrus.interpret(Resources.getResource("mapyrus/albina_styles.mapyrus"));
@@ -264,6 +264,14 @@ public interface MapUtil {
 		if (!BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
+	}
+
+	private static String getFont(String font) {
+		Path path = Paths.get("/usr/share/fonts/open-sans/" + font);
+		if (Files.exists(path)) {
+			return path.toString();
+		}
+		return Resources.getResource("fonts/open-sans/" + font).getFile();
 	}
 
 	static Path mapProductionResource(Path geodataPath, String filename) {
