@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -31,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -61,7 +61,7 @@ public class MediaFileService {
 	RegionController regionController;
 
 	@Inject
-	private ServerInstanceController serverInstanceController;
+	private ServerInstanceRepository serverInstanceRepository;
 
 	@Inject
 	private UserRepository userRepository;
@@ -91,7 +91,7 @@ public class MediaFileService {
 			}
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
-			ServerInstance localServerInstance = serverInstanceController.getLocalServerInstance();
+			ServerInstance localServerInstance = serverInstanceRepository.getLocalServerInstance();
 
 			Path fileLocation = getMediaPath(localServerInstance, region, language);
 			Files.createDirectories(fileLocation);
@@ -149,7 +149,7 @@ public class MediaFileService {
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language
 	) throws Exception {
-		final ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
+		final ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 		final Region region = new Region(regionId);
 		final String websiteName = region.getWebsiteName(language);
 		final String rss = RssUtil.getRss(

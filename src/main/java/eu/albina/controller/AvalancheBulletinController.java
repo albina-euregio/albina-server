@@ -51,7 +51,8 @@ public class AvalancheBulletinController {
 	AvalancheReportController avalancheReportController;
 
 	@Inject
-	ServerInstanceController serverInstanceController;
+	ServerInstanceRepository serverInstanceRepository;
+
 	@Inject
 	private UserRepository userRepository;
 
@@ -563,7 +564,7 @@ public class AvalancheBulletinController {
 				if (bulletin.affectsRegionWithoutSuggestions(region)) {
 
 					// set author
-					ServerInstance serverInstance = serverInstanceController.getLocalServerInstance(entityManager);
+					ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 					if (user != null && !Objects.equals(user.getEmail(), serverInstance.getUserName())) {
 						if (!bulletin.getAdditionalAuthors().contains(user.getName()))
 							bulletin.addAdditionalAuthor(user.getName());

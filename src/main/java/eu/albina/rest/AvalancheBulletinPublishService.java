@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -25,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
@@ -60,7 +60,7 @@ public class AvalancheBulletinPublishService {
 	RegionController regionController;
 
 	@Inject
-	private ServerInstanceController serverInstanceController;
+	private ServerInstanceRepository serverInstanceRepository;
 
 	@Inject
 	private UserRepository userRepository;
@@ -87,7 +87,7 @@ public class AvalancheBulletinPublishService {
 			).distinct().collect(Collectors.toList());
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()) {
+				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceRepository.getLocalServerInstance()) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -127,7 +127,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			new Thread(() -> {
-				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()) {
+				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceRepository.getLocalServerInstance()) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -239,7 +239,7 @@ public class AvalancheBulletinPublishService {
 			.getPublishedBulletins(startDate, Collections.singletonList(region));
 		AvalancheReport avalancheReport = avalancheReportController.getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);
-		avalancheReport.setServerInstance(serverInstanceController.getLocalServerInstance());
+		avalancheReport.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 		return (language != null ? Collections.singleton(language) : region.getEnabledLanguages()).stream()
 			.map(lang -> MultichannelMessage.of(avalancheReport, lang))
 			.collect(Collectors.toList());

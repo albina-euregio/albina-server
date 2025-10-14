@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpHeaders;
@@ -37,7 +38,6 @@ import io.micronaut.http.annotation.Produces;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.RateLimiter;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
 import eu.albina.util.HibernateUtil;
@@ -110,7 +110,7 @@ public class AvalancheBulletinService {
 	RegionController regionController;
 
 	@Inject
-	private ServerInstanceController serverInstanceController;
+	private ServerInstanceRepository serverInstanceRepository;
 
 	@Inject
 	private UserRepository userRepository;
@@ -157,7 +157,7 @@ public class AvalancheBulletinService {
 				avalancheBulletinController.getBulletins(startDate, endDate, regions, entityManager));
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 			bulletins.forEach(b -> b.setPublishedRegions(b.getPublishedAndSavedRegions()));
-			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, serverInstanceController.getLocalServerInstance());
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, serverInstanceRepository.getLocalServerInstance());
 			avalancheReport.setStatus(BulletinStatus.draft);
 			return makeCAAML(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 		} catch (RuntimeException e) {
@@ -223,7 +223,7 @@ public class AvalancheBulletinService {
 		try {
 			AvalancheReport avalancheReport = AvalancheReport.of(
 				avalancheReportController.getPublishedBulletins(startDate, regions), null,
-				serverInstanceController.getLocalServerInstance());
+				serverInstanceRepository.getLocalServerInstance());
 			return makeCAAML(avalancheReport, language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
@@ -288,7 +288,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
-			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
+			ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 			serverInstance.setPdfDirectory(SystemProperties.getJavaIoTmpdir());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
@@ -316,7 +316,7 @@ public class AvalancheBulletinService {
 			pdfRateLimiter.acquire();
 			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			Region region = regionController.getRegion(regionId);
-			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
+			ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 			serverInstance.setPdfDirectory(SystemProperties.getJavaIoTmpdir());
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
@@ -400,7 +400,7 @@ public class AvalancheBulletinService {
 				.collect(Collectors.toList());
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
-			ServerInstance serverInstance = serverInstanceController.getLocalServerInstance();
+			ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 			serverInstance.setMapsPath(SystemProperties.getJavaIoTmpdir());
 			serverInstance.setPdfDirectory(SystemProperties.getJavaIoTmpdir());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
@@ -665,7 +665,7 @@ public class AvalancheBulletinService {
 				).distinct().collect(Collectors.toList());
 
 				new Thread(() -> {
-					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceController.getLocalServerInstance()) {
+					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceRepository.getLocalServerInstance()) {
 						@Override
 						protected Instant getStartDate(Clock clock) {
 							return startDate;
