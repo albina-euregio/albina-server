@@ -533,7 +533,7 @@ public class AvalancheReportController {
 			if (report == null) {
 				continue;
 			}
-			List<AvalancheBulletin> publishedBulletinsForRegion = report.getPublishedBulletins();
+			List<AvalancheBulletin> publishedBulletinsForRegion = report.getPublishedBulletins(objectMapper);
 			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
 				if (resultMap.containsKey(bulletin.getId())) {
 					boolean match = false;

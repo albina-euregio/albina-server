@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -48,6 +50,9 @@ public class StatisticsController {
 
 	@Inject
 	DangerSourceVariantRepository dangerSourceVariantRepository;
+
+	@Inject
+	private ObjectMapper objectMapper;
 
 	/**
 	 * Return a CSV string with all danger source variants from {@code startDate}
@@ -177,7 +182,7 @@ public class StatisticsController {
 	}
 
 	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {
-		return reports.stream().flatMap(r -> r.getPublishedBulletins().stream()).collect(Collectors.toList());
+		return reports.stream().flatMap(r -> r.getPublishedBulletins(objectMapper).stream()).collect(Collectors.toList());
 	}
 
 	/**

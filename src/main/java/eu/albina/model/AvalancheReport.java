@@ -2,6 +2,7 @@
 package eu.albina.model;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -133,7 +135,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	}
 
 	@JsonIgnore
-	public List<AvalancheBulletin> getPublishedBulletins() {
+	public List<AvalancheBulletin> getPublishedBulletins(ObjectMapper objectMapper) {
 		if (getStatus() != BulletinStatus.published && getStatus() != BulletinStatus.republished) {
 			LoggerFactory.getLogger(AvalancheReport.class).warn("Report has not been published!");
 			return List.of();
@@ -142,10 +144,14 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 			LoggerFactory.getLogger(AvalancheReport.class).warn("JSON string empty: {}, {}", getDate(), getRegion());
 			return List.of();
 		}
-		return Arrays.stream(JsonUtil.parseUsingJackson(getJsonString(), AvalancheBulletin[].class))
-			// only add bulletins with published regions
-			.filter(bulletin -> bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
-			.collect(Collectors.toList());
+		try {
+			return Arrays.stream(objectMapper.readValue(getJsonString(), AvalancheBulletin[].class))
+				// only add bulletins with published regions
+				.filter(bulletin -> bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
+				.collect(Collectors.toList());
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
 	public void createJsonFile() throws IOException {
