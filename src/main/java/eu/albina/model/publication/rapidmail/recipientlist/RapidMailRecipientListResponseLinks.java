@@ -3,8 +3,10 @@ package eu.albina.model.publication.rapidmail.recipientlist;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Serdeable
 public class RapidMailRecipientListResponseLinks {
 
 	@JsonProperty("self")

@@ -15,10 +15,10 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import eu.albina.util.JsonUtil;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -40,6 +40,9 @@ import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsReque
 public class RapidMailController {
 	private static final Logger logger = LoggerFactory.getLogger(RapidMailController.class);
 	private static final String baseUrl = "https://apiv3.emailsys.net";
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Inject
 	HttpClient client;
@@ -70,7 +73,7 @@ public class RapidMailController {
 			.build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		logger.info("Retrieving recipients -> {}", response.statusCode());
-		return JsonUtil.parseUsingJackson(response.body(), RapidMailRecipientListResponse.class);
+		return objectMapper.readValue(response.body(), RapidMailRecipientListResponse.class);
 	}
 
 	public void createRecipient(RapidMailConfiguration config, PostRecipientsRequest recipient)
@@ -84,7 +87,7 @@ public class RapidMailController {
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
 			.header("Content-Type", MediaType.APPLICATION_JSON)
-			.POST(HttpRequest.BodyPublishers.ofString(JsonUtil.writeValueUsingJackson(recipient)))
+			.POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(recipient)))
 			.build();
 		client.send(request, HttpResponse.BodyHandlers.discarding());
 	}
@@ -104,11 +107,11 @@ public class RapidMailController {
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
 			.header("Content-Type", MediaType.APPLICATION_JSON)
-			.POST(HttpRequest.BodyPublishers.ofString(JsonUtil.writeValueUsingJackson(mailingsPost)))
+			.POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(mailingsPost)))
 			.build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		logger.info("... returned {}", response);
-		PostMailingsResponse entity = JsonUtil.parseUsingJackson(response.body(), PostMailingsResponse.class);
+		PostMailingsResponse entity = objectMapper.readValue(response.body(), PostMailingsResponse.class);
 		logger.info("... returned {}", entity);
 	}
 
