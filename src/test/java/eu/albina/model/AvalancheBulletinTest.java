@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @MicronautTest
@@ -27,8 +28,9 @@ public class AvalancheBulletinTest {
 	ObjectMapper objectMapper;
 
 	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
+		final ObjectMapper objectMapper = ObjectMapper.create(Map.of(), "eu.albina"); // FIXME
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);
+		final AvalancheBulletin[] bulletins = objectMapper.readValue(validBulletinStringFromResource, AvalancheBulletin[].class);
 		return List.of(bulletins);
 	}
 
