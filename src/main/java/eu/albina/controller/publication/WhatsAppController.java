@@ -5,10 +5,10 @@ import com.google.common.net.HttpHeaders;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.WhatsAppConfiguration;
-import eu.albina.util.JsonUtil;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -31,6 +31,9 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class WhatsAppController {
 	private static final Logger logger = LoggerFactory.getLogger(WhatsAppController.class);
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Inject
 	HttpClient client;
@@ -79,7 +82,7 @@ public class WhatsAppController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending photo {} and message {} to whatsapp channel using config {}", attachmentUrl, message, config);
 
-		String payload = JsonUtil.writeValueUsingJackson(Map.of(
+		String payload = objectMapper.writeValueAsString(Map.of(
 			"to", chatId,
 			"media", attachmentUrl,
 			"caption", message
@@ -105,7 +108,7 @@ public class WhatsAppController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending message {} to whatsapp channel using config {}", message, config);
 
-		String payload = JsonUtil.writeValueUsingJackson(Map.of(
+		String payload = objectMapper.writeValueAsString(Map.of(
 			"to", chatId,
 			"body", message
 		));
