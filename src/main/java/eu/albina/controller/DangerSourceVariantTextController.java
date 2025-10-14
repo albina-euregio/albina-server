@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,6 @@ import eu.albina.model.enumerations.Recognizability;
 import eu.albina.model.enumerations.SlopeGradient;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.model.enumerations.Wetness;
-import eu.albina.util.HibernateUtil;
 
 /**
  * Controller for danger sources variant texts.
@@ -36,6 +36,9 @@ import eu.albina.util.HibernateUtil;
 public class DangerSourceVariantTextController {
 
 	private static final Logger logger = LoggerFactory.getLogger(DangerSourceVariantTextController.class);
+
+	@Inject
+	DangerSourceVariantTextRepository dangerSourceVariantTextRepository;
 
 	// phrase "Gefahrenstellen05§an_Expositionen"
 	// placeholder:
@@ -272,26 +275,12 @@ public class DangerSourceVariantTextController {
 			AddOns.outflow_areas_to_consider,
 			"{\"curlyName\":\"Empfehlung11\",\"line\":0,\"args\":{\"Empfehlung11§Absturzgefahr\":{\"curlyName\":\"Empfehlung11§Absturzgefahr\",\"line\":7,\"args\":{\"auch\":{\"curlyName\":\"auch\",\"line\":0},\"von_grossen_Lawinen\":{\"curlyName\":\"von_grossen_Lawinen\",\"line\":2}}}}}");
 
-	/**
-	 * Returns all danger source variant texts for the given {@code avalanche type}.
-	 *
-	 * @param avalancheType
-	 *                      the type of avalanche
-	 * @return all danger source variant texts for the given avalanche type
-	 */
-	private List<DangerSourceVariantText> getDangerSourceVariantTexts(AvalancheType avalancheType) {
-		return HibernateUtil.getInstance().runTransaction(entityManager -> {
-			return entityManager
-					.createQuery(HibernateUtil.queryGetDangerSourceVariantTexts, DangerSourceVariantText.class)
-					.setParameter("avalancheType", avalancheType).getResultList();
-		});
-	}
-
 	public DangerSourceVariantText getDangerSourceVariantText(DangerSourceVariant dangerSourceVariant) {
 		if (dangerSourceVariant == null || dangerSourceVariant.getAvalancheType() == null) {
 			return null;
 		}
-		List<DangerSourceVariantText> result = getDangerSourceVariantTexts(dangerSourceVariant.getAvalancheType());
+		AvalancheType avalancheType = dangerSourceVariant.getAvalancheType();
+		List<DangerSourceVariantText> result = dangerSourceVariantTextRepository.findByAvalancheType(avalancheType);
 		switch (dangerSourceVariant.getAvalancheType()) {
 			case glide:
 				return result.stream()
