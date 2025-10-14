@@ -11,9 +11,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import io.micronaut.core.type.Argument;
+import io.micronaut.json.tree.JsonNode;
 import io.micronaut.serde.Decoder;
 import io.micronaut.serde.Deserializer;
 import io.micronaut.serde.Encoder;
+import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Singleton;
@@ -22,13 +24,10 @@ import org.w3c.dom.Element;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
 import eu.albina.model.enumerations.TextcatTextfield;
-import eu.albina.util.JsonUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -291,21 +290,21 @@ public class Region implements PersistentObject {
 		this.id = id;
 	}
 
-	public Region(String json, Function<String, Region> regionFunction) throws JsonProcessingException {
+	public Region(String json, Function<String, Region> regionFunction, ObjectMapper objectMapper) throws IOException {
 		this();
 
 		// Use Jackson to populate all "normal" fields
-		JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(this).readValue(json);
+		JsonNode node = JsonNode.from(json);
+		objectMapper.updateValueFromTree(this, node);
 
 		fixLanguageConfigurations();
 
 		// Handle region references manually
-		JsonNode node = JsonUtil.ALBINA_OBJECT_MAPPER.readTree(json);
 		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
 			JsonNode arrayNode = node.get(key);
 			if (arrayNode != null && arrayNode.isArray()) {
-				for (JsonNode entryNode : arrayNode) {
-					Region region = regionFunction.apply(entryNode.asText());
+				for (JsonNode entryNode : arrayNode.values()) {
+					Region region = regionFunction.apply(entryNode.getStringValue());
 					if (region != null)
 						targetSet.add(region);
 				}

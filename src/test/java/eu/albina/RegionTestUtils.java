@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import com.google.common.io.Resources;
 
 import eu.albina.model.Region;
+import io.micronaut.serde.ObjectMapper;
 
 public interface RegionTestUtils {
 
@@ -21,7 +23,8 @@ public interface RegionTestUtils {
 
 	static Region readRegion(URL resource) throws UncheckedIOException {
 		try {
-			return new Region(Resources.toString(resource, StandardCharsets.UTF_8), Region::new);
+			ObjectMapper objectMapper = ObjectMapper.create(Map.of(), "eu.albina"); // FIXME
+			return new Region(Resources.toString(resource, StandardCharsets.UTF_8), Region::new, objectMapper);
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}

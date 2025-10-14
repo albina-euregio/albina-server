@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.List;
 
@@ -12,11 +13,11 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.json.tree.JsonNode;
 import io.micronaut.security.annotation.Secured;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.albina.exception.AlbinaException;
-import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -41,6 +42,9 @@ public class RegionService {
 
 	@Inject
 	RegionRepository regionRepository;
+
+	@Inject
+	private ObjectMapper objectMapper;
 
 	@Get
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
@@ -91,13 +95,13 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
 
 		try {
-			String id = new Region(regionString, Region::new).getId();
+			String id = new Region(regionString, Region::new, objectMapper).getId();
 			Optional<Region> optionalRegion = regionRepository.findById(id);
 			if (optionalRegion.isPresent()) {
 				Region existing = optionalRegion.get();
 				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
-				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
+				objectMapper.updateValueFromTree(existing, JsonNode.from(regionString));
 				existing.fixLanguageConfigurations();
 				regionRepository.update(existing);
 				return HttpResponse.ok(existing);
@@ -106,11 +110,8 @@ public class RegionService {
 				logger.warn(message);
 				return HttpResponse.badRequest().body(new AlbinaException(message).toJSON());
 			}
-		} catch (HibernateException e) {
+		} catch (IOException | HibernateException e) {
 			logger.warn("Error updating region", e);
-			return HttpResponse.badRequest().body(e.toString());
-		} catch (JsonProcessingException e) {
-			logger.warn("Error deserializing region", e);
 			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
@@ -123,7 +124,7 @@ public class RegionService {
 		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("POST JSON region");
 		try {
-			Region region = new Region(regionString, Region::new);
+			Region region = new Region(regionString, Region::new, objectMapper);
 
 			// check if id already exists
 			if (regionRepository.findById(region.getId()).isEmpty()) {
@@ -135,7 +136,7 @@ public class RegionService {
 				logger.warn(message);
 				return HttpResponse.badRequest(new AlbinaException(message).toJSON());
 			}
-		} catch (JsonProcessingException e) {
+		} catch (IOException e) {
 			logger.warn("Error deserializing region", e);
 			return HttpResponse.badRequest(e.toString());
 		}
