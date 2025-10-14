@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.type.Argument;
 import io.micronaut.serde.Decoder;
@@ -130,6 +131,7 @@ public class StressLevel {
 			.toString();
 	}
 
+	@Introspected
 	public static final class StressLevelID {
 		private User user;
 		private LocalDate date;

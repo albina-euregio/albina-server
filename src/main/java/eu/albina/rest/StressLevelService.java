@@ -2,7 +2,7 @@
 package eu.albina.rest;
 
 import eu.albina.controller.RegionRepository;
-import eu.albina.controller.StressLevelController;
+import eu.albina.controller.StressLevelRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.model.StressLevel;
 import eu.albina.model.User;
@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,9 @@ public class StressLevelService {
 	@Inject
 	private UserRepository userRepository;
 
+	@Inject
+	private StressLevelRepository stressLevelRepository;
+
 	@Get
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -59,7 +63,7 @@ public class StressLevelService {
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
 		User user = userRepository.findById(principal.getName()).orElseThrow();
 		Set<User> users = Collections.singleton(user);
-		List<StressLevel> stressLevels = StressLevelController.get(users, startDate, endDate);
+		List<StressLevel> stressLevels = stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate);
 		return HttpResponse.ok(stressLevels);
 	}
 
@@ -88,7 +92,7 @@ public class StressLevelService {
 					.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
 					.filter(u -> u.hasPermissionForRegion(region.getId()))
 					.collect(Collectors.toList());
-			Map<UUID, List<StressLevel>> stressLevels = StressLevel.randomizeUsers(StressLevelController.get(users, startDate, endDate));
+			Map<UUID, List<StressLevel>> stressLevels = StressLevel.randomizeUsers(stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate));
 			return HttpResponse.ok(stressLevels);
 		} catch (Exception e) {
 			logger.warn("Failed to get stress levels for region: " + regionId, e);
@@ -100,13 +104,14 @@ public class StressLevelService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create stress level entry")
+	@Transactional
 	public HttpResponse<?> postStressLevel(
 			Principal principal,
 			@Body StressLevel stressLevel) {
 
 		User user = userRepository.findById(principal.getName()).orElseThrow();
 		stressLevel.setUser(user);
-		stressLevel = StressLevelController.create(stressLevel);
+		stressLevel = stressLevelRepository.updateOrSave(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);
 		return HttpResponse.ok(stressLevel);
 	}
