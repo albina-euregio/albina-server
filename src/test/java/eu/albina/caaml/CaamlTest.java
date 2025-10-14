@@ -17,6 +17,8 @@ import java.util.List;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.model.AvalancheBulletinTest;
+import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import net.javacrumbs.jsonunit.JsonAssert;
@@ -36,7 +38,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.JsonUtil;
 
 @MicronautTest()
 public class CaamlTest {
@@ -45,6 +46,9 @@ public class CaamlTest {
 
 	@Inject
 	Caaml caaml;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Inject
 	private RegionRepository regionRepository;
@@ -131,7 +135,7 @@ public class CaamlTest {
 		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));
 		Files.createDirectories(path.getParent());
-		String json = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
+		String json = objectMapper.cloneWithViewClass(JsonUtil.Views.Public.class).writeValueAsString(bulletins);
 		Files.writeString(path, json, StandardCharsets.UTF_8);
 		return report;
 	}
