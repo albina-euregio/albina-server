@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
+import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -31,7 +35,6 @@ import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.JsonUtil;
 
 /**
  * Controller for avalanche reports.
@@ -49,6 +52,9 @@ public class AvalancheReportController {
 
 	@Inject
 	UserRepository userRepository;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	/**
 	 * Return the actual status of the bulletins for every day in a given time
@@ -307,7 +313,11 @@ public class AvalancheReportController {
 		avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
 		Collection<AvalancheBulletin> bulletins = avalancheBulletins.values().stream().map(b -> b.withRegionFilter(region)).toList();
-		avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Internal.class));
+		try {
+			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 
 		avalancheReportRepository.save(avalancheReport);
 
@@ -413,7 +423,11 @@ public class AvalancheReportController {
 		}
 
 		Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
-		avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins1, JsonUtil.Views.Internal.class));
+		try {
+			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins1));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 
 		avalancheReportRepository.save(avalancheReport);
 		bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
@@ -487,7 +501,11 @@ public class AvalancheReportController {
 
 		// set json string after status is published/republished
 		Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
-		avalancheReport.setJsonString(JsonUtil.writeValueUsingJackson(bulletins1, JsonUtil.Views.Internal.class));
+		try {
+			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins1));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 
 		avalancheReportRepository.save(avalancheReport);
 		bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
