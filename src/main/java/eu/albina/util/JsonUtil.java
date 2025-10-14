@@ -10,7 +10,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 public class JsonUtil {
@@ -62,19 +61,4 @@ public class JsonUtil {
 		}
 	}
 
-	public static <T> T parseUsingJackson(InputStream json, Class<T> valueType) throws IOException {
-		try {
-			return ALBINA_OBJECT_MAPPER.readValue(json, valueType);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static void writeValueUsingJackson(OutputStream out, Object value) throws IOException {
-		try {
-			ALBINA_OBJECT_MAPPER.writeValue(out, value);
-		} catch (JsonProcessingException e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
