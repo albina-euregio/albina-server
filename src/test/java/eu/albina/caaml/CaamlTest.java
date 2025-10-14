@@ -36,7 +36,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
 
 @MicronautTest()
@@ -83,7 +82,6 @@ public class CaamlTest {
 	@Disabled
 	@Test
 	public void createOldCaamlFiles() throws Exception {
-		HibernateUtil.getInstance().setUp();
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
 			createOldCaamlFiles(date, CaamlVersion.V6_JSON);

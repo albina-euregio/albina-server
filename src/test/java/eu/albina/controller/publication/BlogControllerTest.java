@@ -22,7 +22,6 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.util.HibernateUtil;
 
 @MicronautTest
 public class BlogControllerTest {
@@ -53,34 +52,28 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testBlogPosts() throws Exception {
-		HibernateUtil.getInstance().setUp();
 		BlogConfiguration config = blogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
 		List<? extends BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
 		blogController.updateConfigurationLastPublished(config, blogPosts.get(0));
-		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
 	@Test
 	public void testLatestBlogPost() throws Exception {
-		HibernateUtil.getInstance().setUp();
 		BlogConfiguration config = blogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
 		BlogItem blogItem = blogController.getLatestBlogPost(config);
 		assertTrue(blogItem.getContent().length() > 100, "blog has >100 chars");
-		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
 	@Test
 	public void testBlogPost() throws Exception {
-		HibernateUtil.getInstance().setUp();
         BlogConfiguration configuration = blogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
 		String blogPost = blogController.getBlogPost(configuration, "1227558273754407795").getContent();
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
-		HibernateUtil.getInstance().shutDown();
 	}
 
 	@Disabled
@@ -110,8 +103,6 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testTechBlog() throws Exception {
-		HibernateUtil.getInstance().setUp();
 		blogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, new Region("AT-07"));
-		HibernateUtil.getInstance().shutDown();
 	}
 }

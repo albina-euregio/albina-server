@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.HibernateUtil;
 
 public class PushSubscriptionControllerTest {
 
@@ -23,7 +22,6 @@ public class PushSubscriptionControllerTest {
 	@Test
 	@Disabled
 	public void get() {
-		HibernateUtil.getInstance().setUp();
 		List<PushSubscription> subscriptions = pushSubscriptionRepository.findByLanguageAndRegionInList(LanguageCode.de, Collections.singletonList("AT-07"));
 		Assertions.assertFalse(subscriptions.isEmpty());
 		subscriptions = pushSubscriptionRepository.findByLanguageAndRegionInList(LanguageCode.de, Arrays.asList("AT-07", "IT-32-BZ"));

@@ -24,7 +24,6 @@ import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.HibernateUtil;
 
 public class AvalancheReportTest {
 
@@ -99,9 +98,7 @@ public class AvalancheReportTest {
 	@Test
 	@Disabled
 	public void testDatesHibernate() throws Exception {
-		HibernateUtil.getInstance().setUp();
 		final AvalancheBulletin bulletin = new AvalancheBulletinController().getBulletin("4e5bbd7c-7ccf-4a2a-8ac7-5a0bfc322a14");
-		HibernateUtil.getInstance().shutDown();
 		final List<AvalancheBulletin> bulletins = List.of(bulletin);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 
