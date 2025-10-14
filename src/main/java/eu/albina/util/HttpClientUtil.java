@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
@@ -23,5 +26,14 @@ public interface HttpClientUtil {
 		return data.entrySet().stream()
 			.map(entry -> entry.getKey() + "=" + URLEncoder.encode(String.valueOf(entry.getValue()), StandardCharsets.UTF_8))
 			.collect(Collectors.joining("&"));
+	}
+
+	@Factory
+	class HttpClientFactory {
+
+		@Bean
+		public HttpClient httpClient() {
+			return newClientBuilder().build();
+		}
 	}
 }

@@ -3,24 +3,25 @@ package eu.albina.rest;
 
 import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
-import eu.albina.util.HttpClientUtil;
+import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.model.PushSubscription;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
-
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.serde.annotation.Serdeable;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.publication.PushNotificationUtil;
-import eu.albina.model.PushSubscription;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 @Controller("/push")
 @Tag(name = "push")
+@Secured(SecurityRule.IS_ANONYMOUS)
 public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
@@ -33,12 +34,14 @@ public class PushNotificationService {
 	@Inject
 	private PushNotificationUtil pushNotificationUtil;
 
+	@Serdeable
+	record VapidPublicKey(String vapidPublicKey) {
+	}
+
 	@Get("/key")
 	@Operation(summary = "Get VAPID public key")
 	public Object key() {
-		return new Object() {
-			public String vapidPublicKey = pushNotificationUtil.getConfiguration().orElseThrow().getVapidPublicKey();
-		};
+		return new VapidPublicKey(pushNotificationUtil.getConfiguration().orElseThrow().getVapidPublicKey());
 	}
 
 	@Post("/subscribe")
