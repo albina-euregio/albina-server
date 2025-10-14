@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.model.PushSubscription;
@@ -29,7 +28,7 @@ public class PushNotificationService {
 	RegionRepository regionRepository;
 
 	@Inject
-	PushSubscriptionRepository pushSubscriptionRepository;
+	PushNotificationUtil.PushSubscriptionRepository pushSubscriptionRepository;
 
 	@Inject
 	private PushNotificationUtil pushNotificationUtil;
@@ -41,7 +40,7 @@ public class PushNotificationService {
 	@Get("/key")
 	@Operation(summary = "Get VAPID public key")
 	public Object key() {
-		return new VapidPublicKey(pushNotificationUtil.getConfiguration().orElseThrow().getVapidPublicKey());
+	return new VapidPublicKey(pushNotificationUtil.getConfiguration().getVapidPublicKey());
 	}
 
 	@Post("/subscribe")

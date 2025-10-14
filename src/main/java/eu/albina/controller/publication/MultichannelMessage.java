@@ -7,8 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
-import eu.albina.controller.PushSubscriptionRepository;
-import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

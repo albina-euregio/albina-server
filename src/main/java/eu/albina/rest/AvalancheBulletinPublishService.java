@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.PublicationController;
-import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;

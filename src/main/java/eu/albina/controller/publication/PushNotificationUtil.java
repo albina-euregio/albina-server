@@ -5,11 +5,15 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import eu.albina.controller.PushSubscriptionRepository;
+import com.google.common.collect.MoreCollectors;
+import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -25,12 +29,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
 import eu.albina.model.publication.PushConfiguration;
-import eu.albina.util.HibernateUtil;
 import eu.albina.util.JsonUtil;
-
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 
 @Singleton
 public class PushNotificationUtil {
@@ -42,6 +41,26 @@ public class PushNotificationUtil {
 
 	@Inject
 	PushSubscriptionRepository pushSubscriptionRepository;
+
+	@Inject
+	PushConfigurationRepository pushConfigurationRepository;
+
+	@Repository
+	public interface PushSubscriptionRepository extends CrudRepository<PushSubscription, Long> {
+
+		List<PushSubscription> findByLanguageAndRegionInList(LanguageCode lang, Collection<String> regionIds);
+
+		Optional<PushSubscription> findByEndpointAndAuthAndP256dh(String endpoint, String auth, String p256dh);
+
+		default void incrementFailedCount(PushSubscription subscription) {
+			subscription.setFailedCount(subscription.getFailedCount() + 1);
+			update(subscription);
+		}
+	}
+
+	@Repository
+	public interface PushConfigurationRepository extends CrudRepository<PushConfiguration, Long> {
+	}
 
 	public static class Message {
 		public final String title;
@@ -81,19 +100,8 @@ public class PushNotificationUtil {
 		sendPushMessage(subscription, payload, null);
 	}
 
-
-	public static Optional<PushConfiguration> getConfiguration() {
-		return HibernateUtil.getInstance().run(entityManager -> {
-			try {
-				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-				CriteriaQuery<PushConfiguration> select = criteriaBuilder.createQuery(PushConfiguration.class);
-				select.from(PushConfiguration.class);
-				PushConfiguration configuration = entityManager.createQuery(select).getSingleResult();
-				return Optional.ofNullable(configuration);
-			} catch (PersistenceException e) {
-				return Optional.empty();
-			}
-		});
+	public PushConfiguration getConfiguration() {
+		return pushConfigurationRepository.findAll().stream().collect(MoreCollectors.onlyElement());
 	}
 
 	@Transactional
@@ -101,7 +109,7 @@ public class PushNotificationUtil {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
 			if (serverKeys == null) {
-				PushConfiguration configuration = getConfiguration().orElseThrow();
+				PushConfiguration configuration = getConfiguration();
 				serverKeys = new ServerKeys(configuration.getVapidPublicKey(), configuration.getVapidPrivateKey());
 			}
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
