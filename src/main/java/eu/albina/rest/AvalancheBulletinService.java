@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.PublicationController;
+import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
@@ -39,7 +40,6 @@ import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.JsonUtil;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -385,7 +385,7 @@ public class AvalancheBulletinService {
 	@Produces(PdfUtil.MEDIA_TYPE)
 	@Operation(summary = "Get bulletin preview as PDF")
 	public HttpResponse<?> getPreviewPdf(
-		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
+		@Body AvalancheBulletin[] bulletinsArray,
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language) {
 
@@ -394,7 +394,7 @@ public class AvalancheBulletinService {
 		try {
 			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 			ZonedDateTime publicationDate = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-			List<AvalancheBulletin> bulletins = Arrays.stream(JsonUtil.parseUsingJackson(bulletinsString, AvalancheBulletin[].class))
+			List<AvalancheBulletin> bulletins = Arrays.stream(bulletinsArray)
 				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
 				.sorted()
 				.collect(Collectors.toList());
@@ -451,7 +451,7 @@ public class AvalancheBulletinService {
 	public HttpResponse<?> updateJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
+		@Body AvalancheBulletin bulletin,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 
@@ -467,7 +467,6 @@ public class AvalancheBulletinService {
 					List<Region> regions = regionController.getRegions(entityManager);
 
 					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-						AvalancheBulletin bulletin = JsonUtil.parseUsingJackson(bulletinString, AvalancheBulletin.class);
 						loadUser(entityManager, bulletin);
 						avalancheBulletinController.updateBulletin(bulletin, startDate, endDate, region, user, entityManager);
 					} else
@@ -495,7 +494,7 @@ public class AvalancheBulletinService {
 	@JsonView(JsonUtil.Views.Internal.class)
 	public HttpResponse<?> createJSONBulletin(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinString,
+		@Body AvalancheBulletin bulletin,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 
@@ -511,7 +510,6 @@ public class AvalancheBulletinService {
 					List<Region> regions = regionController.getRegions(entityManager);
 
 					if (region != null && user != null && user.hasPermissionForRegion(region.getId())) {
-						AvalancheBulletin bulletin = JsonUtil.parseUsingJackson(bulletinString, AvalancheBulletin.class);
 						loadUser(entityManager, bulletin);
 						Map<String, AvalancheBulletin> avalancheBulletins = avalancheBulletinController
 							.createBulletin(bulletin, startDate, endDate, region, entityManager);
@@ -576,7 +574,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Create bulletins")
 	public HttpResponse<?> createJSONBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin[].class))) String bulletinsString,
+		@Body AvalancheBulletin[] bulletinsArray,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 
@@ -590,7 +588,7 @@ public class AvalancheBulletinService {
 				Region region = regionController.getRegionOrThrowAlbinaException(regionId);
 
 				if (region != null && user.hasPermissionForRegion(region.getId())) {
-					List<AvalancheBulletin> bulletins = List.of(JsonUtil.parseUsingJackson(bulletinsString, AvalancheBulletin[].class));
+					List<AvalancheBulletin> bulletins = List.of(bulletinsArray);
 					HibernateUtil.getInstance().run(entityManager -> {
 						bulletins.forEach(b -> loadUser(entityManager, b));
 						return null;
@@ -614,7 +612,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Change bulletins")
 	public HttpResponse<?> changeBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Body @Parameter(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))) String bulletinsString,
+		@Body AvalancheBulletin[] bulletinsArray,
 		@QueryValue("region") String regionId,
 		Principal principal) {
 		logger.debug("POST JSON bulletins change");
@@ -630,7 +628,7 @@ public class AvalancheBulletinService {
 				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
 
 				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted)) {
-					List<AvalancheBulletin> bulletins = List.of(JsonUtil.parseUsingJackson(bulletinsString, AvalancheBulletin[].class));
+					List<AvalancheBulletin> bulletins = List.of(bulletinsArray);
 
 					avalancheBulletinController.saveBulletins(bulletins, startDate, endDate, region, user);
 
