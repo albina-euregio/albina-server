@@ -49,7 +49,9 @@ public class PushNotificationUtilTest {
 			null
 		);
 		Assertions.assertEquals("{\"title\":\"Avalanche.report\",\"body\":\"Hello World!\",\"image\":null,\"url\":null}", JsonUtil.writeValueUsingJackson(payload));
-		new PushNotificationUtil(client, null).sendPushMessage(subscription, payload, serverKeys);
+		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
+		pushNotificationUtil.client = client;
+		pushNotificationUtil.sendPushMessage(subscription, payload, serverKeys);
 
 		ArgumentCaptor<HttpRequest> argumentCaptor = getEntityArgumentCaptor();
 		verify(client).send(argumentCaptor.capture(), any());

@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import eu.albina.controller.PushSubscriptionRepository;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +32,16 @@ import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 
-public record PushNotificationUtil(HttpClient client, PushSubscriptionRepository pushSubscriptionRepository) {
+@Singleton
+public class PushNotificationUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
+
+	@Inject
+	HttpClient client;
+
+	@Inject
+	PushSubscriptionRepository pushSubscriptionRepository;
 
 	public static class Message {
 		public final String title;

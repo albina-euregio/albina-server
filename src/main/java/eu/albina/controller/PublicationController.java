@@ -3,6 +3,7 @@ package eu.albina.controller;
 
 import java.io.IOException;
 
+import eu.albina.controller.publication.PushNotificationUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class PublicationController {
 	AvalancheReportController avalancheReportController;
 
 	@Inject
-	private PushSubscriptionRepository pushSubscriptionRepository;
+	private PushNotificationUtil pushNotificationUtil;
 
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
@@ -190,7 +191,7 @@ public class PublicationController {
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
 			try {
-				posting.sendToAllChannels(pushSubscriptionRepository);
+				posting.sendToAllChannels(pushNotificationUtil);
 				AvalancheReportController c = avalancheReportController;
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);

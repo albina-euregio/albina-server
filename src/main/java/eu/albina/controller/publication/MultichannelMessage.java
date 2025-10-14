@@ -59,11 +59,11 @@ public interface MultichannelMessage {
 			.toString();
 	}
 
-	default void sendToAllChannels(PushSubscriptionRepository pushSubscriptionRepository) {
+	default void sendToAllChannels(PushNotificationUtil pushNotificationUtil) {
 		sendMails();
 		sendTelegramMessage();
 		sendWhatsAppMessage();
-		sendPushNotifications(pushSubscriptionRepository);
+		sendPushNotifications(pushNotificationUtil);
 	}
 
 	default void sendMails() {
@@ -102,12 +102,12 @@ public interface MultichannelMessage {
 		});
 	}
 
-	default void sendPushNotifications(PushSubscriptionRepository pushSubscriptionRepository) {
+	default void sendPushNotifications(PushNotificationUtil pushNotificationUtil) {
 		if (!getRegion().isSendPushNotifications()) {
 			return;
 		}
 		tryRunWithLogging("Push notifications", () -> {
-			new PushNotificationUtil(HttpClientUtil.newClientBuilder().build(), pushSubscriptionRepository).send(this);
+			pushNotificationUtil.send(this);
 			return null;
 		});
 	}

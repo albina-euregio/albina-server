@@ -30,11 +30,14 @@ public class PushNotificationService {
 	@Inject
 	PushSubscriptionRepository pushSubscriptionRepository;
 
+	@Inject
+	private PushNotificationUtil pushNotificationUtil;
+
 	@Get("/key")
 	@Operation(summary = "Get VAPID public key")
 	public Object key() {
 		return new Object() {
-			public String vapidPublicKey = PushNotificationUtil.getConfiguration().orElseThrow().getVapidPublicKey();
+			public String vapidPublicKey = pushNotificationUtil.getConfiguration().orElseThrow().getVapidPublicKey();
 		};
 	}
 
@@ -43,7 +46,7 @@ public class PushNotificationService {
 	public HttpResponse<?> subscribe(@Body PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
 		pushSubscriptionRepository.save(subscription);
-		new PushNotificationUtil(HttpClientUtil.newClientBuilder().build(), pushSubscriptionRepository).sendWelcomePushMessage(subscription, regionRepository.findById(subscription.getRegion()).orElseThrow());
+		pushNotificationUtil.sendWelcomePushMessage(subscription, regionRepository.findById(subscription.getRegion()).orElseThrow());
 		return HttpResponse.noContent();
 	}
 

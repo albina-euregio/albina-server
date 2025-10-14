@@ -16,6 +16,7 @@ import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.controller.publication.PushNotificationUtil;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -67,7 +68,7 @@ public class AvalancheBulletinPublishService {
 	private UserRepository userRepository;
 
 	@Inject
-	private PushSubscriptionRepository pushSubscriptionRepository;
+	private PushNotificationUtil pushNotificationUtil;
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
@@ -227,7 +228,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendPushNotifications(pushSubscriptionRepository);
+				posting.sendPushNotifications(pushNotificationUtil);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

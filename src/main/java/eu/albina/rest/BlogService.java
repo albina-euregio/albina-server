@@ -3,6 +3,7 @@ package eu.albina.rest;
 
 import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
+import eu.albina.controller.publication.PushNotificationUtil;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -34,7 +35,7 @@ public class BlogService {
 	RegionRepository regionRepository;
 
 	@Inject
-	private PushSubscriptionRepository pushSubscriptionRepository;
+	private PushNotificationUtil pushNotificationUtil;
 
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
@@ -45,7 +46,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
 			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendToAllChannels(pushSubscriptionRepository);
+			posting.sendToAllChannels(pushNotificationUtil);
 
 			return HttpResponse.ok("{}");
 		} catch (Exception e) {
@@ -126,7 +127,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
 			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendPushNotifications(pushSubscriptionRepository);
+			posting.sendPushNotifications(pushNotificationUtil);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
