@@ -23,7 +23,7 @@ public class AvalancheBulletin {
     private List<AvalancheProblem> avalancheProblems;
 	@JacksonXmlProperty(isAttribute = true)
     private String bulletinID;
-    private Object customData;
+    private AvalancheBulletinCustomData customData;
 	@JacksonXmlElementWrapper(useWrapping = false)
 	@JacksonXmlProperty(localName = "dangerRating")
     private List<DangerRating> dangerRatings;
@@ -67,8 +67,8 @@ public class AvalancheBulletin {
     public String getBulletinID() { return bulletinID; }
     public void setBulletinID(String value) { this.bulletinID = value; }
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
+    public AvalancheBulletinCustomData getCustomData() { return customData; }
+    public void setCustomData(AvalancheBulletinCustomData value) { this.customData = value; }
 
     /**
      * Collection of Danger Rating elements for this bulletin.
