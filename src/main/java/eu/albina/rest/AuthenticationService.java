@@ -73,7 +73,8 @@ public class AuthenticationService {
 		}
 	}
 
-	static class Token {
+	@Serdeable
+	public static class Token {
 		public String access_token;
 	}
 
@@ -96,7 +97,8 @@ public class AuthenticationService {
 		}
 	}
 
-	static class Username {
+	@Serdeable
+	public static class Username {
 		public String username;
 	}
 
