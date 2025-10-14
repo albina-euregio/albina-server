@@ -5,7 +5,10 @@ import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 
 import eu.albina.util.HttpClientUtil;
-import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,9 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public interface Blogger {
+@Singleton
+public class Blogger {
 
-	static List<Item> getBlogPosts(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	@Inject
+	ObjectMapper objectMapper;
+
+	public List<Item> getBlogPosts(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + config.getBlogId() + "/posts?" + HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
@@ -29,11 +36,11 @@ public interface Blogger {
 			"fetchImages", Boolean.TRUE.toString()
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		Root root = JsonUtil.parseUsingJackson(response.body(), Root.class);
+		Root root = objectMapper.readValue(response.body(), Root.class);
 		return root.items;
 	}
 
-	static Item getLatestBlogPost(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	public Item getLatestBlogPost(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + config.getBlogId() + "/posts?" + HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"fetchBodies", Boolean.TRUE.toString(),
@@ -41,26 +48,44 @@ public interface Blogger {
 			"maxResults", Integer.toString(1)
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		Root root = JsonUtil.parseUsingJackson(response.body(), Root.class);
+		Root root = objectMapper.readValue(response.body(), Root.class);
 		return root.items.stream().collect(MoreCollectors.onlyElement());
 	}
 
-	static Item getBlogPost(BlogConfiguration config, String blogPostId, HttpClient client) throws IOException, InterruptedException {
+	public Item getBlogPost(BlogConfiguration config, String blogPostId, HttpClient client) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId + "?" + HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey")
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		return JsonUtil.parseUsingJackson(response.body(), Item.class);
+		return objectMapper.readValue(response.body(), Item.class);
 	}
 
-	class Root {
+	@Serdeable
+	static class Root {
 		public String kind;
 		public String nextPageToken;
 		public List<Item> items = new ArrayList<>();
 		public String etag;
+
+		public void setKind(String kind) {
+			this.kind = kind;
+		}
+
+		public void setNextPageToken(String nextPageToken) {
+			this.nextPageToken = nextPageToken;
+		}
+
+		public void setItems(List<Item> items) {
+			this.items = items;
+		}
+
+		public void setEtag(String etag) {
+			this.etag = etag;
+		}
 	}
 
-	class Item implements BlogItem {
+	@Serdeable
+	static class Item implements BlogItem {
 		public String kind;
 		public String id;
 		public String content;
@@ -75,6 +100,62 @@ public interface Blogger {
 		public Replies replies;
 		public List<String> labels;
 		public String etag;
+
+		public void setKind(String kind) {
+			this.kind = kind;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public void setContent(String content) {
+			this.content = content;
+		}
+
+		public void setBlog(Blog blog) {
+			this.blog = blog;
+		}
+
+		public void setPublished(String published) {
+			this.published = published;
+		}
+
+		public void setUpdated(String updated) {
+			this.updated = updated;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public void setSelfLink(String selfLink) {
+			this.selfLink = selfLink;
+		}
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+		public void setImages(List<Image> images) {
+			this.images = images;
+		}
+
+		public void setAuthor(Author author) {
+			this.author = author;
+		}
+
+		public void setReplies(Replies replies) {
+			this.replies = replies;
+		}
+
+		public void setLabels(List<String> labels) {
+			this.labels = labels;
+		}
+
+		public void setEtag(String etag) {
+			this.etag = etag;
+		}
 
 		@Override
 		public String getId() {
@@ -106,24 +187,60 @@ public interface Blogger {
 		}
 	}
 
-	class Author {
+	@Serdeable
+	static class Author {
 		public String id;
 		public String displayName;
 		public String url;
 		public Image image;
+
+		public void setId(String id) {
+			this.id = id;
+		}
+
+		public void setDisplayName(String displayName) {
+			this.displayName = displayName;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+
+		public void setImage(Image image) {
+			this.image = image;
+		}
 	}
 
-	class Image {
+	@Serdeable
+	static class Image {
 		public String url;
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
 	}
 
-	class Blog {
+	@Serdeable
+	static class Blog {
 		public String id;
+
+		public void setId(String id) {
+			this.id = id;
+		}
 	}
 
-	class Replies {
+	@Serdeable
+	static class Replies {
 		public String totalItems;
 		public String selfLink;
+
+		public void setTotalItems(String totalItems) {
+			this.totalItems = totalItems;
+		}
+
+		public void setSelfLink(String selfLink) {
+			this.selfLink = selfLink;
+		}
 	}
 
 }

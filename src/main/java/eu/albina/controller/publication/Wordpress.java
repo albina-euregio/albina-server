@@ -4,7 +4,10 @@ package eu.albina.controller.publication;
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HttpClientUtil;
-import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.IOException;
@@ -20,9 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public interface Wordpress {
+@Singleton
+public class Wordpress {
 
-	static List<Item> getBlogPosts(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	@Inject
+	ObjectMapper objectMapper;
+
+	public List<Item> getBlogPosts(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
@@ -31,27 +38,28 @@ public interface Wordpress {
 			"order", "asc"
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		Item[] items = JsonUtil.parseUsingJackson(response.body(), Item[].class);
+		Item[] items = objectMapper.readValue(response.body(), Item[].class);
 		return List.of(items);
 	}
 
-	static Item getLatestBlogPost(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	public Item getLatestBlogPost(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
 			"lang", config.getLanguageCode(),
 			"per_page", Integer.toString(1)
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		Item[] items = JsonUtil.parseUsingJackson(response.body(), Item[].class);
+		Item[] items = objectMapper.readValue(response.body(), Item[].class);
 		return Arrays.stream(items).collect(MoreCollectors.onlyElement());
 	}
 
-	static Item getBlogPost(BlogConfiguration config, String blogPostId, HttpClient client) throws IOException, InterruptedException {
+	public Item getBlogPost(BlogConfiguration config, String blogPostId, HttpClient client) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts/" + blogPostId)).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		return JsonUtil.parseUsingJackson(response.body(), Item.class);
+		return objectMapper.readValue(response.body(), Item.class);
 	}
 
-	class Item implements BlogItem {
+	@Serdeable
+	static class Item implements BlogItem {
 		public long id;
 		public String date;
 		public String date_gmt;
@@ -64,6 +72,54 @@ public interface Wordpress {
 		public String polylang_current_lang;
 		public PolylangTranslation[] polylang_translations;
 		public String featured_image_url;
+
+		public void setId(long id) {
+			this.id = id;
+		}
+
+		public void setDate(String date) {
+			this.date = date;
+		}
+
+		public void setDate_gmt(String date_gmt) {
+			this.date_gmt = date_gmt;
+		}
+
+		public void setLink(String link) {
+			this.link = link;
+		}
+
+		public void setTitle(Rendered title) {
+			this.title = title;
+		}
+
+		public void setContent(Rendered content) {
+			this.content = content;
+		}
+
+		public void setExcerpt(Rendered excerpt) {
+			this.excerpt = excerpt;
+		}
+
+		public void setFeatured_media(long featured_media) {
+			this.featured_media = featured_media;
+		}
+
+		public void setCategories(long[] categories) {
+			this.categories = categories;
+		}
+
+		public void setPolylang_current_lang(String polylang_current_lang) {
+			this.polylang_current_lang = polylang_current_lang;
+		}
+
+		public void setPolylang_translations(PolylangTranslation[] polylang_translations) {
+			this.polylang_translations = polylang_translations;
+		}
+
+		public void setFeatured_image_url(String featured_image_url) {
+			this.featured_image_url = featured_image_url;
+		}
 
 		@Override
 		public String getId() {
@@ -91,12 +147,26 @@ public interface Wordpress {
 		}
 	}
 
-	class Rendered {
+	@Serdeable
+	static class Rendered {
 		public String rendered;
+
+		public void setRendered(String rendered) {
+			this.rendered = rendered;
+		}
 	}
 
-	class PolylangTranslation {
+	@Serdeable
+	static class PolylangTranslation {
 		public String locale;
 		public long id;
+
+		public void setLocale(String locale) {
+			this.locale = locale;
+		}
+
+		public void setId(long id) {
+			this.id = id;
+		}
 	}
 }

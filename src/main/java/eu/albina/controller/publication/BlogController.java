@@ -30,6 +30,12 @@ public class BlogController {
 	HttpClient client;
 
 	@Inject
+	Blogger blogger;
+
+	@Inject
+	Wordpress wordpress;
+
+	@Inject
 	WhatsAppController whatsAppController;
 
 	@Inject
@@ -72,8 +78,8 @@ public class BlogController {
 		}
 
 		List<? extends BlogItem> blogPosts = config.isBlogger()
-			? Blogger.getBlogPosts(config, client)
-			: Wordpress.getBlogPosts(config, client);
+			? blogger.getBlogPosts(config, client)
+			: wordpress.getBlogPosts(config, client);
 		logger.info("Found {} new blog posts for {}", blogPosts.size(), config);
 		return blogPosts;
 	}
@@ -83,8 +89,8 @@ public class BlogController {
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
 		BlogItem blogPost = config.isBlogger()
-			? Blogger.getLatestBlogPost(config, client)
-			: Wordpress.getLatestBlogPost(config, client);
+			? blogger.getLatestBlogPost(config, client)
+			: wordpress.getLatestBlogPost(config, client);
 		logger.info("Fetched latest blog post for region={} lang={}", config.getRegion().getId(), config.getLanguageCode().toString());
 		return blogPost;
 	}
@@ -94,8 +100,8 @@ public class BlogController {
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
 		return config.isBlogger()
-			? Blogger.getBlogPost(config, blogPostId, client)
-			: Wordpress.getBlogPost(config, blogPostId, client);
+			? blogger.getBlogPost(config, blogPostId, client)
+			: wordpress.getBlogPost(config, blogPostId, client);
 	}
 
 	public MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
