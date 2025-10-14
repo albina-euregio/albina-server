@@ -10,8 +10,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpHeaders;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +24,11 @@ import ch.rasc.webpush.ServerKeys;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 public class PushNotificationUtilTest {
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Test
 	public void test() throws Exception {
@@ -42,15 +48,17 @@ public class PushNotificationUtilTest {
 		HttpClient client = mock(HttpClient.class);
 		when(client.send(any(), any())).thenReturn(response);
 
+		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
+		pushNotificationUtil.client = client;
+		pushNotificationUtil.objectMapper = objectMapper;
+
 		PushNotificationUtil.Message payload = new PushNotificationUtil.Message(
 			"Avalanche.report",
 			"Hello World!",
 			null,
 			null
 		);
-		Assertions.assertEquals("{\"title\":\"Avalanche.report\",\"body\":\"Hello World!\",\"image\":null,\"url\":null}", JsonUtil.writeValueUsingJackson(payload));
-		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
-		pushNotificationUtil.client = client;
+		Assertions.assertEquals("{\"title\":\"Avalanche.report\",\"body\":\"Hello World!\"}", pushNotificationUtil.getJson(payload));
 		pushNotificationUtil.sendPushMessage(subscription, payload, serverKeys);
 
 		ArgumentCaptor<HttpRequest> argumentCaptor = getEntityArgumentCaptor();

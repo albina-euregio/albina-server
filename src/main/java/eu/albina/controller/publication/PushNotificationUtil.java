@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -108,7 +109,7 @@ public class PushNotificationUtil {
 			}
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
 			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
-			final String json = objectMapper.writeValueAsString(payload);
+			final String json = getJson(payload);
 			final byte[] encrypted = new CryptoService().encrypt(json, subscriptionKeys, 0);
 			final URI endpointURI = URI.create(subscription1.getEndpoint());
 			final HttpRequest request = HttpRequest.newBuilder(endpointURI)
@@ -141,5 +142,9 @@ public class PushNotificationUtil {
 				}
 			}
 		}
+	}
+
+	protected String getJson(Message payload) throws IOException {
+		return objectMapper.writeValueAsString(payload);
 	}
 }
