@@ -10,4 +10,16 @@ public class DangerSourceVariantsStatus {
 	public Instant date;
 	public boolean forecast;
 	public boolean analysis;
+
+	public Instant getDate() {
+		return date;
+	}
+
+	public boolean isForecast() {
+		return forecast;
+	}
+
+	public boolean isAnalysis() {
+		return analysis;
+	}
 }
