@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import eu.albina.model.AvalancheBulletinTest;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.caaml.v6.AvalancheBulletins;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -23,7 +25,11 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 class TextToSpeechTest {
+
+	@Inject
+	TextToSpeech textToSpeech;
 
 	private static void toCAAMLv6(String bulletinResource) throws Exception {
 		URL resource = Resources.getResource(bulletinResource);
@@ -79,8 +85,8 @@ class TextToSpeechTest {
 		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.de);
-		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().get(0);
-		byte[] mp3 = TextToSpeech.createAudioFile(bulletin);
+		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().getFirst();
+		byte[] mp3 = textToSpeech.createAudioFile(bulletin);
 		Path path = Path.of(bulletin.getBulletinID() + ".mp3");
 		Files.write(path, mp3);
 	}

@@ -1,4 +1,4 @@
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -33,7 +33,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -68,7 +68,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.4: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -103,7 +103,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -137,7 +137,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -170,7 +170,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -203,7 +203,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -236,7 +236,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -270,7 +270,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento, st.2: 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-C, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -304,7 +304,7 @@ Abbiamo i seguenti situazioni tipo: st.6: neve a debole coesione e vento.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=it-IT, name=it-IT-Wavenet-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>

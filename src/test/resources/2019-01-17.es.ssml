@@ -1,4 +1,4 @@
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -30,7 +30,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -62,7 +62,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -94,7 +94,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -125,7 +125,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -155,7 +155,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -185,7 +185,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -215,7 +215,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -246,7 +246,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento, 
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-B, ssmlGender=MALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -277,7 +277,7 @@ Tenemos los siguientes patrones de peligro: pp.6: frío, nieve suelta y viento.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=es-ES, name=es-ES-Wavenet-C, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>

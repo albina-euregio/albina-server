@@ -1,4 +1,4 @@
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -31,7 +31,7 @@
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -61,7 +61,7 @@
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -92,7 +92,7 @@
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -124,7 +124,7 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.2:
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -155,7 +155,7 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -185,7 +185,7 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -216,7 +216,7 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -246,7 +246,7 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -277,7 +277,7 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -309,7 +309,7 @@ Tenim els segënts patrons de perill: pp.6: neu freda i incohesiva i vent, pp.4:
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>

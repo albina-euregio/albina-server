@@ -53,6 +53,9 @@ public class PublicationController {
 	@Inject
 	private RapidMailController rapidMailController;
 
+	@Inject
+	private TextToSpeech textToSpeech;
+
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
 		if (region.isCreateCaamlV5()) {
@@ -188,7 +191,7 @@ public class PublicationController {
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		try {
 			logger.info("Synthesize speech for {} started", avalancheReport);
-			TextToSpeech.createAudioFiles(avalancheReport);
+			textToSpeech.createAudioFiles(avalancheReport);
 		} catch (Exception e) {
 			logger.error("Synthesize speech error for " + avalancheReport, e);
 		} finally {
