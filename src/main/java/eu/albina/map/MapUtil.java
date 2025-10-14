@@ -25,7 +25,6 @@ import javax.script.SimpleBindings;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.MoreCollectors;
 import com.google.common.io.Closer;
-import org.apache.commons.lang3.SystemProperties;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
