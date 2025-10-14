@@ -3,6 +3,8 @@ package eu.albina.map;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +24,8 @@ import javax.script.SimpleBindings;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.MoreCollectors;
+import com.google.common.io.Closer;
+import org.apache.commons.lang3.SystemProperties;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
@@ -220,30 +224,32 @@ public interface MapUtil {
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
 
-		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
-			Resources.getResource("fonts/open-sans/OpenSans.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Italic.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Bold.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-BoldItalic.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Semibold.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-SemiboldItalic.otf").getFile());
+		try (Closer closer = Closer.create()) {
+			final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
+				getFont("OpenSans.otf", closer),
+				getFont("OpenSans-Italic.otf", closer),
+				getFont("OpenSans-Bold.otf", closer),
+				getFont("OpenSans-BoldItalic.otf", closer),
+				getFont("OpenSans-Semibold.otf", closer),
+				getFont("OpenSans-SemiboldItalic.otf", closer));
 
-		logger.debug("Creating map {} using {} with bindings {}", outputFile, dangerBindings, bindings);
-		final MapyrusInterpreter mapyrus = new MapyrusInterpreter(bindings);
-		mapyrus.interpret(new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"));
-		mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
-		mapyrus.interpret(Resources.getResource("mapyrus/albina_functions.mapyrus"));
-		mapyrus.interpret(Resources.getResource("mapyrus/albina_styles.mapyrus"));
-		if (MapLevel.overlay.equals(mapLevel)) {
-			mapyrus.interpret(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
-		} else {
-			if (bulletin != null) {
-				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
-				mapyrus.context.getBindings().put("elevation_level", description.getElevation());
-				mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.dangerRating(false)));
-				mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.dangerRating(true)));
+			logger.debug("Creating map {} using {} with bindings {}", outputFile, dangerBindings, bindings);
+			final MapyrusInterpreter mapyrus = new MapyrusInterpreter(bindings);
+			mapyrus.interpret(new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"));
+			mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
+			mapyrus.interpret(Resources.getResource("mapyrus/albina_functions.mapyrus"));
+			mapyrus.interpret(Resources.getResource("mapyrus/albina_styles.mapyrus"));
+			if (MapLevel.overlay.equals(mapLevel)) {
+				mapyrus.interpret(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
+			} else {
+				if (bulletin != null) {
+					AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
+					mapyrus.context.getBindings().put("elevation_level", description.getElevation());
+					mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.dangerRating(false)));
+					mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.dangerRating(true)));
+				}
+				mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 			}
-			mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 		}
 
 		final Path outputFilePng = MapImageFormat.png.convertFrom(outputFile);
@@ -264,6 +270,16 @@ public interface MapUtil {
 		if (!BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
+	}
+
+	private static String getFont(String font, Closer closer) throws IOException {
+		Path path = Files.createTempFile("", font);
+		URL resource = Resources.getResource("fonts/open-sans/" + font);
+		try (InputStream inputStream = resource.openStream(); OutputStream outputStream = Files.newOutputStream(path)) {
+			inputStream.transferTo(outputStream);
+		}
+		closer.register(() -> Files.delete(path));
+		return path.toString();
 	}
 
 	static Path mapProductionResource(Path geodataPath, String filename) {
