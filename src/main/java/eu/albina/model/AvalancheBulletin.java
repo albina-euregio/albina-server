@@ -571,6 +571,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		validUntil = v.until;
 	}
 
+	@Serdeable
 	public static class Validity {
 		private ZonedDateTime from;
 		private ZonedDateTime until;
