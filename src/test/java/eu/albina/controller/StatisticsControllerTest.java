@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import eu.albina.model.AvalancheBulletinTest;
-import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,14 +22,18 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 public class StatisticsControllerTest {
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	private List<AvalancheBulletin> bulletinsAmPm;
 	private List<DangerSourceVariant> dangerSourceVariants;
 
-	public static DangerSourceVariant readDangerSourceVariant(final URL resource) throws IOException {
+	public DangerSourceVariant readDangerSourceVariant(final URL resource) throws IOException {
 		final String json = Resources.toString(resource, StandardCharsets.UTF_8);
-		return JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
+		return objectMapper.readValue(json, DangerSourceVariant.class);
 	}
 
 	@BeforeEach
