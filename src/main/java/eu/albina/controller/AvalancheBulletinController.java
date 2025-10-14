@@ -466,7 +466,7 @@ public class AvalancheBulletinController {
 
 		List<AvalancheBulletin> results = bulletins.stream()
 			.filter(bulletin -> bulletin.affectsRegion(region))
-			.collect(Collectors.toList());
+			.toList();
 
 		// select bulletins within the region
 
@@ -721,7 +721,7 @@ public class AvalancheBulletinController {
 	public void unlockBulletins(String sessionId) {
 		List<BulletinLock> hits = bulletinLocks.stream()
 			.filter(bulletinLock -> Objects.equals(bulletinLock.getSessionId(), sessionId))
-			.collect(Collectors.toList());
+			.toList();
 		for (BulletinLock bulletinLock : hits) {
 			bulletinLocks.remove(bulletinLock);
 			bulletinLock.setLock(false);

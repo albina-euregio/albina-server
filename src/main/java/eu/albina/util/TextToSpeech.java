@@ -143,7 +143,7 @@ public interface TextToSpeech {
 			List<String> texts = sortAspects(aspects).stream()
 				.map(Aspect::toString)
 				.map(lang.getBundle("i18n.Aspect")::getString)
-				.collect(Collectors.toList());
+				.toList();
 			switch (texts.size()) {
 				case 0:
 					return lang.getBundleString("speech.aspects.0");

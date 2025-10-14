@@ -63,7 +63,7 @@ public class PdfUtilRebuildTest {
 	}
 
 	private void rebuildMaps(LocalDate date) {
-		List<AvalancheReport> reports = regions.stream().map(region -> fetch(date, region)).collect(Collectors.toList());
+		List<AvalancheReport> reports = regions.stream().map(region -> fetch(date, region)).toList();
 		reports.forEach(PdfUtilRebuildTest::createRegionPdfs);
 	}
 

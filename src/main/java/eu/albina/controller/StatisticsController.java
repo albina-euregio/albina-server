@@ -391,7 +391,7 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getValidUntil() != null ? dangerSourceVariant.getValidUntil() : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getRegions() != null ? dangerSourceVariant.getRegions().stream().collect(Collectors.joining(",")) : notAvailableString);
+		sb.append(dangerSourceVariant.getRegions() != null ? String.join(",", dangerSourceVariant.getRegions()) : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getHasDaytimeDependency() != null ? dangerSourceVariant.getHasDaytimeDependency() : notAvailableString);
 		sb.append(csvDeliminator);
