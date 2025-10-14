@@ -40,6 +40,9 @@ public class BlogService {
 	@Inject
 	private PushNotificationUtil pushNotificationUtil;
 
+	@Inject
+	BlogController blogController;
+
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -47,8 +50,8 @@ public class BlogService {
 		try {
 			logger.debug("POST send latest blog post for {} in {}", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendToAllChannels(whatsAppController, pushNotificationUtil);
 
 			return HttpResponse.ok("{}");
@@ -65,8 +68,8 @@ public class BlogService {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendMails();
 
 			return HttpResponse.noContent();
@@ -86,8 +89,8 @@ public class BlogService {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendTelegramMessage();
 
 			return HttpResponse.noContent();
@@ -107,8 +110,8 @@ public class BlogService {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via whatsapp", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendWhatsAppMessage(whatsAppController);
 
 			return HttpResponse.noContent();
@@ -128,8 +131,8 @@ public class BlogService {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendPushNotifications(pushNotificationUtil);
 
 			return HttpResponse.noContent();
@@ -150,6 +153,6 @@ public class BlogService {
 		if (!region.isPublishBlogs()) {
 			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
 		}
-		return BlogController.getConfiguration(region, language);
+		return blogController.getConfiguration(region, language).orElseThrow();
 	}
 }

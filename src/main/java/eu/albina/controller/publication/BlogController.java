@@ -1,52 +1,55 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.BlogConfiguration;
+import eu.albina.model.publication.RapidMailConfiguration;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.persistence.NoResultException;
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
-import eu.albina.controller.PushSubscriptionRepository;
-import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.util.HttpClientUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+@Singleton
+public class BlogController {
+	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
 
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.BlogConfiguration;
-import eu.albina.util.HibernateUtil;
+	@Inject
+	HttpClient client;
 
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+	@Inject
+	WhatsAppController whatsAppController;
 
-public interface BlogController {
-	Logger logger = LoggerFactory.getLogger(BlogController.class);
-	HttpClient client = HttpClientUtil.newClientBuilder().build();
+	@Inject
+	PushNotificationUtil pushNotificationUtil;
 
-	static BlogConfiguration getConfiguration(Region region, LanguageCode languageCode) throws NoResultException {
-		Objects.requireNonNull(region, "region");
-		Objects.requireNonNull(region.getId(), "region.getId()");
-		Objects.requireNonNull(languageCode, "languageCode");
+	@Inject
+	BlogConfigurationRepository blogConfigurationRepository;
 
-		return HibernateUtil.getInstance().run(entityManager -> {
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
-			Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
-			select.where(
-				criteriaBuilder.notEqual(root.get("blogId"), BlogConfiguration.TECH_BLOG_ID),
-				criteriaBuilder.equal(root.get("lang"), languageCode),
-				criteriaBuilder.equal(root.get("region"), region)
-			);
-			return entityManager.createQuery(select).getSingleResult();
-		});
+	@Repository
+	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
+		Optional<BlogConfiguration> findByBlogId(String blogId);
+
+		Optional<BlogConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
 	}
 
-	static void updateConfigurationLastPublished(BlogConfiguration config, BlogItem object) {
+	public Optional<BlogConfiguration> getConfiguration(Region region, LanguageCode languageCode) throws NoResultException {
+		return blogConfigurationRepository.findByRegionAndLanguageCode(region, languageCode);
+	}
+
+	public void updateConfigurationLastPublished(BlogConfiguration config, BlogItem object) {
 		if (!object.getPublished().toInstant().isAfter(config.getLastPublishedTimestamp().toInstant())) {
 			return;
 		}
@@ -54,10 +57,10 @@ public interface BlogController {
 		config.setLastPublishedTimestamp(object.getPublished());
 		logger.info("Updating lastPublishedTimestamp={} lastPublishedBlogId={} for {}",
 			config.getLastPublishedTimestamp(), config.getLastPublishedBlogId(), config);
-		HibernateUtil.getInstance().runTransaction(entityManager -> entityManager.merge(config));
+		blogConfigurationRepository.save(config);
 	}
 
-	static List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
+	public List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		if (config == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
@@ -69,7 +72,7 @@ public interface BlogController {
 		return blogPosts;
 	}
 
-	static BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
+	public BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
@@ -80,7 +83,7 @@ public interface BlogController {
 		return blogPost;
 	}
 
-	static BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
+	public BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
@@ -89,21 +92,19 @@ public interface BlogController {
 			: Wordpress.getBlogPost(config, blogPostId, client);
 	}
 
-	static MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
+	public MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		BlogItem blogPost = getBlogPost(config, blogPostId);
 		return MultichannelMessage.of(config, blogPost);
 	}
 
-	static void sendNewBlogPosts(Region region, LanguageCode lang, WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) throws IOException, InterruptedException {
+	public void sendNewBlogPosts(Region region, LanguageCode lang) throws IOException, InterruptedException {
 		if (!region.isPublishBlogs()) {
 			logger.debug("Publishing blogs is disabled for region {}", region);
 			return;
 		}
 
-		BlogConfiguration config;
-		try {
-			config = getConfiguration(region, lang);
-		} catch (NoResultException e) {
+		BlogConfiguration config = getConfiguration(region, lang).orElse(null);
+		if (config == null) {
 			logger.debug("No blog configuration found for region {} and lang {}", region, lang);
 			return;
 		}
@@ -123,17 +124,10 @@ public interface BlogController {
 		}
 	}
 
-	static void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) throws IOException, InterruptedException {
-		BlogConfiguration config;
-		try {
-			config = HibernateUtil.getInstance().run(entityManager -> {
-				CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-				CriteriaQuery<BlogConfiguration> select = criteriaBuilder.createQuery(BlogConfiguration.class);
-				Root<BlogConfiguration> root = select.from(BlogConfiguration.class);
-				select.where(criteriaBuilder.equal(root.get("blogId"), blogId));
-				return entityManager.createQuery(select).getSingleResult();
-			});
-		} catch (NoResultException e) {
+	@Transactional
+	public void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) throws IOException, InterruptedException {
+		BlogConfiguration config = blogConfigurationRepository.findByBlogId(blogId).orElse(null);
+		if (config == null) {
 			logger.debug("No blog configuration found for {}", blogId);
 			return;
 		}

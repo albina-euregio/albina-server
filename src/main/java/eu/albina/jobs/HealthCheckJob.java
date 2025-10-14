@@ -28,6 +28,9 @@ public class HealthCheckJob {
 	@Inject
 	WhatsAppController whatsAppController;
 
+	@Inject
+	BlogController blogController;
+
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
 		for (Region region : regionRepository.getPublishBulletinRegions()) {
@@ -58,8 +61,8 @@ public class HealthCheckJob {
 			String blogStatus;
 			if (regionRepository.getPublishBlogRegions().contains(region)) {
 				try {
-					BlogConfiguration config = BlogController.getConfiguration(region, language);
-					BlogItem latest = BlogController.getLatestBlogPost(config);
+					BlogConfiguration config = blogController.getConfiguration(region, language).orElseThrow();
+					BlogItem latest = blogController.getLatestBlogPost(config);
 					blogStatus = "OK (latest=" + latest.getTitle() + ")";
 				} catch (Exception e) {
 					blogStatus = "FAILED (" + e.getMessage() + ")";
