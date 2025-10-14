@@ -16,7 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -61,101 +60,31 @@ public class Blogger {
 	}
 
 	@Serdeable
-	static class Root {
-		public String kind;
-		public String nextPageToken;
-		public List<Item> items = new ArrayList<>();
-		public String etag;
-
-		public void setKind(String kind) {
-			this.kind = kind;
-		}
-
-		public void setNextPageToken(String nextPageToken) {
-			this.nextPageToken = nextPageToken;
-		}
-
-		public void setItems(List<Item> items) {
-			this.items = items;
-		}
-
-		public void setEtag(String etag) {
-			this.etag = etag;
-		}
+	record Root(
+		String kind,
+		String nextPageToken,
+		List<Item> items,
+		String etag
+	) {
 	}
 
 	@Serdeable
-	static class Item implements BlogItem {
-		public String kind;
-		public String id;
-		public String content;
-		public Blog blog;
-		public String published;
-		public String updated;
-		public String url;
-		public String selfLink;
-		public String title;
-		public List<Image> images;
-		public Author author;
-		public Replies replies;
-		public List<String> labels;
-		public String etag;
-
-		public void setKind(String kind) {
-			this.kind = kind;
-		}
-
-		public void setId(String id) {
-			this.id = id;
-		}
-
-		public void setContent(String content) {
-			this.content = content;
-		}
-
-		public void setBlog(Blog blog) {
-			this.blog = blog;
-		}
-
-		public void setPublished(String published) {
-			this.published = published;
-		}
-
-		public void setUpdated(String updated) {
-			this.updated = updated;
-		}
-
-		public void setUrl(String url) {
-			this.url = url;
-		}
-
-		public void setSelfLink(String selfLink) {
-			this.selfLink = selfLink;
-		}
-
-		public void setTitle(String title) {
-			this.title = title;
-		}
-
-		public void setImages(List<Image> images) {
-			this.images = images;
-		}
-
-		public void setAuthor(Author author) {
-			this.author = author;
-		}
-
-		public void setReplies(Replies replies) {
-			this.replies = replies;
-		}
-
-		public void setLabels(List<String> labels) {
-			this.labels = labels;
-		}
-
-		public void setEtag(String etag) {
-			this.etag = etag;
-		}
+	record Item(
+		String kind,
+		String id,
+		String content,
+		Blog blog,
+		String published,
+		String updated,
+		String url,
+		String selfLink,
+		String title,
+		List<Image> images,
+		Author author,
+		Replies replies,
+		List<String> labels,
+		String etag
+	) implements BlogItem {
 
 		@Override
 		public String getId() {
@@ -188,59 +117,19 @@ public class Blogger {
 	}
 
 	@Serdeable
-	static class Author {
-		public String id;
-		public String displayName;
-		public String url;
-		public Image image;
-
-		public void setId(String id) {
-			this.id = id;
-		}
-
-		public void setDisplayName(String displayName) {
-			this.displayName = displayName;
-		}
-
-		public void setUrl(String url) {
-			this.url = url;
-		}
-
-		public void setImage(Image image) {
-			this.image = image;
-		}
+	record Author(String id, String displayName, String url, Image image) {
 	}
 
 	@Serdeable
-	static class Image {
-		public String url;
-
-		public void setUrl(String url) {
-			this.url = url;
-		}
+	record Image(String url) {
 	}
 
 	@Serdeable
-	static class Blog {
-		public String id;
-
-		public void setId(String id) {
-			this.id = id;
-		}
+	record Blog(String id) {
 	}
 
 	@Serdeable
-	static class Replies {
-		public String totalItems;
-		public String selfLink;
-
-		public void setTotalItems(String totalItems) {
-			this.totalItems = totalItems;
-		}
-
-		public void setSelfLink(String selfLink) {
-			this.selfLink = selfLink;
-		}
+	record Replies(String totalItems, String selfLink) {
 	}
 
 }

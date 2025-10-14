@@ -59,67 +59,20 @@ public class Wordpress {
 	}
 
 	@Serdeable
-	static class Item implements BlogItem {
-		public long id;
-		public String date;
-		public String date_gmt;
-		public String link;
-		public Rendered title;
-		public Rendered content;
-		public Rendered excerpt;
-		public long featured_media;
-		public long[] categories;
-		public String polylang_current_lang;
-		public PolylangTranslation[] polylang_translations;
-		public String featured_image_url;
-
-		public void setId(long id) {
-			this.id = id;
-		}
-
-		public void setDate(String date) {
-			this.date = date;
-		}
-
-		public void setDate_gmt(String date_gmt) {
-			this.date_gmt = date_gmt;
-		}
-
-		public void setLink(String link) {
-			this.link = link;
-		}
-
-		public void setTitle(Rendered title) {
-			this.title = title;
-		}
-
-		public void setContent(Rendered content) {
-			this.content = content;
-		}
-
-		public void setExcerpt(Rendered excerpt) {
-			this.excerpt = excerpt;
-		}
-
-		public void setFeatured_media(long featured_media) {
-			this.featured_media = featured_media;
-		}
-
-		public void setCategories(long[] categories) {
-			this.categories = categories;
-		}
-
-		public void setPolylang_current_lang(String polylang_current_lang) {
-			this.polylang_current_lang = polylang_current_lang;
-		}
-
-		public void setPolylang_translations(PolylangTranslation[] polylang_translations) {
-			this.polylang_translations = polylang_translations;
-		}
-
-		public void setFeatured_image_url(String featured_image_url) {
-			this.featured_image_url = featured_image_url;
-		}
+	record Item(
+		long id,
+		String date,
+		String date_gmt,
+		String link,
+		Rendered title,
+		Rendered content,
+		Rendered excerpt,
+		long featured_media,
+		long[] categories,
+		String polylang_current_lang,
+		PolylangTranslation[] polylang_translations,
+		String featured_image_url
+	) implements BlogItem {
 
 		@Override
 		public String getId() {
@@ -148,25 +101,10 @@ public class Wordpress {
 	}
 
 	@Serdeable
-	static class Rendered {
-		public String rendered;
-
-		public void setRendered(String rendered) {
-			this.rendered = rendered;
-		}
+	record Rendered(String rendered) {
 	}
 
 	@Serdeable
-	static class PolylangTranslation {
-		public String locale;
-		public long id;
-
-		public void setLocale(String locale) {
-			this.locale = locale;
-		}
-
-		public void setId(long id) {
-			this.id = id;
-		}
+	record PolylangTranslation(String locale, long id) {
 	}
 }
