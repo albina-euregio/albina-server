@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
@@ -77,15 +78,15 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSource.class))))
 	@Operation(summary = "Get danger sources for season")
-	public List<DangerSource> getDangerSources(
+	public HttpResponse<List<DangerSource>> getDangerSources(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
 		logger.debug("GET JSON danger sources");
 
 		Range<Instant> instantRange = DateControllerUtil.parseHydrologicalYearInstantRange(date);
 		List<DangerSource> dangerSources = dangerSourceController
-				.getDangerSourcesForRegion(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regionId);
-		return dangerSources;
+			.getDangerSourcesForRegion(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regionId);
+		return HttpResponse.ok(dangerSources);
 	}
 
 	@Post("/{dangerSourceId}")
@@ -93,7 +94,7 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update danger source")
 	public void updateDangerSource(
-			@PathVariable("dangerSourceId") String dangerSourceId,
+		@PathVariable("dangerSourceId") String dangerSourceId,
 			@Body DangerSource dangerSource) {
 		logger.debug("POST JSON danger source");
 
@@ -105,32 +106,32 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for date")
-	public List<DangerSourceVariant> getVariants(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-			@QueryValue("region") String regionId) {
+	public HttpResponse<List<DangerSourceVariant>> getVariants(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId) {
 		logger.debug("GET JSON danger source variants");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 		Region region = regionController.getRegion(regionId);
 		List<DangerSourceVariant> variants = dangerSourceVariantController
-				.getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
-		return variants;
+			.getDangerSourceVariants(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+		return HttpResponse.ok(variants);
 	}
 
 	@Get("/status")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public List<DangerSourceVariantsStatus> getInternalStatus(@QueryValue("region") String regionId,
-															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
-															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
+	public HttpResponse<List<DangerSourceVariantsStatus>> getInternalStatus(@QueryValue("region") String regionId,
+																				   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+																				   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
 
 		Range<Instant> instantRangeStart = DateControllerUtil.parseInstantRange(startDate);
 		Range<Instant> instantRangeEnd = DateControllerUtil.parseInstantRange(endDate);
 		Region region = regionController.getRegion(regionId);
 
 		List<DangerSourceVariantsStatus> status = dangerSourceVariantController
-				.getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
-		return status;
+			.getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
+		return HttpResponse.ok(status);
 	}
 
 	@Get("/{dangerSourceId}/edit")
@@ -138,28 +139,28 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for danger source and date")
-	public List<DangerSourceVariant> getVariantsForDangerSource(
-			@PathVariable("dangerSourceId") String dangerSourceId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-			@QueryValue("regions") List<String> regionIds) {
+	public HttpResponse<List<DangerSourceVariant>> getVariantsForDangerSource(
+		@PathVariable("dangerSourceId") String dangerSourceId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("regions") List<String> regionIds) {
 		logger.debug("GET JSON danger source variants for danger source");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 		List<Region> regions = regionIds.stream().map(regionController::getRegion)
-				.collect(Collectors.toList());
+			.collect(Collectors.toList());
 		List<DangerSourceVariant> variants = dangerSourceVariantController.getDangerSourceVariants(
-				instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
-		return variants;
+			instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
+		return HttpResponse.ok(variants);
 	}
 
 	@Post
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create variants")
-	public List<DangerSourceVariant> createVariants(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-			@QueryValue("region") String regionId,
-			Principal principal,
+	public HttpResponse<List<DangerSourceVariant>> createVariants(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId,
+		Principal principal,
 			@Body DangerSourceVariant[] variants) {
 		logger.debug("POST JSON variants");
 
@@ -171,11 +172,11 @@ public class DangerSourceService {
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				for (DangerSourceVariant variant : variants) {
 					variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(
-							variant,
-							dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
+						variant,
+						dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
 				}
 				dangerSourceVariantController.saveDangerSourceVariants(Arrays.asList(variants),
-						instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+					instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -191,29 +192,29 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
 	@Operation(summary = "Get variant by ID")
-	public DangerSourceVariant getVariantById(
+	public HttpResponse<DangerSourceVariant> getVariantById(
 		@PathVariable("variantId") String variantId
 	) {
 		logger.debug("GET JSON danger source variant: {}", variantId);
 		DangerSourceVariant variant = dangerSourceVariantController.getDangerSourceVariant(variantId);
-		return variant;
+		return HttpResponse.ok(variant);
 	}
 
 	@Post("/variants/{variantId}")
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update danger source variant")
-	public List<DangerSourceVariant> updateDangerSource(
-			@PathVariable("variantId") String variantId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-			@QueryValue("region") String regionId,
-			Principal principal,
+	public HttpResponse<List<DangerSourceVariant>> updateDangerSource(
+		@PathVariable("variantId") String variantId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId,
+		Principal principal,
 			@Body DangerSourceVariant variant) {
 		logger.debug("POST JSON danger source variant");
 
 		try {
 			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant,
-					dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
+				dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
@@ -222,7 +223,7 @@ public class DangerSourceService {
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantController.updateDangerSourceVariant(variant,
-						instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+					instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -237,11 +238,11 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete danger source variant")
-	public List<DangerSourceVariant> deleteVariant(
-			@PathVariable("variantId") String variantId,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-			@QueryValue("region") String regionId,
-			Principal principal) {
+	public HttpResponse<List<DangerSourceVariant>> deleteVariant(
+		@PathVariable("variantId") String variantId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId,
+		Principal principal) {
 		logger.debug("DELETE JSON danger source variant");
 
 		try {
@@ -265,16 +266,16 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create danger source variant")
-	public List<DangerSourceVariant> createVariant(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-			@QueryValue("region") String regionId,
-			Principal principal,
+	public HttpResponse<List<DangerSourceVariant>> createVariant(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@QueryValue("region") String regionId,
+		Principal principal,
 			@Body DangerSourceVariant variant) {
 		logger.debug("PUT JSON danger source variant");
 
 		try {
 			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant,
-					dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
+				dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
@@ -283,7 +284,7 @@ public class DangerSourceService {
 
 			if (region != null && user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantController.createDangerSourceVariant(variant,
-						instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+					instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
