@@ -4,12 +4,12 @@ package eu.albina.rest;
 import java.util.Collections;
 import java.util.Objects;
 
+import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 
-import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -32,7 +32,7 @@ public class SubscriptionService {
 	private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Inject
 	SubscriberController subscriberController;
@@ -75,7 +75,7 @@ public class SubscriptionService {
 	public HttpResponse<?> addSubscriber(@Body EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		Objects.requireNonNull(json.language, "language");
-		final Region region = regionController.getRegion(json.regions);
+		final Region region = regionRepository.findById(json.regions).orElseThrow();
 		final Subscriber subscriber = new Subscriber();
 		subscriber.setEmail(json.email);
 		subscriber.setRegions(Collections.singletonList(region));

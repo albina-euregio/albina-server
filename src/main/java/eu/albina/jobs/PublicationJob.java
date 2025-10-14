@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import eu.albina.controller.RegionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,13 +35,11 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
-import eu.albina.controller.RegionController;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
-import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
 
@@ -57,14 +56,14 @@ public class PublicationJob {
 	private final PublicationController publicationController;
 	private final AvalancheReportController avalancheReportController;
 	private final AvalancheBulletinController avalancheBulletinController;
-	protected final RegionController regionController;
+	protected final RegionRepository regionRepository;
 	private final ServerInstance serverInstance;
 
-	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionController regionController, ServerInstance serverInstance) {
+	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance) {
 		this.publicationController = publicationController;
 		this.avalancheReportController = avalancheReportController;
 		this.avalancheBulletinController = avalancheBulletinController;
-		this.regionController = regionController;
+		this.regionRepository = regionRepository;
 		this.serverInstance = serverInstance;
 	}
 
@@ -132,14 +131,14 @@ public class PublicationJob {
 
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
-		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionController.getPublishBulletinRegions());
+		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionRepository.getPublishBulletinRegions());
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
 
 		// update all regions to create complete maps
-		Stream<CompletableFuture<Void>> futures1 = regionController.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
+		Stream<CompletableFuture<Void>> futures1 = regionRepository.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
@@ -296,7 +295,7 @@ public class PublicationJob {
 	}
 
 	protected List<Region> getRegions() {
-		return regionController.getPublishBulletinRegions();
+		return regionRepository.getPublishBulletinRegions();
 	}
 
 }

@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MutableHttpResponse;
@@ -17,7 +18,6 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
 
-import eu.albina.controller.RegionController;
 import eu.albina.model.Region;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +44,7 @@ public class UserService {
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Inject
 	UserRepository userRepository;
@@ -84,7 +84,7 @@ public class UserService {
 	public HttpResponse<?> getRegions() {
 		logger.debug("GET JSON regions");
 		try {
-			List<String> ids = regionController.getRegions().stream().map(Region::getId).collect(Collectors.toList());
+			List<String> ids = regionRepository.findAll().stream().map(Region::getId).collect(Collectors.toList());
 			return HttpResponse.ok(ids);
 		} catch (Exception e) {
 			logger.warn("Error loading regions", e);

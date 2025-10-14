@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -11,7 +12,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogController;
 import eu.albina.controller.publication.BlogItem;
 import eu.albina.controller.publication.MultichannelMessage;
@@ -30,7 +30,7 @@ public class BlogService {
 	private static final Logger logger = LoggerFactory.getLogger(BlogService.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
@@ -138,7 +138,7 @@ public class BlogService {
 		if (language == null) {
 			throw new AlbinaException("No language defined!");
 		}
-		Region region = regionController.getRegionOrThrowAlbinaException(regionId);
+		Region region = regionRepository.findById(regionId).orElseThrow();
 		if (!region.isPublishBlogs()) {
 			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
 		}

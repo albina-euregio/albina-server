@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import eu.albina.controller.RegionController;
+import eu.albina.controller.RegionRepository;
 import eu.albina.controller.StressLevelController;
 import eu.albina.controller.UserRepository;
 import eu.albina.model.StressLevel;
@@ -41,7 +41,7 @@ public class StressLevelService {
 	private static final Logger logger = LoggerFactory.getLogger(StressLevelService.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Inject
 	private UserRepository userRepository;
@@ -78,7 +78,7 @@ public class StressLevelService {
 		User user = userRepository.findById(principal.getName()).orElseThrow();
 		try {
 			// check that user is member of requested region
-			Region region = regionController.getRegion(regionId);
+			Region region = regionRepository.findById(regionId).orElseThrow();
 			if (!user.hasPermissionForRegion(region.getId())) {
 				return HttpResponse.status(HttpStatus.FORBIDDEN);
 			}

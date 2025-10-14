@@ -2,7 +2,7 @@
 package eu.albina.rest;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
+import eu.albina.controller.RegionRepository;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -43,7 +43,7 @@ public class AvalancheBulletinStatusService {
 	private AvalancheReportController avalancheReportController;
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Serdeable
 	static class Status {
@@ -85,9 +85,9 @@ public class AvalancheBulletinStatusService {
 			Map<Instant, BulletinStatus> status;
 			if (regionId == null || regionId.isEmpty()) {
 				status = avalancheReportController.getStatus(startDate, endDate,
-						regionController.getPublishBulletinRegions());
+						regionRepository.getPublishBulletinRegions());
 			} else {
-				status = avalancheReportController.getStatus(startDate, endDate, regionController.getRegion(regionId));
+				status = avalancheReportController.getStatus(startDate, endDate, regionRepository.findById(regionId).orElseThrow());
 			}
 
 			List<Status> result = status.entrySet().stream()
@@ -110,7 +110,7 @@ public class AvalancheBulletinStatusService {
 									  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		try {
-			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
+			Region region = regionRepository.findById(regionId).orElseThrow();
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
@@ -145,7 +145,7 @@ public class AvalancheBulletinStatusService {
 			return HttpResponse.noContent();
 		}
 
-		Region region = regionController.getRegion(regionId);
+		Region region = regionRepository.findById(regionId).orElseThrow();
 		List<Status> result = avalancheReportController
 			.getPublicationStatus(startDate, endDate, region)
 			.entrySet().stream()
@@ -167,7 +167,7 @@ public class AvalancheBulletinStatusService {
 
 		try {
 			Map<Instant, AvalancheReport> status = avalancheReportController
-					.getPublicationStatus(startDate, endDate, regionController.getRegionOrThrowAlbinaException(regionId));
+					.getPublicationStatus(startDate, endDate, regionRepository.findById(regionId).orElseThrow());
 
 			if (status.size() > 1)
 				logger.warn("More than one report found!");

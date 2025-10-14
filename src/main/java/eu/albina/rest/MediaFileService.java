@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
@@ -31,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
@@ -58,7 +58,7 @@ public class MediaFileService {
 	private AvalancheReportController avalancheReportController;
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Inject
 	private ServerInstanceRepository serverInstanceRepository;
@@ -82,10 +82,10 @@ public class MediaFileService {
 		try {
 			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());
 
-			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
+			Region region = regionRepository.findById(regionId).orElseThrow();
 			User user = userRepository.findById(principal.getName()).orElseThrow();
 
-			if (region == null || !user.hasPermissionForRegion(region.getId())) {
+			if (!user.hasPermissionForRegion(region.getId())) {
 				logger.warn("User is not authorized for this region!");
 				throw new AlbinaException("User is not authorized for this region!");
 			}

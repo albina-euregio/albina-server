@@ -31,7 +31,7 @@ public class SubscriberController {
 	private static final Logger logger = LoggerFactory.getLogger(SubscriberController.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	/**
 	 * Return the {@code Subscriber} object with {@code email} as primary key.
@@ -127,7 +127,7 @@ public class SubscriberController {
 			List<Subscriber> subscribers = entityManager.createQuery(HibernateUtil.queryGetSubscribersForLanguage, Subscriber.class)
 					.setParameter("language", lang).getResultList();
 			List<Subscriber> results = subscribers.stream()
-				.filter(subscriber -> regionIds.stream().anyMatch(regionId -> subscriber.affectsRegion(regionController.getRegion(regionId))))
+				.filter(subscriber -> regionIds.stream().anyMatch(regionId -> subscriber.affectsRegion(regionRepository.findById(regionId).orElseThrow())))
 				.collect(Collectors.toList());
 
 			for (Subscriber subscriber : results)

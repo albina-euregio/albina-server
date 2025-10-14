@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
-import eu.albina.controller.RegionController;
+import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.BlogController;
 import eu.albina.controller.publication.BlogItem;
 import eu.albina.controller.publication.TelegramController;
@@ -23,11 +23,11 @@ public class HealthCheckJob {
 	private static final Logger logger = LoggerFactory.getLogger(HealthCheckJob.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
-		for (Region region : regionController.getPublishBulletinRegions()) {
+		for (Region region : regionRepository.getPublishBulletinRegions()) {
 			LanguageCode language = region.getDefaultLang();
 			logger.info("Health check triggered for {}/{}", region.getId(), language);
 
@@ -53,7 +53,7 @@ public class HealthCheckJob {
 
 			// Blog (only if region publishes blogs)
 			String blogStatus;
-			if (regionController.getPublishBlogRegions().contains(region)) {
+			if (regionRepository.getPublishBlogRegions().contains(region)) {
 				try {
 					BlogConfiguration config = BlogController.getConfiguration(region, language);
 					BlogItem latest = BlogController.getLatestBlogPost(config);

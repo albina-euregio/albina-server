@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import eu.albina.controller.RegionController;
+import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -24,7 +24,7 @@ public class PushNotificationService {
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationService.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Get("/key")
 	@Operation(summary = "Get VAPID public key")
@@ -39,7 +39,7 @@ public class PushNotificationService {
 	public HttpResponse<?> subscribe(@Body PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
 		PushSubscriptionController.create(subscription);
-		new PushNotificationUtil().sendWelcomePushMessage(subscription, regionController.getRegion(subscription.getRegion()));
+		new PushNotificationUtil().sendWelcomePushMessage(subscription, regionRepository.findById(subscription.getRegion()).orElseThrow());
 		return HttpResponse.noContent();
 	}
 

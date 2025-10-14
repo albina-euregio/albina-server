@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import io.micronaut.http.HttpResponse;
@@ -25,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
@@ -57,7 +57,7 @@ public class AvalancheBulletinPublishService {
 	AvalancheBulletinController avalancheBulletinController;
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Inject
 	private ServerInstanceRepository serverInstanceRepository;
@@ -80,14 +80,14 @@ public class AvalancheBulletinPublishService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 
 			User user = userRepository.findById(principal.getName()).orElseThrow();
-			Region region = regionController.getRegionOrThrowAlbinaException(regionId);
+			Region region = regionRepository.findById(regionId).orElseThrow();
 			List<Region> regions = Stream.concat(
 				Stream.of(region),
 				region.getSuperRegions().stream().filter(Region::isPublishBulletins)
 			).distinct().collect(Collectors.toList());
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceRepository.getLocalServerInstance()) {
+				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance()) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -127,7 +127,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			new Thread(() -> {
-				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionController, serverInstanceRepository.getLocalServerInstance()) {
+				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance()) {
 					@Override
 					protected boolean isEnabled(ServerInstance serverInstance) {
 						return true;
@@ -233,7 +233,7 @@ public class AvalancheBulletinPublishService {
 	}
 
 	private List<MultichannelMessage> getMultichannelMessage(String regionId, String date, LanguageCode language) throws AlbinaException {
-		Region region = regionController.getRegionOrThrowAlbinaException(regionId);
+		Region region = regionRepository.findById(regionId).orElseThrow();
 		Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 		ArrayList<AvalancheBulletin> bulletins = avalancheReportController
 			.getPublishedBulletins(startDate, Collections.singletonList(region));

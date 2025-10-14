@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -29,7 +30,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
 import eu.albina.controller.StatisticsController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -49,7 +49,7 @@ public class StatisticsService {
 	StatisticsController statisticsController;
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
@@ -81,10 +81,10 @@ public class StatisticsService {
 		List<Region> regions = new ArrayList<Region>();
 		if (regionIds != null && !regionIds.isEmpty()) {
 			for (String regionId : regionIds) {
-				regions.add(regionController.getRegion(regionId));
+				regions.add(regionRepository.findById(regionId).orElseThrow());
 			}
 		} else {
-			regions = regionController.getPublishBulletinRegions();
+			regions = regionRepository.getPublishBulletinRegions();
 		}
 
 		String statistics = statisticsController.getDangerRatingStatistics(start, end, language, regions, extended,

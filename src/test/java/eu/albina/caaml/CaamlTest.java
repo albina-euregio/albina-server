@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import eu.albina.controller.RegionRepository;
 import eu.albina.model.AvalancheBulletinTest;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -30,7 +31,6 @@ import org.xml.sax.SAXParseException;
 import com.google.common.io.Resources;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
@@ -48,7 +48,7 @@ public class CaamlTest {
 	Caaml caaml;
 
 	@Inject
-	private RegionController regionController;
+	private RegionRepository regionRepository;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -129,7 +129,7 @@ public class CaamlTest {
 
 	private AvalancheReport loadFromDatabase(LocalDate date) throws Exception {
 		Instant instant = date.atStartOfDay(AlbinaUtil.localZone()).withZoneSameInstant(ZoneOffset.UTC).toInstant();
-		List<AvalancheBulletin> bulletins = new AvalancheReportController().getPublishedBulletins(instant, regionController.getPublishBulletinRegions());
+		List<AvalancheBulletin> bulletins = new AvalancheReportController().getPublishedBulletins(instant, regionRepository.getPublishBulletinRegions());
 		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));
 		Files.createDirectories(path.getParent());

@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import eu.albina.controller.RegionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
 import eu.albina.controller.publication.BlogController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
@@ -26,17 +24,17 @@ public class BlogJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogJob.class);
 
-	private final RegionController regionController;
+	private final RegionRepository regionRepository;
 
-	public BlogJob(RegionController regionController) {
-		this.regionController = regionController;
+	public BlogJob(RegionRepository regionRepository) {
+		this.regionRepository = regionRepository;
 	}
 
 	/**
 	 * Execute all necessary tasks to publish new blog posts.
 	 */
 	public void execute() {
-		for (Region region : regionController.getPublishBlogRegions()) {
+		for (Region region : regionRepository.getPublishBlogRegions()) {
 			logger.info("Blog job triggered for {}!", region.getId());
 			for (LanguageCode lang : region.getEnabledLanguages()) {
 				try {
