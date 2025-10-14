@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import java.time.Instant;
 import java.util.Optional;
 import java.util.List;
 
+import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -22,8 +22,6 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +40,7 @@ public class RegionService {
 	private static final Logger logger = LoggerFactory.getLogger(RegionService.class);
 
 	@Inject
-	RegionController regionController;
+	RegionRepository regionRepository;
 
 	@Get
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
@@ -55,7 +53,7 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region
 
 		try {
-			List<Region> regions = regionController.getRegions();
+			List<Region> regions = regionRepository.findAll();
 			return HttpResponse.ok(regions);
 		} catch (HibernateException he) {
 			logger.warn("Error loading regions", he);
@@ -74,7 +72,7 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region
 
 		try {
-			Region region = regionController.getRegion(regionId);
+			Region region = regionRepository.findById(regionId).orElseThrow();
 			return HttpResponse.ok(region);
 		} catch (HibernateException he) {
 			logger.warn("Error loading region", he);
@@ -94,14 +92,14 @@ public class RegionService {
 
 		try {
 			String id = new Region(regionString, Region::new).getId();
-			Optional<Region> optionalRegion = regionController.tryGetRegion(id);
+			Optional<Region> optionalRegion = regionRepository.findById(id);
 			if (optionalRegion.isPresent()) {
 				Region existing = optionalRegion.get();
 				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
 				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
 				existing.fixLanguageConfigurations();
-				regionController.updateRegion(existing);
+				regionRepository.update(existing);
 				return HttpResponse.ok(existing.toJSON());
 			} else {
 				String message = "Error updating region - Region does not exist";
@@ -128,9 +126,9 @@ public class RegionService {
 			Region region = new Region(regionString, Region::new);
 
 			// check if id already exists
-			if (regionController.tryGetRegion(region.getId()).isEmpty()) {
+			if (regionRepository.findById(region.getId()).isEmpty()) {
 				region.fixLanguageConfigurations();
-				regionController.createRegion(region);
+				regionRepository.save(region);
 				return HttpResponse.created(region);
 			} else {
 				String message = "Error creating region - Region already exists";
@@ -147,8 +145,6 @@ public class RegionService {
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	public HttpResponse<?> getLockedRegions(@QueryValue("region") String region) {
-		logger.debug("GET JSON locked regions");
-		List<Instant> lockedRegions = regionController.getLockedRegions(region);
-		return HttpResponse.ok(lockedRegions);
+		return HttpResponse.serverError();
 	}
 }
