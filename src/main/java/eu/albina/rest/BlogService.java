@@ -3,6 +3,7 @@ package eu.albina.rest;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -43,6 +44,9 @@ public class BlogService {
 	@Inject
 	BlogController blogController;
 
+	@Inject
+	private TelegramController telegramController;
+
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -52,7 +56,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendToAllChannels(whatsAppController, pushNotificationUtil);
+			posting.sendToAllChannels(telegramController, whatsAppController, pushNotificationUtil);
 
 			return HttpResponse.ok("{}");
 		} catch (Exception e) {
@@ -91,7 +95,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendTelegramMessage();
+			posting.sendTelegramMessage(telegramController);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

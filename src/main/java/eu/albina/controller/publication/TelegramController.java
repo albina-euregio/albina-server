@@ -19,41 +19,39 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import eu.albina.util.HttpClientUtil;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.MediaType;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.TelegramConfiguration;
-import eu.albina.util.HibernateUtil;
 
-import jakarta.persistence.PersistenceException;
+@Singleton
+public class TelegramController {
+	private static final Logger logger = LoggerFactory.getLogger(TelegramController.class);
 
-public interface TelegramController {
-	Logger logger = LoggerFactory.getLogger(TelegramController.class);
-	HttpClient client = HttpClientUtil.newClientBuilder().build();
+	@Inject
+	HttpClient client;
 
-	static Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
-		Objects.requireNonNull(region, "region");
-		Objects.requireNonNull(region.getId(), "region.getId()");
-		Objects.requireNonNull(languageCode, "languageCode");
+	@Inject
+	TelegramConfigurationRepository telegramConfigurationRepository;
 
-		return HibernateUtil.getInstance().run(entityManager -> {
-			try {
-				TelegramConfiguration result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
-					.setParameter("region", region)
-					.setParameter("lang", languageCode)
-					.getSingleResult();
-				return Optional.ofNullable(result);
-			} catch (PersistenceException e) {
-				return Optional.empty();
-			}
-		});
+	@Repository
+	public interface TelegramConfigurationRepository extends CrudRepository<TelegramConfiguration, Long> {
+		Optional<TelegramConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
 	}
 
-	static Void trySend(TelegramConfiguration config, MultichannelMessage posting, int retry) throws Exception {
+	public Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+		return telegramConfigurationRepository.findByRegionAndLanguageCode(region, languageCode);
+	}
+
+	public Void trySend(TelegramConfiguration config, MultichannelMessage posting, int retry) throws Exception {
 		try {
 			String message = posting.getSocialMediaText();
 			String attachmentUrl = posting.getAttachmentUrl();
@@ -84,7 +82,7 @@ public interface TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#sendphoto">https://core.telegram.org/bots/api#sendphoto</a>
 	 * @see <a href="https://core.telegram.org/bots/api#inputfile">https://core.telegram.org/bots/api#inputfile</a>
 	 */
-	static HttpResponse<String> sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
+	public HttpResponse<String> sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
 		throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
@@ -124,7 +122,7 @@ public interface TelegramController {
 		return response;
 	}
 
-	static HttpResponse<String> sendMessage(TelegramConfiguration config, String message) throws IOException, InterruptedException {
+	public HttpResponse<String> sendMessage(TelegramConfiguration config, String message) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
@@ -143,12 +141,12 @@ public interface TelegramController {
 	 *
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
-	static HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
+	public HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
 		return execute(request, config);
 	}
 
-	static HttpResponse<String> execute(HttpRequest request, TelegramConfiguration config) throws IOException, InterruptedException {
+	public HttpResponse<String> execute(HttpRequest request, TelegramConfiguration config) throws IOException, InterruptedException {
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		if (response.statusCode() != 200) {
 			logger.warn("Error publishing on telegram channel for "

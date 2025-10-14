@@ -16,6 +16,7 @@ import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -72,6 +73,9 @@ public class AvalancheBulletinPublishService {
 
 	@Inject
 	private PushNotificationUtil pushNotificationUtil;
+
+	@Inject
+	private TelegramController telegramController;
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
@@ -189,7 +193,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendTelegramMessage();
+				posting.sendTelegramMessage(telegramController);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

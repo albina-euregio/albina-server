@@ -4,6 +4,7 @@ package eu.albina.controller;
 import java.io.IOException;
 
 import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -44,6 +45,9 @@ public class PublicationController {
 
 	@Inject
 	private PushNotificationUtil pushNotificationUtil;
+
+	@Inject
+	private TelegramController telegramController;
 
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
@@ -195,7 +199,7 @@ public class PublicationController {
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
 			try {
-				posting.sendToAllChannels(whatsAppController, pushNotificationUtil);
+				posting.sendToAllChannels(telegramController, whatsAppController, pushNotificationUtil);
 				AvalancheReportController c = avalancheReportController;
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);

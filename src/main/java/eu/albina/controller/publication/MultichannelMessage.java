@@ -57,9 +57,9 @@ public interface MultichannelMessage {
 			.toString();
 	}
 
-	default void sendToAllChannels(WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) {
+	default void sendToAllChannels(TelegramController telegramController, WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) {
 		sendMails();
-		sendTelegramMessage();
+		sendTelegramMessage(telegramController);
 		sendWhatsAppMessage(whatsAppController);
 		sendPushNotifications(pushNotificationUtil);
 	}
@@ -76,14 +76,14 @@ public interface MultichannelMessage {
 		});
 	}
 
-	default void sendTelegramMessage() {
+	default void sendTelegramMessage(TelegramController telegramController) {
 		if (!getRegion().isSendTelegramMessages()) {
 			return;
 		}
 		tryRunWithLogging("Telegram message", () -> {
-			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).
+			TelegramConfiguration telegramConfig = telegramController.getConfiguration(getRegion(), getLanguageCode()).
 				orElseThrow(() -> new NoSuchElementException(String.format("No TelegramConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			TelegramController.trySend(telegramConfig, this, 3);
+			telegramController.trySend(telegramConfig, this, 3);
 			return null;
 		});
 	}

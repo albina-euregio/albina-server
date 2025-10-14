@@ -31,16 +31,19 @@ public class HealthCheckJob {
 	@Inject
 	BlogController blogController;
 
+	@Inject
+	TelegramController telegramController;
+
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
 		for (Region region : regionRepository.getPublishBulletinRegions()) {
 			LanguageCode language = region.getDefaultLang();
 			logger.info("Health check triggered for {}/{}", region.getId(), language);
 
-			String telegramStatus = TelegramController.getConfiguration(region, language)
+			String telegramStatus = telegramController.getConfiguration(region, language)
 				.map(cfg -> {
 					try {
-						return TelegramController.getMe(cfg).body();
+						return telegramController.getMe(cfg).body();
 					} catch (Exception e){
 						return "FAILED (" + e.getMessage() + ")";
 					}

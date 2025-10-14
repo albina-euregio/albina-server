@@ -38,6 +38,9 @@ public class BlogController {
 	@Inject
 	BlogConfigurationRepository blogConfigurationRepository;
 
+	@Inject
+	TelegramController telegramController;
+
 	@Repository
 	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
 		Optional<BlogConfiguration> findByBlogId(String blogId);
@@ -119,7 +122,7 @@ public class BlogController {
 
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
-			posting.sendToAllChannels(whatsAppController, pushNotificationUtil);
+			posting.sendToAllChannels(telegramController, whatsAppController, pushNotificationUtil);
 			updateConfigurationLastPublished(config, object);
 		}
 	}
