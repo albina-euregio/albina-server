@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import eu.albina.controller.PushSubscriptionRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,26 +19,20 @@ import ch.rasc.webpush.PushController;
 import ch.rasc.webpush.ServerKeys;
 import ch.rasc.webpush.dto.Subscription;
 import ch.rasc.webpush.dto.SubscriptionKeys;
-import eu.albina.controller.PushSubscriptionController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
 import eu.albina.model.publication.PushConfiguration;
 import eu.albina.util.HibernateUtil;
-import eu.albina.util.HttpClientUtil;
 import eu.albina.util.JsonUtil;
 
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 
-public record PushNotificationUtil(HttpClient client) {
+public record PushNotificationUtil(HttpClient client, PushSubscriptionRepository pushSubscriptionRepository) {
 
 	private static final Logger logger = LoggerFactory.getLogger(PushNotificationUtil.class);
-
-	public PushNotificationUtil() {
-		this(HttpClientUtil.newClientBuilder().build());
-	}
 
 	public static class Message {
 		public final String title;
@@ -59,7 +55,7 @@ public record PushNotificationUtil(HttpClient client) {
 			posting.getAttachmentUrl(),
 			posting.getWebsiteUrl()
 		);
-        List<PushSubscription> subscriptions = PushSubscriptionController.get(posting.getLanguageCode(), Collections.singleton(posting.getRegion().getId()));
+        List<PushSubscription> subscriptions = pushSubscriptionRepository.findByLanguageAndRegionInList(posting.getLanguageCode(), Collections.singleton(posting.getRegion().getId()));
         logger.info("Sending {} push notifications for language={} regions={}: {}", subscriptions.size(), posting.getLanguageCode(), posting.getRegion(), payload);
         for (PushSubscription subscription : subscriptions) {
             sendPushMessage(subscription, payload, null);
@@ -91,6 +87,7 @@ public record PushNotificationUtil(HttpClient client) {
 		});
 	}
 
+	@Transactional
 	public void sendPushMessage(PushSubscription subscription, Object payload, ServerKeys serverKeys) {
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
@@ -121,13 +118,13 @@ public record PushNotificationUtil(HttpClient client) {
 			if (subscription.getFailedCount() >= 10) {
 				try {
 					logger.warn("Deleting subscription {} with failed count {}", subscription.getEndpoint(), subscription.getFailedCount());
-					PushSubscriptionController.delete(subscription);
+					pushSubscriptionRepository.delete(subscription);
 				} catch (Exception e2) {
 					logger.warn("Failed to delete subscription " + subscription.getEndpoint(), e2);
 				}
 			} else {
 				try {
-					PushSubscriptionController.incrementFailedCount(subscription);
+					pushSubscriptionRepository.incrementFailedCount(subscription);
 				} catch (Exception e2) {
 					logger.warn("Failed to increment failed fount for " + subscription.getEndpoint(), e2);
 				}

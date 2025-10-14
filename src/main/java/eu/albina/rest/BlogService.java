@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -32,6 +33,9 @@ public class BlogService {
 	@Inject
 	RegionRepository regionRepository;
 
+	@Inject
+	private PushSubscriptionRepository pushSubscriptionRepository;
+
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -41,7 +45,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
 			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendToAllChannels();
+			posting.sendToAllChannels(pushSubscriptionRepository);
 
 			return HttpResponse.ok("{}");
 		} catch (Exception e) {
@@ -122,7 +126,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = BlogController.getLatestBlogPost(config);
 			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendPushNotifications();
+			posting.sendPushNotifications(pushSubscriptionRepository);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

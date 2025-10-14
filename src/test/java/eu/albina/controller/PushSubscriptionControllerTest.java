@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -15,13 +16,16 @@ import eu.albina.util.HibernateUtil;
 
 public class PushSubscriptionControllerTest {
 
+	@Inject
+	PushSubscriptionRepository pushSubscriptionRepository;
+
 	@Test
 	@Disabled
 	public void get() {
 		HibernateUtil.getInstance().setUp();
-		List<PushSubscription> subscriptions = PushSubscriptionController.get(LanguageCode.de, Collections.singletonList("AT-07"));
-		Assertions.assertTrue(subscriptions.size() > 0);
-		subscriptions = PushSubscriptionController.get(LanguageCode.de, Arrays.asList("AT-07", "IT-32-BZ"));
-		Assertions.assertTrue(subscriptions.size() > 0);
+		List<PushSubscription> subscriptions = pushSubscriptionRepository.findByLanguageAndRegionInList(LanguageCode.de, Collections.singletonList("AT-07"));
+		Assertions.assertFalse(subscriptions.isEmpty());
+		subscriptions = pushSubscriptionRepository.findByLanguageAndRegionInList(LanguageCode.de, Arrays.asList("AT-07", "IT-32-BZ"));
+		Assertions.assertFalse(subscriptions.isEmpty());
 	}
 }

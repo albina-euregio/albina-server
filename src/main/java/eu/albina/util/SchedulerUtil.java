@@ -4,6 +4,7 @@ package eu.albina.util;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.PublicationController;
+import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.jobs.BlogJob;
@@ -33,6 +34,9 @@ public class SchedulerUtil {
 	@Inject
 	private ServerInstanceRepository serverInstanceRepository;
 
+	@Inject
+	private PushSubscriptionRepository pushSubscriptionRepository;
+
 	@Scheduled(cron = "0 0 17 * * ?")
 	public void triggerPublication() {
 		new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance()).execute();
@@ -45,7 +49,7 @@ public class SchedulerUtil {
 
 	@Scheduled(cron = "0 0/10 * * * ?")
 	public void triggerBlog() {
-		new BlogJob(regionRepository).execute();
+		new BlogJob(regionRepository, pushSubscriptionRepository).execute();
 	}
 
 	@Scheduled(cron = "0 0 3 * * ?")

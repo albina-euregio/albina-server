@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
@@ -93,7 +94,7 @@ public interface BlogController {
 		return MultichannelMessage.of(config, blogPost);
 	}
 
-	static void sendNewBlogPosts(Region region, LanguageCode lang) throws IOException, InterruptedException {
+	static void sendNewBlogPosts(Region region, LanguageCode lang, PushSubscriptionRepository pushSubscriptionRepository) throws IOException, InterruptedException {
 		if (!region.isPublishBlogs()) {
 			logger.debug("Publishing blogs is disabled for region {}", region);
 			return;
@@ -117,7 +118,7 @@ public interface BlogController {
 
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
-			posting.sendToAllChannels();
+			posting.sendToAllChannels(pushSubscriptionRepository);
 			updateConfigurationLastPublished(config, object);
 		}
 	}

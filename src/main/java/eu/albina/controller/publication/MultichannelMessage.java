@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
 
+import eu.albina.controller.PushSubscriptionRepository;
+import eu.albina.util.HttpClientUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,11 +59,11 @@ public interface MultichannelMessage {
 			.toString();
 	}
 
-	default void sendToAllChannels() {
+	default void sendToAllChannels(PushSubscriptionRepository pushSubscriptionRepository) {
 		sendMails();
 		sendTelegramMessage();
 		sendWhatsAppMessage();
-		sendPushNotifications();
+		sendPushNotifications(pushSubscriptionRepository);
 	}
 
 	default void sendMails() {
@@ -100,12 +102,12 @@ public interface MultichannelMessage {
 		});
 	}
 
-	default void sendPushNotifications() {
+	default void sendPushNotifications(PushSubscriptionRepository pushSubscriptionRepository) {
 		if (!getRegion().isSendPushNotifications()) {
 			return;
 		}
 		tryRunWithLogging("Push notifications", () -> {
-			new PushNotificationUtil().send(this);
+			new PushNotificationUtil(HttpClientUtil.newClientBuilder().build(), pushSubscriptionRepository).send(this);
 			return null;
 		});
 	}

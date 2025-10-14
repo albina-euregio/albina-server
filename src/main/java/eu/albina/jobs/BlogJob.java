@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
+import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,11 @@ public class BlogJob {
 	private static final Logger logger = LoggerFactory.getLogger(BlogJob.class);
 
 	private final RegionRepository regionRepository;
+	private final PushSubscriptionRepository pushSubscriptionRepository;
 
-	public BlogJob(RegionRepository regionRepository) {
+	public BlogJob(RegionRepository regionRepository, PushSubscriptionRepository pushSubscriptionRepository) {
 		this.regionRepository = regionRepository;
+		this.pushSubscriptionRepository = pushSubscriptionRepository;
 	}
 
 	/**
@@ -38,7 +41,7 @@ public class BlogJob {
 			logger.info("Blog job triggered for {}!", region.getId());
 			for (LanguageCode lang : region.getEnabledLanguages()) {
 				try {
-					BlogController.sendNewBlogPosts(region, lang);
+					BlogController.sendNewBlogPosts(region, lang, pushSubscriptionRepository);
 				} catch (IOException | InterruptedException e) {
 					logger.warn("Blog job failed", e);
 				}

@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import eu.albina.controller.PushSubscriptionRepository;
 import eu.albina.controller.RegionRepository;
+import eu.albina.util.HttpClientUtil;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -12,7 +14,6 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.PushSubscriptionController;
 import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.model.PushSubscription;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,6 +27,9 @@ public class PushNotificationService {
 	@Inject
 	RegionRepository regionRepository;
 
+	@Inject
+	PushSubscriptionRepository pushSubscriptionRepository;
+
 	@Get("/key")
 	@Operation(summary = "Get VAPID public key")
 	public Object key() {
@@ -38,8 +42,8 @@ public class PushNotificationService {
 	@Operation(summary = "Subscribe push notification")
 	public HttpResponse<?> subscribe(@Body PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
-		PushSubscriptionController.create(subscription);
-		new PushNotificationUtil().sendWelcomePushMessage(subscription, regionRepository.findById(subscription.getRegion()).orElseThrow());
+		pushSubscriptionRepository.save(subscription);
+		new PushNotificationUtil(HttpClientUtil.newClientBuilder().build(), pushSubscriptionRepository).sendWelcomePushMessage(subscription, regionRepository.findById(subscription.getRegion()).orElseThrow());
 		return HttpResponse.noContent();
 	}
 
@@ -47,7 +51,8 @@ public class PushNotificationService {
 	@Operation(summary = "Unsubscribe push notification")
 	public HttpResponse<?> unsubscribe(@Body PushSubscription subscription) {
 		logger.info("Unsubscribing {}", subscription);
-		PushSubscriptionController.delete(subscription);
+		subscription = pushSubscriptionRepository.findByEndpointAndAuthAndP256dh(subscription.getEndpoint(), subscription.getAuth(), subscription.getP256dh()).orElseThrow();
+		pushSubscriptionRepository.delete(subscription);
 		return HttpResponse.noContent();
 	}
 }

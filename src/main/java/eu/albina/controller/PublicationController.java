@@ -37,6 +37,9 @@ public class PublicationController {
 	@Inject
 	AvalancheReportController avalancheReportController;
 
+	@Inject
+	private PushSubscriptionRepository pushSubscriptionRepository;
+
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
 		if (region.isCreateCaamlV5()) {
@@ -187,7 +190,7 @@ public class PublicationController {
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
 			try {
-				posting.sendToAllChannels();
+				posting.sendToAllChannels(pushSubscriptionRepository);
 				AvalancheReportController c = avalancheReportController;
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);
