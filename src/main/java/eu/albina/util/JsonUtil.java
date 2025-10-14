@@ -9,9 +9,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 public class JsonUtil {
 
 	public interface Views {

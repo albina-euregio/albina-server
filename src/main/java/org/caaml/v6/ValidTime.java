@@ -4,8 +4,6 @@ package org.caaml.v6;
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
