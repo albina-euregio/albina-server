@@ -41,6 +41,9 @@ public class BlogController {
 	@Inject
 	TelegramController telegramController;
 
+	@Inject
+	private RapidMailController rapidMailController;
+
 	@Repository
 	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
 		Optional<BlogConfiguration> findByBlogId(String blogId);
@@ -122,7 +125,7 @@ public class BlogController {
 
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
-			posting.sendToAllChannels(telegramController, whatsAppController, pushNotificationUtil);
+			posting.sendToAllChannels(rapidMailController, telegramController, whatsAppController, pushNotificationUtil);
 			updateConfigurationLastPublished(config, object);
 		}
 	}
@@ -147,10 +150,10 @@ public class BlogController {
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
 			posting.tryRunWithLogging("Email newsletter", () -> {
-				RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
+				RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
 					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));
 				mailConfig.setRegion(regionOverride);
-				RapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
+				rapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
 				return null;
 			});
 			updateConfigurationLastPublished(config, object);

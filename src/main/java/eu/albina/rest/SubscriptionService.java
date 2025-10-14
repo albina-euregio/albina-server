@@ -40,6 +40,9 @@ public class SubscriptionService {
 	@Inject
 	SubscriberRepository subscriberRepository;
 
+	@Inject
+	private RapidMailController rapidMailController;
+
 	@Serdeable
 	static class EmailSubscription {
 		public String email;
@@ -88,9 +91,9 @@ public class SubscriptionService {
 		recipient.setEmail(subscriber.getEmail());
 
 		try {
-			RapidMailConfiguration config = RapidMailController.getConfiguration(region, subscriber.getLanguage(), null).orElseThrow();
+			RapidMailConfiguration config = rapidMailController.getConfiguration(region, subscriber.getLanguage(), null).orElseThrow();
 			subscriberRepository.save(subscriber);
-			RapidMailController.createRecipient(config, recipient);
+			rapidMailController.createRecipient(config, recipient);
 			return HttpResponse.ok();
 		} catch (Exception e) {
 			logger.warn("Error subscribe", e);

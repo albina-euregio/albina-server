@@ -16,8 +16,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import eu.albina.util.JsonUtil;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;
-import org.hibernate.HibernateException;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,40 +35,25 @@ import eu.albina.model.publication.rapidmail.mailings.PostMailingsResponse;
 import eu.albina.model.publication.rapidmail.recipientlist.RapidMailRecipientListResponse;
 import eu.albina.model.publication.rapidmail.recipientlist.RapidMailRecipientListResponseItem;
 import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
-import eu.albina.util.HibernateUtil;
-import eu.albina.util.HttpClientUtil;
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
 
-public interface RapidMailController {
-	Logger logger = LoggerFactory.getLogger(RapidMailController.class);
-	String baseUrl = "https://apiv3.emailsys.net";
-	HttpClient client = HttpClientUtil.newClientBuilder().build();
+@Singleton
+public class RapidMailController {
+	private static final Logger logger = LoggerFactory.getLogger(RapidMailController.class);
+	private static final String baseUrl = "https://apiv3.emailsys.net";
 
-	static Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
-		Objects.requireNonNull(languageCode, "languageCode");
+	@Inject
+	HttpClient client;
 
-		return HibernateUtil.getInstance().run(entityManager -> {
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-			CriteriaQuery<RapidMailConfiguration> select = criteriaBuilder.createQuery(RapidMailConfiguration.class);
-			Root<RapidMailConfiguration> root = select.from(RapidMailConfiguration.class);
-			select.where(
-				region == null
-					? criteriaBuilder.isNull(root.get("region"))
-					: criteriaBuilder.equal(root.get("region"), region),
-				criteriaBuilder.equal(root.get("lang"), languageCode),
-				subjectMatter == null
-					? criteriaBuilder.isNull(root.get("subjectMatter"))
-					: criteriaBuilder.equal(root.get("subjectMatter"), subjectMatter)
-			);
-			try {
-				return Optional.ofNullable(entityManager.createQuery(select).getSingleResult());
-			} catch (PersistenceException e) {
-				return Optional.empty();
-			}
-		});
+	@Inject
+	RapidMailConfigurationRepository rapidMailConfigurationRepository;
+
+	@Repository
+	public interface RapidMailConfigurationRepository extends CrudRepository<RapidMailConfiguration, Long> {
+		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatter(Region region, LanguageCode languageCode, String subjectMatter);
+	}
+
+	public Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
+		return rapidMailConfigurationRepository.findByRegionAndLanguageCodeAndSubjectMatter(region, languageCode, subjectMatter);
 	}
 
 	private static String calcBasicAuth(RapidMailConfiguration config) {
@@ -73,7 +61,7 @@ public interface RapidMailController {
 		return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 	}
 
-	static RapidMailRecipientListResponse getRecipientsList(RapidMailConfiguration config) throws IOException, HibernateException, InterruptedException {
+	private RapidMailRecipientListResponse getRecipientsList(RapidMailConfiguration config) throws IOException, InterruptedException {
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
 		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/recipientlists"))
@@ -85,8 +73,8 @@ public interface RapidMailController {
 		return JsonUtil.parseUsingJackson(response.body(), RapidMailRecipientListResponse.class);
 	}
 
-	static void createRecipient(RapidMailConfiguration config, PostRecipientsRequest recipient)
-		throws AlbinaException, IOException, HibernateException, InterruptedException {
+	public void createRecipient(RapidMailConfiguration config, PostRecipientsRequest recipient)
+		throws AlbinaException, IOException, InterruptedException {
 
 		if (recipient.getRecipientlistId() == null) {
 			int recipientListId = getRecipientId(config);
@@ -101,8 +89,8 @@ public interface RapidMailController {
 		client.send(request, HttpResponse.BodyHandlers.discarding());
 	}
 
-	static void sendMessage(PostMailingsRequest mailingsPost, RapidMailConfiguration config)
-		throws AlbinaException, IOException, HibernateException, InterruptedException {
+	private void sendMessage(PostMailingsRequest mailingsPost, RapidMailConfiguration config)
+		throws AlbinaException, IOException, InterruptedException {
 
 		if (mailingsPost.getDestinations() == null) {
 			int recipientListId = getRecipientId(config);
@@ -124,7 +112,7 @@ public interface RapidMailController {
 		logger.info("... returned {}", entity);
 	}
 
-	static int getRecipientId(RapidMailConfiguration config) throws AlbinaException, HibernateException, IOException, InterruptedException {
+	private int getRecipientId(RapidMailConfiguration config) throws AlbinaException, IOException, InterruptedException {
 		String recipientName = config.getMailinglistName();
 		logger.info("Retrieving recipient for {} ...", recipientName);
 		RapidMailRecipientListResponse recipientListResponse = getRecipientsList(config);
@@ -135,7 +123,7 @@ public interface RapidMailController {
 			.orElseThrow(() -> new AlbinaException("Invalid recipientList name '" + recipientName + "'. Please check configuration"));
 	}
 
-	static String createZipFile(String htmlContent, String textContent) throws IOException {
+	private String createZipFile(String htmlContent, String textContent) throws IOException {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			 ZipOutputStream out = new ZipOutputStream(baos)) {
 			if (htmlContent != null) {
@@ -158,10 +146,10 @@ public interface RapidMailController {
 		}
 	}
 
-	static void sendEmail(RapidMailConfiguration config, String emailHtml, String subject) throws IOException, AlbinaException, InterruptedException {
+	public void sendEmail(RapidMailConfiguration config, String emailHtml, String subject) throws IOException, AlbinaException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		logger.info("Sending [{}] email for {} ({} bytes)...", subject, config, emailHtml.getBytes(StandardCharsets.UTF_8).length);
-		LanguageCode lang = config.getLang();
+		LanguageCode lang = config.getLanguageCode();
 		Region region = config.getRegion();
 		PostMailingsRequestPostFile file = new PostMailingsRequestPostFile()
 			.description("mail-content.zip")

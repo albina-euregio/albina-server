@@ -66,6 +66,9 @@ public class MediaFileService {
 	@Inject
 	private UserRepository userRepository;
 
+	@Inject
+	private RapidMailController rapidMailController;
+
 	@Post
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -120,13 +123,13 @@ public class MediaFileService {
 				mediaText.replace("\n", "<br>"),
 				String.format("<a href=\"%s\">%s</a>", mp3FileUrl, text),
 				MessageFormat.format(language.getBundleString("email.media.text"), user.getName()));
-			RapidMailConfiguration config = RapidMailController.getConfiguration(region, language, "media").orElseThrow();
-			RapidMailController.sendEmail(config, emailHtml, subject);
+			RapidMailConfiguration config = rapidMailController.getConfiguration(region, language, "media").orElseThrow();
+			rapidMailController.sendEmail(config, emailHtml, subject);
 
 			if (important) {
 				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), region.getWebsiteName(language), formattedDate, user.getName());
-				config = RapidMailController.getConfiguration(region, language, "media+").orElseThrow();
-				RapidMailController.sendEmail(config, emailHtml, subject);
+				config = rapidMailController.getConfiguration(region, language, "media+").orElseThrow();
+				rapidMailController.sendEmail(config, emailHtml, subject);
 			}
 
 			// set publication flag

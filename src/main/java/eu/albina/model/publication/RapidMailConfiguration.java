@@ -85,11 +85,11 @@ public class RapidMailConfiguration implements Serializable {
 		this.password = password;
 	}
 
-	public LanguageCode getLang() {
+	public LanguageCode getLanguageCode() {
 		return lang;
 	}
 
-	public void setLang(LanguageCode lang) {
+	public void setLanguageCode(LanguageCode lang) {
 		this.lang = lang;
 	}
 

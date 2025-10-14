@@ -16,6 +16,7 @@ import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
+import eu.albina.controller.publication.RapidMailController;
 import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.http.HttpResponse;
@@ -76,6 +77,9 @@ public class AvalancheBulletinPublishService {
 
 	@Inject
 	private TelegramController telegramController;
+
+	@Inject
+	private RapidMailController rapidMailController;
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
@@ -172,7 +176,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendMails();
+				posting.sendMails(rapidMailController);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

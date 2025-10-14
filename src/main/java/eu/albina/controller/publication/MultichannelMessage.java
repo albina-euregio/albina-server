@@ -57,21 +57,21 @@ public interface MultichannelMessage {
 			.toString();
 	}
 
-	default void sendToAllChannels(TelegramController telegramController, WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) {
-		sendMails();
+	default void sendToAllChannels(RapidMailController rapidMailController, TelegramController telegramController, WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) {
+		sendMails(rapidMailController);
 		sendTelegramMessage(telegramController);
 		sendWhatsAppMessage(whatsAppController);
 		sendPushNotifications(pushNotificationUtil);
 	}
 
-	default void sendMails() {
+	default void sendMails(RapidMailController rapidMailController) {
 		if (!getRegion().isSendEmails()) {
 			return;
 		}
 		tryRunWithLogging("Email newsletter", () -> {
-			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null)
+			RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(getRegion(), getLanguageCode(), null)
 				.orElseThrow(() -> new NoSuchElementException(String.format("No RapidMailConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			RapidMailController.sendEmail(mailConfig, getHtmlMessage(), getSubject());
+			rapidMailController.sendEmail(mailConfig, getHtmlMessage(), getSubject());
 			return null;
 		});
 	}
