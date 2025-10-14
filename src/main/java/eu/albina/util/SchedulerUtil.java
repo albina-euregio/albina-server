@@ -45,7 +45,7 @@ public class SchedulerUtil {
 
 	@Scheduled(cron = "0 0/10 * * * ?")
 	public void triggerBlog() {
-		new BlogJob().execute();
+		new BlogJob(regionController).execute();
 	}
 
 	@Scheduled(cron = "0 0 3 * * ?")

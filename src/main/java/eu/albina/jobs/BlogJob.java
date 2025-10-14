@@ -2,6 +2,7 @@
 package eu.albina.jobs;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +26,11 @@ public class BlogJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogJob.class);
 
-	@Inject
-	RegionController regionController;
+	private final RegionController regionController;
+
+	public BlogJob(RegionController regionController) {
+		this.regionController = regionController;
+	}
 
 	/**
 	 * Execute all necessary tasks to publish new blog posts.
