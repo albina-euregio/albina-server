@@ -43,6 +43,7 @@ import eu.albina.util.AlbinaUtil;
 public class CaamlTest {
 
 	private ServerInstance serverInstanceEuregio;
+	private Region regionEuregio;
 
 	@Inject
 	RegionTestUtils regionTestUtils;
@@ -55,7 +56,6 @@ public class CaamlTest {
 
 	@Inject
 	private RegionRepository regionRepository;
-	private Region regionEuregio;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -85,7 +85,7 @@ public class CaamlTest {
 		final String expected = Resources
 				.toString(Resources.getResource("2019-01-16.caaml.v5.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
 		final String xml = createCaaml(CaamlVersion.V5);
-		assertCustomEquals(expected, xml, CaamlVersion.V5);
+		Assertions.assertEquals(expected, xml);
 	}
 
 	@Disabled
@@ -158,16 +158,12 @@ public class CaamlTest {
 		String caaml = this.caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
         String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
-		assertCustomEquals(expected, caaml, version);
-		CaamlValidator.validateCaamlBulletin(caaml, version);
-	}
-
-	public static void assertCustomEquals(String expected, String actual, CaamlVersion version) {
 		if (version == CaamlVersion.V6_JSON) {
-			JsonAssert.assertJsonEquals(expected, actual);
+			JsonAssert.assertJsonEquals(expected, caaml);
 		} else {
-			Assertions.assertEquals(expected, actual);
+			Assertions.assertEquals(expected, caaml);
 		}
+		CaamlValidator.validateCaamlBulletin(caaml, version);
 	}
 
 	@Test
