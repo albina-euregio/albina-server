@@ -630,6 +630,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return publishedRegions;
 	}
 
+	@JsonView(JsonUtil.Views.Public.class)
+	public void setRegions(Set<String> regions) {
+		this.publishedRegions = regions;
+	}
+
 	public Set<String> getPublishedRegions() {
 		return publishedRegions;
 	}
