@@ -2,12 +2,14 @@
 package eu.albina.model;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import net.javacrumbs.jsonunit.JsonAssert;
 import net.javacrumbs.jsonunit.core.Option;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +25,7 @@ public class RegionTest {
 
 	@Inject
 	ObjectMapper objectMapper;
+	private Region region;
 
 	@BeforeEach
 	void setUp() {
@@ -35,5 +38,13 @@ public class RegionTest {
 		Region region = regionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
 		String json = objectMapper.writeValueAsString(region);
 		JsonAssert.assertJsonEquals(expected, json);
+	}
+
+	@Test
+	void testEuregioFromJson() {
+		region = regionTestUtils.regionEuregio();
+		Assertions.assertEquals("EUREGIO", region.getId());
+		Assertions.assertEquals(Set.of(), region.getSuperRegions());
+		Assertions.assertEquals(Set.of(new Region("AT-07"), new Region("IT-32-BZ"), new Region("IT-32-TN")), region.getSubRegions());
 	}
 }
