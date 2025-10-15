@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import eu.albina.model.AvalancheBulletinTest;
+import eu.albina.AvalancheBulletinTestUtils;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -26,6 +26,9 @@ import eu.albina.model.enumerations.LanguageCode;
 public class StatisticsControllerTest {
 
 	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
 	ObjectMapper objectMapper;
 
 	private List<AvalancheBulletin> bulletinsAmPm;
@@ -39,8 +42,8 @@ public class StatisticsControllerTest {
 	@BeforeEach
 	public void setUp() throws Exception {
 		bulletinsAmPm = new ArrayList<>();
-		bulletinsAmPm.addAll(AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
-		bulletinsAmPm.addAll(AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_6.json")));
+		bulletinsAmPm.addAll(avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json")));
+		bulletinsAmPm.addAll(avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_6.json")));
 		dangerSourceVariants = Arrays.asList(readDangerSourceVariant(Resources.getResource("danger_source_variants.json")));
 	}
 

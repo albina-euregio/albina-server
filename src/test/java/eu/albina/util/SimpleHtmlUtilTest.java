@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
-import eu.albina.model.AvalancheBulletinTest;
 import eu.albina.model.Region;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -27,6 +27,9 @@ import freemarker.template.TemplateException;
 
 @MicronautTest
 public class SimpleHtmlUtilTest {
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
 
 	@Inject
 	RegionTestUtils regionTestUtils;
@@ -62,7 +65,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("2019-01-17.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String htmlString = SimpleHtmlUtil.createSimpleHtmlString(avalancheReport, LanguageCode.de).replaceAll("\\s*<", "\n<");
 		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
@@ -72,7 +75,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlStringTyrol() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("2019-01-17.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final List<AvalancheBulletin> bulletinsTyrol = bulletins.stream()
 			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(regionTyrol))
 			.collect(Collectors.toList());
@@ -85,7 +88,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String htmlString = SimpleHtmlUtil.createSimpleHtmlString(avalancheReport, LanguageCode.ca);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
@@ -95,7 +98,7 @@ public class SimpleHtmlUtilTest {
 	@Test
 	public void createSimpleHtmlStringAranDaytimeDependency() throws Exception {
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String html = SimpleHtmlUtil.createSimpleHtmlString(avalancheReport, LanguageCode.en);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.simple.html"), StandardCharsets.UTF_8);

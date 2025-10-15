@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -36,6 +37,9 @@ public class AvalancheReportTest {
 	private final ServerInstance serverInstanceEuregio = new ServerInstance();
 
 	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
 	RegionTestUtils regionTestUtils;
 
 	@Inject
@@ -44,16 +48,16 @@ public class AvalancheReportTest {
 
 	@Test
 	public void testIsUpdate() throws Exception {
-		List<AvalancheBulletin> bulletins0 = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins0 = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json"));
 		Assertions.assertTrue(AvalancheReport.of(bulletins0, null, null).isUpdate());
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2019-01-17.json"));
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2019-01-17.json"));
 		Assertions.assertFalse(AvalancheReport.of(bulletins, null, null).isUpdate());
 	}
 
 	@Disabled
 	@Test
 	public void sortBulletinsTest() throws Exception {
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json"));
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
@@ -69,7 +73,7 @@ public class AvalancheReportTest {
 		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/bulletins");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		regionEuregio = regionTestUtils.regionEuregio();
 		regionEuregio.setServerInstance(serverInstanceEuregio);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
@@ -134,7 +138,7 @@ public class AvalancheReportTest {
 	@Test
 	public void createJsonTest(@TempDir Path folder) throws IOException {
 		ServerInstance serverInstanceEuregio = new ServerInstance();
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json"));
 		serverInstanceEuregio.setHtmlDirectory(folder.toString());
 		serverInstanceEuregio.setMapsPath(folder.toString());
 		serverInstanceEuregio.setPdfDirectory(folder.toString());

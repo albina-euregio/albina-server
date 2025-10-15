@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import eu.albina.model.AvalancheBulletinTest;
+import eu.albina.AvalancheBulletinTestUtils;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +36,9 @@ public class PdfUtilRebuildTest {
 
 	private List<Region> regions;
 	private ServerInstance serverInstance;
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
 
 	@Inject
 	RegionTestUtils regionTestUtils;
@@ -75,7 +78,7 @@ public class PdfUtilRebuildTest {
 		try {
 			URL url = new URL("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json");
 			logger.info("Fetching bulletins from {}", url);
-			List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(url);
+			List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(url);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setServerInstance(serverInstance);
 			return avalancheReport;

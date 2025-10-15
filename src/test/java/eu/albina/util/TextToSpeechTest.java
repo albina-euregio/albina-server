@@ -8,8 +8,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
-import eu.albina.model.AvalancheBulletinTest;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.caaml.v6.AvalancheBulletins;
@@ -28,6 +28,9 @@ import eu.albina.model.enumerations.LanguageCode;
 class TextToSpeechTest {
 
 	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
 	RegionTestUtils regionTestUtils;
 
 	@Inject
@@ -35,7 +38,7 @@ class TextToSpeechTest {
 
 	private void toCAAMLv6(String bulletinResource) throws Exception {
 		URL resource = Resources.getResource(bulletinResource);
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTestUtils.regionTyrol(), null);
 		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
@@ -84,7 +87,7 @@ class TextToSpeechTest {
 	public void test20231201mp3() throws Exception {
 		// GOOGLE_APPLICATION_CREDENTIALS
 		URL resource = Resources.getResource("2023-12-01.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.de);
 		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().getFirst();

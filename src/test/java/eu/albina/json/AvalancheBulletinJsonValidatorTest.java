@@ -6,7 +6,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
-import eu.albina.model.AvalancheBulletinTest;
+import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.util.JsonUtil;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -22,6 +22,9 @@ import eu.albina.model.AvalancheBulletin;
 public class AvalancheBulletinJsonValidatorTest {
 
 	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
 	ObjectMapper objectMapper;
 
 	@Test
@@ -34,7 +37,7 @@ public class AvalancheBulletinJsonValidatorTest {
 	@Test
 	public void testValidateAvalancheBulletinValid() throws IOException {
 		final URL resource = Resources.getResource("2019-01-16.json");
-		for (AvalancheBulletin bulletin : AvalancheBulletinTest.readBulletinsUsingJackson(resource)) {
+		for (AvalancheBulletin bulletin : avalancheBulletinTestUtils.readBulletins(resource)) {
 			final String json = objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletin);
 			Assertions.assertEquals(Set.of(), JsonValidator.validateAvalancheBulletin(json));
 		}

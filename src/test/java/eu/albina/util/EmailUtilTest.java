@@ -6,8 +6,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
-import eu.albina.model.AvalancheBulletinTest;
 import eu.albina.model.Region;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -24,6 +24,9 @@ import eu.albina.model.enumerations.LanguageCode;
 
 @MicronautTest
 public class EmailUtilTest {
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
 
 	@Inject
 	RegionTestUtils regionTestUtils;
@@ -53,7 +56,7 @@ public class EmailUtilTest {
 	@Test
 	public void createBulletinEmailHtml() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
 		Assertions.assertEquals(154.7177734375, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1., "155 kB");
@@ -68,7 +71,7 @@ public class EmailUtilTest {
 	@Test
 	public void createBulletinEmailHtmlAran() throws Exception {
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.en);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.mail.html"), StandardCharsets.UTF_8);
@@ -78,7 +81,7 @@ public class EmailUtilTest {
 	@Test
 	public void createBulletinEmailHtml2021() throws Exception {
 		final URL resource = Resources.getResource("2021-12-01.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
 		Assertions.assertEquals(58, html.getBytes(StandardCharsets.UTF_8).length / 1024, "59 kB");
