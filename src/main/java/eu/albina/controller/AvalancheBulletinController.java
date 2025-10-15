@@ -22,7 +22,6 @@ import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,44 +75,7 @@ public class AvalancheBulletinController {
 	 * @return The avalanche bulletin with the given ID.
 	 */
 	public AvalancheBulletin getBulletin(String bulletinId) {
-		AvalancheBulletin bulletin = avalancheBulletinRepository.findById(bulletinId).orElseThrow();
-		initializeBulletin(bulletin);
-		return bulletin;
-	}
-
-	/**
-	 * Initialize all fields of the {@code bulletin} to be able to access it after
-	 * the DB transaction was closed.
-	 *
-	 * @param bulletin the bulletin that should be initialized
-	 */
-	@Deprecated
-	private void initializeBulletin(AvalancheBulletin bulletin) {
-		Hibernate.initialize(bulletin.getAvActivityComment());
-		Hibernate.initialize(bulletin.getAvActivityHighlights());
-		Hibernate.initialize(bulletin.getSnowpackStructureComment());
-		Hibernate.initialize(bulletin.getSnowpackStructureHighlights());
-		Hibernate.initialize(bulletin.getSynopsisComment());
-		Hibernate.initialize(bulletin.getSynopsisHighlights());
-		Hibernate.initialize(bulletin.getTravelAdvisoryComment());
-		Hibernate.initialize(bulletin.getTravelAdvisoryHighlights());
-		if (bulletin.getForenoon() != null) {
-			bulletin.getForenoon().getAvalancheProblems().forEach(s -> {
-				if (s != null)
-					Hibernate.initialize(s.getAspects());
-			});
-		}
-		if (bulletin.getAfternoon() != null) {
-			bulletin.getAfternoon().getAvalancheProblems().forEach(s -> {
-				if (s != null)
-					Hibernate.initialize(s.getAspects());
-			});
-		}
-		Hibernate.initialize(bulletin.getSuggestedRegions());
-		Hibernate.initialize(bulletin.getSavedRegions());
-		Hibernate.initialize(bulletin.getPublishedRegions());
-		Hibernate.initialize(bulletin.getUser());
-		Hibernate.initialize(bulletin.getAdditionalAuthors());
+		return avalancheBulletinRepository.findById(bulletinId).orElseThrow();
 	}
 
 	/**
@@ -175,9 +137,6 @@ public class AvalancheBulletinController {
 				resultBulletins.remove(avalancheBulletin.getId());
 			}
 		}
-
-		for (AvalancheBulletin bulletin : resultBulletins.values())
-			initializeBulletin(bulletin);
 
 		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
 		// save report for super regions
@@ -319,9 +278,6 @@ public class AvalancheBulletinController {
 		avalancheBulletinRepository.save(newBulletin);
 		resultBulletins.put(newBulletin.getId(), newBulletin);
 
-		for (AvalancheBulletin bulletin : resultBulletins.values())
-			initializeBulletin(bulletin);
-
 		return resultBulletins;
 	}
 
@@ -363,11 +319,8 @@ public class AvalancheBulletinController {
 		}
 
 		// Bulletin has to be updated
-		avalancheBulletinRepository.save(updatedBulletin);
+		avalancheBulletinRepository.update(updatedBulletin);
 		resultBulletins.put(updatedBulletin.getId(), updatedBulletin);
-
-		for (AvalancheBulletin bulletin : resultBulletins.values())
-			initializeBulletin(bulletin);
 
 		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
 		// save report for super regions
@@ -401,9 +354,6 @@ public class AvalancheBulletinController {
 			else
 				avalancheBulletinRepository.delete(loadedBulletin);
 		}
-
-		for (AvalancheBulletin bulletin : resultBulletins.values())
-			initializeBulletin(bulletin);
 
 		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
 		// save report for super regions
@@ -456,9 +406,6 @@ public class AvalancheBulletinController {
 				.anyMatch(bulletin::affectsRegionWithoutSuggestions))
 			.collect(Collectors.toList());
 
-		for (AvalancheBulletin bulletin : results)
-			initializeBulletin(bulletin);
-
 		return results;
 	}
 
@@ -501,9 +448,6 @@ public class AvalancheBulletinController {
 
 			avalancheBulletinRepository.save(bulletin);
 		}
-
-		for (AvalancheBulletin avalancheBulletin : bulletins)
-			initializeBulletin(avalancheBulletin);
 
 		logger.info("Bulletins for region {} submitted", region.getId());
 
@@ -561,11 +505,7 @@ public class AvalancheBulletinController {
 	}
 
 	public List<AvalancheBulletin> getAllBulletins(Instant startDate, Instant endDate) {
-		final List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			initializeBulletin(avalancheBulletin);
-		}
-		return bulletins;
+		return avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 	}
 
 	/**

@@ -60,7 +60,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		implements Comparable<AvalancheBulletin>, HasValidityDate, HasPublicationDate {
 
 	/** Information about the author of the avalanche bulletin */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID")
 	@JsonProperty("author")
 	@JsonSerialize(as = NameAndEmail.class)
@@ -192,7 +192,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private DangerPattern dangerPattern2;
 
 	/** Map containing all text parts available for a bulletin */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@MapKeyEnumerated(EnumType.STRING)
 	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
