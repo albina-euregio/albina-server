@@ -45,7 +45,7 @@ public class RapidMailConfiguration implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE",  length = 191)
-	private LanguageCode lang;
+	private LanguageCode languageCode;
 
 	@Column(name = "MAILINGLIST_NAME", length = 191)
 	private String mailinglistName;
@@ -86,11 +86,11 @@ public class RapidMailConfiguration implements Serializable {
 	}
 
 	public LanguageCode getLanguageCode() {
-		return lang;
+		return languageCode;
 	}
 
 	public void setLanguageCode(LanguageCode lang) {
-		this.lang = lang;
+		this.languageCode = lang;
 	}
 
 	public String getMailinglistName() {
@@ -121,7 +121,7 @@ public class RapidMailConfiguration implements Serializable {
 			.add("region", region)
 			.add("username", username)
 			.add("password", password)
-			.add("lang", lang)
+			.add("lang", languageCode)
 			.add("mailinglistName", mailinglistName)
 			.add("subjectMatter", subjectMatter)
 			.toString();

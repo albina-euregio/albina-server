@@ -42,7 +42,7 @@ public class TelegramConfiguration implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE", length = 191)
-	private LanguageCode lang;
+	private LanguageCode languageCode;
 
 	public Long getId() {
 		return id;
@@ -92,16 +92,16 @@ public class TelegramConfiguration implements Serializable {
 	}
 
 	public LanguageCode getLanguageCode() {
-		return lang;
+		return languageCode;
 	}
 
 	public TelegramConfiguration languageCode(LanguageCode languageCode) {
-		this.lang = languageCode;
+		this.languageCode = languageCode;
 		return this;
 	}
 
 	public void setLanguageCodeId(LanguageCode languageCode) {
-		this.lang = languageCode;
+		this.languageCode = languageCode;
 	}
 
 	@Override

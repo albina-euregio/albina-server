@@ -159,12 +159,12 @@ public class User implements NameAndEmail {
 		this.organization = organization;
 	}
 
-	public LanguageCode getLanguage() {
+	public LanguageCode getLanguageCode() {
 		return languageCode;
 	}
 
-	public void setLanguage(LanguageCode language) {
-		this.languageCode = language;
+	public void setLanguageCode(LanguageCode languageCode) {
+		this.languageCode = languageCode;
 	}
 
 	public boolean isDeleted() {
