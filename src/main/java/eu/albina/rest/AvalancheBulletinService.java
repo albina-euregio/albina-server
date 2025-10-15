@@ -741,7 +741,7 @@ public class AvalancheBulletinService {
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				Set<String> result = avalancheBulletinController.checkBulletins(startDate, endDate, region);
-				return HttpResponse.ok(result);
+				return HttpResponse.ok(new ArrayList<>(result));
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
