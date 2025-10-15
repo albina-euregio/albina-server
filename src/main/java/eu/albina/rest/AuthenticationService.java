@@ -50,54 +50,19 @@ public class AuthenticationService {
 	private UserRepository userRepository;
 
 	@Serdeable
-	public static class Credentials {
-		public String username;
-		public String password;
-
-		public String getUsername() {
-			return username;
-		}
-
-		public void setUsername(String username) {
-			this.username = username;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
+	public record Credentials(String username, String password) {
 	}
 
 	@Serdeable
-	public static class Token {
-		public String access_token;
+	public record Token(String access_token) {
 	}
 
 	@Serdeable
-	public static class AuthenticationResponse {
-		public User user;
-		public Collection<Region> regions;
-		public String access_token;
-
-		public User getUser() {
-			return user;
-		}
-
-		public Collection<Region> getRegions() {
-			return regions;
-		}
-
-		public String getAccess_token() {
-			return access_token;
-		}
+	public record AuthenticationResponse(User user, Collection<Region> regions, String access_token) {
 	}
 
 	@Serdeable
-	public static class Username {
-		public String username;
+	public record Username(String username) {
 	}
 
 	@Post
@@ -115,11 +80,7 @@ public class AuthenticationService {
 			Authentication authentication = Authentication.build(username, roles);
 			AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
 
-			AuthenticationResponse result = new AuthenticationResponse();
-			result.user = user;
-			result.regions = user.getRegions();
-			result.access_token = token.getAccessToken();
-
+			AuthenticationResponse result = new AuthenticationResponse(user, user.getRegions(), token.getAccessToken());
 			return HttpResponse.ok(result);
 		} catch (Exception e) {
 			return HttpResponse.unauthorized();
@@ -144,8 +105,7 @@ public class AuthenticationService {
 		try {
 			String username = principal.getName();
 
-			Username jsonResult = new Username();
-			jsonResult.username = username;
+			Username jsonResult = new Username(username);
 			return HttpResponse.ok(jsonResult);
 		} catch (Exception e) {
 			return HttpResponse.unauthorized();

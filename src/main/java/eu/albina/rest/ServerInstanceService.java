@@ -70,28 +70,7 @@ public class ServerInstanceService {
 	}
 
 	@Serdeable
-	public static class PublicLocalServerConfiguration {
-		public final String name;
-		public final String apiUrl;
-		public final String version;
-
-		public PublicLocalServerConfiguration(String name, String apiUrl, String version) {
-			this.name = name;
-			this.apiUrl = apiUrl;
-			this.version = version;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public String getApiUrl() {
-			return apiUrl;
-		}
-
-		public String getVersion() {
-			return version;
-		}
+	public record PublicLocalServerConfiguration(String name, String apiUrl, String version) {
 	}
 
 	@Get("/info")

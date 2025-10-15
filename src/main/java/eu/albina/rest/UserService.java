@@ -137,38 +137,11 @@ public class UserService {
 	}
 
 	@Serdeable
-	static class ChangePassword {
-		public String oldPassword;
-		public String newPassword;
-
-		public String getOldPassword() {
-			return oldPassword;
-		}
-
-		public void setOldPassword(String oldPassword) {
-			this.oldPassword = oldPassword;
-		}
-
-		public String getNewPassword() {
-			return newPassword;
-		}
-
-		public void setNewPassword(String newPassword) {
-			this.newPassword = newPassword;
-		}
+	public record ChangePassword(String oldPassword, String newPassword) {
 	}
 
 	@Serdeable
-	static class ResetPassword {
-		public String newPassword;
-
-		public String getNewPassword() {
-			return newPassword;
-		}
-
-		public void setNewPassword(String newPassword) {
-			this.newPassword = newPassword;
-		}
+	public record ResetPassword(String newPassword) {
 	}
 
 	@Put("/change")
@@ -190,16 +163,7 @@ public class UserService {
 	}
 
 	@Serdeable
-	static class CheckPassword {
-		public String password;
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
+	public record CheckPassword(String password) {
 	}
 
 	@Put("/check")

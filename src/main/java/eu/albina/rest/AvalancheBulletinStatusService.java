@@ -46,28 +46,7 @@ public class AvalancheBulletinStatusService {
 	RegionRepository regionRepository;
 
 	@Serdeable
-	static class Status {
-		public final Instant date;
-		public final BulletinStatus status;
-		public final AvalancheReport report;
-
-		public Status(Instant date, BulletinStatus status, AvalancheReport report) {
-			this.date = date;
-			this.status = status;
-			this.report = report;
-		}
-
-		public Instant getDate() {
-			return date;
-		}
-
-		public BulletinStatus getStatus() {
-			return status;
-		}
-
-		public AvalancheReport getReport() {
-			return report;
-		}
+	public record Status(Instant date, BulletinStatus status, AvalancheReport report) {
 	}
 
 	@Get

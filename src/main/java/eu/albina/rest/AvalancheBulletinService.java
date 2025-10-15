@@ -43,6 +43,7 @@ import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.RateLimiter;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -241,8 +242,8 @@ public class AvalancheBulletinService {
 		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 	}
 
-	static class LatestBulletin {
-		public Instant date;
+	@Serdeable
+	public record LatestBulletin(Instant date) {
 	}
 
 	@Get("/latest")
@@ -251,9 +252,7 @@ public class AvalancheBulletinService {
 	public HttpResponse<?> getLatest() {
 		logger.debug("GET latest date");
 		try {
-			LatestBulletin json = new LatestBulletin();
-			json.date = avalancheReportController.getLatestDate();
-
+			LatestBulletin json = new LatestBulletin(avalancheReportController.getLatestDate());
 			return HttpResponse.ok(json);
 		} catch (AlbinaException e) {
 			logger.warn("Error loading latest date", e);
@@ -344,8 +343,8 @@ public class AvalancheBulletinService {
 		return HttpResponse.ok(bulletins);
 	}
 
-	static class Highest {
-		public DangerRating dangerRating;
+	@Serdeable
+	public record Highest(DangerRating dangerRating) {
 	}
 
 	@Get("/highest")
@@ -369,8 +368,7 @@ public class AvalancheBulletinService {
 			DangerRating highestDangerRating = avalancheBulletinController
 				.getHighestDangerRating(startDate, regions);
 
-			Highest jsonResult = new Highest();
-			jsonResult.dangerRating = highestDangerRating;
+			Highest jsonResult = new Highest(highestDangerRating);
 			return HttpResponse.ok(jsonResult);
 		} catch (AlbinaException e) {
 			logger.warn("Error loading highest danger rating", e);

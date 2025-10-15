@@ -44,36 +44,7 @@ public class SubscriptionService {
 	private RapidMailController rapidMailController;
 
 	@Serdeable
-	static class EmailSubscription {
-		public String email;
-
-		public String regions;
-
-		public LanguageCode language;
-
-		public String getEmail() {
-			return email;
-		}
-
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
-		public String getRegions() {
-			return regions;
-		}
-
-		public void setRegions(String regions) {
-			this.regions = regions;
-		}
-
-		public LanguageCode getLanguage() {
-			return language;
-		}
-
-		public void setLanguage(LanguageCode language) {
-			this.language = language;
-		}
+	public record EmailSubscription(String email, String regions, LanguageCode language) {
 	}
 
 	@Post("/subscribe")
