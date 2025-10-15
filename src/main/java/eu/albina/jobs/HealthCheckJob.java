@@ -9,7 +9,9 @@ import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
+import io.micronaut.scheduling.annotation.Scheduled;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +20,7 @@ import org.slf4j.LoggerFactory;
  * Also serves the purpose of keeping whapi.cloud channels active enough to not get deactivated during the off-season.
  *
  */
+@Singleton
 public class HealthCheckJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(HealthCheckJob.class);
@@ -34,6 +37,7 @@ public class HealthCheckJob {
 	@Inject
 	TelegramController telegramController;
 
+	@Scheduled(cron = "0 0 4 * * ?")
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
 		for (Region region : regionRepository.getPublishBulletinRegions()) {

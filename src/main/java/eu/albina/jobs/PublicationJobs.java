@@ -1,21 +1,19 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-package eu.albina.util;
+/*
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+package eu.albina.jobs;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
-import eu.albina.jobs.HealthCheckJob;
-import eu.albina.jobs.PublicationJob;
-import eu.albina.jobs.TmpDeletionJob;
-import eu.albina.jobs.UpdateJob;
 import io.micronaut.scheduling.annotation.Scheduled;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 @Singleton
-public class SchedulerUtil {
+public class PublicationJobs {
 
 	@Inject
 	PublicationController publicationController;
@@ -40,15 +38,5 @@ public class SchedulerUtil {
 	@Scheduled(cron = "0 0 8 * * ?")
 	public void triggerUpdate() {
 		new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance()).execute();
-	}
-
-	@Scheduled(cron = "0 0 3 * * ?")
-	public void triggerTmpDeletion() {
-		new TmpDeletionJob().execute();
-	}
-
-	@Scheduled(cron = "0 0 4 * * ?")
-	public void triggerHealthCheck() {
-		new HealthCheckJob().execute();
 	}
 }

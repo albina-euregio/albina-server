@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.google.common.base.StandardSystemProperty;
+import io.micronaut.scheduling.annotation.Scheduled;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +21,7 @@ import com.google.common.io.MoreFiles;
  * @author Norbert Lanzanasto
  *
  */
+@Singleton
 public class TmpDeletionJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(TmpDeletionJob.class);
@@ -26,6 +29,7 @@ public class TmpDeletionJob {
 	/**
 	 * Execute all necessary tasks to delete tmp files.
 	 */
+	@Scheduled(cron = "0 0 3 * * ?")
 	public void execute() {
 		logger.info("TmpDeletion job triggered!");
 		try {
