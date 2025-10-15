@@ -36,19 +36,10 @@ public class BlogController {
 	Wordpress wordpress;
 
 	@Inject
-	WhatsAppController whatsAppController;
-
-	@Inject
-	PushNotificationUtil pushNotificationUtil;
-
-	@Inject
 	BlogConfigurationRepository blogConfigurationRepository;
 
 	@Inject
-	TelegramController telegramController;
-
-	@Inject
-	private RapidMailController rapidMailController;
+	PublicationController publicationController;
 
 	@Repository
 	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
@@ -131,7 +122,7 @@ public class BlogController {
 
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
-			posting.sendToAllChannels(rapidMailController, telegramController, whatsAppController, pushNotificationUtil);
+			posting.sendToAllChannels(publicationController);
 			updateConfigurationLastPublished(config, object);
 		}
 	}
@@ -156,10 +147,10 @@ public class BlogController {
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
 			posting.tryRunWithLogging("Email newsletter", () -> {
-				RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
+				RapidMailConfiguration mailConfig = publicationController.rapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
 					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));
 				mailConfig.setRegion(regionOverride);
-				rapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
+				publicationController.rapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
 				return null;
 			});
 			updateConfigurationLastPublished(config, object);

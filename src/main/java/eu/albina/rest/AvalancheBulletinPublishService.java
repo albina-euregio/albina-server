@@ -11,14 +11,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.PublicationController;
+import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
-import eu.albina.controller.publication.PushNotificationUtil;
-import eu.albina.controller.publication.RapidMailController;
-import eu.albina.controller.publication.TelegramController;
-import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -68,18 +64,6 @@ public class AvalancheBulletinPublishService {
 
 	@Inject
 	private UserRepository userRepository;
-
-	@Inject
-	private WhatsAppController whatsAppController;
-
-	@Inject
-	private PushNotificationUtil pushNotificationUtil;
-
-	@Inject
-	private TelegramController telegramController;
-
-	@Inject
-	private RapidMailController rapidMailController;
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
@@ -176,7 +160,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendMails(rapidMailController);
+				posting.sendMails(publicationController);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
@@ -197,7 +181,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendTelegramMessage(telegramController);
+				posting.sendTelegramMessage(publicationController);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
@@ -218,7 +202,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST trigger whatsapp channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendWhatsAppMessage(whatsAppController);
+				posting.sendWhatsAppMessage(publicationController);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
@@ -239,7 +223,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
-				posting.sendPushNotifications(pushNotificationUtil);
+				posting.sendPushNotifications(publicationController);
 			}
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {

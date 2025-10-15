@@ -34,7 +34,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.PublicationController;
+import eu.albina.controller.publication.PublicationController;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;

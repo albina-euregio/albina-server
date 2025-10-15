@@ -3,7 +3,7 @@ package eu.albina.util;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.PublicationController;
+import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.jobs.HealthCheckJob;

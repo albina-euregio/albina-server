@@ -57,55 +57,55 @@ public interface MultichannelMessage {
 			.toString();
 	}
 
-	default void sendToAllChannels(RapidMailController rapidMailController, TelegramController telegramController, WhatsAppController whatsAppController, PushNotificationUtil pushNotificationUtil) {
-		sendMails(rapidMailController);
-		sendTelegramMessage(telegramController);
-		sendWhatsAppMessage(whatsAppController);
-		sendPushNotifications(pushNotificationUtil);
+	default void sendToAllChannels(PublicationController publicationController) {
+		sendMails(publicationController);
+		sendTelegramMessage(publicationController);
+		sendWhatsAppMessage(publicationController);
+		sendPushNotifications(publicationController);
 	}
 
-	default void sendMails(RapidMailController rapidMailController) {
+	default void sendMails(PublicationController publicationController) {
 		if (!getRegion().isSendEmails()) {
 			return;
 		}
 		tryRunWithLogging("Email newsletter", () -> {
-			RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(getRegion(), getLanguageCode(), null)
+			RapidMailConfiguration mailConfig = publicationController.rapidMailController.getConfiguration(getRegion(), getLanguageCode(), null)
 				.orElseThrow(() -> new NoSuchElementException(String.format("No RapidMailConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			rapidMailController.sendEmail(mailConfig, getHtmlMessage(), getSubject());
+			publicationController.rapidMailController.sendEmail(mailConfig, getHtmlMessage(), getSubject());
 			return null;
 		});
 	}
 
-	default void sendTelegramMessage(TelegramController telegramController) {
+	default void sendTelegramMessage(PublicationController publicationController) {
 		if (!getRegion().isSendTelegramMessages()) {
 			return;
 		}
 		tryRunWithLogging("Telegram message", () -> {
-			TelegramConfiguration telegramConfig = telegramController.getConfiguration(getRegion(), getLanguageCode()).
+			TelegramConfiguration telegramConfig = publicationController.telegramController.getConfiguration(getRegion(), getLanguageCode()).
 				orElseThrow(() -> new NoSuchElementException(String.format("No TelegramConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			telegramController.trySend(telegramConfig, this, 3);
+			publicationController.telegramController.trySend(telegramConfig, this, 3);
 			return null;
 		});
 	}
 
-	default void sendWhatsAppMessage(WhatsAppController whatsAppController) {
+	default void sendWhatsAppMessage(PublicationController publicationController) {
 		if (!getRegion().isSendWhatsAppMessages()) {
 			return;
 		}
 		tryRunWithLogging("WhatsApp message", () -> {
-			WhatsAppConfiguration whatsAppConfig = whatsAppController.getConfiguration(getRegion(), getLanguageCode()).
+			WhatsAppConfiguration whatsAppConfig = publicationController.whatsAppController.getConfiguration(getRegion(), getLanguageCode()).
 				orElseThrow(() -> new NoSuchElementException(String.format("No WhatsAppConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			whatsAppController.trySend(whatsAppConfig, this, 3);
+			publicationController.whatsAppController.trySend(whatsAppConfig, this, 3);
 			return null;
 		});
 	}
 
-	default void sendPushNotifications(PushNotificationUtil pushNotificationUtil) {
+	default void sendPushNotifications(PublicationController publicationController) {
 		if (!getRegion().isSendPushNotifications()) {
 			return;
 		}
 		tryRunWithLogging("Push notifications", () -> {
-			pushNotificationUtil.send(this);
+			publicationController.pushNotificationUtil.send(this);
 			return null;
 		});
 	}

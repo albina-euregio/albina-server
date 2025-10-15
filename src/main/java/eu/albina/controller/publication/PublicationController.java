@@ -1,12 +1,11 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
-package eu.albina.controller;
+/*
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+package eu.albina.controller.publication;
 
 import java.io.IOException;
 
-import eu.albina.controller.publication.PushNotificationUtil;
-import eu.albina.controller.publication.RapidMailController;
-import eu.albina.controller.publication.TelegramController;
-import eu.albina.controller.publication.WhatsAppController;
+import eu.albina.controller.AvalancheReportController;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -17,7 +16,6 @@ import com.google.common.base.Stopwatch;
 
 import eu.albina.caaml.Caaml;
 import eu.albina.caaml.CaamlVersion;
-import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -40,22 +38,22 @@ public class PublicationController {
 	Caaml caaml;
 
 	@Inject
-	AvalancheReportController avalancheReportController;
+	private AvalancheReportController avalancheReportController;
 
 	@Inject
-	private WhatsAppController whatsAppController;
+	WhatsAppController whatsAppController;
 
 	@Inject
-	private PushNotificationUtil pushNotificationUtil;
+	PushNotificationUtil pushNotificationUtil;
 
 	@Inject
-	private TelegramController telegramController;
+	TelegramController telegramController;
 
 	@Inject
-	private RapidMailController rapidMailController;
+	RapidMailController rapidMailController;
 
 	@Inject
-	private TextToSpeech textToSpeech;
+	TextToSpeech textToSpeech;
 
 	@Inject
 	private ObjectMapper objectMapper;
@@ -210,7 +208,7 @@ public class PublicationController {
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			MultichannelMessage posting = MultichannelMessage.of(avalancheReport, lang);
 			try {
-				posting.sendToAllChannels(rapidMailController, telegramController, whatsAppController, pushNotificationUtil);
+				posting.sendToAllChannels(this);
 				AvalancheReportController c = avalancheReportController;
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setEmailCreated);
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setTelegramSent);

@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import eu.albina.controller.RegionRepository;
+import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.controller.publication.RapidMailController;
 import eu.albina.controller.publication.TelegramController;
@@ -37,19 +38,10 @@ public class BlogService {
 	RegionRepository regionRepository;
 
 	@Inject
-	private WhatsAppController whatsAppController;
-
-	@Inject
-	private PushNotificationUtil pushNotificationUtil;
-
-	@Inject
 	BlogController blogController;
 
 	@Inject
-	private TelegramController telegramController;
-
-	@Inject
-	private RapidMailController rapidMailController;
+	private PublicationController publicationController;
 
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
@@ -60,7 +52,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendToAllChannels(rapidMailController, telegramController, whatsAppController, pushNotificationUtil);
+			posting.sendToAllChannels(publicationController);
 
 			return HttpResponse.ok("{}");
 		} catch (Exception e) {
@@ -78,7 +70,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendMails(rapidMailController);
+			posting.sendMails(publicationController);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
@@ -99,7 +91,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendTelegramMessage(telegramController);
+			posting.sendTelegramMessage(publicationController);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
@@ -120,7 +112,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendWhatsAppMessage(whatsAppController);
+			posting.sendWhatsAppMessage(publicationController);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
@@ -141,7 +133,7 @@ public class BlogService {
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendPushNotifications(pushNotificationUtil);
+			posting.sendPushNotifications(publicationController);
 
 			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
