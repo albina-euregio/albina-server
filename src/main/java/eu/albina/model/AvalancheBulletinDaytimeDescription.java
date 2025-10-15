@@ -339,6 +339,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		return terrainFeatureTextcat;
 	}
 
+	@JsonIgnore
 	boolean isDangerLevelElevationDependency() {
 		return serverInstance == null || serverInstance.isDangerLevelElevationDependency();
 	}
