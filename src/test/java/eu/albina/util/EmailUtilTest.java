@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import static eu.albina.RegionTestUtils.regionAran;
-import static eu.albina.RegionTestUtils.regionTyrol;
-
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import eu.albina.RegionTestUtils;
 import eu.albina.model.AvalancheBulletinTest;
+import eu.albina.model.Region;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,16 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 public class EmailUtilTest {
+
+	@Inject
+	RegionTestUtils regionTestUtils;
 
 	private ServerInstance serverInstanceEuregio;
 	private ServerInstance serverInstanceAran;
+	private Region regionTyrol;
+	private Region regionAran;
 
 	@BeforeEach
 	public void setUp() throws IOException {
@@ -37,7 +44,9 @@ public class EmailUtilTest {
 		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
 		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
 		serverInstanceAran.setPdfDirectory("/mnt/albina_files_local/");
+		regionTyrol = regionTestUtils.regionTyrol();
 		regionTyrol.setServerInstance(serverInstanceEuregio);
+		regionAran = regionTestUtils.regionAran();
 		regionAran.setServerInstance(serverInstanceAran);
 	}
 

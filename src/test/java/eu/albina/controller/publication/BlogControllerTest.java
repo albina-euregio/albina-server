@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
-import static eu.albina.RegionTestUtils.regionSouthTyrol;
-import static eu.albina.RegionTestUtils.regionTyrol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import eu.albina.RegionTestUtils;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assumptions;
@@ -29,13 +28,16 @@ public class BlogControllerTest {
 	@Inject
 	BlogController blogController;
 
+	@Inject
+	RegionTestUtils regionTestUtils;
+
 	@Test
 	void testWordpress() throws Exception {
 		BlogConfiguration config = new BlogConfiguration();
 		config.setBlogApiUrl("https://blog.avalanche.report/at-07/wp-json/wp/v2/");
 		config.setLanguageCode(LanguageCode.de);
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
-		config.setRegion(regionTyrol);
+		config.setRegion(regionTestUtils.regionTyrol());
 		List<? extends BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
@@ -52,7 +54,7 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testBlogPosts() throws Exception {
-		BlogConfiguration config = blogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
+		BlogConfiguration config = blogController.getConfiguration(regionTestUtils.regionTyrol(), LanguageCode.de).orElseThrow();
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
 		List<? extends BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
@@ -63,7 +65,7 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testLatestBlogPost() throws Exception {
-		BlogConfiguration config = blogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
+		BlogConfiguration config = blogController.getConfiguration(regionTestUtils.regionTyrol(), LanguageCode.de).orElseThrow();
 		BlogItem blogItem = blogController.getLatestBlogPost(config);
 		assertTrue(blogItem.getContent().length() > 100, "blog has >100 chars");
 	}
@@ -71,7 +73,7 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testBlogPost() throws Exception {
-        BlogConfiguration configuration = blogController.getConfiguration(regionTyrol, LanguageCode.de).orElseThrow();
+        BlogConfiguration configuration = blogController.getConfiguration(regionTestUtils.regionTyrol(), LanguageCode.de).orElseThrow();
 		String blogPost = blogController.getBlogPost(configuration, "1227558273754407795").getContent();
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 	}
@@ -79,7 +81,7 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testTicket150() throws Exception {
-		BlogConfiguration config = blogController.getConfiguration(regionSouthTyrol, LanguageCode.de).orElseThrow();
+		BlogConfiguration config = blogController.getConfiguration(regionTestUtils.regionSouthTyrol(), LanguageCode.de).orElseThrow();
 		String blogPost = blogController.getBlogPost(config, "4564885875858452565").getContent();
 		assertTrue(blogPost.contains("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
 	}

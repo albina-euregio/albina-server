@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import static eu.albina.RegionTestUtils.regionEuregio;
-
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -38,7 +36,11 @@ public class AvalancheReportTest {
 	private final ServerInstance serverInstanceEuregio = new ServerInstance();
 
 	@Inject
+	RegionTestUtils regionTestUtils;
+
+	@Inject
 	ObjectMapper objectMapper;
+	private Region regionEuregio;
 
 	@Test
 	public void testIsUpdate() throws Exception {
@@ -68,6 +70,7 @@ public class AvalancheReportTest {
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
+		regionEuregio = regionTestUtils.regionEuregio();
 		regionEuregio.setServerInstance(serverInstanceEuregio);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Assertions.assertEquals("16.01.2019, 17:00:00", avalancheReport.getPublicationDate(LanguageCode.de));
@@ -135,7 +138,7 @@ public class AvalancheReportTest {
 		serverInstanceEuregio.setHtmlDirectory(folder.toString());
 		serverInstanceEuregio.setMapsPath(folder.toString());
 		serverInstanceEuregio.setPdfDirectory(folder.toString());
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, RegionTestUtils.regionTyrol, serverInstanceEuregio);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTestUtils.regionTyrol(), serverInstanceEuregio);
 		avalancheReport.createJsonFile(objectMapper);
 	}
 }

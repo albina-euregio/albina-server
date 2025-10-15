@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import static eu.albina.RegionTestUtils.regionTyrol;
-
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,6 +8,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import eu.albina.RegionTestUtils;
 import eu.albina.model.AvalancheBulletinTest;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -29,12 +28,15 @@ import eu.albina.model.enumerations.LanguageCode;
 class TextToSpeechTest {
 
 	@Inject
+	RegionTestUtils regionTestUtils;
+
+	@Inject
 	TextToSpeech textToSpeech;
 
-	private static void toCAAMLv6(String bulletinResource) throws Exception {
+	private void toCAAMLv6(String bulletinResource) throws Exception {
 		URL resource = Resources.getResource(bulletinResource);
 		List<AvalancheBulletin> bulletins = AvalancheBulletinTest.readBulletinsUsingJackson(resource);
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, null);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTestUtils.regionTyrol(), null);
 		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
 			String ssml = caaml.getBulletins().stream()

@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.caaml;
 
-import static eu.albina.RegionTestUtils.regionEuregio;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -15,8 +13,10 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import eu.albina.RegionTestUtils;
 import eu.albina.controller.RegionRepository;
 import eu.albina.model.AvalancheBulletinTest;
+import eu.albina.model.Region;
 import eu.albina.util.JsonUtil;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -39,10 +39,13 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 
-@MicronautTest()
+@MicronautTest
 public class CaamlTest {
 
 	private ServerInstance serverInstanceEuregio;
+
+	@Inject
+	RegionTestUtils regionTestUtils;
 
 	@Inject
 	Caaml caaml;
@@ -52,12 +55,14 @@ public class CaamlTest {
 
 	@Inject
 	private RegionRepository regionRepository;
+	private Region regionEuregio;
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		serverInstanceEuregio = new ServerInstance();
 		serverInstanceEuregio.setHtmlDirectory("/foo/bar/baz/simple/");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins/");
+		regionEuregio = regionTestUtils.regionEuregio();
 	}
 
 	private String createCaaml(CaamlVersion version) throws Exception {

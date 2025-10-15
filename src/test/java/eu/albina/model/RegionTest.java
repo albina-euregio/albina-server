@@ -19,6 +19,9 @@ import eu.albina.RegionTestUtils;
 public class RegionTest {
 
 	@Inject
+	RegionTestUtils regionTestUtils;
+
+	@Inject
 	ObjectMapper objectMapper;
 
 	@BeforeEach
@@ -29,7 +32,7 @@ public class RegionTest {
 	@Test
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("region_AT-07.json"), StandardCharsets.UTF_8);
-		Region region = RegionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
+		Region region = regionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
 		String json = objectMapper.writeValueAsString(region);
 		JsonAssert.assertJsonEquals(expected, json);
 	}

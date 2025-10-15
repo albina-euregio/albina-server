@@ -294,7 +294,7 @@ public class Region implements PersistentObject {
 		this();
 
 		// Use Jackson to populate all "normal" fields
-		JsonNode node = JsonNode.from(json);
+		JsonNode node = objectMapper.readValue(json, JsonNode.class);
 		objectMapper.updateValueFromTree(this, node);
 
 		fixLanguageConfigurations();

@@ -1,11 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.map;
 
-import static eu.albina.RegionTestUtils.regionAran;
-import static eu.albina.RegionTestUtils.regionEuregio;
-import static eu.albina.RegionTestUtils.regionSouthTyrol;
-import static eu.albina.RegionTestUtils.regionTrentino;
-import static eu.albina.RegionTestUtils.regionTyrol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URL;
@@ -19,7 +14,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.base.StandardSystemProperty;
+import eu.albina.RegionTestUtils;
 import eu.albina.model.AvalancheBulletinTest;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -35,10 +33,19 @@ import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.PdfUtil;
 
+@MicronautTest
 public class MapUtilTest {
+
+	@Inject
+	RegionTestUtils regionTestUtils;
 
 	private ServerInstance serverInstance;
 	private Path folder;
+	private Region regionAran;
+	private Region regionEuregio;
+	private Region regionSouthTyrol;
+	private Region regionTrentino;
+	private Region regionTyrol;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -48,6 +55,11 @@ public class MapUtilTest {
 		serverInstance.setMapsPath(folder.toString());
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 		serverInstance.setPdfDirectory(folder.toString());
+		regionAran = regionTestUtils.regionAran();
+		regionEuregio = regionTestUtils.regionEuregio();
+		regionSouthTyrol = regionTestUtils.regionSouthTyrol();
+		regionTrentino = regionTestUtils.regionTrentino();
+		regionTyrol = regionTestUtils.regionTyrol();
 	}
 
 	private Path getRelativePath(Path path) {

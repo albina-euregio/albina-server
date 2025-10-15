@@ -5,25 +5,46 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import com.google.common.io.Resources;
 
 import eu.albina.model.Region;
 import io.micronaut.serde.ObjectMapper;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
-public interface RegionTestUtils {
+@Singleton
+public class RegionTestUtils {
 
-	Region regionEuregio = readRegion(Resources.getResource("region_EUREGIO.json"));
-	Region regionTyrol = readRegion(Resources.getResource("region_AT-07.json"));
-	Region regionCarinthia = readRegion(Resources.getResource("region_AT-02.json"));
-	Region regionSouthTyrol = readRegion(Resources.getResource("region_IT-32-BZ.json"));
-	Region regionTrentino = readRegion(Resources.getResource("region_IT-32-TN.json"));
-	Region regionAran = readRegion(Resources.getResource("region_ES-CT-L.json"));
+	@Inject
+	ObjectMapper objectMapper;
 
-	static Region readRegion(URL resource) throws UncheckedIOException {
+	public Region regionEuregio() {
+		return readRegion(Resources.getResource("region_EUREGIO.json"));
+	}
+
+	public Region regionTyrol() {
+		return readRegion(Resources.getResource("region_AT-07.json"));
+	}
+
+	public Region regionCarinthia() {
+		return readRegion(Resources.getResource("region_AT-02.json"));
+	}
+
+	public Region regionSouthTyrol() {
+		return readRegion(Resources.getResource("region_IT-32-BZ.json"));
+	}
+
+	public Region regionTrentino() {
+		return readRegion(Resources.getResource("region_IT-32-TN.json"));
+	}
+
+	public Region regionAran() {
+		return readRegion(Resources.getResource("region_ES-CT-L.json"));
+	}
+
+	public Region readRegion(URL resource) throws UncheckedIOException {
 		try {
-			ObjectMapper objectMapper = ObjectMapper.create(Map.of(), "eu.albina"); // FIXME
 			return new Region(Resources.toString(resource, StandardCharsets.UTF_8), Region::new, objectMapper);
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
