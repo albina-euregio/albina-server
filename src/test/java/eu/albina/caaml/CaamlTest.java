@@ -85,7 +85,7 @@ public class CaamlTest {
 		final String expected = Resources
 				.toString(Resources.getResource("2019-01-16.caaml.v5.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
 		final String xml = createCaaml(CaamlVersion.V5);
-		assertCustomEquals(expected, xml);
+		assertCustomEquals(expected, xml, CaamlVersion.V5);
 	}
 
 	@Disabled
@@ -158,21 +158,16 @@ public class CaamlTest {
 		String caaml = this.caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
         String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
-		assertCustomEquals(expected, caaml);
+		assertCustomEquals(expected, caaml, version);
 		CaamlValidator.validateCaamlBulletin(caaml, version);
 	}
 
-	public static void assertCustomEquals(String expected, String actual) {
-		if (looksLikeJson(expected) && looksLikeJson(actual)) {
+	public static void assertCustomEquals(String expected, String actual, CaamlVersion version) {
+		if (version == CaamlVersion.V6_JSON) {
 			JsonAssert.assertJsonEquals(expected, actual);
 		} else {
 			Assertions.assertEquals(expected, actual);
 		}
-	}
-
-	private static boolean looksLikeJson(String s) {
-		s = s.trim();
-		return (s.startsWith("{") && s.endsWith("}")) || (s.startsWith("[") && s.endsWith("]"));
 	}
 
 	@Test
