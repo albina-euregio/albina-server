@@ -11,7 +11,9 @@ import java.time.temporal.ChronoUnit;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.core.annotation.Introspected;
 
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public interface HasPublicationDate {
 
 	ZonedDateTime getPublicationDate();
