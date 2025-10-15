@@ -10,6 +10,7 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DangerRatingModificator;
 import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.SnowpackStability;
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -21,6 +22,7 @@ import java.util.Comparator;
 @Embeddable
 @Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public class EawsMatrixInformation implements Comparable<EawsMatrixInformation> {
 
 	@Enumerated(EnumType.STRING)

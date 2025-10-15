@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.type.Argument;
 import io.micronaut.json.tree.JsonNode;
 import io.micronaut.serde.Decoder;
@@ -52,6 +53,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "regions")
 @Serdeable
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public class Region implements PersistentObject {
 
 	@Singleton

@@ -26,6 +26,7 @@ import eu.albina.model.enumerations.StrategicMindset;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -56,6 +57,7 @@ import jakarta.persistence.Table;
 @Serdeable
 @JsonView({JsonUtil.Views.Public.class, JsonUtil.Views.Internal.class})
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public class AvalancheBulletin extends AbstractPersistentObject
 		implements Comparable<AvalancheBulletin>, HasValidityDate, HasPublicationDate {
 
