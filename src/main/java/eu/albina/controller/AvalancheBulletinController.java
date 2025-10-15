@@ -3,6 +3,7 @@ package eu.albina.controller;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,6 +16,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
+import eu.albina.util.AlbinaUtil;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -55,6 +59,15 @@ public class AvalancheBulletinController {
 
 	@Inject
 	private UserRepository userRepository;
+
+	@Repository
+	public interface AvalancheBulletinRepository extends CrudRepository<AvalancheBulletin, String> {
+		List<AvalancheBulletin> findByValidFromOrValidUntil(ZonedDateTime startDate, ZonedDateTime endDate);
+
+		default List<AvalancheBulletin> findByValidFromOrValidUntil(Instant startDate, Instant endDate) {
+			return findByValidFromOrValidUntil(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate));
+		}
+	}
 
 	/**
 	 * Retrieve an avalanche bulletin from the database by {@code bulletinID}.
@@ -740,5 +753,4 @@ public class AvalancheBulletinController {
 			.filter(bulletinLock -> bulletinLock.getDate().equals(date))
 			.collect(Collectors.toList());
 	}
-
 }

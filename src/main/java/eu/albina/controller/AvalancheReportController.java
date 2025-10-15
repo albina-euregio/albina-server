@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,11 +15,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.JsonUtil;
+import io.micronaut.data.annotation.Join;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -55,6 +60,27 @@ public class AvalancheReportController {
 
 	@Inject
 	ObjectMapper objectMapper;
+
+	@Repository
+	public interface AvalancheReportRepository extends CrudRepository<AvalancheReport, String> {
+
+		@Join(value = "user", type = Join.Type.FETCH)
+		List<AvalancheReport> findByDateAndRegion(ZonedDateTime date, Region region);
+
+		default List<AvalancheReport> findByDateAndRegion(Instant date, Region region) {
+			return findByDateAndRegion(AlbinaUtil.getZonedDateTimeUtc(date), region);
+		}
+
+		@Join(value = "user", type = Join.Type.FETCH)
+		List<AvalancheReport> findByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
+
+		default List<AvalancheReport> findByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
+			return findByDateBetweenAndRegion(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate), region);
+		}
+
+		AvalancheReport findFirstByStatusInOrderByDateDesc(Set<BulletinStatus> status);
+
+	}
 
 	/**
 	 * Return the actual status of the bulletins for every day in a given time
