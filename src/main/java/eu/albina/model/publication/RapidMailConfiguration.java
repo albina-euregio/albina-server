@@ -26,7 +26,6 @@ import jakarta.persistence.Table;
 public class RapidMailConfiguration implements Serializable {
 
     public static final String TECH_SUBJECT_MATTER = "tech";
-    private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")

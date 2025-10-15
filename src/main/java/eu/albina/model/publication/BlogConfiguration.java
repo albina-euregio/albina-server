@@ -31,8 +31,6 @@ public class BlogConfiguration implements Serializable {
 		return "https://www.googleapis.com/blogger/v3/blogs/".equals(blogApiUrl);
 	}
 
-	private static final long serialVersionUID = 1L;
-
 	@Id
 	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

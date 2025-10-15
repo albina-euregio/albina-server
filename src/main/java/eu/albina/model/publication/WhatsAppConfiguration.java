@@ -23,8 +23,6 @@ import jakarta.persistence.Table;
 @Serdeable
 public class WhatsAppConfiguration implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-
 	@Id
 	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
