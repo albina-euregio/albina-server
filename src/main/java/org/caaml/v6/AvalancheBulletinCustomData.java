@@ -3,11 +3,13 @@ package org.caaml.v6;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
+@JsonPropertyOrder(alphabetic = true)
 public class AvalancheBulletinCustomData {
 	private final ALBINA ALBINA;
 	private final LwdTyrol LWD_Tyrol;
