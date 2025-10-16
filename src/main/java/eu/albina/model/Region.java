@@ -11,18 +11,10 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.core.type.Argument;
 import io.micronaut.json.tree.JsonNode;
-import io.micronaut.serde.Decoder;
-import io.micronaut.serde.Deserializer;
-import io.micronaut.serde.Encoder;
 import io.micronaut.serde.ObjectMapper;
-import io.micronaut.serde.Serializer;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.inject.Singleton;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
