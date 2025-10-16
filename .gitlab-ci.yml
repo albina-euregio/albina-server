@@ -63,8 +63,8 @@ deploy to development:
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
         - mvn $MAVEN_PROFILE install -Dmaven.test.skip=true
-        - rsync -avz -e 'ssh -p2201' target/albina-$GIT_VERSION.jar $SSH_SERVER:$JAR_PATH
-        - ssh -p2201 $SSH_SERVER 'sudo /usr/bin/systemctl restart $SYSTEMD_SERVICE'
+        - rsync -avz -e "ssh -p2201" target/albina-$GIT_VERSION.jar $SSH_SERVER:$JAR_PATH
+        - ssh -p2201 $SSH_SERVER "sudo /usr/bin/systemctl restart $SYSTEMD_SERVICE"
     environment:
         name: development
     rules:
