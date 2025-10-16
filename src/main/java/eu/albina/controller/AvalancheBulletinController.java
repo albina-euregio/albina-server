@@ -21,7 +21,6 @@ import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +89,6 @@ public class AvalancheBulletinController {
 	 * @return a map of all affected bulletin ids and bulletins
 	 * @throws AlbinaException if a micro region is defined twice in the bulletins
 	 */
-	@Transactional
 	public synchronized Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> newBulletins, Instant startDate,
 																	 Instant endDate, Region region, User user) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
@@ -289,7 +287,6 @@ public class AvalancheBulletinController {
 	 * @param region    the active region of the user who is updating the bulletin
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
-	@Transactional
 	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate, Region region, User user) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
 
@@ -341,7 +338,6 @@ public class AvalancheBulletinController {
 	 * @param region    the active region of the user who is deleting the bulletin
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
-	@Transactional
 	public synchronized Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
 																	  Region region, User user) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
@@ -420,7 +416,6 @@ public class AvalancheBulletinController {
 	 * @param user      the user who submits the bulletins
 	 * @return a list of all bulletins
 	 */
-	@Transactional
 	public List<AvalancheBulletin> submitBulletins(Instant startDate, Instant endDate, Region region, User user) {
 		List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 
@@ -465,7 +460,6 @@ public class AvalancheBulletinController {
 	 * @param publicationDate the timestamp of the publication
 	 * @param username        the user who publishes the bulletins
 	 */
-	@Transactional
 	public void publishBulletins(Instant startDate, Instant endDate, Region region,
 								 Instant publicationDate, String username) {
 

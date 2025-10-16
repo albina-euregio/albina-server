@@ -443,6 +443,7 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update bulletin")
 	@JsonView(JsonUtil.Views.Internal.class)
+	@Transactional
 	public HttpResponse<?> updateJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -599,6 +600,7 @@ public class AvalancheBulletinService {
 	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Change bulletins")
+	@Transactional
 	public HttpResponse<?> changeBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Body AvalancheBulletin[] bulletinsArray,
@@ -680,6 +682,7 @@ public class AvalancheBulletinService {
 	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Submit bulletins")
+	@Transactional
 	public HttpResponse<?> submitBulletins(@QueryValue("region") String regionId,
 									@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 										   Principal principal) {
