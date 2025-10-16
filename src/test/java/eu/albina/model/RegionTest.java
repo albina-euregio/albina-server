@@ -11,6 +11,7 @@ import net.javacrumbs.jsonunit.JsonAssert;
 import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
@@ -25,7 +26,6 @@ public class RegionTest {
 
 	@Inject
 	ObjectMapper objectMapper;
-	private Region region;
 
 	@BeforeEach
 	void setUp() {
@@ -42,9 +42,15 @@ public class RegionTest {
 
 	@Test
 	void testEuregioFromJson() {
-		region = regionTestUtils.regionEuregio();
+		Region region = regionTestUtils.regionEuregio();
 		Assertions.assertEquals("EUREGIO", region.getId());
 		Assertions.assertEquals(Set.of(), region.getSuperRegions());
 		Assertions.assertEquals(Set.of(new Region("AT-07"), new Region("IT-32-BZ"), new Region("IT-32-TN")), region.getSubRegions());
+	}
+
+	@Test
+	@Disabled("java.lang.ClassCastException: class java.lang.Integer cannot be cast to class eu.albina.model.Region")
+	void testObjectMapper() throws Exception {
+		Assertions.assertEquals("[1,2,3]", objectMapper.writeValueAsString(Set.of(1, 2, 3)));
 	}
 }
