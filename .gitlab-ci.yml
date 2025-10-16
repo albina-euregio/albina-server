@@ -24,11 +24,13 @@ production build:
         - apt-get install -y ghostscript imagemagick webp
         - if [ -e "../avalanche-warning-maps" ]; then rm -rf ../avalanche-warning-maps; fi
         - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
+        - export GIT_VERSION=$(git describe --tags)
+        - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
         - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
     artifacts:
         when: always
         paths:
-            - target/albina.war
+            - target/albina*.jar
             - target/test-results/
         reports:
             junit:
