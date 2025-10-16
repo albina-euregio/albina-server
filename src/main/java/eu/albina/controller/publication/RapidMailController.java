@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;
@@ -52,7 +53,7 @@ public class RapidMailController {
 
 	@Repository
 	public interface RapidMailConfigurationRepository extends CrudRepository<RapidMailConfiguration, Long> {
-		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatter(Region region, LanguageCode languageCode, String subjectMatter);
+		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatter(Region region, LanguageCode languageCode, @Nullable String subjectMatter);
 	}
 
 	public Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
