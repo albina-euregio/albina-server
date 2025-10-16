@@ -4,7 +4,6 @@ package eu.albina.rest;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.text.MessageFormat;
 import java.time.Instant;
@@ -19,9 +18,10 @@ import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Part;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
-import io.micronaut.http.multipart.StreamingFileUpload;
+import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.security.annotation.Secured;
 import jakarta.inject.Inject;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -79,8 +79,8 @@ public class MediaFileService {
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language,
 		@QueryValue("important") boolean important,
-		String mediaText, // FIXME
-		StreamingFileUpload file, // FIXME
+		@Part("text") String text,
+		@Part("file") CompletedFileUpload file,
 		Principal principal) {
 		try {
 			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());
@@ -102,13 +102,13 @@ public class MediaFileService {
 			// save mp3 file
 			String mp3FileName = getMediaFileName(dateString, user, language, ".mp3");
 			Path mp3File = fileLocation.resolve(mp3FileName);
-			Files.copy(file.asInputStream(), mp3File, StandardCopyOption.REPLACE_EXISTING);
+			Files.write(mp3File, file.getBytes());
 			logger.info("{} successfully uploaded to: {}", mp3FileName, mp3File);
 
 			// save text file
 			String txtFileName = getMediaFileName(dateString, user, language, ".txt");
 			Path txtFile = fileLocation.resolve(txtFileName);
-			Files.write(txtFile, mediaText.getBytes());
+			Files.write(txtFile, text.getBytes());
 			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
 
 			// send emails
@@ -118,10 +118,9 @@ public class MediaFileService {
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 
 			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), region.getWebsiteName(language), formattedDate, user.getName());
-			String text = language.getBundleString("email.media.link.mp3");
 			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
-				mediaText.replace("\n", "<br>"),
-				String.format("<a href=\"%s\">%s</a>", mp3FileUrl, text),
+				text.replace("\n", "<br>"),
+				String.format("<a href=\"%s\">%s</a>", mp3FileUrl, language.getBundleString("email.media.link.mp3")),
 				MessageFormat.format(language.getBundleString("email.media.text"), user.getName()));
 			RapidMailConfiguration config = rapidMailController.getConfiguration(region, language, "media").orElseThrow();
 			rapidMailController.sendEmail(config, emailHtml, subject);
