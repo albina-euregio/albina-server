@@ -11,7 +11,7 @@ image: maven:3-eclipse-temurin-21
 
 variables:
     MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-    MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+    MAVEN_ARGS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 cache:
     paths:
@@ -26,7 +26,7 @@ production build:
         - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
+        - mvn --activate-profiles env-prod install
         - mv target/albina*.jar target/albina.jar
     artifacts:
         when: always
@@ -46,7 +46,7 @@ deploy to development:
     stage: deploy
     needs: []
     variables:
-        MAVEN_CLI_OPTS: "$MAVEN_CLI_OPTS --activate-profiles env-dev"
+        MAVEN_PROFILE: --activate-profiles env-dev
         JAR_PATH: /opt/albina-server-dev/albina.jar
         SYSTEMD_SERVICE: albina-server-dev.service
     before_script:
@@ -62,7 +62,7 @@ deploy to development:
         - apt-get install -y rsync
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
-        - mvn $MAVEN_CLI_OPTS install -Dmaven.test.skip=true
+        - mvn $MAVEN_PROFILE install -Dmaven.test.skip=true
         - rsync -avz -e 'ssh -p2201' target/albina-$GIT_VERSION.jar $SSH_SERVER:$JAR_PATH
         - ssh -p2201 $SSH_SERVER 'sudo /usr/bin/systemctl restart $SYSTEMD_SERVICE'
     environment:
