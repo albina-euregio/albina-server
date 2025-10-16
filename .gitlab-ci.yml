@@ -27,10 +27,11 @@ production build:
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
         - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
+        - mv target/albina*.jar target/albina.jar
     artifacts:
         when: always
         paths:
-            - target/albina*.jar
+            - target/albina.jar
             - target/test-results/
         reports:
             junit:
@@ -43,10 +44,21 @@ production build:
 
 deploy to development:
     stage: deploy
+    before_script:
+        - eval $(ssh-agent -s)
+        - chmod 400 "$SSH_PRIVATE_KEY"
+        - ssh-add "$SSH_PRIVATE_KEY"
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
     script:
-        - export TOMCAT_PATH=/albina_dev
         - export GIT_VERSION=$(git describe --tags)
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:deploy -Dmaven.test.skip=true
+        - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
+        - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev package -Dmaven.test.skip=true
+        - mv target/albina*.jar target/albina.jar
+        - rsync -avz -e 'ssh -p2201' target/albina.jar $SSH_SERVER:/opt/albina-server-dev/albina.jar
+        - ssh -p2201 $SSH_SERVER 'sudo /usr/bin/systemctl restart albina-server-dev.service'
     environment:
         name: development
     rules:
