@@ -59,20 +59,6 @@ import jakarta.persistence.Table;
 @Introspected(excludedAnnotations = {JsonIgnore.class})
 public class Region implements PersistentObject {
 
-	@Singleton
-	public static class RegionSetDeserializer implements Deserializer<Set<Region>> {
-		@Override
-		public Set<Region> deserialize(Decoder decoder, DecoderContext context, Argument<? super Set<Region>> type) throws IOException {
-			HashSet<Region> regions = new HashSet<>();
-			try (Decoder array = decoder.decodeArray()) {
-				while (array.hasNextArrayValue()) {
-					regions.add(new Region(array.decodeString()));
-				}
-			}
-			return regions;
-		}
-	}
-
 	@Id
 	@Column(name = "ID", length = 191)
 	private String id;
@@ -86,7 +72,6 @@ public class Region implements PersistentObject {
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
 	@JsonIgnore
-	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> subRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -95,7 +80,6 @@ public class Region implements PersistentObject {
 	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
 	)
 	@JsonIgnore
-	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> superRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -104,7 +88,6 @@ public class Region implements PersistentObject {
 	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
 	)
 	@JsonIgnore
-	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> neighborRegions;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -342,6 +325,11 @@ public class Region implements PersistentObject {
 		return subRegions.stream().map(Region::getId).collect(Collectors.toSet());
 	}
 
+	@JsonProperty("subRegions")
+	public void setSubRegionsString(Set<String> subRegions) {
+		this.subRegions = subRegions.stream().map(Region::new).collect(Collectors.toSet());
+	}
+
 	public void setSubRegions(Set<Region> subRegions) {
 		this.subRegions = subRegions;
 	}
@@ -359,6 +347,11 @@ public class Region implements PersistentObject {
 		return superRegions.stream().map(Region::getId).collect(Collectors.toSet());
 	}
 
+	@JsonProperty("superRegions")
+	public void setSuperRegionsString(Set<String> superRegions) {
+		this.superRegions = superRegions.stream().map(Region::new).collect(Collectors.toSet());
+	}
+
 	public void setSuperRegions(Set<Region> superRegions) {
 		this.superRegions = superRegions;
 	}
@@ -374,6 +367,11 @@ public class Region implements PersistentObject {
 	@JsonProperty("neighborRegions")
 	public Set<String> getNeighborRegionsString() {
 		return neighborRegions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
+	@JsonProperty("neighborRegions")
+	public void setNeighborRegionsString(Set<String> neighborRegions) {
+		this.neighborRegions = neighborRegions.stream().map(Region::new).collect(Collectors.toSet());
 	}
 
 	public void setNeighborRegions(Set<Region> neighborRegions) {

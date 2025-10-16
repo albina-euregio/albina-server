@@ -33,9 +33,18 @@ public class RegionTest {
 	}
 
 	@Test
-	public void testCreateObjectFromJSONAndBack() throws Exception {
+	public void testJSONViaConstructor() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("region_AT-07.json"), StandardCharsets.UTF_8);
 		Region region = regionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
+		Assertions.assertEquals(Set.of(new Region("EUREGIO")), region.getSuperRegions());
+		String json = objectMapper.writeValueAsString(region);
+		JsonAssert.assertJsonEquals(expected, json);
+	}
+
+	@Test
+	public void testJSONViaObjectMapper() throws Exception {
+		final String expected = Resources.toString(Resources.getResource("region_AT-07.json"), StandardCharsets.UTF_8);
+		Region region = objectMapper.readValue(expected, Region.class);
 		Assertions.assertEquals(Set.of(new Region("EUREGIO")), region.getSuperRegions());
 		String json = objectMapper.writeValueAsString(region);
 		JsonAssert.assertJsonEquals(expected, json);
