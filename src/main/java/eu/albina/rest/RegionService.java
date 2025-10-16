@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.List;
 
 import eu.albina.controller.RegionRepository;
+import eu.albina.controller.ServerInstanceRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -45,6 +46,9 @@ public class RegionService {
 
 	@Inject
 	private ObjectMapper objectMapper;
+
+	@Inject
+	private ServerInstanceRepository serverInstanceRepository;
 
 	@Get
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
@@ -95,14 +99,16 @@ public class RegionService {
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
 
 		try {
-			String id = new Region(regionString, Region::new, objectMapper).getId();
+			String id = objectMapper.readValue(regionString, Region.class).getId();
 			Optional<Region> optionalRegion = regionRepository.findById(id);
 			if (optionalRegion.isPresent()) {
 				Region existing = optionalRegion.get();
 				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
-				objectMapper.updateValueFromTree(existing, JsonNode.from(regionString));
+				existing.updateFromJSON(regionString, objectMapper);
 				existing.fixLanguageConfigurations();
+				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
+				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.update(existing);
 				return HttpResponse.ok(existing);
 			} else {
@@ -124,11 +130,12 @@ public class RegionService {
 		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("POST JSON region");
 		try {
-			Region region = new Region(regionString, Region::new, objectMapper);
+			Region region = objectMapper.readValue(regionString, Region.class);
 
 			// check if id already exists
 			if (regionRepository.findById(region.getId()).isEmpty()) {
 				region.fixLanguageConfigurations();
+				region.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.save(region);
 				return HttpResponse.created(region);
 			} else {

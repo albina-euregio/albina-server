@@ -260,27 +260,13 @@ public class Region implements PersistentObject {
 
 	public Region(String json, Function<String, Region> regionFunction, ObjectMapper objectMapper) throws IOException {
 		this();
+		updateFromJSON(json, objectMapper);
+		fixLanguageConfigurations();
+	}
 
-		// Use Jackson to populate all "normal" fields
+	public void updateFromJSON(String json, ObjectMapper objectMapper) throws IOException {
 		JsonNode node = objectMapper.readValue(json, JsonNode.class);
 		objectMapper.updateValueFromTree(this, node);
-
-		fixLanguageConfigurations();
-
-		// Handle region references manually
-		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
-			JsonNode arrayNode = node.get(key);
-			if (arrayNode != null && arrayNode.isArray()) {
-				for (JsonNode entryNode : arrayNode.values()) {
-					Region region = regionFunction.apply(entryNode.getStringValue());
-					if (region != null)
-						targetSet.add(region);
-				}
-			}
-		};
-		extractRegionsFromJSON.accept("subRegions", this.subRegions);
-		extractRegionsFromJSON.accept("superRegions", this.superRegions);
-		extractRegionsFromJSON.accept("neighborRegions", this.neighborRegions);
 	}
 
 	public void fixLanguageConfigurations() {
