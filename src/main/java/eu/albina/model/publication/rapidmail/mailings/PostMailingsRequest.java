@@ -4,7 +4,9 @@ package eu.albina.model.publication.rapidmail.mailings;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
+@Serdeable
 public class PostMailingsRequest {
 
 	@JsonProperty("check_robinson")
