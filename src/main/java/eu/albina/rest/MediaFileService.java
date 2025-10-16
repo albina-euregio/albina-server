@@ -134,7 +134,7 @@ public class MediaFileService {
 			// set publication flag
 			avalancheReportController.setMediaFileFlag(date, region);
 
-			return HttpResponse.created(Map.of("file", fileLocation));
+			return HttpResponse.created(Map.of("file", fileLocation.toString()));
 		} catch (AlbinaException e) {
 			logger.warn("Failed to save media file", e);
 			return HttpResponse.badRequest().body(e.toJSON());
