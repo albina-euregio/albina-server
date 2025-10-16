@@ -45,7 +45,8 @@ public class RegionTestUtils {
 
 	public Region readRegion(URL resource) throws UncheckedIOException {
 		try {
-			return new Region(Resources.toString(resource, StandardCharsets.UTF_8), Region::new, objectMapper);
+			String json = Resources.toString(resource, StandardCharsets.UTF_8);
+			return objectMapper.readValue(json, Region.class);
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}

@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -256,12 +255,6 @@ public class Region implements PersistentObject {
 	public Region(String id) {
 		super();
 		this.id = id;
-	}
-
-	public Region(String json, Function<String, Region> regionFunction, ObjectMapper objectMapper) throws IOException {
-		this();
-		updateFromJSON(json, objectMapper);
-		fixLanguageConfigurations();
 	}
 
 	public void updateFromJSON(String json, ObjectMapper objectMapper) throws IOException {
