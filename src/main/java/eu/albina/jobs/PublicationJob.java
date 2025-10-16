@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import eu.albina.controller.RegionRepository;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +67,6 @@ public class PublicationJob {
 		this.serverInstance = serverInstance;
 	}
 
-	@Transactional
 	private List<Runnable> execute0() {
 		if (!isEnabled(serverInstance)) {
 			return null;
