@@ -45,6 +45,10 @@ production build:
 deploy to development:
     stage: deploy
     needs: []
+    variables:
+        MAVEN_CLI_OPTS: "$MAVEN_CLI_OPTS --activate-profiles env-dev"
+        JAR_PATH: /opt/albina-server-dev/albina.jar
+        SYSTEMD_SERVICE: albina-server-dev.service
     before_script:
         - eval $(ssh-agent -s)
         - chmod 400 "$SSH_PRIVATE_KEY"
@@ -58,9 +62,9 @@ deploy to development:
         - apt-get install -y rsync
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev install -Dmaven.test.skip=true
-        - rsync -avz -e 'ssh -p2201' target/albina-$GIT_VERSION.jar $SSH_SERVER:/opt/albina-server-dev/albina.jar
-        - ssh -p2201 $SSH_SERVER 'sudo /usr/bin/systemctl restart albina-server-dev.service'
+        - mvn $MAVEN_CLI_OPTS install -Dmaven.test.skip=true
+        - rsync -avz -e 'ssh -p2201' target/albina-$GIT_VERSION.jar $SSH_SERVER:$JAR_PATH
+        - ssh -p2201 $SSH_SERVER 'sudo /usr/bin/systemctl restart $SYSTEMD_SERVICE'
     environment:
         name: development
     rules:
