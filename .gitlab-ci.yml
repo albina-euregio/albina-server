@@ -54,6 +54,8 @@ deploy to development:
         - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
         - chmod 644 ~/.ssh/known_hosts
     script:
+        - apt-get update -y
+        - apt-get install -y rsync
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
         - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev install -Dmaven.test.skip=true
