@@ -22,6 +22,7 @@ import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +72,7 @@ public class AvalancheBulletinPublishService {
 	@Post
 	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Transactional
 	public HttpResponse<?> publishBulletins(@QueryValue("region") String regionId,
 											@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 											Principal principal) {
@@ -119,6 +121,7 @@ public class AvalancheBulletinPublishService {
 	@Post("/all")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Transactional
 	public HttpResponse<?> publishAllBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 			@QueryValue("change") boolean change) {
@@ -154,6 +157,7 @@ public class AvalancheBulletinPublishService {
 	@Post("/email")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Transactional
 	public HttpResponse<?> sendEmail(@QueryValue("region") String regionId,
 							  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 							  @QueryValue("lang") LanguageCode language) {
@@ -175,6 +179,7 @@ public class AvalancheBulletinPublishService {
 	@Post("/telegram")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Transactional
 	public HttpResponse<?> triggerTelegramChannel(@QueryValue("region") String regionId,
 										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 										   @QueryValue("lang") LanguageCode language) {
@@ -196,6 +201,7 @@ public class AvalancheBulletinPublishService {
 	@Post("/whatsapp")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Transactional
 	public HttpResponse<?> triggerWhatsAppChannel(@QueryValue("region") String regionId,
 										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 										   @QueryValue("lang") LanguageCode language) {
@@ -217,6 +223,7 @@ public class AvalancheBulletinPublishService {
 	@Post("/push")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Transactional
 	public HttpResponse<?> triggerPushNotifications(@QueryValue("region") String regionId,
 											 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 											 @QueryValue("lang") LanguageCode language) {
