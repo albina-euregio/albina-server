@@ -4,6 +4,7 @@ package eu.albina.model;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -11,7 +12,6 @@ import net.javacrumbs.jsonunit.JsonAssert;
 import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
@@ -36,6 +36,7 @@ public class RegionTest {
 	public void testCreateObjectFromJSONAndBack() throws Exception {
 		final String expected = Resources.toString(Resources.getResource("region_AT-07.json"), StandardCharsets.UTF_8);
 		Region region = regionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
+		Assertions.assertEquals(Set.of(new Region("EUREGIO")), region.getSuperRegions());
 		String json = objectMapper.writeValueAsString(region);
 		JsonAssert.assertJsonEquals(expected, json);
 	}
@@ -49,8 +50,7 @@ public class RegionTest {
 	}
 
 	@Test
-	@Disabled("java.lang.ClassCastException: class java.lang.Integer cannot be cast to class eu.albina.model.Region")
 	void testObjectMapper() throws Exception {
-		Assertions.assertEquals("[1,2,3]", objectMapper.writeValueAsString(Set.of(1, 2, 3)));
+		Assertions.assertEquals("[1,2,3]", objectMapper.writeValueAsString(ImmutableSet.of(1, 2, 3)));
 	}
 }

@@ -9,7 +9,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.type.Argument;
 import io.micronaut.json.tree.JsonNode;
@@ -57,18 +60,6 @@ import jakarta.persistence.Table;
 public class Region implements PersistentObject {
 
 	@Singleton
-	public static class RegionSetSerializer implements Serializer<Set<Region>> {
-		@Override
-		public void serialize(Encoder encoder, EncoderContext context, Argument<? extends Set<Region>> type, Set<Region> value) throws IOException {
-			try (Encoder array = encoder.encodeArray(type)) {
-				for (Region region : value) {
-					array.encodeString(region.getId());
-				}
-			}
-		}
-	}
-
-	@Singleton
 	public static class RegionSetDeserializer implements Deserializer<Set<Region>> {
 		@Override
 		public Set<Region> deserialize(Decoder decoder, DecoderContext context, Argument<? super Set<Region>> type) throws IOException {
@@ -94,7 +85,7 @@ public class Region implements PersistentObject {
 	 joinColumns=@JoinColumn(name="SUPER_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
-	@Serdeable.Serializable(using = RegionSetSerializer.class)
+	@JsonIgnore
 	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> subRegions;
 
@@ -103,7 +94,7 @@ public class Region implements PersistentObject {
 	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
 	)
-	@Serdeable.Serializable(using = RegionSetSerializer.class)
+	@JsonIgnore
 	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> superRegions;
 
@@ -112,7 +103,7 @@ public class Region implements PersistentObject {
 	 joinColumns=@JoinColumn(name="REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
 	)
-	@Serdeable.Serializable(using = RegionSetSerializer.class)
+	@JsonIgnore
 	@Serdeable.Deserializable(using = RegionSetDeserializer.class)
 	private Set<Region> neighborRegions;
 
@@ -346,6 +337,11 @@ public class Region implements PersistentObject {
 		return subRegions;
 	}
 
+	@JsonProperty("subRegions")
+	public Set<String> getSubRegionsString() {
+		return subRegions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
 	public void setSubRegions(Set<Region> subRegions) {
 		this.subRegions = subRegions;
 	}
@@ -358,6 +354,11 @@ public class Region implements PersistentObject {
 		return superRegions;
 	}
 
+	@JsonProperty("superRegions")
+	public Set<String> getSuperRegionsString() {
+		return superRegions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
 	public void setSuperRegions(Set<Region> superRegions) {
 		this.superRegions = superRegions;
 	}
@@ -368,6 +369,11 @@ public class Region implements PersistentObject {
 
 	public Set<Region> getNeighborRegions() {
 		return neighborRegions;
+	}
+
+	@JsonProperty("neighborRegions")
+	public Set<String> getNeighborRegionsString() {
+		return neighborRegions.stream().map(Region::getId).collect(Collectors.toSet());
 	}
 
 	public void setNeighborRegions(Set<Region> neighborRegions) {
