@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.http.HttpClient;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,9 +27,6 @@ import java.util.Optional;
 @Singleton
 public class BlogController {
 	private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
-
-	@Inject
-	HttpClient client;
 
 	@Inject
 	Blogger blogger;
@@ -75,8 +71,8 @@ public class BlogController {
 		}
 
 		List<? extends BlogItem> blogPosts = config.isBlogger()
-			? blogger.getBlogPosts(config, client)
-			: wordpress.getBlogPosts(config, client);
+			? blogger.getBlogPosts(config)
+			: wordpress.getBlogPosts(config);
 		logger.info("Found {} new blog posts for {}", blogPosts.size(), config);
 		return blogPosts;
 	}
@@ -86,8 +82,8 @@ public class BlogController {
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
 		BlogItem blogPost = config.isBlogger()
-			? blogger.getLatestBlogPost(config, client)
-			: wordpress.getLatestBlogPost(config, client);
+			? blogger.getLatestBlogPost(config)
+			: wordpress.getLatestBlogPost(config);
 		logger.info("Fetched latest blog post for region={} lang={}", config.getRegion().getId(), config.getLanguageCode().toString());
 		return blogPost;
 	}
@@ -97,8 +93,8 @@ public class BlogController {
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
 		return config.isBlogger()
-			? blogger.getBlogPost(config, blogPostId, client)
-			: wordpress.getBlogPost(config, blogPostId, client);
+			? blogger.getBlogPost(config, blogPostId)
+			: wordpress.getBlogPost(config, blogPostId);
 	}
 
 	public MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {

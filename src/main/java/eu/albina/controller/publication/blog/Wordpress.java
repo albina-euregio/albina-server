@@ -27,9 +27,12 @@ import java.util.Objects;
 class Wordpress {
 
 	@Inject
+	HttpClient client;
+
+	@Inject
 	ObjectMapper objectMapper;
 
-	public List<Item> getBlogPosts(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	public List<Item> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
@@ -42,7 +45,7 @@ class Wordpress {
 		return List.of(items);
 	}
 
-	public Item getLatestBlogPost(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	public Item getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
 			"lang", config.getLanguageCode(),
 			"per_page", Integer.toString(1)
@@ -52,7 +55,7 @@ class Wordpress {
 		return Arrays.stream(items).collect(MoreCollectors.onlyElement());
 	}
 
-	public Item getBlogPost(BlogConfiguration config, String blogPostId, HttpClient client) throws IOException, InterruptedException {
+	public Item getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts/" + blogPostId)).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		return objectMapper.readValue(response.body(), Item.class);

@@ -24,9 +24,12 @@ import java.util.Objects;
 class Blogger {
 
 	@Inject
+	HttpClient client;
+
+	@Inject
 	ObjectMapper objectMapper;
 
-	public List<Item> getBlogPosts(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	public List<Item> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + config.getBlogId() + "/posts?" + HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
@@ -39,7 +42,7 @@ class Blogger {
 		return root.items;
 	}
 
-	public Item getLatestBlogPost(BlogConfiguration config, HttpClient client) throws IOException, InterruptedException {
+	public Item getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + config.getBlogId() + "/posts?" + HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"fetchBodies", Boolean.TRUE.toString(),
@@ -51,7 +54,7 @@ class Blogger {
 		return root.items.stream().collect(MoreCollectors.onlyElement());
 	}
 
-	public Item getBlogPost(BlogConfiguration config, String blogPostId, HttpClient client) throws IOException, InterruptedException {
+	public Item getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + config.getBlogId() + "/posts/" + blogPostId + "?" + HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey")
 		)))).build();
