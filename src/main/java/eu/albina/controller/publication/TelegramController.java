@@ -41,6 +41,8 @@ public class TelegramController {
 
 	@Inject
 	TelegramConfigurationRepository telegramConfigurationRepository;
+	@Inject
+	private HttpClient httpClient;
 
 	@Repository
 	public interface TelegramConfigurationRepository extends CrudRepository<TelegramConfiguration, Long> {
@@ -89,37 +91,13 @@ public class TelegramController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending photo {} and message {} to telegram channel using config {}", attachmentUrl, message, config);
 
-		String boundary = UUID.randomUUID().toString();
-		String fileName = attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1);
-
-		HttpClient client = HttpClientUtil
-			.newClientBuilder(80000) // sending photos may a while
-			.build();
-		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s",
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s&photo=%s",
 				apiToken,
 				URLEncoder.encode(chatId, StandardCharsets.UTF_8),
-				URLEncoder.encode(message, StandardCharsets.UTF_8)
-			)))
-			.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=" + boundary)
-			.POST(HttpRequest.BodyPublishers.ofByteArrays(List.of(
-				"--%s\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8),
-				"Content-Disposition: form-data; name=\"photo\"; filename=\"%s\"\r\n".formatted(fileName).getBytes(StandardCharsets.UTF_8),
-				"Content-Type: %s\r\n".formatted(MediaType.APPLICATION_OCTET_STREAM).getBytes(StandardCharsets.UTF_8),
-				"\r\n".getBytes(StandardCharsets.UTF_8),
-				URI.create(attachmentUrl).toURL().openStream().readAllBytes(),
-				"\r\n".getBytes(StandardCharsets.UTF_8),
-				"--%s--\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8)
-			)))
-			.build();
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-		if (response.statusCode() != 200) {
-			// FIXME throw exception?
-			logger.warn("Error publishing on telegram channel for "
-				+ config.getRegion().getId() + " (error code "
-				+ response.statusCode() + "): " + response.body());
-		}
-		return response;
+				URLEncoder.encode(message, StandardCharsets.UTF_8),
+				URLEncoder.encode(attachmentUrl, StandardCharsets.UTF_8)
+			))).build();
+		return execute(request, config);
 	}
 
 	public HttpResponse<String> sendMessage(TelegramConfiguration config, String message) throws IOException, InterruptedException {
