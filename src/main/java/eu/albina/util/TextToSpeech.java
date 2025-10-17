@@ -56,6 +56,9 @@ public class TextToSpeech {
 	private static final Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
 
 	@Inject
+	HttpClient httpClient;
+
+	@Inject
 	ObjectMapper objectMapper;
 
 	enum SsmlVoiceGender {FEMALE, MALE}
@@ -359,10 +362,7 @@ public class TextToSpeech {
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
 			.timeout(Duration.ofSeconds(30))
 			.build();
-		HttpResponse<String> response = HttpClient.newBuilder()
-			.connectTimeout(Duration.ofSeconds(10))
-			.build()
-			.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		Response audio = objectMapper.readValue(response.body(), Response.class);
 		return audio.asBytes();
 	}
