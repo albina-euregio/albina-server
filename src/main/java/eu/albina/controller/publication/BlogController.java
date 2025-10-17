@@ -129,6 +129,8 @@ public class BlogController {
 
 	@Transactional
 	public void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) throws IOException, InterruptedException {
+		Objects.requireNonNull(blogId);
+		Objects.requireNonNull(subjectMatter);
 		BlogConfiguration config = blogConfigurationRepository.findByBlogId(blogId).orElse(null);
 		if (config == null) {
 			logger.debug("No blog configuration found for {}", blogId);

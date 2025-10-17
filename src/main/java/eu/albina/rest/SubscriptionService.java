@@ -62,7 +62,7 @@ public class SubscriptionService {
 		recipient.setEmail(subscriber.getEmail());
 
 		try {
-			RapidMailConfiguration config = rapidMailController.getConfiguration(region, subscriber.getLanguage(), null).orElseThrow();
+			RapidMailConfiguration config = rapidMailController.getConfiguration(region, subscriber.getLanguage()).orElseThrow();
 			subscriberRepository.save(subscriber);
 			rapidMailController.createRecipient(config, recipient);
 			return HttpResponse.ok();

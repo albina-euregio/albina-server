@@ -15,11 +15,11 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;
 import io.micronaut.serde.ObjectMapper;
+import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -53,11 +53,16 @@ public class RapidMailController {
 
 	@Repository
 	public interface RapidMailConfigurationRepository extends CrudRepository<RapidMailConfiguration, Long> {
-		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatter(Region region, LanguageCode languageCode, @Nullable String subjectMatter);
+		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatter(Region region, LanguageCode languageCode, @Nonnull String subjectMatter);
+		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatterIsNull(Region region, LanguageCode languageCode);
 	}
 
-	public Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, String subjectMatter) {
+	public Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode, @Nonnull String subjectMatter) {
 		return rapidMailConfigurationRepository.findByRegionAndLanguageCodeAndSubjectMatter(region, languageCode, subjectMatter);
+	}
+
+	public Optional<RapidMailConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+		return rapidMailConfigurationRepository.findByRegionAndLanguageCodeAndSubjectMatterIsNull(region, languageCode);
 	}
 
 	private static String calcBasicAuth(RapidMailConfiguration config) {
