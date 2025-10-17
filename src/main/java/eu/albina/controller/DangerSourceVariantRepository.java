@@ -49,12 +49,12 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	default void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant startDate, Instant endDate,
 										  Region region) {
 		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(startDate, endDate);
-		Map<String, DangerSourceVariant> originalVariants = new HashMap<String, DangerSourceVariant>();
+		Map<String, DangerSourceVariant> originalVariants = new HashMap<>();
 
 		for (DangerSourceVariant loadedVariant : loadedVariants)
 			originalVariants.put(loadedVariant.getId(), loadedVariant);
 
-		List<String> ids = new ArrayList<String>();
+		List<String> ids = new ArrayList<>();
 		for (DangerSourceVariant newVariant : newVariants) {
 
 			ids.add(newVariant.getId());
@@ -117,7 +117,7 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 */
 	default List<DangerSourceVariantsStatus> getDangerSourceVariantsStatus(Range<Instant> startDate,
 																		   Range<Instant> endDate, Region region) {
-		List<DangerSourceVariantsStatus> result = new ArrayList<DangerSourceVariantsStatus>();
+		List<DangerSourceVariantsStatus> result = new ArrayList<>();
 		Instant date = startDate.lowerEndpoint();
 		while (date.isBefore(endDate.lowerEndpoint()) || date.equals(endDate.lowerEndpoint())) {
 			result.add(this.getDangerSourceVariantsStatusForDay(date, date.plus(1, ChronoUnit.DAYS), region));

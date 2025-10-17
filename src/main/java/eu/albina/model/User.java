@@ -62,7 +62,7 @@ public class User implements NameAndEmail {
 	 inverseJoinColumns=@JoinColumn(name="REGION_ID")
 	)
 	@JsonIgnore
-	private Set<Region> regions = new HashSet<Region>();
+	private Set<Region> regions = new HashSet<>();
 
 	/** Image of the user **/
 	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")

@@ -137,7 +137,7 @@ public class AvalancheReportController {
 	 */
 	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, Region region)
 		throws AlbinaException {
-		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
+		Map<Instant, BulletinStatus> result = new HashMap<>();
 
 		if (region == null)
 			throw new AlbinaException("No region defined!");
@@ -164,7 +164,7 @@ public class AvalancheReportController {
 	 */
 	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, List<Region> regions)
 		throws AlbinaException {
-		Map<Instant, BulletinStatus> result = new HashMap<Instant, BulletinStatus>();
+		Map<Instant, BulletinStatus> result = new HashMap<>();
 
 		if (regions == null || regions.isEmpty())
 			throw new AlbinaException("No region defined!");
@@ -252,7 +252,7 @@ public class AvalancheReportController {
 	}
 
 	private Map<Instant, AvalancheReport> getHighestStatusMap(List<AvalancheReport> reports) {
-		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
+		Map<Instant, AvalancheReport> result = new HashMap<>();
 		for (AvalancheReport avalancheReport : reports)
 			if (result.containsKey(avalancheReport.getDate().toInstant())) {
 				if (avalancheReport.getStatus() == null)
@@ -278,7 +278,7 @@ public class AvalancheReportController {
 	 * @return all most recent reports for a specific time period and {@code region}
 	 */
 	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, Region region) {
-		Map<Instant, AvalancheReport> result = new HashMap<Instant, AvalancheReport>();
+		Map<Instant, AvalancheReport> result = new HashMap<>();
 		List<AvalancheReport> reports = avalancheReportRepository.findByDateBetweenAndRegion(startDate, endDate, region);
 
 		// select most recent report
@@ -551,7 +551,7 @@ public class AvalancheReportController {
 	 */
 	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, List<Region> regions) {
 		int revision = 1;
-		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> resultMap = new HashMap<>();
 
 		for (Region region : regions) {
 			// get bulletins for this region
@@ -592,7 +592,7 @@ public class AvalancheReportController {
 			}
 		}
 
-		ArrayList<AvalancheBulletin> bulletins = new ArrayList<AvalancheBulletin>(resultMap.values());
+		ArrayList<AvalancheBulletin> bulletins = new ArrayList<>(resultMap.values());
 		Collections.sort(bulletins);
 
 		return bulletins;

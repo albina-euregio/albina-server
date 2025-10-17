@@ -91,7 +91,7 @@ public class AvalancheBulletinController {
 	 */
 	public synchronized Map<String, AvalancheBulletin> saveBulletins(List<AvalancheBulletin> newBulletins, Instant startDate,
 																	 Instant endDate, Region region, User user) throws AlbinaException {
-		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<>();
 
 		if (checkBulletinsForDuplicateRegion(newBulletins, region))
 			throw new AlbinaException("duplicateRegion");
@@ -99,7 +99,7 @@ public class AvalancheBulletinController {
 		List<AvalancheBulletin> loadedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 		Map<String, AvalancheBulletin> originalBulletins = loadedBulletins.stream().collect(Collectors.toMap(AbstractPersistentObject::getId, b -> b));
 
-		List<String> ids = new ArrayList<String>();
+		List<String> ids = new ArrayList<>();
 		for (AvalancheBulletin newBulletin : newBulletins) {
 			ids.add(newBulletin.getId());
 			AvalancheBulletin originalBulletin = originalBulletins.get(newBulletin.getId());
@@ -168,7 +168,7 @@ public class AvalancheBulletinController {
 		originalBulletin.copy(newBulletin);
 		originalBulletin.setSavedRegions(savedRegions);
 
-		Set<String> tmpRegions = new HashSet<String>();
+		Set<String> tmpRegions = new HashSet<>();
 		for (String suggestedRegion : originalBulletin.getSuggestedRegions()) {
 			if (newBulletin.getSavedRegions().contains(suggestedRegion))
 				tmpRegions.add(suggestedRegion);
@@ -176,7 +176,7 @@ public class AvalancheBulletinController {
 		for (String tmpRegion : tmpRegions)
 			originalBulletin.getSuggestedRegions().remove(tmpRegion);
 
-		tmpRegions = new HashSet<String>();
+		tmpRegions = new HashSet<>();
 		for (String publishedRegion : originalBulletin.getPublishedRegions()) {
 			if (!publishedRegion.startsWith(region.getId())) {
 				if (newBulletin.getSavedRegions().contains(publishedRegion))
@@ -193,7 +193,7 @@ public class AvalancheBulletinController {
 		// foreign bulletin
 		// no split of bulletin needed, because the published bulletin for the other region remains
 		// remove own saved regions from original bulletin which are not present in new bulletin
-		Set<String> tmpRegions = new HashSet<String>();
+		Set<String> tmpRegions = new HashSet<>();
 		for (String savedRegion : originalBulletin.getSavedRegions()) {
 			if (savedRegion.startsWith(region.getId())) {
 				if (!newBulletin.getSavedRegions().contains(savedRegion))
@@ -212,7 +212,7 @@ public class AvalancheBulletinController {
 		}
 
 		// remove own suggested regions from original bulletin which are not present in new bulletin
-		tmpRegions = new HashSet<String>();
+		tmpRegions = new HashSet<>();
 		for (String suggestedRegion : originalBulletin.getSuggestedRegions()) {
 			if (suggestedRegion.startsWith(region.getId())) {
 				if (!newBulletin.getSuggestedRegions().contains(suggestedRegion))
@@ -225,7 +225,7 @@ public class AvalancheBulletinController {
 		// own suggested regions are not possible (they are always in saved regions) -> nothing to add
 
 		// remove own published regions from original bulletin
-		tmpRegions = new HashSet<String>();
+		tmpRegions = new HashSet<>();
 		for (String publishedRegion : originalBulletin.getPublishedRegions()) {
 			if (publishedRegion.startsWith(region.getId()))
 				tmpRegions.add(publishedRegion);
@@ -234,7 +234,7 @@ public class AvalancheBulletinController {
 			originalBulletin.getPublishedRegions().remove(tmpRegion);
 
 		// add own published regions from new bulletin as saved regions to original bulletin
-		tmpRegions = new HashSet<String>();
+		tmpRegions = new HashSet<>();
 		for (String publishedRegion : newBulletin.getPublishedRegions()) {
 			if (publishedRegion.startsWith(region.getId()))
 				tmpRegions.add(publishedRegion);
@@ -253,7 +253,7 @@ public class AvalancheBulletinController {
 	 */
 	public synchronized Map<String, AvalancheBulletin> createBulletin(AvalancheBulletin newBulletin, Instant startDate, Instant endDate,
 																	  Region region) {
-		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<>();
 
 		List<AvalancheBulletin> loadedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 
@@ -288,7 +288,7 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
 	public Map<String, AvalancheBulletin> updateBulletin(AvalancheBulletin updatedBulletin, Instant startDate, Instant endDate, Region region, User user) {
-		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<>();
 
 		List<AvalancheBulletin> loadedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 
@@ -340,7 +340,7 @@ public class AvalancheBulletinController {
 	 */
 	public synchronized Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
 																	  Region region, User user) {
-		Map<String, AvalancheBulletin> resultBulletins = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> resultBulletins = new HashMap<>();
 
 		List<AvalancheBulletin> loadedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 
@@ -425,7 +425,7 @@ public class AvalancheBulletinController {
 
 		// select bulletins within the region
 
-		Set<String> result = new HashSet<String>();
+		Set<String> result = new HashSet<>();
 		for (AvalancheBulletin bulletin : results) {
 
 			// set author
@@ -434,7 +434,7 @@ public class AvalancheBulletinController {
 			bulletin.setUser(user);
 
 			// delete suggestions within the region
-			result = new HashSet<String>();
+			result = new HashSet<>();
 			for (String entry : bulletin.getSuggestedRegions())
 				if (entry.startsWith(region.getId()))
 					result.add(entry);
@@ -512,7 +512,7 @@ public class AvalancheBulletinController {
 	 */
 	private boolean checkBulletinsForDuplicateRegion(List<AvalancheBulletin> bulletins, Region region) {
 		boolean duplicateRegion = false;
-		Set<String> definedRegions = new HashSet<String>();
+		Set<String> definedRegions = new HashSet<>();
 		for (AvalancheBulletin bulletin : bulletins) {
 			for (String entry : bulletin.getSavedRegions())
 				if (entry.startsWith(region.getId()))
@@ -570,7 +570,7 @@ public class AvalancheBulletinController {
 		if (checkBulletinsForDuplicateRegion(bulletins, region))
 			json.add("duplicateRegion");
 
-		Set<String> definedRegions = new HashSet<String>();
+		Set<String> definedRegions = new HashSet<>();
 		for (AvalancheBulletin bulletin : results) {
 			definedRegions.addAll(getOwnRegions(bulletin.getSavedRegions(), region));
 			definedRegions.addAll(getOwnRegions(bulletin.getPublishedRegions(), region));

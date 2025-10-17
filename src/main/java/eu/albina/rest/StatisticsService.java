@@ -78,7 +78,7 @@ public class StatisticsService {
 		else
 			return HttpResponse.badRequest();
 
-		List<Region> regions = new ArrayList<Region>();
+		List<Region> regions = new ArrayList<>();
 		if (regionIds != null && !regionIds.isEmpty()) {
 			for (String regionId : regionIds) {
 				regions.add(regionRepository.findById(regionId).orElseThrow());

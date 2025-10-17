@@ -139,7 +139,7 @@ public class StatisticsController {
 	}
 
 	private List<AvalancheBulletin> mergeBulletins(List<AvalancheBulletin> bulletins) {
-		Map<String, AvalancheBulletin> resultMap = new HashMap<String, AvalancheBulletin>();
+		Map<String, AvalancheBulletin> resultMap = new HashMap<>();
 		int revision = 1;
 
 		for (AvalancheBulletin bulletin : bulletins) {
@@ -153,7 +153,7 @@ public class StatisticsController {
 					for (String suggestedRegion : bulletin.getSuggestedRegions())
 						resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
 				} else {
-					List<AvalancheBulletin> newList = new ArrayList<AvalancheBulletin>();
+					List<AvalancheBulletin> newList = new ArrayList<>();
 					for (String bulletinId : resultMap.keySet()) {
 						if (bulletinId.startsWith(bulletin.getId())) {
 							if (resultMap.get(bulletinId).equals(bulletin)) {
@@ -178,7 +178,7 @@ public class StatisticsController {
 				resultMap.put(bulletin.getId(), bulletin);
 		}
 
-		return new ArrayList<AvalancheBulletin>(resultMap.values());
+		return new ArrayList<>(resultMap.values());
 	}
 
 	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {

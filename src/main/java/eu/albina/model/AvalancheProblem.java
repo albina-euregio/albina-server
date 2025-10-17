@@ -110,7 +110,7 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	private Set<Text> terrainFeature;
 
 	public AvalancheProblem() {
-		this.aspects = new LinkedHashSet<Aspect>();
+		this.aspects = new LinkedHashSet<>();
 		this.terrainFeature = new TreeSet<>(); // sort texts by language to allow caching of API calls
 	}
 

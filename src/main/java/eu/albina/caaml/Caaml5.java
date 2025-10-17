@@ -268,7 +268,7 @@ interface Caaml5 {
 
 	static List<Element> toCAAMLv5(AvalancheBulletin bulletin, Document doc, LanguageCode languageCode, Region region) {
 		if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty()) {
-			List<Element> result = new ArrayList<Element>();
+			List<Element> result = new ArrayList<>();
 			result.add(createCAAMLv5Bulletin(bulletin, doc, languageCode, region, false));
 
 			if (bulletin.isHasDaytimeDependency())

@@ -132,7 +132,7 @@ public interface EmailUtil {
 
 		root.put("text", text);
 
-		ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
+		ArrayList<Map<String, Object>> arrayList = new ArrayList<>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			Map<String, Object> bulletin = new HashMap<>();
 

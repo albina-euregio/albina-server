@@ -50,7 +50,7 @@ public class Subscriber {
 	 * Standard constructor for a subscriber.
 	 */
 	public Subscriber() {
-		regions = new ArrayList<Region>();
+		regions = new ArrayList<>();
 		pdfAttachment = false;
 		confirmed = false;
 	}

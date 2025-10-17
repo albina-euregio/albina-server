@@ -126,7 +126,7 @@ public class AvalancheBulletinService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds) {
 
-		List<Region> regions = new ArrayList<Region>();
+		List<Region> regions = new ArrayList<>();
 		regionIds.forEach(regionId -> {
 			try {
 				Region region = regionRepository.findById(regionId).orElseThrow();

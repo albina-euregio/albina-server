@@ -242,12 +242,12 @@ public class Region implements PersistentObject {
 	 * Default constructor. Initializes all collections of the region.
 	 */
 	public Region() {
-		this.superRegions = new HashSet<Region>();
-		this.subRegions = new HashSet<Region>();
-		this.neighborRegions = new HashSet<Region>();
-		this.languageConfigurations = new HashSet<RegionLanguageConfiguration>();
-		this.enabledLanguages = new HashSet<LanguageCode>();
-		this.ttsLanguages = new HashSet<LanguageCode>();
+		this.superRegions = new HashSet<>();
+		this.subRegions = new HashSet<>();
+		this.neighborRegions = new HashSet<>();
+		this.languageConfigurations = new HashSet<>();
+		this.enabledLanguages = new HashSet<>();
+		this.ttsLanguages = new HashSet<>();
 	}
 
 	public Region(String id) {

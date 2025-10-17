@@ -106,8 +106,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private transient ServerInstance serverInstance;
 
 	public AvalancheBulletinDaytimeDescription() {
-		this.terrainFeatureAbove = new HashSet<Text>();
-		this.terrainFeatureBelow = new HashSet<Text>();
+		this.terrainFeatureAbove = new HashSet<>();
+		this.terrainFeatureBelow = new HashSet<>();
 	}
 
 	public boolean isHasElevationDependency() {
