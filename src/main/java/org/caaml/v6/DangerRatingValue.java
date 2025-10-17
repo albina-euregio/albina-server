@@ -26,13 +26,15 @@ public enum DangerRatingValue {
     }
 
     public static DangerRatingValue forValue(String value) {
-        if (value.equals("considerable")) return CONSIDERABLE;
-        if (value.equals("high")) return HIGH;
-        if (value.equals("low")) return LOW;
-        if (value.equals("moderate")) return MODERATE;
-        if (value.equals("no_rating")) return NO_RATING;
-        if (value.equals("no_snow")) return NO_SNOW;
-        if (value.equals("very_high")) return VERY_HIGH;
-        throw new IllegalArgumentException("Cannot deserialize DangerRatingValue");
-    }
+		return switch (value) {
+			case "considerable" -> CONSIDERABLE;
+			case "high" -> HIGH;
+			case "low" -> LOW;
+			case "moderate" -> MODERATE;
+			case "no_rating" -> NO_RATING;
+			case "no_snow" -> NO_SNOW;
+			case "very_high" -> VERY_HIGH;
+			default -> throw new IllegalArgumentException("Cannot deserialize DangerRatingValue");
+		};
+	}
 }

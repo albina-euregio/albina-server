@@ -24,10 +24,12 @@ public enum ExpectedSnowpackStability {
     }
 
     public static ExpectedSnowpackStability forValue(String value) {
-        if (value.equals("fair")) return FAIR;
-        if (value.equals("good")) return GOOD;
-        if (value.equals("poor")) return POOR;
-        if (value.equals("very_poor")) return VERY_POOR;
-        throw new IllegalArgumentException("Cannot deserialize ExpectedSnowpackStability");
-    }
+		return switch (value) {
+			case "fair" -> FAIR;
+			case "good" -> GOOD;
+			case "poor" -> POOR;
+			case "very_poor" -> VERY_POOR;
+			default -> throw new IllegalArgumentException("Cannot deserialize ExpectedSnowpackStability");
+		};
+	}
 }

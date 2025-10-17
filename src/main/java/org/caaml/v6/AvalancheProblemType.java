@@ -27,14 +27,16 @@ public enum AvalancheProblemType {
     }
 
     public static AvalancheProblemType forValue(String value) {
-        if (value.equals("cornices")) return CORNICES;
-        if (value.equals("favourable_situation")) return FAVOURABLE_SITUATION;
-        if (value.equals("gliding_snow")) return GLIDING_SNOW;
-        if (value.equals("new_snow")) return NEW_SNOW;
-        if (value.equals("no_distinct_avalanche_problem")) return NO_DISTINCT_AVALANCHE_PROBLEM;
-        if (value.equals("persistent_weak_layers")) return PERSISTENT_WEAK_LAYERS;
-        if (value.equals("wet_snow")) return WET_SNOW;
-        if (value.equals("wind_slab")) return WIND_SLAB;
-        throw new IllegalArgumentException("Cannot deserialize AvalancheProblemType");
-    }
+		return switch (value) {
+			case "cornices" -> CORNICES;
+			case "favourable_situation" -> FAVOURABLE_SITUATION;
+			case "gliding_snow" -> GLIDING_SNOW;
+			case "new_snow" -> NEW_SNOW;
+			case "no_distinct_avalanche_problem" -> NO_DISTINCT_AVALANCHE_PROBLEM;
+			case "persistent_weak_layers" -> PERSISTENT_WEAK_LAYERS;
+			case "wet_snow" -> WET_SNOW;
+			case "wind_slab" -> WIND_SLAB;
+			default -> throw new IllegalArgumentException("Cannot deserialize AvalancheProblemType");
+		};
+	}
 }

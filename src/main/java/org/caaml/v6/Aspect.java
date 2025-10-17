@@ -30,15 +30,17 @@ public enum Aspect {
     }
 
     public static Aspect forValue(String value) {
-        if (value.equals("E")) return E;
-        if (value.equals("N")) return N;
-        if (value.equals("NE")) return NE;
-        if (value.equals("NW")) return NW;
-        if (value.equals("n/a")) return N_A;
-        if (value.equals("S")) return S;
-        if (value.equals("SE")) return SE;
-        if (value.equals("SW")) return SW;
-        if (value.equals("W")) return W;
-        throw new IllegalArgumentException("Cannot deserialize Aspect");
-    }
+		return switch (value) {
+			case "E" -> E;
+			case "N" -> N;
+			case "NE" -> NE;
+			case "NW" -> NW;
+			case "n/a" -> N_A;
+			case "S" -> S;
+			case "SE" -> SE;
+			case "SW" -> SW;
+			case "W" -> W;
+			default -> throw new IllegalArgumentException("Cannot deserialize Aspect");
+		};
+	}
 }

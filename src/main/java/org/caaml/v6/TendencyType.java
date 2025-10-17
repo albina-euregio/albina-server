@@ -19,9 +19,11 @@ public enum TendencyType {
     }
 
     public static TendencyType forValue(String value) {
-        if (value.equals("decreasing")) return DECREASING;
-        if (value.equals("increasing")) return INCREASING;
-        if (value.equals("steady")) return STEADY;
-        throw new IllegalArgumentException("Cannot deserialize TendencyType");
-    }
+		return switch (value) {
+			case "decreasing" -> DECREASING;
+			case "increasing" -> INCREASING;
+			case "steady" -> STEADY;
+			default -> throw new IllegalArgumentException("Cannot deserialize TendencyType");
+		};
+	}
 }

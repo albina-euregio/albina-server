@@ -24,10 +24,12 @@ public enum ExpectedAvalancheFrequency {
     }
 
     public static ExpectedAvalancheFrequency forValue(String value) {
-        if (value.equals("few")) return FEW;
-        if (value.equals("many")) return MANY;
-        if (value.equals("none")) return NONE;
-        if (value.equals("some")) return SOME;
-        throw new IllegalArgumentException("Cannot deserialize ExpectedAvalancheFrequency");
-    }
+		return switch (value) {
+			case "few" -> FEW;
+			case "many" -> MANY;
+			case "none" -> NONE;
+			case "some" -> SOME;
+			default -> throw new IllegalArgumentException("Cannot deserialize ExpectedAvalancheFrequency");
+		};
+	}
 }
