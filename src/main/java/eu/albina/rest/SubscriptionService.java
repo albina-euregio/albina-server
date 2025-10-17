@@ -15,7 +15,6 @@ import eu.albina.controller.publication.RapidMailController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -58,13 +57,10 @@ public class SubscriptionService {
 		subscriber.setRegions(Collections.singletonList(region));
 		subscriber.setLanguage(json.language);
 
-		PostRecipientsRequest recipient = new PostRecipientsRequest();
-		recipient.setEmail(subscriber.getEmail());
-
 		try {
 			RapidMailConfiguration config = rapidMailController.getConfiguration(region, subscriber.getLanguage()).orElseThrow();
 			subscriberRepository.save(subscriber);
-			rapidMailController.createRecipient(config, recipient);
+			rapidMailController.createRecipient(config, subscriber);
 			return HttpResponse.ok();
 		} catch (Exception e) {
 			logger.warn("Error subscribe", e);

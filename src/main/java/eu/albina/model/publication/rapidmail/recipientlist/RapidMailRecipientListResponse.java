@@ -5,80 +5,57 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
-public class RapidMailRecipientListResponse {
+public record RapidMailRecipientListResponse(
+	@JsonProperty("_embedded") Embedded embedded,
+	@JsonProperty("page") int page,
+	@JsonProperty("total_items") int totalItems,
+	@JsonProperty("page_count") int pageCount,
+	@JsonProperty("page_size") int pageSize) {
 
-	@JsonProperty("_links")
-	private RapidMailRecipientListResponseLinks links;
-
-	@JsonProperty("_embedded")
-	private RapidMailRecipientListResponseEmbedded embedded;
-
-	@JsonProperty("page")
-	private int page;
-
-	@JsonProperty("total_items")
-	private int totalItems;
-
-	@JsonProperty("page_count")
-	private int pageCount;
-
-	@JsonProperty("page_size")
-	private int pageSize;
-
-	public void setLinks(RapidMailRecipientListResponseLinks links) {
-		this.links = links;
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Serdeable
+	public record Embedded(
+		@JsonProperty("recipientlists") List<Item> recipientlists) {
 	}
 
-	public RapidMailRecipientListResponseLinks getLinks() {
-		return links;
-	}
-
-	public void setEmbedded(RapidMailRecipientListResponseEmbedded embedded) {
-		this.embedded = embedded;
-	}
-
-	public RapidMailRecipientListResponseEmbedded getEmbedded() {
-		return embedded;
-	}
-
-	public void setPage(int page) {
-		this.page = page;
-	}
-
-	public int getPage() {
-		return page;
-	}
-
-	public void setTotalItems(int totalItems) {
-		this.totalItems = totalItems;
-	}
-
-	public int getTotalItems() {
-		return totalItems;
-	}
-
-	public void setPageCount(int pageCount) {
-		this.pageCount = pageCount;
-	}
-
-	public int getPageCount() {
-		return pageCount;
-	}
-
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	@Override
-	public String toString() {
-		return "RapidMailRecipientListResponse{" + "_links = '" + links + '\'' + ",_embedded = '" + embedded + '\''
-				+ ",page = '" + page + '\'' + ",total_items = '" + totalItems + '\'' + ",page_count = '" + pageCount
-				+ '\'' + ",page_size = '" + pageSize + '\'' + "}";
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Serdeable
+	public record Item(
+		@JsonProperty("created") String created,
+		@JsonProperty("default") String jsonMemberDefault,
+		@JsonProperty("description") String description,
+		@JsonProperty("id") Integer id,
+		@JsonProperty("name") String name,
+		@JsonProperty("recipient_subscribe_email") String recipientSubscribeEmail,
+		@JsonProperty("subscribe_confirmation_email_body") String subscribeConfirmationEmailBody,
+		@JsonProperty("subscribe_confirmation_email_body_html") String subscribeConfirmationEmailBodyHtml,
+		@JsonProperty("subscribe_confirmation_email_from") String subscribeConfirmationEmailFrom,
+		@JsonProperty("subscribe_confirmation_email_from_name") String subscribeConfirmationEmailFromName,
+		@JsonProperty("subscribe_confirmation_email_subject") String subscribeConfirmationEmailSubject,
+		@JsonProperty("subscribe_confirmation_welcome_email_body") String subscribeConfirmationWelcomeEmailBody,
+		@JsonProperty("subscribe_confirmation_welcome_email_body_html") String subscribeConfirmationWelcomeEmailBodyHtml,
+		@JsonProperty("subscribe_confirmation_welcome_email_from") String subscribeConfirmationWelcomeEmailFrom,
+		@JsonProperty("subscribe_confirmation_welcome_email_from_name") String subscribeConfirmationWelcomeEmailFromName,
+		@JsonProperty("subscribe_confirmation_welcome_email_subject") String subscribeConfirmationWelcomeEmailSubject,
+		@JsonProperty("subscribe_form_field_key") String subscribeFormFieldKey,
+		@JsonProperty("subscribe_form_url") String subscribeFormUrl,
+		@JsonProperty("unsubscribe_blacklist") String unsubscribeBlacklist,
+		@JsonProperty("unsubscribe_confirmation_email_body") String unsubscribeConfirmationEmailBody,
+		@JsonProperty("unsubscribe_confirmation_email_body_html") String unsubscribeConfirmationEmailBodyHtml,
+		@JsonProperty("unsubscribe_confirmation_email_from") String unsubscribeConfirmationEmailFrom,
+		@JsonProperty("unsubscribe_confirmation_email_from_name") String unsubscribeConfirmationEmailFromName,
+		@JsonProperty("unsubscribe_confirmation_email_subject") String unsubscribeConfirmationEmailSubject,
+		@JsonProperty("unsubscribe_confirmation_goodbye_email_body") String unsubscribeConfirmationGoodbyeEmailBody,
+		@JsonProperty("unsubscribe_confirmation_goodbye_email_body_html") String unsubscribeConfirmationGoodbyeEmailBodyHtml,
+		@JsonProperty("unsubscribe_confirmation_goodbye_email_from") String unsubscribeConfirmationGoodbyeEmailFrom,
+		@JsonProperty("unsubscribe_confirmation_goodbye_email_from_name") String unsubscribeConfirmationGoodbyeEmailFromName,
+		@JsonProperty("unsubscribe_confirmation_goodbye_email_subject") String unsubscribeConfirmationGoodbyeEmailSubject,
+		@JsonProperty("unsubscribe_form_url") String unsubscribeFormUrl,
+		@JsonProperty("updated") String updated
+	) {
 	}
 }
