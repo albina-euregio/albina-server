@@ -14,17 +14,16 @@ public enum AvalancheProblemType {
 	@JsonValue
 	@Override
 	public String toString() {
-        switch (this) {
-            case CORNICES: return "cornices";
-            case FAVOURABLE_SITUATION: return "favourable_situation";
-            case GLIDING_SNOW: return "gliding_snow";
-            case NEW_SNOW: return "new_snow";
-            case NO_DISTINCT_AVALANCHE_PROBLEM: return "no_distinct_avalanche_problem";
-            case PERSISTENT_WEAK_LAYERS: return "persistent_weak_layers";
-            case WET_SNOW: return "wet_snow";
-            case WIND_SLAB: return "wind_slab";
-        }
-        throw new IllegalStateException();
+        return switch (this) {
+            case CORNICES -> "cornices";
+            case FAVOURABLE_SITUATION -> "favourable_situation";
+            case GLIDING_SNOW -> "gliding_snow";
+            case NEW_SNOW -> "new_snow";
+            case NO_DISTINCT_AVALANCHE_PROBLEM -> "no_distinct_avalanche_problem";
+            case PERSISTENT_WEAK_LAYERS -> "persistent_weak_layers";
+            case WET_SNOW -> "wet_snow";
+            case WIND_SLAB -> "wind_slab";
+        };
     }
 
     public static AvalancheProblemType forValue(String value) {

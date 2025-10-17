@@ -22,42 +22,26 @@ public enum Tendency {
 	}
 
 	public static String getCaamlString(Tendency tendency) {
-		switch (tendency) {
-		case decreasing:
-			return "decreasing";
-		case steady:
-			return "steady";
-		case increasing:
-			return "increasing";
-
-		default:
-			return "n/a";
-		}
+		return switch (tendency) {
+			case decreasing -> "decreasing";
+			case steady -> "steady";
+			case increasing -> "increasing";
+		};
 	}
 
 	public String getSymbolPath(boolean grayscale) {
 		if (grayscale) {
-			switch (this) {
-				case increasing:
-					return "tendency/tendency_increasing_black.png";
-				case steady:
-					return "tendency/tendency_steady_black.png";
-				case decreasing:
-					return "tendency/tendency_decreasing_black.png";
-				default:
-					return null;
-			}
+			return switch (this) {
+				case increasing -> "tendency/tendency_increasing_black.png";
+				case steady -> "tendency/tendency_steady_black.png";
+				case decreasing -> "tendency/tendency_decreasing_black.png";
+			};
 		} else {
-			switch (this) {
-				case increasing:
-					return "tendency/tendency_increasing_blue.png";
-				case steady:
-					return "tendency/tendency_steady_blue.png";
-				case decreasing:
-					return "tendency/tendency_decreasing_blue.png";
-				default:
-					return null;
-			}
+            return switch (this) {
+                case increasing -> "tendency/tendency_increasing_blue.png";
+                case steady -> "tendency/tendency_steady_blue.png";
+                case decreasing -> "tendency/tendency_decreasing_blue.png";
+			};
 		}
 	}
 }

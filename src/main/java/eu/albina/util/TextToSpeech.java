@@ -150,16 +150,14 @@ public class TextToSpeech {
 				.map(Aspect::toString)
 				.map(lang.getBundle("i18n.Aspect")::getString)
 				.toList();
-			switch (texts.size()) {
-				case 0:
-					return lang.getBundleString("speech.aspects.0");
-				case 1:
-					return lang.getBundleString("speech.aspects.1", Map.of("aspect1", texts.get(0)));
-				case 2:
-					return lang.getBundleString("speech.aspects.2", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1)));
-				default:
-					return lang.getBundleString("speech.aspects.3", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1), "aspect3", texts.get(2)));
-			}
+            return switch (texts.size()) {
+                case 0 -> lang.getBundleString("speech.aspects.0");
+                case 1 -> lang.getBundleString("speech.aspects.1", Map.of("aspect1", texts.get(0)));
+                case 2 ->
+                        lang.getBundleString("speech.aspects.2", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1)));
+                default ->
+                        lang.getBundleString("speech.aspects.3", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1), "aspect3", texts.get(2)));
+            };
 		}
 
 

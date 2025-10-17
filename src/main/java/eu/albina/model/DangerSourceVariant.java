@@ -850,30 +850,19 @@ public class DangerSourceVariant extends AbstractPersistentObject
 							if (this.dangerSpotRecognizability == null) {
 								return null;
 							}
-							switch (this.dangerSpotRecognizability) {
-								case very_easy:
-								case easy:
-									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
-								case hard:
-								case very_hard:
-									return eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
-								default:
-									return null;
-							}
+							return switch (this.dangerSpotRecognizability) {
+								case very_easy, easy -> eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard, very_hard ->
+									eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
+							};
 						} else {
 							if (this.dangerSpotRecognizability == null) {
 								return null;
 							}
-							switch (this.dangerSpotRecognizability) {
-								case very_easy:
-								case easy:
-									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
-								case hard:
-								case very_hard:
-									return eu.albina.model.enumerations.AvalancheProblem.new_snow;
-								default:
-									return null;
-							}
+							return switch (this.dangerSpotRecognizability) {
+								case very_easy, easy -> eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard, very_hard -> eu.albina.model.enumerations.AvalancheProblem.new_snow;
+							};
 						}
 					case MF:
 						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
@@ -887,19 +876,12 @@ public class DangerSourceVariant extends AbstractPersistentObject
 						return null;
 				}
 			case loose:
-				switch (this.looseSnowGrainShape) {
-					case PP:
-					case DF:
-						return eu.albina.model.enumerations.AvalancheProblem.new_snow;
-					case MF:
-						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
-					case FC:
-					case DH:
-					case SH:
-						return null;
-					default:
-						return null;
-				}
+				return switch (this.looseSnowGrainShape) {
+					case PP, DF -> eu.albina.model.enumerations.AvalancheProblem.new_snow;
+					case MF -> eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+					case FC, DH, SH -> null;
+					default -> null;
+				};
 			case glide:
 				return eu.albina.model.enumerations.AvalancheProblem.gliding_snow;
 			default:
@@ -942,16 +924,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 							if (this.dangerSpotRecognizability == null) {
 								return null;
 							}
-							switch (this.dangerSpotRecognizability) {
-								case very_easy:
-								case easy:
-									return AvalancheProblemType.wind_slab;
-								case hard:
-								case very_hard:
-									return AvalancheProblemType.storm_slab;
-								default:
-									return null;
-							}
+							return switch (this.dangerSpotRecognizability) {
+								case very_easy, easy -> AvalancheProblemType.wind_slab;
+								case hard, very_hard -> AvalancheProblemType.storm_slab;
+							};
 						}
 					case MF:
 						return AvalancheProblemType.wet_slab;
@@ -965,18 +941,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 						return null;
 				}
 			case loose:
-				switch (this.looseSnowGrainShape) {
-					case PP:
-					case DF:
-					case FC:
-					case DH:
-					case SH:
-						return AvalancheProblemType.dry_loose;
-					case MF:
-						return AvalancheProblemType.wet_loose;
-					default:
-						return null;
-				}
+				return switch (this.looseSnowGrainShape) {
+					case PP, DF, FC, DH, SH -> AvalancheProblemType.dry_loose;
+					case MF -> AvalancheProblemType.wet_loose;
+					default -> null;
+				};
 			case glide:
 				return AvalancheProblemType.glide_avalanche;
 			default:

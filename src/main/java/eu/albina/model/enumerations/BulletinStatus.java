@@ -18,112 +18,40 @@ public enum BulletinStatus {
 	}
 
 	public int comparePublicationStatus(BulletinStatus status) {
-		switch (this) {
-		case missing:
-			switch (status) {
-			case missing:
-				return 0;
-			case draft:
-			case submitted:
-			case published:
-			case updated:
-			case resubmitted:
-			case republished:
-				return -1;
-			default:
-				return 1;
-			}
-		case draft:
-			switch (status) {
-			case missing:
-				return 1;
-			case draft:
-				return 0;
-			case updated:
-			case submitted:
-			case published:
-			case resubmitted:
-			case republished:
-				return -1;
-			default:
-				return 1;
-			}
-		case submitted:
-			switch (status) {
-			case missing:
-			case draft:
-			case updated:
-				return 1;
-			case submitted:
-				return 0;
-			case resubmitted:
-			case published:
-			case republished:
-				return -1;
-			default:
-				return 1;
-			}
-		case published:
-			switch (status) {
-			case missing:
-			case draft:
-			case updated:
-			case submitted:
-			case resubmitted:
-				return 1;
-			case published:
-				return 0;
-			case republished:
-				return -1;
-			default:
-				return 1;
-			}
-		case updated:
-			switch (status) {
-			case missing:
-			case draft:
-				return 1;
-			case updated:
-				return 0;
-			case submitted:
-			case published:
-			case resubmitted:
-			case republished:
-				return -1;
-			default:
-				return 1;
-			}
-		case resubmitted:
-			switch (status) {
-			case missing:
-			case draft:
-			case updated:
-			case submitted:
-				return 1;
-			case resubmitted:
-				return 0;
-			case published:
-			case republished:
-				return -1;
-			default:
-				return 1;
-			}
-		case republished:
-			switch (status) {
-			case missing:
-			case draft:
-			case updated:
-			case submitted:
-			case resubmitted:
-			case published:
-				return 1;
-			case republished:
-				return 0;
-			default:
-				return 1;
-			}
-		default:
-			return -1;
-		}
+		return switch (this) {
+			case missing -> switch (status) {
+				case missing -> 0;
+				case draft, submitted, published, updated, resubmitted, republished -> -1;
+			};
+			case draft -> switch (status) {
+				case missing -> 1;
+				case draft -> 0;
+				case updated, submitted, published, resubmitted, republished -> -1;
+			};
+			case submitted -> switch (status) {
+				case missing, draft, updated -> 1;
+				case submitted -> 0;
+				case resubmitted, published, republished -> -1;
+			};
+			case published -> switch (status) {
+				case missing, draft, updated, submitted, resubmitted -> 1;
+				case published -> 0;
+				case republished -> -1;
+			};
+			case updated -> switch (status) {
+				case missing, draft -> 1;
+				case updated -> 0;
+				case submitted, published, resubmitted, republished -> -1;
+			};
+			case resubmitted -> switch (status) {
+				case missing, draft, updated, submitted -> 1;
+				case resubmitted -> 0;
+				case published, republished -> -1;
+			};
+			case republished -> switch (status) {
+				case missing, draft, updated, submitted, resubmitted, published -> 1;
+				case republished -> 0;
+			};
+		};
 	}
 }

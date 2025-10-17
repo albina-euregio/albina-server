@@ -14,16 +14,10 @@ public enum GlidingSnowActivity {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-		case low:
-			return "low";
-		case medium:
-			return "medium";
-		case high:
-			return "high";
-
-		default:
-			return null;
-		}
+        return switch (this) {
+            case low -> "low";
+            case medium -> "medium";
+            case high -> "high";
+		};
 	}
 }

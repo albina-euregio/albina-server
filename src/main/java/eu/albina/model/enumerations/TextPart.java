@@ -14,32 +14,18 @@ public enum TextPart {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-		case avActivityHighlights:
-			return "avalancheActivityHighlights";
-		case avActivityComment:
-			return "avalancheActivityComment";
-		case synopsisHighlights:
-			return "wxSynopsisHighlights";
-		case synopsisComment:
-			return "wxSynopsisComment";
-		case snowpackStructureHighlights:
-			return "snowpackStructureHighlights";
-		case snowpackStructureComment:
-			return "snowpackStructureComment";
-		case travelAdvisoryHighlights:
-			return "travelAdvisoryHighlights";
-		case travelAdvisoryComment:
-			return "travelAdvisoryComment";
-		case tendencyComment:
-			return "tendencyComment";
-		case highlights:
-			return "highlights";
-		case generalHeadlineComment:
-			return "generalHeadlineComment";
-
-		default:
-			return null;
-		}
+        return switch (this) {
+            case avActivityHighlights -> "avalancheActivityHighlights";
+            case avActivityComment -> "avalancheActivityComment";
+            case synopsisHighlights -> "wxSynopsisHighlights";
+            case synopsisComment -> "wxSynopsisComment";
+            case snowpackStructureHighlights -> "snowpackStructureHighlights";
+            case snowpackStructureComment -> "snowpackStructureComment";
+            case travelAdvisoryHighlights -> "travelAdvisoryHighlights";
+            case travelAdvisoryComment -> "travelAdvisoryComment";
+            case tendencyComment -> "tendencyComment";
+            case highlights -> "highlights";
+            case generalHeadlineComment -> "generalHeadlineComment";
+		};
 	}
 }

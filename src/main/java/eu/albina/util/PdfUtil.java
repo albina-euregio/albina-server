@@ -981,103 +981,67 @@ public class PdfUtil {
 
 	private Color getDangerRatingColor(DangerRating dangerRating, boolean grayscale) {
 		if (grayscale) {
-			switch (dangerRating) {
-			case low:
-				return dangerLevel1ColorBw;
-			case moderate:
-				return dangerLevel2ColorBw;
-			case considerable:
-				return dangerLevel3ColorBw;
-			case high:
-				return dangerLevel4ColorBw;
-			case very_high:
-				return dangerLevel5ColorRedBw;
-			default:
-				return whiteColor;
-			}
+			return switch (dangerRating) {
+				case low -> dangerLevel1ColorBw;
+				case moderate -> dangerLevel2ColorBw;
+				case considerable -> dangerLevel3ColorBw;
+				case high -> dangerLevel4ColorBw;
+				case very_high -> dangerLevel5ColorRedBw;
+				default -> whiteColor;
+			};
 		} else {
-			switch (dangerRating) {
-			case low:
-				return dangerLevel1Color;
-			case moderate:
-				return dangerLevel2Color;
-			case considerable:
-				return dangerLevel3Color;
-			case high:
-				return dangerLevel4Color;
-			case very_high:
-				return dangerLevel5ColorRed;
-			default:
-				return whiteColor;
-			}
+			return switch (dangerRating) {
+				case low -> dangerLevel1Color;
+				case moderate -> dangerLevel2Color;
+				case considerable -> dangerLevel3Color;
+				case high -> dangerLevel4Color;
+				case very_high -> dangerLevel5ColorRed;
+				default -> whiteColor;
+			};
 		}
 	}
 
 	private Color getDangerRatingBackgroundColor(DangerRating dangerRating, boolean grayscale) {
 		if (grayscale) {
-			switch (dangerRating) {
-			case low:
-				return dangerLevel1ColorBw;
-			case moderate:
-				return dangerLevel2ColorBw;
-			case considerable:
-				return whiteColor;
-			case high:
-				return whiteColor;
-			case very_high:
-				return whiteColor;
-			default:
-				return whiteColor;
-			}
+			return switch (dangerRating) {
+				case low -> dangerLevel1ColorBw;
+				case moderate -> dangerLevel2ColorBw;
+				case considerable -> whiteColor;
+				case high -> whiteColor;
+				case very_high -> whiteColor;
+				default -> whiteColor;
+			};
 		} else {
-			switch (dangerRating) {
-			case low:
-				return dangerLevel1Color;
-			case moderate:
-				return dangerLevel2Color;
-			case considerable:
-				return whiteColor;
-			case high:
-				return whiteColor;
-			case very_high:
-				return whiteColor;
-			default:
-				return whiteColor;
-			}
+			return switch (dangerRating) {
+				case low -> dangerLevel1Color;
+				case moderate -> dangerLevel2Color;
+				case considerable -> whiteColor;
+				case high -> whiteColor;
+				case very_high -> whiteColor;
+				default -> whiteColor;
+			};
 		}
 	}
 
 	private Color getDangerRatingTextColor(DangerRating dangerRating, boolean grayscale) {
 		if (grayscale) {
-			switch (dangerRating) {
-			case low:
-				return blackColor;
-			case moderate:
-				return blackColor;
-			case considerable:
-				return dangerLevel3ColorBw;
-			case high:
-				return dangerLevel4ColorBw;
-			case very_high:
-				return dangerLevel5ColorRedBw;
-			default:
-				return blackColor;
-			}
+			return switch (dangerRating) {
+				case low -> blackColor;
+				case moderate -> blackColor;
+				case considerable -> dangerLevel3ColorBw;
+				case high -> dangerLevel4ColorBw;
+				case very_high -> dangerLevel5ColorRedBw;
+				default -> blackColor;
+			};
 		} else {
-			switch (dangerRating) {
-			case low:
-				return blackColor;
-			case moderate:
-				return blackColor;
-			case considerable:
-				return dangerLevel3Color;
-			case high:
-				return dangerLevel4Color;
-			case very_high:
-				return dangerLevel5ColorRed;
-			default:
-				return blackColor;
-			}
+            return switch (dangerRating) {
+                case low -> blackColor;
+                case moderate -> blackColor;
+                case considerable -> dangerLevel3Color;
+                case high -> dangerLevel4Color;
+                case very_high -> dangerLevel5ColorRed;
+                default -> blackColor;
+            };
 		}
 	}
 

@@ -22,58 +22,32 @@ public enum DangerPattern {
 	}
 
 	public static String getCAAMLv5String(DangerPattern dangerPattern) {
-		switch (dangerPattern) {
-		case dp1:
-			return "DP1";
-		case dp2:
-			return "DP2";
-		case dp3:
-			return "DP3";
-		case dp4:
-			return "DP4";
-		case dp5:
-			return "DP5";
-		case dp6:
-			return "DP6";
-		case dp7:
-			return "DP7";
-		case dp8:
-			return "DP8";
-		case dp9:
-			return "DP9";
-		case dp10:
-			return "DP10";
-
-		default:
-			return "missing";
-		}
+		return switch (dangerPattern) {
+			case dp1 -> "DP1";
+			case dp2 -> "DP2";
+			case dp3 -> "DP3";
+			case dp4 -> "DP4";
+			case dp5 -> "DP5";
+			case dp6 -> "DP6";
+			case dp7 -> "DP7";
+			case dp8 -> "DP8";
+			case dp9 -> "DP9";
+			case dp10 -> "DP10";
+		};
 	}
 
 	public static String getCAAMLv6String(DangerPattern dangerPattern) {
-		switch (dangerPattern) {
-		case dp1:
-			return "dp1";
-		case dp2:
-			return "dp2";
-		case dp3:
-			return "dp3";
-		case dp4:
-			return "dp4";
-		case dp5:
-			return "dp5";
-		case dp6:
-			return "dp6";
-		case dp7:
-			return "dp7";
-		case dp8:
-			return "dp8";
-		case dp9:
-			return "dp9";
-		case dp10:
-			return "dp10";
-
-		default:
-			return null;
-		}
+        return switch (dangerPattern) {
+            case dp1 -> "dp1";
+            case dp2 -> "dp2";
+            case dp3 -> "dp3";
+            case dp4 -> "dp4";
+            case dp5 -> "dp5";
+            case dp6 -> "dp6";
+            case dp7 -> "dp7";
+            case dp8 -> "dp8";
+            case dp9 -> "dp9";
+            case dp10 -> "dp10";
+		};
 	}
 }

@@ -11,12 +11,11 @@ public enum TendencyType {
 	@JsonValue
 	@Override
 	public String toString() {
-        switch (this) {
-            case DECREASING: return "decreasing";
-            case INCREASING: return "increasing";
-            case STEADY: return "steady";
-        }
-        return null;
+        return switch (this) {
+            case DECREASING -> "decreasing";
+            case INCREASING -> "increasing";
+            case STEADY -> "steady";
+        };
     }
 
     public static TendencyType forValue(String value) {

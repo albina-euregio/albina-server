@@ -14,12 +14,11 @@ public enum AvalancheTypeType {
 	@JsonValue
 	@Override
 	public String toString() {
-        switch (this) {
-            case SLAB: return "slab";
-            case LOOSE: return "loose";
-            case GLIDE: return "glide";
-        }
-        throw new IllegalStateException();
+        return switch (this) {
+            case SLAB -> "slab";
+            case LOOSE -> "loose";
+            case GLIDE -> "glide";
+        };
     }
 
     public static AvalancheTypeType forValue(String value) {

@@ -14,20 +14,12 @@ public enum HazardSiteDistribution {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-		case single:
-			return "1";
-		case some:
-			return "2";
-		case many:
-			return "3";
-		case many_most:
-			return "4";
-		case moderately_steep:
-			return "5";
-
-		default:
-			return null;
-		}
+        return switch (this) {
+            case single -> "1";
+            case some -> "2";
+            case many -> "3";
+            case many_most -> "4";
+            case moderately_steep -> "5";
+		};
 	}
 }

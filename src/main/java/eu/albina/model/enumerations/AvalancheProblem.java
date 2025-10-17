@@ -24,50 +24,29 @@ public enum AvalancheProblem {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-		case new_snow:
-			return "new_snow";
-		case wind_slab:
-			return "wind_slab";
-		case persistent_weak_layers:
-			return "persistent_weak_layers";
-		case wet_snow:
-			return "wet_snow";
-		case gliding_snow:
-			return "gliding_snow";
-		case favourable_situation:
-			return "favourable_situation";
-		case cornices:
-			return "cornices";
-		case no_distinct_avalanche_problem:
-			return "no_distinct_avalanche_problem";
-
-		default:
-			return null;
-		}
+		return switch (this) {
+			case new_snow -> "new_snow";
+			case wind_slab -> "wind_slab";
+			case persistent_weak_layers -> "persistent_weak_layers";
+			case wet_snow -> "wet_snow";
+			case gliding_snow -> "gliding_snow";
+			case favourable_situation -> "favourable_situation";
+			case cornices -> "cornices";
+			case no_distinct_avalanche_problem -> "no_distinct_avalanche_problem";
+		};
 	}
 
 	public String toStringId() {
-		switch (this) {
-		case new_snow:
-			return "new_snow";
-		case wind_slab:
-			return "wind_slab";
-		case persistent_weak_layers:
-			return "persistent_weak_layers";
-		case wet_snow:
-			return "wet_snow";
-		case gliding_snow:
-			return "gliding_snow";
-		case favourable_situation:
-			return "favourable_situation";
-		case cornices:
-			return "cornices";
-		case no_distinct_avalanche_problem:
-			return "no_distinct_avalanche_problem";
-		default:
-			return "";
-		}
+        return switch (this) {
+            case new_snow -> "new_snow";
+            case wind_slab -> "wind_slab";
+            case persistent_weak_layers -> "persistent_weak_layers";
+            case wet_snow -> "wet_snow";
+            case gliding_snow -> "gliding_snow";
+            case favourable_situation -> "favourable_situation";
+            case cornices -> "cornices";
+            case no_distinct_avalanche_problem -> "no_distinct_avalanche_problem";
+		};
 	}
 
 	public String getSymbolPath(boolean grayscale) {

@@ -14,30 +14,18 @@ public enum Complexity {
 	}
 
 	public static String getCAAMLString(Complexity complexity) {
-		switch (complexity) {
-		case easy:
-			return "easy";
-		case challenging:
-			return "challenging";
-		case complex:
-			return "complex";
-
-		default:
-			return "n/a";
-		}
+		return switch (complexity) {
+			case easy -> "easy";
+			case challenging -> "challenging";
+			case complex -> "complex";
+		};
 	}
 
 	public static String getString(Complexity complexity) {
-		switch (complexity) {
-		case easy:
-			return "easy";
-		case challenging:
-			return "challenging";
-		case complex:
-			return "complex";
-
-		default:
-			return "n/a";
-		}
+        return switch (complexity) {
+            case easy -> "easy";
+            case challenging -> "challenging";
+            case complex -> "complex";
+		};
 	}
 }

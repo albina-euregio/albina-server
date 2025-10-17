@@ -15,12 +15,11 @@ public enum ValidTimePeriod {
 	@JsonValue
 	@Override
 	public String toString() {
-        switch (this) {
-            case ALL_DAY: return "all_day";
-            case EARLIER: return "earlier";
-            case LATER: return "later";
-        }
-        return null;
+        return switch (this) {
+            case ALL_DAY -> "all_day";
+            case EARLIER -> "earlier";
+            case LATER -> "later";
+        };
     }
 
     public static ValidTimePeriod forValue(String value) {

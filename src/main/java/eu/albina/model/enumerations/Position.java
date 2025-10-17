@@ -14,18 +14,11 @@ public enum Position {
 	}
 
 	public String toString() {
-		switch (this) {
-		case topleft:
-			return "topleft";
-		case topright:
-			return "topright";
-		case bottomleft:
-			return "bottomleft";
-		case bottomright:
-			return "bottomright";
-
-		default:
-			return null;
-		}
+        return switch (this) {
+            case topleft -> "topleft";
+            case topright -> "topright";
+            case bottomleft -> "bottomleft";
+            case bottomright -> "bottomright";
+		};
 	}
 }

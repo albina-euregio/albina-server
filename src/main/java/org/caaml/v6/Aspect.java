@@ -16,18 +16,17 @@ public enum Aspect {
 	@JsonValue
 	@Override
 	public String toString() {
-        switch (this) {
-            case E: return "E";
-            case N: return "N";
-            case NE: return "NE";
-            case NW: return "NW";
-            case N_A: return "n/a";
-            case S: return "S";
-            case SE: return "SE";
-            case SW: return "SW";
-            case W: return "W";
-        }
-        return null;
+        return switch (this) {
+            case E -> "E";
+            case N -> "N";
+            case NE -> "NE";
+            case NW -> "NW";
+            case N_A -> "n/a";
+            case S -> "S";
+            case SE -> "SE";
+            case SW -> "SW";
+            case W -> "W";
+        };
     }
 
     public static Aspect forValue(String value) {

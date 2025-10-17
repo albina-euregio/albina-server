@@ -14,16 +14,10 @@ public enum AvalancheType {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-			case slab:
-				return "slab";
-			case loose:
-				return "loose";
-			case glide:
-				return "glide";
-	
-			default:
-				return null;
-			}
+        return switch (this) {
+            case slab -> "slab";
+            case loose -> "loose";
+            case glide -> "glide";
+		};
 		}
 }

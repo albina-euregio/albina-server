@@ -14,18 +14,11 @@ public enum SnowpackStability {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-		case good:
-			return "good";
-		case fair:
-			return "fair";
-		case poor:
-			return "poor";
-		case very_poor:
-			return "very_poor";
-
-		default:
-			return null;
-		}
+        return switch (this) {
+            case good -> "good";
+            case fair -> "fair";
+            case poor -> "poor";
+            case very_poor -> "very_poor";
+		};
 	}
 }

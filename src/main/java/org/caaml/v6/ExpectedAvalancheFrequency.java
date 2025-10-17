@@ -15,13 +15,12 @@ public enum ExpectedAvalancheFrequency {
 	@JsonValue
 	@Override
 	public String toString() {
-        switch (this) {
-            case FEW: return "few";
-            case MANY: return "many";
-            case NONE: return "none";
-            case SOME: return "some";
-        }
-        return null;
+        return switch (this) {
+            case FEW -> "few";
+            case MANY -> "many";
+            case NONE -> "none";
+            case SOME -> "some";
+        };
     }
 
     public static ExpectedAvalancheFrequency forValue(String value) {

@@ -14,18 +14,11 @@ public enum NaturalAvalancheReleaseProbability {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-		case one:
-			return "1";
-		case two:
-			return "2";
-		case three:
-			return "3";
-		case four:
-			return "4";
-
-		default:
-			return null;
-		}
+		return switch (this) {
+			case one -> "1";
+			case two -> "2";
+			case three -> "3";
+			case four -> "4";
+		};
 	}
 }

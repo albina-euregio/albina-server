@@ -15,13 +15,12 @@ public enum ExpectedSnowpackStability {
 	@JsonValue
 	@Override
     public String toString() {
-        switch (this) {
-            case FAIR: return "fair";
-            case GOOD: return "good";
-            case POOR: return "poor";
-            case VERY_POOR: return "very_poor";
-        }
-        return null;
+        return switch (this) {
+            case FAIR -> "fair";
+            case GOOD -> "good";
+            case POOR -> "poor";
+            case VERY_POOR -> "very_poor";
+        };
     }
 
     public static ExpectedSnowpackStability forValue(String value) {

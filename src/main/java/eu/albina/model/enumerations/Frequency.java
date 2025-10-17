@@ -14,18 +14,11 @@ public enum Frequency {
 	}
 
 	public String toCaamlv6String() {
-		switch (this) {
-		case none:
-			return "none";
-		case few:
-			return "few";
-		case some:
-			return "some";
-		case many:
-			return "many";
-
-		default:
-			return null;
-		}
+        return switch (this) {
+            case none -> "none";
+            case few -> "few";
+            case some -> "some";
+            case many -> "many";
+		};
 	}
 }
