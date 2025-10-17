@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.caaml.v6.Aspect;
@@ -327,16 +330,18 @@ public class TextToSpeech {
 
 	}
 
+	@Serdeable
 	record VoiceSelectionParams(String languageCode, String name, SsmlVoiceGender ssmlGender) {
 	}
 
+	@Serdeable
 	record Response(String audioContent) {
 		byte[] asBytes() {
 			return Base64.getDecoder().decode(audioContent);
 		}
 	}
 
-	public byte[] createAudioFile(AvalancheBulletin bulletin) throws Exception {
+	String createAudioFileRequest(AvalancheBulletin bulletin) {
 		ScriptEngine scriptEngine = new ScriptEngine(bulletin);
 		String ssml = scriptEngine.createScript();
 		VoiceSelectionParams voice = scriptEngine.voice();
@@ -344,17 +349,26 @@ public class TextToSpeech {
 		logger.info("Synthesize speech for bulletin={} lang={} voice={}",
 			bulletin.getBulletinID(), bulletin.getLang(), voice);
 
+		// https://cloud.google.com/text-to-speech/docs/create-audio#text-to-speech-text-protocol
+		try {
+			return objectMapper.writeValueAsString(Map.of(
+				"input", Map.of("ssml", ssml),
+				"voice", voice,
+				"audioConfig", Map.of("audioEncoding", "MP3")
+			));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	public byte[] createAudioFile(AvalancheBulletin bulletin) throws Exception {
+		String json = createAudioFileRequest(bulletin);
+
 		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
 			.createScoped(API_AUTH_SCOPE);
 		credentials.refreshIfExpired();
 		AccessToken token = credentials.getAccessToken();
 
-		// https://cloud.google.com/text-to-speech/docs/create-audio#text-to-speech-text-protocol
-		String json = objectMapper.writeValueAsString(Map.of(
-			"input", Map.of("ssml", ssml),
-			"voice", voice,
-			"audioConfig", Map.of("audioEncoding", "MP3")
-		));
 		URI uri = URI.create(API_URL);
 		HttpRequest request = HttpRequest.newBuilder(uri)
 			.POST(HttpRequest.BodyPublishers.ofString(json))

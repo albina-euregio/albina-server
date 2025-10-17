@@ -42,6 +42,7 @@ class TextToSpeechTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTestUtils.regionTyrol(), null);
 		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
+			caaml.getBulletins().forEach(textToSpeech::createAudioFileRequest);
 			String ssml = caaml.getBulletins().stream()
 				.map(bulletin -> new TextToSpeech.ScriptEngine(bulletin).createScript())
 				.collect(Collectors.joining(String.format("%n%n")));
