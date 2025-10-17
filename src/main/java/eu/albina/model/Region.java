@@ -14,8 +14,6 @@ import io.micronaut.core.annotation.Introspected;
 import io.micronaut.json.tree.JsonNode;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -823,14 +821,6 @@ public class Region implements PersistentObject {
 
 	public void setEnableGeneralHeadline(boolean enableGeneralHeadline) {
 		this.enableGeneralHeadline = enableGeneralHeadline;
-	}
-
-	public Element toCAAML(Document doc) {
-		Element region = doc.createElement("Region");
-		region.setAttribute("gml:id", getId());
-		Element regionSubType = doc.createElement("regionSubType");
-		region.appendChild(regionSubType);
-		return region;
 	}
 
 	public boolean affects(String regionId) {
