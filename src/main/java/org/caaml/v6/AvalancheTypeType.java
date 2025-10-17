@@ -21,10 +21,4 @@ public enum AvalancheTypeType {
         };
     }
 
-    public static AvalancheTypeType forValue(String value) {
-        if (value.equals("slab")) return SLAB;
-        if (value.equals("loose")) return LOOSE;
-        if (value.equals("glide")) return GLIDE;
-        throw new IllegalArgumentException("Cannot deserialize AvalancheTypeType");
-    }
 }

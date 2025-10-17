@@ -48,7 +48,7 @@ public interface EmailUtil {
 	static String getAvalancheProblemLink(LanguageCode lang, Region region,
 										  eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
 		return String.format("%s/education/avalanche-problems#%s",
-			region.getWebsiteUrl(lang), avalancheProblem.toCaamlv6String());
+			region.getWebsiteUrl(lang), avalancheProblem.toStringId());
 	}
 
 	static String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) throws IOException, TemplateException {

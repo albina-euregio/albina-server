@@ -1,20 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
-import java.util.Arrays;
-
 public enum BulletinStatus {
 	republished, resubmitted, updated, published, submitted, draft, missing;
 
 	public static boolean isDraftOrUpdated(BulletinStatus status) {
 		return status == draft || status == updated;
-	}
-
-	public static BulletinStatus fromString(String text) {
-		if (text != null) {
-			return Arrays.stream(BulletinStatus.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
-		}
-		return null;
 	}
 
 	public int comparePublicationStatus(BulletinStatus status) {

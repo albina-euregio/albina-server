@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,13 +14,6 @@ public enum DangerRating {
 				.getString(name() + (useLong ? ".long" : ""));
 	}
 
-	public static DangerRating fromString(String text) {
-		if (text != null) {
-			return Arrays.stream(DangerRating.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
-		}
-		return null;
-	}
-
 	public String getColor() {
 		return switch (this) {
 			case low -> "#CCFF66";
@@ -30,19 +22,6 @@ public enum DangerRating {
 			case high -> "#FF0000";
 			case very_high -> "#800000";
 			default -> "#969696";
-		};
-	}
-
-	public static String getCAAMLv6String(DangerRating dangerRating) {
-		return switch (dangerRating) {
-			case missing -> "no_rating";
-			case no_rating -> "no_rating";
-			case no_snow -> "no_snow";
-			case low -> "low";
-			case moderate -> "moderate";
-			case considerable -> "considerable";
-			case high -> "high";
-			case very_high -> "very_high";
 		};
 	}
 
@@ -85,16 +64,4 @@ public enum DangerRating {
 		};
 	}
 
-	public double getDouble() {
-        return switch (this) {
-            case missing -> .0;
-            case no_rating -> .0;
-            case no_snow -> .0;
-            case low -> 1.0 / 1364;
-            case moderate -> 1.0 / 1364 * 4.0;
-            case considerable -> 1.0 / 1364 * 4.0 * 4.0;
-            case high -> 1.0 / 1364 * 4.0 * 4.0 * 4.0;
-            case very_high -> 1.0 / 1364 * 4.0 * 4.0 * 4.0 * 4.0;
-		};
-	}
 }

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -12,13 +11,6 @@ public enum Tendency {
 
 	public String toString(Locale locale) {
 		return ResourceBundle.getBundle("i18n.Tendency", locale, new XMLResourceBundleControl()).getString(name());
-	}
-
-	public static Tendency fromString(String text) {
-		if (text != null) {
-			return Arrays.stream(Tendency.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
-		}
-		return null;
 	}
 
 	public static String getCaamlString(Tendency tendency) {

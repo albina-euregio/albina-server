@@ -22,10 +22,4 @@ public enum ValidTimePeriod {
         };
     }
 
-    public static ValidTimePeriod forValue(String value) {
-        if (value.equals("all_day")) return ALL_DAY;
-        if (value.equals("earlier")) return EARLIER;
-        if (value.equals("later")) return LATER;
-        throw new IllegalArgumentException("Cannot deserialize ValidTimePeriod");
-    }
 }

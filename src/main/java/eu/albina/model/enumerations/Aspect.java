@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -18,13 +17,6 @@ public enum Aspect {
 	public String toString(Locale locale) {
 		return ResourceBundle.getBundle("i18n.Aspect", locale, new XMLResourceBundleControl())
 				.getString(name());
-	}
-
-	public static Aspect fromString(String text) {
-		if (text != null) {
-			return Arrays.stream(Aspect.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
-		}
-		return null;
 	}
 
 	public String toCaamlString() {
