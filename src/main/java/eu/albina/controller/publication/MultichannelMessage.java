@@ -16,7 +16,6 @@ import com.google.common.base.Stopwatch;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.model.publication.WhatsAppConfiguration;
@@ -125,10 +124,6 @@ public interface MultichannelMessage {
 
 	static MultichannelMessage of(AvalancheReport avalancheReport, LanguageCode lang) {
 		return new AvalancheReportMultichannelMessage(avalancheReport, lang);
-	}
-
-	static MultichannelMessage of(BlogConfiguration config, BlogItem blogPost) {
-		return new BlogItemMultichannelMessage(config, blogPost);
 	}
 
 }

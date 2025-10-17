@@ -1,4 +1,5 @@
-package eu.albina.controller.publication;
+// SPDX-License-Identifier: AGPL-3.0-or-later
+package eu.albina.controller.publication.blog;
 
 import eu.albina.model.publication.BlogConfiguration;
 

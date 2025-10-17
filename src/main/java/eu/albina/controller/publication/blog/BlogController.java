@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-package eu.albina.controller.publication;
+package eu.albina.controller.publication.blog;
 
+import eu.albina.controller.publication.MultichannelMessage;
+import eu.albina.controller.publication.PublicationController;
+import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
@@ -40,6 +43,9 @@ public class BlogController {
 
 	@Inject
 	PublicationController publicationController;
+
+	@Inject
+	RapidMailController rapidMailController;
 
 	@Repository
 	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
@@ -97,7 +103,7 @@ public class BlogController {
 
 	public MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		BlogItem blogPost = getBlogPost(config, blogPostId);
-		return MultichannelMessage.of(config, blogPost);
+		return new BlogItemMultichannelMessage(config, blogPost);
 	}
 
 	public void sendNewBlogPosts(Region region, LanguageCode lang) throws IOException, InterruptedException {
@@ -149,10 +155,10 @@ public class BlogController {
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
 			posting.tryRunWithLogging("Email newsletter", () -> {
-				RapidMailConfiguration mailConfig = publicationController.rapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
+				RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
 					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));
 				mailConfig.setRegion(regionOverride);
-				publicationController.rapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
+				rapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
 				return null;
 			});
 			updateConfigurationLastPublished(config, object);

@@ -2,8 +2,8 @@
 package eu.albina.jobs;
 
 import eu.albina.controller.RegionRepository;
-import eu.albina.controller.publication.BlogController;
-import eu.albina.controller.publication.BlogItem;
+import eu.albina.controller.publication.blog.BlogController;
+import eu.albina.controller.publication.blog.BlogItem;
 import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.model.Region;

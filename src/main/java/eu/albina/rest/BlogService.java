@@ -13,8 +13,8 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.publication.BlogController;
-import eu.albina.controller.publication.BlogItem;
+import eu.albina.controller.publication.blog.BlogController;
+import eu.albina.controller.publication.blog.BlogItem;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;

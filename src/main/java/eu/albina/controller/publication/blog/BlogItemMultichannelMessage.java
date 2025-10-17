@@ -1,18 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-package eu.albina.controller.publication;
+package eu.albina.controller.publication.blog;
 
+import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 
-class BlogItemMultichannelMessage implements MultichannelMessage {
-	private final BlogConfiguration config;
-	private final BlogItem blogPost;
-
-	public BlogItemMultichannelMessage(BlogConfiguration config, BlogItem blogPost) {
-		this.config = config;
-		this.blogPost = blogPost;
-	}
+record BlogItemMultichannelMessage(BlogConfiguration config, BlogItem blogPost) implements MultichannelMessage {
 
 	@Override
 	public Region getRegion() {

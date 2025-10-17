@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-package eu.albina.controller.publication;
+package eu.albina.controller.publication.blog;
 
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Singleton
-public class Wordpress {
+class Wordpress {
 
 	@Inject
 	ObjectMapper objectMapper;
