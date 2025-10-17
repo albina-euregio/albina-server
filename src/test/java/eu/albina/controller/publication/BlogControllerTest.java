@@ -43,7 +43,7 @@ public class BlogControllerTest {
 		List<? extends BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
-		assertTrue(blogController.getBlogPost(config, blogPosts.get(0).getId()).getContent().length() > 100, "blog has >100 chars");
+		assertTrue(blogController.getBlogPost(config, blogPosts.getFirst().getId()).getContent().length() > 100, "blog has >100 chars");
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
 		assertEquals("Inizio dell’inverno in montagna", blogController.getBlogPost(config, "1851").getTitle());
@@ -61,7 +61,7 @@ public class BlogControllerTest {
 		List<? extends BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
-		blogController.updateConfigurationLastPublished(config, blogPosts.get(0));
+		blogController.updateConfigurationLastPublished(config, blogPosts.getFirst());
 	}
 
 	@Disabled

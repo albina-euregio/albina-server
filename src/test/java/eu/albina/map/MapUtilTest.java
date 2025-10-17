@@ -96,7 +96,7 @@ public class MapUtilTest {
 			}
 		}
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final AvalancheBulletin bulletin = avalancheBulletinTestUtils.readBulletins(resource).get(0);
+		final AvalancheBulletin bulletin = avalancheBulletinTestUtils.readBulletins(resource).getFirst();
 		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTyrol, regionTrentino)) {
 			if (!bulletin.affectsRegion(region)) {
 				continue;

@@ -112,7 +112,7 @@ class Blogger {
 		@Override
 		public String getAttachmentUrl() {
 			if (images != null && !images.isEmpty()) {
-				return images.get(0).url;
+				return images.getFirst().url;
 			} else {
 				return null;
 			}

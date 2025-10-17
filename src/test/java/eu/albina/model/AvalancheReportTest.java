@@ -90,7 +90,7 @@ public class AvalancheReportTest {
 		Assertions.assertEquals("am Freitag, 18. Jänner 2019", avalancheReport.getTendencyDate(LanguageCode.de));
 		Assertions.assertEquals("16.01.2019", avalancheReport.getPreviousValidityDateString(LanguageCode.de));
 		Assertions.assertEquals("18.01.2019", avalancheReport.getNextValidityDateString(LanguageCode.de));
-		Assertions.assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
+		Assertions.assertEquals("2019-01-17", bulletins.getFirst().getValidityDateString());
 		Assertions.assertEquals("2019-01-17", avalancheReport.getValidityDateString());
 		Assertions.assertEquals("2019-01-24", avalancheReport.getValidityDateString(Period.ofDays(7)));
 		Assertions.assertEquals("Lawinenvorhersage für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
@@ -106,9 +106,9 @@ public class AvalancheReportTest {
 			Clock.fixed(Instant.parse("2019-01-17T16:00:00Z"), AlbinaUtil.localZone())));
 
 		// should yield strings in correct timezone, even if publication date is in a different timezone
-		Assertions.assertEquals("2019-01-16T16:00Z", bulletins.get(0).getPublicationDate().toString());
+		Assertions.assertEquals("2019-01-16T16:00Z", bulletins.getFirst().getPublicationDate().toString());
 		bulletins.forEach(b -> b.setPublicationDate(b.getPublicationDate().withZoneSameInstant(ZoneId.of("Canada/Mountain"))));
-		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
+		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.getFirst().getPublicationDate().toString());
 		Assertions.assertEquals("16.01.2019, 17:00:00", avalancheReport.getPublicationDate(LanguageCode.de));
 		Assertions.assertEquals("2019-01-16_16-00-00", avalancheReport.getPublicationTimeString());
 	}

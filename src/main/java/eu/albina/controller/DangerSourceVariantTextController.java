@@ -978,7 +978,7 @@ public class DangerSourceVariantTextController {
 			List<Aspect> sortedAspects = Aspect.sortAspects(aspects);
 			for (Map.Entry<Aspect, String> entry : textcatSubstitutionsAspect1.entrySet()) {
 				if (!sortedAspects.isEmpty()) {
-					if (entry.getKey() == sortedAspects.get(0)) {
+					if (entry.getKey() == sortedAspects.getFirst()) {
 						result = result.replaceAll(textcatPlaceholder.get("Expo"), entry.getValue());
 						break;
 					}

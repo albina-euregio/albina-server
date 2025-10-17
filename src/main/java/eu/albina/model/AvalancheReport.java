@@ -360,7 +360,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 
 	public String getGeneralHeadline(LanguageCode lang) {
 		return !this.bulletins.isEmpty()
-			? this.bulletins.get(0).getGeneralHeadlineCommentIn(lang)
+			? this.bulletins.getFirst().getGeneralHeadlineCommentIn(lang)
 			: "";
 	}
 
