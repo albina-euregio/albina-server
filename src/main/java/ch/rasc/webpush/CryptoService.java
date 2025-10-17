@@ -1,7 +1,5 @@
 package ch.rasc.webpush;
 
-import ch.rasc.webpush.dto.SubscriptionKeys;
-
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -117,7 +115,7 @@ public class CryptoService {
 		ECPublicKey asPublicKey = (ECPublicKey) asKeyPair.getPublic();
 		byte[] uncompressedASPublicKey = toUncompressedECPublicKey(asPublicKey);
 
-		ECPublicKey uaPublicKey = fromUncompressedECPublicKey(subscriptionKeys.getP256dh());
+		ECPublicKey uaPublicKey = fromUncompressedECPublicKey(subscriptionKeys.p256dh());
 
 		KeyAgreement keyAgreement = KeyAgreement.getInstance("ECDH");
 		keyAgreement.init(asKeyPair.getPrivate());
@@ -132,7 +130,7 @@ public class CryptoService {
 		// # HKDF-Extract(salt=auth_secret, IKM=ecdh_secret)
 		// PRK_key = HMAC-SHA-256(auth_secret, ecdh_secret)
 		Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
-		hmacSHA256.init(new SecretKeySpec(Base64.getUrlDecoder().decode(subscriptionKeys.getAuth()), "HmacSHA256"));
+		hmacSHA256.init(new SecretKeySpec(Base64.getUrlDecoder().decode(subscriptionKeys.auth()), "HmacSHA256"));
 		byte[] prkKey = hmacSHA256.doFinal(ecdhSecret);
 
 		// # HKDF-Expand(PRK_key, key_info, L_key=32)

@@ -26,8 +26,7 @@ import org.slf4j.LoggerFactory;
 import ch.rasc.webpush.CryptoService;
 import ch.rasc.webpush.PushController;
 import ch.rasc.webpush.ServerKeys;
-import ch.rasc.webpush.dto.Subscription;
-import ch.rasc.webpush.dto.SubscriptionKeys;
+import ch.rasc.webpush.SubscriptionKeys;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
@@ -108,10 +107,9 @@ public class PushNotificationUtil {
 				serverKeys = new ServerKeys(configuration.getVapidPublicKey(), configuration.getVapidPrivateKey());
 			}
 			final SubscriptionKeys subscriptionKeys = new SubscriptionKeys(subscription.getP256dh(), subscription.getAuth());
-			final Subscription subscription1 = new Subscription(subscription.getEndpoint(), null, subscriptionKeys);
 			final String json = getJson(payload);
 			final byte[] encrypted = new CryptoService().encrypt(json, subscriptionKeys, 0);
-			final URI endpointURI = URI.create(subscription1.getEndpoint());
+			final URI endpointURI = URI.create(subscription.getEndpoint());
 			final HttpRequest request = HttpRequest.newBuilder(endpointURI)
 				.header("Content-Type", "application/octet-stream")
 				.header("Content-Encoding", "aes128gcm")
