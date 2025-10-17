@@ -77,7 +77,7 @@ public interface RssUtil {
 	static List<Path> list(Path directory) throws IOException {
 		PathMatcher matcher = directory.getFileSystem().getPathMatcher("glob:*.mp3");
 		try (Stream<Path> stream = Files.list(directory)) {
-			return stream.filter(matcher::matches)
+			return stream.filter(p -> matcher.matches(p.getFileName()))
 				.sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder()))
 				.limit(10).toList();
 		}
