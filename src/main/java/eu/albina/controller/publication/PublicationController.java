@@ -6,6 +6,7 @@ package eu.albina.controller.publication;
 import java.io.IOException;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.publication.rapidmail.RapidMailController;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -50,7 +51,7 @@ public class PublicationController {
 	TelegramController telegramController;
 
 	@Inject
-	RapidMailController rapidMailController;
+    RapidMailController rapidMailController;
 
 	@Inject
 	TextToSpeech textToSpeech;

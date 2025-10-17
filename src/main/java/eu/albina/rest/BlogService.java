@@ -3,10 +3,6 @@ package eu.albina.rest;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PublicationController;
-import eu.albina.controller.publication.PushNotificationUtil;
-import eu.albina.controller.publication.RapidMailController;
-import eu.albina.controller.publication.TelegramController;
-import eu.albina.controller.publication.WhatsAppController;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;

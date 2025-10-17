@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-package eu.albina.controller.publication;
+package eu.albina.controller.publication.rapidmail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,9 +16,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import eu.albina.model.Subscriber;
-import eu.albina.model.publication.rapidmail.mailings.PostMailingsRequest;
-import eu.albina.model.publication.rapidmail.recipientlist.RapidMailRecipientListResponse;
-import eu.albina.model.publication.rapidmail.recipients.post.PostRecipientsRequest;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;

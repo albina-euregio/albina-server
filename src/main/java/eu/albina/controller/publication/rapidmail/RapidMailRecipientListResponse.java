@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
-package eu.albina.model.publication.rapidmail.recipientlist;
+package eu.albina.controller.publication.rapidmail;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Serdeable
-public record RapidMailRecipientListResponse(
+record RapidMailRecipientListResponse(
 	@JsonProperty("_embedded") Embedded embedded,
 	@JsonProperty("page") int page,
 	@JsonProperty("total_items") int totalItems,
@@ -18,13 +18,13 @@ public record RapidMailRecipientListResponse(
 
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	@Serdeable
-	public record Embedded(
+	record Embedded(
 		@JsonProperty("recipientlists") List<Item> recipientlists) {
 	}
 
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	@Serdeable
-	public record Item(
+	record Item(
 		@JsonProperty("created") String created,
 		@JsonProperty("default") String jsonMemberDefault,
 		@JsonProperty("description") String description,
