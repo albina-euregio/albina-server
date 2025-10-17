@@ -52,7 +52,7 @@ public class SubscriptionService {
 		logger.debug("POST JSON subscribe");
 		Objects.requireNonNull(json.language, "language");
 		final Region region = regionRepository.findById(json.regions).orElseThrow();
-		final Subscriber subscriber = new Subscriber();
+		final Subscriber subscriber = subscriberRepository.findById(json.email).orElseGet(Subscriber::new);
 		subscriber.setEmail(json.email);
 		subscriber.setRegions(Collections.singletonList(region));
 		subscriber.setLanguage(json.language);
