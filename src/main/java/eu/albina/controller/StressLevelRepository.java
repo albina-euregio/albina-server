@@ -6,7 +6,6 @@ import eu.albina.model.StressLevel.StressLevelID;
 import eu.albina.model.User;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
-import org.hibernate.HibernateException;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ public interface StressLevelRepository extends CrudRepository<StressLevel, Stres
 
 	List<StressLevel> findByUserInAndDateBetween(Collection<User> users, LocalDate startDate, LocalDate endDate);
 
-	default StressLevel updateOrSave(StressLevel stressLevel) throws HibernateException {
+	default StressLevel updateOrSave(StressLevel stressLevel) {
 		StressLevelID id = new StressLevelID(stressLevel.getUser(), stressLevel.getDate());
 		StressLevel existing = findById(id).orElse(null);
 		if (existing != null) {

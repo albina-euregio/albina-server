@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.inject.Inject;
-import org.hibernate.HibernateException;
+import jakarta.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +92,7 @@ public class ServerInstanceService {
 		try {
 			ServerInstance serverInstance = serverInstanceRepository.findByExternalServerFalse();
 			return HttpResponse.ok(serverInstance);
-		} catch (HibernateException he) {
+		} catch (PersistenceException he) {
 			logger.warn("Error loading local server configuration", he);
 			return HttpResponse.badRequest().body(he.toString());
 		}
@@ -108,7 +108,7 @@ public class ServerInstanceService {
 		try {
 			List<ServerInstance> externalServerInstances = serverInstanceRepository.getExternalServerInstances();
 			return HttpResponse.ok(externalServerInstances);
-		} catch (HibernateException he) {
+		} catch (PersistenceException he) {
 			logger.warn("Error loading local server configuration", he);
 			return HttpResponse.badRequest().body(he.toString());
 		}

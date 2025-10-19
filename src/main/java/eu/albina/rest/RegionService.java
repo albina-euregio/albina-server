@@ -20,7 +20,7 @@ import io.micronaut.security.annotation.Secured;
 import eu.albina.exception.AlbinaException;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
-import org.hibernate.HibernateException;
+import jakarta.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +63,7 @@ public class RegionService {
 		try {
 			List<Region> regions = regionRepository.findAll();
 			return HttpResponse.ok(regions);
-		} catch (HibernateException he) {
+		} catch (PersistenceException he) {
 			logger.warn("Error loading regions", he);
 			return HttpResponse.badRequest().body(he.toString());
 		}
@@ -82,7 +82,7 @@ public class RegionService {
 		try {
 			Region region = regionRepository.findById(regionId).orElseThrow();
 			return HttpResponse.ok(region);
-		} catch (HibernateException he) {
+		} catch (PersistenceException he) {
 			logger.warn("Error loading region", he);
 			return HttpResponse.badRequest().body(he.toString());
 		}
@@ -116,7 +116,7 @@ public class RegionService {
 				logger.warn(message);
 				return HttpResponse.badRequest().body(new AlbinaException(message).toJSON());
 			}
-		} catch (IOException | HibernateException e) {
+		} catch (IOException | PersistenceException e) {
 			logger.warn("Error updating region", e);
 			return HttpResponse.badRequest().body(e.toString());
 		}

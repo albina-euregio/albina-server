@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.inject.Inject;
-import org.hibernate.HibernateException;
+import jakarta.persistence.PersistenceException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -180,7 +180,7 @@ public class UserService {
 			} else {
 				return HttpResponse.badRequest();
 			}
-		} catch (AlbinaException | HibernateException e) {
+		} catch (AlbinaException | PersistenceException e) {
 			logger.warn("Error checking password", e);
 			return HttpResponse.badRequest().body(e.toString());
 		}

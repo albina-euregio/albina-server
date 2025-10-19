@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
-import org.hibernate.HibernateException;
+import jakarta.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +102,7 @@ public class AvalancheBulletinStatusService {
 		} catch (AlbinaException e) {
 			logger.warn("Error loading status", e);
 			return HttpResponse.badRequest().body(e.toString());
-		} catch (HibernateException e) {
+		} catch (PersistenceException e) {
 			logger.warn("Error loading status for " + regionId);
 			return HttpResponse.badRequest().body(e.toString());
 		}
