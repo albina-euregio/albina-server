@@ -9,8 +9,6 @@ import java.util.TreeSet;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.micronaut.serde.annotation.Serdeable;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
@@ -54,7 +52,6 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_problem_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_PROBLEM_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
-	@Fetch(FetchMode.JOIN)
 	@JsonDeserialize(as = LinkedHashSet.class)
 	private Set<Aspect> aspects;
 

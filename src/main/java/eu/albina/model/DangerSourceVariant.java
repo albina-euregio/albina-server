@@ -6,8 +6,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import io.micronaut.serde.annotation.Serdeable;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblemType;
@@ -106,7 +104,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "ASPECT")
-	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
@@ -149,7 +146,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "DANGER_SIGN")
-	@Fetch(FetchMode.JOIN)
 	private Set<DangerSign> dangerSigns;
 
 	/** Information about the selected field in the EAWS matrix */
@@ -283,7 +279,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "TERRAIN_TYPE")
-	@Fetch(FetchMode.JOIN)
 	private Set<TerrainType> terrainTypes;
 
 	/** --------------------- */
