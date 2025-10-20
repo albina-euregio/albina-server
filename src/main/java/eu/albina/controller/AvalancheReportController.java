@@ -323,7 +323,6 @@ public class AvalancheReportController {
 	 * @param region             the region of the report
 	 * @param user               the user who saves the report
 	 */
-	@Transactional
 	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user) {
 		AvalancheReport latestReport = getInternalReport(date, region);
 		BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
@@ -397,7 +396,6 @@ public class AvalancheReportController {
 	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
 	 */
-	@Transactional
 	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, String username,
 										 Instant publicationDate) {
 		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
@@ -476,7 +474,6 @@ public class AvalancheReportController {
 	 * @param region    the region that should be submitted
 	 * @param user      the user who submits the report
 	 */
-	@Transactional
 	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user) {
 		AvalancheReport report = getInternalReport(startDate, region);
 		BulletinUpdate bulletinUpdate = null;
