@@ -17,13 +17,13 @@ import eu.albina.util.XMLResourceBundleControl;
  * @author Norbert Lanzanasto
  */
 public enum LanguageCode {
-	de(new Locale("de", "AT")),
-	it(Locale.ITALIAN),
-	en(new Locale("en", "IE")),
-	fr(Locale.FRENCH),
-	es(new Locale("es")),
-	ca(new Locale("ca")),
-	oc(new Locale("ca")) {
+	de(Locale.of("de", "AT")),
+	it(Locale.of("it")),
+	en(Locale.of("en", "IE")),
+	fr(Locale.of("fr")),
+	es(Locale.of("es")),
+	ca(Locale.of("ca")),
+	oc(Locale.of("ca")) {
 		private String replaceAranes(String date) {
 			date = date.replaceAll("(lunes|dilluns|monday)", "deluns");
 			date = date.replaceAll("(martes|dimarts|tuesday)", "dimars");
