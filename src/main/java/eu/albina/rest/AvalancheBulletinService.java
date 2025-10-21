@@ -271,7 +271,7 @@ public class AvalancheBulletinService {
 	private final RateLimiter pdfRateLimiter = RateLimiter.create(2.0); // allow 2 PDFs per second
 
 	@Get("/pdf")
-	@Produces(PdfUtil.MEDIA_TYPE)
+	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get published bulletins as PDF")
 	public HttpResponse<?> getPublishedBulletinsAsPDF(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -290,7 +290,7 @@ public class AvalancheBulletinService {
 			serverInstance.setPdfDirectory(StandardSystemProperty.JAVA_IO_TMPDIR.value());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
-			return HttpResponse.ok(pdf.toFile()).contentType(PdfUtil.MEDIA_TYPE);
+			return HttpResponse.ok(pdf.toFile()).contentType(MediaType.APPLICATION_PDF);
 		} catch (Exception e) {
 			logger.warn("Error creating PDF", e);
 			return HttpResponse.badRequest().body(e.toString());
@@ -300,7 +300,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get("/{bulletinId}/pdf")
-	@Produces(PdfUtil.MEDIA_TYPE)
+	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get published bulletin as PDF")
 	public HttpResponse<?> getPublishedBulletinAsPDF(
 		@PathVariable("bulletinId") String bulletinId,
@@ -318,7 +318,7 @@ public class AvalancheBulletinService {
 			serverInstance.setPdfDirectory(StandardSystemProperty.JAVA_IO_TMPDIR.value());
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
-			return HttpResponse.ok(pdf.toFile()).contentType(PdfUtil.MEDIA_TYPE);
+			return HttpResponse.ok(pdf.toFile()).contentType(MediaType.APPLICATION_PDF);
 		} catch (Exception e) {
 			logger.warn("Error creating PDF", e);
 			return HttpResponse.badRequest().body(e.toString());
@@ -378,7 +378,7 @@ public class AvalancheBulletinService {
 	@Post("/preview")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(PdfUtil.MEDIA_TYPE)
+	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get bulletin preview as PDF")
 	public HttpResponse<?> getPreviewPdf(
 		@Body AvalancheBulletin[] bulletinsArray,
@@ -408,7 +408,7 @@ public class AvalancheBulletinService {
 
 			return HttpResponse.ok(pdf.toFile())
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + pdf.getFileName() + "\"")
-				.header(HttpHeaders.CONTENT_TYPE, PdfUtil.MEDIA_TYPE);
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF);
 		} catch (Exception e) {
 			logger.warn("Error creating PDFs", e);
 			return HttpResponse.badRequest().body(e.toString());
