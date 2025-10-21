@@ -39,7 +39,10 @@ class LoggingHeadersFilter implements Ordered {
 
 		String username = request.getUserPrincipal()
 			.map(Principal::getName)
-			.or(() -> request.getHeaders().getAuthorization().flatMap(jsonWebTokenParser::parseClaims).map(c -> String.valueOf(c.get(Claims.SUBJECT))))
+			.or(() -> request.getHeaders().getAuthorization()
+				.map(h -> h.startsWith("Bearer ") ? h.substring("Bearer ".length()) : null)
+				.flatMap(jsonWebTokenParser::parseClaims)
+				.map(c -> String.valueOf(c.get(Claims.SUBJECT))))
 			.orElse(null);
 		logger.info("User {} executes {} {}", username, request.getMethod(), request.getUri());
 	}
