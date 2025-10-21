@@ -65,11 +65,11 @@ public interface MapUtil {
 				: bulletin.regions(preview).stream();
 			regions.forEach(region -> {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
-				bindings.put("bulletin_ids", region + "-h", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("bulletin_ids", region + "-l", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("danger_h", region + "-h", new Argument(DangerRating.getInt(description.dangerRating(true))));
-				bindings.put("danger_l", region + "-l", new Argument(DangerRating.getInt(description.dangerRating(false))));
-				bindings.put("elevation_h", region + "-h", new Argument(description.getElevation()));
+				bindings.put("bulletin_ids", region + "-high", new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("bulletin_ids", region + "-low", new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.dangerRating(true))));
+				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.dangerRating(false))));
+				bindings.put("elevation_h", region + "-high", new Argument(description.getElevation()));
 			});
 		}
 		SimpleBindings simpleBindings = new SimpleBindings();
