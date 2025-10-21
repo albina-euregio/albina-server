@@ -376,6 +376,10 @@ public class DangerSourceVariantTextController {
 			Map.entry("Alarmzeichen",
 					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\},\"Altschnee03§sowie_Alarmzeichen\":\\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0\\}"));
 
+	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant) {
+		return getTextForDangerSourceVariant(dangerSourceVariant, getDangerSourceVariantText(dangerSourceVariant));
+	}
+
 	public String getTextForDangerSourceVariant(DangerSourceVariant dangerSourceVariant,
 			DangerSourceVariantText dangerSourceVariantText) {
 		if (dangerSourceVariantText == null) {

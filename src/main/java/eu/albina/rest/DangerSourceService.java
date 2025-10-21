@@ -169,9 +169,7 @@ public class DangerSourceService {
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				for (DangerSourceVariant variant : variants) {
-					variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(
-						variant,
-						dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
+					variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 				}
 				dangerSourceVariantRepository.saveDangerSourceVariants(Arrays.asList(variants),
 					instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
@@ -211,8 +209,7 @@ public class DangerSourceService {
 		logger.debug("POST JSON danger source variant");
 
 		try {
-			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant,
-				dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
+			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
@@ -272,8 +269,7 @@ public class DangerSourceService {
 		logger.debug("PUT JSON danger source variant");
 
 		try {
-			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant,
-				dangerSourceVariantTextController.getDangerSourceVariantText(variant)));
+			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
