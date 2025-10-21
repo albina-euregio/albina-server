@@ -89,8 +89,7 @@ public class AvalancheBulletinController {
 																	 Instant endDate, Region region, User user) throws AlbinaException {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<>();
 
-		if (checkBulletinsForDuplicateRegion(newBulletins, region))
-			throw new AlbinaException("duplicateRegion");
+		checkBulletinsForDuplicateRegion(newBulletins, region);
 
 		List<AvalancheBulletin> loadedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 		Map<String, AvalancheBulletin> originalBulletins = loadedBulletins.stream().collect(Collectors.toMap(AbstractPersistentObject::getId, b -> b));
@@ -504,22 +503,16 @@ public class AvalancheBulletinController {
 	 *
 	 * @param bulletins the bulletins to be checked
 	 * @param region    the region to check the micro regions for
-	 * @return true if one micro region was defined twice
+	 * @throws AlbinaException if one micro region was defined twice
 	 */
-	private boolean checkBulletinsForDuplicateRegion(List<AvalancheBulletin> bulletins, Region region) {
-		boolean duplicateRegion = false;
+	private void checkBulletinsForDuplicateRegion(List<AvalancheBulletin> bulletins, Region region) throws AlbinaException {
 		Set<String> definedRegions = new HashSet<>();
 		for (AvalancheBulletin bulletin : bulletins) {
-			for (String entry : bulletin.getSavedRegions())
-				if (entry.startsWith(region.getId()))
-					if (!definedRegions.add(entry.toLowerCase()))
-						duplicateRegion = true;
-			for (String entry : bulletin.getPublishedRegions())
-				if (entry.startsWith(region.getId()))
-					if (!definedRegions.add(entry.toLowerCase()))
-						duplicateRegion = true;
+			for (String r : bulletin.getPublishedAndSavedRegions())
+				if (r.startsWith(region.getId()))
+					if (!definedRegions.add(r))
+						throw new AlbinaException("Duplicate region " + r);
 		}
-		return duplicateRegion;
 	}
 
 	/**
@@ -563,8 +556,11 @@ public class AvalancheBulletinController {
 			.toList();
 		// select bulletins within the region
 
-		if (checkBulletinsForDuplicateRegion(bulletins, region))
+		try {
+			checkBulletinsForDuplicateRegion(bulletins, region);
+		} catch (AlbinaException e) {
 			json.add("duplicateRegion");
+		}
 
 		Set<String> definedRegions = new HashSet<>();
 		for (AvalancheBulletin bulletin : results) {
