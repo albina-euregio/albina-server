@@ -37,24 +37,17 @@ import eu.albina.model.DangerSourceVariantsStatus;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Controller("/danger-sources")
 @Tag(name = "danger-sources")
-@OpenAPIDefinition(info = @Info(title = "albina-server", version = "0.0", description = "Server component to compose and publish multilingual avalanche bulletins", license = @License(name = "GNU General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"), contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")), servers = {
-		@Server(url = "/albina/api") })
 public class DangerSourceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(DangerSourceService.class);
