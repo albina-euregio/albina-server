@@ -24,6 +24,7 @@ import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Controller("/danger-sources")
 @Tag(name = "danger-sources")
+@Transactional
 public class DangerSourceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(DangerSourceService.class);
