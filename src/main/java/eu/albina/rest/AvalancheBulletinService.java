@@ -43,6 +43,7 @@ import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.RateLimiter;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
+import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -183,6 +184,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(deprecated = true)
@@ -207,6 +209,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get("/caaml")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(summary = "Get published bulletins for date as CAAML XML")
@@ -232,6 +235,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get("/caaml/json")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Get published bulletins for date as CAAML JSON")
 	public HttpResponse<?> getPublishedCaamlJsonBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -246,6 +250,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get("/latest")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@ApiResponse(description = "latest", content = @Content(schema = @Schema(implementation = LatestBulletin.class)))
 	@Operation(summary = "Get latest bulletin date")
 	public HttpResponse<?> getLatest() {
@@ -271,6 +276,7 @@ public class AvalancheBulletinService {
 	private final RateLimiter pdfRateLimiter = RateLimiter.create(2.0); // allow 2 PDFs per second
 
 	@Get("/pdf")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get published bulletins as PDF")
 	public HttpResponse<?> getPublishedBulletinsAsPDF(
@@ -300,6 +306,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get("/{bulletinId}/pdf")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get published bulletin as PDF")
 	public HttpResponse<?> getPublishedBulletinAsPDF(
@@ -328,6 +335,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get("/json")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get published bulletins for date")
 	@JsonView(JsonUtil.Views.Public.class)
@@ -347,6 +355,7 @@ public class AvalancheBulletinService {
 	}
 
 	@Get("/highest")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@ApiResponse(description = "latest", content = @Content(schema = @Schema(implementation = Highest.class)))
 	@Operation(summary = "Get highest danger rating")
 	public HttpResponse<?> getHighestDangerRating(
