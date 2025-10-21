@@ -60,7 +60,7 @@ Database migrations are handled by Liquibase, and are enabled by default via `li
    4. check the contents of the file and adapt if necessary. Once you are satisfied, rename it, update the lines `-- changeset albina:000_000000 failOnError:true` accordingly, and move into appropriate sub-folder under `resources/db`
 3. Deploy changesets in your local test environment:
    1. run `mvn compile` followed by `mvn liquibase:update`, or,
-   2. check that `ALBINA_DB_RUN_MIGRATION=true` and start local server with `mvn jetty:run`
+   2. just start the local server with `mvn mn:run`
 4. Commit changes to Java source and liquibase changesets together.
 
 ### Tips
@@ -108,10 +108,10 @@ ssh example-server -L 3306:localhost:3306
 2. Start the server:
 
 ```bash
-mvn jetty:run
+mvn mn:run
 ```
 
-3. Once the server is running, you can access and test the API by navigating to: http://0.0.0.0:8080/albina/
+3. Once the server is running, you can access the API by navigating to: http://0.0.0.0:8080/albina/api
 
 ## Micronaut 4.9.2 Documentation
 
@@ -122,6 +122,11 @@ mvn jetty:run
 ---
 
 - [Micronaut Maven Plugin documentation](https://micronaut-projects.github.io/micronaut-maven-plugin/latest/)
+
+## Micronaut Data
+Micronaut Data is a database access toolkit that uses Ahead of Time (AoT) compilation to pre-compute queries for repository interfaces that are then executed by a thin, lightweight runtime layer.
+- [Guide](https://micronaut-projects.github.io/micronaut-data/latest/guide/)
+
 ## Feature liquibase documentation
 
 - [Micronaut Liquibase Database Migration documentation](https://micronaut-projects.github.io/micronaut-liquibase/latest/guide/index.html)
