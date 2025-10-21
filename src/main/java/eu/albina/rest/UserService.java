@@ -3,6 +3,7 @@ package eu.albina.rest;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import eu.albina.controller.RegionRepository;
@@ -27,7 +28,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.inject.Inject;
-import jakarta.persistence.PersistenceException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,6 @@ public class UserService {
 	@Operation(summary = "Get all users")
 	@ApiResponse(description = "users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
 	public HttpResponse<?> getUsers() {
-		logger.debug("GET JSON users");
 		try {
 			List<User> users = userRepository.findAll();
 			return HttpResponse.ok(users);
@@ -71,7 +70,6 @@ public class UserService {
 	@Operation(summary = "Get all roles")
 	@ApiResponse(description = "roles", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Role.class))))
 	public HttpResponse<?> getRoles() {
-		logger.debug("GET JSON roles");
 		Role[] roles = Role.values();
 		return HttpResponse.ok(roles);
 	}
@@ -82,7 +80,6 @@ public class UserService {
 	@Operation(summary = "Get all regions")
 	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
 	public HttpResponse<?> getRegions() {
-		logger.debug("GET JSON regions");
 		try {
 			List<String> ids = regionRepository.findAll().stream().map(Region::getId).collect(Collectors.toList());
 			return HttpResponse.ok(ids);
@@ -98,17 +95,16 @@ public class UserService {
 	@Operation(summary = "Create user")
 	public HttpResponse<?> createUser(
 		@Body User user) {
-		logger.debug("POST JSON user");
-		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-
-		// check if email already exists
-		if (!userRepository.existsById(user.getEmail())) {
+		try {
+			if (userRepository.existsById(user.getEmail())) {
+				throw new AlbinaException("User already exists!");
+			}
+			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 			userRepository.save(user);
 			return HttpResponse.noContent();
-		} else {
-			String message = "Error creating user - User already exists";
-			logger.warn(message);
-			return HttpResponse.badRequest().body(new AlbinaException(message).toJSON());
+		} catch (Exception e) {
+			logger.warn("Error creating user", e);
+			return HttpResponse.badRequest().body(e.getMessage());
 		}
 	}
 
@@ -119,20 +115,16 @@ public class UserService {
 	public HttpResponse<?> updateOwnUser(
 		@Body User user,
 		Principal principal) {
-		logger.debug("PUT JSON user");
 		try {
 			String username = principal.getName();
-
-			// check if email already exists
-			if (user.getEmail().equals(username)) {
-				userRepository.update(user);
-				return HttpResponse.noContent();
-			} else {
+			if (!Objects.equals(user.getEmail(), username)) {
 				throw new AlbinaException("Updating user not allowed");
 			}
-		} catch (AlbinaException e) {
+			userRepository.updateKeepPassword(user);
+			return HttpResponse.noContent();
+		} catch (Exception e) {
 			logger.warn("Error updating user", e);
-			return HttpResponse.badRequest().body(e.toJSON());
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
@@ -149,16 +141,13 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Change password")
 	public HttpResponse<?> changePassword(@Body ChangePassword data, Principal principal) {
-		logger.debug("PUT JSON password");
 		try {
 			String username = principal.getName();
-
 			userRepository.changePassword(username, data.oldPassword, data.newPassword);
-
 			return HttpResponse.ok();
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 			logger.warn("Error changing password", e);
-			return HttpResponse.badRequest().body(e.toJSON());
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
@@ -171,16 +160,11 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Check password")
 	public HttpResponse<?> checkPassword(@Body CheckPassword data, Principal principal) {
-		logger.debug("GET JSON check password");
 		try {
 			String username = principal.getName();
-
-			if (userRepository.checkPassword(username, data.password)) {
-				return HttpResponse.ok();
-			} else {
-				return HttpResponse.badRequest();
-			}
-		} catch (AlbinaException | PersistenceException e) {
+			userRepository.authenticate(username, data.password);
+			return HttpResponse.ok();
+		} catch (Exception e) {
 			logger.warn("Error checking password", e);
 			return HttpResponse.badRequest().body(e.toString());
 		}
@@ -191,11 +175,10 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete user")
 	public MutableHttpResponse<String> deleteUser(@PathVariable("id") String id) {
-		logger.info("DELETE JSON user {}", id);
 		try {
 			userRepository.delete(id);
 			return HttpResponse.ok();
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 			logger.warn("Error deleting user", e);
 			return HttpResponse.badRequest().body(e.toString());
 		}
@@ -206,14 +189,12 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Reset user password")
 	public HttpResponse<?> resetPassword(@PathVariable("id") String id, @Body ResetPassword data) {
-		logger.debug("PUT JSON user password");
 		try {
 			userRepository.resetPassword(id, data.newPassword);
-
 			return HttpResponse.ok();
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 			logger.warn("Error changing password", e);
-			return HttpResponse.badRequest().body(e.toJSON());
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
@@ -224,18 +205,12 @@ public class UserService {
 	public HttpResponse<?> updateUser(
 		@PathVariable("id") String id,
 		@Body User user) {
-		logger.debug("PUT JSON user");
 		try {
-			// check if email already exists
-			if (userRepository.existsById(user.getEmail())) {
-				userRepository.update(user);
-				return HttpResponse.ok();
-			} else {
-				throw new AlbinaException("User does not exist");
-			}
-		} catch (AlbinaException e) {
+			userRepository.updateKeepPassword(user);
+			return HttpResponse.ok();
+		} catch (Exception e) {
 			logger.warn("Error updating user", e);
-			return HttpResponse.badRequest().body(e.toJSON());
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
