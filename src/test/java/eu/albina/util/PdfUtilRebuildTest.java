@@ -4,6 +4,7 @@ package eu.albina.util;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -76,7 +77,7 @@ public class PdfUtilRebuildTest {
 
 	private AvalancheReport fetch(LocalDate date, Region region) {
 		try {
-			URL url = new URL("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json");
+			URL url = URI.create("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json").toURL();
 			logger.info("Fetching bulletins from {}", url);
 			List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(url);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);

@@ -3,6 +3,7 @@ package eu.albina.caaml;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -131,7 +132,7 @@ public class CaamlTest {
 	}
 
 	private AvalancheReport loadFromURL(LocalDate date) throws Exception {
-		URL url = new URL(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date));
+		URL url = URI.create(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date)).toURL();
 		LoggerFactory.getLogger(getClass()).info("Fetching bulletins from {}", url);
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(url);
 		return AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
