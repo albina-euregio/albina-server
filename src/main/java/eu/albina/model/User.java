@@ -5,7 +5,9 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.util.JsonUtil;
 import io.micronaut.serde.annotation.Serdeable;
@@ -42,7 +44,7 @@ public class User implements NameAndEmail {
 
 	/** Password of the user */
 	@Column(name = "PASSWORD", length = 191)
-	@JsonIgnore
+	@JsonView({JsonUtil.Views.Detailed.class})
 	private String password;
 
 	/** Name of the user **/
@@ -141,6 +143,16 @@ public class User implements NameAndEmail {
 
 	public void setRegions(Set<Region> regions) {
 		this.regions = regions;
+	}
+
+	@JsonProperty("regions")
+	public Set<String> getRegionsString() {
+		return regions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
+	@JsonProperty("regions")
+	public void setRegionsString(Set<String> regions) {
+		this.regions = regions.stream().map(Region::new).collect(Collectors.toSet());
 	}
 
 	public String getImage() {

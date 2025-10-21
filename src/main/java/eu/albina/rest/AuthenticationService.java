@@ -5,12 +5,16 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.UserRepository;
+import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 
 import eu.albina.model.Region;
@@ -69,7 +73,8 @@ public class AuthenticationService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Authenticate user")
 	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = AuthenticationResponse.class)))
-	public HttpResponse<?> login(@Body Credentials credentials) {
+	@JsonView(JsonUtil.Views.Internal.class)
+	public AuthenticationResponse login(@Body Credentials credentials) {
 		String username = credentials.username.toLowerCase();
 		String password = credentials.password;
 
@@ -80,10 +85,9 @@ public class AuthenticationService {
 			Authentication authentication = Authentication.build(username, roles);
 			AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
 
-			AuthenticationResponse result = new AuthenticationResponse(user, user.getRegions(), token.getAccessToken());
-			return HttpResponse.ok(result);
+			return new AuthenticationResponse(user, user.getRegions(), token.getAccessToken());
 		} catch (Exception e) {
-			return HttpResponse.unauthorized();
+			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 		}
 	}
 

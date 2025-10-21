@@ -9,6 +9,8 @@ public interface JsonUtil {
 
 		class Internal {
 		}
+
+		class Detailed extends Internal {}
 	}
 
 }

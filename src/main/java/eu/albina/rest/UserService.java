@@ -6,8 +6,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
+import eu.albina.model.User;
+import eu.albina.model.enumerations.Role;
+import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Body;
@@ -18,8 +29,6 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
-
-import eu.albina.model.Region;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,15 +36,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.inject.Inject;
-import org.mindrot.jbcrypt.BCrypt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.User;
-import eu.albina.model.enumerations.Role;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
 @Controller("/user")
 @Tag(name = "user")
@@ -54,14 +56,9 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get all users")
 	@ApiResponse(description = "users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
-	public HttpResponse<?> getUsers() {
-		try {
-			List<User> users = userRepository.findAll();
-			return HttpResponse.ok(users);
-		} catch (Exception e) {
-			logger.warn("Error loading users", e);
-			return HttpResponse.unauthorized();
-		}
+	@JsonView(JsonUtil.Views.Internal.class)
+	public List<User> getUsers() {
+		return userRepository.findAll();
 	}
 
 	@Get("/roles")
