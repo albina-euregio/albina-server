@@ -87,7 +87,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 	title = "albina-server",
 	version = "0.0",
 	description = "Server component to compose and publish multilingual avalanche bulletins",
-	license = @License(name = "GNU General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"),
+	license = @License(name = "GNU Affero General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"),
 	contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")
 ), servers = {@Server(url = "/albina/api")})
 public class AvalancheBulletinService {
