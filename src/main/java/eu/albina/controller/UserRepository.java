@@ -6,12 +6,17 @@ import eu.albina.model.User;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.Principal;
 import java.util.List;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
+
+	Logger logger = LoggerFactory.getLogger(UserRepository.class);
+
 	@Override
 	default List<User> findAll() {
 		return findByDeletedFalse();
@@ -56,11 +61,16 @@ public interface UserRepository extends CrudRepository<User, String> {
 	 * @throws AlbinaException if the credentials are not valid
 	 */
 	default void authenticate(String username, String password) throws AlbinaException {
-		User user = findByIdOrElseThrow(username);
-		if (user.isDeleted())
-			throw new AlbinaException("User has been deleted!");
-		if (!BCrypt.checkpw(password, user.getPassword()))
-			throw new AlbinaException("Password not correct!");
+		try {
+			User user = findByIdOrElseThrow(username);
+			if (user.isDeleted())
+				throw new AlbinaException("User has been deleted!");
+			if (!BCrypt.checkpw(password, user.getPassword()))
+				throw new AlbinaException("Password not correct!");
+		} catch (AlbinaException e) {
+			logger.warn("Failed to authenticate " + username, e);
+			throw new AlbinaException("Incorrect username or password entered!");
+		}
 	}
 
 	default void delete(String username) throws AlbinaException {
