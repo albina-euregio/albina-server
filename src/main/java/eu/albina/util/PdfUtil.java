@@ -25,7 +25,6 @@ import com.itextpdf.kernel.colors.Color;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.colors.WebColors;
-import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
@@ -37,6 +36,9 @@ import com.itextpdf.kernel.pdf.PdfViewerPreferences;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.event.AbstractPdfDocumentEvent;
+import com.itextpdf.kernel.pdf.event.AbstractPdfDocumentEventHandler;
+import com.itextpdf.kernel.pdf.event.PdfDocumentEvent;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
@@ -126,7 +128,12 @@ public class PdfUtil {
 			openSansBoldFont = createFont("fonts/open-sans/OpenSans-Bold.ttf");
 			openSansLightFont = createFont("fonts/open-sans/OpenSans-Light.ttf");
 
-			pdf.addEventHandler(PdfDocumentEvent.END_PAGE, event -> addHeaderFooter((PdfDocumentEvent) event));
+			pdf.addEventHandler(PdfDocumentEvent.END_PAGE, new AbstractPdfDocumentEventHandler() {
+				@Override
+				protected void onAcceptedEvent(AbstractPdfDocumentEvent event) {
+					addHeaderFooter((PdfDocumentEvent) event);
+				}
+			});
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 

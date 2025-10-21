@@ -23,7 +23,7 @@
 		<slf4j.version>2.0.17</slf4j.version>
 		<hibernate.version>6.6.2.Final</hibernate.version>
 		<liquibase.version>4.30.0</liquibase.version>
-		<itextpdf.version>7.2.6</itextpdf.version>
+		<itextpdf.version>9.3.0</itextpdf.version>
 		<micronaut.version>4.9.4</micronaut.version>
 		<micronaut.runtime>tomcat</micronaut.runtime>
 		<micronaut.aot.enabled>false</micronaut.aot.enabled>
