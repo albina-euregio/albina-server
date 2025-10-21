@@ -232,9 +232,9 @@ public class PdfUtil {
 		// Add page number
 		int pageNumber = docEvent.getDocument().getPageNumber(page);
 		String pageText = MessageFormat.format(lang.getBundleString("pdf.page-number"), pageNumber);
-		double width = openSansRegularFont.getContentWidth(new PdfString(pageText)) * 0.001f * 12 / 2;
+		double width = openSansRegularFont.getContentWidth(new PdfString(pageText)) * 0.001f * 12 / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, 9)
-			.moveText(pageSize.getWidth() / 2 - width / 2, 20).setColor(greyDarkColor, true).showText(pageText)
+			.moveText(pageSize.getWidth() / 2f - width / 2f, 20).setColor(greyDarkColor, true).showText(pageText)
 			.endText();
 
 		canvas.close();
@@ -1077,7 +1077,7 @@ public class PdfUtil {
 					.setFontColor(blackColor);
 				Paragraph p = new Paragraph().add(title)
 					.setMultipliedLeading(1.1f)
-					.setFixedPosition(pageSize.getWidth() / 2 - 260, mapY + 2 * mapHeight * 0.88f + 80, mapWidth);
+					.setFixedPosition(pageSize.getWidth() / 2f - 260, mapY + 2 * mapHeight * 0.88f + 80, mapWidth);
 				canvas.add(p);
 			}
 
@@ -1085,20 +1085,20 @@ public class PdfUtil {
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
 			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
-			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY + mapHeight + 40);
+			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY + mapHeight + 40);
 			canvas.add(overviewMapAMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
-					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
+					.moveText(pageSize.getWidth() / 2f - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
 					.showText(lang.getBundleString("valid-time-period.earlier")).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.pm));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
 			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
-			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2 - mapWidth / 2, mapY);
+			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY);
 			canvas.add(overviewMapPMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
-					.moveText(pageSize.getWidth() / 2 - 240, mapY + mapHeight + 10).setColor(blackColor, true)
+					.moveText(pageSize.getWidth() / 2f - 240, mapY + mapHeight + 10).setColor(blackColor, true)
 					.showText(lang.getBundleString("valid-time-period.later")).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.fd));
@@ -1114,12 +1114,12 @@ public class PdfUtil {
 					.setFontColor(blackColor);
 				Paragraph p = new Paragraph().add(title)
 					.setMultipliedLeading(1.1f)
-					.setFixedPosition(pageSize.getWidth() / 2 - (float) region.getPdfMapWidthFd() / 2, region.getPdfMapYFd() + region.getPdfMapHeight() + 120, region.getPdfMapWidthFd());
+ 					.setFixedPosition(pageSize.getWidth() / 2f - region.getPdfMapWidthFd() / 2f, region.getPdfMapYFd() + region.getPdfMapHeight() + 120, region.getPdfMapWidthFd());
 				canvas.add(p);
 			}
 
 			overviewMapImg.scaleToFit(region.getPdfMapWidthFd(), 500);
-			overviewMapImg.setFixedPosition(pageSize.getWidth() / 2 - region.getPdfMapWidthFd() / 2, mapY);
+			overviewMapImg.setFixedPosition(pageSize.getWidth() / 2f - region.getPdfMapWidthFd() / 2f, mapY);
 			canvas.add(overviewMapImg);
 		}
 
@@ -1131,24 +1131,24 @@ public class PdfUtil {
 
 		if (grayscale) {
 			Rectangle dangerLevel1Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
+					pageSize.getWidth() / 2f - 2 * legendEntryWidth - legendEntryWidth / 2f, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel1Rectangle).setColor(dangerLevel1ColorBw, true).fill();
 			Rectangle dangerLevel2Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
+					pageSize.getWidth() / 2f - legendEntryWidth - legendEntryWidth / 2f, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel2Rectangle).setColor(dangerLevel2ColorBw, true).fill();
-			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, legendY,
+			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2f - legendEntryWidth / 2f, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel3Rectangle).setColor(dangerLevel3ColorBw, true).fill();
-			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, legendY,
+			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2f + legendEntryWidth / 2f, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4ColorBw, true).fill();
 
 			for (int j = 0; j < 2; j++) {
 				for (int i = 0; i < 12; i++) {
 					Rectangle dangerLevel5Rectangle = new Rectangle(
-							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, legendY + j * 4,
+							pageSize.getWidth() / 2f + legendEntryWidth + legendEntryWidth / 2f + i * 4, legendY + j * 4,
 							4, 4);
 					if ((i + j) % 2 == 0)
 						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorRedBw, true).fill();
@@ -1158,24 +1158,24 @@ public class PdfUtil {
 			}
 		} else {
 			Rectangle dangerLevel1Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - 2 * legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
+					pageSize.getWidth() / 2f - 2 * legendEntryWidth - legendEntryWidth / 2f, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel1Rectangle).setColor(dangerLevel1Color, true).fill();
 			Rectangle dangerLevel2Rectangle = new Rectangle(
-					pageSize.getWidth() / 2 - legendEntryWidth - legendEntryWidth / 2, legendY, legendEntryWidth,
+					pageSize.getWidth() / 2f - legendEntryWidth - legendEntryWidth / 2f, legendY, legendEntryWidth,
 					legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel2Rectangle).setColor(dangerLevel2Color, true).fill();
-			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2 - legendEntryWidth / 2, legendY,
+			Rectangle dangerLevel3Rectangle = new Rectangle(pageSize.getWidth() / 2f - legendEntryWidth / 2f, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel3Rectangle).setColor(dangerLevel3Color, true).fill();
-			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2 + legendEntryWidth / 2, legendY,
+			Rectangle dangerLevel4Rectangle = new Rectangle(pageSize.getWidth() / 2f + legendEntryWidth / 2f, legendY,
 					legendEntryWidth, legendEntryHeight);
 			pdfCanvas.rectangle(dangerLevel4Rectangle).setColor(dangerLevel4Color, true).fill();
 
 			for (int j = 0; j < 2; j++) {
 				for (int i = 0; i < 12; i++) {
 					Rectangle dangerLevel5Rectangle = new Rectangle(
-							pageSize.getWidth() / 2 + legendEntryWidth + legendEntryWidth / 2 + i * 4, legendY + j * 4,
+							pageSize.getWidth() / 2f + legendEntryWidth + legendEntryWidth / 2f + i * 4, legendY + j * 4,
 							4, 4);
 					if ((i + j) % 2 == 0)
 						pdfCanvas.rectangle(dangerLevel5Rectangle).setColor(dangerLevel5ColorRed, true).fill();
@@ -1188,54 +1188,54 @@ public class PdfUtil {
 		float width;
 		float fontSize = 8;
 		int y = legendY - 10;
-		width = openSansBoldFont.getContentWidth(new PdfString("1")) * 0.001f * fontSize / 2;
+		width = openSansBoldFont.getContentWidth(new PdfString("1")) * 0.001f * fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("1").endText();
-		width = openSansBoldFont.getContentWidth(new PdfString("2")) * 0.001f * fontSize / 2;
+		width = openSansBoldFont.getContentWidth(new PdfString("2")) * 0.001f * fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f - legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("2").endText();
-		width = openSansBoldFont.getContentWidth(new PdfString("3")) * 0.001f * fontSize / 2;
-		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize).moveText(pageSize.getWidth() / 2 - width, y)
+		width = openSansBoldFont.getContentWidth(new PdfString("3")) * 0.001f * fontSize / 2f;
+		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize).moveText(pageSize.getWidth() / 2f - width, y)
 				.setColor(blackColor, true).showText("3").endText();
-		width = openSansBoldFont.getContentWidth(new PdfString("4")) * 0.001f * fontSize / 2;
+		width = openSansBoldFont.getContentWidth(new PdfString("4")) * 0.001f * fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f + legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("4").endText();
-		width = openSansBoldFont.getContentWidth(new PdfString("5")) * 0.001f * fontSize / 2;
+		width = openSansBoldFont.getContentWidth(new PdfString("5")) * 0.001f * fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansBoldFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText("5").endText();
 
 		y = y - 9;
 		width = openSansRegularFont.getContentWidth(new PdfString(DangerRating.low.toString(lang.getLocale(), false)))
-				* 0.001f * fontSize / 2;
+				* 0.001f * fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f - 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(DangerRating.low.toString(lang.getLocale(), false)).endText();
 		width = openSansRegularFont
 				.getContentWidth(new PdfString(DangerRating.moderate.toString(lang.getLocale(), false))) * 0.001f
-				* fontSize / 2;
+				* fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 - legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f - legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(DangerRating.moderate.toString(lang.getLocale(), false)).endText();
 		width = openSansRegularFont
 				.getContentWidth(new PdfString(DangerRating.considerable.toString(lang.getLocale(), false))) * 0.001f
-				* fontSize / 2;
-		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize).moveText(pageSize.getWidth() / 2 - width, y)
+				* fontSize / 2f;
+		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize).moveText(pageSize.getWidth() / 2f - width, y)
 				.setColor(blackColor, true).showText(DangerRating.considerable.toString(lang.getLocale(), false))
 				.endText();
 		width = openSansRegularFont.getContentWidth(new PdfString(DangerRating.high.toString(lang.getLocale(), false)))
-				* 0.001f * fontSize / 2;
+				* 0.001f * fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f + legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(DangerRating.high.toString(lang.getLocale(), false)).endText();
 		width = openSansRegularFont
 				.getContentWidth(new PdfString(DangerRating.very_high.toString(lang.getLocale(), false))) * 0.001f
-				* fontSize / 2;
+				* fontSize / 2f;
 		pdfCanvas.beginText().setFontAndSize(openSansRegularFont, fontSize)
-				.moveText(pageSize.getWidth() / 2 + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
+				.moveText(pageSize.getWidth() / 2f + 2 * legendEntryWidth - width, y).setColor(blackColor, true)
 				.showText(DangerRating.very_high.toString(lang.getLocale(), false)).endText();
 
 		canvas.close();
