@@ -21,11 +21,34 @@ flowchart TD
 
 This project uses Transifex for its translations: https://app.transifex.com/albina-euregio/albina-server/dashboard/
 
+## Deployment
+
+```shell
+mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(git describe --tags)
+mvn clean package
+scp target/albina*.jar albina.example.com:/opt/albina-server/albina.jar
+sudo systemctl restart albina-server.service
+```
+
+```properties
+# /etc/systemd/system/albina-server.service
+[Unit]
+After=syslog.target network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Environment=MICRONAUT_SERVER_PORT=8080
+Environment=UMASK=0022
+ExecStart=/usr/lib/jvm/jre-21/bin/java -jar albina.jar
+Type=simple
+User=...
+WorkingDirectory=/opt/albina-server-dev/
+```
 
 ## Database Migrations
-Database migrations are handled by Liquibase. To activate automatic deployment of new changesets,
-make sure that you have the environment variable
-`ALBINA_DB_RUN_MIGRATION` set to `true`.
+Database migrations are handled by Liquibase, and are enabled by default via `liquibase.datasources.default.change-log=classpath\:db/changelog-main.xml`
 
 ### Liquibase for Automatic Database Migrations
 
