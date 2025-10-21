@@ -61,8 +61,10 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 
 			if (!originalVariants.containsKey(newVariant.getId())) {
 				newVariant.setId(null);
+				save(newVariant);
+			} else {
+				update(newVariant);
 			}
-			save(newVariant);
 		}
 
 		// Delete obsolete variants
