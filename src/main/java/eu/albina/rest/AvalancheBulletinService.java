@@ -44,7 +44,6 @@ import com.google.common.util.concurrent.RateLimiter;
 import eu.albina.model.ServerInstance;
 import eu.albina.caaml.Caaml;
 import io.micronaut.serde.annotation.Serdeable;
-import io.micronaut.transaction.TransactionDefinition;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -530,7 +529,7 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete bulletin")
 	@JsonView(JsonUtil.Views.Internal.class)
-	@io.micronaut.transaction.annotation.Transactional(isolation = TransactionDefinition.Isolation.SERIALIZABLE)
+	@Transactional
 	public HttpResponse<?> deleteJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
