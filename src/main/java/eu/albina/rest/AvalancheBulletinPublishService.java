@@ -81,7 +81,7 @@ public class AvalancheBulletinPublishService {
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 			List<Region> regions = Stream.concat(
 				Stream.of(region),

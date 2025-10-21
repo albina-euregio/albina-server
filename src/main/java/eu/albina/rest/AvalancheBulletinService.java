@@ -456,7 +456,7 @@ public class AvalancheBulletinService {
 				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = userRepository.findById(principal.getName()).orElseThrow();
+				User user = userRepository.findByIdOrElseThrow(principal);
 				Region region = regionRepository.findById(regionId).orElseThrow();
 				List<Region> regions = regionRepository.findAll();
 
@@ -498,7 +498,7 @@ public class AvalancheBulletinService {
 				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = userRepository.findById(principal.getName()).orElseThrow();
+				User user = userRepository.findByIdOrElseThrow(principal);
 				Region region = regionRepository.findById(regionId).orElseThrow();
 				List<Region> regions = regionRepository.findAll();
 
@@ -541,7 +541,7 @@ public class AvalancheBulletinService {
 				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = userRepository.findById(principal.getName()).orElseThrow();
+				User user = userRepository.findByIdOrElseThrow(principal);
 				Region region = regionRepository.findById(regionId).orElseThrow();
 				List<Region> regions = regionRepository.findAll();
 
@@ -576,7 +576,7 @@ public class AvalancheBulletinService {
 				Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 				Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-				User user = userRepository.findById(principal.getName()).orElseThrow();
+				User user = userRepository.findByIdOrElseThrow(principal);
 				Region region = regionRepository.findById(regionId).orElseThrow();
 
 				if (user.hasPermissionForRegion(region.getId())) {
@@ -611,7 +611,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (user.hasPermissionForRegion(region.getId())) {
@@ -691,7 +691,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (regionId != null && user.hasPermissionForRegion(regionId)) {
@@ -739,7 +739,7 @@ public class AvalancheBulletinService {
 			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
 
 			Region region = regionRepository.findById(regionId).orElseThrow();
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				Set<String> result = avalancheBulletinController.checkBulletins(startDate, endDate, region);

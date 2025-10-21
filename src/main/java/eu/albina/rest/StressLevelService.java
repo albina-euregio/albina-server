@@ -4,6 +4,7 @@ package eu.albina.rest;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.StressLevelRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.StressLevel;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -57,11 +58,11 @@ public class StressLevelService {
 	public HttpResponse<?> getStressLevels(
 			Principal principal,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) throws AlbinaException {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = userRepository.findById(principal.getName()).orElseThrow();
+		User user = userRepository.findByIdOrElseThrow(principal);
 		Set<User> users = Collections.singleton(user);
 		List<StressLevel> stressLevels = stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate);
 		return HttpResponse.ok(stressLevels);
@@ -75,11 +76,11 @@ public class StressLevelService {
 			Principal principal,
 			@QueryValue("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) throws AlbinaException {
 
 		LocalDate startDate = OffsetDateTime.parse(start).toLocalDate();
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
-		User user = userRepository.findById(principal.getName()).orElseThrow();
+		User user = userRepository.findByIdOrElseThrow(principal);
 		try {
 			// check that user is member of requested region
 			Region region = regionRepository.findById(regionId).orElseThrow();
@@ -107,9 +108,9 @@ public class StressLevelService {
 	@Transactional
 	public HttpResponse<?> postStressLevel(
 			Principal principal,
-			@Body StressLevel stressLevel) {
+			@Body StressLevel stressLevel) throws AlbinaException {
 
-		User user = userRepository.findById(principal.getName()).orElseThrow();
+		User user = userRepository.findByIdOrElseThrow(principal);
 		stressLevel.setUser(user);
 		stressLevel = stressLevelRepository.updateOrSave(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);

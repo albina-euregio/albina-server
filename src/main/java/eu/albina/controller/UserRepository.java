@@ -7,6 +7,7 @@ import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.security.Principal;
 import java.util.List;
 
 @Repository
@@ -76,6 +77,10 @@ public interface UserRepository extends CrudRepository<User, String> {
 
 	default User findByIdOrElseThrow(String username) throws AlbinaException {
 		return findById(username).orElseThrow(() -> new AlbinaException("No user with username: " + username));
+	}
+
+	default User findByIdOrElseThrow(Principal principal) throws AlbinaException {
+		return findByIdOrElseThrow(principal.getName());
 	}
 
 }

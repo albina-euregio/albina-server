@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller;
 
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
@@ -29,5 +30,9 @@ public interface RegionRepository extends CrudRepository<Region, String> {
 			return getPublishBulletinRegions();
 		}
 		return regionIds.stream().map(this::findById).map(Optional::orElseThrow).toList();
+	}
+
+	default Region findByIdOrElseThrow(String id) throws AlbinaException {
+		return findById(id).orElseThrow(() -> new AlbinaException("No region with id: " + id));
 	}
 }

@@ -164,7 +164,7 @@ public class DangerSourceService {
 
 		try {
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (user.hasPermissionForRegion(region.getId())) {
@@ -216,7 +216,7 @@ public class DangerSourceService {
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (user.hasPermissionForRegion(region.getId())) {
@@ -244,7 +244,7 @@ public class DangerSourceService {
 		logger.debug("DELETE JSON danger source variant");
 
 		try {
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (user.hasPermissionForRegion(region.getId())) {
@@ -277,7 +277,7 @@ public class DangerSourceService {
 
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (user.hasPermissionForRegion(region.getId())) {

@@ -86,7 +86,7 @@ public class MediaFileService {
 			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());
 
 			Region region = regionRepository.findById(regionId).orElseThrow();
-			User user = userRepository.findById(principal.getName()).orElseThrow();
+			User user = userRepository.findByIdOrElseThrow(principal);
 
 			if (!user.hasPermissionForRegion(region.getId())) {
 				logger.warn("User is not authorized for this region!");
