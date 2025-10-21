@@ -8,6 +8,7 @@ import com.google.common.base.MoreObjects;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,10 +22,10 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "rapid_mail_configurations")
+@Serdeable
 public class RapidMailConfiguration implements Serializable {
 
     public static final String TECH_SUBJECT_MATTER = "tech";
-    private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")
@@ -43,7 +44,7 @@ public class RapidMailConfiguration implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE",  length = 191)
-	private LanguageCode lang;
+	private LanguageCode languageCode;
 
 	@Column(name = "MAILINGLIST_NAME", length = 191)
 	private String mailinglistName;
@@ -83,12 +84,12 @@ public class RapidMailConfiguration implements Serializable {
 		this.password = password;
 	}
 
-	public LanguageCode getLang() {
-		return lang;
+	public LanguageCode getLanguageCode() {
+		return languageCode;
 	}
 
-	public void setLang(LanguageCode lang) {
-		this.lang = lang;
+	public void setLanguageCode(LanguageCode lang) {
+		this.languageCode = lang;
 	}
 
 	public String getMailinglistName() {
@@ -119,7 +120,7 @@ public class RapidMailConfiguration implements Serializable {
 			.add("region", region)
 			.add("username", username)
 			.add("password", password)
-			.add("lang", lang)
+			.add("lang", languageCode)
 			.add("mailinglistName", mailinglistName)
 			.add("subjectMatter", subjectMatter)
 			.toString();

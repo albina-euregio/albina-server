@@ -268,7 +268,7 @@ interface Caaml5 {
 
 	static List<Element> toCAAMLv5(AvalancheBulletin bulletin, Document doc, LanguageCode languageCode, Region region) {
 		if (bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty()) {
-			List<Element> result = new ArrayList<Element>();
+			List<Element> result = new ArrayList<>();
 			result.add(createCAAMLv5Bulletin(bulletin, doc, languageCode, region, false));
 
 			if (bulletin.isHasDaytimeDependency())
@@ -343,57 +343,32 @@ interface Caaml5 {
 	}
 
 	static String toCaamlv5String(TextPart textPart) {
-		switch (textPart) {
-		case avActivityHighlights:
-			return "avActivityHighlights";
-		case avActivityComment:
-			return "avActivityComment";
-		case synopsisHighlights:
-			return "wxSynopsisHighlights";
-		case synopsisComment:
-			return "wxSynopsisComment";
-		case snowpackStructureHighlights:
-			return "snowpackStructureHighlights";
-		case snowpackStructureComment:
-			return "snowpackStructureComment";
-		case travelAdvisoryHighlights:
-			return "travelAdvisoryHighlights";
-		case travelAdvisoryComment:
-			return "travelAdvisoryComment";
-		case tendencyComment:
-			return "tendencyComment";
-		case highlights:
-			return "highlights";
-		case generalHeadlineComment:
-			return "generalHeadlineComment";
-
-		default:
-			return null;
-		}
+		return switch (textPart) {
+			case avActivityHighlights -> "avActivityHighlights";
+			case avActivityComment -> "avActivityComment";
+			case synopsisHighlights -> "wxSynopsisHighlights";
+			case synopsisComment -> "wxSynopsisComment";
+			case snowpackStructureHighlights -> "snowpackStructureHighlights";
+			case snowpackStructureComment -> "snowpackStructureComment";
+			case travelAdvisoryHighlights -> "travelAdvisoryHighlights";
+			case travelAdvisoryComment -> "travelAdvisoryComment";
+			case tendencyComment -> "tendencyComment";
+			case highlights -> "highlights";
+			case generalHeadlineComment -> "generalHeadlineComment";
+		};
 	}
 
 	static String toCaamlv5String(eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
-		switch (avalancheProblem) {
-		case new_snow:
-			return "new snow";
-		case wind_slab:
-			return "drifting snow";
-		case persistent_weak_layers:
-			return "old snow";
-		case wet_snow:
-			return "wet snow";
-		case gliding_snow:
-			return "gliding snow";
-		case favourable_situation:
-			return "favourable situation";
-		case cornices:
-			return "cornices";
-		case no_distinct_avalanche_problem:
-			return "no distinct avalanche problem";
-
-		default:
-			return null;
-		}
+		return switch (avalancheProblem) {
+			case new_snow -> "new snow";
+			case wind_slab -> "drifting snow";
+			case persistent_weak_layers -> "old snow";
+			case wet_snow -> "wet snow";
+			case gliding_snow -> "gliding snow";
+			case favourable_situation -> "favourable situation";
+			case cornices -> "cornices";
+			case no_distinct_avalanche_problem -> "no distinct avalanche problem";
+		};
 	}
 
 	static String createValidElevationAttribute(int elevation, boolean above, boolean treeline) {

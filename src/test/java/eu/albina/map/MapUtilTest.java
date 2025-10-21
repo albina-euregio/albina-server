@@ -1,11 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.map;
 
-import static eu.albina.RegionTestUtils.regionAran;
-import static eu.albina.RegionTestUtils.regionEuregio;
-import static eu.albina.RegionTestUtils.regionSouthTyrol;
-import static eu.albina.RegionTestUtils.regionTrentino;
-import static eu.albina.RegionTestUtils.regionTyrol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URL;
@@ -18,6 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.common.base.StandardSystemProperty;
+import eu.albina.AvalancheBulletinTestUtils;
+import eu.albina.RegionTestUtils;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -31,13 +31,24 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.GlobalVariables;
 import eu.albina.util.PdfUtil;
 
+@MicronautTest
 public class MapUtilTest {
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
+	RegionTestUtils regionTestUtils;
 
 	private ServerInstance serverInstance;
 	private Path folder;
+	private Region regionAran;
+	private Region regionEuregio;
+	private Region regionSouthTyrol;
+	private Region regionTrentino;
+	private Region regionTyrol;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -47,6 +58,11 @@ public class MapUtilTest {
 		serverInstance.setMapsPath(folder.toString());
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 		serverInstance.setPdfDirectory(folder.toString());
+		regionAran = regionTestUtils.regionAran();
+		regionEuregio = regionTestUtils.regionEuregio();
+		regionSouthTyrol = regionTestUtils.regionSouthTyrol();
+		regionTrentino = regionTestUtils.regionTrentino();
+		regionTyrol = regionTestUtils.regionTyrol();
 	}
 
 	private Path getRelativePath(Path path) {
@@ -80,7 +96,7 @@ public class MapUtilTest {
 			}
 		}
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final AvalancheBulletin bulletin = AvalancheBulletin.readBulletinsUsingJackson(resource).get(0);
+		final AvalancheBulletin bulletin = avalancheBulletinTestUtils.readBulletins(resource).getFirst();
 		for (Region region : Arrays.asList(regionAran, regionEuregio, regionSouthTyrol, regionTyrol, regionTrentino)) {
 			if (!bulletin.affectsRegion(region)) {
 				continue;
@@ -147,7 +163,7 @@ public class MapUtilTest {
 	@Test
 	public void testMapyrusMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 
@@ -166,7 +182,7 @@ public class MapUtilTest {
 	@Test
 	public void testMapyrusMapsTyrol() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final List<AvalancheBulletin> bulletinsTyrol = bulletins.stream()
 			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(regionTyrol))
 			.collect(Collectors.toList());
@@ -181,7 +197,7 @@ public class MapUtilTest {
 	@Test
 	public void testMapyrusMapsAran() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 
@@ -198,7 +214,7 @@ public class MapUtilTest {
 	@Disabled
 	public void testMapyrusMapsAranVeryHigh() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
@@ -208,7 +224,7 @@ public class MapUtilTest {
 	@Disabled
 	public void testMapyrusMapsAranMatrixInformation() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2022-12-06/ES-CT-L.json");
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
@@ -218,11 +234,11 @@ public class MapUtilTest {
 	@Disabled("fix path")
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionEuregio, serverInstance));
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
-		byte[] actual = Files.readAllBytes(Path.of(GlobalVariables.getTmpMapsPath() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+        byte[] actual = Files.readAllBytes(Path.of(StandardSystemProperty.JAVA_IO_TMPDIR.value() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		ImageTestUtils.assertImageEquals("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png", expected, actual, 0, 0, ignore -> {
 		});
 	}
@@ -231,7 +247,7 @@ public class MapUtilTest {
 	@Disabled("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsWithDaytimeDependency() throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
@@ -241,7 +257,7 @@ public class MapUtilTest {
 	@Disabled("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime1() throws Exception {
 		final URL resource = Resources.getResource("2020-03-29.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionEuregio, serverInstance));
 	}
 
@@ -249,14 +265,14 @@ public class MapUtilTest {
 	@Disabled("slow, only run testMapyrusMaps")
 	public void testMapyrusMapsDaylightSavingTime2() throws Exception {
 		final URL resource = Resources.getResource("2020-03-30.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionEuregio, serverInstance));
 	}
 
 	@Test
 	public void testMayrusBindings() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final Map<String, Object> bindings = MapUtil.createMayrusBindings(bulletins, DaytimeDependency.fd, false);
 		String expected = "{\"AT-07-01-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-01-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-02-01-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-02-01-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-02-02-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-02-02-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-03-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-03-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-04-01-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-04-01-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-04-02-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-04-02-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-05-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-05-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-06-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-06-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-07-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-07-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-08-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-08-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-09-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-09-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-10-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-10-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-11-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-11-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-12-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-12-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-13-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-13-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-14-01-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-01-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-02-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-02-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-03-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-03-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-04-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-04-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-05-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-14-05-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-15-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-15-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-16-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-16-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-17-01-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-17-01-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-17-02-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-17-02-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-18-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-18-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-19-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-19-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-20-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-20-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-21-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-21-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-22-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-22-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-23-01-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-23-01-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-23-02-h\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-23-02-l\": \"f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd\", \"AT-07-24-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-24-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-25-h\": \"cd6faf0f-5188-4904-91cc-524c3a446b0c\", \"AT-07-25-l\": \"cd6faf0f-5188-4904-91cc-524c3a446b0c\", \"AT-07-26-01-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-26-01-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-26-02-h\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-26-02-l\": \"6385c958-018d-4c89-aa67-5eddc31ada5a\", \"AT-07-27-h\": \"cd6faf0f-5188-4904-91cc-524c3a446b0c\", \"AT-07-27-l\": \"cd6faf0f-5188-4904-91cc-524c3a446b0c\", \"AT-07-28-h\": \"cd6faf0f-5188-4904-91cc-524c3a446b0c\", \"AT-07-28-l\": \"cd6faf0f-5188-4904-91cc-524c3a446b0c\", \"AT-07-29-01-h\": \"5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34\", \"AT-07-29-01-l\": \"5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34\", \"AT-07-29-02-h\": \"5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34\", \"AT-07-29-02-l\": \"5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34\", \"AT-07-29-03-h\": \"5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34\", \"AT-07-29-03-l\": \"5bf03ed5-7cac-493b-aad4-f2bc4cb4ba34\", \"IT-32-BZ-01-01-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-01-01-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-01-02-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-01-02-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-02-01-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-02-01-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-02-02-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-02-02-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-03-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-03-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-04-01-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-04-01-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-04-02-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-04-02-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-05-01-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-05-01-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-05-02-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-05-02-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-05-03-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-05-03-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-06-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-06-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-07-01-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-07-01-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-07-02-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-07-02-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-08-01-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-08-01-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-08-02-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-08-02-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-08-03-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-08-03-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-09-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-09-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-10-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-10-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-11-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-11-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-12-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-12-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-13-h\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-13-l\": \"0d9c6af5-53cc-4c80-8901-065a3f5b3195\", \"IT-32-BZ-14-h\": \"2683b4d4-a4d3-48e0-ac4b-1e8a04676925\", \"IT-32-BZ-14-l\": \"2683b4d4-a4d3-48e0-ac4b-1e8a04676925\", \"IT-32-BZ-15-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-15-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-16-h\": \"67e2d91b-2335-45f5-abad-1dc48b86c777\", \"IT-32-BZ-16-l\": \"67e2d91b-2335-45f5-abad-1dc48b86c777\", \"IT-32-BZ-17-h\": \"67e2d91b-2335-45f5-abad-1dc48b86c777\", \"IT-32-BZ-17-l\": \"67e2d91b-2335-45f5-abad-1dc48b86c777\", \"IT-32-BZ-18-01-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-18-01-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-18-02-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-18-02-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-19-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-19-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-20-h\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-BZ-20-l\": \"9d365268-1218-49b8-b05b-e4cc6de13402\", \"IT-32-TN-01-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-01-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-02-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-02-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-03-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-03-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-04-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-04-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-05-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-05-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-06-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-06-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-07-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-07-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-08-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-08-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-09-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-09-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-10-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-10-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-11-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-11-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-12-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-12-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-13-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-13-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-14-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-14-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-15-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-15-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-16-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-16-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-17-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-17-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-18-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-18-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-19-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-19-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-20-h\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-20-l\": \"853733e5-cb48-4cf1-91a2-ebde59dda31f\", \"IT-32-TN-21-h\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\", \"IT-32-TN-21-l\": \"24fce71f-ad60-47d6-b607-d7cefca5ba3f\"}";
 		assertEquals(expected, bindings.get("bulletin_ids").toString());

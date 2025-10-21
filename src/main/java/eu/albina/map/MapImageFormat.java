@@ -1,9 +1,9 @@
 package eu.albina.map;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.StandardSystemProperty;
 import com.google.common.io.MoreFiles;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public enum MapImageFormat {
 			Path pngFile = checkAndReplaceExtension(pdfFile, "pdf", "png");
 			logger.debug("Converting {} to {}", pdfFile, pngFile);
 			int dpi = 300;
-			if (SystemUtils.IS_OS_WINDOWS) {
+			if (IS_OS_WINDOWS) {
 				new ProcessBuilder("gswin32",
 					"-sDEVICE=png16m",
 					"-dTextAlphaBits=4",
@@ -51,7 +51,7 @@ public enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			checkAndReplaceExtension(pngFile, "png", "png");
 			logger.debug("Creating transparency for {}", pngFile);
-			if (SystemUtils.IS_OS_WINDOWS) {
+			if (IS_OS_WINDOWS) {
 				new ProcessBuilder("cmd.exe", "/C", "convert",
 					"-transparent",
 					"white",
@@ -73,7 +73,7 @@ public enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path jpgFile = checkAndReplaceExtension(pngFile, "png", "jpg");
 			logger.debug("Converting {} to {}", pngFile, jpgFile);
-			if (SystemUtils.IS_OS_WINDOWS) {
+			if (IS_OS_WINDOWS) {
 				new ProcessBuilder("cmd.exe", "/C", "convert",
 					pngFile.toString(),
 					jpgFile.toString()
@@ -91,7 +91,7 @@ public enum MapImageFormat {
 		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
 			Path webpFile = checkAndReplaceExtension(pngFile, "png", "webp");
 			logger.debug("Converting {} to {}", pngFile, webpFile);
-			if (SystemUtils.IS_OS_WINDOWS) {
+			if (IS_OS_WINDOWS) {
 				new ProcessBuilder("cmd.exe", "/C", "cwebp",
 					pngFile.toString(),
 					"-o",
@@ -107,6 +107,7 @@ public enum MapImageFormat {
 			return webpFile;
 		}
 	};
+	private static final boolean IS_OS_WINDOWS = StandardSystemProperty.OS_NAME.value().contains("Windows");
 	private static final Logger logger = LoggerFactory.getLogger(MapImageFormat.class);
 
 	abstract Path convertFrom(Path file) throws IOException, InterruptedException;

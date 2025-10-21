@@ -5,15 +5,15 @@ import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Avalanche Bulletin valid for a given set of regions.
  */
 @JsonPropertyOrder({"publicationTime", "validTime", "nextUpdate", "unscheduled", "source", "region", "dangerRating", "avalancheProblem", "highlights", "weatherForecast", "weatherReview", "avalancheActivity", "snowpackStructure", "travelAdvisory", "tendency", "metaData", "customData"})
+@Serdeable
 public class AvalancheBulletin {
     private Texts avalancheActivity;
 	@JacksonXmlElementWrapper(useWrapping = false)
@@ -21,7 +21,7 @@ public class AvalancheBulletin {
     private List<AvalancheProblem> avalancheProblems;
 	@JacksonXmlProperty(isAttribute = true)
     private String bulletinID;
-    private Object customData;
+    private AvalancheBulletinCustomData customData;
 	@JacksonXmlElementWrapper(useWrapping = false)
 	@JacksonXmlProperty(localName = "dangerRating")
     private List<DangerRating> dangerRatings;
@@ -29,10 +29,8 @@ public class AvalancheBulletin {
 	@JacksonXmlProperty(isAttribute = true)
     private String lang;
     private MetaData metaData;
-	@JsonSerialize(using = ToStringSerializer.class)
 	@JacksonXmlProperty(localName = "nextUpdate")
     private Instant nextUpdate;
-	@JsonSerialize(using = ToStringSerializer.class)
 	@JacksonXmlProperty(localName = "publicationTime")
 	private Instant publicationTime;
 	@JacksonXmlElementWrapper(useWrapping = false)
@@ -67,8 +65,8 @@ public class AvalancheBulletin {
     public String getBulletinID() { return bulletinID; }
     public void setBulletinID(String value) { this.bulletinID = value; }
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
+    public AvalancheBulletinCustomData getCustomData() { return customData; }
+    public void setCustomData(AvalancheBulletinCustomData value) { this.customData = value; }
 
     /**
      * Collection of Danger Rating elements for this bulletin.

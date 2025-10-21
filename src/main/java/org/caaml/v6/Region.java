@@ -2,12 +2,14 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Region element describes a (micro) region. The regionID follows the EAWS schema. It is
  * recommended to have the region shape's files with the same IDs in
  * gitlab.com/eaws/eaws-regions. Additionally, the region name can be added.
  */
+@Serdeable
 public class Region {
     private Object customData;
     private MetaData metaData;

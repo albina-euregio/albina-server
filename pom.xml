@@ -1,23 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.albina</groupId>
 	<artifactId>albina</artifactId>
-	<packaging>war</packaging>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>albina-server</name>
-	<description>Server for avalanche.report</description>
-	<url>https://gitlab.com/albina-euregio/albina-server</url>
+	<version>0.1</version>
+	<packaging>${packaging}</packaging>
+
+	<parent>
+		<groupId>io.micronaut.platform</groupId>
+		<artifactId>micronaut-parent</artifactId>
+		<version>4.9.4</version>
+	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.release>11</maven.compiler.release>
+		<packaging>jar</packaging>
+		<maven.compiler.release>21</maven.compiler.release>
+		<jdk.version>21</jdk.version>
+		<release.version>21</release.version>
 		<jersey.version>2.40</jersey.version>
-		<slf4j.version>1.7.36</slf4j.version>
+		<slf4j.version>2.0.17</slf4j.version>
 		<hibernate.version>6.6.2.Final</hibernate.version>
 		<liquibase.version>4.30.0</liquibase.version>
 		<itextpdf.version>7.2.6</itextpdf.version>
+		<micronaut.version>4.9.4</micronaut.version>
+		<micronaut.runtime>tomcat</micronaut.runtime>
+		<micronaut.aot.enabled>false</micronaut.aot.enabled>
+		<micronaut.aot.packageName>eu.albina.aot.generated</micronaut.aot.packageName>
+		<exec.mainClass>eu.albina.Application</exec.mainClass>
 	</properties>
 
 	<profiles>
@@ -34,13 +45,6 @@
 				<hibernate.hikari.minimumIdle>10</hibernate.hikari.minimumIdle>
 				<hibernate.hikari.maximumPoolSize>20</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>SNAPSHOT</albina.conf.git.version>
-				<albina.log.prefix>LOCAL </albina.log.prefix>
-				<albina.log.level>DEBUG</albina.log.level>
-				<albina.log.level.c3p0>ERROR</albina.log.level.c3p0>
-				<albina.log.level.sql>INFO</albina.log.level.sql>
-				<albina.log.filepath>/opt/local/logs/</albina.log.filepath>
-				<albina.log.filename>albina_local.log</albina.log.filename>
-				<albina.log.dest>stdout</albina.log.dest>
 			</properties>
 		</profile>
 		<profile>
@@ -53,13 +57,6 @@
 				<hibernate.hikari.minimumIdle>10</hibernate.hikari.minimumIdle>
 				<hibernate.hikari.maximumPoolSize>50</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
-				<albina.log.prefix>DEV </albina.log.prefix>
-				<albina.log.level>DEBUG</albina.log.level>
-				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
-				<albina.log.level.sql>ERROR</albina.log.level.sql>
-				<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
-				<albina.log.filename>albina_dev.log</albina.log.filename>
-				<albina.log.dest>file</albina.log.dest>
 			</properties>
 		</profile>
 		<profile>
@@ -72,209 +69,23 @@
 				<hibernate.hikari.minimumIdle>20</hibernate.hikari.minimumIdle>
 				<hibernate.hikari.maximumPoolSize>100</hibernate.hikari.maximumPoolSize>
 				<albina.conf.git.version>${env.GIT_VERSION}</albina.conf.git.version>
-				<albina.log.prefix></albina.log.prefix>
-				<albina.log.level>INFO</albina.log.level>
-				<albina.log.level.c3p0>WARN</albina.log.level.c3p0>
-				<albina.log.level.sql>WARN</albina.log.level.sql>
-				<albina.log.filepath>/opt/tomcat/logs/</albina.log.filepath>
-				<albina.log.filename>albina.log</albina.log.filename>
-				<albina.log.dest>file</albina.log.dest>
 			</properties>
 		</profile>
 	</profiles>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-bom</artifactId>
-				<version>2.24.2</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.glassfish.jersey</groupId>
-				<artifactId>jersey-bom</artifactId>
-				<version>${jersey.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.fasterxml.jackson</groupId>
-				<artifactId>jackson-bom</artifactId>
-				<version>2.19.2</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<repositories>
 		<repository>
 			<id>central</id>
-			<name>Central Repository</name>
 			<url>https://repo.maven.apache.org/maven2</url>
-			<layout>default</layout>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
 		</repository>
 	</repositories>
 
 	<dependencies>
 
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>33.5.0-jre</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.auth</groupId>
-			<artifactId>google-auth-library-oauth2-http</artifactId>
-			<version>1.30.0</version>
-		</dependency>
-
-		<!-- timer -->
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>2.5.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.mchange</groupId>
-					<artifactId>c3p0</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.zaxxer</groupId>
-					<artifactId>HikariCP-java7</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- rest -->
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-moxy</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-multipart</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.inject</groupId>
-			<artifactId>jersey-hk2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
-		</dependency>
-
-		<!-- email -->
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<version>2.3.31</version>
-		</dependency>
-
-		<!-- blog -->
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-
-		<!-- pdf -->
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>kernel</artifactId>
-			<version>${itextpdf.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>layout</artifactId>
-			<version>${itextpdf.version}</version>
-		</dependency>
-
-		<!-- swagger -->
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-jaxrs2</artifactId>
-			<version>2.2.15</version>
-		</dependency>
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-jaxrs2-servlet-initializer-v2</artifactId>
-			<version>2.2.15</version>
-		</dependency>
-
-		<!-- JSON -->
-		<dependency>
-			<groupId>com.networknt</groupId>
-			<artifactId>json-schema-validator</artifactId>
-			<version>1.5.8</version>
-		</dependency>
-
-		<!-- logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-		</dependency>
-
-		<!-- database -->
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>6.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-hikaricp</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.xml.bind</groupId>
-			<artifactId>jakarta.xml.bind-api</artifactId>
-			<version>4.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy</artifactId>
-			<version>1.12.22</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
-			<version>3.5.0</version>
+			<version>3.5.6</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.github.waffle</groupId>
@@ -283,30 +94,10 @@
 			</exclusions>
 		</dependency>
 
-		<!-- database migration -->
-		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
-			<version>${liquibase.version}</version>
-		</dependency>
-
-		<!-- testing -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.9.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.9.0</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>4.10.0</version>
+			<version>5.20.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -322,11 +113,35 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- websocket -->
 		<dependency>
-			<groupId>javax.websocket</groupId>
-			<artifactId>javax.websocket-api</artifactId>
-			<version>1.1</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>33.5.0-jre</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.auth</groupId>
+			<artifactId>google-auth-library-oauth2-http</artifactId>
+			<version>1.40.0</version>
+		</dependency>
+
+		<!-- email -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.31</version>
+		</dependency>
+
+		<!-- pdf -->
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>kernel</artifactId>
+			<version>${itextpdf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>layout</artifactId>
+			<version>${itextpdf.version}</version>
 		</dependency>
 
 		<!-- authentication -->
@@ -345,28 +160,22 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
-			<version>1.10.0</version>
-		</dependency>
-
-		<!--  json  -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
+			<version>1.14.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
+			<groupId>com.networknt</groupId>
+			<artifactId>json-schema-validator</artifactId>
+			<version>1.5.8</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-hibernate6</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 
 		<dependency>
@@ -381,109 +190,182 @@
 			<version>2.106</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-jackson-databind</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.data</groupId>
+			<artifactId>micronaut-data-hibernate-jpa</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.data</groupId>
+			<artifactId>micronaut-data-tx-hibernate</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.liquibase</groupId>
+			<artifactId>micronaut-liquibase</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.security</groupId>
+			<artifactId>micronaut-security</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.security</groupId>
+			<artifactId>micronaut-security-jwt</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.serde</groupId>
+			<artifactId>micronaut-serde-jackson</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.servlet</groupId>
+			<artifactId>micronaut-http-server-tomcat</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.sql</groupId>
+			<artifactId>micronaut-hibernate-jpa</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.sql</groupId>
+			<artifactId>micronaut-jdbc-hikari</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.xml</groupId>
+			<artifactId>micronaut-jackson-xml</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.openapi</groupId>
+			<artifactId>micronaut-openapi-annotations</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-http-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.test</groupId>
+			<artifactId>micronaut-test-junit5</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
 	<build>
-		<finalName>albina</finalName>
 		<plugins>
+			<plugin>
+				<groupId>io.micronaut.maven</groupId>
+				<artifactId>micronaut-maven-plugin</artifactId>
+				<version>4.10.2</version>
+				<configuration>
+					<configFile>aot-${packaging}.properties</configFile>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>auto-clean</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M7</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.3.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<!-- https://stackoverflow.com/questions/66361859/jetty-11-doesnt-detect-servlets -->
-				<version>9.4.58.v20250814</version>
+				<version>3.14.1</version>
 				<configuration>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<webApp>
-						<contextPath>/albina</contextPath>
-					</webApp>
+					<!-- Uncomment to enable incremental compilation -->
+					<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+					<annotationProcessorPaths combine.self="override">
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-inject-java</artifactId>
+							<version>${micronaut.core.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut.data</groupId>
+							<artifactId>micronaut-data-processor</artifactId>
+							<version>${micronaut.data.version}</version>
+							<exclusions>
+								<exclusion>
+									<groupId>io.micronaut</groupId>
+									<artifactId>micronaut-inject</artifactId>
+								</exclusion>
+							</exclusions>
+						</path>
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-graal</artifactId>
+							<version>${micronaut.core.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-http-validation</artifactId>
+							<version>${micronaut.core.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut.openapi</groupId>
+							<artifactId>micronaut-openapi</artifactId>
+							<version>${micronaut.openapi.version}</version>
+							<exclusions>
+								<exclusion>
+									<groupId>io.micronaut</groupId>
+									<artifactId>micronaut-inject</artifactId>
+								</exclusion>
+							</exclusions>
+						</path>
+						<path>
+							<groupId>io.micronaut.serde</groupId>
+							<artifactId>micronaut-serde-processor</artifactId>
+							<version>${micronaut.serialization.version}</version>
+							<exclusions>
+								<exclusion>
+									<groupId>io.micronaut</groupId>
+									<artifactId>micronaut-inject</artifactId>
+								</exclusion>
+							</exclusions>
+						</path>
+						<path>
+							<groupId>io.micronaut.servlet</groupId>
+							<artifactId>micronaut-servlet-processor</artifactId>
+							<version>${micronaut.servlet.version}</version>
+							<exclusions>
+								<exclusion>
+									<groupId>io.micronaut</groupId>
+									<artifactId>micronaut-inject</artifactId>
+								</exclusion>
+							</exclusions>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-Amicronaut.processing.group=eu.albina</arg>
+						<arg>-Amicronaut.processing.module=albina</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<url>https://admin.avalanche.report/manager/text</url>
-					<path>${env.TOMCAT_PATH}</path>
-					<username>${env.TOMCAT_USERNAME}</username>
-					<password>${env.TOMCAT_PASSWORD}</password>
-					<update>true</update>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.8.1</version>
-				<configuration>
-					<generateBackupPoms>false</generateBackupPoms>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>${liquibase.version}</version>
-				<configuration>
-					<!--set values for Liquibase properties and settings
-					for example, the location of a properties file to use-->
-<!--					<propertyFile>liquibase.properties</propertyFile>-->
-					<changeLogFile>db/changelog-main.xml</changeLogFile>
-					<diffChangeLogFile>
-						${project.basedir}/src/main/resources/db/generated_changelog.mariadb.sql
-					</diffChangeLogFile>
-<!--					default diffTypes: tables, views, columns, indexes, foreignkeys, primarykeys, uniqueconstraints
-						in addition one can add: data -->
-					<diffTypes>tables, columns, primarykeys, foreignkeys</diffTypes>
-<!--					Liquibase diff has problems detecting the existing primary keys for some tables. Use diffExcludeObjects to ignore them -->
-<!--					<diffExcludeObjects>table:region_hierarchy, table:user_stress_levels, table:text_parts</diffExcludeObjects>-->
-					<diffExcludeObjects>table:generic_observations</diffExcludeObjects>
-					<url>${hibernate.connection.url}</url>
-					<username>${hibernate.connection.username}</username>
-					<password>${hibernate.connection.password}</password>
-					<referenceUrl>hibernate:classic:hibernate.cfg.xml</referenceUrl>
-				</configuration>
-				<dependencies>
-					<!--set up any dependencies for Liquibase to function in your
-					environment for example, a database-specific plugin-->
-					<dependency>
-						<groupId>org.liquibase.ext</groupId>
-						<artifactId>liquibase-hibernate6</artifactId>
-						<version>${liquibase.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-data-jpa</artifactId>
-						<version>3.0.0</version>
-					</dependency>
-				</dependencies>
-			</plugin>
+
 		</plugins>
 
 		<resources>
@@ -496,6 +378,6 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-
 	</build>
+
 </project>

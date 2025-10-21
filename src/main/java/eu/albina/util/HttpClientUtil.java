@@ -1,26 +1,39 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import java.util.concurrent.TimeUnit;
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestFilter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public interface HttpClientUtil {
 
-	Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
-
-	static ClientBuilder newClientBuilder() {
+	static HttpClient.Builder newClientBuilder() {
 		return newClientBuilder(10000);
 	}
 
-	static ClientBuilder newClientBuilder(int readTimeout) {
-		return ClientBuilder.newBuilder()
-			.connectTimeout(10000, TimeUnit.MILLISECONDS)
-			.readTimeout(readTimeout, TimeUnit.MILLISECONDS)
-			.register((ClientRequestFilter) requestContext -> logger.info("Sending {} {}", requestContext.getMethod(), requestContext.getUri()));
+	static HttpClient.Builder newClientBuilder(int readTimeout) {
+		return HttpClient.newBuilder()
+			.connectTimeout(Duration.ofMillis(readTimeout));
+	}
+
+	static String queryParams(Map<String, Object> data) {
+		return data.entrySet().stream()
+			.map(entry -> entry.getKey() + "=" + URLEncoder.encode(String.valueOf(entry.getValue()), StandardCharsets.UTF_8))
+			.collect(Collectors.joining("&"));
+	}
+
+	@Factory
+	class HttpClientFactory {
+
+		@Bean
+		public HttpClient httpClient() {
+			return newClientBuilder().build();
+		}
 	}
 }

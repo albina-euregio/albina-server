@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import io.micronaut.serde.annotation.Serdeable;
+
+@Serdeable
 public class AvalancheBulletinsCustomData {
 	public final AvalancheBulletinsCustomData.ALBINA ALBINA;
 
@@ -8,6 +11,7 @@ public class AvalancheBulletinsCustomData {
 		this.ALBINA = ALBINA;
 	}
 
+	@Serdeable
 	public static class ALBINA {
 		public final String generalHeadline;
 

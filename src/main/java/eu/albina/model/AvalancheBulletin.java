@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
@@ -22,8 +19,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.albina.util.JsonUtil;
 
-import com.google.common.io.Resources;
-
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
@@ -31,6 +26,8 @@ import eu.albina.model.enumerations.StrategicMindset;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -57,13 +54,15 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "avalanche_bulletins")
+@Serdeable
 @JsonView({JsonUtil.Views.Public.class, JsonUtil.Views.Internal.class})
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public class AvalancheBulletin extends AbstractPersistentObject
 		implements Comparable<AvalancheBulletin>, HasValidityDate, HasPublicationDate {
 
 	/** Information about the author of the avalanche bulletin */
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "USER_ID")
 	@JsonProperty("author")
 	@JsonSerialize(as = NameAndEmail.class)
@@ -195,7 +194,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private DangerPattern dangerPattern2;
 
 	/** Map containing all text parts available for a bulletin */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@MapKeyEnumerated(EnumType.STRING)
 	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
@@ -574,6 +573,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		validUntil = v.until;
 	}
 
+	@Serdeable
 	public static class Validity {
 		private ZonedDateTime from;
 		private ZonedDateTime until;
@@ -630,6 +630,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@JsonView(JsonUtil.Views.Public.class)
 	public Set<String> getRegions() {
 		return publishedRegions;
+	}
+
+	@JsonView(JsonUtil.Views.Public.class)
+	public void setRegions(Set<String> regions) {
+		this.publishedRegions = regions;
 	}
 
 	public Set<String> getPublishedRegions() {
@@ -905,12 +910,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Override
 	public int compareTo(AvalancheBulletin other) {
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
-	}
-
-	public static List<AvalancheBulletin> readBulletinsUsingJackson(final URL resource) throws IOException {
-		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
-		final AvalancheBulletin[] bulletins = JsonUtil.parseUsingJackson(validBulletinStringFromResource, AvalancheBulletin[].class);
-		return List.of(bulletins);
 	}
 
 }

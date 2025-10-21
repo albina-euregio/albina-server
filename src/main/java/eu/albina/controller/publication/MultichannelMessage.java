@@ -16,7 +16,6 @@ import com.google.common.base.Stopwatch;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
 import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.model.publication.WhatsAppConfiguration;
@@ -57,55 +56,55 @@ public interface MultichannelMessage {
 			.toString();
 	}
 
-	default void sendToAllChannels() {
-		sendMails();
-		sendTelegramMessage();
-		sendWhatsAppMessage();
-		sendPushNotifications();
+	default void sendToAllChannels(PublicationController publicationController) {
+		sendMails(publicationController);
+		sendTelegramMessage(publicationController);
+		sendWhatsAppMessage(publicationController);
+		sendPushNotifications(publicationController);
 	}
 
-	default void sendMails() {
+	default void sendMails(PublicationController publicationController) {
 		if (!getRegion().isSendEmails()) {
 			return;
 		}
 		tryRunWithLogging("Email newsletter", () -> {
-			RapidMailConfiguration mailConfig = RapidMailController.getConfiguration(getRegion(), getLanguageCode(), null)
+			RapidMailConfiguration mailConfig = publicationController.rapidMailController.getConfiguration(getRegion(), getLanguageCode())
 				.orElseThrow(() -> new NoSuchElementException(String.format("No RapidMailConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			RapidMailController.sendEmail(mailConfig, getHtmlMessage(), getSubject());
+			publicationController.rapidMailController.sendEmail(mailConfig, getHtmlMessage(), getSubject());
 			return null;
 		});
 	}
 
-	default void sendTelegramMessage() {
+	default void sendTelegramMessage(PublicationController publicationController) {
 		if (!getRegion().isSendTelegramMessages()) {
 			return;
 		}
 		tryRunWithLogging("Telegram message", () -> {
-			TelegramConfiguration telegramConfig = TelegramController.getConfiguration(getRegion(), getLanguageCode()).
+			TelegramConfiguration telegramConfig = publicationController.telegramController.getConfiguration(getRegion(), getLanguageCode()).
 				orElseThrow(() -> new NoSuchElementException(String.format("No TelegramConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			TelegramController.trySend(telegramConfig, this, 3);
+			publicationController.telegramController.trySend(telegramConfig, this, 3);
 			return null;
 		});
 	}
 
-	default void sendWhatsAppMessage() {
+	default void sendWhatsAppMessage(PublicationController publicationController) {
 		if (!getRegion().isSendWhatsAppMessages()) {
 			return;
 		}
 		tryRunWithLogging("WhatsApp message", () -> {
-			WhatsAppConfiguration whatsAppConfig = WhatsAppController.getConfiguration(getRegion(), getLanguageCode()).
+			WhatsAppConfiguration whatsAppConfig = publicationController.whatsAppController.getConfiguration(getRegion(), getLanguageCode()).
 				orElseThrow(() -> new NoSuchElementException(String.format("No WhatsAppConfiguration for %s/%s", getRegion(), getLanguageCode())));
-			WhatsAppController.trySend(whatsAppConfig, this, 3);
+			publicationController.whatsAppController.trySend(whatsAppConfig, this, 3);
 			return null;
 		});
 	}
 
-	default void sendPushNotifications() {
+	default void sendPushNotifications(PublicationController publicationController) {
 		if (!getRegion().isSendPushNotifications()) {
 			return;
 		}
 		tryRunWithLogging("Push notifications", () -> {
-			new PushNotificationUtil().send(this);
+			publicationController.pushNotificationUtil.send(this);
 			return null;
 		});
 	}
@@ -125,10 +124,6 @@ public interface MultichannelMessage {
 
 	static MultichannelMessage of(AvalancheReport avalancheReport, LanguageCode lang) {
 		return new AvalancheReportMultichannelMessage(avalancheReport, lang);
-	}
-
-	static MultichannelMessage of(BlogConfiguration config, BlogItem blogPost) {
-		return new BlogItemMultichannelMessage(config, blogPost);
 	}
 
 }

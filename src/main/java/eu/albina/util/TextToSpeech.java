@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -20,6 +22,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.caaml.v6.Aspect;
 import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheBulletinCustomData;
@@ -35,7 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Streams;
 import com.google.common.net.HttpHeaders;
@@ -46,15 +51,22 @@ import eu.albina.caaml.Caaml6;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
-public interface TextToSpeech {
-	String API_URL = "https://eu-texttospeech.googleapis.com/v1/text:synthesize";
-	String API_AUTH_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
-	String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
-	Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
+@Singleton
+public class TextToSpeech {
+	private static final String API_URL = "https://eu-texttospeech.googleapis.com/v1/text:synthesize";
+	private static final String API_AUTH_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
+	private static final String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
+	private static final Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
+
+	@Inject
+	HttpClient httpClient;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	enum SsmlVoiceGender {FEMALE, MALE}
 
-	class ScriptEngine {
+	static class ScriptEngine {
 		private final AvalancheBulletin bulletin;
 		private final LanguageCode lang;
 		private final SsmlVoiceGender gender;
@@ -143,17 +155,15 @@ public interface TextToSpeech {
 			List<String> texts = sortAspects(aspects).stream()
 				.map(Aspect::toString)
 				.map(lang.getBundle("i18n.Aspect")::getString)
-				.collect(Collectors.toList());
-			switch (texts.size()) {
-				case 0:
-					return lang.getBundleString("speech.aspects.0");
-				case 1:
-					return lang.getBundleString("speech.aspects.1", Map.of("aspect1", texts.get(0)));
-				case 2:
-					return lang.getBundleString("speech.aspects.2", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1)));
-				default:
-					return lang.getBundleString("speech.aspects.3", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1), "aspect3", texts.get(2)));
-			}
+				.toList();
+            return switch (texts.size()) {
+                case 0 -> lang.getBundleString("speech.aspects.0");
+                case 1 -> lang.getBundleString("speech.aspects.1", Map.of("aspect1", texts.get(0)));
+                case 2 ->
+                        lang.getBundleString("speech.aspects.2", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1)));
+                default ->
+                        lang.getBundleString("speech.aspects.3", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1), "aspect3", texts.get(2)));
+            };
 		}
 
 
@@ -168,7 +178,7 @@ public interface TextToSpeech {
 				return sorted;
 			}
 			Aspect middleAspect = Stream.of(Aspect.N, Aspect.S, Aspect.W, Aspect.E).filter(aspects::contains).findFirst().orElseThrow();
-			return List.of(sorted.get(0), middleAspect, sorted.get(sorted.size() - 1));
+			return List.of(sorted.getFirst(), middleAspect, sorted.getLast());
 		}
 
 		private String avalancheProblemText(AvalancheProblem p) {
@@ -211,7 +221,7 @@ public interface TextToSpeech {
 		private String dangerRatingTexts0(List<DangerRating> dangerRatings, ValidTimePeriod validTimePeriod) {
 			dangerRatings = dangerRatings.stream().filter(dr -> dr.getValidTimePeriod() == validTimePeriod).collect(Collectors.toList());
 			if (dangerRatings.stream().allMatch(dr -> dr.getElevation() == null)) {
-				DangerRating rating = dangerRatings.iterator().next();
+				DangerRating rating = dangerRatings.getFirst();
 				return lang.getBundleString("speech.danger-rating", Map.of(
 					"validTimePeriod", validTimePeriodText(validTimePeriod),
 					"dangerRating", dangerRatingValueText(rating.getMainValue())
@@ -248,10 +258,10 @@ public interface TextToSpeech {
 				return;
 			}
 			AvalancheBulletinCustomData customData = (AvalancheBulletinCustomData) bulletin.getCustomData();
-			if (customData.LWD_Tyrol == null) {
+			if (customData.getLWD_Tyrol() == null) {
 				return;
 			}
-			String string = customData.LWD_Tyrol.dangerPatterns.stream().map(String::valueOf)
+			String string = customData.getLWD_Tyrol().dangerPatterns.stream().map(String::valueOf)
 				.map(DangerPattern::fromString)
 				.map(p -> p.toString(lang.getLocale()))
 				.collect(Collectors.joining(", "));
@@ -320,40 +330,18 @@ public interface TextToSpeech {
 
 	}
 
-	final class VoiceSelectionParams {
-		private final String languageCode;
-		private final String name;
-		private final SsmlVoiceGender ssmlGender;
-
-		VoiceSelectionParams(String languageCode, String name, SsmlVoiceGender ssmlGender) {
-			this.languageCode = languageCode;
-			this.name = name;
-			this.ssmlGender = ssmlGender;
-		}
-
-		@Override
-		public String toString() {
-			return MoreObjects.toStringHelper(this)
-				.add("languageCode", languageCode)
-				.add("name", name)
-				.add("ssmlGender", ssmlGender)
-				.toString();
-		}
+	@Serdeable
+	record VoiceSelectionParams(String languageCode, String name, SsmlVoiceGender ssmlGender) {
 	}
 
-	final class Response {
-		private final String audioContent;
-
-		Response(String audioContent) {
-			this.audioContent = audioContent;
-		}
-
+	@Serdeable
+	record Response(String audioContent) {
 		byte[] asBytes() {
 			return Base64.getDecoder().decode(audioContent);
 		}
 	}
 
-	static byte[] createAudioFile(AvalancheBulletin bulletin) throws Exception {
+	String createAudioFileRequest(AvalancheBulletin bulletin) {
 		ScriptEngine scriptEngine = new ScriptEngine(bulletin);
 		String ssml = scriptEngine.createScript();
 		VoiceSelectionParams voice = scriptEngine.voice();
@@ -361,17 +349,26 @@ public interface TextToSpeech {
 		logger.info("Synthesize speech for bulletin={} lang={} voice={}",
 			bulletin.getBulletinID(), bulletin.getLang(), voice);
 
+		// https://cloud.google.com/text-to-speech/docs/create-audio#text-to-speech-text-protocol
+		try {
+			return objectMapper.writeValueAsString(Map.of(
+				"input", Map.of("ssml", ssml),
+				"voice", voice,
+				"audioConfig", Map.of("audioEncoding", "MP3")
+			));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	public byte[] createAudioFile(AvalancheBulletin bulletin) throws Exception {
+		String json = createAudioFileRequest(bulletin);
+
 		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
 			.createScoped(API_AUTH_SCOPE);
 		credentials.refreshIfExpired();
 		AccessToken token = credentials.getAccessToken();
 
-		// https://cloud.google.com/text-to-speech/docs/create-audio#text-to-speech-text-protocol
-		String json = JsonUtil.writeValueUsingJackson(Map.of(
-			"input", Map.of("ssml", ssml),
-			"voice", voice,
-			"audioConfig", Map.of("audioEncoding", "MP3")
-		));
 		URI uri = URI.create(API_URL);
 		HttpRequest request = HttpRequest.newBuilder(uri)
 			.POST(HttpRequest.BodyPublishers.ofString(json))
@@ -379,15 +376,12 @@ public interface TextToSpeech {
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
 			.timeout(Duration.ofSeconds(30))
 			.build();
-		HttpResponse<String> response = HttpClient.newBuilder()
-			.connectTimeout(Duration.ofSeconds(10))
-			.build()
-			.send(request, HttpResponse.BodyHandlers.ofString());
-		Response audio = JsonUtil.parseUsingJackson(response.body(), Response.class);
+		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+		Response audio = objectMapper.readValue(response.body(), Response.class);
 		return audio.asBytes();
 	}
 
-	static void createAudioFiles(eu.albina.model.AvalancheReport avalancheReport) throws Exception {
+	public void createAudioFiles(eu.albina.model.AvalancheReport avalancheReport) throws Exception {
 		if (Strings.isNullOrEmpty(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"))) {
 			logger.info("Skipping synthesize speech since GOOGLE_APPLICATION_CREDENTIALS is undefined.");
 			return;

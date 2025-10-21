@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import io.micronaut.serde.annotation.Serdeable;
+
 /**
  * External file is used to link to external files like maps, thumbnails etc.
  */
+@Serdeable
 public class ExternalFile {
     private String description;
     private String fileReferenceURI;

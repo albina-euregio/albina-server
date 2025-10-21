@@ -8,6 +8,7 @@ import com.google.common.base.MoreObjects;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,6 +22,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "blog_configurations")
+@Serdeable
 public class BlogConfiguration implements Serializable {
 
 	public static final String TECH_BLOG_ID = "tech";
@@ -28,8 +30,6 @@ public class BlogConfiguration implements Serializable {
 	public boolean isBlogger() {
 		return "https://www.googleapis.com/blogger/v3/blogs/".equals(blogApiUrl);
 	}
-
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")
@@ -54,7 +54,7 @@ public class BlogConfiguration implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE", length = 191)
-	private LanguageCode lang;
+	private LanguageCode languageCode;
 
 	@Column(name = "LAST_PUBLISHED_BLOG_ID")
 	private String lastPublishedBlogId;
@@ -111,11 +111,11 @@ public class BlogConfiguration implements Serializable {
 	}
 
 	public LanguageCode getLanguageCode() {
-		return lang;
+		return languageCode;
 	}
 
 	public void setLanguageCode(LanguageCode languageCode) {
-		this.lang = languageCode;
+		this.languageCode = languageCode;
 	}
 
 	public String getLastPublishedBlogId() {
@@ -143,7 +143,7 @@ public class BlogConfiguration implements Serializable {
 			.add("blogId", blogId)
 			.add("blogUrl", blogUrl)
 			.add("blogApiUrl", blogApiUrl)
-			.add("languageCode", lang)
+			.add("languageCode", languageCode)
 			.add("lastPublishedBlogId", lastPublishedBlogId)
 			.add("lastPublishedTimestamp", lastPublishedTimestamp)
 			.toString();

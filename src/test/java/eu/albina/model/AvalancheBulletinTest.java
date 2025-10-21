@@ -2,7 +2,11 @@
 package eu.albina.model;
 
 import com.google.common.io.Resources;
+import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.util.JsonUtil;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import net.javacrumbs.jsonunit.JsonAssert;
 import net.javacrumbs.jsonunit.core.Option;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +21,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@MicronautTest
 public class AvalancheBulletinTest {
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@BeforeEach
 	void setUp() {
@@ -49,16 +60,16 @@ public class AvalancheBulletinTest {
 		runTest(Resources.getResource("2025-03-14.internal.json"), JsonUtil.Views.Internal.class);
 	}
 
-	private static void runTest(URL bulletin, Class<?> view) throws IOException {
+	private void runTest(URL bulletin, Class<?> view) throws IOException {
 		String expected = Resources.toString(bulletin, StandardCharsets.UTF_8);
-		List<AvalancheBulletin> avalancheBulletins = AvalancheBulletin.readBulletinsUsingJackson(bulletin);
-		String actual3 = JsonUtil.writeValueUsingJackson(avalancheBulletins, view);
+		List<AvalancheBulletin> avalancheBulletins = avalancheBulletinTestUtils.readBulletins(bulletin);
+		String actual3 = objectMapper.cloneWithViewClass(view).writeValueAsString(avalancheBulletins);
 		JsonAssert.assertJsonEquals(expected, actual3);
 	}
 
 	@Test
 	public void testSortByDangerRating() throws IOException {
-		List<AvalancheBulletin> bulletins = new ArrayList<>(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
+		List<AvalancheBulletin> bulletins = new ArrayList<>(avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json")));
 		Collections.sort(bulletins);
 		List<Integer> actual = bulletins.stream().map(AvalancheBulletin::getHighestDangerRatingDouble).collect(Collectors.toList());
 		Assertions.assertEquals(List.of(14, 10, 8, 6, 4), actual);

@@ -8,8 +8,7 @@ import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import io.micronaut.serde.annotation.Serdeable;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
@@ -34,6 +33,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "avalanche_problems")
+@Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AvalancheProblem extends AbstractPersistentObject {
 
@@ -52,7 +52,6 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "avalanche_problem_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_PROBLEM_ID", referencedColumnName = "ID"))
 	@Column(name = "ASPECT")
-	@Fetch(FetchMode.JOIN)
 	@JsonDeserialize(as = LinkedHashSet.class)
 	private Set<Aspect> aspects;
 
@@ -108,7 +107,7 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	private Set<Text> terrainFeature;
 
 	public AvalancheProblem() {
-		this.aspects = new LinkedHashSet<Aspect>();
+		this.aspects = new LinkedHashSet<>();
 		this.terrainFeature = new TreeSet<>(); // sort texts by language to allow caching of API calls
 	}
 

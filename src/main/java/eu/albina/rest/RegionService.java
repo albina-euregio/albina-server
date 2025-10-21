@@ -1,36 +1,31 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
 import java.util.Optional;
+import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import eu.albina.controller.RegionRepository;
+import eu.albina.controller.ServerInstanceRepository;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.json.tree.JsonNode;
+import io.micronaut.security.annotation.Secured;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.albina.exception.AlbinaException;
-import eu.albina.util.JsonUtil;
-import org.hibernate.HibernateException;
+import io.micronaut.serde.ObjectMapper;
+import jakarta.inject.Inject;
+import jakarta.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -40,135 +35,124 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/regions")
+@Controller("/regions")
 @Tag(name = "regions")
 public class RegionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegionService.class);
 
-	@Context
-	UriInfo uri;
+	@Inject
+	RegionRepository regionRepository;
 
-	@GET
-	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Inject
+	private ObjectMapper objectMapper;
+
+	@Inject
+	private ServerInstanceRepository serverInstanceRepository;
+
+	@Get
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all regions")
 	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Region.class))))
-	public Response getRegions(@Context SecurityContext securityContext) {
+	public HttpResponse<?> getRegions() {
 		logger.debug("GET JSON regions");
 
 		// TODO check if user has ADMIN rights for this region
 
 		try {
-			List<Region> regions = RegionController.getInstance().getRegions();
-			return Response.ok(regions).build();
-		} catch (HibernateException he) {
+			List<Region> regions = regionRepository.findAll();
+			return HttpResponse.ok(regions);
+		} catch (PersistenceException he) {
 			logger.warn("Error loading regions", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
 
-	@GET
-	@Path("/region")
-	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Get("/region")
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get region for ID")
 	@ApiResponse(description = "region", content = @Content(schema = @Schema(implementation = Region.class)))
-	public Response getRegion(@QueryParam("region") String regionId, @Context SecurityContext securityContext) {
+	public HttpResponse<?> getRegion(@QueryValue("region") String regionId) {
 		logger.debug("GET JSON region");
 
 		// TODO check if user has ADMIN rights for this region
 
 		try {
-			Region region = RegionController.getInstance().getRegion(regionId);
-			return Response.ok(region).build();
-		} catch (HibernateException he) {
+			Region region = regionRepository.findById(regionId).orElseThrow();
+			return HttpResponse.ok(region);
+		} catch (PersistenceException he) {
 			logger.warn("Error loading region", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
 
-	@PUT
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Put
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update region")
-	public Response updateRegion(
-		@Parameter(schema = @Schema(implementation = Region.class)) String regionString,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> updateRegion(
+		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("PUT JSON region");
 
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
 
 		try {
-			String id = new Region(regionString, Region::new).getId();
-			Optional<Region> optionalRegion = RegionController.getInstance().tryGetRegion(id);
+			String id = objectMapper.readValue(regionString, Region.class).getId();
+			Optional<Region> optionalRegion = regionRepository.findById(id);
 			if (optionalRegion.isPresent()) {
 				Region existing = optionalRegion.get();
 				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
-				JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(existing).readValue(regionString);
+				existing.updateFromJSON(regionString, objectMapper);
 				existing.fixLanguageConfigurations();
-				RegionController.getInstance().updateRegion(existing);
-				return Response.ok(existing.toJSON()).build();
+				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
+				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
+				regionRepository.update(existing);
+				return HttpResponse.ok(existing);
 			} else {
 				String message = "Error updating region - Region does not exist";
 				logger.warn(message);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
+				return HttpResponse.badRequest().body(new AlbinaException(message).toJSON());
 			}
-		} catch (HibernateException e) {
+		} catch (IOException | PersistenceException e) {
 			logger.warn("Error updating region", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
-		} catch (JsonProcessingException e) {
-			logger.warn("Error deserializing region", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Post
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create region")
-	public Response createRegion(
-		@Parameter(schema = @Schema(implementation = Region.class)) String regionString,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> createRegion(
+		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("POST JSON region");
 		try {
-			Region region = new Region(regionString, Region::new);
+			Region region = objectMapper.readValue(regionString, Region.class);
 
 			// check if id already exists
-			if (RegionController.getInstance().tryGetRegion(region.getId()).isEmpty()) {
+			if (regionRepository.findById(region.getId()).isEmpty()) {
 				region.fixLanguageConfigurations();
-				RegionController.getInstance().createRegion(region);
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).type(MediaType.APPLICATION_JSON)
-						.entity(Map.of()).build();
+				region.setServerInstance(serverInstanceRepository.getLocalServerInstance());
+				regionRepository.save(region);
+				return HttpResponse.created(region);
 			} else {
 				String message = "Error creating region - Region already exists";
 				logger.warn(message);
-				return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
+				return HttpResponse.badRequest(new AlbinaException(message).toJSON());
 			}
-		} catch (JsonProcessingException e) {
+		} catch (IOException e) {
 			logger.warn("Error deserializing region", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest(e.toString());
 		}
 	}
 
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Get("/locked")
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/locked")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response getLockedRegions(@QueryParam("region") String region, @Context SecurityContext securityContext) {
-		logger.debug("GET JSON locked regions");
-		List<Instant> lockedRegions = RegionController.getInstance().getLockedRegions(region);
-		return Response.ok(lockedRegions, MediaType.APPLICATION_JSON).build();
+	public HttpResponse<?> getLockedRegions(@QueryValue("region") String region) {
+		return HttpResponse.serverError();
 	}
 }

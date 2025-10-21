@@ -9,9 +9,11 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import eu.albina.AvalancheBulletinTestUtils;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Resources;
 
 import eu.albina.RegionTestUtils;
 import eu.albina.model.AvalancheBulletin;
@@ -29,11 +30,18 @@ import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 public class PdfUtilRebuildTest {
 	private static final Logger logger = LoggerFactory.getLogger(PdfUtilRebuildTest.class);
 
 	private List<Region> regions;
 	private ServerInstance serverInstance;
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
+	RegionTestUtils regionTestUtils;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -42,10 +50,10 @@ public class PdfUtilRebuildTest {
 		serverInstance.setPdfDirectory("/tmp/bulletins/");
 		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
 
-		Region regionTyrol = RegionTestUtils.readRegion(Resources.getResource("region_AT-07.json"));
-		Region regionSouthTyrol = RegionTestUtils.readRegion(Resources.getResource("region_IT-32-BZ.json"));
-		Region regionTrentino = RegionTestUtils.readRegion(Resources.getResource("region_IT-32-TN.json"));
-		Region regionEuregio = RegionTestUtils.readRegion(Resources.getResource("region_EUREGIO.json"));
+		Region regionTyrol = regionTestUtils.regionTyrol();
+		Region regionSouthTyrol = regionTestUtils.regionSouthTyrol();
+		Region regionTrentino = regionTestUtils.regionTrentino();
+		Region regionEuregio = regionTestUtils.regionEuregio();
 		regionEuregio.addSubRegion(regionTyrol);
 		regionEuregio.addSubRegion(regionSouthTyrol);
 		regionEuregio.addSubRegion(regionTrentino);
@@ -62,7 +70,7 @@ public class PdfUtilRebuildTest {
 	}
 
 	private void rebuildMaps(LocalDate date) {
-		List<AvalancheReport> reports = regions.stream().map(region -> fetch(date, region)).collect(Collectors.toList());
+		List<AvalancheReport> reports = regions.stream().map(region -> fetch(date, region)).toList();
 		reports.forEach(PdfUtilRebuildTest::createRegionPdfs);
 	}
 
@@ -70,7 +78,7 @@ public class PdfUtilRebuildTest {
 		try {
 			URL url = new URL("https://static.avalanche.report/bulletins/" + date + "/avalanche_report.json");
 			logger.info("Fetching bulletins from {}", url);
-			List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(url);
+			List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(url);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setServerInstance(serverInstance);
 			return avalancheReport;

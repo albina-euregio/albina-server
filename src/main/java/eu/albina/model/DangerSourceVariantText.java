@@ -6,6 +6,7 @@ import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.GlidingSnowActivity;
 import eu.albina.model.enumerations.SnowpackStability;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,6 +22,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "danger_source_variant_texts")
+@Serdeable
 public class DangerSourceVariantText extends AbstractPersistentObject {
 
 	@Enumerated(EnumType.STRING)

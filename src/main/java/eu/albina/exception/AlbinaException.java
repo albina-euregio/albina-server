@@ -12,11 +12,6 @@ import java.util.Map;
 public class AlbinaException extends Exception {
 
 	/**
-	 *
-	 */
-	private static final long serialVersionUID = 3770001034138464030L;
-
-	/**
 	 * Constructor with a custom {@code message} text.
 	 *
 	 * @param message

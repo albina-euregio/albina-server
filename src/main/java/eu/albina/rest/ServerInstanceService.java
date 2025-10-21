@@ -2,162 +2,115 @@
 package eu.albina.rest;
 
 import java.util.List;
-import java.util.Map;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import eu.albina.controller.ServerInstanceRepository;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.security.annotation.Secured;
 
-import com.google.common.base.MoreObjects;
-import eu.albina.controller.RegionController;
-
-import eu.albina.controller.publication.BlogController;
-import eu.albina.controller.publication.BlogItem;
-import eu.albina.controller.publication.TelegramController;
-import eu.albina.controller.publication.WhatsAppController;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.BlogConfiguration;
-import eu.albina.model.publication.TelegramConfiguration;
-import eu.albina.model.publication.WhatsAppConfiguration;
 import eu.albina.util.GlobalVariables;
+import io.micronaut.security.rules.SecurityRule;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.hibernate.HibernateException;
+import jakarta.inject.Inject;
+import jakarta.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.ServerInstanceController;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/server")
+@Controller("/server")
 @Tag(name = "server")
 public class ServerInstanceService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ServerInstanceService.class);
 
-	@Context
-	UriInfo uri;
+	@Inject
+	private ServerInstanceRepository serverInstanceRepository;
 
-	@PUT
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Inject
+	private GlobalVariables globalVariables;
+
+	@Put
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update server configuration")
-	public Response updateServerConfiguration(
-		ServerInstance serverInstance) {
-		try {
-			ServerInstanceController.getInstance().updateServerInstance(serverInstance);
-			return Response.ok().build();
-		} catch (AlbinaException e) {
-			logger.warn("Error updating local server configuration", e);
-			return Response.status(Response.Status.BAD_REQUEST).build();
-		}
+	public HttpResponse<?> updateServerConfiguration(@Body ServerInstance serverInstance) {
+		serverInstanceRepository.update(serverInstance);
+		return HttpResponse.noContent();
 	}
 
-	@POST
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Post
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create server configuration")
-	public Response createServerConfiguration(
-		ServerInstance serverInstance,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> createServerConfiguration(@Body ServerInstance serverInstance) {
 		logger.debug("POST JSON server");
 
 		// check if id already exists
-		if (serverInstance.getId() == null || !ServerInstanceController.getInstance().serverInstanceExists(serverInstance.getId())) {
-			ServerInstanceController.getInstance().createServerInstance(serverInstance);
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
+		if (serverInstance.getId() == null || !serverInstanceRepository.existsById(serverInstance.getId())) {
+			serverInstanceRepository.save(serverInstance);
+			return HttpResponse.created(serverInstance);
 		} else {
 			String msg = "Error creating server instance - Server instance already exists";
 			logger.warn(msg);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(msg).build();
+			return HttpResponse.badRequest().body(msg);
 		}
 	}
 
-	static class PublicLocalServerConfiguration {
-		public final String name;
-		public final String apiUrl;
-		public final String version;
-
-		public PublicLocalServerConfiguration(String name, String apiUrl, String version) {
-			this.name = name;
-			this.apiUrl = apiUrl;
-			this.version = version;
-		}
+	@Serdeable
+	public record PublicLocalServerConfiguration(String name, String apiUrl, String version) {
 	}
 
-	@GET
-	@Path("/info")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Get("/info")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Get public local server configuration")
 	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
-	public Response getPublicLocalServerConfiguration() {
-		try {
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-			PublicLocalServerConfiguration r = new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), GlobalVariables.version);
-            return Response.ok(r, MediaType.APPLICATION_JSON).build();
-		} catch (HibernateException he) {
-			logger.warn("Error loading local server configuration", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
-		}
+	public PublicLocalServerConfiguration getPublicLocalServerConfiguration() {
+		ServerInstance serverInstance = serverInstanceRepository.findByExternalServerFalse();
+		return new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), globalVariables.version);
 	}
 
-	@GET
-	@Secured({ Role.SUPERADMIN, Role.ADMIN })
+	@Get
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get local server configuration")
 	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
-	public Response getLocalServerConfiguration() {
+	public HttpResponse<?> getLocalServerConfiguration() {
 		logger.debug("GET JSON server");
 		try {
-			ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-			return Response.ok(serverInstance, MediaType.APPLICATION_JSON).build();
-		} catch (HibernateException he) {
+			ServerInstance serverInstance = serverInstanceRepository.findByExternalServerFalse();
+			return HttpResponse.ok(serverInstance);
+		} catch (PersistenceException he) {
 			logger.warn("Error loading local server configuration", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
 
-	@GET
-	@Secured({ Role.SUPERADMIN, Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Get("/external")
+	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/external")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get external server configurations")
 	@ApiResponse(description = "configuration", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ServerInstance.class))))
-	public Response getExternalServerConfigurations() {
+	public HttpResponse<?> getExternalServerConfigurations() {
 		logger.debug("GET JSON external servers");
 		try {
-			List<ServerInstance> externalServerInstances = ServerInstanceController.getInstance().getExternalServerInstances();
-			return Response.ok(externalServerInstances, MediaType.APPLICATION_JSON).build();
-		} catch (HibernateException he) {
+			List<ServerInstance> externalServerInstances = serverInstanceRepository.getExternalServerInstances();
+			return HttpResponse.ok(externalServerInstances);
+		} catch (PersistenceException he) {
 			logger.warn("Error loading local server configuration", he);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(he.toString()).build();
+			return HttpResponse.badRequest().body(he.toString());
 		}
 	}
 }

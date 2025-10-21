@@ -1,166 +1,154 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import eu.albina.controller.RegionRepository;
+import eu.albina.controller.publication.PublicationController;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.security.annotation.Secured;
 
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
-import eu.albina.controller.publication.BlogController;
-import eu.albina.controller.publication.BlogItem;
+import eu.albina.controller.publication.blog.BlogController;
+import eu.albina.controller.publication.blog.BlogItem;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.model.publication.BlogConfiguration;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/blogs")
+@Controller("/blogs")
 @Tag(name = "blogs")
 public class BlogService {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlogService.class);
 
-	@Context
-	UriInfo uri;
+	@Inject
+	RegionRepository regionRepository;
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Inject
+	BlogController blogController;
+
+	@Inject
+	private PublicationController publicationController;
+
+	@Post("/publish/latest")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPost(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
+	public HttpResponse<String> sendLatestBlogPost(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {}", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendToAllChannels();
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			posting.sendToAllChannels(publicationController);
 
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.ok("{}");
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/publish/latest/email")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest/email")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostEmail(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostEmail(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendMails();
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			posting.sendMails(publicationController);
 
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/publish/latest/telegram")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest/telegram")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostTelegram(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostTelegram(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendTelegramMessage();
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			posting.sendTelegramMessage(publicationController);
 
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/publish/latest/whatsapp")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest/whatsapp")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostWhatsApp(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostWhatsApp(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via whatsapp", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendWhatsAppMessage();
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			posting.sendWhatsAppMessage(publicationController);
 
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/publish/latest/push")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/publish/latest/push")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response sendLatestBlogPostPush(@QueryParam("region") String regionId, @QueryParam("lang") LanguageCode language) {
+	public HttpResponse<?> sendLatestBlogPostPush(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = BlogController.getLatestBlogPost(config);
-			MultichannelMessage posting = BlogController.getSocialMediaPosting(config, blogPost.getId());
-			posting.sendPushNotifications();
+			BlogItem blogPost = blogController.getLatestBlogPost(config);
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			posting.sendPushNotifications(publicationController);
 
-			return Response.ok(MediaType.APPLICATION_JSON).entity("{}").build();
+			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	private static BlogConfiguration getBlogConfiguration(String regionId, LanguageCode language) throws AlbinaException {
+	private BlogConfiguration getBlogConfiguration(String regionId, LanguageCode language) throws AlbinaException {
 		if (language == null) {
 			throw new AlbinaException("No language defined!");
 		}
-		Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
+		Region region = regionRepository.findById(regionId).orElseThrow();
 		if (!region.isPublishBlogs()) {
 			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
 		}
-		return BlogController.getConfiguration(region, language);
+		return blogController.getConfiguration(region, language).orElseThrow();
 	}
 }

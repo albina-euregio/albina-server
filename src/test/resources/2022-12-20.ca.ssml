@@ -1,4 +1,4 @@
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -32,7 +32,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscam
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -66,7 +66,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent.
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -101,7 +101,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscam
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>
@@ -135,7 +135,7 @@ Tenim els segënts patrons de perill: pp.1: capa feble persistent, pp.2: lliscam
 </speak>
 
 
-<!--VoiceSelectionParams{languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE}-->
+<!--VoiceSelectionParams[languageCode=ca-ES, name=ca-ES-Standard-A, ssmlGender=FEMALE]-->
 <speak>
 <par>
 <media repeatCount="1" fadeOutDur="10s" end="10s"><audio src="https://static.avalanche.report/synthesizer/intro_0_1.mp3"></audio></media>

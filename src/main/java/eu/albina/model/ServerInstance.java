@@ -4,6 +4,7 @@ package eu.albina.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,9 +20,8 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "server_instances")
+@Serdeable
 public class ServerInstance implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")

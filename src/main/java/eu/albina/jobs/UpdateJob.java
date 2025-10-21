@@ -7,19 +7,26 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import eu.albina.controller.RegionController;
+import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.publication.PublicationController;
+import eu.albina.controller.RegionRepository;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.util.AlbinaUtil;
 
 /**
- * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * A job handling all the tasks and logic necessary to
  * automatically update the bulletins at 8AM or triggered manually.
  *
  * @author Norbert Lanzanasto
  *
  */
 public class UpdateJob extends PublicationJob {
+
+	public UpdateJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance) {
+		super(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstance);
+	}
 
 	@Override
 	protected boolean isEnabled(ServerInstance serverInstance) {
@@ -42,7 +49,7 @@ public class UpdateJob extends PublicationJob {
 
 	@Override
 	protected List<Region> getRegions() {
-		return RegionController.getInstance().getPublishBulletinRegions();
+		return regionRepository.getPublishBulletinRegions();
 	}
 
 }

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -12,14 +13,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import com.google.common.base.MoreObjects;
 
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.type.Argument;
+import io.micronaut.serde.Decoder;
+import io.micronaut.serde.Deserializer;
+import io.micronaut.serde.Encoder;
+import io.micronaut.serde.Serializer;
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Singleton;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +36,32 @@ import jakarta.persistence.Table;
 @Entity
 @IdClass(StressLevel.StressLevelID.class)
 @Table(name = "user_stress_levels")
+@Serdeable
 public class StressLevel {
+
+	@Singleton
+	public static class ToStringSerializer implements Serializer<Object> {
+		@Override
+		public void serialize(Encoder encoder, EncoderContext context, Argument<?> type, Object value) throws IOException {
+			encoder.encodeString(value.toString());
+		}
+	}
+
+	@Singleton
+	public static class LocalDateFromStringDeserializer implements Deserializer<LocalDate> {
+		@Override
+		public @Nullable LocalDate deserialize(Decoder decoder, DecoderContext context, Argument<? super LocalDate> type) throws IOException {
+			return LocalDate.parse(decoder.decodeString());
+		}
+	}
+
+	@Singleton
+	public static class InstantFromStringDeserializer implements Deserializer<Instant> {
+		@Override
+		public @Nullable Instant deserialize(Decoder decoder, DecoderContext context, Argument<? super Instant> type) throws IOException {
+			return Instant.parse(decoder.decodeString());
+		}
+	}
 
 	@Id
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -42,16 +71,16 @@ public class StressLevel {
 
 	@Id
 	@Column(name = "DATE", nullable = false)
-	@JsonSerialize(using = ToStringSerializer.class)
-	@JsonDeserialize(using = FromStringDeserializer.class)
+	@Serdeable.Serializable(using = ToStringSerializer.class)
+	@Serdeable.Deserializable(using = LocalDateFromStringDeserializer.class)
 	private LocalDate date;
 
 	@Column(name = "STRESS_LEVEL")
 	private Integer stressLevel;
 
 	@Column(name = "LAST_UPDATED", nullable = false)
-	@JsonSerialize(using = InstantSerializer.class)
-	@JsonDeserialize(using = InstantDeserializer.class)
+	@Serdeable.Serializable(using = ToStringSerializer.class)
+	@Serdeable.Deserializable(using = InstantFromStringDeserializer.class)
 	private Instant lastUpdated;
 
 	public static Map<UUID, List<StressLevel>> randomizeUsers(List<StressLevel> stressLevels) {
@@ -102,6 +131,7 @@ public class StressLevel {
 			.toString();
 	}
 
+	@Introspected
 	public static final class StressLevelID {
 		private User user;
 		private LocalDate date;

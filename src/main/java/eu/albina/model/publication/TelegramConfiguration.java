@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,9 +20,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "telegram_configurations")
+@Serdeable
 public class TelegramConfiguration implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID")
@@ -40,7 +40,7 @@ public class TelegramConfiguration implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE", length = 191)
-	private LanguageCode lang;
+	private LanguageCode languageCode;
 
 	public Long getId() {
 		return id;
@@ -90,16 +90,16 @@ public class TelegramConfiguration implements Serializable {
 	}
 
 	public LanguageCode getLanguageCode() {
-		return lang;
+		return languageCode;
 	}
 
 	public TelegramConfiguration languageCode(LanguageCode languageCode) {
-		this.lang = languageCode;
+		this.languageCode = languageCode;
 		return this;
 	}
 
 	public void setLanguageCodeId(LanguageCode languageCode) {
-		this.lang = languageCode;
+		this.languageCode = languageCode;
 	}
 
 	@Override

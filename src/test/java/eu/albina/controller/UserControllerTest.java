@@ -3,35 +3,25 @@ package eu.albina.controller;
 
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
-import eu.albina.util.HibernateUtil;
 
 public class UserControllerTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
 
-	@BeforeEach
-	public void setUp() throws Exception {
-		HibernateUtil.getInstance().setUp();
-	}
-
-	@AfterEach
-	public void shutDown() {
-		HibernateUtil.getInstance().shutDown();
-	}
+	@Inject
+	UserRepository userRepository;
 
 	@Test
 	@Disabled
-	public void getUsersTest() throws AlbinaException {
-		List<User> users = UserController.getInstance().getUsers();
+	public void getUsersTest() {
+		List<User> users = userRepository.findAll();
 		for (User user : users) {
 			logger.info(user.getEmail());
 		}
@@ -39,8 +29,8 @@ public class UserControllerTest {
 
 	@Test
 	@Disabled
-	public void getUserTest() throws AlbinaException {
-		User user = UserController.getInstance().getUser("info@avalanche.report");
+	public void getUserTest() {
+		User user = userRepository.findById("info@avalanche.report").orElseThrow();
 		logger.info(user.getEmail());
 	}
 }

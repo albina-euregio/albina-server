@@ -2,6 +2,7 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Texts element with highlight and comment for the avalanche activity.
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * Texts element with highlight and comment for weather review information.
  */
 @JsonPropertyOrder({"highlights", "comment"})
+@Serdeable
 public class Texts {
     private String comment;
     private String highlights;

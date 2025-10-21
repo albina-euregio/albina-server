@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Set;
 
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,10 @@ import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.GlidingSnowActivity;
 
+@MicronautTest
 public class DangerSourceVariantTextControllerTest {
 
+	@Inject
 	private DangerSourceVariantTextController controller;
 	private DangerSourceVariant dangerSourceVariant;
 	private DangerSourceVariantText dangerSourceVariantText;
@@ -29,7 +33,6 @@ public class DangerSourceVariantTextControllerTest {
 
 	@BeforeEach
 	public void setUp() {
-		controller = DangerSourceVariantTextController.getInstance();
 		dangerSourceVariant = mock(DangerSourceVariant.class);
 		eawsMatrixInformation = mock(EawsMatrixInformation.class);
 		dangerSourceVariantText = mock(DangerSourceVariantText.class);

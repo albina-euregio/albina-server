@@ -2,38 +2,41 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Expected avalanche problem, according to the EAWS avalanche problem definition.
  */
+@Serdeable
 public enum AvalancheProblemType {
     CORNICES, FAVOURABLE_SITUATION, GLIDING_SNOW, NEW_SNOW, NO_DISTINCT_AVALANCHE_PROBLEM, PERSISTENT_WEAK_LAYERS, WET_SNOW, WIND_SLAB;
 
 	@JsonValue
 	@Override
 	public String toString() {
-        switch (this) {
-            case CORNICES: return "cornices";
-            case FAVOURABLE_SITUATION: return "favourable_situation";
-            case GLIDING_SNOW: return "gliding_snow";
-            case NEW_SNOW: return "new_snow";
-            case NO_DISTINCT_AVALANCHE_PROBLEM: return "no_distinct_avalanche_problem";
-            case PERSISTENT_WEAK_LAYERS: return "persistent_weak_layers";
-            case WET_SNOW: return "wet_snow";
-            case WIND_SLAB: return "wind_slab";
-        }
-        throw new IllegalStateException();
+        return switch (this) {
+            case CORNICES -> "cornices";
+            case FAVOURABLE_SITUATION -> "favourable_situation";
+            case GLIDING_SNOW -> "gliding_snow";
+            case NEW_SNOW -> "new_snow";
+            case NO_DISTINCT_AVALANCHE_PROBLEM -> "no_distinct_avalanche_problem";
+            case PERSISTENT_WEAK_LAYERS -> "persistent_weak_layers";
+            case WET_SNOW -> "wet_snow";
+            case WIND_SLAB -> "wind_slab";
+        };
     }
 
     public static AvalancheProblemType forValue(String value) {
-        if (value.equals("cornices")) return CORNICES;
-        if (value.equals("favourable_situation")) return FAVOURABLE_SITUATION;
-        if (value.equals("gliding_snow")) return GLIDING_SNOW;
-        if (value.equals("new_snow")) return NEW_SNOW;
-        if (value.equals("no_distinct_avalanche_problem")) return NO_DISTINCT_AVALANCHE_PROBLEM;
-        if (value.equals("persistent_weak_layers")) return PERSISTENT_WEAK_LAYERS;
-        if (value.equals("wet_snow")) return WET_SNOW;
-        if (value.equals("wind_slab")) return WIND_SLAB;
-        throw new IllegalArgumentException("Cannot deserialize AvalancheProblemType");
-    }
+		return switch (value) {
+			case "cornices" -> CORNICES;
+			case "favourable_situation" -> FAVOURABLE_SITUATION;
+			case "gliding_snow" -> GLIDING_SNOW;
+			case "new_snow" -> NEW_SNOW;
+			case "no_distinct_avalanche_problem" -> NO_DISTINCT_AVALANCHE_PROBLEM;
+			case "persistent_weak_layers" -> PERSISTENT_WEAK_LAYERS;
+			case "wet_snow" -> WET_SNOW;
+			case "wind_slab" -> WIND_SLAB;
+			default -> throw new IllegalArgumentException("Cannot deserialize AvalancheProblemType");
+		};
+	}
 }

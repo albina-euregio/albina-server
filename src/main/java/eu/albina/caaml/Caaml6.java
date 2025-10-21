@@ -1,17 +1,22 @@
 package eu.albina.caaml;
 
+import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.logging.log4j.util.Strings;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.base.Strings;
+import io.micronaut.serde.ObjectMapper;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.caaml.v6.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import eu.albina.model.AvalancheBulletin;
@@ -22,21 +27,26 @@ import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
-public interface Caaml6 {
-	static String createJSON(AvalancheReport avalancheReport, LanguageCode lang) {
+@Singleton
+public class Caaml6 {
+
+	@Inject
+	private ObjectMapper objectMapper;
+
+	public String createJSON(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
-			return new ObjectMapper()
-				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-				.writerWithDefaultPrettyPrinter()
+			return objectMapper
 				.writeValueAsString(toCAAML(avalancheReport, lang));
-		} catch (JsonProcessingException e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
+	public static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			return new XmlMapper()
+				.registerModule(new JavaTimeModule())
+				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 				.writerWithDefaultPrettyPrinter()
 				.writeValueAsString(toCAAML(avalancheReport, lang))
@@ -46,11 +56,11 @@ public interface Caaml6 {
 		}
 	}
 
-	static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
+	public static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
 		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
 		// TODO (general-headline): insert conditional - only set general headline if activated in backend
 		String generalHeadline = avalancheReport.getGeneralHeadline(lang);
-		if (Strings.isNotEmpty(generalHeadline)) {
+		if (!Strings.isNullOrEmpty(generalHeadline)) {
 			bulletins.setCustomData(new AvalancheBulletinsCustomData(
 				new AvalancheBulletinsCustomData.ALBINA(generalHeadline)
 			));
@@ -58,7 +68,7 @@ public interface Caaml6 {
 		return bulletins;
 	}
 
-	static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
+	public static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
 		bulletin.setUnscheduled(avalancheBulletin.isUpdate());
 		bulletin.setAvalancheActivity(org.caaml.v6.Texts.of(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
@@ -107,7 +117,7 @@ public interface Caaml6 {
 		return bulletin;
 	}
 
-	static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang, ValidTimePeriod validTimePeriod) {
+	public static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang, ValidTimePeriod validTimePeriod) {
 		if (p == null || p.getAvalancheProblem() == null) {
 			return null;
 		}
@@ -136,7 +146,7 @@ public interface Caaml6 {
 		return result;
 	}
 
-	static org.caaml.v6.DangerRating getDangerRating(AvalancheBulletin avalancheBulletin, AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
+	public static org.caaml.v6.DangerRating getDangerRating(AvalancheBulletin avalancheBulletin, AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
 		org.caaml.v6.DangerRating result = new org.caaml.v6.DangerRating();
 		if (!daytime.isHasElevationDependency() || Objects.equals(daytime.dangerRating(false), daytime.dangerRating(true))) {
 			result.setMainValue(DangerRatingValue.forValue(daytime.dangerRating(true).name()));

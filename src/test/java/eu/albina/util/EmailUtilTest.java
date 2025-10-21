@@ -1,14 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import static eu.albina.RegionTestUtils.regionAran;
-import static eu.albina.RegionTestUtils.regionTyrol;
-
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import eu.albina.AvalancheBulletinTestUtils;
+import eu.albina.RegionTestUtils;
+import eu.albina.model.Region;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +22,19 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 public class EmailUtilTest {
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
+	RegionTestUtils regionTestUtils;
 
 	private ServerInstance serverInstanceEuregio;
 	private ServerInstance serverInstanceAran;
+	private Region regionTyrol;
+	private Region regionAran;
 
 	@BeforeEach
 	public void setUp() throws IOException {
@@ -36,16 +47,18 @@ public class EmailUtilTest {
 		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
 		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
 		serverInstanceAran.setPdfDirectory("/mnt/albina_files_local/");
+		regionTyrol = regionTestUtils.regionTyrol();
 		regionTyrol.setServerInstance(serverInstanceEuregio);
+		regionAran = regionTestUtils.regionAran();
 		regionAran.setServerInstance(serverInstanceAran);
 	}
 
 	@Test
 	public void createBulletinEmailHtml() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
 		Assertions.assertEquals(154.7177734375, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1., "155 kB");
 		Assertions.assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag, 17. Jänner 2019</h2>"));
 		Assertions.assertTrue(html.contains("Veröffentlicht am <b>16.01.2019, 17:00:00</b>"));
@@ -58,9 +71,9 @@ public class EmailUtilTest {
 	@Test
 	public void createBulletinEmailHtmlAran() throws Exception {
 		final URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, LanguageCode.en);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.en);
 		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.mail.html"), StandardCharsets.UTF_8);
 		Assertions.assertEquals(expected.trim(), html.trim());
 	}
@@ -68,9 +81,9 @@ public class EmailUtilTest {
 	@Test
 	public void createBulletinEmailHtml2021() throws Exception {
 		final URL resource = Resources.getResource("2021-12-01.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
-		String html = EmailUtil.getInstance().createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
 		Assertions.assertEquals(58, html.getBytes(StandardCharsets.UTF_8).length / 1024, "59 kB");
 	}
 

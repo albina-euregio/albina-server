@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +18,7 @@ import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "texts")
+@Serdeable
 public class Texts extends AbstractPersistentObject {
 
 	@ElementCollection(fetch = FetchType.EAGER)

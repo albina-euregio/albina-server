@@ -1,53 +1,63 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
-import eu.albina.controller.RegionController;
-import eu.albina.controller.publication.BlogController;
-import eu.albina.controller.publication.BlogItem;
+import eu.albina.controller.RegionRepository;
+import eu.albina.controller.publication.blog.BlogController;
+import eu.albina.controller.publication.blog.BlogItem;
 import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import io.micronaut.scheduling.annotation.Scheduled;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.core.Response;
-
 /**
- * A {@code org.quartz.Job} to check status of the different publication channels (Telegram, WhatsApp, Blog).
+ * A job to check status of the different publication channels (Telegram, WhatsApp, Blog).
  * Also serves the purpose of keeping whapi.cloud channels active enough to not get deactivated during the off-season.
  *
  */
-public class HealthCheckJob implements org.quartz.Job {
+@Singleton
+public class HealthCheckJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(HealthCheckJob.class);
 
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	@Inject
+	RegionRepository regionRepository;
+
+	@Inject
+	WhatsAppController whatsAppController;
+
+	@Inject
+	BlogController blogController;
+
+	@Inject
+	TelegramController telegramController;
+
+	@Scheduled(cron = "0 0 4 * * ?")
+	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
-		for (Region region : RegionController.getInstance().getPublishBulletinRegions()) {
+		for (Region region : regionRepository.getPublishBulletinRegions()) {
 			LanguageCode language = region.getDefaultLang();
 			logger.info("Health check triggered for {}/{}", region.getId(), language);
 
-			String telegramStatus = TelegramController.getConfiguration(region, language)
+			String telegramStatus = telegramController.getConfiguration(region, language)
 				.map(cfg -> {
 					try {
-						Response me = TelegramController.getMe(cfg);
-						return me.getStatusInfo().toString();
+						return telegramController.getMe(cfg).body();
 					} catch (Exception e){
 						return "FAILED (" + e.getMessage() + ")";
 					}
 				})
 				.orElse("SKIPPED (no config)");
 
-			String whatsappStatus = WhatsAppController.getConfiguration(region, language)
+			String whatsappStatus = whatsAppController.getConfiguration(region, language)
 				.map(cfg -> {
 					try {
-						Response whapiResponse = WhatsAppController.getHealth(cfg);
-						return whapiResponse.getStatusInfo().toString();
+						return whatsAppController.getHealth(cfg);
 					} catch (Exception e){
 						return "FAILED (" + e.getMessage() + ")";
 					}
@@ -56,10 +66,10 @@ public class HealthCheckJob implements org.quartz.Job {
 
 			// Blog (only if region publishes blogs)
 			String blogStatus;
-			if (RegionController.getInstance().getPublishBlogRegions().contains(region)) {
+			if (regionRepository.getPublishBlogRegions().contains(region)) {
 				try {
-					BlogConfiguration config = BlogController.getConfiguration(region, language);
-					BlogItem latest = BlogController.getLatestBlogPost(config);
+					BlogConfiguration config = blogController.getConfiguration(region, language).orElseThrow();
+					BlogItem latest = blogController.getLatestBlogPost(config);
 					blogStatus = "OK (latest=" + latest.getTitle() + ")";
 				} catch (Exception e) {
 					blogStatus = "FAILED (" + e.getMessage() + ")";

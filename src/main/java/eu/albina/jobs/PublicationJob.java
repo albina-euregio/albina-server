@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.quartz.JobExecutionContext;
+import eu.albina.controller.RegionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,37 +34,40 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.PublicationController;
-import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
-import eu.albina.controller.UserController;
+import eu.albina.controller.publication.PublicationController;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
-import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
 
 /**
- * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * A job handling all the tasks and logic necessary to
  * automatically publish the bulletins at 5PM.
  *
  * @author Norbert Lanzanasto
  */
-public class PublicationJob implements org.quartz.Job {
+public class PublicationJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
+	private final PublicationController publicationController;
+	private final AvalancheReportController avalancheReportController;
+	private final AvalancheBulletinController avalancheBulletinController;
+	protected final RegionRepository regionRepository;
+	private final ServerInstance serverInstance;
+
+	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance) {
+		this.publicationController = publicationController;
+		this.avalancheReportController = avalancheReportController;
+		this.avalancheBulletinController = avalancheBulletinController;
+		this.regionRepository = regionRepository;
+		this.serverInstance = serverInstance;
+	}
 
 	private List<Runnable> execute0() {
-		PublicationController publicationController = PublicationController.getInstance();
-		AvalancheBulletinController avalancheBulletinController = AvalancheBulletinController.getInstance();
-		AvalancheReportController avalancheReportController = AvalancheReportController.getInstance();
-		RegionController regionController = RegionController.getInstance();
-		ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
-
 		if (!isEnabled(serverInstance)) {
 			return null;
 		}
@@ -84,7 +87,6 @@ public class PublicationJob implements org.quartz.Job {
 			logger.info("No bulletins to publish/update/change.");
 			return null;
 		}
-		User user = getUser(serverInstance);
 
 		for (Region region : regions) {
 			logger.info("Publish bulletins for region {}", region.getId());
@@ -93,7 +95,7 @@ public class PublicationJob implements org.quartz.Job {
 			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
 
 			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
-				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate, user);
+				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate, serverInstance.getUserName());
 			}
 		}
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
@@ -124,19 +126,19 @@ public class PublicationJob implements org.quartz.Job {
 				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
 				publicationTimeString);
 
-			avalancheReportController.publishReport(regionBulletins, startDate, region, user, publicationDate);
+			avalancheReportController.publishReport(regionBulletins, startDate, region, serverInstance.getUserName(), publicationDate);
 		}
 
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
-		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionController.getPublishBulletinRegions());
+		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionRepository.getPublishBulletinRegions());
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
 
 		// update all regions to create complete maps
-		Stream<CompletableFuture<Void>> futures1 = regionController.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
+		Stream<CompletableFuture<Void>> futures1 = regionRepository.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
@@ -200,11 +202,8 @@ public class PublicationJob implements org.quartz.Job {
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
 	 * on the current settings.
-	 *
-	 * @param arg0
 	 */
-	@Override
-	public void execute(JobExecutionContext arg0) {
+	public void execute() {
 		List<Runnable> tasksAfterDirectoryUpdate;
 
 		synchronized (PublicationJob.class) {
@@ -263,11 +262,6 @@ public class PublicationJob implements org.quartz.Job {
 		}
 	}
 
-	protected User getUser(ServerInstance serverInstance) {
-		String userName = serverInstance.getUserName();
-		return userName != null ? UserController.getInstance().getUser(userName) : null;
-	}
-
 	private static Set<Region> getSuperRegions(List<Region> regions) {
 		Set<Region> superRegions = new HashSet<>();
 		for (Region region : regions) {
@@ -301,7 +295,7 @@ public class PublicationJob implements org.quartz.Job {
 	}
 
 	protected List<Region> getRegions() {
-		return RegionController.getInstance().getPublishBulletinRegions();
+		return regionRepository.getPublishBulletinRegions();
 	}
 
 }

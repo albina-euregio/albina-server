@@ -7,31 +7,20 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.json.tree.JsonNode;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
 import eu.albina.model.enumerations.TextcatTextfield;
-import eu.albina.util.JsonUtil;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -55,22 +44,9 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "regions")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Region.class)
-public class Region {
-
-	static class RegionSerializer extends JsonSerializer<Region> {
-		@Override
-		public void serialize(Region value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-			gen.writeString(value.getId());
-		}
-	}
-
-	static class RegionDeserializer extends JsonDeserializer<Region> {
-		@Override
-		public Region deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-			return new Region(p.getValueAsString());
-		}
-	}
+@Serdeable
+@Introspected(excludedAnnotations = {JsonIgnore.class})
+public class Region implements PersistentObject {
 
 	@Id
 	@Column(name = "ID", length = 191)
@@ -84,8 +60,7 @@ public class Region {
 	 joinColumns=@JoinColumn(name="SUPER_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUB_REGION_ID")
 	)
-	@JsonSerialize(contentUsing = RegionSerializer.class)
-	@JsonDeserialize(contentUsing = RegionDeserializer.class)
+	@JsonIgnore
 	private Set<Region> subRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -93,8 +68,7 @@ public class Region {
 	 joinColumns=@JoinColumn(name="SUB_REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="SUPER_REGION_ID")
 	)
-	@JsonSerialize(contentUsing = RegionSerializer.class)
-	@JsonDeserialize(contentUsing = RegionDeserializer.class)
+	@JsonIgnore
 	private Set<Region> superRegions;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -102,8 +76,7 @@ public class Region {
 	 joinColumns=@JoinColumn(name="REGION_ID"),
 	 inverseJoinColumns=@JoinColumn(name="NEIGHBOR_REGION_ID")
 	)
-	@JsonSerialize(contentUsing = RegionSerializer.class)
-	@JsonDeserialize(contentUsing = RegionDeserializer.class)
+	@JsonIgnore
 	private Set<Region> neighborRegions;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -269,12 +242,12 @@ public class Region {
 	 * Default constructor. Initializes all collections of the region.
 	 */
 	public Region() {
-		this.superRegions = new HashSet<Region>();
-		this.subRegions = new HashSet<Region>();
-		this.neighborRegions = new HashSet<Region>();
-		this.languageConfigurations = new HashSet<RegionLanguageConfiguration>();
-		this.enabledLanguages = new HashSet<LanguageCode>();
-		this.ttsLanguages = new HashSet<LanguageCode>();
+		this.superRegions = new HashSet<>();
+		this.subRegions = new HashSet<>();
+		this.neighborRegions = new HashSet<>();
+		this.languageConfigurations = new HashSet<>();
+		this.enabledLanguages = new HashSet<>();
+		this.ttsLanguages = new HashSet<>();
 	}
 
 	public Region(String id) {
@@ -282,29 +255,9 @@ public class Region {
 		this.id = id;
 	}
 
-	public Region(String json, Function<String, Region> regionFunction) throws JsonProcessingException {
-		this();
-
-		// Use Jackson to populate all "normal" fields
-		JsonUtil.ALBINA_OBJECT_MAPPER.readerForUpdating(this).readValue(json);
-
-		fixLanguageConfigurations();
-
-		// Handle region references manually
-		JsonNode node = JsonUtil.ALBINA_OBJECT_MAPPER.readTree(json);
-		BiConsumer<String, Set<Region>> extractRegionsFromJSON = (key, targetSet) -> {
-			JsonNode arrayNode = node.get(key);
-			if (arrayNode != null && arrayNode.isArray()) {
-				for (JsonNode entryNode : arrayNode) {
-					Region region = regionFunction.apply(entryNode.asText());
-					if (region != null)
-						targetSet.add(region);
-				}
-			}
-		};
-		extractRegionsFromJSON.accept("subRegions", this.subRegions);
-		extractRegionsFromJSON.accept("superRegions", this.superRegions);
-		extractRegionsFromJSON.accept("neighborRegions", this.neighborRegions);
+	public void updateFromJSON(String json, ObjectMapper objectMapper) throws IOException {
+		JsonNode node = objectMapper.readValue(json, JsonNode.class);
+		objectMapper.updateValueFromTree(this, node);
 	}
 
 	public void fixLanguageConfigurations() {
@@ -336,6 +289,16 @@ public class Region {
 		return subRegions;
 	}
 
+	@JsonProperty("subRegions")
+	public Set<String> getSubRegionsString() {
+		return subRegions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
+	@JsonProperty("subRegions")
+	public void setSubRegionsString(Set<String> subRegions) {
+		this.subRegions = subRegions.stream().map(Region::new).collect(Collectors.toSet());
+	}
+
 	public void setSubRegions(Set<Region> subRegions) {
 		this.subRegions = subRegions;
 	}
@@ -348,6 +311,16 @@ public class Region {
 		return superRegions;
 	}
 
+	@JsonProperty("superRegions")
+	public Set<String> getSuperRegionsString() {
+		return superRegions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
+	@JsonProperty("superRegions")
+	public void setSuperRegionsString(Set<String> superRegions) {
+		this.superRegions = superRegions.stream().map(Region::new).collect(Collectors.toSet());
+	}
+
 	public void setSuperRegions(Set<Region> superRegions) {
 		this.superRegions = superRegions;
 	}
@@ -358,6 +331,16 @@ public class Region {
 
 	public Set<Region> getNeighborRegions() {
 		return neighborRegions;
+	}
+
+	@JsonProperty("neighborRegions")
+	public Set<String> getNeighborRegionsString() {
+		return neighborRegions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
+	@JsonProperty("neighborRegions")
+	public void setNeighborRegionsString(Set<String> neighborRegions) {
+		this.neighborRegions = neighborRegions.stream().map(Region::new).collect(Collectors.toSet());
 	}
 
 	public void setNeighborRegions(Set<Region> neighborRegions) {
@@ -449,7 +432,7 @@ public class Region {
 	}
 
 	public String getStaticUrl() {
-		return staticUrl.replaceAll("/$", "");
+		return staticUrl == null ? null : staticUrl.replaceAll("/$", "");
 	}
 
 	public Set<LanguageCode> getEnabledLanguages() {
@@ -840,14 +823,6 @@ public class Region {
 		this.enableGeneralHeadline = enableGeneralHeadline;
 	}
 
-	public Element toCAAML(Document doc) {
-		Element region = doc.createElement("Region");
-		region.setAttribute("gml:id", getId());
-		Element regionSubType = doc.createElement("regionSubType");
-		region.appendChild(regionSubType);
-		return region;
-	}
-
 	public boolean affects(String regionId) {
 		if (regionId.startsWith(this.getId()))
 			return true;
@@ -857,10 +832,6 @@ public class Region {
 
 	public boolean isForeign(String regionId) {
 		return !affects(regionId);
-	}
-
-	public String toJSON() throws JsonProcessingException {
-		return JsonUtil.ALBINA_OBJECT_MAPPER.writeValueAsString(this);
 	}
 
 	@Override

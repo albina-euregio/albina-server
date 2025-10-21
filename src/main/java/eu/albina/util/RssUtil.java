@@ -6,12 +6,13 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,7 +48,7 @@ public interface RssUtil {
 		owner.appendChild(document.createElementNS(ITUNES_NS, "email")).setTextContent(region.getWarningServiceEmail(language));
 
 
-		list(directory).sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder())).limit(10).forEach(path -> {
+		list(directory).forEach(path -> {
 			try {
 				Node item = channel.appendChild(document.createElement("item"));
 				item.appendChild(document.createElement("title")).setTextContent(path.getFileName().toString());
@@ -73,7 +74,12 @@ public interface RssUtil {
 		return XmlUtil.convertDocToString(document);
 	}
 
-	static Stream<Path> list(Path directory) throws IOException {
-		return StreamSupport.stream(Files.newDirectoryStream(directory, "*.mp3").spliterator(), false);
+	static List<Path> list(Path directory) throws IOException {
+		PathMatcher matcher = directory.getFileSystem().getPathMatcher("glob:*.mp3");
+		try (Stream<Path> stream = Files.list(directory)) {
+			return stream.filter(p -> matcher.matches(p.getFileName()))
+				.sorted(Comparator.comparing(p -> p.getFileName().toString(), Comparator.reverseOrder()))
+				.limit(10).toList();
+		}
 	}
 }

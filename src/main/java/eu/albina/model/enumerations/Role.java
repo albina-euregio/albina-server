@@ -2,5 +2,13 @@
 package eu.albina.model.enumerations;
 
 public enum Role {
-	SUPERADMIN, ADMIN, FORECASTER, FOREMAN, OBSERVER
+	SUPERADMIN, ADMIN, FORECASTER, FOREMAN, OBSERVER;
+
+	public interface Str {
+		String SUPERADMIN = "SUPERADMIN";
+		String ADMIN = "ADMIN";
+		String FORECASTER = "FORECASTER";
+		String FOREMAN = "FOREMAN";
+		String OBSERVER = "OBSERVER";
+	}
 }

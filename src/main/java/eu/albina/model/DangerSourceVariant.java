@@ -5,10 +5,7 @@ import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import io.micronaut.serde.annotation.Serdeable;
 
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblemType;
@@ -54,6 +51,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "danger_source_variants")
+@Serdeable
 public class DangerSourceVariant extends AbstractPersistentObject
 		implements Comparable<DangerSourceVariant> {
 
@@ -106,8 +104,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "ASPECT")
-	@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
-	@Fetch(FetchMode.JOIN)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
@@ -150,7 +146,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "DANGER_SIGN")
-	@Fetch(FetchMode.JOIN)
 	private Set<DangerSign> dangerSigns;
 
 	/** Information about the selected field in the EAWS matrix */
@@ -284,7 +279,6 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
 	@Column(name = "TERRAIN_TYPE")
-	@Fetch(FetchMode.JOIN)
 	private Set<TerrainType> terrainTypes;
 
 	/** --------------------- */
@@ -851,30 +845,19 @@ public class DangerSourceVariant extends AbstractPersistentObject
 							if (this.dangerSpotRecognizability == null) {
 								return null;
 							}
-							switch (this.dangerSpotRecognizability) {
-								case very_easy:
-								case easy:
-									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
-								case hard:
-								case very_hard:
-									return eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
-								default:
-									return null;
-							}
+							return switch (this.dangerSpotRecognizability) {
+								case very_easy, easy -> eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard, very_hard ->
+									eu.albina.model.enumerations.AvalancheProblem.persistent_weak_layers;
+							};
 						} else {
 							if (this.dangerSpotRecognizability == null) {
 								return null;
 							}
-							switch (this.dangerSpotRecognizability) {
-								case very_easy:
-								case easy:
-									return eu.albina.model.enumerations.AvalancheProblem.wind_slab;
-								case hard:
-								case very_hard:
-									return eu.albina.model.enumerations.AvalancheProblem.new_snow;
-								default:
-									return null;
-							}
+							return switch (this.dangerSpotRecognizability) {
+								case very_easy, easy -> eu.albina.model.enumerations.AvalancheProblem.wind_slab;
+								case hard, very_hard -> eu.albina.model.enumerations.AvalancheProblem.new_snow;
+							};
 						}
 					case MF:
 						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
@@ -888,19 +871,12 @@ public class DangerSourceVariant extends AbstractPersistentObject
 						return null;
 				}
 			case loose:
-				switch (this.looseSnowGrainShape) {
-					case PP:
-					case DF:
-						return eu.albina.model.enumerations.AvalancheProblem.new_snow;
-					case MF:
-						return eu.albina.model.enumerations.AvalancheProblem.wet_snow;
-					case FC:
-					case DH:
-					case SH:
-						return null;
-					default:
-						return null;
-				}
+				return switch (this.looseSnowGrainShape) {
+					case PP, DF -> eu.albina.model.enumerations.AvalancheProblem.new_snow;
+					case MF -> eu.albina.model.enumerations.AvalancheProblem.wet_snow;
+					case FC, DH, SH -> null;
+					default -> null;
+				};
 			case glide:
 				return eu.albina.model.enumerations.AvalancheProblem.gliding_snow;
 			default:
@@ -943,16 +919,10 @@ public class DangerSourceVariant extends AbstractPersistentObject
 							if (this.dangerSpotRecognizability == null) {
 								return null;
 							}
-							switch (this.dangerSpotRecognizability) {
-								case very_easy:
-								case easy:
-									return AvalancheProblemType.wind_slab;
-								case hard:
-								case very_hard:
-									return AvalancheProblemType.storm_slab;
-								default:
-									return null;
-							}
+							return switch (this.dangerSpotRecognizability) {
+								case very_easy, easy -> AvalancheProblemType.wind_slab;
+								case hard, very_hard -> AvalancheProblemType.storm_slab;
+							};
 						}
 					case MF:
 						return AvalancheProblemType.wet_slab;
@@ -966,18 +936,11 @@ public class DangerSourceVariant extends AbstractPersistentObject
 						return null;
 				}
 			case loose:
-				switch (this.looseSnowGrainShape) {
-					case PP:
-					case DF:
-					case FC:
-					case DH:
-					case SH:
-						return AvalancheProblemType.dry_loose;
-					case MF:
-						return AvalancheProblemType.wet_loose;
-					default:
-						return null;
-				}
+				return switch (this.looseSnowGrainShape) {
+					case PP, DF, FC, DH, SH -> AvalancheProblemType.dry_loose;
+					case MF -> AvalancheProblemType.wet_loose;
+					default -> null;
+				};
 			case glide:
 				return AvalancheProblemType.glide_avalanche;
 			default:

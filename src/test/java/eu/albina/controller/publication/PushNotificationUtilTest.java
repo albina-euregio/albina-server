@@ -2,21 +2,20 @@
 package eu.albina.controller.publication;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
-
-import eu.albina.util.JsonUtil;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -25,7 +24,11 @@ import ch.rasc.webpush.ServerKeys;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 public class PushNotificationUtilTest {
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Test
 	public void test() throws Exception {
@@ -39,14 +42,15 @@ public class PushNotificationUtilTest {
 		subscription.setP256dh("BEoQn2VR93GQ9gBxOo4pvdmgOyO1eiSDjUy7blwez1Vu_99PDswkEtV6m7cuwB60A8WlYq6lGKTZLet7PbnAEow");
 		subscription.setRegion("AT-07");
 
-		Response response = mock(Response.class);
-		when(response.getStatusInfo()).thenReturn(Response.Status.fromStatusCode(201));
-		Invocation.Builder builder = mock(Invocation.Builder.class);
-		when(builder.post(any())).thenReturn(response);
-		WebTarget webTarget = mock(WebTarget.class);
-		when(webTarget.request()).thenReturn(builder);
-		Client client = mock(Client.class);
-		when(client.target(eq(URI.create(subscription.getEndpoint())))).thenReturn(webTarget);
+		HttpResponse response = mock(HttpResponse.class);
+		when(response.statusCode()).thenReturn(201);
+		when(response.body()).thenReturn("");
+		HttpClient client = mock(HttpClient.class);
+		when(client.send(any(), any())).thenReturn(response);
+
+		PushNotificationUtil pushNotificationUtil = new PushNotificationUtil();
+		pushNotificationUtil.client = client;
+		pushNotificationUtil.objectMapper = objectMapper;
 
 		PushNotificationUtil.Message payload = new PushNotificationUtil.Message(
 			"Avalanche.report",
@@ -54,20 +58,22 @@ public class PushNotificationUtilTest {
 			null,
 			null
 		);
-		Assertions.assertEquals("{\"title\":\"Avalanche.report\",\"body\":\"Hello World!\",\"image\":null,\"url\":null}", JsonUtil.writeValueUsingJackson(payload));
-		new PushNotificationUtil(client).sendPushMessage(subscription, payload, serverKeys);
+		Assertions.assertEquals("{\"title\":\"Avalanche.report\",\"body\":\"Hello World!\"}", pushNotificationUtil.getJson(payload));
+		pushNotificationUtil.sendPushMessage(subscription, payload, serverKeys);
 
-		verify(builder).header(eq("Content-Type"), eq("application/octet-stream"));
-		verify(builder).header(eq("TTL"), eq("180"));
-		verify(builder).header(eq("Authorization"), startsWith("vapid t=ey"));
-
-		ArgumentCaptor<Entity<?>> entityArgumentCaptor = getEntityArgumentCaptor();
-		verify(builder).post(entityArgumentCaptor.capture());
-		Assertions.assertEquals("application/octet-stream", entityArgumentCaptor.getValue().getMediaType().toString());
-		Assertions.assertEquals("aes128gcm", entityArgumentCaptor.getValue().getEncoding());
+		ArgumentCaptor<HttpRequest> argumentCaptor = getEntityArgumentCaptor();
+		verify(client).send(argumentCaptor.capture(), any());
+		Assertions.assertEquals("application/octet-stream", getHeader(argumentCaptor, HttpHeaders.CONTENT_TYPE));
+		Assertions.assertEquals("aes128gcm", getHeader(argumentCaptor, HttpHeaders.CONTENT_ENCODING));
+		MatcherAssert.assertThat(getHeader(argumentCaptor, HttpHeaders.AUTHORIZATION), Matchers.startsWith("vapid t=ey"));
+		Assertions.assertEquals("180", getHeader(argumentCaptor, "TTL"));
 	}
 
-	private ArgumentCaptor<Entity<?>> getEntityArgumentCaptor() {
-		return ArgumentCaptor.forClass(Entity.class);
+	private static ArgumentCaptor<HttpRequest> getEntityArgumentCaptor() {
+		return ArgumentCaptor.forClass(HttpRequest.class);
+	}
+
+	private static String getHeader(ArgumentCaptor<HttpRequest> httpRequestArgumentCaptor, String header) {
+		return httpRequestArgumentCaptor.getValue().headers().firstValue(header).orElseThrow();
 	}
 }

@@ -7,11 +7,11 @@ workflow:
       when: never
     - if: $CI_COMMIT_BRANCH
 
-image: maven:3-eclipse-temurin-17
+image: maven:3-eclipse-temurin-21
 
 variables:
     MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-    MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+    MAVEN_ARGS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 cache:
     paths:
@@ -24,11 +24,14 @@ production build:
         - apt-get install -y ghostscript imagemagick webp
         - if [ -e "../avalanche-warning-maps" ]; then rm -rf ../avalanche-warning-maps; fi
         - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod install
+        - export GIT_VERSION=$(git describe --tags)
+        - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
+        - mvn --activate-profiles env-prod install
+        - mv target/albina*.jar target/albina.jar
     artifacts:
         when: always
         paths:
-            - target/albina.war
+            - target/albina.jar
             - target/test-results/
         reports:
             junit:
@@ -41,10 +44,27 @@ production build:
 
 deploy to development:
     stage: deploy
+    needs: []
+    variables:
+        MAVEN_PROFILE: --activate-profiles env-dev
+        JAR_PATH: /opt/albina-server-dev/albina.jar
+        SYSTEMD_SERVICE: albina-server-dev.service
+    before_script:
+        - eval $(ssh-agent -s)
+        - chmod 400 "$SSH_PRIVATE_KEY"
+        - ssh-add "$SSH_PRIVATE_KEY"
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
     script:
-        - export TOMCAT_PATH=/albina_dev
+        - apt-get update -y
+        - apt-get install -y rsync
         - export GIT_VERSION=$(git describe --tags)
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-dev tomcat7:deploy -Dmaven.test.skip=true
+        - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
+        - mvn $MAVEN_PROFILE install -Dmaven.test.skip=true
+        - rsync -avz -e "ssh -p2201" target/albina-$GIT_VERSION.jar $SSH_SERVER:$JAR_PATH
+        - ssh -p2201 $SSH_SERVER "sudo /usr/bin/systemctl restart $SYSTEMD_SERVICE"
     environment:
         name: development
     rules:

@@ -4,7 +4,6 @@ package eu.albina.model.enumerations;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -93,14 +92,7 @@ public enum LanguageCode {
 		return bundleString;
 	}
 
-	public static LanguageCode fromString(String text) {
-		if (text != null) {
-			return Arrays.stream(LanguageCode.values()).filter(type -> text.equalsIgnoreCase(type.toString())).findFirst().orElse(null);
-		}
-		return null;
-	}
-
-	public String getRegionName(String regionId) {
+    public String getRegionName(String regionId) {
 		if ("".equals(regionId)) {
 			return "";
 		}

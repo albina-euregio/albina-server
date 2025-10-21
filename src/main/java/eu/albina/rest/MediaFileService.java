@@ -1,39 +1,38 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
-import javax.servlet.annotation.MultipartConfig;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import eu.albina.controller.RegionRepository;
+import eu.albina.controller.ServerInstanceRepository;
+import eu.albina.controller.UserRepository;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Part;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.security.annotation.Secured;
+import jakarta.inject.Inject;
+import jakarta.servlet.annotation.MultipartConfig;
+import io.micronaut.http.annotation.Consumes;
+import io.micronaut.http.annotation.Produces;
 
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.RegionController;
-import eu.albina.controller.ServerInstanceController;
-import eu.albina.controller.UserController;
-import eu.albina.controller.publication.RapidMailController;
+import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
@@ -41,7 +40,6 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.rest.filter.Secured;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.RssUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,57 +48,67 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @MultipartConfig
-@Path("/media")
+@Controller("/media")
 @Tag(name = "media")
 public class MediaFileService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MediaFileService.class);
 
-	@Context
-	UriInfo uri;
+	@Inject
+	private AvalancheReportController avalancheReportController;
 
-	@POST
-	@Secured({Role.ADMIN, Role.FORECASTER})
+	@Inject
+	RegionRepository regionRepository;
+
+	@Inject
+	private ServerInstanceRepository serverInstanceRepository;
+
+	@Inject
+	private UserRepository userRepository;
+
+	@Inject
+	private RapidMailController rapidMailController;
+
+	@Post
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Consumes({MediaType.MULTIPART_FORM_DATA})
-	@Produces({MediaType.APPLICATION_JSON})
 	@Operation(summary = "Save media file")
-	public Response saveMediaFile(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("date") String dateString,
-		@QueryParam("region") String regionId,
-		@QueryParam("lang") LanguageCode language,
-		@QueryParam("important") boolean important,
-		@FormDataParam("text") String mediaText,
-		@FormDataParam("file") InputStream uploadedInputStream,
-		@FormDataParam("file") FormDataContentDisposition fileDetail,
-		@Context SecurityContext securityContext) {
+	public HttpResponse<?> saveMediaFile(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String dateString,
+		@QueryValue("region") String regionId,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue("important") boolean important,
+		@Part("text") String text,
+		@Part("file") CompletedFileUpload file,
+		Principal principal) {
 		try {
-			logger.info("Saving media file: {} (size={}, type={})", fileDetail.getFileName(), fileDetail.getSize(), fileDetail.getType());
+			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());
 
-			Region region = RegionController.getInstance().getRegionOrThrowAlbinaException(regionId);
-			User user = UserController.getInstance().getUser(securityContext.getUserPrincipal().getName());
+			Region region = regionRepository.findById(regionId).orElseThrow();
+			User user = userRepository.findById(principal.getName()).orElseThrow();
 
-			if (region == null || !user.hasPermissionForRegion(region.getId())) {
+			if (!user.hasPermissionForRegion(region.getId())) {
 				logger.warn("User is not authorized for this region!");
 				throw new AlbinaException("User is not authorized for this region!");
 			}
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
-			ServerInstance localServerInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+			ServerInstance localServerInstance = serverInstanceRepository.getLocalServerInstance();
 
-			java.nio.file.Path fileLocation = getMediaPath(localServerInstance, region, language);
+			Path fileLocation = getMediaPath(localServerInstance, region, language);
 			Files.createDirectories(fileLocation);
 
 			// save mp3 file
 			String mp3FileName = getMediaFileName(dateString, user, language, ".mp3");
-			java.nio.file.Path mp3File = fileLocation.resolve(mp3FileName);
-			Files.copy(uploadedInputStream, mp3File, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+			Path mp3File = fileLocation.resolve(mp3FileName);
+			Files.write(mp3File, file.getBytes());
 			logger.info("{} successfully uploaded to: {}", mp3FileName, mp3File);
 
 			// save text file
 			String txtFileName = getMediaFileName(dateString, user, language, ".txt");
-			java.nio.file.Path txtFile = fileLocation.resolve(txtFileName);
-			Files.write(txtFile, mediaText.getBytes());
+			Path txtFile = fileLocation.resolve(txtFileName);
+			Files.write(txtFile, text.getBytes());
 			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
 
 			// send emails
@@ -110,53 +118,51 @@ public class MediaFileService {
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 
 			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), region.getWebsiteName(language), formattedDate, user.getName());
-			String text = language.getBundleString("email.media.link.mp3");
 			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
-				mediaText.replace("\n", "<br>"),
-				String.format("<a href=\"%s\">%s</a>", mp3FileUrl, text),
+				text.replace("\n", "<br>"),
+				String.format("<a href=\"%s\">%s</a>", mp3FileUrl, language.getBundleString("email.media.link.mp3")),
 				MessageFormat.format(language.getBundleString("email.media.text"), user.getName()));
-			RapidMailConfiguration config = RapidMailController.getConfiguration(region, language, "media").orElseThrow();
-			RapidMailController.sendEmail(config, emailHtml, subject);
+			RapidMailConfiguration config = rapidMailController.getConfiguration(region, language, "media").orElseThrow();
+			rapidMailController.sendEmail(config, emailHtml, subject);
 
 			if (important) {
 				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), region.getWebsiteName(language), formattedDate, user.getName());
-				config = RapidMailController.getConfiguration(region, language, "media+").orElseThrow();
-				RapidMailController.sendEmail(config, emailHtml, subject);
+				config = rapidMailController.getConfiguration(region, language, "media+").orElseThrow();
+				rapidMailController.sendEmail(config, emailHtml, subject);
 			}
 
 			// set publication flag
-			AvalancheReportController.getInstance().setMediaFileFlag(date, region);
+			avalancheReportController.setMediaFileFlag(date, region);
 
-			return Response.status(200).type(MediaType.APPLICATION_JSON).entity(Map.of("file", fileLocation)).build();
+			return HttpResponse.created(Map.of("file", fileLocation.toString()));
 		} catch (AlbinaException e) {
 			logger.warn("Failed to save media file", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Failed to save media file", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@GET
-	@Path("/rss")
+	@Get("/rss")
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(summary = "Get media files as RSS feed")
-	public Response getRssFeed(
-		@QueryParam("region") @DefaultValue("AT-07") String regionId,
-		@QueryParam("lang") @DefaultValue("de") LanguageCode language
+	public HttpResponse<?> getRssFeed(
+		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
+		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language
 	) throws Exception {
-		final ServerInstance serverInstance = ServerInstanceController.getInstance().getLocalServerInstance();
+		final ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 		final Region region = new Region(regionId);
 		final String websiteName = region.getWebsiteName(language);
 		final String rss = RssUtil.getRss(
 			language,
 			region,
 			getMediaPath(serverInstance, region, language));
-		return Response.ok(rss, MediaType.APPLICATION_XML).build();
+		return HttpResponse.ok(rss).contentType(MediaType.APPLICATION_XML);
 	}
 
-	public static java.nio.file.Path getMediaPath(ServerInstance serverInstance, Region region, LanguageCode lang) {
-		java.nio.file.Path mediaPath = Paths.get(serverInstance.getMediaPath());
+	public static Path getMediaPath(ServerInstance serverInstance, Region region, LanguageCode lang) {
+		Path mediaPath = Paths.get(serverInstance.getMediaPath());
 		return mediaPath
 			.resolve(region.getId())
 			.resolve(lang.name());

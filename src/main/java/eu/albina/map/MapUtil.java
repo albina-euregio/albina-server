@@ -3,6 +3,8 @@ package eu.albina.map;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +24,7 @@ import javax.script.SimpleBindings;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.MoreCollectors;
+import com.google.common.io.Closer;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
@@ -79,23 +82,23 @@ public interface MapUtil {
 	}
 
 	static Stream<String> mapRegions(String region) {
-		switch (region) {
-			case "AT-07-02": return Stream.of("AT-07-02-01", "AT-07-02-02");
-			case "AT-07-04": return Stream.of("AT-07-04-01", "AT-07-04-02");
-			case "AT-07-14": return Stream.of("AT-07-14-01", "AT-07-14-02", "AT-07-14-03", "AT-07-14-04", "AT-07-14-05");
-			case "AT-07-17": return Stream.of("AT-07-17-01", "AT-07-17-02");
-			case "AT-07-23": return Stream.of("AT-07-23-01", "AT-07-23-02");
-			case "AT-07-26": return Stream.of("AT-07-26-01", "AT-07-26-02");
-			case "AT-07-29": return Stream.of("AT-07-29-01", "AT-07-29-02", "AT-07-29-03");
-			case "IT-32-BZ-01": return Stream.of("IT-32-BZ-01-01", "IT-32-BZ-01-02");
-			case "IT-32-BZ-02": return Stream.of("IT-32-BZ-02-01", "IT-32-BZ-02-02");
-			case "IT-32-BZ-04": return Stream.of("IT-32-BZ-04-01", "IT-32-BZ-04-02");
-			case "IT-32-BZ-05": return Stream.of("IT-32-BZ-05-01", "IT-32-BZ-05-02", "IT-32-BZ-05-03");
-			case "IT-32-BZ-07": return Stream.of("IT-32-BZ-07-01", "IT-32-BZ-07-02");
-			case "IT-32-BZ-08": return Stream.of("IT-32-BZ-08-01", "IT-32-BZ-08-02", "IT-32-BZ-08-03");
-			case "IT-32-BZ-18": return Stream.of("IT-32-BZ-18-01", "IT-32-BZ-18-02");
-			default: return Stream.of(region);
-		}
+        return switch (region) {
+            case "AT-07-02" -> Stream.of("AT-07-02-01", "AT-07-02-02");
+            case "AT-07-04" -> Stream.of("AT-07-04-01", "AT-07-04-02");
+            case "AT-07-14" -> Stream.of("AT-07-14-01", "AT-07-14-02", "AT-07-14-03", "AT-07-14-04", "AT-07-14-05");
+            case "AT-07-17" -> Stream.of("AT-07-17-01", "AT-07-17-02");
+            case "AT-07-23" -> Stream.of("AT-07-23-01", "AT-07-23-02");
+            case "AT-07-26" -> Stream.of("AT-07-26-01", "AT-07-26-02");
+            case "AT-07-29" -> Stream.of("AT-07-29-01", "AT-07-29-02", "AT-07-29-03");
+            case "IT-32-BZ-01" -> Stream.of("IT-32-BZ-01-01", "IT-32-BZ-01-02");
+            case "IT-32-BZ-02" -> Stream.of("IT-32-BZ-02-01", "IT-32-BZ-02-02");
+            case "IT-32-BZ-04" -> Stream.of("IT-32-BZ-04-01", "IT-32-BZ-04-02");
+            case "IT-32-BZ-05" -> Stream.of("IT-32-BZ-05-01", "IT-32-BZ-05-02", "IT-32-BZ-05-03");
+            case "IT-32-BZ-07" -> Stream.of("IT-32-BZ-07-01", "IT-32-BZ-07-02");
+            case "IT-32-BZ-08" -> Stream.of("IT-32-BZ-08-01", "IT-32-BZ-08-02", "IT-32-BZ-08-03");
+            case "IT-32-BZ-18" -> Stream.of("IT-32-BZ-18-01", "IT-32-BZ-18-02");
+            default -> Stream.of(region);
+        };
 	}
 
 	static void createMapyrusMaps(AvalancheReport avalancheReport) {
@@ -220,30 +223,32 @@ public interface MapUtil {
 		bindings.put("bulletin_id", bulletin != null ? bulletin.getId() : region.getId());
 		bindings.putAll(dangerBindings);
 
-		final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
-			Resources.getResource("fonts/open-sans/OpenSans.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Italic.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Bold.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-BoldItalic.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-Semibold.otf").getFile(),
-			Resources.getResource("fonts/open-sans/OpenSans-SemiboldItalic.otf").getFile());
+		try (Closer closer = Closer.create()) {
+			final String otf_mapyrus = String.format("let otf_mapyrus = \" otffiles=%s,%s,%s,%s,%s,%s \"",
+				getFont("OpenSans.otf", closer),
+				getFont("OpenSans-Italic.otf", closer),
+				getFont("OpenSans-Bold.otf", closer),
+				getFont("OpenSans-BoldItalic.otf", closer),
+				getFont("OpenSans-Semibold.otf", closer),
+				getFont("OpenSans-SemiboldItalic.otf", closer));
 
-		logger.debug("Creating map {} using {} with bindings {}", outputFile, dangerBindings, bindings);
-		final MapyrusInterpreter mapyrus = new MapyrusInterpreter(bindings);
-		mapyrus.interpret(new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"));
-		mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
-		mapyrus.interpret(Resources.getResource("mapyrus/albina_functions.mapyrus"));
-		mapyrus.interpret(Resources.getResource("mapyrus/albina_styles.mapyrus"));
-		if (MapLevel.overlay.equals(mapLevel)) {
-			mapyrus.interpret(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
-		} else {
-			if (bulletin != null) {
-				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
-				mapyrus.context.getBindings().put("elevation_level", description.getElevation());
-				mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.dangerRating(false)));
-				mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.dangerRating(true)));
+			logger.debug("Creating map {} using {} with bindings {}", outputFile, dangerBindings, bindings);
+			final MapyrusInterpreter mapyrus = new MapyrusInterpreter(bindings);
+			mapyrus.interpret(new FileOrURL(new StringReader(otf_mapyrus), "otf.mapyrus"));
+			mapyrus.interpret(Resources.getResource("mapyrus/fontdefinition.mapyrus"));
+			mapyrus.interpret(Resources.getResource("mapyrus/albina_functions.mapyrus"));
+			mapyrus.interpret(Resources.getResource("mapyrus/albina_styles.mapyrus"));
+			if (MapLevel.overlay.equals(mapLevel)) {
+				mapyrus.interpret(Resources.getResource("mapyrus/albina_overlaymap.mapyrus"));
+			} else {
+				if (bulletin != null) {
+					AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
+					mapyrus.context.getBindings().put("elevation_level", description.getElevation());
+					mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.dangerRating(false)));
+					mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.dangerRating(true)));
+				}
+				mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 			}
-			mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 		}
 
 		final Path outputFilePng = MapImageFormat.png.convertFrom(outputFile);
@@ -264,6 +269,16 @@ public interface MapUtil {
 		if (!BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
 			MapImageFormat.webp.convertFrom(outputFilePng);
 		}
+	}
+
+	private static String getFont(String font, Closer closer) throws IOException {
+		Path path = Files.createTempFile("", font);
+		URL resource = Resources.getResource("fonts/open-sans/" + font);
+		try (InputStream inputStream = resource.openStream(); OutputStream outputStream = Files.newOutputStream(path)) {
+			inputStream.transferTo(outputStream);
+		}
+		closer.register(() -> Files.delete(path));
+		return path.toString();
 	}
 
 	static Path mapProductionResource(Path geodataPath, String filename) {

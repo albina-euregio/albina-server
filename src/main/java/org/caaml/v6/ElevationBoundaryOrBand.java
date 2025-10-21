@@ -4,6 +4,7 @@ package org.caaml.v6;
 import java.util.Objects;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Elevation describes either an elevation range below a certain bound (only upperBound is
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * a numeric value, not more detailed than 100m resolution. Additionally to the numeric
  * values also 'treeline' is allowed.
  */
+@Serdeable
 public class ElevationBoundaryOrBand {
     private String lowerBound;
     private String upperBound;

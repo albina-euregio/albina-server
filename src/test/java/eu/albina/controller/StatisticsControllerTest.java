@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import eu.albina.util.JsonUtil;
+import eu.albina.AvalancheBulletinTestUtils;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,21 +22,28 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.enumerations.LanguageCode;
 
+@MicronautTest
 public class StatisticsControllerTest {
+
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	private List<AvalancheBulletin> bulletinsAmPm;
 	private List<DangerSourceVariant> dangerSourceVariants;
 
-	public static DangerSourceVariant readDangerSourceVariant(final URL resource) throws IOException {
+	public DangerSourceVariant readDangerSourceVariant(final URL resource) throws IOException {
 		final String json = Resources.toString(resource, StandardCharsets.UTF_8);
-		return JsonUtil.parseUsingJackson(json, DangerSourceVariant.class);
+		return objectMapper.readValue(json, DangerSourceVariant.class);
 	}
 
 	@BeforeEach
 	public void setUp() throws Exception {
 		bulletinsAmPm = new ArrayList<>();
-		bulletinsAmPm.addAll(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json")));
-		bulletinsAmPm.addAll(AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_6.json")));
+		bulletinsAmPm.addAll(avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json")));
+		bulletinsAmPm.addAll(avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_6.json")));
 		dangerSourceVariants = Arrays.asList(readDangerSourceVariant(Resources.getResource("danger_source_variants.json")));
 	}
 
@@ -41,7 +51,7 @@ public class StatisticsControllerTest {
 	public void getAvalancheBulletinCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, false, false, true);
+		String csvString = StatisticsController.getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, false, false, true);
 		Assertions.assertEquals(expected, csvString);
 	}
 
@@ -49,7 +59,7 @@ public class StatisticsControllerTest {
 	public void getExtendedAvalancheBulletinCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.extended.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, true, false, true);
+		String csvString = StatisticsController.getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, true, false, true);
 		Assertions.assertEquals(expected, csvString);
 	}
 
@@ -57,7 +67,7 @@ public class StatisticsControllerTest {
 	public void getDangerSourceVariantCsv() throws IOException {
 		final String expected = Resources.toString(Resources.getResource("danger_source_variants.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
-		String csvString = StatisticsController.getInstance().getDangerSourceVariantsCsvString(dangerSourceVariants);
+		String csvString = StatisticsController.getDangerSourceVariantsCsvString(dangerSourceVariants);
 		Assertions.assertEquals(expected, csvString);
 	}
 }

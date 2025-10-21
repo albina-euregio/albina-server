@@ -7,60 +7,63 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import eu.albina.controller.RegionRepository;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Header;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.annotation.Produces;
+import io.micronaut.security.annotation.Secured;
 
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
 import eu.albina.controller.StatisticsController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Path("/statistics")
+@Controller("/statistics")
 @Tag(name = "statistics")
 public class StatisticsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsService.class);
 
-	@Context
-	UriInfo uri;
+	@Inject
+	StatisticsController statisticsController;
 
-	@GET
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Inject
+	RegionRepository regionRepository;
+
+	@Get
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces("text/csv")
 	@Operation(summary = "Get bulletin statistics")
-	public Response getBulletinCsv(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate,
-			@QueryParam("lang") LanguageCode language, @QueryParam("extended") boolean extended,
-			@QueryParam("duplicate") boolean duplicate,
-			@QueryParam("regions") List<String> regionIds,
-			@QueryParam("obsoleteMatrix") boolean obsoleteMatrix) {
+	public HttpResponse<?> getBulletinCsv(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate,
+		@QueryValue("lang") LanguageCode language,
+		@QueryValue(value = "extended", defaultValue = "false") boolean extended,
+		@QueryValue(value = "duplicate", defaultValue = "false") boolean duplicate,
+		@QueryValue("regions") List<String> regionIds,
+		@QueryValue(value = "obsoleteMatrix", defaultValue = "false") boolean obsoleteMatrix) {
 		logger.debug("GET CSV bulletins");
 
 		Instant start = null;
@@ -69,22 +72,22 @@ public class StatisticsService {
 		if (startDate != null)
 			start = OffsetDateTime.parse(startDate).toInstant();
 		else
-			return Response.notAcceptable(null).build();
+			return HttpResponse.badRequest();
 		if (endDate != null)
 			end = OffsetDateTime.parse(endDate).toInstant();
 		else
-			return Response.notAcceptable(null).build();
+			return HttpResponse.badRequest();
 
-		List<Region> regions = new ArrayList<Region>();
+		List<Region> regions = new ArrayList<>();
 		if (regionIds != null && !regionIds.isEmpty()) {
 			for (String regionId : regionIds) {
-				regions.add(RegionController.getInstance().getRegion(regionId));
+				regions.add(regionRepository.findById(regionId).orElseThrow());
 			}
 		} else {
-			regions = RegionController.getInstance().getPublishBulletinRegions();
+			regions = regionRepository.getPublishBulletinRegions();
 		}
 
-		String statistics = StatisticsController.getInstance().getDangerRatingStatistics(start, end, language, regions, extended,
+		String statistics = statisticsController.getDangerRatingStatistics(start, end, language, regions, extended,
 				duplicate, obsoleteMatrix);
 
 		String filename = String.format("statistic_%s_%s%s%s%s_%s",
@@ -101,23 +104,22 @@ public class StatisticsService {
 			writer.write(statistics);
 			writer.close();
 
-			return Response.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
-			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
+			return HttpResponse.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv");
 		} catch (IOException e) {
 			logger.warn("Error creating bulletin statistics", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@GET
-	@Path("/danger-sources")
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN })
+	@Get("/danger-sources")
+	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces("text/csv")
 	@Operation(summary = "Get danger source statistics")
-	public Response getDangerSourceCsv(
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("startDate") String startDate,
-			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryParam("endDate") String endDate) {
+	public HttpResponse<?> getDangerSourceCsv(
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
 		logger.debug("GET CSV danger sources");
 
 		Instant start = null;
@@ -126,13 +128,13 @@ public class StatisticsService {
 		if (startDate != null)
 			start = OffsetDateTime.parse(startDate).toInstant();
 		else
-			return Response.notAcceptable(null).build();
+			return HttpResponse.badRequest();
 		if (endDate != null)
 			end = OffsetDateTime.parse(endDate).toInstant();
 		else
-			return Response.notAcceptable(null).build();
+			return HttpResponse.badRequest();
 
-		String statistics = StatisticsController.getInstance().getDangerSourceStatistics(start, end);
+		String statistics = statisticsController.getDangerSourceStatistics(start, end);
 
 		String filename = String.format("danger_source_statistic_%s_%s",
 			OffsetDateTime.parse(startDate).toLocalDate(),
@@ -144,31 +146,29 @@ public class StatisticsService {
 			writer.write(statistics);
 			writer.close();
 
-			return Response.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
-			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv").build();
+			return HttpResponse.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
+			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv");
 		} catch (IOException e) {
 			logger.warn("Error creating danger source statistics", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@POST
-	@Path("/vr")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Post("/vr")
 	@Operation(summary = "Save VR statistics")
-	public Response saveMediaFile(
-		@HeaderParam(HttpHeaders.AUTHORIZATION) String authorization,
+	public HttpResponse<?> saveMediaFile(
+		@Header String authorization,
 		InputStream inputStream
 	) throws IOException {
 		String token = System.getenv("ALBINA_VR_STATISTICS_TOKEN");
 		if (token == null || token.isEmpty() || !token.equals(authorization)) {
-			return Response.status(Response.Status.FORBIDDEN).build();
+			return HttpResponse.status(HttpStatus.FORBIDDEN);
 		}
 		String directory = System.getenv("ALBINA_VR_STATISTICS_DIRECTORY");
-		java.nio.file.Path file = java.nio.file.Path.of(directory).resolve(UUID.randomUUID() + ".json");
+		Path file = Path.of(directory).resolve(UUID.randomUUID() + ".json");
 		try (OutputStream outputStream = Files.newOutputStream(file)) {
 			inputStream.transferTo(outputStream);
 		}
-		return Response.status(Response.Status.CREATED).build();
+		return HttpResponse.noContent();
 	}
 }

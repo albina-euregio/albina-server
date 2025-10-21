@@ -1,19 +1,16 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import eu.albina.util.JsonUtil;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -35,15 +32,9 @@ import eu.albina.model.enumerations.Role;
 
 @Entity
 @Table(name = "users")
+@Serdeable
 @JsonView(JsonUtil.Views.Internal.class)
 public class User implements NameAndEmail {
-
-	static class UserNameSerializer extends JsonSerializer<User> {
-		@Override
-		public void serialize(User value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-			gen.writeString(value.getName());
-		}
-	}
 
 	/** Email address of the user */
 	@Id
@@ -53,7 +44,7 @@ public class User implements NameAndEmail {
 
 	/** Password of the user */
 	@Column(name = "PASSWORD", length = 191)
-	@JsonIgnore
+	@JsonView({JsonUtil.Views.Detailed.class})
 	private String password;
 
 	/** Name of the user **/
@@ -72,9 +63,8 @@ public class User implements NameAndEmail {
 	 joinColumns=@JoinColumn(name="USER_EMAIL"),
 	 inverseJoinColumns=@JoinColumn(name="REGION_ID")
 	)
-	@JsonSerialize(contentUsing = Region.RegionSerializer.class)
-	@JsonDeserialize(contentUsing = Region.RegionDeserializer.class)
-	private Set<Region> regions = new HashSet<Region>();
+	@JsonIgnore
+	private Set<Region> regions = new HashSet<>();
 
 	/** Image of the user **/
 	@Column(name = "IMAGE", columnDefinition = "LONGBLOB")
@@ -155,6 +145,16 @@ public class User implements NameAndEmail {
 		this.regions = regions;
 	}
 
+	@JsonProperty("regions")
+	public Set<String> getRegionsString() {
+		return regions.stream().map(Region::getId).collect(Collectors.toSet());
+	}
+
+	@JsonProperty("regions")
+	public void setRegionsString(Set<String> regions) {
+		this.regions = regions.stream().map(Region::new).collect(Collectors.toSet());
+	}
+
 	public String getImage() {
 		return image;
 	}
@@ -171,12 +171,12 @@ public class User implements NameAndEmail {
 		this.organization = organization;
 	}
 
-	public LanguageCode getLanguage() {
+	public LanguageCode getLanguageCode() {
 		return languageCode;
 	}
 
-	public void setLanguage(LanguageCode language) {
-		this.languageCode = language;
+	public void setLanguageCode(LanguageCode languageCode) {
+		this.languageCode = languageCode;
 	}
 
 	public boolean isDeleted() {

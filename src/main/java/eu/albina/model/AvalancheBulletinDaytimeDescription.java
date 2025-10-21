@@ -13,6 +13,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import eu.albina.model.enumerations.Complexity;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -30,7 +32,9 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
+@Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObject {
 
 	@OneToOne
@@ -102,8 +106,8 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	private transient ServerInstance serverInstance;
 
 	public AvalancheBulletinDaytimeDescription() {
-		this.terrainFeatureAbove = new HashSet<Text>();
-		this.terrainFeatureBelow = new HashSet<Text>();
+		this.terrainFeatureAbove = new HashSet<>();
+		this.terrainFeatureBelow = new HashSet<>();
 	}
 
 	public boolean isHasElevationDependency() {
@@ -335,6 +339,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		return terrainFeatureTextcat;
 	}
 
+	@JsonIgnore
 	boolean isDangerLevelElevationDependency() {
 		return serverInstance == null || serverInstance.isDangerLevelElevationDependency();
 	}

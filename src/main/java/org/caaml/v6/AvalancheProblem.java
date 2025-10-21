@@ -7,6 +7,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import io.micronaut.serde.annotation.Serdeable;
 
 /**
  * Defines an avalanche problem, its time, aspect, and elevation constraints. A textual
@@ -15,13 +16,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * implied danger rating value is optional.
  */
 @JsonPropertyOrder({"problemType", "avalancheType", "elevation", "aspect", "validTimePeriod", "snowpackStability", "frequency", "avalancheSize", "dangerRatingValue", "comment", "metaData", "customData"})
+@Serdeable
 public class AvalancheProblem {
 	@JacksonXmlElementWrapper(useWrapping = false)
 	@JacksonXmlProperty(localName = "aspect")
     private List<Aspect> aspects;
     private Integer avalancheSize;
     private String comment;
-    private Object customData;
+    private AvalancheProblemCustomData customData;
     private DangerRatingValue dangerRatingValue;
     private ElevationBoundaryOrBand elevation;
     private ExpectedAvalancheFrequency frequency;
@@ -40,8 +42,8 @@ public class AvalancheProblem {
     public String getComment() { return comment; }
     public void setComment(String value) { this.comment = value; }
 
-    public Object getCustomData() { return customData; }
-    public void setCustomData(Object value) { this.customData = value; }
+    public AvalancheProblemCustomData getCustomData() { return customData; }
+    public void setCustomData(AvalancheProblemCustomData value) { this.customData = value; }
 
     public DangerRatingValue getDangerRatingValue() { return dangerRatingValue; }
     public void setDangerRatingValue(DangerRatingValue value) { this.dangerRatingValue = value; }

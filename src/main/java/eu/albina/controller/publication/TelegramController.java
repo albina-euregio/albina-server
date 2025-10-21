@@ -2,59 +2,58 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
-import org.hibernate.HibernateException;
 import eu.albina.util.HttpClientUtil;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.MediaType;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.TelegramConfiguration;
-import eu.albina.util.HibernateUtil;
 
-import jakarta.persistence.PersistenceException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+@Singleton
+public class TelegramController {
+	private static final Logger logger = LoggerFactory.getLogger(TelegramController.class);
 
-public interface TelegramController {
-	Logger logger = LoggerFactory.getLogger(TelegramController.class);
-	Client client = HttpClientUtil.newClientBuilder().build();
+	@Inject
+	HttpClient client;
 
-	static Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
-		Objects.requireNonNull(region, "region");
-		Objects.requireNonNull(region.getId(), "region.getId()");
-		Objects.requireNonNull(languageCode, "languageCode");
+	@Inject
+	TelegramConfigurationRepository telegramConfigurationRepository;
+	@Inject
+	private HttpClient httpClient;
 
-		return HibernateUtil.getInstance().run(entityManager -> {
-			try {
-				TelegramConfiguration result = (TelegramConfiguration) entityManager.createQuery(HibernateUtil.queryGetTelegramConfiguration)
-					.setParameter("region", region)
-					.setParameter("lang", languageCode)
-					.getSingleResult();
-				return Optional.ofNullable(result);
-			} catch (PersistenceException e) {
-				return Optional.empty();
-			}
-		});
+	@Repository
+	public interface TelegramConfigurationRepository extends CrudRepository<TelegramConfiguration, Long> {
+		Optional<TelegramConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
 	}
 
-	static Void trySend(TelegramConfiguration config, MultichannelMessage posting, int retry) throws Exception {
+	public Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
+		return telegramConfigurationRepository.findByRegionAndLanguageCode(region, languageCode);
+	}
+
+	public Void trySend(TelegramConfiguration config, MultichannelMessage posting, int retry) throws Exception {
 		try {
 			String message = posting.getSocialMediaText();
 			String attachmentUrl = posting.getAttachmentUrl();
@@ -85,67 +84,52 @@ public interface TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#sendphoto">https://core.telegram.org/bots/api#sendphoto</a>
 	 * @see <a href="https://core.telegram.org/bots/api#inputfile">https://core.telegram.org/bots/api#inputfile</a>
 	 */
-	static Response sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
-			throws IOException, HibernateException {
+	public HttpResponse<String> sendPhoto(TelegramConfiguration config, String message, String attachmentUrl)
+		throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending photo {} and message {} to telegram channel using config {}", attachmentUrl, message, config);
 
-		MultiPart multiPart = new FormDataMultiPart();
-		multiPart.bodyPart(new StreamDataBodyPart(
-			"photo",
-			new URL(attachmentUrl).openStream(),
-			attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1),
-			MediaType.APPLICATION_OCTET_STREAM_TYPE));
-
-		Response response = HttpClientUtil
-			.newClientBuilder(80000) // sending photos may a while
-			.register(MultiPartFeature.class)
-			.build()
-			.target(String.format("https://api.telegram.org/bot%s/sendPhoto", apiToken))
-			.register(MultiPartFeature.class)
-			.queryParam("chat_id", chatId)
-			.queryParam("caption", message)
-			.request()
-			.post(Entity.entity(multiPart, multiPart.getMediaType()));
-
-		if (response.getStatusInfo().getStatusCode() != 200) {
-			// FIXME throw exception?
-			logger.warn("Error publishing on telegram channel for "
-				+ config.getRegion().getId() + " (error code "
-				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
-		}
-		return response;
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s&photo=%s",
+				apiToken,
+				URLEncoder.encode(chatId, StandardCharsets.UTF_8),
+				URLEncoder.encode(message, StandardCharsets.UTF_8),
+				URLEncoder.encode(attachmentUrl, StandardCharsets.UTF_8)
+			))).build();
+		return execute(request, config);
 	}
 
-	static Response sendMessage(TelegramConfiguration config, String message) throws HibernateException {
+	public HttpResponse<String> sendMessage(TelegramConfiguration config, String message) throws IOException, InterruptedException {
 		Objects.requireNonNull(config, "config");
 		String chatId = Objects.requireNonNull(config.getChatId(), "config.getChatId");
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending message {} to telegram channel using config {}", message, config);
 
-		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/sendMessage", apiToken))
-			.queryParam("chat_id", chatId)
-			.queryParam("text", message);
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s",
+			apiToken,
+			URLEncoder.encode(chatId, StandardCharsets.UTF_8),
+			URLEncoder.encode(message, StandardCharsets.UTF_8)
+		))).build();
 		return execute(request, config);
 	}
 
 	/**
 	 * A simple method for testing your bot's authentication token. Requires no parameters. Returns basic information about the bot in form of a User object.
+	 *
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
-	static Response getMe(TelegramConfiguration config) throws HibernateException {
-		WebTarget request = client.target(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()));
+	public HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
 		return execute(request, config);
 	}
 
-	static Response execute(WebTarget request, TelegramConfiguration config) {
-		final Response response = request.request().get();
-		if (response.getStatusInfo().getStatusCode() != 200) {
+	public HttpResponse<String> execute(HttpRequest request, TelegramConfiguration config) throws IOException, InterruptedException {
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		if (response.statusCode() != 200) {
 			logger.warn("Error publishing on telegram channel for "
 				+ config.getRegion().getId() + " (error code "
-				+ response.getStatusInfo().getStatusCode() + "): " + response.readEntity(String.class));
+				+ response.statusCode() + "): " + response.body());
 		}
 		return response;
 	}

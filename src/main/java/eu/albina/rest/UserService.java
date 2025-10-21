@@ -3,267 +3,211 @@ package eu.albina.rest;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import eu.albina.controller.RegionController;
+import com.fasterxml.jackson.annotation.JsonView;
+
+import eu.albina.controller.RegionRepository;
+import eu.albina.controller.UserRepository;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
+import eu.albina.model.User;
+import eu.albina.model.enumerations.Role;
+import eu.albina.util.JsonUtil;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpResponse;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Put;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.hibernate.HibernateException;
-import org.mindrot.jbcrypt.BCrypt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.albina.controller.UserController;
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.User;
-import eu.albina.model.enumerations.Role;
-import eu.albina.rest.filter.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
 
-@Path("/user")
+@Controller("/user")
 @Tag(name = "user")
 public class UserService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-	@Context
-	UriInfo uri;
+	@Inject
+	RegionRepository regionRepository;
 
-	@GET
-	@Secured({ Role.ADMIN })
+	@Inject
+	UserRepository userRepository;
+
+	@Get
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all users")
 	@ApiResponse(description = "users", content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class))))
-	public Response getUsers(@Context SecurityContext securityContext) {
-		logger.debug("GET JSON users");
-		try {
-			List<User> users = UserController.getInstance().getUsers();
-			return Response.ok(users, MediaType.APPLICATION_JSON).build();
-		} catch (Exception e) {
-			logger.warn("Error loading users", e);
-			return Response.status(Response.Status.UNAUTHORIZED).build();
-		}
+	@JsonView(JsonUtil.Views.Internal.class)
+	public List<User> getUsers() {
+		return userRepository.findAll();
 	}
 
-	@GET
-	@Secured({ Role.ADMIN })
+	@Get("/roles")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/roles")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all roles")
 	@ApiResponse(description = "roles", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Role.class))))
-	public Response getRoles(@Context SecurityContext securityContext) {
-		logger.debug("GET JSON roles");
+	public HttpResponse<?> getRoles() {
 		Role[] roles = Role.values();
-		return Response.ok(roles, MediaType.APPLICATION_JSON).build();
+		return HttpResponse.ok(roles);
 	}
 
-	@GET
-	@Secured({ Role.ADMIN })
+	@Get("/regions")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/regions")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get all regions")
 	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class))))
-	public Response getRegions(@Context SecurityContext securityContext) {
-		logger.debug("GET JSON regions");
+	public HttpResponse<?> getRegions() {
 		try {
-			List<String> ids = RegionController.getInstance().getRegions().stream().map(Region::getId).collect(Collectors.toList());
-			return Response.ok(ids, MediaType.APPLICATION_JSON).build();
+			List<String> ids = regionRepository.findAll().stream().map(Region::getId).collect(Collectors.toList());
+			return HttpResponse.ok(ids);
 		} catch (Exception e) {
 			logger.warn("Error loading regions", e);
-			return Response.status(Response.Status.UNAUTHORIZED).build();
+			return HttpResponse.unauthorized();
 		}
 	}
 
-	@POST
-	@Secured({ Role.ADMIN })
+	@Post("/create")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/create")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Create user")
-	public Response createUser(
-		@Parameter(schema = @Schema(implementation = User.class)) User user,
-		@Context SecurityContext securityContext) {
-		logger.debug("POST JSON user");
-		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-
-		// check if email already exists
-		if (!UserController.getInstance().userExists(user.getEmail())) {
-			UserController.getInstance().createUser(user);
-			return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
-		} else {
-			String message = "Error creating user - User already exists";
-			logger.warn(message);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(new AlbinaException(message).toJSON()).build();
+	public HttpResponse<?> createUser(
+		@Body User user) {
+		try {
+			if (userRepository.existsById(user.getEmail())) {
+				throw new AlbinaException("User already exists!");
+			}
+			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+			userRepository.save(user);
+			return HttpResponse.noContent();
+		} catch (Exception e) {
+			logger.warn("Error creating user", e);
+			return HttpResponse.badRequest().body(e.getMessage());
 		}
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Put
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Update own user")
-	public Response updateOwnUser(
-		@Parameter(schema = @Schema(implementation = User.class)) User user,
-		@Context SecurityContext securityContext) {
-		logger.debug("PUT JSON user");
+	public HttpResponse<?> updateOwnUser(
+		@Body User user,
+		Principal principal) {
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
-
-			// check if email already exists
-			if (user.getEmail().equals(username)) {
-				UserController.getInstance().updateUser(user);
-				return Response.created(uri.getAbsolutePathBuilder().path("").build()).build();
-			} else {
+			if (!Objects.equals(user.getEmail(), username)) {
 				throw new AlbinaException("Updating user not allowed");
 			}
-		} catch (AlbinaException e) {
+			userRepository.updateKeepPassword(user);
+			return HttpResponse.noContent();
+		} catch (Exception e) {
 			logger.warn("Error updating user", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	static class ChangePassword {
-		public String oldPassword;
-		public String newPassword;
+	@Serdeable
+	public record ChangePassword(String oldPassword, String newPassword) {
 	}
 
-	static class ResetPassword {
-		public String newPassword;
+	@Serdeable
+	public record ResetPassword(String newPassword) {
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Put("/change")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/change")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Change password")
-	public Response changePassword(ChangePassword data, @Context SecurityContext securityContext) {
-		logger.debug("PUT JSON password");
+	public HttpResponse<?> changePassword(@Body ChangePassword data, Principal principal) {
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
-
-			UserController.getInstance().changePassword(username, data.oldPassword, data.newPassword);
-
-			return Response.ok().build();
-		} catch (AlbinaException e) {
+			userRepository.changePassword(username, data.oldPassword, data.newPassword);
+			return HttpResponse.ok();
+		} catch (Exception e) {
 			logger.warn("Error changing password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	static class CheckPassword {
-		public String password;
+	@Serdeable
+	public record CheckPassword(String password) {
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN, Role.FORECASTER, Role.FOREMAN, Role.OBSERVER })
+	@Put("/check")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/check")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Check password")
-	public Response checkPassword(CheckPassword data, @Context SecurityContext securityContext) {
-		logger.debug("GET JSON check password");
+	public HttpResponse<?> checkPassword(@Body CheckPassword data, Principal principal) {
 		try {
-			Principal principal = securityContext.getUserPrincipal();
 			String username = principal.getName();
-
-			if (UserController.getInstance().checkPassword(username, data.password)) {
-				return Response.ok().build();
-			} else {
-				return Response.status(400).type(MediaType.APPLICATION_JSON).build();
-			}
-		} catch (HibernateException e) {
+			userRepository.authenticate(username, data.password);
+			return HttpResponse.ok();
+		} catch (Exception e) {
 			logger.warn("Error checking password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toString()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@DELETE
-	@Secured({ Role.ADMIN })
+	@Delete("/{id}")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Delete user")
-	public void deleteUser(@PathParam("id") String id) {
-		logger.info("DELETE JSON user {}", id);
-		UserController.delete(id);
-	}
-
-	@PUT
-	@Secured({ Role.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{id}/reset")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Operation(summary = "Reset user password")
-	public Response resetPassword(@PathParam("id") String id, ResetPassword data, @Context SecurityContext securityContext) {
-		logger.debug("PUT JSON user password");
+	public MutableHttpResponse<String> deleteUser(@PathVariable("id") String id) {
 		try {
-			UserController.getInstance().resetPassword(id, data.newPassword);
-
-			return Response.ok().build();
-		} catch (AlbinaException e) {
-			logger.warn("Error changing password", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			userRepository.delete(id);
+			return HttpResponse.ok();
+		} catch (Exception e) {
+			logger.warn("Error deleting user", e);
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
-	@PUT
-	@Secured({ Role.ADMIN })
+	@Put("/{id}/reset")
+	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Operation(summary = "Update user")
-	public Response updateUser(
-		@PathParam("id") String id,
-		@Parameter(schema = @Schema(implementation = User.class)) User user,
-		@Context SecurityContext securityContext) {
-		logger.debug("PUT JSON user");
+	@Operation(summary = "Reset user password")
+	public HttpResponse<?> resetPassword(@PathVariable("id") String id, @Body ResetPassword data) {
 		try {
-			// check if email already exists
-			if (UserController.getInstance().userExists(user.getEmail())) {
-				UserController.getInstance().updateUser(user);
-				return Response.ok().build();
-			} else {
-				throw new AlbinaException("User does not exist");
-			}
-		} catch (AlbinaException e) {
+			userRepository.resetPassword(id, data.newPassword);
+			return HttpResponse.ok();
+		} catch (Exception e) {
+			logger.warn("Error changing password", e);
+			return HttpResponse.badRequest().body(e.toString());
+		}
+	}
+
+	@Put("/{id}")
+	@Secured(Role.Str.ADMIN)
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Update user")
+	public HttpResponse<?> updateUser(
+		@PathVariable("id") String id,
+		@Body User user) {
+		try {
+			userRepository.updateKeepPassword(user);
+			return HttpResponse.ok();
+		} catch (Exception e) {
 			logger.warn("Error updating user", e);
-			return Response.status(400).type(MediaType.APPLICATION_JSON).entity(e.toJSON()).build();
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 

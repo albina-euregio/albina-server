@@ -28,19 +28,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
-public class EmailUtil {
-
-	private static EmailUtil instance = null;
-
-	protected EmailUtil() {
-	}
-
-	public static EmailUtil getInstance() {
-		if (instance == null) {
-			instance = new EmailUtil();
-		}
-		return instance;
-	}
+public interface EmailUtil {
 
 	private static Template getTemplate() throws IOException {
 		Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
@@ -52,18 +40,18 @@ public class EmailUtil {
 		return cfg.getTemplate("albina-email.html");
 	}
 
-	public static String getDangerPatternLink(LanguageCode lang, Region region, DangerPattern dangerPattern) {
+	static String getDangerPatternLink(LanguageCode lang, Region region, DangerPattern dangerPattern) {
 		return String.format("%s/education/danger-patterns#%s",
 			region.getWebsiteUrl(lang), DangerPattern.getCAAMLv6String(dangerPattern));
 	}
 
-	public static String getAvalancheProblemLink(LanguageCode lang, Region region,
-												 eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
+	static String getAvalancheProblemLink(LanguageCode lang, Region region,
+										  eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
 		return String.format("%s/education/avalanche-problems#%s",
-			region.getWebsiteUrl(lang), avalancheProblem.toCaamlv6String());
+			region.getWebsiteUrl(lang), avalancheProblem.toStringId());
 	}
 
-	public String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) throws IOException, TemplateException {
+	static String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) throws IOException, TemplateException {
 		// Create data model
 		Map<String, Object> root = new HashMap<>();
 		Map<String, Object> image = new HashMap<>();
@@ -144,7 +132,7 @@ public class EmailUtil {
 
 		root.put("text", text);
 
-		ArrayList<Map<String, Object>> arrayList = new ArrayList<Map<String, Object>>();
+		ArrayList<Map<String, Object>> arrayList = new ArrayList<>();
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			Map<String, Object> bulletin = new HashMap<>();
 
@@ -333,8 +321,8 @@ public class EmailUtil {
 		return out.toString();
 	}
 
-	private void addDaytimeInfo(LanguageCode lang, Region region, AvalancheBulletin avalancheBulletin, Map<String, Object> bulletin,
-								boolean isAfternoon, ServerInstance serverInstance) {
+	private static void addDaytimeInfo(LanguageCode lang, Region region, AvalancheBulletin avalancheBulletin, Map<String, Object> bulletin,
+									   boolean isAfternoon, ServerInstance serverInstance) {
 		AvalancheBulletinDaytimeDescription daytimeBulletin;
 		if (isAfternoon)
 			daytimeBulletin = avalancheBulletin.getAfternoon();
@@ -387,8 +375,8 @@ public class EmailUtil {
 		bulletin.put("avalancheProblem5", createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, region, serverInstance));
 	}
 
-	private Map<String, Object> createAvalancheProblem(eu.albina.model.AvalancheProblem avalancheProblem,
-			LanguageCode lang, Region region, ServerInstance serverInstance) {
+	private static Map<String, Object> createAvalancheProblem(eu.albina.model.AvalancheProblem avalancheProblem,
+															  LanguageCode lang, Region region, ServerInstance serverInstance) {
 		Map<String, Object> avalancheProblemMap = new HashMap<>();
 		final String serverImagesUrl =  serverInstance.getServerImagesUrl();
 
@@ -471,7 +459,7 @@ public class EmailUtil {
 		return avalancheProblemMap;
 	}
 
-	private String getDangerRatingColorStyle(DangerRating dangerRating, ServerInstance serverInstance) {
+	private static String getDangerRatingColorStyle(DangerRating dangerRating, ServerInstance serverInstance) {
 		if (dangerRating.equals(DangerRating.very_high)) {
 			return "background=\"" + serverInstance.getServerImagesUrl() + "bg_checkered.png"
 					+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
@@ -480,7 +468,7 @@ public class EmailUtil {
 					+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
 	}
 
-	private String getHeadlineStyle(DangerRating dangerRating) {
+	private static String getHeadlineStyle(DangerRating dangerRating) {
 		if (dangerRating.equals(DangerRating.low) || dangerRating.equals(DangerRating.moderate)) {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
 					+ "#565F61" + "; background-color: " + dangerRating.getColor() + ";\"";
@@ -490,28 +478,28 @@ public class EmailUtil {
 		}
 	}
 
-	private String getDangerPatternStyle(boolean b) {
+	private static String getDangerPatternStyle(boolean b) {
 		if (b)
 			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; margin-right: 5px; display: inline-block; background-color: #FFFFFF;\"";
 		else
 			return "";
 	}
 
-	private String getSnowpackStyle(boolean b) {
+	private static String getSnowpackStyle(boolean b) {
 		if (!b)
 			return "style=\"overflow: hidden; float: left; display: none !important; line-height: 0px; height: 0px; border-spacing: 0px;\"";
 		else
 			return "style=\"padding: 0px; border-spacing: 0px; width: 100%; background-color: #f6fafc;\"";
 	}
 
-	private String getPMStyle(boolean daytimeDependency) {
+	private static String getPMStyle(boolean daytimeDependency) {
 		if (!daytimeDependency)
 			return "style=\"display:none;width:0px;max-height:0px;overflow:hidden;mso-hide:all;height:0;font-size:0;max-height:0;line-height:0;margin:0 auto;\"";
 		else
 			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px; border-top: 1px solid #e6eef2; padding-top: 10px;\"";
 	}
 
-	private String getPMStyleTable(boolean daytimeDependency) {
+	private static String getPMStyleTable(boolean daytimeDependency) {
 		if (!daytimeDependency)
 			return "style=\"mso-hide: all;\"";
 		else

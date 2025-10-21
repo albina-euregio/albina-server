@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import static eu.albina.RegionTestUtils.regionEuregio;
-
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.Period;
@@ -13,6 +13,11 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import eu.albina.AvalancheBulletinTestUtils;
+import eu.albina.RegionTestUtils;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -24,24 +29,35 @@ import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
-import eu.albina.util.HibernateUtil;
+import org.junit.jupiter.api.io.TempDir;
 
+@MicronautTest
 public class AvalancheReportTest {
 
 	private final ServerInstance serverInstanceEuregio = new ServerInstance();
 
+	@Inject
+	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
+
+	@Inject
+	RegionTestUtils regionTestUtils;
+
+	@Inject
+	ObjectMapper objectMapper;
+	private Region regionEuregio;
+
 	@Test
 	public void testIsUpdate() throws Exception {
-		List<AvalancheBulletin> bulletins0 = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins0 = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json"));
 		Assertions.assertTrue(AvalancheReport.of(bulletins0, null, null).isUpdate());
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2019-01-17.json"));
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2019-01-17.json"));
 		Assertions.assertFalse(AvalancheReport.of(bulletins, null, null).isUpdate());
 	}
 
 	@Disabled
 	@Test
 	public void sortBulletinsTest() throws Exception {
-		List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(Resources.getResource("2030-02-16_1.json"));
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json"));
 		for (AvalancheBulletin avalancheBulletin : bulletins) {
 			System.out.println(avalancheBulletin.getHighestDangerRating());
 		}
@@ -57,7 +73,8 @@ public class AvalancheReportTest {
 		serverInstanceEuregio.setPdfDirectory("/foo/bar/baz/bulletins");
 		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins");
 		final URL resource = Resources.getResource("2019-01-17.json");
-		final List<AvalancheBulletin> bulletins = AvalancheBulletin.readBulletinsUsingJackson(resource);
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		regionEuregio = regionTestUtils.regionEuregio();
 		regionEuregio.setServerInstance(serverInstanceEuregio);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		Assertions.assertEquals("16.01.2019, 17:00:00", avalancheReport.getPublicationDate(LanguageCode.de));
@@ -73,7 +90,7 @@ public class AvalancheReportTest {
 		Assertions.assertEquals("am Freitag, 18. Jänner 2019", avalancheReport.getTendencyDate(LanguageCode.de));
 		Assertions.assertEquals("16.01.2019", avalancheReport.getPreviousValidityDateString(LanguageCode.de));
 		Assertions.assertEquals("18.01.2019", avalancheReport.getNextValidityDateString(LanguageCode.de));
-		Assertions.assertEquals("2019-01-17", bulletins.get(0).getValidityDateString());
+		Assertions.assertEquals("2019-01-17", bulletins.getFirst().getValidityDateString());
 		Assertions.assertEquals("2019-01-17", avalancheReport.getValidityDateString());
 		Assertions.assertEquals("2019-01-24", avalancheReport.getValidityDateString(Period.ofDays(7)));
 		Assertions.assertEquals("Lawinenvorhersage für Donnerstag, 17. Jänner 2019: https://lawinen.report/bulletin/2019-01-17", MultichannelMessage.of(avalancheReport, LanguageCode.de).getSocialMediaText());
@@ -89,9 +106,9 @@ public class AvalancheReportTest {
 			Clock.fixed(Instant.parse("2019-01-17T16:00:00Z"), AlbinaUtil.localZone())));
 
 		// should yield strings in correct timezone, even if publication date is in a different timezone
-		Assertions.assertEquals("2019-01-16T16:00Z", bulletins.get(0).getPublicationDate().toString());
+		Assertions.assertEquals("2019-01-16T16:00Z", bulletins.getFirst().getPublicationDate().toString());
 		bulletins.forEach(b -> b.setPublicationDate(b.getPublicationDate().withZoneSameInstant(ZoneId.of("Canada/Mountain"))));
-		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.get(0).getPublicationDate().toString());
+		Assertions.assertEquals("2019-01-16T09:00-07:00[Canada/Mountain]", bulletins.getFirst().getPublicationDate().toString());
 		Assertions.assertEquals("16.01.2019, 17:00:00", avalancheReport.getPublicationDate(LanguageCode.de));
 		Assertions.assertEquals("2019-01-16_16-00-00", avalancheReport.getPublicationTimeString());
 	}
@@ -99,9 +116,7 @@ public class AvalancheReportTest {
 	@Test
 	@Disabled
 	public void testDatesHibernate() throws Exception {
-		HibernateUtil.getInstance().setUp();
-		final AvalancheBulletin bulletin = AvalancheBulletinController.getInstance().getBulletin("4e5bbd7c-7ccf-4a2a-8ac7-5a0bfc322a14");
-		HibernateUtil.getInstance().shutDown();
+		final AvalancheBulletin bulletin = new AvalancheBulletinController().getBulletin("4e5bbd7c-7ccf-4a2a-8ac7-5a0bfc322a14");
 		final List<AvalancheBulletin> bulletins = List.of(bulletin);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
 
@@ -118,6 +133,17 @@ public class AvalancheReportTest {
 		AvalancheBulletin bulletin = new AvalancheBulletin();
 		bulletin.setPublicationDate(ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC));
 		Assertions.assertEquals(bulletin.getPublicationDate(), AvalancheReport.of(List.of(new AvalancheBulletin(), bulletin, new AvalancheBulletin()), null, null).getPublicationDate());
+	}
+
+	@Test
+	public void createJsonTest(@TempDir Path folder) throws IOException {
+		ServerInstance serverInstanceEuregio = new ServerInstance();
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json"));
+		serverInstanceEuregio.setHtmlDirectory(folder.toString());
+		serverInstanceEuregio.setMapsPath(folder.toString());
+		serverInstanceEuregio.setPdfDirectory(folder.toString());
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTestUtils.regionTyrol(), serverInstanceEuregio);
+		avalancheReport.createJsonFile(objectMapper);
 	}
 }
 

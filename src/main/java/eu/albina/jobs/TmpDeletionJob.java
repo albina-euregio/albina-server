@@ -6,36 +6,35 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import com.google.common.base.StandardSystemProperty;
+import io.micronaut.scheduling.annotation.Scheduled;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.MoreFiles;
 
-import eu.albina.util.GlobalVariables;
-
 /**
- * A {@code org.quartz.Job} handling all the tasks and logic necessary to
+ * A job handling all the tasks and logic necessary to
  * automatically publish blog posts.
  *
  * @author Norbert Lanzanasto
  *
  */
-public class TmpDeletionJob implements org.quartz.Job {
+@Singleton
+public class TmpDeletionJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(TmpDeletionJob.class);
 
 	/**
 	 * Execute all necessary tasks to delete tmp files.
-	 *
-	 * @param arg0
 	 */
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	@Scheduled(cron = "0 0 3 * * ?")
+	public void execute() {
 		logger.info("TmpDeletion job triggered!");
 		try {
-			Path tmpDir = Paths.get(GlobalVariables.getTmpMapsPath());
+
+			Path tmpDir = Paths.get(StandardSystemProperty.JAVA_IO_TMPDIR.value());
 			if (Files.exists(tmpDir)) {
 				MoreFiles.deleteDirectoryContents(tmpDir);
 			}

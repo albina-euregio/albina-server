@@ -2,6 +2,7 @@
 package eu.albina.model;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,11 +18,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.JsonUtil;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -47,6 +50,8 @@ import org.slf4j.LoggerFactory;
 @Table(name = "avalanche_reports", indexes = {
 	@Index(name = "avalanche_reports_DATE_IDX", columnList = "DATE"),
 })
+@Serdeable
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public class AvalancheReport extends AbstractPersistentObject implements HasValidityDate, HasPublicationDate {
 
 	/**
@@ -54,13 +59,11 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	 */
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
-	@JsonSerialize(using = User.UserNameSerializer.class)
+	@JsonSerialize(as = NameAndEmail.class)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
-	@JsonSerialize(using = Region.RegionSerializer.class)
-	@JsonDeserialize(using = Region.RegionDeserializer.class)
 	private Region region;
 
 	@Column(name = "DATE")
@@ -134,7 +137,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	}
 
 	@JsonIgnore
-	public List<AvalancheBulletin> getPublishedBulletins() {
+	public List<AvalancheBulletin> getPublishedBulletins(ObjectMapper objectMapper) {
 		if (getStatus() != BulletinStatus.published && getStatus() != BulletinStatus.republished) {
 			LoggerFactory.getLogger(AvalancheReport.class).warn("Report has not been published!");
 			return List.of();
@@ -143,13 +146,17 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 			LoggerFactory.getLogger(AvalancheReport.class).warn("JSON string empty: {}, {}", getDate(), getRegion());
 			return List.of();
 		}
-		return Arrays.stream(JsonUtil.parseUsingJackson(getJsonString(), AvalancheBulletin[].class))
-			// only add bulletins with published regions
-			.filter(bulletin -> bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
-			.collect(Collectors.toList());
+		try {
+			return Arrays.stream(objectMapper.readValue(getJsonString(), AvalancheBulletin[].class))
+				// only add bulletins with published regions
+				.filter(bulletin -> bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
+				.collect(Collectors.toList());
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
-	public void createJsonFile() throws IOException {
+	public void createJsonFile(ObjectMapper objectMapper) throws IOException {
 		Path pdfDirectory = getPdfDirectory();
 		Files.createDirectories(pdfDirectory);
 		Path path = pdfDirectory.resolve(getRegion().getId() + ".json");
@@ -158,7 +165,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		}
 		Region region = getRegion();
 		Collection<AvalancheBulletin> bulletins = getBulletins().stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
-		String jsonString = JsonUtil.writeValueUsingJackson(bulletins, JsonUtil.Views.Public.class);
+		String jsonString = objectMapper.cloneWithViewClass(JsonUtil.Views.Public.class).writeValueAsString(bulletins);
 		Files.writeString(path, jsonString, StandardCharsets.UTF_8);
 	}
 
@@ -353,7 +360,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 
 	public String getGeneralHeadline(LanguageCode lang) {
 		return !this.bulletins.isEmpty()
-			? this.bulletins.get(0).getGeneralHeadlineCommentIn(lang)
+			? this.bulletins.getFirst().getGeneralHeadlineCommentIn(lang)
 			: "";
 	}
 

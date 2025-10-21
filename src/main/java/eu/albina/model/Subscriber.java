@@ -4,6 +4,7 @@ package eu.albina.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,6 +21,7 @@ import eu.albina.model.enumerations.LanguageCode;
 
 @Entity
 @Table(name = "subscribers")
+@Serdeable
 public class Subscriber {
 
 	/** Email address of the subscriber */
@@ -48,7 +50,7 @@ public class Subscriber {
 	 * Standard constructor for a subscriber.
 	 */
 	public Subscriber() {
-		regions = new ArrayList<Region>();
+		regions = new ArrayList<>();
 		pdfAttachment = false;
 		confirmed = false;
 	}
