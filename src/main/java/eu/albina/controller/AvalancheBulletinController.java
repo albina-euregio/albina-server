@@ -15,7 +15,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import eu.albina.rest.websocket.AvalancheBulletinEndpoint;
 import eu.albina.util.AlbinaUtil;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
@@ -27,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
@@ -43,8 +41,6 @@ import eu.albina.model.enumerations.DangerRating;
 public class AvalancheBulletinController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinController.class);
-
-	private final List<BulletinLock> bulletinLocks = new ArrayList<>();
 
 	@Inject
 	AvalancheBulletinRepository avalancheBulletinRepository;
@@ -625,66 +621,5 @@ public class AvalancheBulletinController {
 			json.add("missingDangerRating");
 
 		return json;
-	}
-
-	/**
-	 * Lock a specific bulletin due to current modification.
-	 *
-	 * @param lock the bulletin lock
-	 * @throws AlbinaException if the bulletin was already locked
-	 */
-	public void lockBulletin(BulletinLock lock) throws AlbinaException {
-		for (BulletinLock bulletinLock : bulletinLocks) {
-			if (bulletinLock.getDate().equals(lock.getDate())
-				&& bulletinLock.getBulletin().equals(lock.getBulletin()))
-				throw new AlbinaException("Bulletin already locked!");
-		}
-		bulletinLocks.add(lock);
-	}
-
-	/**
-	 * Unlock a specific bulletin.
-	 *
-	 * @param lock the bulletin lock
-	 * @throws AlbinaException if the bulletin was not locked
-	 */
-	public void unlockBulletin(BulletinLock lock) throws AlbinaException {
-		BulletinLock hit = bulletinLocks.stream()
-			.filter(bulletinLock -> bulletinLock.getDate().toEpochMilli() == lock.getDate().toEpochMilli()
-				&& Objects.equals(bulletinLock.getBulletin(), lock.getBulletin()))
-			.findFirst().orElse(null);
-
-		if (hit != null)
-			bulletinLocks.remove(hit);
-		else
-			throw new AlbinaException("Bulletin not locked!");
-	}
-
-	/**
-	 * Unlock all bulletins locked by a specific {@code sessionId}.
-	 *
-	 * @param sessionId the session id
-	 */
-	public void unlockBulletins(String sessionId) {
-		List<BulletinLock> hits = bulletinLocks.stream()
-			.filter(bulletinLock -> Objects.equals(bulletinLock.getSessionId(), sessionId))
-			.toList();
-		for (BulletinLock bulletinLock : hits) {
-			bulletinLocks.remove(bulletinLock);
-			bulletinLock.setLock(false);
-			AvalancheBulletinEndpoint.broadcast(bulletinLock);
-		}
-	}
-
-	/**
-	 * Return all bulletin locks that are locked for {@code region}.
-	 *
-	 * @param date the date of interest
-	 * @return all bulletin locks that are locked for {@code date}
-	 */
-	public List<BulletinLock> getLockedBulletins(Instant date) {
-		return bulletinLocks.stream()
-			.filter(bulletinLock -> bulletinLock.getDate().equals(date))
-			.collect(Collectors.toList());
 	}
 }

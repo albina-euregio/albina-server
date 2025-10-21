@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import eu.albina.rest.websocket.AvalancheBulletinUpdateEndpoint;
 import eu.albina.util.JsonUtil;
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Repository;
@@ -35,7 +34,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.BulletinUpdate;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -346,9 +344,6 @@ public class AvalancheReportController {
 
 		avalancheReportRepository.save(avalancheReport);
 
-		BulletinUpdate bulletinUpdate = new BulletinUpdate(region.getId(), date, avalancheReport.getStatus());
-		AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-
 		logger.info("Report for region {} saved by {}", region.getId(), user);
 	}
 
@@ -391,7 +386,7 @@ public class AvalancheReportController {
 	 * @param bulletins       the bulletins which are affected by the publication
 	 * @param startDate       the start date of the time period
 	 * @param region          the region that should be published
-	 * @param user            the user who publishes the report
+	 * @param username        the user who publishes the report
 	 * @param publicationDate the timestamp when the report was published
 	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
@@ -400,8 +395,6 @@ public class AvalancheReportController {
 										 Instant publicationDate) {
 		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
 		AvalancheReport report = getInternalReport(startDate, region);
-
-		BulletinUpdate bulletinUpdate = null;
 
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
@@ -454,11 +447,7 @@ public class AvalancheReportController {
 		}
 
 		avalancheReportRepository.save(avalancheReport);
-		bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
-		AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-
 		logger.info("Report for region {} published by {}", region.getId(), user);
-
 		return avalancheReport;
 	}
 
@@ -476,8 +465,6 @@ public class AvalancheReportController {
 	 */
 	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user) {
 		AvalancheReport report = getInternalReport(startDate, region);
-		BulletinUpdate bulletinUpdate = null;
-
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
 		avalancheReport.setUser(user);
@@ -531,9 +518,6 @@ public class AvalancheReportController {
 		}
 
 		avalancheReportRepository.save(avalancheReport);
-		bulletinUpdate = new BulletinUpdate(region.getId(), startDate, avalancheReport.getStatus());
-		AvalancheBulletinUpdateEndpoint.broadcast(bulletinUpdate);
-
 		logger.info("Report for region {} submitted by {}", region.getId(), user);
 	}
 

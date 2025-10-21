@@ -69,7 +69,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.ChangeJob;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.BulletinLock;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -749,21 +748,6 @@ public class AvalancheBulletinService {
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error loading bulletins", e);
-			return HttpResponse.badRequest().body(e.toJSON());
-		}
-	}
-
-	@Get("/locked")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> getLockedBulletins(@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date) {
-		logger.debug("GET JSON locked bulletins");
-
-		try {
-			List<BulletinLock> lockedBulletins = avalancheBulletinController.getLockedBulletins(DateControllerUtil.parseDateOrThrow(date));
-			return HttpResponse.ok(lockedBulletins);
-		} catch (AlbinaException e) {
-			logger.warn("Error loading bulletin locks", e);
 			return HttpResponse.badRequest().body(e.toJSON());
 		}
 	}
