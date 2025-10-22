@@ -3,9 +3,12 @@ package eu.albina.rest;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.security.authentication.Authentication;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -86,43 +88,30 @@ public class UserService {
 		}
 	}
 
-	@Post("/create")
-	@Secured(Role.Str.ADMIN)
+	@Post
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Create user")
-	public HttpResponse<?> createUser(
-		@Body User user) {
-		try {
-			if (userRepository.existsById(user.getEmail())) {
-				throw new AlbinaException("User already exists!");
+	@Operation(summary = "Create or update user")
+	public User saveUser(
+		@Body User user,
+		Authentication authentication) {
+		boolean isAdmin = authentication.getRoles().contains(Role.Str.ADMIN);
+		Optional<User> existingUser = userRepository.findById(user.getEmail());
+
+		if (existingUser.isPresent()) {
+			if (!isAdmin && !authentication.getName().equals(user.getEmail())) {
+				throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Only admins can update other users.");
+			}
+			user.setPassword(existingUser.get().getPassword());
+			userRepository.update(user);
+		} else {
+			if (!isAdmin) {
+				throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Only admins can create other users.");
 			}
 			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 			userRepository.save(user);
-			return HttpResponse.noContent();
-		} catch (Exception e) {
-			logger.warn("Error creating user", e);
-			return HttpResponse.badRequest().body(e.getMessage());
 		}
-	}
-
-	@Put
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Update own user")
-	public HttpResponse<?> updateOwnUser(
-		@Body User user,
-		Principal principal) {
-		try {
-			String username = principal.getName();
-			if (!Objects.equals(user.getEmail(), username)) {
-				throw new AlbinaException("Updating user not allowed");
-			}
-			userRepository.updateKeepPassword(user);
-			return HttpResponse.noContent();
-		} catch (Exception e) {
-			logger.warn("Error updating user", e);
-			return HttpResponse.badRequest().body(e.toString());
-		}
+		return user;
 	}
 
 	@Serdeable
@@ -194,21 +183,4 @@ public class UserService {
 			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
-
-	@Put("/{id}")
-	@Secured(Role.Str.ADMIN)
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Update user")
-	public HttpResponse<?> updateUser(
-		@PathVariable("id") String id,
-		@Body User user) {
-		try {
-			userRepository.updateKeepPassword(user);
-			return HttpResponse.ok();
-		} catch (Exception e) {
-			logger.warn("Error updating user", e);
-			return HttpResponse.badRequest().body(e.toString());
-		}
-	}
-
 }

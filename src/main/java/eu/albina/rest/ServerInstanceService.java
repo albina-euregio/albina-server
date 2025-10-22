@@ -9,7 +9,6 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.Put;
 import io.micronaut.security.annotation.Secured;
 
 import eu.albina.util.GlobalVariables;
@@ -42,20 +41,12 @@ public class ServerInstanceService {
 	@Inject
 	private GlobalVariables globalVariables;
 
-	@Put
-	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Update server configuration")
-	public HttpResponse<?> updateServerConfiguration(@Body ServerInstance serverInstance) {
-		serverInstanceRepository.update(serverInstance);
-		return HttpResponse.noContent();
-	}
 
 	@Post
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Create server configuration")
-	public HttpResponse<?> createServerConfiguration(@Body ServerInstance serverInstance) {
+	@Operation(summary = "Create or update server configuration")
+	public HttpResponse<?> saveServerConfiguration(@Body ServerInstance serverInstance) {
 		logger.debug("POST JSON server");
 
 		// check if id already exists
@@ -63,9 +54,8 @@ public class ServerInstanceService {
 			serverInstanceRepository.save(serverInstance);
 			return HttpResponse.created(serverInstance);
 		} else {
-			String msg = "Error creating server instance - Server instance already exists";
-			logger.warn(msg);
-			return HttpResponse.badRequest().body(msg);
+			serverInstanceRepository.update(serverInstance);
+			return HttpResponse.ok(serverInstance);
 		}
 	}
 

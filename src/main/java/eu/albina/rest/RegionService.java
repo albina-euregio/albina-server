@@ -12,11 +12,9 @@ import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 
-import eu.albina.exception.AlbinaException;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.persistence.PersistenceException;
@@ -87,11 +85,11 @@ public class RegionService {
 		}
 	}
 
-	@Put
+	@Post
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Update region")
-	public HttpResponse<?> updateRegion(
+	@Operation(summary = "Create or update region")
+	public HttpResponse<?> saveRegion(
 		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("PUT JSON region");
 
@@ -107,44 +105,18 @@ public class RegionService {
 				existing.updateFromJSON(regionString, objectMapper);
 				existing.fixLanguageConfigurations();
 				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
-				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.update(existing);
 				return HttpResponse.ok(existing);
 			} else {
-				String message = "Error updating region - Region does not exist";
-				logger.warn(message);
-				return HttpResponse.badRequest().body(new AlbinaException(message).toJSON());
-			}
-		} catch (IOException | PersistenceException e) {
-			logger.warn("Error updating region", e);
-			return HttpResponse.badRequest().body(e.toString());
-		}
-	}
-
-	@Post
-	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Create region")
-	public HttpResponse<?> createRegion(
-		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
-		logger.debug("POST JSON region");
-		try {
-			Region region = objectMapper.readValue(regionString, Region.class);
-
-			// check if id already exists
-			if (regionRepository.findById(region.getId()).isEmpty()) {
+				Region region = objectMapper.readValue(regionString, Region.class);
 				region.fixLanguageConfigurations();
 				region.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.update(region); // with `save` we get  "detached entity passed to persist: eu.albina.model.ServerInstance"
 				return HttpResponse.created(region);
-			} else {
-				String message = "Error creating region - Region already exists";
-				logger.warn(message);
-				return HttpResponse.badRequest(new AlbinaException(message).toJSON());
 			}
-		} catch (IOException e) {
-			logger.warn("Error deserializing region", e);
-			return HttpResponse.badRequest(e.toString());
+		} catch (IOException | PersistenceException e) {
+			logger.warn("Error updating region", e);
+			return HttpResponse.badRequest().body(e.toString());
 		}
 	}
 
