@@ -68,7 +68,7 @@ public interface UserRepository extends CrudRepository<User, String> {
 			if (!BCrypt.checkpw(password, user.getPassword()))
 				throw new AlbinaException("Password not correct!");
 		} catch (AlbinaException e) {
-			logger.warn("Failed to authenticate " + username, e);
+			logger.warn("Failed to authenticate {}: {}", username, e.getMessage());
 			throw new AlbinaException("Incorrect username or password entered!");
 		}
 	}
