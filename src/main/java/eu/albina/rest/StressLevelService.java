@@ -1,21 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import eu.albina.controller.RegionRepository;
 import eu.albina.controller.StressLevelRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.StressLevel;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
-import eu.albina.model.Region;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,9 +41,6 @@ public class StressLevelService {
 	private static final Logger logger = LoggerFactory.getLogger(StressLevelService.class);
 
 	@Inject
-	RegionRepository regionRepository;
-
-	@Inject
 	private UserRepository userRepository;
 
 	@Inject
@@ -55,7 +50,7 @@ public class StressLevelService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "List stress level entries of user")
-	public HttpResponse<?> getStressLevels(
+	public List<StressLevel> getStressLevels(
 			Principal principal,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) throws AlbinaException {
@@ -64,15 +59,14 @@ public class StressLevelService {
 		LocalDate endDate = OffsetDateTime.parse(end).toLocalDate();
 		User user = userRepository.findByIdOrElseThrow(principal);
 		Set<User> users = Collections.singleton(user);
-		List<StressLevel> stressLevels = stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate);
-		return HttpResponse.ok(stressLevels);
+		return stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate);
 	}
 
 	@Get("/team")
 	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "List stress level entries of team")
-	public HttpResponse<?> getTeamStressLevels(
+	public Map<UUID, List<StressLevel>> getTeamStressLevels(
 			Principal principal,
 			@QueryValue("region") String regionId,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
@@ -83,21 +77,19 @@ public class StressLevelService {
 		User user = userRepository.findByIdOrElseThrow(principal);
 		try {
 			// check that user is member of requested region
-			Region region = regionRepository.findById(regionId).orElseThrow();
-			if (!user.hasPermissionForRegion(region.getId())) {
-				return HttpResponse.status(HttpStatus.FORBIDDEN);
+			if (!user.hasPermissionForRegion(regionId)) {
+				throw new HttpStatusException(HttpStatus.FORBIDDEN, regionId);
 			}
 			List<User> users = userRepository.findAll().stream()
 					.filter(u -> !u.isDeleted())
 					.filter(u -> u.hasRole(Role.FORECASTER) || u.hasRole(Role.FOREMAN))
 					.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
-					.filter(u -> u.hasPermissionForRegion(region.getId()))
+					.filter(u -> u.hasPermissionForRegion(regionId))
 					.collect(Collectors.toList());
-			Map<UUID, List<StressLevel>> stressLevels = StressLevel.randomizeUsers(stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate));
-			return HttpResponse.ok(stressLevels);
+			return StressLevel.randomizeUsers(stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate));
 		} catch (Exception e) {
 			logger.warn("Failed to get stress levels for region: " + regionId, e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -106,7 +98,7 @@ public class StressLevelService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create stress level entry")
 	@Transactional
-	public HttpResponse<?> postStressLevel(
+	public StressLevel postStressLevel(
 			Principal principal,
 			@Body StressLevel stressLevel) throws AlbinaException {
 
@@ -114,7 +106,7 @@ public class StressLevelService {
 		stressLevel.setUser(user);
 		stressLevel = stressLevelRepository.updateOrSave(stressLevel);
 		logger.info("Creating stress level {}", stressLevel);
-		return HttpResponse.ok(stressLevel);
+		return stressLevel;
 	}
 
 }

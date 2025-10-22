@@ -6,13 +6,12 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import eu.albina.controller.DangerSourceRepository;
 import eu.albina.controller.DangerSourceVariantRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
-import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
@@ -21,6 +20,7 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 
 import jakarta.inject.Inject;
@@ -74,16 +74,13 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSource.class))))
 	@Operation(summary = "Get danger sources for season")
-	public HttpResponse<List<DangerSource>> getDangerSources(
+	public List<DangerSource> getDangerSources(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
-		logger.debug("GET JSON danger sources");
 
 		Range<Instant> instantRange = DateControllerUtil.parseHydrologicalYearInstantRange(date);
-
-		List<DangerSource> dangerSources = dangerSourceRepository
+		return dangerSourceRepository
 			.findByCreationDateBetweenAndOwnerRegion(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regionId);
-		return HttpResponse.ok(dangerSources);
 	}
 
 	@Post("/{dangerSourceId}")
@@ -93,7 +90,6 @@ public class DangerSourceService {
 	public void updateDangerSource(
 		@PathVariable("dangerSourceId") String dangerSourceId,
 			@Body DangerSource dangerSource) {
-		logger.debug("POST JSON danger source");
 
 		dangerSourceRepository.update(dangerSource);
 	}
@@ -103,32 +99,29 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for date")
-	public HttpResponse<List<DangerSourceVariant>> getVariants(
+	public List<DangerSourceVariant> getVariants(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
-		logger.debug("GET JSON danger source variants");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 		Region region = regionRepository.findById(regionId).orElseThrow();
-		List<DangerSourceVariant> variants = dangerSourceVariantRepository
+		return dangerSourceVariantRepository
 			.findByCreationDateBetweenAndOwnerRegion(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region.getId());
-		return HttpResponse.ok(variants);
 	}
 
 	@Get("/status")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<List<DangerSourceVariantsStatus>> getInternalStatus(@QueryValue("region") String regionId,
-																				   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
-																				   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
+	public List<DangerSourceVariantsStatus> getInternalStatus(@QueryValue("region") String regionId,
+															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
 
 		Range<Instant> instantRangeStart = DateControllerUtil.parseInstantRange(startDate);
 		Range<Instant> instantRangeEnd = DateControllerUtil.parseInstantRange(endDate);
 		Region region = regionRepository.findById(regionId).orElseThrow();
 
-		List<DangerSourceVariantsStatus> status = dangerSourceVariantRepository
+		return dangerSourceVariantRepository
 			.getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
-		return HttpResponse.ok(status);
 	}
 
 	@Get("/{dangerSourceId}/edit")
@@ -136,31 +129,28 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for danger source and date")
-	public HttpResponse<List<DangerSourceVariant>> getVariantsForDangerSource(
+	public List<DangerSourceVariant> getVariantsForDangerSource(
 		@PathVariable("dangerSourceId") String dangerSourceId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds) {
-		logger.debug("GET JSON danger source variants for danger source");
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
 		List<Region> regions = regionIds.stream().map(regionRepository::findById)
 			.map(Optional::orElseThrow)
-			.collect(Collectors.toList());
-		List<DangerSourceVariant> variants = dangerSourceVariantRepository.getDangerSourceVariants(
+			.toList();
+		return dangerSourceVariantRepository.getDangerSourceVariants(
 			instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
-		return HttpResponse.ok(variants);
 	}
 
 	@Post
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create variants")
-	public HttpResponse<List<DangerSourceVariant>> createVariants(
+	public List<DangerSourceVariant> createVariants(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		Principal principal,
 			@Body DangerSourceVariant[] variants) {
-		logger.debug("POST JSON variants");
 
 		try {
 			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
@@ -177,9 +167,9 @@ public class DangerSourceService {
 				throw new AlbinaException("User is not authorized for this region!");
 
 			return getVariants(date, regionId);
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 			logger.warn("Error creating variants", e);
-			return getVariants(date, regionId);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -188,25 +178,22 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
 	@Operation(summary = "Get variant by ID")
-	public HttpResponse<DangerSourceVariant> getVariantById(
+	public DangerSourceVariant getVariantById(
 		@PathVariable("variantId") String variantId
 	) {
-		logger.debug("GET JSON danger source variant: {}", variantId);
-		DangerSourceVariant variant = dangerSourceVariantRepository.findById(variantId).orElseThrow();
-		return HttpResponse.ok(variant);
+		return dangerSourceVariantRepository.findById(variantId).orElseThrow();
 	}
 
 	@Post("/variants/{variantId}")
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update danger source variant")
-	public HttpResponse<List<DangerSourceVariant>> updateDangerSource(
+	public List<DangerSourceVariant> updateDangerSource(
 		@PathVariable("variantId") String variantId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		Principal principal,
 			@Body DangerSourceVariant variant) {
-		logger.debug("POST JSON danger source variant");
 
 		try {
 			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
@@ -223,9 +210,9 @@ public class DangerSourceService {
 				throw new AlbinaException("User is not authorized for this region!");
 
 			return getVariants(date, regionId);
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 			logger.warn("Error creating danger source variant", e);
-			return getVariants(date, regionId);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -233,12 +220,11 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete danger source variant")
-	public HttpResponse<List<DangerSourceVariant>> deleteVariant(
+	public List<DangerSourceVariant> deleteVariant(
 		@PathVariable("variantId") String variantId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		Principal principal) {
-		logger.debug("DELETE JSON danger source variant");
 
 		try {
 			User user = userRepository.findByIdOrElseThrow(principal);
@@ -251,9 +237,9 @@ public class DangerSourceService {
 			}
 
 			return getVariants(date, regionId);
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 			logger.warn("Error deleting variant", e);
-			return getVariants(date, regionId);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -261,12 +247,11 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create danger source variant")
-	public HttpResponse<List<DangerSourceVariant>> createVariant(
+	public List<DangerSourceVariant> createVariant(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		Principal principal,
 			@Body DangerSourceVariant variant) {
-		logger.debug("PUT JSON danger source variant");
 
 		try {
 			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
@@ -285,7 +270,7 @@ public class DangerSourceService {
 			return getVariants(date, regionId);
 		} catch (AlbinaException e) {
 			logger.warn("Error creating danger source variant", e);
-			return getVariants(date, regionId);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 }

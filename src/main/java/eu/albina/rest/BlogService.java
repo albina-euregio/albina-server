@@ -3,10 +3,11 @@ package eu.albina.rest;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PublicationController;
-import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 
 import jakarta.inject.Inject;
@@ -42,102 +43,80 @@ public class BlogService {
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<String> sendLatestBlogPost(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
+	public void sendLatestBlogPost(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {}", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendToAllChannels(publicationController);
-
-			return HttpResponse.ok("{}");
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@Post("/publish/latest/email")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostEmail(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
+	public void sendLatestBlogPostEmail(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendMails(publicationController);
-
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@Post("/publish/latest/telegram")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostTelegram(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
+	public void sendLatestBlogPostTelegram(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendTelegramMessage(publicationController);
-
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@Post("/publish/latest/whatsapp")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostWhatsApp(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
+	public void sendLatestBlogPostWhatsApp(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via whatsapp", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendWhatsAppMessage(publicationController);
-
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@Post("/publish/latest/push")
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> sendLatestBlogPostPush(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
+	public void sendLatestBlogPostPush(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
 			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
 			posting.sendPushNotifications(publicationController);
-
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 

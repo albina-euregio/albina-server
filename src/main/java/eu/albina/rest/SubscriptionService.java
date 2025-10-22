@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.SubscriberRepository;
-import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -15,6 +15,7 @@ import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -48,7 +49,7 @@ public class SubscriptionService {
 
 	@Post("/subscribe")
 	@Operation(summary = "Subscribe email notification")
-	public HttpResponse<?> addSubscriber(@Body EmailSubscription json) {
+	public void addSubscriber(@Body EmailSubscription json) {
 		logger.debug("POST JSON subscribe");
 		Objects.requireNonNull(json.language, "language");
 		final Region region = regionRepository.findById(json.regions).orElseThrow();
@@ -61,10 +62,9 @@ public class SubscriptionService {
 			RapidMailConfiguration config = rapidMailController.getConfiguration(region, subscriber.getLanguage()).orElseThrow();
 			subscriberRepository.save(subscriber);
 			rapidMailController.createRecipient(config, subscriber);
-			return HttpResponse.ok();
 		} catch (Exception e) {
 			logger.warn("Error subscribe", e);
-			return HttpResponse.badRequest().body(e.getMessage());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 }

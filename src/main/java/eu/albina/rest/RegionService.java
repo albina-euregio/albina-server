@@ -7,12 +7,13 @@ import java.util.List;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
-import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 
 import io.micronaut.serde.ObjectMapper;
@@ -25,10 +26,7 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -51,48 +49,26 @@ public class RegionService {
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get all regions")
-	@ApiResponse(description = "regions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Region.class))))
-	public HttpResponse<?> getRegions() {
-		logger.debug("GET JSON regions");
-
+	public List<Region> getRegions() {
 		// TODO check if user has ADMIN rights for this region
-
-		try {
-			List<Region> regions = regionRepository.findAll();
-			return HttpResponse.ok(regions);
-		} catch (PersistenceException he) {
-			logger.warn("Error loading regions", he);
-			return HttpResponse.badRequest().body(he.toString());
-		}
+		return regionRepository.findAll();
 	}
 
 	@Get("/region")
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get region for ID")
-	@ApiResponse(description = "region", content = @Content(schema = @Schema(implementation = Region.class)))
-	public HttpResponse<?> getRegion(@QueryValue("region") String regionId) {
-		logger.debug("GET JSON region");
-
+	public Region getRegion(@QueryValue("region") String regionId) {
 		// TODO check if user has ADMIN rights for this region
-
-		try {
-			Region region = regionRepository.findById(regionId).orElseThrow();
-			return HttpResponse.ok(region);
-		} catch (PersistenceException he) {
-			logger.warn("Error loading region", he);
-			return HttpResponse.badRequest().body(he.toString());
-		}
+		return regionRepository.findById(regionId).orElseThrow();
 	}
 
 	@Post
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create or update region")
-	public HttpResponse<?> saveRegion(
+	public Region saveRegion(
 		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
-		logger.debug("PUT JSON region");
-
 		// TODO check if user has ADMIN rights for this region (UserRegionRoleLinks.class)
 
 		try {
@@ -106,24 +82,17 @@ public class RegionService {
 				existing.fixLanguageConfigurations();
 				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.update(existing);
-				return HttpResponse.ok(existing);
+				return existing;
 			} else {
 				Region region = objectMapper.readValue(regionString, Region.class);
 				region.fixLanguageConfigurations();
 				region.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.update(region); // with `save` we get  "detached entity passed to persist: eu.albina.model.ServerInstance"
-				return HttpResponse.created(region);
+				return region;
 			}
 		} catch (IOException | PersistenceException e) {
 			logger.warn("Error updating region", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-	}
-
-	@Get("/locked")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public HttpResponse<?> getLockedRegions(@QueryValue("region") String region) {
-		return HttpResponse.serverError();
 	}
 }

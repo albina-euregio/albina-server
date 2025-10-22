@@ -9,18 +9,18 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.Map;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
-import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Part;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.security.annotation.Secured;
 import jakarta.inject.Inject;
@@ -74,7 +74,7 @@ public class MediaFileService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Consumes({MediaType.MULTIPART_FORM_DATA})
 	@Operation(summary = "Save media file")
-	public HttpResponse<?> saveMediaFile(
+	public void saveMediaFile(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String dateString,
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language,
@@ -133,32 +133,25 @@ public class MediaFileService {
 
 			// set publication flag
 			avalancheReportController.setMediaFileFlag(date, region);
-
-			return HttpResponse.created(Map.of("file", fileLocation.toString()));
-		} catch (AlbinaException e) {
-			logger.warn("Failed to save media file", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Failed to save media file", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@Get("/rss")
 	@Produces(MediaType.APPLICATION_XML)
 	@Operation(summary = "Get media files as RSS feed")
-	public HttpResponse<?> getRssFeed(
+	public String getRssFeed(
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language
 	) throws Exception {
 		final ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 		final Region region = new Region(regionId);
-		final String websiteName = region.getWebsiteName(language);
-		final String rss = RssUtil.getRss(
+		return RssUtil.getRss(
 			language,
 			region,
 			getMediaPath(serverInstance, region, language));
-		return HttpResponse.ok(rss).contentType(MediaType.APPLICATION_XML);
 	}
 
 	public static Path getMediaPath(ServerInstance serverInstance, Region region, LanguageCode lang) {
