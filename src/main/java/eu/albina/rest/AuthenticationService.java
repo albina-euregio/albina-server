@@ -8,7 +8,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.UserRepository;
 import eu.albina.util.JsonUtil;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -27,9 +26,6 @@ import io.micronaut.security.token.render.AccessRefreshToken;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,7 +68,6 @@ public class AuthenticationService {
 	@Post
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Authenticate user")
-	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = AuthenticationResponse.class)))
 	@JsonView(JsonUtil.Views.Internal.class)
 	public AuthenticationResponse login(@Body Credentials credentials) {
 		String username = credentials.username.toLowerCase();
@@ -91,28 +86,12 @@ public class AuthenticationService {
 		}
 	}
 
-	@Get
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Refresh token")
-	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Token.class)))
-	public HttpResponse<?> refreshToken(Principal principal) {
-		return HttpResponse.serverError();
-	}
-
 	@Get("/test")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Test access token")
-	@ApiResponse(description = "token", content = @Content(schema = @Schema(implementation = Username.class)))
-	public HttpResponse<?> testAuth(Principal principal) {
-		try {
-			String username = principal.getName();
-
-			Username jsonResult = new Username(username);
-			return HttpResponse.ok(jsonResult);
-		} catch (Exception e) {
-			return HttpResponse.unauthorized();
-		}
+	public Username testAuth(Principal principal) {
+		String username = principal.getName();
+		return new Username(username);
 	}
 }
