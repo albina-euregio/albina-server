@@ -15,10 +15,11 @@ import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
-import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 
 import jakarta.inject.Inject;
@@ -73,10 +74,9 @@ public class AvalancheBulletinPublishService {
 	@Secured(Role.Str.FORECASTER)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
-	public HttpResponse<?> publishBulletins(@QueryValue("region") String regionId,
+	public void publishBulletins(@QueryValue("region") String regionId,
 											@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 											Principal principal) {
-		logger.debug("POST publish bulletins");
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
@@ -105,13 +105,11 @@ public class AvalancheBulletinPublishService {
 						return regions;
 					}
 				}.execute();
-
-				return HttpResponse.noContent();
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
-			return HttpResponse.badRequest().body(e.toJSON());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -122,10 +120,9 @@ public class AvalancheBulletinPublishService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
-	public HttpResponse<?> publishAllBulletins(
+	public void publishAllBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 			@QueryValue("change") boolean change) {
-		logger.debug("POST publish all bulletins");
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
@@ -147,10 +144,9 @@ public class AvalancheBulletinPublishService {
 					}
 				}.execute();
 				}, "publishAllBulletins").start();
-			return HttpResponse.noContent();
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
-			return HttpResponse.badRequest().body(e.toJSON());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -158,21 +154,16 @@ public class AvalancheBulletinPublishService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
-	public HttpResponse<?> sendEmail(@QueryValue("region") String regionId,
+	public void sendEmail(@QueryValue("region") String regionId,
 							  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 							  @QueryValue("lang") LanguageCode language) {
 		try {
-			logger.debug("POST send emails for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendMails(publicationController);
 			}
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
-			logger.warn("Error sending emails", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error sending emails", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -180,21 +171,16 @@ public class AvalancheBulletinPublishService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
-	public HttpResponse<?> triggerTelegramChannel(@QueryValue("region") String regionId,
+	public void triggerTelegramChannel(@QueryValue("region") String regionId,
 										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 										   @QueryValue("lang") LanguageCode language) {
 		try {
-			logger.debug("POST trigger telegram channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendTelegramMessage(publicationController);
 			}
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
-			logger.warn("Error triggering telegram channel", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error triggering telegram channel", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -202,21 +188,16 @@ public class AvalancheBulletinPublishService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
-	public HttpResponse<?> triggerWhatsAppChannel(@QueryValue("region") String regionId,
+	public void triggerWhatsAppChannel(@QueryValue("region") String regionId,
 										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 										   @QueryValue("lang") LanguageCode language) {
 		try {
-			logger.debug("POST trigger whatsapp channel for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendWhatsAppMessage(publicationController);
 			}
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
-			logger.warn("Error triggering whatsapp channel", e);
-			return HttpResponse.badRequest().body(e.toJSON());
 		} catch (Exception e) {
 			logger.warn("Error triggering whatsapp channel", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -224,18 +205,16 @@ public class AvalancheBulletinPublishService {
 	@Secured(Role.Str.ADMIN)
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
-	public HttpResponse<?> triggerPushNotifications(@QueryValue("region") String regionId,
+	public void triggerPushNotifications(@QueryValue("region") String regionId,
 											 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 											 @QueryValue("lang") LanguageCode language) {
 		try {
-			logger.debug("POST trigger push notifications for {} in {} [{}]", regionId, language, date);
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendPushNotifications(publicationController);
 			}
-			return HttpResponse.noContent();
-		} catch (AlbinaException e) {
+		} catch (Exception e) {
 			logger.warn("Error triggering push notifications", e);
-			return HttpResponse.badRequest().body(e.toJSON());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
