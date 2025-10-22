@@ -84,13 +84,13 @@ public class UserService {
 
 		if (existingUser.isPresent()) {
 			if (!isAdmin && !authentication.getName().equals(user.getEmail())) {
-				throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Only admins can update other users.");
+				throw new HttpStatusException(HttpStatus.FORBIDDEN, "Only admins can update other users.");
 			}
 			user.setPassword(existingUser.get().getPassword());
 			userRepository.update(user);
 		} else {
 			if (!isAdmin) {
-				throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Only admins can create other users.");
+				throw new HttpStatusException(HttpStatus.FORBIDDEN, "Only admins can create other users.");
 			}
 			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 			userRepository.save(user);
