@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -15,15 +15,16 @@ import java.util.List;
 import java.util.UUID;
 
 import eu.albina.controller.RegionRepository;
-import io.micronaut.http.HttpHeaders;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.http.server.types.files.StreamedFile;
 import io.micronaut.security.annotation.Secured;
 
 import jakarta.inject.Inject;
@@ -54,9 +55,9 @@ public class StatisticsService {
 	@Get
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces("text/csv")
+	@Produces(MediaType.TEXT_CSV)
 	@Operation(summary = "Get bulletin statistics")
-	public HttpResponse<?> getBulletinCsv(
+	public StreamedFile getBulletinCsv(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate,
 		@QueryValue("lang") LanguageCode language,
@@ -64,111 +65,80 @@ public class StatisticsService {
 		@QueryValue(value = "duplicate", defaultValue = "false") boolean duplicate,
 		@QueryValue("regions") List<String> regionIds,
 		@QueryValue(value = "obsoleteMatrix", defaultValue = "false") boolean obsoleteMatrix) {
-		logger.debug("GET CSV bulletins");
-
-		Instant start = null;
-		Instant end = null;
-
-		if (startDate != null)
-			start = OffsetDateTime.parse(startDate).toInstant();
-		else
-			return HttpResponse.badRequest();
-		if (endDate != null)
-			end = OffsetDateTime.parse(endDate).toInstant();
-		else
-			return HttpResponse.badRequest();
-
-		List<Region> regions = new ArrayList<>();
-		if (regionIds != null && !regionIds.isEmpty()) {
-			for (String regionId : regionIds) {
-				regions.add(regionRepository.findById(regionId).orElseThrow());
-			}
-		} else {
-			regions = regionRepository.getPublishBulletinRegions();
-		}
-
-		String statistics = statisticsController.getDangerRatingStatistics(start, end, language, regions, extended,
-				duplicate, obsoleteMatrix);
-
-		String filename = String.format("statistic_%s_%s%s%s%s_%s",
-			OffsetDateTime.parse(startDate).toLocalDate(),
-			OffsetDateTime.parse(endDate).toLocalDate(),
-			duplicate || extended ? "_" : "",
-			duplicate ? "d" : "",
-			extended ? "e" : "",
-			language.toString());
 
 		try {
-			File tmpFile = File.createTempFile(filename, ".csv");
-			FileWriter writer = new FileWriter(tmpFile);
-			writer.write(statistics);
-			writer.close();
+			Instant start = DateControllerUtil.parseDateOrThrow(startDate);
+			Instant end = DateControllerUtil.parseDateOrThrow(endDate);
 
-			return HttpResponse.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
-			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv");
-		} catch (IOException e) {
+			List<Region> regions = new ArrayList<>();
+			if (regionIds != null && !regionIds.isEmpty()) {
+				for (String regionId : regionIds) {
+					regions.add(regionRepository.findById(regionId).orElseThrow());
+				}
+			} else {
+				regions = regionRepository.getPublishBulletinRegions();
+			}
+
+			String statistics = statisticsController.getDangerRatingStatistics(start, end, language, regions, extended,
+				duplicate, obsoleteMatrix);
+
+			String filename = String.format("statistic_%s_%s%s%s%s_%s.csv",
+				OffsetDateTime.parse(startDate).toLocalDate(),
+				OffsetDateTime.parse(endDate).toLocalDate(),
+				duplicate || extended ? "_" : "",
+				duplicate ? "d" : "",
+				extended ? "e" : "",
+				language.toString());
+
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(statistics.getBytes(StandardCharsets.UTF_8));
+			return new StreamedFile(inputStream, MediaType.TEXT_CSV_TYPE).attach(filename + ".csv");
+		} catch (Exception e) {
 			logger.warn("Error creating bulletin statistics", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@Get("/danger-sources")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Produces("text/csv")
+	@Produces(MediaType.TEXT_CSV)
 	@Operation(summary = "Get danger source statistics")
-	public HttpResponse<?> getDangerSourceCsv(
+	public StreamedFile getDangerSourceCsv(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
-		logger.debug("GET CSV danger sources");
-
-		Instant start = null;
-		Instant end = null;
-
-		if (startDate != null)
-			start = OffsetDateTime.parse(startDate).toInstant();
-		else
-			return HttpResponse.badRequest();
-		if (endDate != null)
-			end = OffsetDateTime.parse(endDate).toInstant();
-		else
-			return HttpResponse.badRequest();
-
-		String statistics = statisticsController.getDangerSourceStatistics(start, end);
-
-		String filename = String.format("danger_source_statistic_%s_%s",
-			OffsetDateTime.parse(startDate).toLocalDate(),
-			OffsetDateTime.parse(endDate).toLocalDate());
 
 		try {
-			File tmpFile = File.createTempFile(filename, ".csv");
-			FileWriter writer = new FileWriter(tmpFile);
-			writer.write(statistics);
-			writer.close();
+			Instant start = DateControllerUtil.parseDateOrThrow(startDate);
+			Instant end = DateControllerUtil.parseDateOrThrow(endDate);
 
-			return HttpResponse.ok(tmpFile).header(HttpHeaders.CONTENT_DISPOSITION,
-			"attachment; filename=\"" + filename + ".csv\"").header(HttpHeaders.CONTENT_TYPE, "text/csv");
-		} catch (IOException e) {
+			String statistics = statisticsController.getDangerSourceStatistics(start, end);
+
+			String filename = String.format("danger_source_statistic_%s_%s.csv",
+				OffsetDateTime.parse(startDate).toLocalDate(),
+				OffsetDateTime.parse(endDate).toLocalDate());
+
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(statistics.getBytes(StandardCharsets.UTF_8));
+			return new StreamedFile(inputStream, MediaType.TEXT_CSV_TYPE).attach(filename);
+		} catch (Exception e) {
 			logger.warn("Error creating danger source statistics", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@Post("/vr")
 	@Operation(summary = "Save VR statistics")
-	public HttpResponse<?> saveMediaFile(
+	public void saveMediaFile(
 		@Header String authorization,
 		InputStream inputStream
 	) throws IOException {
 		String token = System.getenv("ALBINA_VR_STATISTICS_TOKEN");
 		if (token == null || token.isEmpty() || !token.equals(authorization)) {
-			return HttpResponse.status(HttpStatus.FORBIDDEN);
+			throw new HttpStatusException(HttpStatus.FORBIDDEN, "");
 		}
 		String directory = System.getenv("ALBINA_VR_STATISTICS_DIRECTORY");
 		Path file = Path.of(directory).resolve(UUID.randomUUID() + ".json");
 		try (OutputStream outputStream = Files.newOutputStream(file)) {
 			inputStream.transferTo(outputStream);
 		}
-		return HttpResponse.noContent();
 	}
 }
