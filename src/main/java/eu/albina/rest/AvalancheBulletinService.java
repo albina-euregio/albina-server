@@ -26,6 +26,7 @@ import eu.albina.controller.UserRepository;
 import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
@@ -36,6 +37,7 @@ import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.http.annotation.Produces;
 
@@ -122,7 +124,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Get bulletins for date")
 	@JsonView(JsonUtil.Views.Internal.class)
 	@Transactional
-	public HttpResponse<?> getJSONBulletins(
+	public List<AvalancheBulletin> getJSONBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds) {
 
@@ -167,7 +169,7 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	private HttpResponse<List<AvalancheBulletin>> getJSONBulletins0(String date, List<Region> regions) {
+	private List<AvalancheBulletin> getJSONBulletins0(String date, List<Region> regions) {
 		logger.debug("GET JSON bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -175,12 +177,11 @@ public class AvalancheBulletinService {
 
 		if (regions.isEmpty()) {
 			logger.warn("No region defined.");
-			return HttpResponse.noContent();
 		}
 
 		List<AvalancheBulletin> bulletins = avalancheBulletinController.getBulletins(startDate, endDate, regions);
 		Collections.sort(bulletins);
-		return HttpResponse.ok(bulletins);
+		return bulletins;
 	}
 
 	@Get
@@ -431,18 +432,18 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Get bulletin by ID")
 	@JsonView(JsonUtil.Views.Internal.class)
 	@Transactional
-	public HttpResponse<?> getJSONBulletin(@PathVariable("bulletinId") String bulletinId) {
+	public AvalancheBulletin getJSONBulletin(@PathVariable("bulletinId") String bulletinId) {
 		logger.debug("GET JSON bulletin: {}", bulletinId);
 
 		try {
 			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			if (bulletin == null) {
-				return HttpResponse.notFound().body(new AlbinaException("Bulletin not found for ID: " + bulletinId).toJSON());
+				throw new HttpStatusException(HttpStatus.NOT_FOUND, new AlbinaException("Bulletin not found for ID: " + bulletinId).toJSON());
 			}
-			return HttpResponse.ok(bulletin);
+			return bulletin;
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletin", e);
-			return HttpResponse.badRequest().body(e.toString());
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.toString());
 		}
 	}
 
@@ -452,7 +453,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Update bulletin")
 	@JsonView(JsonUtil.Views.Internal.class)
 	@Transactional
-	public HttpResponse<?> updateJSONBulletin(
+	public List<AvalancheBulletin> updateJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Body AvalancheBulletin bulletin,
@@ -478,7 +479,7 @@ public class AvalancheBulletinService {
 				return getJSONBulletins0(date, regions);
 			} catch (AlbinaException e) {
 				logger.warn("Error creating bulletin", e);
-				return HttpResponse.badRequest().body(e.toJSON());
+				throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.toJSON());
 			}
 		}
 	}
@@ -495,7 +496,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Create bulletin")
 	@JsonView(JsonUtil.Views.Internal.class)
 	@Transactional
-	public HttpResponse<?> createJSONBulletin(
+	public List<AvalancheBulletin> createJSONBulletin(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Body AvalancheBulletin bulletin,
 		@QueryValue("region") String regionId,
@@ -527,7 +528,7 @@ public class AvalancheBulletinService {
 				return getJSONBulletins0(date, regions);
 			} catch (AlbinaException e) {
 				logger.warn("Error creating bulletin", e);
-				return HttpResponse.badRequest().body(e.toJSON());
+				throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.toJSON());
 			}
 		}
 	}
@@ -538,7 +539,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Delete bulletin")
 	@JsonView(JsonUtil.Views.Internal.class)
 	@Transactional
-	public HttpResponse<?> deleteJSONBulletin(
+	public List<AvalancheBulletin> deleteJSONBulletin(
 		@PathVariable("bulletinId") String bulletinId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
@@ -563,7 +564,7 @@ public class AvalancheBulletinService {
 				return getJSONBulletins0(date, regions);
 			} catch (AlbinaException e) {
 				logger.warn("Error creating bulletin", e);
-				return HttpResponse.badRequest().body(e.toJSON());
+				throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.toJSON());
 			}
 		}
 	}
@@ -572,8 +573,9 @@ public class AvalancheBulletinService {
 	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create bulletins")
+	@JsonView(JsonUtil.Views.Internal.class)
 	@Transactional
-	public HttpResponse<?> createJSONBulletins(
+	public List<AvalancheBulletin> createJSONBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Body AvalancheBulletin[] bulletinsArray,
 		@QueryValue("region") String regionId,
@@ -599,7 +601,7 @@ public class AvalancheBulletinService {
 				return getJSONBulletins(date, regionIDs);
 			} catch (AlbinaException e) {
 				logger.warn("Error creating bulletin", e);
-				return HttpResponse.badRequest().body(e.toJSON());
+				throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.toJSON());
 			}
 		}
 	}
