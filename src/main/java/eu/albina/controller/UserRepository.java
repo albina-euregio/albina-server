@@ -79,12 +79,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 		update(user);
 	}
 
-	default void updateKeepPassword(User user) throws AlbinaException {
-		User existing = findByIdOrElseThrow(user.getEmail());
-		user.setPassword(existing.getPassword());
-		update(user);
-	}
-
 	default User findByIdOrElseThrow(String username) throws AlbinaException {
 		return findById(username).orElseThrow(() -> new AlbinaException("No user with username: " + username));
 	}
