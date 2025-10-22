@@ -14,7 +14,6 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
-import io.micronaut.json.tree.JsonNode;
 import io.micronaut.security.annotation.Secured;
 
 import eu.albina.exception.AlbinaException;
@@ -136,7 +135,7 @@ public class RegionService {
 			if (regionRepository.findById(region.getId()).isEmpty()) {
 				region.fixLanguageConfigurations();
 				region.setServerInstance(serverInstanceRepository.getLocalServerInstance());
-				regionRepository.save(region);
+				regionRepository.update(region); // with `save` we get  "detached entity passed to persist: eu.albina.model.ServerInstance"
 				return HttpResponse.created(region);
 			} else {
 				String message = "Error creating region - Region already exists";
