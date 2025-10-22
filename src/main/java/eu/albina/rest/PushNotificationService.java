@@ -4,7 +4,6 @@ package eu.albina.rest;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.model.PushSubscription;
-import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -45,19 +44,17 @@ public class PushNotificationService {
 
 	@Post("/subscribe")
 	@Operation(summary = "Subscribe push notification")
-	public HttpResponse<?> subscribe(@Body PushSubscription subscription) {
+	public void subscribe(@Body PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
 		pushSubscriptionRepository.save(subscription);
 		pushNotificationUtil.sendWelcomePushMessage(subscription, regionRepository.findById(subscription.getRegion()).orElseThrow());
-		return HttpResponse.noContent();
 	}
 
 	@Post("/unsubscribe")
 	@Operation(summary = "Unsubscribe push notification")
-	public HttpResponse<?> unsubscribe(@Body PushSubscription subscription) {
+	public void unsubscribe(@Body PushSubscription subscription) {
 		logger.info("Unsubscribing {}", subscription);
 		subscription = pushSubscriptionRepository.findByEndpointAndAuthAndP256dh(subscription.getEndpoint(), subscription.getAuth(), subscription.getP256dh()).orElseThrow();
 		pushSubscriptionRepository.delete(subscription);
-		return HttpResponse.noContent();
 	}
 }
