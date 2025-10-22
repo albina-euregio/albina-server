@@ -89,7 +89,7 @@ public class RegionService {
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create or update region")
-	public HttpResponse<?> updateRegion(
+	public HttpResponse<?> saveRegion(
 		@Body @Parameter(schema = @Schema(implementation = Region.class)) String regionString) {
 		logger.debug("PUT JSON region");
 

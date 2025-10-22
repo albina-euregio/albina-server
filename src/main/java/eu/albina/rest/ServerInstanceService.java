@@ -46,7 +46,7 @@ public class ServerInstanceService {
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create or update server configuration")
-	public HttpResponse<?> createServerConfiguration(@Body ServerInstance serverInstance) {
+	public HttpResponse<?> saveServerConfiguration(@Body ServerInstance serverInstance) {
 		logger.debug("POST JSON server");
 
 		// check if id already exists

@@ -3,7 +3,6 @@ package eu.albina.rest;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
@@ -94,7 +92,7 @@ public class UserService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create or update user")
-	public User createUser(
+	public User saveUser(
 		@Body User user,
 		Authentication authentication) {
 		boolean isAdmin = authentication.getRoles().contains(Role.Str.ADMIN);
