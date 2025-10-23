@@ -31,7 +31,7 @@ public class OpenApiService {
   <script type="module" src="https://unpkg.com/rapidoc@9.3.8/dist/rapidoc-min.js"></script>
 </head>
 <body>
-  <rapi-doc spec-url="./api/openapi.json" theme = "dark"></rapi-doc>
+  <rapi-doc spec-url="./openapi.json" theme = "dark"></rapi-doc>
 </body>
 </html>
 			""";
