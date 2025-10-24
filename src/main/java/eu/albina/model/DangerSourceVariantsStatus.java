@@ -6,20 +6,5 @@ import io.micronaut.serde.annotation.Serdeable;
 import java.time.Instant;
 
 @Serdeable
-public class DangerSourceVariantsStatus {
-	public Instant date;
-	public boolean forecast;
-	public boolean analysis;
-
-	public Instant getDate() {
-		return date;
-	}
-
-	public boolean isForecast() {
-		return forecast;
-	}
-
-	public boolean isAnalysis() {
-		return analysis;
-	}
+public record DangerSourceVariantsStatus(Instant date, boolean forecast, boolean analysis) {
 }
