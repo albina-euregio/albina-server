@@ -92,7 +92,7 @@ public class DangerSourceService {
 		@PathVariable("dangerSourceId") String dangerSourceId,
 			@Body DangerSource dangerSource) {
 
-		dangerSourceRepository.update(dangerSource);
+		dangerSourceRepository.save(dangerSource);
 	}
 
 	@Get("/edit")
