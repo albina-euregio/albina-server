@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import eu.albina.controller.DangerSourceRepository;
@@ -104,9 +105,8 @@ public class DangerSourceService {
 		@QueryValue("region") String regionId) {
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-		Region region = regionRepository.findById(regionId).orElseThrow();
-		return dangerSourceVariantRepository
-			.findByCreationDateBetweenAndOwnerRegion(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region.getId());
+		return dangerSourceVariantRepository.findByCreationDateBetween(instantRange).stream()
+			.filter(ds -> Objects.equals(ds.getOwnerRegion(), regionId)).toList();
 	}
 
 	@Get("/status")
@@ -139,7 +139,7 @@ public class DangerSourceService {
 			.map(Optional::orElseThrow)
 			.toList();
 		return dangerSourceVariantRepository.getDangerSourceVariants(
-			instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regions, dangerSourceId);
+			instantRange, regions, dangerSourceId);
 	}
 
 	@Post
@@ -162,7 +162,7 @@ public class DangerSourceService {
 					variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 				}
 				dangerSourceVariantRepository.saveDangerSourceVariants(Arrays.asList(variants),
-					instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+					instantRange, region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -205,7 +205,7 @@ public class DangerSourceService {
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantRepository.updateDangerSourceVariant(variant,
-					instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+					instantRange, region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -263,7 +263,7 @@ public class DangerSourceService {
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantRepository.createDangerSourceVariant(variant,
-					instantRange.lowerEndpoint(), instantRange.upperEndpoint(), region);
+					instantRange, region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 

@@ -25,20 +25,20 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 
 	List<DangerSourceVariant> findByCreationDateBetween(Instant startDate, Instant endDate);
 
-	List<DangerSourceVariant> findByCreationDateBetweenAndOwnerRegion(Instant startDate, Instant endDate, String region);
+	default List<DangerSourceVariant> findByCreationDateBetween(Range<Instant> dateRange) {
+		return findByCreationDateBetween(dateRange.lowerEndpoint(), dateRange.upperEndpoint());
+	}
 
 
 	/**
 	 * Creates a {@code variant} in the database.
 	 *
-	 * @param startDate the start date the variant is valid from
-	 * @param endDate   the end date the variant is valid until
+	 * @param dateRange the date range the variant is valid from
 	 * @param region    the active region of the user who is creating the variant
 	 */
-	default void createDangerSourceVariant(DangerSourceVariant newVariant, Instant startDate,
-										   Instant endDate,
+	default void createDangerSourceVariant(DangerSourceVariant newVariant, Range<Instant> dateRange,
 										   Region region) {
-		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(startDate, endDate);
+		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(dateRange);
 		this.removeDuplicateRegions(newVariant, loadedVariants);
 		// Variant has to be created
 		newVariant.setId(null);
@@ -46,9 +46,9 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 		logger.info("Danger source variant {} for region {} created", newVariant.getId(), region.getId());
 	}
 
-	default void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant startDate, Instant endDate,
+	default void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Range<Instant> dateRange,
 										  Region region) {
-		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(startDate, endDate);
+		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(dateRange);
 		Map<String, DangerSourceVariant> originalVariants = new HashMap<>();
 
 		for (DangerSourceVariant loadedVariant : loadedVariants)
@@ -81,13 +81,12 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	/**
 	 * Update a {@code variant} in the database.
 	 *
-	 * @param startDate the start date the variant is valid from
-	 * @param endDate   the end date the variant is valid until
+	 * @param dateRange the date range the variant is valid from
 	 * @param region    the active region of the user who is updating the variant
 	 */
-	default void updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant startDate, Instant endDate,
+	default void updateDangerSourceVariant(DangerSourceVariant updatedVariant, Range<Instant> dateRange,
 										   Region region) {
-		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(startDate, endDate);
+		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(dateRange);
 		removeDuplicateRegions(updatedVariant, loadedVariants);
 		update(updatedVariant);
 		logger.info("Danger source variant {} for region {} updated", updatedVariant.getId(), region.getId());
@@ -97,13 +96,12 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 * Returns the most recent variants for a given time period and
 	 * {@code regions}.
 	 *
-	 * @param startDate the start date the variants should be valid from
-	 * @param endDate   the end date the variants should be valid until
+	 * @param dateRange the date range the variants should be valid from
 	 * @param region    the region of the variants
 	 * @return the most recent variants for the given time period and regions
 	 */
-	default List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, Region region) {
-		return findByCreationDateBetween(startDate, endDate).stream()
+	default List<DangerSourceVariant> getDangerSourceVariants(Range<Instant> dateRange, Region region) {
+		return findByCreationDateBetween(dateRange).stream()
 			.filter(variant -> variant.affectsRegion(region))
 			.toList();
 	}
@@ -122,35 +120,34 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 		List<DangerSourceVariantsStatus> result = new ArrayList<>();
 		Instant date = startDate.lowerEndpoint();
 		while (date.isBefore(endDate.lowerEndpoint()) || date.equals(endDate.lowerEndpoint())) {
-			result.add(this.getDangerSourceVariantsStatusForDay(date, date.plus(1, ChronoUnit.DAYS), region));
+			result.add(this.getDangerSourceVariantsStatusForDay(Range.closed(date, date.plus(1, ChronoUnit.DAYS)), region));
 			date = date.plus(1, ChronoUnit.DAYS);
 		}
 		return result;
 	}
 
-	default DangerSourceVariantsStatus getDangerSourceVariantsStatusForDay(Instant startDate, Instant endDate,
+	default DangerSourceVariantsStatus getDangerSourceVariantsStatusForDay(Range<Instant> dateRange,
 																		   Region region) {
-		List<DangerSourceVariant> dangerSourceVariants = this.getDangerSourceVariants(startDate, endDate, region);
-		DangerSourceVariantsStatus status = new DangerSourceVariantsStatus();
-		status.date = startDate;
-		status.forecast = dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.forecast);
-		status.analysis = dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.analysis);
-		return status;
+		List<DangerSourceVariant> dangerSourceVariants = this.getDangerSourceVariants(dateRange, region);
+		return new DangerSourceVariantsStatus(
+			dateRange.lowerEndpoint(),
+			dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.forecast),
+			dangerSourceVariants.stream().anyMatch(variant -> variant.getDangerSourceVariantType() == DangerSourceVariantType.analysis)
+		);
 	}
 
 	/**
 	 * Returns the most recent variants for a given time period and
 	 * {@code regions} and {@code dangerSource}.
 	 *
-	 * @param startDate      the start date the variants should be valid from
-	 * @param endDate        the end date the variants should be valid until
+	 * @param dateRange      the date range the variants should be valid from
 	 * @param regions        the regions of the variants
 	 * @param dangerSourceId the id of the danger source
 	 * @return the most recent variants for the given time period and regions
 	 */
-	default List<DangerSourceVariant> getDangerSourceVariants(Instant startDate, Instant endDate, List<Region> regions,
+	default List<DangerSourceVariant> getDangerSourceVariants(Range<Instant> dateRange, List<Region> regions,
 															  String dangerSourceId) {
-		return findByCreationDateBetween(startDate, endDate).stream()
+		return findByCreationDateBetween(dateRange).stream()
 			.filter(variant -> regions.stream().anyMatch(variant::affectsRegion))
 			.filter(variant -> variant.getDangerSource().getId().equals(dangerSourceId))
 			.toList();
