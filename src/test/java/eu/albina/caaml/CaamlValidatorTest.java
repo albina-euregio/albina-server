@@ -15,7 +15,7 @@ public class CaamlValidatorTest {
 
 	@Test
 	public void testValidateAvalancheBulletinCaamlValid() throws Exception {
-		final URL resource = Resources.getResource("validBulletin.xml");
+		final URL resource = Resources.getResource("caaml/validBulletin.xml");
 		final String validBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		CaamlValidator.validateCaamlBulletin(validBulletinStringFromResource, CaamlVersion.V5);
 	}
@@ -23,7 +23,7 @@ public class CaamlValidatorTest {
 	@Test
 	public void testValidateAvalancheBulletinCaamlInvalid() throws SAXException, IOException {
 		Assertions.assertThrows(SAXException.class, () -> {
-			final URL resource = Resources.getResource("invalidBulletin.xml");
+			final URL resource = Resources.getResource("caaml/invalidBulletin.xml");
 			final String invalidBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 			CaamlValidator.validateCaamlBulletin(invalidBulletinStringFromResource, CaamlVersion.V5);
 		});
@@ -31,7 +31,7 @@ public class CaamlValidatorTest {
 
 	@Test
 	public void testValidateAvalancheBulletinCaamlUnclear() throws Exception {
-		final URL resource = Resources.getResource("unclearBulletin.xml");
+		final URL resource = Resources.getResource("caaml/unclearBulletin.xml");
 		final String unclearBulletinStringFromResource = Resources.toString(resource, StandardCharsets.UTF_8);
 		CaamlValidator.validateCaamlBulletin(unclearBulletinStringFromResource, CaamlVersion.V5);
 	}
