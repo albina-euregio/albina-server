@@ -28,6 +28,9 @@ mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(git describe --tags)
 mvn clean package
 scp target/albina*.jar albina.example.com:/opt/albina-server/albina.jar
 sudo systemctl restart albina-server.service
+# logging to stdout (no log files), use `journalctl` to view the logs:
+journalctl --unit albina-server.service
+journalctl --unit albina-server-dev.service --follow --lines 100
 ```
 
 ```properties
