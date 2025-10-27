@@ -190,13 +190,12 @@ public class DangerSourceService {
 		return dangerSourceVariantRepository.findById(variantId).orElseThrow();
 	}
 
-	@Post("/variants/{variantId}")
+	@Post("/variants")
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Update danger source variant")
+	@Operation(summary = "Save danger source variant (create/insert or update)")
 	@Transactional
-	public List<DangerSourceVariant> updateDangerSource(
-		@PathVariable("variantId") String variantId,
+	public List<DangerSourceVariant> saveDangerSource(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		Principal principal,
@@ -210,15 +209,17 @@ public class DangerSourceService {
 			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
+			variant.setDangerSource(dangerSourceRepository.findById(variant.getDangerSource().getId()).orElseThrow());
+
 			if (user.hasPermissionForRegion(region.getId())) {
-				dangerSourceVariantRepository.updateDangerSourceVariant(variant,
+				dangerSourceVariantRepository.saveDangerSourceVariant(variant,
 					validFrom, region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
 			return getVariants(date, regionId);
 		} catch (Exception e) {
-			logger.warn("Error creating danger source variant", e);
+			logger.warn("Error saving danger source variant", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
@@ -247,40 +248,6 @@ public class DangerSourceService {
 			return getVariants(date, regionId);
 		} catch (Exception e) {
 			logger.warn("Error deleting variant", e);
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
-	}
-
-	@Put("/variants")
-	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Create danger source variant")
-	@Transactional
-	public List<DangerSourceVariant> createVariant(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@QueryValue("region") String regionId,
-		Principal principal,
-			@Body DangerSourceVariant variant) {
-
-		try {
-			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
-
-			Instant validFrom = DateControllerUtil.parseDate(date);
-
-			User user = userRepository.findByIdOrElseThrow(principal);
-			Region region = regionRepository.findById(regionId).orElseThrow();
-
-			variant.setDangerSource(dangerSourceRepository.findById(variant.getDangerSource().getId()).orElseThrow());
-
-			if (user.hasPermissionForRegion(region.getId())) {
-				dangerSourceVariantRepository.createDangerSourceVariant(variant,
-					validFrom, region);
-			} else
-				throw new AlbinaException("User is not authorized for this region!");
-
-			return getVariants(date, regionId);
-		} catch (AlbinaException e) {
-			logger.warn("Error creating danger source variant", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}

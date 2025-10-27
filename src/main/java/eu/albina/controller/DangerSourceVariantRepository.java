@@ -27,19 +27,21 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	List<DangerSourceVariant> findByValidFromBetween(Instant startDate, Instant endDate);
 
 	/**
-	 * Creates a {@code variant} in the database.
+	 * Creates or update a {@code variant} in the database.
 	 *
 	 * @param validFrom the date range the variant is valid from
 	 * @param region    the active region of the user who is creating the variant
 	 */
-	default void createDangerSourceVariant(DangerSourceVariant newVariant, Instant validFrom,
-										   Region region) {
+	default void saveDangerSourceVariant(DangerSourceVariant variant, Instant validFrom,
+										 Region region) {
 		List<DangerSourceVariant> loadedVariants = findByValidFrom(validFrom);
-		this.removeDuplicateRegions(newVariant, loadedVariants);
-		// Variant has to be created
-		newVariant.setId(null);
-		save(newVariant);
-		logger.info("Danger source variant {} for region {} created", newVariant.getId(), region.getId());
+		this.removeDuplicateRegions(variant, loadedVariants);
+		if (variant.getId() == null) {
+			save(variant);
+		} else {
+			update(variant);
+		}
+		logger.info("Danger source variant {} for region {} saved", variant.getId(), region.getId());
 	}
 
 	default void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Instant validFrom,
@@ -72,20 +74,6 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 				delete(variant);
 			}
 		}
-	}
-
-	/**
-	 * Update a {@code variant} in the database.
-	 *
-	 * @param validFrom the date range the variant is valid from
-	 * @param region    the active region of the user who is updating the variant
-	 */
-	default void updateDangerSourceVariant(DangerSourceVariant updatedVariant, Instant validFrom,
-										   Region region) {
-		List<DangerSourceVariant> loadedVariants = findByValidFrom(validFrom);
-		removeDuplicateRegions(updatedVariant, loadedVariants);
-		update(updatedVariant);
-		logger.info("Danger source variant {} for region {} updated", updatedVariant.getId(), region.getId());
 	}
 
 	/**
