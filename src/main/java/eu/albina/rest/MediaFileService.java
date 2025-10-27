@@ -140,7 +140,7 @@ public class MediaFileService {
 	}
 
 	@Get("/rss")
-	@Produces(MediaType.APPLICATION_XML)
+	@Produces("application/rss+xml")
 	@Operation(summary = "Get media files as RSS feed")
 	public String getRssFeed(
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
