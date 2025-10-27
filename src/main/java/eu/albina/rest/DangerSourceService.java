@@ -19,7 +19,6 @@ import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
@@ -195,7 +194,7 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Save danger source variant (create/insert or update)")
 	@Transactional
-	public List<DangerSourceVariant> saveDangerSource(
+	public DangerSourceVariant saveDangerSourceVariant(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		Principal principal,
@@ -217,7 +216,7 @@ public class DangerSourceService {
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
-			return getVariants(date, regionId);
+			return variant;
 		} catch (Exception e) {
 			logger.warn("Error saving danger source variant", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
