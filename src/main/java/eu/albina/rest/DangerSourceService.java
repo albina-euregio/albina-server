@@ -75,6 +75,7 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSource.class))))
 	@Operation(summary = "Get danger sources for season")
+	@Transactional
 	public List<DangerSource> getDangerSources(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
@@ -88,6 +89,7 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update danger source")
+	@Transactional
 	public void updateDangerSource(
 		@PathVariable("dangerSourceId") String dangerSourceId,
 			@Body DangerSource dangerSource) {
@@ -100,18 +102,20 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for date")
+	@Transactional
 	public List<DangerSourceVariant> getVariants(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
 
 		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-		return dangerSourceVariantRepository.findByCreationDateBetween(instantRange).stream()
+		return dangerSourceVariantRepository.findByValidFromBetween(instantRange).stream()
 			.filter(ds -> Objects.equals(ds.getOwnerRegion(), regionId)).toList();
 	}
 
 	@Get("/status")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Transactional
 	public List<DangerSourceVariantsStatus> getInternalStatus(@QueryValue("region") String regionId,
 															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
@@ -129,6 +133,7 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for danger source and date")
+	@Transactional
 	public List<DangerSourceVariant> getVariantsForDangerSource(
 		@PathVariable("dangerSourceId") String dangerSourceId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -146,6 +151,7 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create variants")
+	@Transactional
 	public List<DangerSourceVariant> createVariants(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
@@ -178,6 +184,7 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
 	@Operation(summary = "Get variant by ID")
+	@Transactional
 	public DangerSourceVariant getVariantById(
 		@PathVariable("variantId") String variantId
 	) {
@@ -188,6 +195,7 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update danger source variant")
+	@Transactional
 	public List<DangerSourceVariant> updateDangerSource(
 		@PathVariable("variantId") String variantId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -220,6 +228,7 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete danger source variant")
+	@Transactional
 	public List<DangerSourceVariant> deleteVariant(
 		@PathVariable("variantId") String variantId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -247,6 +256,7 @@ public class DangerSourceService {
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create danger source variant")
+	@Transactional
 	public List<DangerSourceVariant> createVariant(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
@@ -260,6 +270,8 @@ public class DangerSourceService {
 
 			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
+
+			variant.setDangerSource(dangerSourceRepository.findById(variant.getDangerSource().getId()).orElseThrow());
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantRepository.createDangerSourceVariant(variant,
