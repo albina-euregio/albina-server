@@ -61,7 +61,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "FORECAST_DANGER_SOURCE_VARIANT_ID")
 	private String forecastDangerSourceVariantId;
 
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	@JoinColumn(name = "DANGER_SOURCE_ID")
 	private DangerSource dangerSource;
 

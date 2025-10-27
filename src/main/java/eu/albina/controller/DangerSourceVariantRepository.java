@@ -5,8 +5,6 @@ import com.google.common.collect.Range;
 import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.DangerSourceVariantsStatus;
 import eu.albina.model.Region;
-import io.micronaut.core.annotation.NonNull;
-import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import org.slf4j.Logger;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -25,20 +22,8 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 
 	Logger logger = LoggerFactory.getLogger(DangerSourceVariantRepository.class);
 
-	@Override
-	@NonNull
-	@Join(value = "dangerSource", type = Join.Type.FETCH)
-	List<DangerSourceVariant> findAll();
-
-	@Override
-	@NonNull
-	@Join(value = "dangerSource", type = Join.Type.FETCH)
-	Optional<DangerSourceVariant> findById(@NonNull String s);
-
-	@Join(value = "dangerSource", type = Join.Type.FETCH)
 	List<DangerSourceVariant> findByValidFrom(Instant validFrom);
 
-	@Join(value = "dangerSource", type = Join.Type.FETCH)
 	List<DangerSourceVariant> findByValidFromBetween(Instant startDate, Instant endDate);
 
 	/**
