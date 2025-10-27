@@ -17,7 +17,7 @@ cache:
     paths:
         - .m2/repository
 
-production build:
+build:
     stage: build
     script:
         - apt-get update -y
@@ -26,7 +26,7 @@ production build:
         - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
-        - mvn --activate-profiles env-prod install
+        - mvn install
         - mv target/albina*.jar target/albina.jar
     artifacts:
         when: always
@@ -42,13 +42,9 @@ production build:
         - if: $CI_COMMIT_TAG
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-deploy to development:
+.deploy:
     stage: deploy
     needs: []
-    variables:
-        MAVEN_PROFILE: --activate-profiles env-dev
-        JAR_PATH: /opt/albina-server-dev/albina.jar
-        SYSTEMD_SERVICE: albina-server-dev.service
     before_script:
         - eval $(ssh-agent -s)
         - chmod 400 "$SSH_PRIVATE_KEY"
@@ -62,9 +58,15 @@ deploy to development:
         - apt-get install -y rsync
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
-        - mvn $MAVEN_PROFILE install -Dmaven.test.skip=true
+        - mvn install -Dmaven.test.skip=true
         - rsync -avz -e "ssh -p2201" target/albina-$GIT_VERSION.jar $SSH_SERVER:$JAR_PATH
         - ssh -p2201 $SSH_SERVER "sudo /usr/bin/systemctl restart $SYSTEMD_SERVICE"
+
+deploy to development:
+    extends: .deploy
+    variables:
+        JAR_PATH: /opt/albina-server-dev/albina.jar
+        SYSTEMD_SERVICE: albina-server-dev.service
     environment:
         name: development
     rules:
@@ -72,12 +74,12 @@ deploy to development:
         - when: manual
           allow_failure: true
 
+
 deploy to production:
-    stage: deploy
-    script:
-        - export TOMCAT_PATH=/albina
-        - export GIT_VERSION=$(git describe --tags)
-        - mvn $MAVEN_CLI_OPTS --activate-profiles env-prod tomcat7:deploy -Dmaven.test.skip=true
+    extends: .deploy
+    variables:
+        JAR_PATH: /opt/albina-server/albina.jar
+        SYSTEMD_SERVICE: albina-server.service
     environment:
         name: production
     rules:

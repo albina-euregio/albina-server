@@ -28,6 +28,9 @@ mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(git describe --tags)
 mvn clean package
 scp target/albina*.jar albina.example.com:/opt/albina-server/albina.jar
 sudo systemctl restart albina-server.service
+# logging to stdout (no log files), use `journalctl` to view the logs:
+journalctl --unit albina-server.service
+journalctl --unit albina-server-dev.service --follow --lines 100
 ```
 
 ```properties
@@ -39,6 +42,10 @@ After=syslog.target network.target
 WantedBy=multi-user.target
 
 [Service]
+Environment=JDBC_URL=...
+Environment=JDBC_USER=...
+Environment=JDBC_PASSWORD=...
+Environment=JWT_GENERATOR_SIGNATURE_SECRET=...
 Environment=MICRONAUT_SERVER_PORT=8080
 Environment=UMASK=0022
 ExecStart=/usr/lib/jvm/jre-21/bin/java -jar albina.jar
