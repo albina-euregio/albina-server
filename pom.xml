@@ -29,7 +29,7 @@
 		<micronaut.aot.enabled>false</micronaut.aot.enabled>
 		<micronaut.aot.packageName>eu.albina.aot.generated</micronaut.aot.packageName>
 		<exec.mainClass>eu.albina.Application</exec.mainClass>
-		<albina.conf.git.version>${env.GIT_VERSION:SNAPSHOT}</albina.conf.git.version>
+		<albina.conf.git.version>${project.version}</albina.conf.git.version>
 	</properties>
 
 	<repositories>
