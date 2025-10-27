@@ -146,12 +146,12 @@ public class DangerSourceService {
 			validFrom, regions, dangerSourceId);
 	}
 
-	@Post
+	@Post("/variants/replace")
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Create variants")
+	@Operation(summary = "Replace variants (save and delete obsolete)")
 	@Transactional
-	public List<DangerSourceVariant> createVariants(
+	public List<DangerSourceVariant> replaceVariants(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		Principal principal,
