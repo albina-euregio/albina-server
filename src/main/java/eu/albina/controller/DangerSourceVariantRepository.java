@@ -23,10 +23,10 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 
 	Logger logger = LoggerFactory.getLogger(DangerSourceVariantRepository.class);
 
-	List<DangerSourceVariant> findByCreationDateBetween(Instant startDate, Instant endDate);
+	List<DangerSourceVariant> findByValidFromBetween(Instant startDate, Instant endDate);
 
-	default List<DangerSourceVariant> findByCreationDateBetween(Range<Instant> dateRange) {
-		return findByCreationDateBetween(dateRange.lowerEndpoint(), dateRange.upperEndpoint());
+	default List<DangerSourceVariant> findByValidFromBetween(Range<Instant> dateRange) {
+		return findByValidFromBetween(dateRange.lowerEndpoint(), dateRange.upperEndpoint());
 	}
 
 
@@ -38,7 +38,7 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 */
 	default void createDangerSourceVariant(DangerSourceVariant newVariant, Range<Instant> dateRange,
 										   Region region) {
-		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(dateRange);
+		List<DangerSourceVariant> loadedVariants = findByValidFromBetween(dateRange);
 		this.removeDuplicateRegions(newVariant, loadedVariants);
 		// Variant has to be created
 		newVariant.setId(null);
@@ -48,7 +48,7 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 
 	default void saveDangerSourceVariants(List<DangerSourceVariant> newVariants, Range<Instant> dateRange,
 										  Region region) {
-		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(dateRange);
+		List<DangerSourceVariant> loadedVariants = findByValidFromBetween(dateRange);
 		Map<String, DangerSourceVariant> originalVariants = new HashMap<>();
 
 		for (DangerSourceVariant loadedVariant : loadedVariants)
@@ -86,7 +86,7 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 */
 	default void updateDangerSourceVariant(DangerSourceVariant updatedVariant, Range<Instant> dateRange,
 										   Region region) {
-		List<DangerSourceVariant> loadedVariants = findByCreationDateBetween(dateRange);
+		List<DangerSourceVariant> loadedVariants = findByValidFromBetween(dateRange);
 		removeDuplicateRegions(updatedVariant, loadedVariants);
 		update(updatedVariant);
 		logger.info("Danger source variant {} for region {} updated", updatedVariant.getId(), region.getId());
@@ -101,7 +101,7 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 * @return the most recent variants for the given time period and regions
 	 */
 	default List<DangerSourceVariant> getDangerSourceVariants(Range<Instant> dateRange, Region region) {
-		return findByCreationDateBetween(dateRange).stream()
+		return findByValidFromBetween(dateRange).stream()
 			.filter(variant -> variant.affectsRegion(region))
 			.toList();
 	}
@@ -147,7 +147,7 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 */
 	default List<DangerSourceVariant> getDangerSourceVariants(Range<Instant> dateRange, List<Region> regions,
 															  String dangerSourceId) {
-		return findByCreationDateBetween(dateRange).stream()
+		return findByValidFromBetween(dateRange).stream()
 			.filter(variant -> regions.stream().anyMatch(variant::affectsRegion))
 			.filter(variant -> variant.getDangerSource().getId().equals(dangerSourceId))
 			.toList();
@@ -155,15 +155,13 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 
 	private void removeDuplicateRegions(DangerSourceVariant updatedVariant, List<DangerSourceVariant> loadedVariants) {
 		for (DangerSourceVariant loadedVariant : loadedVariants) {
-			if (!loadedVariant.getId().equals(updatedVariant.getId()) &&
-				loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()) &&
-				loadedVariant.getDangerSourceVariantType().equals(updatedVariant.getDangerSourceVariantType())) {
-				// check micro-regions to prevent duplicates
-				for (String microRegion : updatedVariant.getRegions()) {
-					loadedVariant.getRegions().remove(microRegion);
-				}
-				save(loadedVariant);
+			if (loadedVariant.getId().equals(updatedVariant.getId()) ||
+				!loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()) ||
+				!loadedVariant.getDangerSourceVariantType().equals(updatedVariant.getDangerSourceVariantType())) {
+				continue;
 			}
+			loadedVariant.getRegions().removeAll(updatedVariant.getRegions());
+			save(loadedVariant);
 		}
 	}
 }

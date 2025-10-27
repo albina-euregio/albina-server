@@ -66,7 +66,7 @@ public class StatisticsController {
 	 *         until {@code endDate} in {@code lang}
 	 */
 	public String getDangerSourceStatistics(Instant startDate, Instant endDate) {
-		List<DangerSourceVariant> variants = dangerSourceVariantRepository.findByCreationDateBetween(startDate, endDate);
+		List<DangerSourceVariant> variants = dangerSourceVariantRepository.findByValidFromBetween(startDate, endDate);
 		return getDangerSourceVariantsCsvString(variants);
 	}
 
