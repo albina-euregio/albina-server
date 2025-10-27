@@ -85,16 +85,15 @@ public class DangerSourceService {
 			.findByCreationDateBetweenAndOwnerRegion(instantRange.lowerEndpoint(), instantRange.upperEndpoint(), regionId);
 	}
 
-	@Post("/{dangerSourceId}")
+	@Post
 	@Secured({ Role.Str.FORECASTER, Role.Str.FOREMAN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Update danger source")
+	@Operation(summary = "Create or update danger source")
 	@Transactional
-	public void updateDangerSource(
-		@PathVariable("dangerSourceId") String dangerSourceId,
-			@Body DangerSource dangerSource) {
+	public DangerSource saveDangerSource(@Body DangerSource dangerSource) {
 
 		dangerSourceRepository.save(dangerSource);
+		return dangerSource;
 	}
 
 	@Get("/edit")
