@@ -34,8 +34,18 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 */
 	default void saveDangerSourceVariant(DangerSourceVariant variant, Instant validFrom,
 										 Region region) {
-		List<DangerSourceVariant> loadedVariants = findByValidFrom(validFrom);
-		this.removeDuplicateRegions(variant, loadedVariants);
+
+		// remove duplicate regions
+		for (DangerSourceVariant loadedVariant : findByValidFrom(validFrom)) {
+			if (loadedVariant.getId().equals(variant.getId()) ||
+				!loadedVariant.getDangerSource().getId().equals(variant.getDangerSource().getId()) ||
+				!loadedVariant.getDangerSourceVariantType().equals(variant.getDangerSourceVariantType())) {
+				continue;
+			}
+			loadedVariant.getRegions().removeAll(variant.getRegions());
+			save(loadedVariant);
+		}
+
 		if (variant.getId() == null) {
 			save(variant);
 		} else {
@@ -111,15 +121,4 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 			.toList();
 	}
 
-	private void removeDuplicateRegions(DangerSourceVariant updatedVariant, List<DangerSourceVariant> loadedVariants) {
-		for (DangerSourceVariant loadedVariant : loadedVariants) {
-			if (loadedVariant.getId().equals(updatedVariant.getId()) ||
-				!loadedVariant.getDangerSource().getId().equals(updatedVariant.getDangerSource().getId()) ||
-				!loadedVariant.getDangerSourceVariantType().equals(updatedVariant.getDangerSourceVariantType())) {
-				continue;
-			}
-			loadedVariant.getRegions().removeAll(updatedVariant.getRegions());
-			save(loadedVariant);
-		}
-	}
 }
