@@ -6,6 +6,7 @@ import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.DangerSourceVariantsStatus;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.DangerSourceVariantType;
+import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.CrudRepository;
 import org.slf4j.Logger;
@@ -19,6 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@Join(value = "dangerSource", type = Join.Type.FETCH)
+//	@Join(value = "regions", type = Join.Type.FETCH)
+//	@Join(value = "aspects", type = Join.Type.FETCH)
+//	@Join(value = "weakLayerGrainShapes", type = Join.Type.FETCH)
+//	@Join(value = "terrainTypes", type = Join.Type.FETCH)
 public interface DangerSourceVariantRepository extends CrudRepository<DangerSourceVariant, String> {
 
 	Logger logger = LoggerFactory.getLogger(DangerSourceVariantRepository.class);
