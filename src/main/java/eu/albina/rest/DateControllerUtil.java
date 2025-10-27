@@ -75,12 +75,4 @@ interface DateControllerUtil {
 		Instant endInstant = endDate.toInstant();
 		return Range.closed(startInstant, endInstant);
 	}
-
-	static Range<Instant> parseInstantRange(String date) {
-		OffsetDateTime startDate = OffsetDateTime.parse(date);
-		OffsetDateTime endDate = startDate.plusDays(1);
-		Instant startInstant = startDate.toInstant();
-		Instant endInstant = endDate.toInstant();
-		return Range.closed(startInstant, endInstant);
-	}
 }
