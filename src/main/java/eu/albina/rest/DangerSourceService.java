@@ -107,8 +107,8 @@ public class DangerSourceService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
 
-		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
-		return dangerSourceVariantRepository.findByValidFromBetween(instantRange).stream()
+		Instant validFrom = DateControllerUtil.parseDate(date);
+		return dangerSourceVariantRepository.findByValidFrom(validFrom).stream()
 			.filter(ds -> Objects.equals(ds.getOwnerRegion(), regionId)).toList();
 	}
 
@@ -120,12 +120,12 @@ public class DangerSourceService {
 															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
 
-		Range<Instant> instantRangeStart = DateControllerUtil.parseInstantRange(startDate);
-		Range<Instant> instantRangeEnd = DateControllerUtil.parseInstantRange(endDate);
+		Instant startInstant = DateControllerUtil.parseDate(startDate);
+		Instant endInstant = DateControllerUtil.parseDate(endDate);
 		Region region = regionRepository.findById(regionId).orElseThrow();
 
 		return dangerSourceVariantRepository
-			.getDangerSourceVariantsStatus(instantRangeStart, instantRangeEnd, region);
+			.getDangerSourceVariantsStatus(Range.closed(startInstant, endInstant), region);
 	}
 
 	@Get("/{dangerSourceId}/edit")
@@ -139,12 +139,12 @@ public class DangerSourceService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds) {
 
-		Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
+		Instant validFrom = DateControllerUtil.parseDate(date);
 		List<Region> regions = regionIds.stream().map(regionRepository::findById)
 			.map(Optional::orElseThrow)
 			.toList();
 		return dangerSourceVariantRepository.getDangerSourceVariants(
-			instantRange, regions, dangerSourceId);
+			validFrom, regions, dangerSourceId);
 	}
 
 	@Post
@@ -159,7 +159,7 @@ public class DangerSourceService {
 			@Body DangerSourceVariant[] variants) {
 
 		try {
-			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
+			Instant validFrom = DateControllerUtil.parseDate(date);
 			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
@@ -168,7 +168,7 @@ public class DangerSourceService {
 					variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 				}
 				dangerSourceVariantRepository.saveDangerSourceVariants(Arrays.asList(variants),
-					instantRange, region);
+					validFrom, region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -206,14 +206,14 @@ public class DangerSourceService {
 		try {
 			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 
-			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
+			Instant validFrom = DateControllerUtil.parseDate(date);
 
 			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantRepository.updateDangerSourceVariant(variant,
-					instantRange, region);
+					validFrom, region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
@@ -266,7 +266,7 @@ public class DangerSourceService {
 		try {
 			variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 
-			Range<Instant> instantRange = DateControllerUtil.parseInstantRange(date);
+			Instant validFrom = DateControllerUtil.parseDate(date);
 
 			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
@@ -275,7 +275,7 @@ public class DangerSourceService {
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				dangerSourceVariantRepository.createDangerSourceVariant(variant,
-					instantRange, region);
+					validFrom, region);
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 
