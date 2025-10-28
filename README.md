@@ -55,6 +55,7 @@ WorkingDirectory=/opt/albina-server-dev/
 ```
 
 ## Database Migrations
+
 Database migrations are handled by Liquibase, and are enabled by default via `liquibase.datasources.default.change-log=classpath\:db/changelog-main.xml`
 
 ### Liquibase for Automatic Database Migrations
@@ -71,15 +72,16 @@ Database migrations are handled by Liquibase, and are enabled by default via `li
 4. Commit changes to Java source and liquibase changesets together.
 
 ### Tips
+
 - If you only want changes for a specific table of the database you can use `diffIncludeObjects`. E.g.
-` mvn liquibase:diff -Dliquibase.diffIncludeObjects="regions"`
+  ` mvn liquibase:diff -Dliquibase.diffIncludeObjects="regions"`
 - similarly, `diffExcludeObjects` can be used to ignore tables
 - use `mvn liquibase:status` to check what changes will be applied before you run `mvn liquibase:update`
 - The JPA Buddy plugin for Intellij (Ultimate) provides nice GUI features for automatic changeset generation.
   You can specify a connection to your development database and it will detect when columns are missing and automatically
   suggest to generate changesets.
 - It is a best practice to specify only one type of change per changeset. Doing so avoids failed auto-commit statements
-that can leave the database in an unexpected state. When you deploy your changes, each changeset either succeeds or fails;
+  that can leave the database in an unexpected state. When you deploy your changes, each changeset either succeeds or fails;
 
 ## Update CHANGELOG (for new releases)
 
@@ -99,7 +101,7 @@ changes to CHANGELOG itself are not included in the release.
 
 If there have been several new releases since the last update to CHANGELOG,
 use e.g. `git-cliff -p CHANGELOG.md v7.0.6..` to prepend all changes that
-happened *after* version v7.0.6 was released.
+happened _after_ version v7.0.6 was released.
 
 ## Development Setup
 
@@ -126,12 +128,15 @@ mvn mn:run
 - [API Reference](https://docs.micronaut.io/4.9.2/api/index.html)
 - [Configuration Reference](https://docs.micronaut.io/4.9.2/guide/configurationreference.html)
 - [Micronaut Guides](https://guides.micronaut.io/index.html)
+
 ---
 
 - [Micronaut Maven Plugin documentation](https://micronaut-projects.github.io/micronaut-maven-plugin/latest/)
 
 ## Micronaut Data
+
 Micronaut Data is a database access toolkit that uses Ahead of Time (AoT) compilation to pre-compute queries for repository interfaces that are then executed by a thin, lightweight runtime layer.
+
 - [Guide](https://micronaut-projects.github.io/micronaut-data/latest/guide/)
 
 ## Feature liquibase documentation
@@ -140,43 +145,35 @@ Micronaut Data is a database access toolkit that uses Ahead of Time (AoT) compil
 
 - [https://www.liquibase.org/](https://www.liquibase.org/)
 
-
 ## Feature tomcat-server documentation
 
 - [Micronaut Tomcat Server documentation](https://micronaut-projects.github.io/micronaut-servlet/latest/guide/index.html#tomcat)
-
 
 ## Feature maven-enforcer-plugin documentation
 
 - [https://maven.apache.org/enforcer/maven-enforcer-plugin/](https://maven.apache.org/enforcer/maven-enforcer-plugin/)
 
-
 ## Feature jul-to-slf4j documentation
 
 - [https://www.slf4j.org/legacy.html#jul-to-slf4jBridge](https://www.slf4j.org/legacy.html#jul-to-slf4jBridge)
-
 
 ## Feature jdbc-hikari documentation
 
 - [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
 
-
 ## Feature serialization-jackson documentation
 
 - [Micronaut Serialization Jackson Core documentation](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/)
 
-
 ## Feature micronaut-aot documentation
 
 - [Micronaut AOT documentation](https://micronaut-projects.github.io/micronaut-aot/latest/guide/)
-
 
 ## Feature jackson-xml documentation
 
 - [Micronaut Jackson XML serialization/deserialization documentation](https://micronaut-projects.github.io/micronaut-jackson-xml/latest/guide/index.html)
 
 - [https://github.com/FasterXML/jackson-dataformat-xml](https://github.com/FasterXML/jackson-dataformat-xml)
-
 
 ## Feature hibernate-jpa documentation
 
