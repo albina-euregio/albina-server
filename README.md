@@ -51,7 +51,7 @@ Environment=UMASK=0022
 ExecStart=/usr/lib/jvm/jre-21/bin/java -jar albina.jar
 Type=simple
 User=...
-WorkingDirectory=/opt/albina-server-dev/
+WorkingDirectory=/opt/albina-server/
 ```
 
 ## Database Migrations
