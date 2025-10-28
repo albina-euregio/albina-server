@@ -24,9 +24,14 @@ This project uses Transifex for its translations: https://app.transifex.com/albi
 ## Deployment
 
 ```shell
+# install requirements
+apt/dnf install java-21-openjdk-headless ghostscript imagemagick webp
+# build
 mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(git describe --tags)
 mvn clean package
+# copy to /opt/albina-server/albina.jar on server
 scp target/albina*.jar albina.example.com:/opt/albina-server/albina.jar
+# start systemd service
 sudo systemctl restart albina-server.service
 # logging to stdout (no log files), use `journalctl` to view the logs:
 journalctl --unit albina-server.service
