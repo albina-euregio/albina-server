@@ -29,13 +29,20 @@ apt/dnf install java-21-openjdk-headless ghostscript imagemagick webp
 # build
 mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(git describe --tags)
 mvn clean package
+# prepare server
+adduser albina-server
+mkdir /opt/albina-server/
+mkdir /opt/albina-server/tomcat.8080/
+sudo chown --recursive albina-server:albina-server /opt/albina-server/
 # copy to /opt/albina-server/albina.jar on server
 scp target/albina*.jar albina.example.com:/opt/albina-server/albina.jar
 # start systemd service
 sudo systemctl restart albina-server.service
+# enable systemd service (start after reboot)
+sudo systemctl enable albina-server.service
 # logging to stdout (no log files), use `journalctl` to view the logs:
 journalctl --unit albina-server.service
-journalctl --unit albina-server-dev.service --follow --lines 100
+journalctl --unit albina-server.service --follow --lines 100
 ```
 
 ```properties
@@ -55,8 +62,19 @@ Environment=MICRONAUT_SERVER_PORT=8080
 Environment=UMASK=0022
 ExecStart=/usr/lib/jvm/jre-21/bin/java -jar albina.jar
 Type=simple
-User=...
+User=albina-server
 WorkingDirectory=/opt/albina-server/
+```
+
+Configure [Caddy server](https://caddyserver.com/) as reverse proxy:
+
+```
+# /etc/caddy/Caddyfile
+api.example.com {
+	reverse_proxy "localhost:8081"
+	log
+	encode zstd gzip
+}
 ```
 
 ## Database Migrations
