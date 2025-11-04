@@ -91,7 +91,11 @@ public class DangerSourceService {
 	@Transactional
 	public DangerSource saveDangerSource(@Body DangerSource dangerSource) {
 
-		dangerSourceRepository.save(dangerSource);
+		if (dangerSource.getId() == null || !dangerSourceRepository.existsById(dangerSource.getId())) {
+			dangerSourceRepository.save(dangerSource);
+		} else {
+			dangerSourceRepository.update(dangerSource);
+		}
 		return dangerSource;
 	}
 
