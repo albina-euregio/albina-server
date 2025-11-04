@@ -203,12 +203,6 @@ public class Region implements PersistentObject {
 	@Column(name = "GEO_DATA_DIRECTORY", length = 191)
 	private String geoDataDirectory;
 
-	@Column(name = "MAP_LOGO_COLOR_PATH", length = 191)
-	private String mapLogoColorPath;
-
-	@Column(name = "MAP_LOGO_BW_PATH", length = 191)
-	private String mapLogoBwPath;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "MAP_LOGO_POSITION", length = 191)
 	private Position mapLogoPosition;
@@ -689,22 +683,6 @@ public class Region implements PersistentObject {
 
 	public void setGeoDataDirectory(String geoDataDirectory) {
 		this.geoDataDirectory = geoDataDirectory;
-	}
-
-	public String getMapLogoColorPath() {
-		return mapLogoColorPath;
-	}
-
-	public void setMapLogoColorPath(String mapLogoColorPath) {
-		this.mapLogoColorPath = mapLogoColorPath;
-	}
-
-	public String getMapLogoBwPath() {
-		return mapLogoBwPath;
-	}
-
-	public void setMapLogoBwPath(String mapLogoBwPath) {
-		this.mapLogoBwPath = mapLogoBwPath;
 	}
 
 	public Position getMapLogoPosition() {

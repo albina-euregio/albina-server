@@ -61,8 +61,6 @@
     "pdfFooterLogoBwPath": "logo/grey/euregio.png",
     "simpleHtmlTemplateName": "simple-bulletin.min.html",
     "geoDataDirectory": "geodata.Euregio/AT-07/",
-    "mapLogoColorPath": "",
-    "mapLogoBwPath": "",
     "mapLogoPosition": "bottomright",
     "imageColorbarColorPath": "logo/color/colorbar.gif",
     "imageColorbarBwPath": "logo/grey/colorbar.gif",

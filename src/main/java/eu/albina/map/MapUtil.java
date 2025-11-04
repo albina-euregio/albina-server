@@ -176,23 +176,20 @@ public interface MapUtil {
 		final Path outputFile = outputDirectory.resolve(bulletin == null
 			? filename(region, mapLevel, daytimeDependency, grayscale, MapImageFormat.pdf)
 			: filename(region, bulletin, daytimeDependency, grayscale, MapImageFormat.pdf));
-		String logoPath = "";
-		double logoAspectRatio = 1;
-
-		if (grayscale && region.getMapLogoBwPath() != null && !region.getMapLogoBwPath().isEmpty()) {
-			URL logoUrl = Resources.getResource(region.getMapLogoBwPath());
-			logoPath = logoUrl.toString();
-			BufferedImage image = ImageIO.read(logoUrl);
-   			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
-		} else if (!grayscale && region.getMapLogoBwPath() != null && !region.getMapLogoBwPath().isEmpty()) {
-			URL logoUrl = Resources.getResource(region.getMapLogoColorPath());
-			logoPath = logoUrl.toString();
-			BufferedImage image = ImageIO.read(logoUrl);
-   			logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
-		}
 
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
 		final Path geodataPath = Paths.get(avalancheReport.getServerInstance().mapProductionUrl()).resolve(region.getGeoDataDirectory());
+
+		String logoPath = "";
+		double logoAspectRatio = 1;
+		Path logo = geodataPath.resolve(grayscale ? "logo_bw.png" : "logo.png");
+		if (Files.exists(logo) && region.getMapLogoPosition() != null) {
+			logoPath = logo.toString();
+			try (InputStream inputStream = Files.newInputStream(logo)) {
+				BufferedImage image = ImageIO.read(inputStream);
+				logoAspectRatio = (double) image.getWidth() / (double) image.getHeight();
+			}
+		}
 
 		Path bounds = MapUtil.mapProductionResource(geodataPath, "bounds.geojson");
 		FeatureCollection features = new ObjectMapper().readValue(Files.readString(bounds, StandardCharsets.UTF_8), FeatureCollection.class);
