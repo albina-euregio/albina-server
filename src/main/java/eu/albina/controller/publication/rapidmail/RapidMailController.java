@@ -15,9 +15,9 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import eu.albina.controller.CrudRepository;
 import eu.albina.model.Subscriber;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.annotation.Nonnull;

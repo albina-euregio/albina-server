@@ -18,11 +18,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import eu.albina.util.HttpClientUtil;
+import eu.albina.controller.CrudRepository;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
-import io.micronaut.http.HttpHeaders;
-import io.micronaut.http.MediaType;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;

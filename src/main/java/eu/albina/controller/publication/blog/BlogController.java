@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
+import eu.albina.controller.CrudRepository;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
@@ -9,7 +10,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.persistence.NoResultException;

@@ -4,7 +4,6 @@ package eu.albina.controller;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
