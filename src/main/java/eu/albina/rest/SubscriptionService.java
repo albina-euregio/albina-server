@@ -60,8 +60,8 @@ public class SubscriptionService {
 
 		try {
 			RapidMailConfiguration config = rapidMailController.getConfiguration(region, subscriber.getLanguage()).orElseThrow();
-			subscriberRepository.save(subscriber);
 			rapidMailController.createRecipient(config, subscriber);
+			subscriberRepository.saveOrUpdate(subscriber, Subscriber::getEmail);
 		} catch (Exception e) {
 			logger.warn("Error subscribe", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
