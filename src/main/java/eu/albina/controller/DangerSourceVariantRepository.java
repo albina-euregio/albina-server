@@ -48,6 +48,8 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 
 		if (variant.getId() == null || !existsById(variant.getId())) {
 			save(variant);
+			variant.setOriginalDangerSourceVariantId(variant.getId());
+			update(variant);
 		} else {
 			update(variant);
 		}
