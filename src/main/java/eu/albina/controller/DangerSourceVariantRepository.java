@@ -46,7 +46,7 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 			save(loadedVariant);
 		}
 
-		if (variant.getId() == null) {
+		if (variant.getId() == null || !existsById(variant.getId())) {
 			save(variant);
 		} else {
 			update(variant);
