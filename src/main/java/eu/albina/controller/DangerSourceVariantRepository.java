@@ -6,7 +6,6 @@ import eu.albina.model.DangerSourceVariant;
 import eu.albina.model.DangerSourceVariantsStatus;
 import eu.albina.model.Region;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +45,12 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 			save(loadedVariant);
 		}
 
-		if (variant.getId() == null || !existsById(variant.getId())) {
-			save(variant);
+		saveOrUpdate(variant, DangerSourceVariant::getId);
+		if (variant.getOriginalDangerSourceVariantId() == null) {
 			variant.setOriginalDangerSourceVariantId(variant.getId());
 			update(variant);
-		} else {
-			update(variant);
 		}
+
 		logger.info("Danger source variant {} for region {} saved", variant.getId(), region.getId());
 	}
 

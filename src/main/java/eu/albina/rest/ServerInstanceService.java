@@ -41,12 +41,8 @@ public class ServerInstanceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create or update server configuration")
 	public ServerInstance saveServerConfiguration(@Body ServerInstance serverInstance) {
-		if (serverInstance.getId() == null || !serverInstanceRepository.existsById(serverInstance.getId())) {
-			serverInstanceRepository.save(serverInstance);
-		} else {
-			serverInstanceRepository.update(serverInstance);
-		}
-		return serverInstance;
+
+		return serverInstanceRepository.saveOrUpdate(serverInstance, ServerInstance::getId);
 	}
 
 	@Serdeable
