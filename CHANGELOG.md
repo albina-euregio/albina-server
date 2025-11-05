@@ -2,6 +2,39 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [8.0.0] - 2025-11-04
+
+### Breaking Changes
+
+- This project is now licensed under the GNU Affero General Public License v3.0
+
+### 🚀 Features
+
+- Integrate Liquibase for database migrations
+- Add a weather section to bulletins
+- Add a general headline to bulletins
+- Enable support for WhatsApp channels
+- Introduce updated micro-regions
+- Add new regions: ES-AR and AT-02
+- Migrate to the Micronaut framework (Tomcat no longer required)
+- Extend region configuration (languages, website name)
+- Allow database configuration via environment variables
+- Implement health checks for Telegram, WhatsApp, and Blog integrations
+- Improve and extend danger sources
+- Add bulletin text generation from danger sources
+
+### 🚜 Refactor
+
+- Remove WebSocket support
+- Use Jackson for JSON serialization and deserialization
+- Make map production fully generic
+- Improve map generation process
+
+### ⚙️ Miscellaneous Tasks
+
+- Upgrade all dependencies to the latest versions
+- Add documentation for deployment and database migration
+
 ## [7.1.11] - 2025-04-17
 
 ### Bulletins
