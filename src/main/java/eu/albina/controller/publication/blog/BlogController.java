@@ -62,7 +62,7 @@ public class BlogController {
 		config.setLastPublishedTimestamp(object.getPublished());
 		logger.info("Updating lastPublishedTimestamp={} lastPublishedBlogId={} for {}",
 			config.getLastPublishedTimestamp(), config.getLastPublishedBlogId(), config);
-		blogConfigurationRepository.save(config);
+		blogConfigurationRepository.update(config);
 	}
 
 	public List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
