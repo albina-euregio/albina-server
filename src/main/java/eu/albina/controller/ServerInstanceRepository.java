@@ -3,7 +3,6 @@ package eu.albina.controller;
 
 import eu.albina.model.ServerInstance;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 
 import java.util.List;
 

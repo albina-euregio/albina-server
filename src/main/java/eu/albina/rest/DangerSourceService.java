@@ -91,12 +91,7 @@ public class DangerSourceService {
 	@Transactional
 	public DangerSource saveDangerSource(@Body DangerSource dangerSource) {
 
-		if (dangerSource.getId() == null || !dangerSourceRepository.existsById(dangerSource.getId())) {
-			dangerSourceRepository.save(dangerSource);
-		} else {
-			dangerSourceRepository.update(dangerSource);
-		}
-		return dangerSource;
+		return dangerSourceRepository.saveOrUpdate(dangerSource, DangerSource::getId);
 	}
 
 	@Get("/edit")

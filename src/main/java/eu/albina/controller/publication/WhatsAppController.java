@@ -2,11 +2,11 @@
 package eu.albina.controller.publication;
 
 import com.google.common.net.HttpHeaders;
+import eu.albina.controller.CrudRepository;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.WhatsAppConfiguration;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.http.MediaType;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;

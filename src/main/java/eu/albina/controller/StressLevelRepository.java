@@ -5,7 +5,6 @@ import eu.albina.model.StressLevel;
 import eu.albina.model.StressLevel.StressLevelID;
 import eu.albina.model.User;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 
 import java.time.Instant;
 import java.time.LocalDate;

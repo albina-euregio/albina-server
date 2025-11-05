@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.google.common.collect.MoreCollectors;
+import eu.albina.controller.CrudRepository;
 import eu.albina.model.enumerations.LanguageCode;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;

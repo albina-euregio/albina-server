@@ -3,7 +3,6 @@ package eu.albina.controller;
 
 import eu.albina.model.DangerSource;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 
 import java.time.Instant;
 import java.util.List;

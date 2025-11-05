@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import eu.albina.util.JsonUtil;
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

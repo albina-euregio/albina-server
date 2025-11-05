@@ -4,7 +4,6 @@ package eu.albina.controller;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.User;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import eu.albina.util.AlbinaUtil;
 import io.micronaut.data.annotation.Repository;
-import io.micronaut.data.repository.CrudRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
