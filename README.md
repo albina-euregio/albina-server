@@ -27,13 +27,20 @@ This project uses Transifex for its translations: https://app.transifex.com/albi
 # install requirements
 apt/dnf install java-21-openjdk-headless ghostscript imagemagick webp
 # build
+# or download build artifact from GitLab: https://gitlab.com/albina-euregio/albina-server/-/pipelines?scope=tags
 mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(git describe --tags)
 mvn clean package
 # prepare server
 adduser albina-server
 mkdir /opt/albina-server/
 mkdir /opt/albina-server/tomcat.8080/
+mkdir /var/www/static-albina.example.com/
+mkdir /var/www/static-albina.example.com/bulletins/
+mkdir /var/www/static-albina.example.com/simple/
+mkdir /var/www/static-albina.example.com/images/
+mkdir /var/www/static-albina.example.com/media_files/
 sudo chown --recursive albina-server:albina-server /opt/albina-server/
+sudo chown --recursive albina-server:albina-server /var/www/static-albina.example.com/
 # copy to /opt/albina-server/albina.jar on server
 scp target/albina*.jar albina.example.com:/opt/albina-server/albina.jar
 # start systemd service
@@ -75,6 +82,40 @@ api.example.com {
 	log
 	encode zstd gzip
 }
+```
+
+Configure server instance, region and admin user in database:
+
+```sql
+INSERT INTO server_instances
+(ID, API_URL, EXTERNAL_SERVER, HTML_DIRECTORY, MAP_PRODUCTION_URL, MAPS_PATH, MEDIA_PATH, NAME, PASSWORD, PDF_DIRECTORY, PUBLISH_AT_5PM, PUBLISH_AT_8PM, SERVER_IMAGES_URL, USER_NAME, DANGER_LEVEL_ELEVATION_DEPENDENCY)
+VALUES(1, 'https://api-albina.example.com/albina/api/', 0, '/var/www/static-albina.example.com/simple', '/opt/avalanche-warning-maps', '/var/www/static-albina.example.com/bulletins', '/var/www/static-albina.example.com/media_files', 'api-albina.example.com', '', '/var/www/static-albina.example.com/bulletins', 0, 0, 'https://static-albina.example.com/images/', 'albina@example.com', 1);
+
+INSERT INTO regions
+(ID, CREATE_CAAML_V5, CREATE_CAAML_V6, CREATE_JSON, CREATE_MAPS, CREATE_PDF, CREATE_SIMPLE_HTML, EMAIL_COLOR, ENABLE_MEDIA_FILE, GEO_DATA_DIRECTORY, IMAGE_COLORBAR_BW_PATH, IMAGE_COLORBAR_COLOR_PATH, MAP_LOGO_BW_PATH, MAP_LOGO_COLOR_PATH, MAP_LOGO_POSITION, MICRO_REGIONS, PDF_COLOR, PDF_FOOTER_LOGO, PDF_FOOTER_LOGO_BW_PATH, PDF_FOOTER_LOGO_COLOR_PATH, PDF_MAP_HEIGHT, PDF_MAP_WIDTH_AM_PM, PDF_MAP_WIDTH_FD, PDF_MAP_Y_AM_PM, PDF_MAP_Y_FD, PUBLISH_BLOGS, PUBLISH_BULLETINS, SEND_EMAILS, SEND_PUSH_NOTIFICATIONS, SEND_TELEGRAM_MESSAGES, SIMPLE_HTML_TEMPLATE_NAME, SERVER_INSTANCE_ID, SHOW_MATRIX, ENABLE_AVALANCHE_PROBLEM_CORNICES, ENABLE_AVALANCHE_PROBLEM_NO_DISTINCT_AVALANCHE_PROBLEM, ENABLE_OBSERVATIONS, ENABLE_MODELLING, ENABLE_STRATEGIC_MINDSET, ENABLE_WEATHERBOX, ENABLE_STRESS_LEVEL, ENABLE_DANGER_SOURCES, SEND_WHATSAPP_MESSAGES, ENABLED_LANGUAGES, TTS_LANGUAGES, ENABLE_GENERAL_HEADLINE, ENABLE_WEATHER_TEXT_FIELD, COAT_OF_ARMS, DEFAULT_LANG, LOGO_PATH, LOGO_BW_PATH, STATIC_URL, ENABLED_EDITABLE_FIELDS)
+VALUES('XA', 1, 1, 1, 1, 1, 1, '1AABFF', 0, 'geodata.Aragon/', 'logo/grey/colorbar.gif', 'logo/color/colorbar.gif', '', '', 'bottomright', 15, '00ACFB', 0, 'logo/grey/avalanche_report.png', 'logo/color/avalanche_report.png', 270, 270, 420, 130, 250, 0, 1, 0, 0, 0, 'simple-bulletin.html', 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'de,it,en,fr,es,ca,oc', '', 0, 0, '', 'en', 'logo/color/avalanche_report.png', 'logo/grey/avalanche_report.png', 'https://static-albina.example.com', '');
+
+INSERT INTO region_language_configurations
+(REGION_ID, LANGUAGE_CODE, URL, URL_WITH_DATE, WARNING_SERVICE_EMAIL, WARNING_SERVICE_NAME, WEBSITE_NAME)
+VALUES('XA', 'en', 'https://albina.example.com', 'https://albina.example.com/bulletin/%s', 'albina@example.com', 'albina.example.com', 'albina.example.com');
+
+INSERT INTO users
+(EMAIL, IMAGE, NAME, ORGANIZATION, PASSWORD, LANGUAGE_CODE, DELETED)
+VALUES('albina@example.com', NULL, 'albina.example.com', NULL, NULL, NULL, 0);
+
+-- https://bcrypt-generator.com/ → $2a$10$...
+
+INSERT INTO users
+(EMAIL, IMAGE, NAME, ORGANIZATION, PASSWORD, LANGUAGE_CODE, DELETED)
+VALUES('admin@example.com', NULL, 'Admin Admin', 'Admin', '$2a$10$...', NULL, 0);
+
+INSERT INTO user_role
+(USER_EMAIL, USER_ROLE)
+VALUES('admin@example.com', 'ADMIN');
+
+INSERT INTO user_region
+(USER_EMAIL, REGION_ID)
+VALUES('admin@example.com', 'XA');
 ```
 
 ## Database Migrations
