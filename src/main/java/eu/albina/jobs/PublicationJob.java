@@ -156,6 +156,9 @@ public class PublicationJob {
 			avalancheReport.setServerInstance(serverInstance);
 			return Stream.of(avalancheReport);
 			}).toList();
+
+		publicationController.commitTransaction();
+
 		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
 			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 

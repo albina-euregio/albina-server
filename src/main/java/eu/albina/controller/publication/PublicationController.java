@@ -10,6 +10,8 @@ import eu.albina.controller.publication.rapidmail.RapidMailController;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +60,13 @@ public class PublicationController {
 
 	@Inject
 	private ObjectMapper objectMapper;
+
+	@PersistenceContext
+	EntityManager entityManager;
+
+	public void commitTransaction() {
+		entityManager.getTransaction().commit();
+	}
 
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
