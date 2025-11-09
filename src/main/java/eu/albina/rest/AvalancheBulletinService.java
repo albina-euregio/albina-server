@@ -57,6 +57,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,6 +116,9 @@ public class AvalancheBulletinService {
 
 	@Inject
 	private UserRepository userRepository;
+
+	@PersistenceContext
+	EntityManager entityManager;
 
 	@Get("/edit")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
@@ -643,7 +648,7 @@ public class AvalancheBulletinService {
 				).distinct().collect(Collectors.toList());
 
 				new Thread(() -> {
-					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance()) {
+					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance(), entityManager) {
 						@Override
 						protected Instant getStartDate(Clock clock) {
 							return startDate;

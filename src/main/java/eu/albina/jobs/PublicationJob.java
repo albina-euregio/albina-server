@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import eu.albina.controller.RegionRepository;
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,13 +55,15 @@ public class PublicationJob {
 	private final AvalancheBulletinController avalancheBulletinController;
 	protected final RegionRepository regionRepository;
 	private final ServerInstance serverInstance;
+	private final EntityManager entityManager;
 
-	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance) {
+	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance, EntityManager entityManager) {
 		this.publicationController = publicationController;
 		this.avalancheReportController = avalancheReportController;
 		this.avalancheBulletinController = avalancheBulletinController;
 		this.regionRepository = regionRepository;
 		this.serverInstance = serverInstance;
+		this.entityManager = entityManager;
 	}
 
 	private List<Runnable> execute0() {
@@ -157,7 +160,7 @@ public class PublicationJob {
 			return Stream.of(avalancheReport);
 			}).toList();
 
-		publicationController.commitTransaction();
+		entityManager.getTransaction().commit();
 
 		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
 			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);

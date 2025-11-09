@@ -14,6 +14,7 @@ import eu.albina.controller.RegionRepository;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.util.AlbinaUtil;
+import jakarta.persistence.EntityManager;
 
 /**
  * A job handling all the tasks and logic necessary to
@@ -24,8 +25,8 @@ import eu.albina.util.AlbinaUtil;
  */
 public class UpdateJob extends PublicationJob {
 
-	public UpdateJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance) {
-		super(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstance);
+	public UpdateJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance, EntityManager entityManager) {
+		super(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstance, entityManager);
 	}
 
 	@Override
