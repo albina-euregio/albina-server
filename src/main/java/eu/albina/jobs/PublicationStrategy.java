@@ -85,26 +85,6 @@ public interface PublicationStrategy {
 		};
 	}
 
-	static PublicationStrategy publishAll(Instant startDate, boolean change) {
-		Objects.requireNonNull(startDate, "startDate");
-		return new PublicationStrategy() {
-			@Override
-			public boolean isEnabled(ServerInstance serverInstance) {
-				return true;
-			}
-
-			@Override
-			public boolean isChange() {
-				return change;
-			}
-
-			@Override
-			public Instant getStartDate(Clock clock) {
-				return startDate;
-			}
-		};
-	}
-
 	static PublicationStrategy publish(Instant startDate, List<Region> regions) {
 		Objects.requireNonNull(startDate, "startDate");
 		Objects.requireNonNull(regions, "regions");

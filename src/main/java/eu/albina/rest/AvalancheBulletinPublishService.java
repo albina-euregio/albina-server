@@ -112,7 +112,11 @@ public class AvalancheBulletinPublishService {
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			publicationJob.execute(PublicationStrategy.publishAll(startDate, change));
+			if (change) {
+				publicationJob.execute(PublicationStrategy.change(startDate, regionRepository.getPublishBulletinRegions()));
+			} else {
+				publicationJob.execute(PublicationStrategy.publish(startDate, regionRepository.getPublishBulletinRegions()));
+			}
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
