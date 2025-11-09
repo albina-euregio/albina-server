@@ -131,6 +131,17 @@
 			<groupId>com.networknt</groupId>
 			<artifactId>json-schema-validator</artifactId>
 			<version>1.5.8</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.dataformat</groupId>
+					<artifactId>jackson-dataformat-yaml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.ethlo.time</groupId>
+					<artifactId>itu</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
