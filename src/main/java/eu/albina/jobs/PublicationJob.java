@@ -122,9 +122,7 @@ public class PublicationJob {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
 				.collect(Collectors.toList());
-			logger.info("Publishing region {} with bulletins {} and publication time {}", region.getId(),
-				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()),
-				publicationTimeString);
+			logger.info("Publishing region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
 
 			avalancheReportController.publishReport(regionBulletins, startDate, region, serverInstance.getUserName(), publicationDate);
 		}
@@ -141,11 +139,16 @@ public class PublicationJob {
 		Stream<CompletableFuture<Void>> futures1 = regionRepository.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
-			logger.info("Load region {} with bulletins {} and publication time {}", region.getId(),
-				regionBulletins.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
+			logger.info("Load region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
 			AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
+			logger.info("Load region {} with report {}", region, avalancheReport);
 
-			if (avalancheReport == null || regionBulletins.isEmpty()) {
+			if (avalancheReport == null) {
+				logger.info("Skipping region {} since report {} is null", region, avalancheReport);
+				return;
+			}
+			if (regionBulletins.isEmpty()) {
+				logger.info("Skipping region {} since bulletins {} is empty", region, regionBulletins);
 				return;
 			}
 
@@ -155,6 +158,7 @@ public class PublicationJob {
 			// maybe another region was not published at all
 			BulletinStatus status = avalancheReport.getStatus();
 			if (status != BulletinStatus.published && status != BulletinStatus.republished) {
+				logger.info("Skipping region {} since report {} has status {}", region, avalancheReport, status);
 				return;
 			}
 
@@ -168,8 +172,7 @@ public class PublicationJob {
 
 		// update all super regions
 		Stream<CompletableFuture<Void>> futures2 = getSuperRegions(regions).stream().map(superRegion -> CompletableFuture.runAsync(() -> {
-			logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion.getId(),
-				publishedBulletins0.stream().map(AbstractPersistentObject::getId).collect(Collectors.toList()), publicationTimeString);
+			logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, publishedBulletins0, publicationTimeString);
 			AvalancheReport report = AvalancheReport.of(publishedBulletins0, superRegion, serverInstance);
 			publicationController.createRegionResources(superRegion, report);
 		}, executor));
