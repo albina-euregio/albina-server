@@ -39,8 +39,6 @@ import org.caaml.v6.ValidTimePeriod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.auth.oauth2.AccessToken;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.base.Strings;
 import com.google.common.collect.Streams;
 import com.google.common.net.HttpHeaders;
@@ -54,7 +52,7 @@ import eu.albina.model.enumerations.LanguageCode;
 @Singleton
 public class TextToSpeech {
 	private static final String API_URL = "https://eu-texttospeech.googleapis.com/v1/text:synthesize";
-	private static final String API_AUTH_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
+	static final String API_AUTH_SCOPE = "https://www.googleapis.com/auth/cloud-platform";
 	private static final String jingle = "https://static.avalanche.report/synthesizer/intro_0_1.mp3";
 	private static final Logger logger = LoggerFactory.getLogger(TextToSpeech.class);
 
@@ -364,15 +362,13 @@ public class TextToSpeech {
 	public byte[] createAudioFile(AvalancheBulletin bulletin) throws Exception {
 		String json = createAudioFileRequest(bulletin);
 
-		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
-			.createScoped(API_AUTH_SCOPE);
-		credentials.refreshIfExpired();
-		AccessToken token = credentials.getAccessToken();
+		GoogleCredentials credentials = GoogleCredentials.ofEnv(objectMapper);
+		GoogleCredentials.AccessToken accessToken = credentials.fetchAccessToken(httpClient, objectMapper);
 
 		URI uri = URI.create(API_URL);
 		HttpRequest request = HttpRequest.newBuilder(uri)
 			.POST(HttpRequest.BodyPublishers.ofString(json))
-			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getTokenValue())
+			.header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.access_token())
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
 			.timeout(Duration.ofSeconds(30))
 			.build();
