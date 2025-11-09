@@ -6,6 +6,7 @@ import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.model.ServerInstance;
+import jakarta.persistence.EntityManager;
 
 /**
  * A job handling all the tasks and logic necessary to
@@ -16,8 +17,8 @@ import eu.albina.model.ServerInstance;
  */
 public class ChangeJob extends PublicationJob {
 
-	public ChangeJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance) {
-		super(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstance);
+	public ChangeJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance, EntityManager entityManager) {
+		super(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstance, entityManager);
 	}
 
 	@Override
