@@ -13,11 +13,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -136,36 +132,35 @@ public class PublicationJob {
 		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
 
 		// update all regions to create complete maps
-		Stream<CompletableFuture<Void>> futures1 = regionRepository.getPublishBulletinRegions().stream().map(region -> CompletableFuture.runAsync(() -> {
+		List<AvalancheReport> allRegions = regionRepository.getPublishBulletinRegions().stream().flatMap(region -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
-			AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
-			logger.info("Load region {} with report {}", region, avalancheReport);
-
-			if (avalancheReport == null) {
-				logger.info("Skipping region {} since report {} is null", region, avalancheReport);
-				return;
-			}
 			if (regionBulletins.isEmpty()) {
 				logger.info("Skipping region {} since bulletins {} is empty", region, regionBulletins);
-				return;
+				return Stream.empty();
 			}
-
-			avalancheReport.setBulletins(regionBulletins, publishedBulletins0);
-			avalancheReport.setServerInstance(serverInstance);
-
-			// maybe another region was not published at all
+			AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
+			logger.info("Load region {} with report {}", region, avalancheReport);
+			if (avalancheReport == null) {
+				logger.info("Skipping region {} since report {} is null", region, avalancheReport);
+				return Stream.empty();
+			}
 			BulletinStatus status = avalancheReport.getStatus();
 			if (status != BulletinStatus.published && status != BulletinStatus.republished) {
+				// maybe another region was not published at all
 				logger.info("Skipping region {} since report {} has status {}", region, avalancheReport, status);
-				return;
+				return Stream.empty();
 			}
-
-			publicationController.createRegionResources(region, avalancheReport);
+			avalancheReport.setBulletins(regionBulletins, publishedBulletins0);
+			avalancheReport.setServerInstance(serverInstance);
+			return Stream.of(avalancheReport);
+			}).toList();
+		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
+			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 
 			// send notifications only for updated regions after all maps were created
-			if (regions.contains(region) && !isChange()) {
+			if (regions.contains(avalancheReport.getRegion()) && !isChange()) {
 				tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
 			}
 		}, executor));
