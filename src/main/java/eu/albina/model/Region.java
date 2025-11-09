@@ -361,6 +361,9 @@ public class Region implements PersistentObject {
 	}
 
 	public Optional<RegionLanguageConfiguration> getLanguageConfiguration(LanguageCode lang) {
+		if (languageConfigurations == null) {
+			return Optional.empty();
+		}
 		return languageConfigurations.stream()
 			.filter(config -> config.getLang() == lang)
 			.findFirst();
