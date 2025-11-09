@@ -139,11 +139,13 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	@JsonIgnore
 	public List<AvalancheBulletin> getPublishedBulletins(ObjectMapper objectMapper) {
 		if (getStatus() != BulletinStatus.published && getStatus() != BulletinStatus.republished) {
-			LoggerFactory.getLogger(AvalancheReport.class).warn("Report has not been published!");
+			IllegalStateException ex = new IllegalStateException("Report %s has not been published!".formatted(this));
+			LoggerFactory.getLogger(AvalancheReport.class).warn(ex.getMessage(), ex);
 			return List.of();
 		}
 		if (getJsonString() == null || getJsonString().isEmpty()) {
-			LoggerFactory.getLogger(AvalancheReport.class).warn("JSON string empty: {}, {}", getDate(), getRegion());
+			IllegalStateException ex = new IllegalStateException("Report %s has empty JSON string!".formatted(this));
+			LoggerFactory.getLogger(AvalancheReport.class).warn(ex.getMessage(), ex);
 			return List.of();
 		}
 		try {
