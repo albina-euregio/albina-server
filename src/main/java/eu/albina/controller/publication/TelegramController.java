@@ -19,7 +19,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import eu.albina.controller.CrudRepository;
+import eu.albina.util.HttpClientUtil;
 import io.micronaut.data.annotation.Repository;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.MediaType;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -108,15 +111,7 @@ public class TelegramController {
 				"--%s--\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8)
 			)))
 			.build();
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-		if (response.statusCode() != 200) {
-			// FIXME throw exception?
-			logger.warn("Error publishing on telegram channel for "
-				+ config.getRegion().getId() + " (error code "
-				+ response.statusCode() + "): " + response.body());
-		}
-		return response;
+		return execute(request, client);
 	}
 
 	public HttpResponse<String> sendMessage(TelegramConfiguration config, String message) throws IOException, InterruptedException {
@@ -130,7 +125,7 @@ public class TelegramController {
 			URLEncoder.encode(chatId, StandardCharsets.UTF_8),
 			URLEncoder.encode(message, StandardCharsets.UTF_8)
 		))).build();
-		return execute(request, config);
+		return execute(request, client);
 	}
 
 	/**
@@ -140,15 +135,14 @@ public class TelegramController {
 	 */
 	public HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
-		return execute(request, config);
+		return execute(request, client);
 	}
 
-	public HttpResponse<String> execute(HttpRequest request, TelegramConfiguration config) throws IOException, InterruptedException {
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+	private static HttpResponse<String> execute(HttpRequest request, HttpClient httpClient) throws IOException, InterruptedException {
+		logger.info("Sending request {}", request.uri());
+		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		if (response.statusCode() != 200) {
-			logger.warn("Error publishing on telegram channel for "
-				+ config.getRegion().getId() + " (error code "
-				+ response.statusCode() + "): " + response.body());
+			logger.warn("Error publishing on telegram channel via {} (error code {}): {}", request.uri(), response.statusCode(), response.body());
 		}
 		return response;
 	}
