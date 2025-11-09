@@ -19,7 +19,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import eu.albina.controller.CrudRepository;
+import eu.albina.util.HttpClientUtil;
 import io.micronaut.data.annotation.Repository;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.MediaType;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -38,8 +41,6 @@ public class TelegramController {
 
 	@Inject
 	TelegramConfigurationRepository telegramConfigurationRepository;
-	@Inject
-	private HttpClient httpClient;
 
 	@Repository
 	public interface TelegramConfigurationRepository extends CrudRepository<TelegramConfiguration, Long> {
@@ -88,13 +89,29 @@ public class TelegramController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending photo {} and message {} to telegram channel using config {}", attachmentUrl, message, config);
 
-		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s&photo=%s",
+		String boundary = UUID.randomUUID().toString();
+		String fileName = attachmentUrl.substring(attachmentUrl.lastIndexOf("/") + 1);
+
+		HttpClient client = HttpClientUtil
+			.newClientBuilder(80000) // sending photos may a while
+			.build();
+		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s",
 				apiToken,
 				URLEncoder.encode(chatId, StandardCharsets.UTF_8),
-				URLEncoder.encode(message, StandardCharsets.UTF_8),
-				URLEncoder.encode(attachmentUrl, StandardCharsets.UTF_8)
-			))).build();
-		return execute(request, config);
+				URLEncoder.encode(message, StandardCharsets.UTF_8)
+			)))
+			.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=" + boundary)
+			.POST(HttpRequest.BodyPublishers.ofByteArrays(List.of(
+				"--%s\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8),
+				"Content-Disposition: form-data; name=\"photo\"; filename=\"%s\"\r\n".formatted(fileName).getBytes(StandardCharsets.UTF_8),
+				"Content-Type: %s\r\n".formatted(MediaType.APPLICATION_OCTET_STREAM).getBytes(StandardCharsets.UTF_8),
+				"\r\n".getBytes(StandardCharsets.UTF_8),
+				URI.create(attachmentUrl).toURL().openStream().readAllBytes(),
+				"\r\n".getBytes(StandardCharsets.UTF_8),
+				"--%s--\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8)
+			)))
+			.build();
+		return execute(request, client);
 	}
 
 	public HttpResponse<String> sendMessage(TelegramConfiguration config, String message) throws IOException, InterruptedException {
@@ -108,7 +125,7 @@ public class TelegramController {
 			URLEncoder.encode(chatId, StandardCharsets.UTF_8),
 			URLEncoder.encode(message, StandardCharsets.UTF_8)
 		))).build();
-		return execute(request, config);
+		return execute(request, client);
 	}
 
 	/**
@@ -118,15 +135,14 @@ public class TelegramController {
 	 */
 	public HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
-		return execute(request, config);
+		return execute(request, client);
 	}
 
-	public HttpResponse<String> execute(HttpRequest request, TelegramConfiguration config) throws IOException, InterruptedException {
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+	private static HttpResponse<String> execute(HttpRequest request, HttpClient httpClient) throws IOException, InterruptedException {
+		logger.info("Sending request {}", request.uri());
+		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		if (response.statusCode() != 200) {
-			logger.warn("Error publishing on telegram channel for "
-				+ config.getRegion().getId() + " (error code "
-				+ response.statusCode() + "): " + response.body());
+			logger.warn("Error publishing on telegram channel via {} (error code {}): {}", request.uri(), response.statusCode(), response.body());
 		}
 		return response;
 	}
