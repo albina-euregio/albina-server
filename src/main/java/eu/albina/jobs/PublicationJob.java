@@ -10,9 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -22,7 +20,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import eu.albina.controller.RegionRepository;
+import eu.albina.controller.ServerInstanceRepository;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +34,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.PublicationController;
-import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -46,37 +47,42 @@ import eu.albina.util.AlbinaUtil;
  *
  * @author Norbert Lanzanasto
  */
+@Singleton
 public class PublicationJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
 	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
-	private final PublicationController publicationController;
-	private final AvalancheReportController avalancheReportController;
-	private final AvalancheBulletinController avalancheBulletinController;
-	protected final RegionRepository regionRepository;
-	private final ServerInstance serverInstance;
-	private final EntityManager entityManager;
 
-	public PublicationJob(PublicationController publicationController, AvalancheReportController avalancheReportController, AvalancheBulletinController avalancheBulletinController, RegionRepository regionRepository, ServerInstance serverInstance, EntityManager entityManager) {
-		this.publicationController = publicationController;
-		this.avalancheReportController = avalancheReportController;
-		this.avalancheBulletinController = avalancheBulletinController;
-		this.regionRepository = regionRepository;
-		this.serverInstance = serverInstance;
-		this.entityManager = entityManager;
-	}
+	@Inject
+	PublicationController publicationController;
 
-	private List<Runnable> execute0() {
-		if (!isEnabled(serverInstance)) {
+	@Inject
+	AvalancheReportController avalancheReportController;
+
+	@Inject
+	AvalancheBulletinController avalancheBulletinController;
+
+	@Inject
+	RegionRepository regionRepository;
+
+	@Inject
+	ServerInstanceRepository serverInstanceRepository;
+
+	@PersistenceContext
+	EntityManager entityManager;
+
+	private List<Runnable> execute0(PublicationStrategy strategy) {
+		ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
+		if (!strategy.isEnabled(serverInstance)) {
 			return null;
 		}
 		Clock system = Clock.system(AlbinaUtil.localZone());
-		Instant startDate = getStartDate(system);
-		Instant endDate = getEndDate(system);
+		Instant startDate = strategy.getStartDate(system);
+		Instant endDate = strategy.getEndDate(system);
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
-		List<Region> regions = getRegions().stream()
+		List<Region> regions = Objects.requireNonNullElseGet(strategy.getRegions(), () -> regionRepository.getPublishBulletinRegions()).stream()
 			.filter(region -> {
 				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
 				logger.info("Internal status for region {} is {}", region.getId(), status);
@@ -158,7 +164,7 @@ public class PublicationJob {
 			avalancheReport.setBulletins(regionBulletins, publishedBulletins0);
 			avalancheReport.setServerInstance(serverInstance);
 			return Stream.of(avalancheReport);
-			}).toList();
+		}).toList();
 
 		entityManager.getTransaction().commit();
 
@@ -166,7 +172,7 @@ public class PublicationJob {
 			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 
 			// send notifications only for updated regions after all maps were created
-			if (regions.contains(avalancheReport.getRegion()) && !isChange()) {
+			if (regions.contains(avalancheReport.getRegion()) && !strategy.isChange()) {
 				tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
 			}
 		}, executor));
@@ -207,11 +213,11 @@ public class PublicationJob {
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
 	 * on the current settings.
 	 */
-	public void execute() {
+	public void execute(PublicationStrategy strategy) {
 		List<Runnable> tasksAfterDirectoryUpdate;
 
 		synchronized (PublicationJob.class) {
-			tasksAfterDirectoryUpdate = execute0();
+			tasksAfterDirectoryUpdate = execute0(strategy);
 			if (tasksAfterDirectoryUpdate == null) {
 				return;
 			}
@@ -276,30 +282,6 @@ public class PublicationJob {
 			}
 		}
 		return superRegions;
-	}
-
-	protected boolean isEnabled(ServerInstance serverInstance) {
-		return serverInstance.isPublishAt5PM();
-	}
-
-	protected boolean isChange() {
-		return false;
-	}
-
-	protected Instant getStartDate(Clock clock) {
-		return ZonedDateTime.of(
-			LocalDate.now(clock),
-			AlbinaUtil.validityStart(),
-			clock.getZone()
-		).toInstant();
-	}
-
-	protected Instant getEndDate(Clock clock) {
-		return getStartDate(clock).atZone(clock.getZone()).plusDays(1).toInstant();
-	}
-
-	protected List<Region> getRegions() {
-		return regionRepository.getPublishBulletinRegions();
 	}
 
 }
