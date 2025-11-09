@@ -3,7 +3,6 @@ package eu.albina.rest;
 
 import java.nio.file.Path;
 import java.security.Principal;
-import java.time.Clock;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -23,6 +22,8 @@ import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.jobs.PublicationJob;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
@@ -57,8 +58,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +68,6 @@ import eu.albina.caaml.CaamlVersion;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.exception.AlbinaException;
-import eu.albina.jobs.ChangeJob;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -117,8 +115,8 @@ public class AvalancheBulletinService {
 	@Inject
 	private UserRepository userRepository;
 
-	@PersistenceContext
-	EntityManager entityManager;
+	@Inject
+	PublicationJob publicationJob;
 
 	@Get("/edit")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
@@ -647,20 +645,7 @@ public class AvalancheBulletinService {
 					region.getSuperRegions().stream().filter(Region::isPublishBulletins)
 				).distinct().collect(Collectors.toList());
 
-				new Thread(() -> {
-					new ChangeJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance(), entityManager) {
-						@Override
-						protected Instant getStartDate(Clock clock) {
-							return startDate;
-						}
-
-						@Override
-						protected List<Region> getRegions() {
-							return regions;
-						}
-					}.execute();
-				}, "changeBulletins").start();
-
+				publicationJob.execute(PublicationStrategy.change(startDate, regions));
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {

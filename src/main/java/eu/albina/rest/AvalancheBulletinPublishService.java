@@ -2,7 +2,6 @@
 package eu.albina.rest;
 
 import java.security.Principal;
-import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +14,7 @@ import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.jobs.PublicationStrategy;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -23,8 +23,6 @@ import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +31,9 @@ import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
-import eu.albina.jobs.UpdateJob;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
@@ -69,8 +65,8 @@ public class AvalancheBulletinPublishService {
 	@Inject
 	private UserRepository userRepository;
 
-	@PersistenceContext
-	EntityManager entityManager;
+	@Inject
+	PublicationJob publicationJob;
 
 	/**
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
@@ -94,22 +90,7 @@ public class AvalancheBulletinPublishService {
 			).distinct().collect(Collectors.toList());
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				new UpdateJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance(), entityManager) {
-					@Override
-					protected boolean isEnabled(ServerInstance serverInstance) {
-						return true;
-					}
-
-					@Override
-					protected Instant getStartDate(Clock clock) {
-						return startDate;
-					}
-
-					@Override
-					protected List<Region> getRegions() {
-						return regions;
-					}
-				}.execute();
+				publicationJob.execute(PublicationStrategy.publish(startDate, regions));
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
@@ -131,24 +112,7 @@ public class AvalancheBulletinPublishService {
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			new Thread(() -> {
-				new PublicationJob(publicationController, avalancheReportController, avalancheBulletinController, regionRepository, serverInstanceRepository.getLocalServerInstance(), entityManager) {
-					@Override
-					protected boolean isEnabled(ServerInstance serverInstance) {
-						return true;
-					}
-
-					@Override
-					protected Instant getStartDate(Clock clock) {
-						return startDate;
-					}
-
-					@Override
-					protected boolean isChange() {
-						return change;
-					}
-				}.execute();
-				}, "publishAllBulletins").start();
+			publicationJob.execute(PublicationStrategy.publishAll(startDate, change));
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
