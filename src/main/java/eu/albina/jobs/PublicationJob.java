@@ -16,6 +16,8 @@ import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +57,9 @@ public class PublicationJob {
 
 	@Inject
 	ServerInstanceRepository serverInstanceRepository;
+
+	@PersistenceContext
+	EntityManager entityManager;
 
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
@@ -157,6 +162,8 @@ public class PublicationJob {
 			avalancheReport.setServerInstance(serverInstance);
 			return Stream.of(avalancheReport);
 		}).toList();
+
+		entityManager.getTransaction().commit();
 
 		// starting from here, everything should be run async in executor, method should return
 
