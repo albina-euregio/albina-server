@@ -189,6 +189,7 @@ public class PublicationJob {
 			createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
 		}, executor);
 
+		tasksAfterDirectoryUpdate.add(() -> {}); // ensure not empty
 		Stream<CompletableFuture<Void>> futures3 = tasksAfterDirectoryUpdate.stream().map(taskAfterDirectoryUpdate -> directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor));
 		CompletableFuture<Void> phase3 = CompletableFuture.allOf(futures3.toArray(CompletableFuture[]::new));
 		phase3.thenRunAsync(() -> logger.info("Publication phase 3 done after {}", stopwatch), executor);
