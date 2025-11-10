@@ -1,35 +1,23 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Stopwatch;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Throwables;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
@@ -51,7 +39,7 @@ import eu.albina.util.AlbinaUtil;
 public class PublicationJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
-	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
+	private final ExecutorService executor = Executors.newCachedThreadPool(Thread.ofPlatform().name("publication-pool-").factory());
 
 	@Inject
 	PublicationController publicationController;
@@ -68,13 +56,15 @@ public class PublicationJob {
 	@Inject
 	ServerInstanceRepository serverInstanceRepository;
 
-	@PersistenceContext
-	EntityManager entityManager;
-
-	private List<Runnable> execute0(PublicationStrategy strategy) {
+	/**
+	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
+	 * on the current settings.
+	 */
+	public synchronized void execute(PublicationStrategy strategy) {
+		Stopwatch stopwatch = Stopwatch.createStarted();
 		ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 		if (!strategy.isEnabled(serverInstance)) {
-			return null;
+			return;
 		}
 		Clock system = Clock.system(AlbinaUtil.localZone());
 		Instant startDate = strategy.getStartDate(system);
@@ -90,7 +80,7 @@ public class PublicationJob {
 			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");
-			return null;
+			return;
 		}
 
 		for (Region region : regions) {
@@ -105,7 +95,7 @@ public class PublicationJob {
 		}
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
-			return null;
+			return;
 		}
 
 		publishedBulletins = publishedBulletins.stream()
@@ -114,7 +104,7 @@ public class PublicationJob {
 			.collect(Collectors.toList());
 		if (publishedBulletins.isEmpty()) {
 			logger.info("No published regions found in bulletins.");
-			return null;
+			return;
 		}
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		String validityDateString = AvalancheReport.of(publishedBulletins, null, serverInstance).getValidityDateString();
@@ -139,6 +129,8 @@ public class PublicationJob {
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
+
+		logger.info("Publication phase 1 done after {}", stopwatch);
 
 		// update all regions to create complete maps
 		List<AvalancheReport> allRegions = regionRepository.getPublishBulletinRegions().stream().flatMap(region -> {
@@ -166,7 +158,7 @@ public class PublicationJob {
 			return Stream.of(avalancheReport);
 		}).toList();
 
-		entityManager.getTransaction().commit();
+		// starting from here, everything should be run async in executor, method should return
 
 		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
 			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
@@ -184,92 +176,17 @@ public class PublicationJob {
 			publicationController.createRegionResources(superRegion, report);
 		}, executor));
 
-		Stream.concat(futures1, futures2).forEach(PublicationJob::await);
+		CompletableFuture<Void> phase2 = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
+		phase2.thenRunAsync(() -> logger.info("Publication phase 2 done after {}", stopwatch), executor);
+		CompletableFuture<Void> directoryUpdate = phase2.thenRunAsync(() -> {
+			publicationController.createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
+		}, executor);
 
-		try {
-			createSymbolicLinks(
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString)
-			);
-			if (AvalancheReport.of(publishedBulletins, null, null).isLatest()) {
-				createSymbolicLinks(
-					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-					Paths.get(serverInstance.getPdfDirectory(), "latest")
-				);
-				stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
-				createSymbolicLinks(
-					Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
-					Paths.get(serverInstance.getHtmlDirectory())
-				);
-			}
-		} catch (IOException e) {
-			logger.error("Failed to create symbolic links", e);
-			throw new UncheckedIOException(e);
-		}
-		return tasksAfterDirectoryUpdate;
-	}
+		tasksAfterDirectoryUpdate.add(() -> {}); // ensure not empty
+		Stream<CompletableFuture<Void>> futures3 = tasksAfterDirectoryUpdate.stream().map(taskAfterDirectoryUpdate -> directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor));
+		CompletableFuture<Void> phase3 = CompletableFuture.allOf(futures3.toArray(CompletableFuture[]::new));
+		phase3.thenRunAsync(() -> logger.info("Publication phase 3 done after {}", stopwatch), executor);
 
-	/**
-	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
-	 * on the current settings.
-	 */
-	public void execute(PublicationStrategy strategy) {
-		List<Runnable> tasksAfterDirectoryUpdate;
-
-		synchronized (PublicationJob.class) {
-			tasksAfterDirectoryUpdate = execute0(strategy);
-			if (tasksAfterDirectoryUpdate == null) {
-				return;
-			}
-		}
-
-		tasksAfterDirectoryUpdate.stream()
-			.map(CompletableFuture::runAsync)
-			.forEach(PublicationJob::await);
-	}
-
-	private static void await(CompletableFuture<Void> future) {
-		try {
-			future.get();
-		} catch (InterruptedException | ExecutionException ex) {
-			Throwables.throwIfUnchecked(ex);
-			throw new RuntimeException(ex);
-		}
-	}
-
-	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
-		// clean target directory
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory)) {
-			for (Path path : stream) {
-				if (Files.isDirectory(path)) {
-					continue;
-				}
-				logger.info("Removing existing file {}", path);
-				Files.delete(path);
-			}
-		}
-		// create symbolic links
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(fromDirectory)) {
-			for (Path path : stream) {
-				if (Files.isDirectory(path)) {
-					continue;
-				}
-				Path link = toDirectory.resolve(path.getFileName());
-				Path target = toDirectory.relativize(path);
-				logger.info("Creating symbolic link {} to {}", link, target);
-				Files.createSymbolicLink(link, target);
-			}
-		}
-	}
-
-	void stripDateFromFilenames(Path directory, String validityDateString) throws IOException {
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, validityDateString + "*")) {
-			for (Path path : stream) {
-				Path target = path.resolveSibling(path.getFileName().toString().substring(validityDateString.length() + 1));
-				logger.info("Renaming file {} to {}", path, target);
-				Files.move(path, target, StandardCopyOption.REPLACE_EXISTING);
-			}
-		}
 	}
 
 	private static Set<Region> getSuperRegions(List<Region> regions) {

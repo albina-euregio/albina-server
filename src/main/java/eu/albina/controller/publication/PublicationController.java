@@ -4,9 +4,16 @@
 package eu.albina.controller.publication;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
+import eu.albina.model.ServerInstance;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -217,6 +224,67 @@ public class PublicationController {
 				c.setAvalancheReportFlag(avalancheReport.getId(), AvalancheReport::setPushSent);
 			} catch (Exception e) {
 				logger.error("Error sending " + posting, e);
+			}
+		}
+	}
+
+	public void createSymbolicLinks(AvalancheReport avalancheReport) {
+		ServerInstance serverInstance = avalancheReport.getServerInstance();
+		String validityDateString = avalancheReport.getValidityDateString();
+		String publicationTimeString = avalancheReport.getPublicationTimeString();
+		try {
+			createSymbolicLinks(
+				Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
+				Paths.get(serverInstance.getPdfDirectory(), validityDateString)
+			);
+			if (avalancheReport.isLatest()) {
+				createSymbolicLinks(
+					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
+					Paths.get(serverInstance.getPdfDirectory(), "latest")
+				);
+				stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
+				createSymbolicLinks(
+					Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
+					Paths.get(serverInstance.getHtmlDirectory())
+				);
+			}
+		} catch (IOException e) {
+			logger.error("Failed to create symbolic links", e);
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
+		// clean target directory
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory)) {
+			for (Path path : stream) {
+				if (Files.isDirectory(path)) {
+					continue;
+				}
+				logger.info("Removing existing file {}", path);
+				Files.delete(path);
+			}
+		}
+		// create symbolic links
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(fromDirectory)) {
+			for (Path path : stream) {
+				if (Files.isDirectory(path)) {
+					continue;
+				}
+				Path link = toDirectory.resolve(path.getFileName());
+				Path target = toDirectory.relativize(path);
+				logger.info("Creating symbolic link {} to {}", link, target);
+				Files.createSymbolicLink(link, target);
+			}
+		}
+	}
+
+	void stripDateFromFilenames(Path directory, String validityDateString) throws IOException {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, validityDateString + "*")) {
+			for (Path path : stream) {
+				Path target = path.resolveSibling(path.getFileName().toString().substring(validityDateString.length() + 1));
+				logger.info("Renaming file {} to {}", path, target);
+				Files.move(path, target, StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
 	}
