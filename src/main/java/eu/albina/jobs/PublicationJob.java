@@ -184,16 +184,14 @@ public class PublicationJob {
 		}, executor));
 
 		CompletableFuture<Void> phase2 = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
+		phase2.thenRunAsync(() -> logger.info("Publication phase 2 done after {}", stopwatch), executor);
 		CompletableFuture<Void> directoryUpdate = phase2.thenRunAsync(() -> {
-			logger.info("Publication phase 2 done after {}", stopwatch);
 			createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
 		}, executor);
 
 		Stream<CompletableFuture<Void>> futures3 = tasksAfterDirectoryUpdate.stream().map(taskAfterDirectoryUpdate -> directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor));
 		CompletableFuture<Void> phase3 = CompletableFuture.allOf(futures3.toArray(CompletableFuture[]::new));
-		phase3.thenRunAsync(() -> {
-			logger.info("Publication phase 3 done after {}", stopwatch);
-		}, executor);
+		phase3.thenRunAsync(() -> logger.info("Publication phase 3 done after {}", stopwatch), executor);
 
 	}
 
