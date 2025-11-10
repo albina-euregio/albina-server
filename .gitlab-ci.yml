@@ -16,6 +16,9 @@ variables:
 cache:
     paths:
         - .m2/repository
+    key:
+        files:
+            - pom.xml
 
 build:
     stage: build

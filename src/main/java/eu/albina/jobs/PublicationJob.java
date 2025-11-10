@@ -5,9 +5,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,7 +37,6 @@ import eu.albina.util.AlbinaUtil;
 public class PublicationJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
-	private final ExecutorService executor = Executors.newCachedThreadPool(Thread.ofPlatform().name("publication-pool-").factory());
 
 	@Inject
 	PublicationController publicationController;
@@ -128,8 +125,6 @@ public class PublicationJob {
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
-		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
-
 		logger.info("Publication phase 1 done after {}", stopwatch);
 
 		// update all regions to create complete maps
@@ -160,33 +155,62 @@ public class PublicationJob {
 
 		// starting from here, everything should be run async in executor, method should return
 
-		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
-			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
+		Thread.startVirtualThread(() -> {
+			Queue<Runnable> tasksAfterDirectoryUpdate = new ConcurrentLinkedDeque<>();
 
-			// send notifications only for updated regions after all maps were created
-			if (regions.contains(avalancheReport.getRegion()) && !strategy.isChange()) {
-				tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
+			Collection<Thread> phase2 = new ArrayList<>();
+			for (AvalancheReport avalancheReport : allRegions) {
+				phase2.add(Thread.startVirtualThread(() -> {
+					logger.info("Creating resources for {}", avalancheReport);
+					publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
+
+					if (strategy.isChange()) {
+						logger.info("Skipping sendToAllChannels since publication isChange");
+						return;
+					}
+					if (!regions.contains(avalancheReport.getRegion())) {
+						logger.info("Skipping sendToAllChannels since report {} is not part of {}", avalancheReport, regions);
+						return;
+					}
+					// send notifications only for updated regions after all maps were created
+					logger.info("Scheduling sendToAllChannels for {}", avalancheReport);
+					tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
+				}));
 			}
-		}, executor));
+			for (Region superRegion : getSuperRegions(regions)) {
+				// update all super regions
+				phase2.add(Thread.startVirtualThread(() -> {
+					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, publishedBulletins0, publicationTimeString);
+					AvalancheReport report = AvalancheReport.of(publishedBulletins0, superRegion, serverInstance);
+					publicationController.createRegionResources(superRegion, report);
+				}));
+			}
 
-		// update all super regions
-		Stream<CompletableFuture<Void>> futures2 = getSuperRegions(regions).stream().map(superRegion -> CompletableFuture.runAsync(() -> {
-			logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, publishedBulletins0, publicationTimeString);
-			AvalancheReport report = AvalancheReport.of(publishedBulletins0, superRegion, serverInstance);
-			publicationController.createRegionResources(superRegion, report);
-		}, executor));
+			for (Thread thread : phase2) {
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			logger.info("Publication phase 2 done after {}", stopwatch);
 
-		CompletableFuture<Void> phase2 = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
-		phase2.thenRunAsync(() -> logger.info("Publication phase 2 done after {}", stopwatch), executor);
-		CompletableFuture<Void> directoryUpdate = phase2.thenRunAsync(() -> {
 			publicationController.createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
-		}, executor);
 
-		tasksAfterDirectoryUpdate.add(() -> {}); // ensure not empty
-		Stream<CompletableFuture<Void>> futures3 = tasksAfterDirectoryUpdate.stream().map(taskAfterDirectoryUpdate -> directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor));
-		CompletableFuture<Void> phase3 = CompletableFuture.allOf(futures3.toArray(CompletableFuture[]::new));
-		phase3.thenRunAsync(() -> logger.info("Publication phase 3 done after {}", stopwatch), executor);
+			Collection<Thread> phase3 = new ArrayList<>();
+			for (Runnable runnable : tasksAfterDirectoryUpdate) {
+				phase3.add(Thread.startVirtualThread(runnable));
+			}
 
+			for (Thread thread : phase3) {
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			}
+			logger.info("Publication phase 3 done after {}", stopwatch);
+		});
 	}
 
 	private static Set<Region> getSuperRegions(List<Region> regions) {
