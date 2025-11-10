@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.jobs;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -186,7 +179,7 @@ public class PublicationJob {
 		CompletableFuture<Void> phase2 = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
 		phase2.thenRunAsync(() -> logger.info("Publication phase 2 done after {}", stopwatch), executor);
 		CompletableFuture<Void> directoryUpdate = phase2.thenRunAsync(() -> {
-			createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
+			publicationController.createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
 		}, executor);
 
 		tasksAfterDirectoryUpdate.add(() -> {}); // ensure not empty
@@ -194,67 +187,6 @@ public class PublicationJob {
 		CompletableFuture<Void> phase3 = CompletableFuture.allOf(futures3.toArray(CompletableFuture[]::new));
 		phase3.thenRunAsync(() -> logger.info("Publication phase 3 done after {}", stopwatch), executor);
 
-	}
-
-	void createSymbolicLinks(AvalancheReport avalancheReport) {
-		ServerInstance serverInstance = avalancheReport.getServerInstance();
-		String validityDateString = avalancheReport.getValidityDateString();
-		String publicationTimeString = avalancheReport.getPublicationTimeString();
-		try {
-			createSymbolicLinks(
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString)
-			);
-			if (avalancheReport.isLatest()) {
-				createSymbolicLinks(
-					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-					Paths.get(serverInstance.getPdfDirectory(), "latest")
-				);
-				stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
-				createSymbolicLinks(
-					Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
-					Paths.get(serverInstance.getHtmlDirectory())
-				);
-			}
-		} catch (IOException e) {
-			logger.error("Failed to create symbolic links", e);
-			throw new UncheckedIOException(e);
-		}
-	}
-
-	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
-		// clean target directory
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory)) {
-			for (Path path : stream) {
-				if (Files.isDirectory(path)) {
-					continue;
-				}
-				logger.info("Removing existing file {}", path);
-				Files.delete(path);
-			}
-		}
-		// create symbolic links
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(fromDirectory)) {
-			for (Path path : stream) {
-				if (Files.isDirectory(path)) {
-					continue;
-				}
-				Path link = toDirectory.resolve(path.getFileName());
-				Path target = toDirectory.relativize(path);
-				logger.info("Creating symbolic link {} to {}", link, target);
-				Files.createSymbolicLink(link, target);
-			}
-		}
-	}
-
-	void stripDateFromFilenames(Path directory, String validityDateString) throws IOException {
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, validityDateString + "*")) {
-			for (Path path : stream) {
-				Path target = path.resolveSibling(path.getFileName().toString().substring(validityDateString.length() + 1));
-				logger.info("Renaming file {} to {}", path, target);
-				Files.move(path, target, StandardCopyOption.REPLACE_EXISTING);
-			}
-		}
 	}
 
 	private static Set<Region> getSuperRegions(List<Region> regions) {
