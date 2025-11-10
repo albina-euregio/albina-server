@@ -186,26 +186,7 @@ public class PublicationJob {
 		CompletableFuture<Void> phase2 = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
 		CompletableFuture<Void> directoryUpdate = phase2.thenRunAsync(() -> {
 			logger.info("Publication phase 2 done after {}", stopwatch);
-			try {
-				createSymbolicLinks(
-					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-					Paths.get(serverInstance.getPdfDirectory(), validityDateString)
-				);
-				if (AvalancheReport.of(publishedBulletins0, null, null).isLatest()) {
-					createSymbolicLinks(
-						Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-						Paths.get(serverInstance.getPdfDirectory(), "latest")
-					);
-					stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
-					createSymbolicLinks(
-						Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
-						Paths.get(serverInstance.getHtmlDirectory())
-					);
-				}
-			} catch (IOException e) {
-				logger.error("Failed to create symbolic links", e);
-				throw new UncheckedIOException(e);
-			}
+			createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
 		}, executor);
 
 		Stream<CompletableFuture<Void>> futures3 = tasksAfterDirectoryUpdate.stream().map(taskAfterDirectoryUpdate -> directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor));
@@ -214,6 +195,32 @@ public class PublicationJob {
 			logger.info("Publication phase 3 done after {}", stopwatch);
 		}, executor);
 
+	}
+
+	void createSymbolicLinks(AvalancheReport avalancheReport) {
+		ServerInstance serverInstance = avalancheReport.getServerInstance();
+		String validityDateString = avalancheReport.getValidityDateString();
+		String publicationTimeString = avalancheReport.getPublicationTimeString();
+		try {
+			createSymbolicLinks(
+				Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
+				Paths.get(serverInstance.getPdfDirectory(), validityDateString)
+			);
+			if (avalancheReport.isLatest()) {
+				createSymbolicLinks(
+					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
+					Paths.get(serverInstance.getPdfDirectory(), "latest")
+				);
+				stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
+				createSymbolicLinks(
+					Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
+					Paths.get(serverInstance.getHtmlDirectory())
+				);
+			}
+		} catch (IOException e) {
+			logger.error("Failed to create symbolic links", e);
+			throw new UncheckedIOException(e);
+		}
 	}
 
 	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
