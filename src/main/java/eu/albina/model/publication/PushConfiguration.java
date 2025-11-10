@@ -4,6 +4,7 @@ package eu.albina.model.publication;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.google.common.base.MoreObjects;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -84,6 +85,9 @@ public class PushConfiguration implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PushConfig{" + "id=" + getId() + "}";
+		return MoreObjects.toStringHelper(this)
+			.add("id", id)
+			.add("vapidPublicKey", vapidPublicKey)
+			.toString();
 	}
 }

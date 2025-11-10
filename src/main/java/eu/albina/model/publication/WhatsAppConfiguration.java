@@ -4,6 +4,7 @@ package eu.albina.model.publication;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.google.common.base.MoreObjects;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import io.micronaut.serde.annotation.Serdeable;
@@ -124,7 +125,11 @@ public class WhatsAppConfiguration implements Serializable {
 
 	@Override
 	public String toString() {
-		return "WhatsAppConfig{" + "id=" + getId() + ", apiToken='" + getApiToken() + "'" + ", chatId='" + getChatId()
-				+ "'" + ", lanugageCode='" + getLanguageCode() + "'" + "}";
+		return MoreObjects.toStringHelper(this)
+			.add("id", id)
+			.add("region", region)
+			.add("chatId", chatId)
+			.add("languageCode", languageCode)
+			.toString();
 	}
 }
