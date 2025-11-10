@@ -27,8 +27,6 @@ import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.PublicationController;
@@ -49,7 +47,7 @@ import eu.albina.util.AlbinaUtil;
 public class PublicationJob {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicationJob.class);
-	private final ExecutorService executor = Executors.newCachedThreadPool(new ThreadFactoryBuilder().setNameFormat("publication-pool-%d").build());
+	private final ExecutorService executor = Executors.newCachedThreadPool(Thread.ofPlatform().name("publication-pool-").factory());
 
 	@Inject
 	PublicationController publicationController;
