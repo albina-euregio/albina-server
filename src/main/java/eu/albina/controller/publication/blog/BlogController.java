@@ -151,7 +151,7 @@ public class BlogController {
 		for (BlogItem object : blogPosts) {
 			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
 			posting.tryRunWithLogging("Email newsletter", () -> {
-				RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(null, config.getLanguageCode(), subjectMatter)
+				RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(config.getLanguageCode(), subjectMatter)
 					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));
 				mailConfig.setRegion(regionOverride);
 				rapidMailController.sendEmail(mailConfig, posting.getHtmlMessage(), posting.getSubject());
