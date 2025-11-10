@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Stopwatch;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.ServerInstanceRepository;
 import jakarta.inject.Inject;
@@ -67,6 +68,7 @@ public class PublicationJob {
 	 * on the current settings.
 	 */
 	public synchronized void execute(PublicationStrategy strategy) {
+		Stopwatch stopwatch = Stopwatch.createStarted();
 		ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 		if (!strategy.isEnabled(serverInstance)) {
 			return;
@@ -135,6 +137,8 @@ public class PublicationJob {
 
 		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
 
+		logger.info("Publication phase 1 done after {}", stopwatch);
+
 		// update all regions to create complete maps
 		List<AvalancheReport> allRegions = regionRepository.getPublishBulletinRegions().stream().flatMap(region -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
@@ -179,8 +183,9 @@ public class PublicationJob {
 			publicationController.createRegionResources(superRegion, report);
 		}, executor));
 
-		CompletableFuture<Void> all = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
-		CompletableFuture<Void> directoryUpdate = all.thenRunAsync(() -> {
+		CompletableFuture<Void> phase2 = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
+		CompletableFuture<Void> directoryUpdate = phase2.thenRunAsync(() -> {
+			logger.info("Publication phase 2 done after {}", stopwatch);
 			try {
 				createSymbolicLinks(
 					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
@@ -203,9 +208,12 @@ public class PublicationJob {
 			}
 		}, executor);
 
-		for (Runnable taskAfterDirectoryUpdate : tasksAfterDirectoryUpdate) {
-			directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor);
-		}
+		Stream<CompletableFuture<Void>> futures3 = tasksAfterDirectoryUpdate.stream().map(taskAfterDirectoryUpdate -> directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor));
+		CompletableFuture<Void> phase3 = CompletableFuture.allOf(futures3.toArray(CompletableFuture[]::new));
+		phase3.thenRunAsync(() -> {
+			logger.info("Publication phase 3 done after {}", stopwatch);
+		}, executor);
+
 	}
 
 	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
