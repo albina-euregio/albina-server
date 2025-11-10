@@ -163,10 +163,16 @@ public class PublicationJob {
 		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
 			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 
-			// send notifications only for updated regions after all maps were created
-			if (regions.contains(avalancheReport.getRegion()) && !strategy.isChange()) {
-				tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
+			if (strategy.isChange()) {
+				logger.info("Skipping sendToAllChannels since publication isChange");
+				return;
 			}
+			if (!regions.contains(avalancheReport.getRegion())) {
+				logger.info("Skipping sendToAllChannels since report {} is not part of {}", avalancheReport, regions);
+				return;
+			}
+			// send notifications only for updated regions after all maps were created
+			tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
 		}, executor));
 
 		// update all super regions
