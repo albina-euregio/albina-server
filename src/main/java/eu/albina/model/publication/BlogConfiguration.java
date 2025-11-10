@@ -139,7 +139,6 @@ public class BlogConfiguration implements Serializable {
 		return MoreObjects.toStringHelper(this)
 			.add("id", id)
 			.add("region", region)
-			.add("apiKey", apiKey)
 			.add("blogId", blogId)
 			.add("blogUrl", blogUrl)
 			.add("blogApiUrl", blogApiUrl)

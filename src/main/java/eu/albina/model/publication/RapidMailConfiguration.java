@@ -118,8 +118,6 @@ public class RapidMailConfiguration implements Serializable {
 		return MoreObjects.toStringHelper(this)
 			.add("id", id)
 			.add("region", region)
-			.add("username", username)
-			.add("password", password)
 			.add("lang", languageCode)
 			.add("mailinglistName", mailinglistName)
 			.add("subjectMatter", subjectMatter)
