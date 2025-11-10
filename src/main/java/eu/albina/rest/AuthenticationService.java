@@ -2,11 +2,14 @@
 package eu.albina.rest;
 
 import java.security.Principal;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.UserRepository;
+import eu.albina.util.AlbinaUtil;
 import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -14,6 +17,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.scheduling.annotation.Scheduled;
 import io.micronaut.security.annotation.Secured;
 
 import eu.albina.model.Region;
@@ -22,6 +26,7 @@ import eu.albina.model.enumerations.Role;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.security.token.generator.AccessRefreshTokenGenerator;
+import io.micronaut.security.token.generator.AccessTokenConfigurationProperties;
 import io.micronaut.security.token.render.AccessRefreshToken;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,6 +50,9 @@ public class AuthenticationService {
 
 	@Inject
 	AccessRefreshTokenGenerator tokenGenerator;
+
+	@Inject
+	AccessTokenConfigurationProperties accessTokenConfigurationProperties;
 
 	@Inject
 	private UserRepository userRepository;
@@ -93,5 +101,15 @@ public class AuthenticationService {
 	public Username testAuth(Principal principal) {
 		String username = principal.getName();
 		return new Username(username);
+	}
+
+	@Scheduled(initialDelay = "1s", fixedRate = "1m")
+	public void updateExpiration() {
+		ZonedDateTime now = ZonedDateTime.now(AlbinaUtil.localZone());
+		long seconds = ChronoUnit.SECONDS.between(
+			now,
+			now.plusDays(1).withHour(3) // tomorrow at 03:00
+		);
+		accessTokenConfigurationProperties.setExpiration(((int) seconds));
 	}
 }
