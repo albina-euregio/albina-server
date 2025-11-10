@@ -6,6 +6,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.UserRepository;
@@ -85,7 +86,8 @@ public class AuthenticationService {
 			userRepository.authenticate(username, password);
 			User user = userRepository.findById(username).orElseThrow();
 			List<String> roles = user.getRoles().stream().map(Role::toString).toList();
-			Authentication authentication = Authentication.build(username, roles);
+			List<String> regions = user.getRegions().stream().map(Region::getId).sorted().toList();
+			Authentication authentication = Authentication.build(username, roles, Map.of("regions", regions));
 			AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
 
 			return new AuthenticationResponse(user, user.getRegions(), token.getAccessToken());
