@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -28,7 +27,6 @@ import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import eu.albina.controller.AvalancheBulletinController;
@@ -71,10 +69,14 @@ public class PublicationJob {
 	@PersistenceContext
 	EntityManager entityManager;
 
-	private List<Runnable> execute0(PublicationStrategy strategy) {
+	/**
+	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
+	 * on the current settings.
+	 */
+	public synchronized void execute(PublicationStrategy strategy) {
 		ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
 		if (!strategy.isEnabled(serverInstance)) {
-			return null;
+			return;
 		}
 		Clock system = Clock.system(AlbinaUtil.localZone());
 		Instant startDate = strategy.getStartDate(system);
@@ -90,7 +92,7 @@ public class PublicationJob {
 			}).collect(Collectors.toList());
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");
-			return null;
+			return;
 		}
 
 		for (Region region : regions) {
@@ -105,7 +107,7 @@ public class PublicationJob {
 		}
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
-			return null;
+			return;
 		}
 
 		publishedBulletins = publishedBulletins.stream()
@@ -114,7 +116,7 @@ public class PublicationJob {
 			.collect(Collectors.toList());
 		if (publishedBulletins.isEmpty()) {
 			logger.info("No published regions found in bulletins.");
-			return null;
+			return;
 		}
 		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		String validityDateString = AvalancheReport.of(publishedBulletins, null, serverInstance).getValidityDateString();
@@ -168,6 +170,8 @@ public class PublicationJob {
 
 		entityManager.getTransaction().commit();
 
+		// starting from here, everything should be run async in executor, method should return
+
 		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
 			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 
@@ -184,56 +188,32 @@ public class PublicationJob {
 			publicationController.createRegionResources(superRegion, report);
 		}, executor));
 
-		Stream.concat(futures1, futures2).forEach(PublicationJob::await);
-
-		try {
-			createSymbolicLinks(
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString)
-			);
-			if (AvalancheReport.of(publishedBulletins, null, null).isLatest()) {
+		CompletableFuture<Void> all = CompletableFuture.allOf(Stream.concat(futures1, futures2).toArray(CompletableFuture[]::new));
+		CompletableFuture<Void> directoryUpdate = all.thenRunAsync(() -> {
+			try {
 				createSymbolicLinks(
 					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-					Paths.get(serverInstance.getPdfDirectory(), "latest")
+					Paths.get(serverInstance.getPdfDirectory(), validityDateString)
 				);
-				stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
-				createSymbolicLinks(
-					Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
-					Paths.get(serverInstance.getHtmlDirectory())
-				);
+				if (AvalancheReport.of(publishedBulletins0, null, null).isLatest()) {
+					createSymbolicLinks(
+						Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
+						Paths.get(serverInstance.getPdfDirectory(), "latest")
+					);
+					stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
+					createSymbolicLinks(
+						Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
+						Paths.get(serverInstance.getHtmlDirectory())
+					);
+				}
+			} catch (IOException e) {
+				logger.error("Failed to create symbolic links", e);
+				throw new UncheckedIOException(e);
 			}
-		} catch (IOException e) {
-			logger.error("Failed to create symbolic links", e);
-			throw new UncheckedIOException(e);
-		}
-		return tasksAfterDirectoryUpdate;
-	}
+		}, executor);
 
-	/**
-	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
-	 * on the current settings.
-	 */
-	public void execute(PublicationStrategy strategy) {
-		List<Runnable> tasksAfterDirectoryUpdate;
-
-		synchronized (PublicationJob.class) {
-			tasksAfterDirectoryUpdate = execute0(strategy);
-			if (tasksAfterDirectoryUpdate == null) {
-				return;
-			}
-		}
-
-		tasksAfterDirectoryUpdate.stream()
-			.map(CompletableFuture::runAsync)
-			.forEach(PublicationJob::await);
-	}
-
-	private static void await(CompletableFuture<Void> future) {
-		try {
-			future.get();
-		} catch (InterruptedException | ExecutionException ex) {
-			Throwables.throwIfUnchecked(ex);
-			throw new RuntimeException(ex);
+		for (Runnable taskAfterDirectoryUpdate : tasksAfterDirectoryUpdate) {
+			directoryUpdate.thenRunAsync(taskAfterDirectoryUpdate, executor);
 		}
 	}
 
