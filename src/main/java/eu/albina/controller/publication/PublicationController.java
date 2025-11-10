@@ -229,6 +229,7 @@ public class PublicationController {
 	}
 
 	public void createSymbolicLinks(AvalancheReport avalancheReport) {
+		Stopwatch stopwatch = Stopwatch.createStarted();
 		ServerInstance serverInstance = avalancheReport.getServerInstance();
 		String validityDateString = avalancheReport.getValidityDateString();
 		String publicationTimeString = avalancheReport.getPublicationTimeString();
@@ -251,6 +252,8 @@ public class PublicationController {
 		} catch (IOException e) {
 			logger.error("Failed to create symbolic links", e);
 			throw new UncheckedIOException(e);
+		} finally {
+			logger.info("Creating symbolic links done after {}", stopwatch);
 		}
 	}
 

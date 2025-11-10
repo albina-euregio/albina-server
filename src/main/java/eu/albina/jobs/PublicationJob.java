@@ -161,6 +161,7 @@ public class PublicationJob {
 		// starting from here, everything should be run async in executor, method should return
 
 		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
+			logger.info("Creating resources for {}", avalancheReport);
 			publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 
 			if (strategy.isChange()) {
@@ -172,6 +173,7 @@ public class PublicationJob {
 				return;
 			}
 			// send notifications only for updated regions after all maps were created
+			logger.info("Scheduling sendToAllChannels for {}", avalancheReport);
 			tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
 		}, executor));
 
