@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -128,8 +129,6 @@ public class PublicationJob {
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
-		List<Runnable> tasksAfterDirectoryUpdate = new ArrayList<>();
-
 		logger.info("Publication phase 1 done after {}", stopwatch);
 
 		// update all regions to create complete maps
@@ -159,6 +158,7 @@ public class PublicationJob {
 		}).toList();
 
 		// starting from here, everything should be run async in executor, method should return
+		Queue<Runnable> tasksAfterDirectoryUpdate = new ConcurrentLinkedDeque<>();
 
 		Stream<CompletableFuture<Void>> futures1 = allRegions.stream().map(avalancheReport -> CompletableFuture.runAsync(() -> {
 			logger.info("Creating resources for {}", avalancheReport);
