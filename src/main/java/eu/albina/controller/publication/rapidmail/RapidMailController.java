@@ -157,7 +157,7 @@ public class RapidMailController {
 			region.getWarningServiceName(lang),
 			null,
 			null,
-			null,
+			"scheduled",
 			subject
 		);
 		sendMessage(request, config);
