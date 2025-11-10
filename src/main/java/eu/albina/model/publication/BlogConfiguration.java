@@ -26,6 +26,7 @@ import jakarta.persistence.Table;
 public class BlogConfiguration implements Serializable {
 
 	public static final String TECH_BLOG_ID = "tech";
+	public static final String TECH_BLOG_REGION_OVERRIDE = "AT-07";
 
 	public boolean isBlogger() {
 		return "https://www.googleapis.com/blogger/v3/blogs/".equals(blogApiUrl);

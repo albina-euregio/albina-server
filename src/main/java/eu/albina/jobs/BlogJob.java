@@ -50,7 +50,8 @@ public class BlogJob {
 			}
 		}
 		try {
-			blogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, new Region("AT-07"));
+			Region region = regionRepository.findById(BlogConfiguration.TECH_BLOG_REGION_OVERRIDE).orElseThrow();
+			blogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, region);
 		} catch (IOException | InterruptedException e) {
 			logger.warn("Blog job failed", e);
 		}
