@@ -191,7 +191,7 @@ public interface MapUtil {
 		}
 
 		final SimpleBindings bindings = new SimpleBindings(new TreeMap<>());
-		final Path geodataPath = Paths.get(avalancheReport.getServerInstance().getMapProductionUrl()).resolve(region.getGeoDataDirectory());
+		final Path geodataPath = Paths.get(avalancheReport.getServerInstance().mapProductionUrl()).resolve(region.getGeoDataDirectory());
 
 		Path bounds = MapUtil.mapProductionResource(geodataPath, "bounds.geojson");
 		FeatureCollection features = new ObjectMapper().readValue(Files.readString(bounds, StandardCharsets.UTF_8), FeatureCollection.class);

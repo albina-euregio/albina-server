@@ -2,8 +2,8 @@
 package eu.albina.jobs;
 
 import eu.albina.controller.RegionRepository;
+import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.util.AlbinaUtil;
 import jakarta.annotation.Nullable;
 
@@ -19,8 +19,8 @@ public interface PublicationStrategy {
 	static PublicationStrategy publishAt5PM() {
 		return new PublicationStrategy() {
 			@Override
-			public boolean isEnabled(ServerInstance serverInstance) {
-				return serverInstance.isPublishAt5PM();
+			public boolean isEnabled(LocalServerInstance serverInstance) {
+				return serverInstance.publishAt5PM();
 			}
 
 			@Override
@@ -42,8 +42,8 @@ public interface PublicationStrategy {
 	static PublicationStrategy updateAt8AM() {
 		return new PublicationStrategy() {
 			@Override
-			public boolean isEnabled(ServerInstance serverInstance) {
-				return serverInstance.isPublishAt8AM();
+			public boolean isEnabled(LocalServerInstance serverInstance) {
+				return serverInstance.publishAt8AM();
 			}
 
 			@Override
@@ -65,7 +65,7 @@ public interface PublicationStrategy {
 	static PublicationStrategy change() {
 		return new PublicationStrategy() {
 			@Override
-			public boolean isEnabled(ServerInstance serverInstance) {
+			public boolean isEnabled(LocalServerInstance serverInstance) {
 				return true;
 			}
 
@@ -90,7 +90,7 @@ public interface PublicationStrategy {
 		Objects.requireNonNull(regions, "regions");
 		return new PublicationStrategy() {
 			@Override
-			public boolean isEnabled(ServerInstance serverInstance) {
+			public boolean isEnabled(LocalServerInstance serverInstance) {
 				return true;
 			}
 
@@ -116,7 +116,7 @@ public interface PublicationStrategy {
 		Objects.requireNonNull(regions, "regions");
 		return new PublicationStrategy() {
 			@Override
-			public boolean isEnabled(ServerInstance serverInstance) {
+			public boolean isEnabled(LocalServerInstance serverInstance) {
 				return true;
 			}
 
@@ -137,7 +137,7 @@ public interface PublicationStrategy {
 		};
 	}
 
-	boolean isEnabled(ServerInstance serverInstance);
+	boolean isEnabled(LocalServerInstance serverInstance);
 
 	boolean isChange();
 

@@ -16,16 +16,38 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.StandardSystemProperty;
-import io.micronaut.context.annotation.Value;
-import eu.albina.controller.publication.PublicationController;
+import com.google.common.base.Stopwatch;
+import com.google.common.util.concurrent.RateLimiter;
+
+import eu.albina.caaml.Caaml;
+import eu.albina.caaml.CaamlVersion;
+import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionRepository;
-import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
 import eu.albina.jobs.PublicationStrategy;
+import eu.albina.map.MapUtil;
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.LocalServerInstance;
+import eu.albina.model.Region;
+import eu.albina.model.User;
+import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DangerRating;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.Role;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
+import eu.albina.util.PdfUtil;
+import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -34,21 +56,17 @@ import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.http.server.types.files.SystemFile;
 import io.micronaut.security.annotation.Secured;
-import io.micronaut.http.annotation.Produces;
-
-import com.google.common.base.Stopwatch;
-import com.google.common.util.concurrent.RateLimiter;
-import eu.albina.model.ServerInstance;
-import eu.albina.caaml.Caaml;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
@@ -58,29 +76,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.MoreObjects;
-
-import eu.albina.caaml.CaamlVersion;
-import eu.albina.controller.AvalancheBulletinController;
-import eu.albina.controller.AvalancheReportController;
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.Region;
-import eu.albina.model.User;
-import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.Role;
-import eu.albina.map.MapUtil;
-import eu.albina.util.PdfUtil;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Parameter;
 
 @Controller("/bulletins")
 @Tag(name = "bulletins")
@@ -99,9 +97,6 @@ public class AvalancheBulletinService {
 	Caaml caaml;
 
 	@Inject
-	PublicationController publicationController;
-
-	@Inject
 	private AvalancheBulletinController avalancheBulletinController;
 
 	@Inject
@@ -111,7 +106,7 @@ public class AvalancheBulletinService {
 	RegionRepository regionRepository;
 
 	@Inject
-	private ServerInstanceRepository serverInstanceRepository;
+	private GlobalVariables globalVariables;
 
 	@Inject
 	private UserRepository userRepository;
@@ -163,7 +158,7 @@ public class AvalancheBulletinService {
 			List<AvalancheBulletin> bulletins = avalancheBulletinController.getBulletins(startDate, endDate, regions);
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 			bulletins.forEach(b -> b.setPublishedRegions(b.getPublishedAndSavedRegions()));
-			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, serverInstanceRepository.getLocalServerInstance());
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, globalVariables.getLocalServerInstance());
 			avalancheReport.setStatus(BulletinStatus.draft);
 			return makeCAAML(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 		} catch (RuntimeException e) {
@@ -221,7 +216,7 @@ public class AvalancheBulletinService {
 		try {
 			AvalancheReport avalancheReport = AvalancheReport.of(
 				avalancheReportController.getPublishedBulletins(startDate, regions), null,
-				serverInstanceRepository.getLocalServerInstance());
+				globalVariables.getLocalServerInstance());
 			return makeCAAML(avalancheReport, language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
@@ -285,8 +280,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
-			ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
-			serverInstance.setPdfDirectory(resolveTmpPath(tmpOverride).toString());
+			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(tmpOverride).toString(), null);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return new SystemFile(pdf.toFile());
@@ -314,8 +308,7 @@ public class AvalancheBulletinService {
 			pdfRateLimiter.acquire();
 			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			Region region = regionRepository.findById(regionId).orElseThrow();
-			ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
-			serverInstance.setPdfDirectory(resolveTmpPath(tmpOverride).toString());
+			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(tmpOverride).toString(), null);
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return new SystemFile(pdf.toFile());
@@ -390,9 +383,7 @@ public class AvalancheBulletinService {
 				.collect(Collectors.toList());
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
-			ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
-			serverInstance.setMapsPath(resolveTmpPath(tmpOverride).toString());
-			serverInstance.setPdfDirectory(resolveTmpPath(tmpOverride).toString());
+			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(tmpOverride).toString(), resolveTmpPath(tmpOverride).toString());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setStatus(BulletinStatus.draft); // preview
 

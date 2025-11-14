@@ -55,9 +55,6 @@ public class AvalancheReportController {
 	AvalancheReportRepository avalancheReportRepository;
 
 	@Inject
-	UserRepository userRepository;
-
-	@Inject
 	ObjectMapper objectMapper;
 
 	@Repository
@@ -349,19 +346,17 @@ public class AvalancheReportController {
 	 * @param bulletins       the bulletins which are affected by the publication
 	 * @param startDate       the start date of the time period
 	 * @param region          the region that should be published
-	 * @param username        the user who publishes the report
 	 * @param publicationDate the timestamp when the report was published
 	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
 	 */
-	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, String username,
+	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
 										 Instant publicationDate) {
-		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
 		AvalancheReport report = getInternalReport(startDate, region);
 
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
-		avalancheReport.setUser(user);
+		avalancheReport.setUser(null); // FIXME region.getWarningServiceEmail
 		avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
 		if (report == null) {
@@ -410,7 +405,7 @@ public class AvalancheReportController {
 		}
 
 		avalancheReportRepository.save(avalancheReport);
-		logger.info("Report for region {} published by {}", region.getId(), user);
+		logger.info("Report for region {} published", region.getId());
 		return avalancheReport;
 	}
 

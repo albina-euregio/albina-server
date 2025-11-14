@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,6 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.DangerRating;
 
@@ -440,26 +438,16 @@ public class AvalancheBulletinController {
 	 * @param endDate         the end date of the time period
 	 * @param region          the region that should be published
 	 * @param publicationDate the timestamp of the publication
-	 * @param username        the user who publishes the bulletins
 	 */
 	public void publishBulletins(Instant startDate, Instant endDate, Region region,
-								 Instant publicationDate, String username) {
+								 Instant publicationDate) {
 
-		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
 		List<AvalancheBulletin> bulletins = getAllBulletins(startDate, endDate);
 
 		for (AvalancheBulletin bulletin : bulletins) {
 
 			// select bulletins within the region
 			if (bulletin.affectsRegionWithoutSuggestions(region)) {
-
-				// set author
-				ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
-				if (user != null && !Objects.equals(user.getEmail(), serverInstance.getUserName())) {
-					if (!bulletin.getAdditionalAuthors().contains(user.getName()))
-						bulletin.addAdditionalAuthor(user.getName());
-					bulletin.setUser(user);
-				}
 
 				// publish all saved regions
 				Set<String> result = bulletin.getSavedRegions().stream()

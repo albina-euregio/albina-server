@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.StandardSystemProperty;
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
+import eu.albina.model.LocalServerInstance;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,6 @@ import eu.albina.ImageTestUtils;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.PdfUtil;
@@ -42,7 +42,7 @@ public class MapUtilTest {
 	@Inject
 	RegionTestUtils regionTestUtils;
 
-	private ServerInstance serverInstance;
+	private LocalServerInstance serverInstance;
 	private Path folder;
 	private Region regionAran;
 	private Region regionAragon;
@@ -55,10 +55,7 @@ public class MapUtilTest {
 	public void setUp() throws Exception {
 		folder = Paths.get("target/test-results");
 		Files.createDirectories(folder);
-		serverInstance = new ServerInstance();
-		serverInstance.setMapsPath(folder.toString());
-		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
-		serverInstance.setPdfDirectory(folder.toString());
+		serverInstance = new LocalServerInstance(false, false, folder.toString(), "../avalanche-warning-maps/", folder.toString(), null, null);
 		regionAran = regionTestUtils.regionAran();
 		regionAragon = regionTestUtils.regionAragon();
 		regionEuregio = regionTestUtils.regionEuregio();
@@ -171,7 +168,7 @@ public class MapUtilTest {
 
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			byte[] expected = Resources.toByteArray(Resources.getResource(name));
-			byte[] actual = Files.readAllBytes(Path.of(serverInstance.getMapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
+			byte[] actual = Files.readAllBytes(Path.of(serverInstance.mapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
 			ImageTestUtils.assertImageEquals(name, expected, actual, 0, 0, ignore -> {
 			});
 		}
@@ -205,7 +202,7 @@ public class MapUtilTest {
 		MapUtil.createMapyrusMaps(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
-		byte[] actual = Files.readAllBytes(Path.of(serverInstance.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
+		byte[] actual = Files.readAllBytes(Path.of(serverInstance.mapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
 		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
@@ -221,7 +218,7 @@ public class MapUtilTest {
 		MapUtil.createMapyrusMaps(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
-		byte[] actual = Files.readAllBytes(Path.of(serverInstance.getMapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
+		byte[] actual = Files.readAllBytes(Path.of(serverInstance.mapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
 		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",

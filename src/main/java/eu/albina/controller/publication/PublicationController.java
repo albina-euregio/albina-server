@@ -13,7 +13,7 @@ import java.nio.file.StandardCopyOption;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
-import eu.albina.model.ServerInstance;
+import eu.albina.model.LocalServerInstance;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -230,23 +230,23 @@ public class PublicationController {
 
 	public void createSymbolicLinks(AvalancheReport avalancheReport) {
 		Stopwatch stopwatch = Stopwatch.createStarted();
-		ServerInstance serverInstance = avalancheReport.getServerInstance();
+		LocalServerInstance serverInstance = avalancheReport.getServerInstance();
 		String validityDateString = avalancheReport.getValidityDateString();
 		String publicationTimeString = avalancheReport.getPublicationTimeString();
 		try {
 			createSymbolicLinks(
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-				Paths.get(serverInstance.getPdfDirectory(), validityDateString)
+				Paths.get(serverInstance.pdfDirectory(), validityDateString, publicationTimeString),
+				Paths.get(serverInstance.pdfDirectory(), validityDateString)
 			);
 			if (avalancheReport.isLatest()) {
 				createSymbolicLinks(
-					Paths.get(serverInstance.getPdfDirectory(), validityDateString, publicationTimeString),
-					Paths.get(serverInstance.getPdfDirectory(), "latest")
+					Paths.get(serverInstance.pdfDirectory(), validityDateString, publicationTimeString),
+					Paths.get(serverInstance.pdfDirectory(), "latest")
 				);
-				stripDateFromFilenames(Paths.get(serverInstance.getPdfDirectory(), "latest"), validityDateString);
+				stripDateFromFilenames(Paths.get(serverInstance.pdfDirectory(), "latest"), validityDateString);
 				createSymbolicLinks(
-					Paths.get(serverInstance.getHtmlDirectory(), validityDateString),
-					Paths.get(serverInstance.getHtmlDirectory())
+					Paths.get(serverInstance.htmlDirectory(), validityDateString),
+					Paths.get(serverInstance.htmlDirectory())
 				);
 			}
 		} catch (IOException e) {

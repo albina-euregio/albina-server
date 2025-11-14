@@ -120,7 +120,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	private List<AvalancheBulletin> globalBulletins;
 
 	@Transient
-	private ServerInstance serverInstance;
+	private LocalServerInstance serverInstance;
 
 	/**
 	 * Standard constructor for an avalanche report.
@@ -128,7 +128,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	public AvalancheReport() {
 	}
 
-	public static AvalancheReport of(List<AvalancheBulletin> bulletins, Region region, ServerInstance serverInstance) {
+	public static AvalancheReport of(List<AvalancheBulletin> bulletins, Region region, LocalServerInstance serverInstance) {
 		final AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setServerInstance(serverInstance);
 		avalancheReport.setRegion(region);
@@ -326,38 +326,27 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		return bulletins;
 	}
 
-	public ServerInstance getServerInstance() {
+	public LocalServerInstance getServerInstance() {
 		return serverInstance;
 	}
 
-	public void setServerInstance(ServerInstance serverInstance) {
+	public void setServerInstance(LocalServerInstance serverInstance) {
 		this.serverInstance = serverInstance;
-		if (this.bulletins == null) {
-			return;
-		}
-		for (AvalancheBulletin bulletin : this.bulletins) {
-			if (bulletin.getForenoon() != null) {
-				bulletin.getForenoon().serverInstance(serverInstance);
-			}
-			if (bulletin.getAfternoon() != null) {
-				bulletin.getAfternoon().serverInstance(serverInstance);
-			}
-		}
 	}
 
 	@JsonIgnore
 	public Path getMapsPath() {
-		return Paths.get(getServerInstance().getMapsPath(), getValidityDateString(), getPublicationTimeString());
+		return Paths.get(getServerInstance().mapsPath(), getValidityDateString(), getPublicationTimeString());
 	}
 
 	@JsonIgnore
 	public Path getPdfDirectory() {
-		return Paths.get(getServerInstance().getPdfDirectory(), getValidityDateString(), getPublicationTimeString());
+		return Paths.get(getServerInstance().pdfDirectory(), getValidityDateString(), getPublicationTimeString());
 	}
 
 	@JsonIgnore
 	public Path getHtmlDirectory() {
-		return Paths.get(getServerInstance().getHtmlDirectory(), getValidityDateString());
+		return Paths.get(getServerInstance().htmlDirectory(), getValidityDateString());
 	}
 
 	public String getGeneralHeadline(LanguageCode lang) {
@@ -370,6 +359,21 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		return getBulletins().stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 
+	public String getSimpleHtmlUrl() {
+		String htmlDirectory = Paths.get(serverInstance.htmlDirectory()).getFileName().toString();
+		return String.format("%s/%s", region.getStaticUrl(), htmlDirectory);
+	}
+
+	public String getMapsUrl() {
+		String mapsDirectory = Paths.get(serverInstance.mapsPath()).getFileName().toString();
+		return String.format("%s/%s/%s/%s", region.getStaticUrl(), mapsDirectory, getValidityDateString(), getPublicationTimeString());
+	}
+
+	public String getPdfUrl(LanguageCode lang) {
+		String pdfDirectory = Paths.get(serverInstance.pdfDirectory()).getFileName().toString();
+		String date = getValidityDateString();
+		return String.format("%s/%s/%s/%s_%s_%s.pdf", region.getStaticUrl(), pdfDirectory, date, date, getId(), lang);
+	}
 
 	@Override
 	@JsonIgnore

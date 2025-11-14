@@ -54,8 +54,7 @@ public class ServerInstanceService {
 	@Operation(summary = "Get public local server configuration")
 	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
 	public PublicLocalServerConfiguration getPublicLocalServerConfiguration() {
-		ServerInstance serverInstance = serverInstanceRepository.findByExternalServerFalse();
-		return new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), globalVariables.version);
+		return new PublicLocalServerConfiguration(null, null, globalVariables.version);
 	}
 
 	@Get
@@ -64,7 +63,7 @@ public class ServerInstanceService {
 	@Operation(summary = "Get local server configuration")
 	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
 	public ServerInstance getLocalServerConfiguration() {
-		return serverInstanceRepository.findByExternalServerFalse();
+		throw new UnsupportedOperationException();
 	}
 
 	@Get("/external")

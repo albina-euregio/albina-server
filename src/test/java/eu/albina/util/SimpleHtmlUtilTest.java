@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
+import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -21,7 +22,6 @@ import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import freemarker.template.TemplateException;
 
@@ -34,32 +34,19 @@ public class SimpleHtmlUtilTest {
 	@Inject
 	RegionTestUtils regionTestUtils;
 
-	private ServerInstance serverInstanceEuregio;
-	private ServerInstance serverInstanceAran;
+	private LocalServerInstance serverInstanceEuregio;
+	private LocalServerInstance serverInstanceAran;
 	private Region regionEuregio;
 	private Region regionTyrol;
 	private Region regionAran;
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		serverInstanceEuregio = new ServerInstance();
-		serverInstanceEuregio.setName("ALBINA-TEST");
-		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local/");
-		serverInstanceEuregio.setMapsPath("/mnt/bulletins/");
-		serverInstanceEuregio.setServerImagesUrl("https://static.avalanche.report/images/");
-		serverInstanceEuregio.setHtmlDirectory("/mnt/simple_local");
-		serverInstanceAran = new ServerInstance();
-		serverInstanceAran.setName("ALBINA-TEST");
-		serverInstanceAran.setHtmlDirectory("/mnt/simple_local/");
-		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
-		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
-		serverInstanceAran.setHtmlDirectory("/mnt/simple_local");
+		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, null, "/mnt/simple_local/", null);
+		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, null, "/mnt/simple_local/", null);
 		regionEuregio = regionTestUtils.regionEuregio();
-		regionEuregio.setServerInstance(serverInstanceEuregio);
 		regionTyrol = regionTestUtils.regionTyrol();
-		regionTyrol.setServerInstance(serverInstanceEuregio);
 		regionAran = regionTestUtils.regionAran();
-		regionAran.setServerInstance(serverInstanceAran);
 	}
 
 	@Test

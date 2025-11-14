@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
-import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.jobs.PublicationStrategy;
+import eu.albina.util.GlobalVariables;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -59,7 +59,7 @@ public class AvalancheBulletinPublishService {
 	RegionRepository regionRepository;
 
 	@Inject
-	private ServerInstanceRepository serverInstanceRepository;
+	private GlobalVariables globalVariables;
 
 	@Inject
 	private UserRepository userRepository;
@@ -194,7 +194,7 @@ public class AvalancheBulletinPublishService {
 			.getPublishedBulletins(startDate, Collections.singletonList(region));
 		AvalancheReport avalancheReport = avalancheReportController.getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);
-		avalancheReport.setServerInstance(serverInstanceRepository.getLocalServerInstance());
+		avalancheReport.setServerInstance(globalVariables.getLocalServerInstance());
 		return (language != null ? Collections.singleton(language) : region.getEnabledLanguages()).stream()
 			.map(lang -> MultichannelMessage.of(avalancheReport, lang))
 			.collect(Collectors.toList());

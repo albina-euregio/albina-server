@@ -1244,7 +1244,7 @@ public class PdfUtil {
 
 	protected String getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {
 		return String.format("%s/%s/%s/%s",
-			avalancheReport.getServerInstance().getMapsPath(),
+			avalancheReport.getServerInstance().mapsPath(),
 			avalancheReport.getValidityDateString(),
 			avalancheReport.getPublicationTimeString(),
 			MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg));
@@ -1252,7 +1252,7 @@ public class PdfUtil {
 
 	protected String getMapImage(DaytimeDependency daytimeDependency) throws MalformedURLException {
 		return String.format("%s/%s/%s/%s",
-			avalancheReport.getServerInstance().getMapsPath(),
+			avalancheReport.getServerInstance().mapsPath(),
 			avalancheReport.getValidityDateString(),
 			avalancheReport.getPublicationTimeString(),
 			MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale));

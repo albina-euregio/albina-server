@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import eu.albina.AvalancheBulletinTestUtils;
+import eu.albina.model.LocalServerInstance;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,6 @@ import eu.albina.RegionTestUtils;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -36,7 +36,7 @@ public class PdfUtilRebuildTest {
 	private static final Logger logger = LoggerFactory.getLogger(PdfUtilRebuildTest.class);
 
 	private List<Region> regions;
-	private ServerInstance serverInstance;
+	private LocalServerInstance serverInstance;
 
 	@Inject
 	AvalancheBulletinTestUtils avalancheBulletinTestUtils;
@@ -46,10 +46,7 @@ public class PdfUtilRebuildTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		serverInstance = new ServerInstance();
-		serverInstance.setMapsPath("https://static.avalanche.report/bulletins");
-		serverInstance.setPdfDirectory("/tmp/bulletins/");
-		serverInstance.setMapProductionUrl("../avalanche-warning-maps/");
+		serverInstance = new LocalServerInstance(false, false, "https://static.avalanche.report/bulletins", "../avalanche-warning-maps/", "/tmp/bulletins/", null, null);
 
 		Region regionTyrol = regionTestUtils.regionTyrol();
 		Region regionSouthTyrol = regionTestUtils.regionSouthTyrol();

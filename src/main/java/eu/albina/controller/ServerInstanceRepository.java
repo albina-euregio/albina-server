@@ -8,12 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ServerInstanceRepository extends CrudRepository<ServerInstance, Long> {
-	ServerInstance findByExternalServerFalse();
-
-	default ServerInstance getLocalServerInstance() {
-		return findByExternalServerFalse();
-	}
-
 	List<ServerInstance> findByExternalServerTrue();
 
 	default List<ServerInstance> getExternalServerInstances() {

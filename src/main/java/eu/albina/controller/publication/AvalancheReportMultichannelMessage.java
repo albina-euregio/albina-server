@@ -48,7 +48,7 @@ record AvalancheReportMultichannelMessage(
 
 	@Override
 	public String getAttachmentUrl() {
-		return avalancheReport.getRegion().getMapsUrl(lang, avalancheReport, avalancheReport) + "/" + MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), DaytimeDependency.fd, false);
+		return avalancheReport.getMapsUrl() + "/" + MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), DaytimeDependency.fd, false);
 	}
 
 	@Override
