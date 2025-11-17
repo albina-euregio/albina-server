@@ -162,6 +162,7 @@ public class DangerSourceService {
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				for (DangerSourceVariant variant : variants) {
+					variant.setDangerSource(dangerSourceRepository.findById(variant.getDangerSource().getId()).orElseThrow());
 					variant.setTextcat(dangerSourceVariantTextController.getTextForDangerSourceVariant(variant));
 				}
 				dangerSourceVariantRepository.saveDangerSourceVariants(Arrays.asList(variants),
