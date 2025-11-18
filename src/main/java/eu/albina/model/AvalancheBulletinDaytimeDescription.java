@@ -337,7 +337,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 	@JsonIgnore
 	boolean isDangerLevelElevationDependency() {
-		return false; // FIXME
+		return true; // FIXME
 	}
 
 	@Override
