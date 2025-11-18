@@ -372,7 +372,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	public String getPdfUrl(LanguageCode lang) {
 		String pdfDirectory = Paths.get(serverInstance.pdfDirectory()).getFileName().toString();
 		String date = getValidityDateString();
-		return String.format("%s/%s/%s/%s_%s_%s.pdf", region.getStaticUrl(), pdfDirectory, date, date, getId(), lang);
+		return String.format("%s/%s/%s/%s_%s_%s.pdf", region.getStaticUrl(), pdfDirectory, date, date, region.getId(), lang);
 	}
 
 	@Override
