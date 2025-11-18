@@ -134,7 +134,7 @@ public class BlogController {
 	}
 
 	@Transactional
-	public void sendNewBlogPosts(String blogId, String subjectMatter) throws IOException, InterruptedException {
+	public void sendNewBlogPosts(String blogId, String subjectMatter, String regionOverrideId) throws IOException, InterruptedException {
 		Objects.requireNonNull(blogId);
 		Objects.requireNonNull(subjectMatter);
 		BlogConfiguration config = blogConfigurationRepository.findByBlogId(blogId).orElse(null);
@@ -142,7 +142,7 @@ public class BlogController {
 			logger.debug("No blog configuration found for {}", blogId);
 			return;
 		}
-		Region regionOverride = regionRepository.findById(BlogConfiguration.TECH_BLOG_REGION_OVERRIDE).orElseThrow();
+		Region regionOverride = regionRepository.findById(regionOverrideId).orElseThrow();
 		config.setRegion(regionOverride);
 
 		List<? extends BlogItem> blogPosts;

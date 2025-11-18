@@ -107,6 +107,6 @@ public class BlogControllerTest {
 	@Disabled
 	@Test
 	public void testTechBlog() throws Exception {
-		blogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER);
+		blogController.sendNewBlogPosts(BlogConfiguration.TECH_BLOG_ID, RapidMailConfiguration.TECH_SUBJECT_MATTER, "AT-07");
 	}
 }
