@@ -16,6 +16,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,7 +40,7 @@ class Blogger {
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		Root root = objectMapper.readValue(response.body(), Root.class);
-		return root.items;
+		return root.items != null ? root.items : Collections.emptyList();
 	}
 
 	public Item getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
