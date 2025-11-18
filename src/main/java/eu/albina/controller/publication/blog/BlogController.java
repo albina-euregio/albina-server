@@ -2,6 +2,7 @@
 package eu.albina.controller.publication.blog;
 
 import eu.albina.controller.CrudRepository;
+import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
@@ -36,6 +37,9 @@ public class BlogController {
 
 	@Inject
 	BlogConfigurationRepository blogConfigurationRepository;
+
+	@Inject
+	RegionRepository regionRepository;
 
 	@Inject
 	PublicationController publicationController;
@@ -130,7 +134,7 @@ public class BlogController {
 	}
 
 	@Transactional
-	public void sendNewBlogPosts(String blogId, String subjectMatter, Region regionOverride) throws IOException, InterruptedException {
+	public void sendNewBlogPosts(String blogId, String subjectMatter) throws IOException, InterruptedException {
 		Objects.requireNonNull(blogId);
 		Objects.requireNonNull(subjectMatter);
 		BlogConfiguration config = blogConfigurationRepository.findByBlogId(blogId).orElse(null);
@@ -138,6 +142,7 @@ public class BlogController {
 			logger.debug("No blog configuration found for {}", blogId);
 			return;
 		}
+		Region regionOverride = regionRepository.findById(BlogConfiguration.TECH_BLOG_REGION_OVERRIDE).orElseThrow();
 		config.setRegion(regionOverride);
 
 		List<? extends BlogItem> blogPosts;
