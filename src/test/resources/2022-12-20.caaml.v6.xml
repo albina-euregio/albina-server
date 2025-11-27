@@ -7,19 +7,19 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
-      <name>Glockner Range</name>
+      <name>Glockner Group</name>
     </region>
     <region regionID="AT-07-27">
       <name>Deferegger Alps East</name>
     </region>
     <region regionID="AT-07-28">
-      <name>Schober Mountains West</name>
+      <name>Schober Group West</name>
     </region>
     <region regionID="AT-07-24">
-      <name>Venediger Range South</name>
+      <name>Venediger Group South</name>
     </region>
     <region regionID="AT-07-25">
-      <name>Lasörling Range</name>
+      <name>Lasörling Group</name>
     </region>
     <dangerRating>
       <mainValue>low</mainValue>
@@ -83,7 +83,7 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-29">
-      <name>Lienzer Dolomites</name>
+      <name>Lienz Dolomites</name>
     </region>
     <region regionID="IT-32-BZ-19">
       <name>Prags Dolomites</name>
@@ -457,7 +457,7 @@
       <name>Kitzbühel Alps Wildseeloder</name>
     </region>
     <region regionID="AT-07-19">
-      <name>Glockturm Range</name>
+      <name>Glockturm Group</name>
     </region>
     <region regionID="AT-07-04-02">
       <name>Karwendel Mountains East</name>
@@ -472,7 +472,7 @@
       <name>Ammergau Alps South</name>
     </region>
     <region regionID="AT-07-20">
-      <name>Weißkugel Range</name>
+      <name>Weißkugel Group</name>
     </region>
     <region regionID="AT-07-17-02">
       <name>Kitzbühel Alps Wildschönau</name>
@@ -481,7 +481,7 @@
       <name>Kitzbühel Alps Brixental</name>
     </region>
     <region regionID="AT-07-21">
-      <name>Gurgler Range</name>
+      <name>Gurgler Group</name>
     </region>
     <region regionID="AT-07-22">
       <name>Stubai Alps Central</name>
@@ -499,7 +499,7 @@
       <name>Brandenberg Alps</name>
     </region>
     <region regionID="AT-07-06">
-      <name>Wilder Kaiser Mountains - Waidring Alps</name>
+      <name>Kaiser Mountains - Waidring Alps</name>
     </region>
     <region regionID="AT-07-07">
       <name>Lechtal Alps West</name>

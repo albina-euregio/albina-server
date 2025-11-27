@@ -400,7 +400,7 @@
       <name>Mount Saint Jakob Range</name>
     </region>
     <region regionID="AT-07-19">
-      <name>Glockturm Range</name>
+      <name>Glockturm Group</name>
     </region>
     <region regionID="IT-32-BZ-10">
       <name>Pfunderer Mountains East</name>
@@ -415,7 +415,7 @@
       <name>Langtaufers</name>
     </region>
     <region regionID="AT-07-20">
-      <name>Weißkugel Range</name>
+      <name>Weißkugel Group</name>
     </region>
     <region regionID="IT-32-BZ-12">
       <name>Rieserferner Mountains</name>
@@ -427,7 +427,7 @@
       <name>Kitzbühel Alps Brixental</name>
     </region>
     <region regionID="AT-07-21">
-      <name>Gurgler Range</name>
+      <name>Gurgler Group</name>
     </region>
     <region regionID="IT-32-BZ-13">
       <name>Deferegger Alps West</name>
@@ -445,22 +445,22 @@
       <name>Ulten Valley</name>
     </region>
     <region regionID="AT-07-24">
-      <name>Venediger Range South</name>
+      <name>Venediger Group South</name>
     </region>
     <region regionID="IT-32-BZ-02-02">
       <name>Planeil Mountains</name>
     </region>
     <region regionID="AT-07-25">
-      <name>Lasörling Range</name>
+      <name>Lasörling Group</name>
     </region>
     <region regionID="AT-07-26">
-      <name>Glockner Range</name>
+      <name>Glockner Group</name>
     </region>
     <region regionID="AT-07-27">
       <name>Deferegger Alps East</name>
     </region>
     <region regionID="AT-07-28">
-      <name>Schober Mountains West</name>
+      <name>Schober Group West</name>
     </region>
     <region regionID="IT-32-BZ-07-01">
       <name>Upper Passeier Valley</name>
@@ -637,7 +637,7 @@
       <name>Brandenberg Alps</name>
     </region>
     <region regionID="AT-07-06">
-      <name>Wilder Kaiser Mountains - Waidring Alps</name>
+      <name>Kaiser Mountains - Waidring Alps</name>
     </region>
     <region regionID="AT-07-18">
       <name>Kitzbühel Alps Wildseeloder</name>
@@ -768,7 +768,7 @@
       <name>Cembra Valley</name>
     </region>
     <region regionID="AT-07-29">
-      <name>Lienzer Dolomites</name>
+      <name>Lienz Dolomites</name>
     </region>
     <region regionID="IT-32-BZ-08-03">
       <name>Sarntal Alps South</name>

@@ -19,7 +19,7 @@
       <name>Silvretta East</name>
     </region>
     <region regionID="AT-07-24">
-      <name>Venediger Range South</name>
+      <name>Venediger Group South</name>
     </region>
     <region regionID="AT-07-13">
       <name>Samnaun Mountains</name>
@@ -34,7 +34,7 @@
       <name>Karwendel Mountains</name>
     </region>
     <region regionID="AT-07-26-01">
-      <name>Glockner Range South</name>
+      <name>Glockner Group South</name>
     </region>
     <region regionID="AT-07-26-02">
       <name>Goldried</name>
@@ -43,10 +43,10 @@
       <name>Brandenberg Alps</name>
     </region>
     <region regionID="AT-07-17">
-      <name>Kitzbühel Alps Brixental</name>
+      <name>Kitzbühel Alps West</name>
     </region>
     <region regionID="AT-07-06">
-      <name>Wilder Kaiser Mountains - Waidring Alps</name>
+      <name>Kaiser Mountains - Waidring Alps</name>
     </region>
     <region regionID="AT-07-18">
       <name>Kitzbühel Alps Wildseeloder</name>
@@ -123,10 +123,10 @@
       <name>Deferegger Alps East</name>
     </region>
     <region regionID="AT-07-28">
-      <name>Schober Mountains West</name>
+      <name>Schober Group West</name>
     </region>
     <region regionID="AT-07-25">
-      <name>Lasörling Range</name>
+      <name>Lasörling Group</name>
     </region>
     <dangerRating>
       <mainValue>moderate</mainValue>
@@ -207,16 +207,16 @@
       <name>Tuxer Alps East</name>
     </region>
     <region regionID="AT-07-19">
-      <name>Glockturm Range</name>
+      <name>Glockturm Group</name>
     </region>
     <region regionID="AT-07-09">
       <name>Grieskogel Mountains</name>
     </region>
     <region regionID="AT-07-20">
-      <name>Weißkugel Range</name>
+      <name>Weißkugel Group</name>
     </region>
     <region regionID="AT-07-21">
-      <name>Gurgler Range</name>
+      <name>Gurgler Group</name>
     </region>
     <region regionID="AT-07-22">
       <name>Stubai Alps Central</name>
@@ -618,7 +618,7 @@
       <name>Schnals Ridge</name>
     </region>
     <region regionID="IT-32-BZ-04">
-      <name>Stubai Alps South</name>
+      <name>Southern Stubai Alps</name>
     </region>
     <region regionID="IT-32-BZ-05">
       <name>Southern Zillertal Alps and High Tauern</name>
@@ -695,13 +695,13 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-29-01">
-      <name>Carnic Alps Osttirol</name>
+      <name>Carnic Alps East Tirol</name>
     </region>
     <region regionID="AT-07-29-02">
-      <name>Lienzer Dolomites</name>
+      <name>Lienz Dolomites</name>
     </region>
     <region regionID="AT-07-29-03">
-      <name>Kreuzeck Mountains Osttirol</name>
+      <name>Kreuzeck Group East Tirol</name>
     </region>
     <dangerRating>
       <mainValue>low</mainValue>

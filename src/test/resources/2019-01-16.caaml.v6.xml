@@ -25,7 +25,7 @@
       <name>Schnals Ridge</name>
     </region>
     <region regionID="IT-32-BZ-04">
-      <name>Stubai Alps South</name>
+      <name>Southern Stubai Alps</name>
     </region>
     <region regionID="IT-32-BZ-05">
       <name>Southern Zillertal Alps and High Tauern</name>
@@ -316,19 +316,19 @@
       <name>Tuxer Alps East</name>
     </region>
     <region regionID="AT-07-17">
-      <name>Kitzbühel Alps Brixental</name>
+      <name>Kitzbühel Alps West</name>
     </region>
     <region regionID="AT-07-18">
       <name>Kitzbühel Alps Wildseeloder</name>
     </region>
     <region regionID="AT-07-19">
-      <name>Glockturm Range</name>
+      <name>Glockturm Group</name>
     </region>
     <region regionID="AT-07-20">
-      <name>Weißkugel Range</name>
+      <name>Weißkugel Group</name>
     </region>
     <region regionID="AT-07-21">
-      <name>Gurgler Range</name>
+      <name>Gurgler Group</name>
     </region>
     <region regionID="AT-07-22">
       <name>Stubai Alps Central</name>
@@ -340,7 +340,7 @@
       <name>Allgäu Alps East</name>
     </region>
     <region regionID="AT-07-24">
-      <name>Venediger Range South</name>
+      <name>Venediger Group South</name>
     </region>
     <region regionID="AT-07-02">
       <name>Eastern Lechtal Alps - Ammergau Alps</name>
@@ -352,13 +352,13 @@
       <name>Karwendel Mountains</name>
     </region>
     <region regionID="AT-07-26">
-      <name>Glockner Range</name>
+      <name>Glockner Group</name>
     </region>
     <region regionID="AT-07-05">
       <name>Brandenberg Alps</name>
     </region>
     <region regionID="AT-07-06">
-      <name>Wilder Kaiser Mountains - Waidring Alps</name>
+      <name>Kaiser Mountains - Waidring Alps</name>
     </region>
     <region regionID="AT-07-07">
       <name>Lechtal Alps West</name>
@@ -456,7 +456,7 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-29">
-      <name>Lienzer Dolomites</name>
+      <name>Lienz Dolomites</name>
     </region>
     <dangerRating>
       <mainValue>low</mainValue>
@@ -871,10 +871,10 @@
       <name>Deferegger Alps East</name>
     </region>
     <region regionID="AT-07-28">
-      <name>Schober Mountains West</name>
+      <name>Schober Group West</name>
     </region>
     <region regionID="AT-07-25">
-      <name>Lasörling Range</name>
+      <name>Lasörling Group</name>
     </region>
     <dangerRating>
       <mainValue>moderate</mainValue>

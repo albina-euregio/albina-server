@@ -10,7 +10,7 @@
       <name>Durreck Range</name>
     </region>
     <region regionID="AT-07-20">
-      <name>Weißkugel Range</name>
+      <name>Weißkugel Group</name>
     </region>
     <region regionID="IT-32-BZ-01">
       <name>Val Müstair Alps</name>
@@ -19,7 +19,7 @@
       <name>Verwall Mountains Central</name>
     </region>
     <region regionID="AT-07-21">
-      <name>Gurgler Range</name>
+      <name>Gurgler Group</name>
     </region>
     <region regionID="IT-32-BZ-02">
       <name>Langtaufers</name>
@@ -40,10 +40,10 @@
       <name>Silvretta East</name>
     </region>
     <region regionID="IT-32-BZ-04">
-      <name>Stubai Alps South</name>
+      <name>Southern Stubai Alps</name>
     </region>
     <region regionID="AT-07-24">
-      <name>Venediger Range South</name>
+      <name>Venediger Group South</name>
     </region>
     <region regionID="AT-07-13">
       <name>Samnaun Mountains</name>
@@ -67,7 +67,7 @@
       <name>Tuxer Alps East</name>
     </region>
     <region regionID="AT-07-19">
-      <name>Glockturm Range</name>
+      <name>Glockturm Group</name>
     </region>
     <region regionID="AT-07-09">
       <name>Grieskogel Mountains</name>
@@ -243,13 +243,13 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-26">
-      <name>Glockner Range</name>
+      <name>Glockner Group</name>
     </region>
     <region regionID="AT-07-27">
       <name>Deferegger Alps East</name>
     </region>
     <region regionID="AT-07-28">
-      <name>Schober Mountains West</name>
+      <name>Schober Group West</name>
     </region>
     <region regionID="IT-32-BZ-12">
       <name>Rieserferner Mountains</name>
@@ -258,7 +258,7 @@
       <name>Deferegger Alps West</name>
     </region>
     <region regionID="AT-07-25">
-      <name>Lasörling Range</name>
+      <name>Lasörling Group</name>
     </region>
     <dangerRating>
       <mainValue>considerable</mainValue>
@@ -418,10 +418,10 @@
       <name>Brandenberg Alps</name>
     </region>
     <region regionID="AT-07-17">
-      <name>Kitzbühel Alps Brixental</name>
+      <name>Kitzbühel Alps West</name>
     </region>
     <region regionID="AT-07-06">
-      <name>Wilder Kaiser Mountains - Waidring Alps</name>
+      <name>Kaiser Mountains - Waidring Alps</name>
     </region>
     <region regionID="AT-07-18">
       <name>Kitzbühel Alps Wildseeloder</name>
@@ -496,7 +496,7 @@
       <name>Cembra Valley</name>
     </region>
     <region regionID="AT-07-29">
-      <name>Lienzer Dolomites</name>
+      <name>Lienz Dolomites</name>
     </region>
     <region regionID="IT-32-TN-03">
       <name>Bondone and Stivo</name>
