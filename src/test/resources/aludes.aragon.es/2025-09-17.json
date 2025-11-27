@@ -18,6 +18,7 @@
 			"ES-AR-12"
 		],
 		"hasDaytimeDependency": false,
+		"tendency": "decreasing",
 		"forenoon": {
 			"dangerRatingAbove": "considerable",
 			"dangerRatingBelow": "low",
@@ -69,6 +70,7 @@
 			"ES-AR-15"
 		],
 		"hasDaytimeDependency": false,
+		"tendency": "decreasing",
 		"forenoon": {
 			"dangerRatingAbove": "high",
 			"dangerRatingBelow": "moderate",
