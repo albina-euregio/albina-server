@@ -204,4 +204,9 @@ public class CaamlTest {
 	public void toCAAMLv6_g() throws Exception {
 		toCAAMLv6("2023-12-21.json", "2023-12-21.caaml.v6.json");
 	}
+
+	@Test
+	public void toCAAMLv6_ES_AR() throws Exception {
+		toCAAMLv6("aludes.aragon.es/2025-09-17.json", "aludes.aragon.es/2025-09-17.caaml.v6.json");
+	}
 }

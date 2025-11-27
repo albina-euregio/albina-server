@@ -1,0 +1,153 @@
+<bulletins xmlns="http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS">
+  <bulletin bulletinID="b9d2203c-bdb1-476a-b74a-e5beb3db236b" lang="en">
+    <publicationTime>2025-09-16T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2025-09-16T15:00:00Z</startTime>
+      <endTime>2025-09-17T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="ES-AR-01">
+      <name>Valles Occidentales - North</name>
+    </region>
+    <region regionID="ES-AR-02">
+      <name>Valles Occidentales - South</name>
+    </region>
+    <region regionID="ES-AR-03">
+      <name>Tena-Aragón northern strip</name>
+    </region>
+    <region regionID="ES-AR-04">
+      <name>Anayet</name>
+    </region>
+    <region regionID="ES-AR-09">
+      <name>Ordesa</name>
+    </region>
+    <region regionID="ES-AR-10">
+      <name>High Cinca</name>
+    </region>
+    <region regionID="ES-AR-11">
+      <name>Benasque-Chistau northern strip</name>
+    </region>
+    <region regionID="ES-AR-12">
+      <name>Posets</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>4</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <tendency>
+      <validTime>
+        <startTime>2025-09-17T15:00:00Z</startTime>
+        <endTime>2025-09-18T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2025-09-17</mainDate>
+      </ALBINA>
+      <LWD_Tyrol/>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="c59b0452-a01a-44fe-bdd6-67bfc602a939" lang="en">
+    <publicationTime>2025-09-16T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2025-09-16T15:00:00Z</startTime>
+      <endTime>2025-09-17T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="ES-AR-06">
+      <name>Infiernos</name>
+    </region>
+    <region regionID="ES-AR-09">
+      <name>Ordesa</name>
+    </region>
+    <region regionID="ES-AR-07">
+      <name>High Ara</name>
+    </region>
+    <region regionID="ES-AR-08">
+      <name>Tendeñera</name>
+    </region>
+    <region regionID="ES-AR-13">
+      <name>Vallibierna- Llauset</name>
+    </region>
+    <region regionID="ES-AR-14">
+      <name>Cerler-Castanesa</name>
+    </region>
+    <region regionID="ES-AR-15">
+      <name>Cotiella-Turbón</name>
+    </region>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <upperBound>treeline</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>high</mainValue>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>new_snow</problemType>
+      <elevation uom="m">
+        <lowerBound>treeline</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>4</avalancheSize>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>gliding_snow</problemType>
+      <elevation uom="m"/>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>glide</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <tendency>
+      <validTime>
+        <startTime>2025-09-17T15:00:00Z</startTime>
+        <endTime>2025-09-18T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2025-09-17</mainDate>
+      </ALBINA>
+      <LWD_Tyrol/>
+    </customData>
+  </bulletin>
+</bulletins>
