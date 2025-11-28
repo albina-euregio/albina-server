@@ -16,21 +16,19 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.EmailUtil;
 import freemarker.template.TemplateException;
 
-class AvalancheReportMultichannelMessage implements MultichannelMessage {
-	private final AvalancheReport avalancheReport;
-	private final LanguageCode lang;
-	private final Supplier<String> htmlMessage;
+record AvalancheReportMultichannelMessage(
+	AvalancheReport avalancheReport,
+	LanguageCode lang,
+	Supplier<String> htmlMessage) implements MultichannelMessage {
 
-	public AvalancheReportMultichannelMessage(AvalancheReport avalancheReport, LanguageCode lang) {
-		this.avalancheReport = avalancheReport;
-		this.lang = lang;
-		this.htmlMessage = Suppliers.memoize(() -> {
+	AvalancheReportMultichannelMessage(AvalancheReport avalancheReport, LanguageCode lang) {
+		this(avalancheReport, lang, Suppliers.memoize(() -> {
 			try {
 				return EmailUtil.createBulletinEmailHtml(avalancheReport, lang);
 			} catch (IOException | TemplateException e) {
 				throw new RuntimeException("Failed to create bulletin email", e);
 			}
-		});
+		}));
 	}
 
 	@Override
