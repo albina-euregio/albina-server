@@ -600,9 +600,13 @@ public class AvalancheReportController {
 		if (avalancheReportId == null) {
 			return;
 		}
-		AvalancheReport avalancheReport = avalancheReportRepository.findById(avalancheReportId).orElseThrow();
-		flagSetter.accept(avalancheReport, true);
-		avalancheReportRepository.save(avalancheReport);
+		try {
+			AvalancheReport avalancheReport = avalancheReportRepository.findById(avalancheReportId).orElseThrow();
+			flagSetter.accept(avalancheReport, true);
+			avalancheReportRepository.save(avalancheReport);
+		} catch (Exception e) {
+			logger.warn("Could not set avalanche report flag for report %s!".formatted(avalancheReportId), e);
+		}
 	}
 
 	@Transactional
