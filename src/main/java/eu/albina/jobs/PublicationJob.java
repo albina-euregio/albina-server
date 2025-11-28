@@ -180,8 +180,10 @@ public class PublicationJob {
 			for (Region superRegion : getSuperRegions(regions)) {
 				// update all super regions
 				phase2.add(Thread.startVirtualThread(() -> {
-					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, publishedBulletins0, publicationTimeString);
-					AvalancheReport report = AvalancheReport.of(publishedBulletins0, superRegion, serverInstance);
+					List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
+						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).collect(Collectors.toList());
+					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationTimeString);
+					AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
 					publicationController.createRegionResources(superRegion, report);
 				}));
 			}
