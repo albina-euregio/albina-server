@@ -20,7 +20,7 @@
   <entry key="elevation.band">Between {0} and {1}</entry>
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} for {1}: {2}</entry>
-  <entry key="social-media.message.update">UDPATE on {0} for {1}: {2}</entry>
+  <entry key="social-media.message.update">UPDATE on {0} for {1}: {2}</entry>
   <entry key="headline">Avalanche Forecast</entry>
   <entry key="headline.update">UPDATE on Avalanche Forecast </entry>
   <entry key="headline.tendency">Tendency</entry>
