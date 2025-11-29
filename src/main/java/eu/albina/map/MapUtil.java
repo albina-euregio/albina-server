@@ -22,9 +22,6 @@ import java.util.stream.Stream;
 import javax.imageio.ImageIO;
 import javax.script.SimpleBindings;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.MoreCollectors;
-import com.google.common.io.Closer;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
@@ -35,9 +32,12 @@ import org.mapyrus.MapyrusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.MoreCollectors;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
+import com.google.common.io.Closer;
 import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
@@ -63,6 +63,31 @@ public interface MapUtil {
 			Stream<String> regions = bulletin.getValidityDate().isBefore(LocalDate.parse("2022-10-01"))
 				? bulletin.regions(preview).stream().flatMap(MapUtil::mapRegions)
 				: bulletin.regions(preview).stream();
+			regions.forEach(region -> {
+				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
+				bindings.put("bulletin_ids", region + "-high", new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("bulletin_ids", region + "-low", new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.dangerRating(true))));
+				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.dangerRating(false))));
+				bindings.put("elevation_h", region + "-high", new Argument(description.getElevation()));
+			});
+		}
+		SimpleBindings simpleBindings = new SimpleBindings();
+		bindings.rowMap().forEach((key, stringObjectMap) -> {
+			Argument argument = new Argument();
+			stringObjectMap.forEach(argument::addHashMapEntry);
+			simpleBindings.put(key, argument);
+		});
+		return simpleBindings;
+	}
+
+	// Similar to createMayrusBindings but for overlay maps only using micro-regions within the desired region
+	static SimpleBindings createOverlayMayrusBindings(Region publicationRegion, List<AvalancheBulletin> bulletins, DaytimeDependency daytimeDependency, boolean preview) {
+		Table<String, String, Argument> bindings = TreeBasedTable.create();
+		for (AvalancheBulletin bulletin : bulletins) {
+			Stream<String> regions = bulletin.getValidityDate().isBefore(LocalDate.parse("2022-10-01"))
+				? bulletin.regions(preview).stream().flatMap(MapUtil::mapRegions).filter(r -> publicationRegion.affects(r))
+				: bulletin.regions(preview).stream().filter(r -> publicationRegion.affects(r));
 			regions.forEach(region -> {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 				bindings.put("bulletin_ids", region + "-high", new Argument(Argument.STRING, bulletin.getId()));
@@ -119,9 +144,10 @@ public interface MapUtil {
 					avalancheReport.getGlobalBulletins(),
 					avalancheReport.getBulletins());
 				final SimpleBindings bindings = createMayrusBindings(bulletins, daytimeDependency, BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus()));
+				final SimpleBindings overlayBindings = createOverlayMayrusBindings(avalancheReport.getRegion(), bulletins, daytimeDependency, BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus()));
 				for (MapLevel mapLevel : MapLevel.values()) {
-					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, false, bindings);
-					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, true, bindings);
+					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, false, MapLevel.overlay.equals(mapLevel) ? overlayBindings : bindings);
+					createMapyrusMaps(avalancheReport, mapLevel, daytimeDependency, null, true, MapLevel.overlay.equals(mapLevel) ? overlayBindings : bindings);
 				}
 				for (final AvalancheBulletin bulletin : bulletins) {
 					if (DaytimeDependency.pm.equals(daytimeDependency) && !bulletin.isHasDaytimeDependency()) {
