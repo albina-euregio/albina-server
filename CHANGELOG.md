@@ -2,6 +2,72 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+
+## [8.0.7] - 2025-11-28
+
+### 🐛 Bug Fixes
+
+- PublicationJob: filter bulletins for super regions
+- Fix typo "UPDATE"
+- Fix AvalancheReportController.setAvalancheReportFlag
+
+## [8.0.6] - 2025-11-28
+- Fix CaamlTest
+
+## [8.0.5] - 2025-11-18
+
+### 🐛 Bug Fixes
+
+- BlogControllerTest: move regionOverride to BlogController
+- BlogJob: move regionOverride to BlogController
+
+## [8.0.4] - 2025-11-18
+
+### 🐛 Bug Fixes
+
+- Return empty list instead of null (blogger)
+- Danger sources: ON DELETE CASCADE (allow deleting variants)
+
+
+## [8.0.3] - 2025-11-17
+
+### 🐛 Bug Fixes
+
+- Fix DangerSourceService.replaceVariants
+
+
+## [8.0.2] - 2025-11-10
+
+### 🐛 Bug Fixes
+
+- Fix publication: getPublicReport in same thread
+- Fix NPE in Region.getLanguageConfiguration
+- Fix publication of tech blog
+
+### 🚜 Refactor
+
+- Refactor PublicationJob
+- Fix RapidMailController (status scheduled)
+- Remove com.google.auth dependency
+
+
+## [8.0.1] - 2025-11-05
+
+### 🐛 Bug Fixes
+
+- BlogController: Fix updating lastPublishedTimestamp
+
+### 🚜 Refactor
+
+- Implement saveOrUpdate method in eu.albina.controller.CrudRepository
+
+### 📚 Documentation
+
+- Remove liquibase specific readme
+- Add documentation for deployment (database)
+- Document micronaut deployment
+
+
 ## [8.0.0] - 2025-11-04
 
 ### Breaking Changes
