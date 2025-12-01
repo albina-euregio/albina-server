@@ -385,15 +385,19 @@ public class TextToSpeech {
 		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 			for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
 				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
-				String filename = String.format("%s_%s_%s.ssml", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang);
+				String filename = String.format("%s_%s_%s.ssml", caaml.getBulletinID(), lang);
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);
-				logger.info("Writing SSML file {}", path);
-				Files.writeString(path, new ScriptEngine(caaml).createScript(), StandardCharsets.UTF_8);
-				byte[] audioFile = createAudioFile(caaml);
-				filename = String.format("%s_%s_%s.mp3", avalancheReport.getRegion().getId(), caaml.getBulletinID(), lang);
+				if (!Files.exists(path)) {
+					logger.info("Writing SSML file {}", path);
+					Files.writeString(path, new ScriptEngine(caaml).createScript(), StandardCharsets.UTF_8);
+				}
+				filename = String.format("%s_%s_%s.mp3", caaml.getBulletinID(), lang);
 				path = avalancheReport.getPdfDirectory().resolve(filename);
-				logger.info("Writing audio file {} ({} bytes)", path, audioFile.length);
-				Files.write(path, audioFile);
+				if (!Files.exists(path)) {
+					byte[] audioFile = createAudioFile(caaml);
+					logger.info("Writing audio file {} ({} bytes)", path, audioFile.length);
+					Files.write(path, audioFile);
+				}
 			}
 		}
 	}
