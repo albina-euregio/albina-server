@@ -3,6 +3,14 @@
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
 
+## [8.0.8] - 2025-12-02
+
+### 🐛 Bug Fixes
+
+- TextToSpeech: omit region ID in filename
+- Restrict overlay map coloring to publication region
+- Filter bulletins for super regions in PublicationJob
+
 ## [8.0.7] - 2025-11-28
 
 ### 🐛 Bug Fixes
