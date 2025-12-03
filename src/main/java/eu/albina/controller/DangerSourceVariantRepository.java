@@ -109,14 +109,14 @@ public interface DangerSourceVariantRepository extends CrudRepository<DangerSour
 	 * {@code regions} and {@code dangerSource}.
 	 *
 	 * @param validFrom      the date range the variants should be valid from
-	 * @param regions        the regions of the variants
+	 * @param region        the region of the variants
 	 * @param dangerSourceId the id of the danger source
 	 * @return the most recent variants for the given time period and regions
 	 */
-	default List<DangerSourceVariant> getDangerSourceVariants(Instant validFrom, List<Region> regions,
+	default List<DangerSourceVariant> getDangerSourceVariants(Instant validFrom, Region region,
 															  String dangerSourceId) {
 		return findByValidFrom(validFrom).stream()
-			.filter(variant -> regions.stream().anyMatch(variant::affectsRegion))
+			.filter(variant -> variant.affectsRegion(region))
 			.filter(variant -> variant.getDangerSource().getId().equals(dangerSourceId))
 			.toList();
 	}

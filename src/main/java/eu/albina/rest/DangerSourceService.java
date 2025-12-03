@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import eu.albina.controller.DangerSourceRepository;
 import eu.albina.controller.DangerSourceVariantRepository;
@@ -134,14 +133,12 @@ public class DangerSourceService {
 	public List<DangerSourceVariant> getVariantsForDangerSource(
 		@PathVariable("dangerSourceId") String dangerSourceId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@QueryValue("regions") List<String> regionIds) {
+		@QueryValue("region") String regionId) {
 
 		Instant validFrom = DateControllerUtil.parseDate(date);
-		List<Region> regions = regionIds.stream().map(regionRepository::findById)
-			.map(Optional::orElseThrow)
-			.toList();
+		Region region = regionRepository.findById(regionId).orElseThrow();
 		return dangerSourceVariantRepository.getDangerSourceVariants(
-			validFrom, regions, dangerSourceId);
+			validFrom, region, dangerSourceId);
 	}
 
 	@Post("/variants/replace")
