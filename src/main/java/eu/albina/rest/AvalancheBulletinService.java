@@ -124,7 +124,6 @@ public class AvalancheBulletinService {
 	@ApiResponse(description = "bulletins", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AvalancheBulletin.class))))
 	@Operation(summary = "Get bulletins for date")
 	@JsonView(JsonUtil.Views.Internal.class)
-	@Transactional
 	public List<AvalancheBulletin> getJSONBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds) {
@@ -145,7 +144,6 @@ public class AvalancheBulletinService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get bulletins for date as CAAML JSON")
-	@Transactional
 	public String getCaamlJsonBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds,
