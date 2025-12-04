@@ -73,7 +73,6 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSource.class))))
 	@Operation(summary = "Get danger sources for season")
-	@Transactional
 	public List<DangerSource> getDangerSources(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
@@ -98,7 +97,6 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for date")
-	@Transactional
 	public List<DangerSourceVariant> getVariants(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId) {
@@ -111,7 +109,6 @@ public class DangerSourceService {
 	@Get("/status")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Transactional
 	public List<DangerSourceVariantsStatus> getInternalStatus(@QueryValue("region") String regionId,
 															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 															  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
@@ -129,7 +126,6 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "danger-sources", content = @Content(array = @ArraySchema(schema = @Schema(implementation = DangerSourceVariant.class))))
 	@Operation(summary = "Get danger source variants for danger source and date")
-	@Transactional
 	public List<DangerSourceVariant> getVariantsForDangerSource(
 		@PathVariable("dangerSourceId") String dangerSourceId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -179,7 +175,6 @@ public class DangerSourceService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@ApiResponse(description = "variant", content = @Content(schema = @Schema(implementation = DangerSourceVariant.class)))
 	@Operation(summary = "Get variant by ID")
-	@Transactional
 	public DangerSourceVariant getVariantById(
 		@PathVariable("variantId") String variantId
 	) {
