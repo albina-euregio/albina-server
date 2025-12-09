@@ -19,10 +19,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import eu.albina.controller.CrudRepository;
+import eu.albina.model.StatusInformation;
 import eu.albina.util.HttpClientUtil;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.MediaType;
+import io.micronaut.json.tree.JsonNode;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -40,7 +44,13 @@ public class TelegramController {
 	HttpClient client;
 
 	@Inject
+	ObjectMapper objectMapper;
+
+	@Inject
 	TelegramConfigurationRepository telegramConfigurationRepository;
+
+	@Serdeable
+	public record GetMeResponse(boolean ok, JsonNode result){}
 
 	@Repository
 	public interface TelegramConfigurationRepository extends CrudRepository<TelegramConfiguration, Long> {
@@ -133,9 +143,17 @@ public class TelegramController {
 	 *
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
-	public HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
+	public StatusInformation getStatus(TelegramConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
-		return execute(request, client);
+		HttpResponse<String> response = execute(request, client);
+		if (response.statusCode() != 200) {
+			String message = "Error connecting to api.telegram.org (error code "
+				+ response.statusCode() + "): " + response.body();
+			logger.warn(message);
+			return new StatusInformation(false, message);
+		}
+		GetMeResponse parsedResponse = objectMapper.readValue(response.body(), GetMeResponse.class);
+		return new StatusInformation(parsedResponse.ok, objectMapper.writeValueAsString(parsedResponse.result));
 	}
 
 	private static HttpResponse<String> execute(HttpRequest request, HttpClient httpClient) throws IOException, InterruptedException {

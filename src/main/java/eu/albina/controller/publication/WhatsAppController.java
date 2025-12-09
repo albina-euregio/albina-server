@@ -4,11 +4,13 @@ package eu.albina.controller.publication;
 import com.google.common.net.HttpHeaders;
 import eu.albina.controller.CrudRepository;
 import eu.albina.model.Region;
+import eu.albina.model.StatusInformation;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.WhatsAppConfiguration;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.http.MediaType;
 import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -40,6 +42,17 @@ public class WhatsAppController {
 
 	@Inject
 	WhatsAppConfigurationRepository whatsAppConfigurationRepository;
+
+	/**
+	 *
+	 * @param code Whapi returns numbers 1,2,3,4,5, if albina-server encounters error it sets code to -1, code 0 is used if no whatsapp config is set
+	 * @param text INIT, LAUNCH, QR, AUTH, ERROR
+	 */
+	@Serdeable
+	public record WhatsAppStatus(int code, String text){}
+
+	@Serdeable
+	public record HealthResponse(WhatsAppStatus status) {}
 
 	@Repository
 	public interface WhatsAppConfigurationRepository extends CrudRepository<WhatsAppConfiguration, Long> {
@@ -127,18 +140,26 @@ public class WhatsAppController {
 		}
 	}
 
-	public String getHealth(WhatsAppConfiguration config) throws IOException, InterruptedException {
+	public StatusInformation getStatus(WhatsAppConfiguration config) throws IOException, InterruptedException {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
 		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
 			.build();
 
+		logger.info("Sending request {}", request.uri());
+
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		if (response.statusCode() != 200) {
-			logger.warn("Error connecting to whapi.cloud (error code "
-				+ response.statusCode() + "): " + response.body());
+			String message = "Error connecting to whapi.cloud (error code "
+				+ response.statusCode() + "): " + response.body();
+			logger.warn(message);
+			return new StatusInformation(false, message);
 		}
-		return response.body();
+		HealthResponse healthResponse = objectMapper.readValue(response.body(), HealthResponse.class);
+		if(healthResponse.status.code != 4) {
+			return new StatusInformation(false, "Whapi response: " + healthResponse.status.text);
+		}
+		return new StatusInformation(true, "Whapi response: " + healthResponse.status.text);
 	}
 }
