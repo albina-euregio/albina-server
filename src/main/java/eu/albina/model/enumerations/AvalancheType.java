@@ -3,5 +3,4 @@ package eu.albina.model.enumerations;
 
 public enum AvalancheType {
 	slab, loose, glide;
-
 }

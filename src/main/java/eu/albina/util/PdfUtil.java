@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
-import eu.albina.model.enumerations.DangerPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +64,7 @@ import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
+import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
@@ -722,7 +722,9 @@ public class PdfUtil {
 		table.addCell(getAvalancheProblemCell(avalancheProblem.getAvalancheProblem()));
 		table.addCell(getAspectsCell(avalancheProblem.getAspects()));
 		table.addCell(getElevationCell(avalancheProblem, table));
-		table.addCell(getMatrixInformationCell(avalancheProblem.getAvalancheProblem(), avalancheProblem.getEawsMatrixInformation()));
+		if (avalancheProblem.getAvalancheType() == eu.albina.model.enumerations.AvalancheType.slab) {
+			table.addCell(getMatrixInformationCell(avalancheProblem.getAvalancheProblem(), avalancheProblem.getEawsMatrixInformation()));
+		}
 	}
 
 	private Cell getAvalancheProblemCell(eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
