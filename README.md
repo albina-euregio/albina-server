@@ -67,6 +67,7 @@ Environment=JDBC_PASSWORD=...
 Environment=JWT_GENERATOR_SIGNATURE_SECRET=...
 Environment=MICRONAUT_SERVER_PORT=8080
 Environment=UMASK=0022
+ExecStartPre=/usr/bin/mkdir -p tomcat.8080/work/Tomcat/localhost/albina#api
 ExecStart=/usr/lib/jvm/jre-21/bin/java -jar albina.jar
 Type=simple
 User=albina-server
