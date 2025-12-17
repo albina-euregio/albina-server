@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -140,26 +141,37 @@ public class WhatsAppController {
 		}
 	}
 
-	public StatusInformation getStatus(WhatsAppConfiguration config, String statusTitle) throws IOException, InterruptedException {
+	public CompletableFuture<StatusInformation> getStatusAsync(WhatsAppConfiguration config, String statusTitle) {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
 		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))
+			.timeout(Duration.ofSeconds(3))
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
 			.build();
 
 		logger.info("Sending request {}", request.uri());
 
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(response -> mapToStatusInformation(response, statusTitle))
+			.exceptionally(ex ->
+				new StatusInformation(false, statusTitle, ex.getMessage())
+			);
+	}
+
+	private StatusInformation mapToStatusInformation(HttpResponse<String> response, String statusTitle) {
 		if (response.statusCode() != 200) {
-			String message = "Error connecting to whapi.cloud (error code "
-				+ response.statusCode() + "): " + response.body();
-			logger.warn(message);
+			String message = "Error connecting to whapi.cloud (error code " + response.statusCode() + "): " + response.body();
 			return new StatusInformation(false, statusTitle, message);
 		}
-		HealthResponse healthResponse = objectMapper.readValue(response.body(), HealthResponse.class);
-		if(healthResponse.status.code != 4) {
-			return new StatusInformation(false, statusTitle,"Whapi response: " + healthResponse.status.text);
+		try {
+			HealthResponse healthResponse = objectMapper.readValue(response.body(), HealthResponse.class);
+			if (healthResponse.status.code != 4) {
+				return new StatusInformation(false, statusTitle, "Whapi response: " + healthResponse.status.text);
+			} else {
+				return new StatusInformation(true, statusTitle, "Whapi response: " + healthResponse.status.text);
+			}
+		} catch (IOException e) {
+			return new StatusInformation(false, statusTitle, "Invalid Whapi JSON response: " + e.getMessage());
 		}
-		return new StatusInformation(true, statusTitle, "Whapi response: " + healthResponse.status.text);
 	}
 }

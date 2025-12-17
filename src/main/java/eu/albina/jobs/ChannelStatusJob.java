@@ -17,9 +17,10 @@ import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A job to check status of the different publication channels (Telegram, WhatsApp, Blog).
@@ -43,82 +44,102 @@ public class ChannelStatusJob {
 	@Inject
 	TelegramController telegramController;
 
-	Map<String, List<StatusInformation>> statusInformationMap = new HashMap<>();
+	Map<String, List<StatusInformation>> statusInformationMap = new ConcurrentHashMap<>();
 
-	public List<StatusInformation> getOrTriggerStatusForRegion(String regionId) throws AlbinaException {
-		if(statusInformationMap.containsKey(regionId)) {
-			return statusInformationMap.get(regionId);
-		} else {
-			Region region = regionRepository.findByIdOrElseThrow(regionId);
-			return triggerStatusChecks(region);
+	public CompletableFuture<List<StatusInformation>> getOrTriggerStatusForRegion(String regionId) throws AlbinaException {
+		List<StatusInformation> cached = statusInformationMap.get(regionId);
+		if (cached != null) {
+			return CompletableFuture.completedFuture(cached);
 		}
+		Region region = regionRepository.findByIdOrElseThrow(regionId);
+		return triggerStatusChecks(region);
 	}
 
-	public List<StatusInformation> triggerStatusChecks(Region region) {
+	public CompletableFuture<List<StatusInformation>> triggerStatusChecks(Region region) {
 		LanguageCode language = region.getDefaultLang();
 		logger.info("Health check triggered for {}/{}", region.getId(), language);
-		List<StatusInformation> statusInformation = List.of(
-			triggerTelegramCheck(region, language),
-			triggerWhatsAppCheck(region, language),
-			triggerBlogCheck(region, language)
-		);
-		statusInformationMap.put(region.getId(), statusInformation);
-		return statusInformation;
+
+		CompletableFuture<StatusInformation> telegram =	triggerTelegramCheck(region, language);
+		CompletableFuture<StatusInformation> whatsapp =	triggerWhatsAppCheck(region, language);
+		CompletableFuture<StatusInformation> blog =	triggerBlogCheck(region, language);
+
+		return CompletableFuture
+			.allOf(telegram, whatsapp, blog)
+			.thenApply(v -> {
+				List<StatusInformation> result = List.of(
+					telegram.join(),
+					whatsapp.join(),
+					blog.join()
+				);
+				statusInformationMap.put(region.getId(), result);
+				return result;
+			});
 	}
 
-	public StatusInformation triggerWhatsAppCheck(Region region, LanguageCode language) {
+	public CompletableFuture<StatusInformation> triggerWhatsAppCheck(Region region, LanguageCode language) {
 		String title = "WhatsApp for " + region.getId() + "/" + language;
-		StatusInformation whatsAppStatus = whatsAppController.getConfiguration(region, language)
-			.map(cfg -> {
-				try {
-					return whatsAppController.getStatus(cfg, title);
-				} catch (Exception e){
-					return new StatusInformation(false, "WhatsApp" + title, e.getMessage());
-				}
-			})
-			.orElse(new StatusInformation(true, "WhatsApp" + title, "No config"));
-		logger.info(whatsAppStatus.toLogLine());
-		return whatsAppStatus;
+
+		return whatsAppController.getConfiguration(region, language)
+			.map(cfg ->
+				whatsAppController.getStatusAsync(cfg, title)
+					.thenApply(status -> {
+						logger.info(status.toLogLine());
+						return status;
+					})
+			)
+			.orElseGet(() -> {
+				StatusInformation status = new StatusInformation(true, title, "No config");
+				logger.info(status.toLogLine());
+				return CompletableFuture.completedFuture(status);
+			});
 	}
 
-	public StatusInformation triggerTelegramCheck(Region region, LanguageCode language) {
+	public CompletableFuture<StatusInformation> triggerTelegramCheck(Region region, LanguageCode language) {
 		String title = "Telegram for " + region.getId() + "/" + language;
-		StatusInformation telegramStatus = telegramController.getConfiguration(region, language)
-			.map(cfg -> {
-				try {
-					return telegramController.getStatus(cfg, title);
-				} catch (Exception e){
-					return new StatusInformation(false, "Telegram" + title, e.getMessage());
-				}
-			})
-			.orElse(new StatusInformation(true, "Telegram" + title, "No config"));
-		logger.info(telegramStatus.toLogLine());
-		return telegramStatus;
+		return telegramController.getConfiguration(region, language)
+			.map(cfg ->
+				telegramController.getStatusAsync(cfg, title)
+					.thenApply(status -> {
+						logger.info(status.toLogLine());
+						return status;
+					})
+			)
+			.orElseGet(() -> {
+				StatusInformation status = new StatusInformation(true, title, "No config");
+				logger.info(status.toLogLine());
+				return CompletableFuture.completedFuture(status);
+			});
 	}
 
-	public StatusInformation triggerBlogCheck(Region region, LanguageCode language) {
-		String title = "Blog for " + region.getId() + "/" + language;
-		StatusInformation blogStatus;
-		if (regionRepository.getPublishBlogRegions().contains(region)) {
-			try {
-				BlogConfiguration config = blogController.getConfiguration(region, language).orElseThrow();
-				BlogItem latest = blogController.getLatestBlogPost(config);
-				blogStatus = new StatusInformation(true, title,"latest=" + latest.getTitle());
-			} catch (Exception e) {
-				blogStatus = new StatusInformation(false, title, e.getMessage());
+	public CompletableFuture<StatusInformation> triggerBlogCheck(Region region, LanguageCode language) {
+		return CompletableFuture.supplyAsync(() -> {
+			String title = "Blog for " + region.getId() + "/" + language;
+			StatusInformation blogStatus;
+			if (regionRepository.getPublishBlogRegions().contains(region)) {
+				try {
+					BlogConfiguration config = blogController.getConfiguration(region, language).orElseThrow();
+					BlogItem latest = blogController.getLatestBlogPost(config);
+					blogStatus = new StatusInformation(true, title, "latest=" + latest.getTitle());
+				} catch (Exception e) {
+					blogStatus = new StatusInformation(false, title, e.getMessage());
+				}
+			} else {
+				blogStatus = new StatusInformation(true, title, "region not in publishBlogRegions");
 			}
-		} else {
-			blogStatus = new StatusInformation(true, title,"region not in publishBlogRegions");
-		}
-		logger.info(blogStatus.toLogLine());
-		return blogStatus;
+			logger.info(blogStatus.toLogLine());
+			return blogStatus;
+		});
 	}
 
 	@Scheduled(cron = "0 0 4 * * ?")
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
 		for (Region region : regionRepository.getPublishBulletinRegions()) {
-			triggerStatusChecks(region);
+			triggerStatusChecks(region)
+				.exceptionally(ex -> {
+					logger.error("Health check failed for {}/{}", region.getId(), region.getDefaultLang(), ex);
+					return List.of();
+				});
 		}
 	}
 }

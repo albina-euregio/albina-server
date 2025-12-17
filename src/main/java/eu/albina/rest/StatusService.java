@@ -16,7 +16,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Controller("/status")
 @Tag(name = "status")
@@ -36,11 +38,15 @@ public class StatusService {
 		// obtain all regions for which this user has permissions
 		String username = principal.getName();
 		User user = userRepository.findById(username).orElseThrow();
-		List<StatusInformation> result = new java.util.ArrayList<>();
+		List<CompletableFuture<List<StatusInformation>>> futures = new ArrayList<>();
+
 		for (Region region : user.getRegions()) {
-			result.addAll(channelStatusJob.getOrTriggerStatusForRegion(region.getId()));
+			futures.add(channelStatusJob.getOrTriggerStatusForRegion(region.getId()));
 		}
-		return result;
+		return futures.stream()
+			.map(CompletableFuture::join)   // block here
+			.flatMap(List::stream)
+			.toList();
 	}
 
 	@Post("/channels")
@@ -51,10 +57,13 @@ public class StatusService {
 		// obtain all regions for which this user has permissions
 		String username = principal.getName();
 		User user = userRepository.findById(username).orElseThrow();
-		List<StatusInformation> result = new java.util.ArrayList<>();
+		List<CompletableFuture<List<StatusInformation>>> futures = new ArrayList<>();
 		for (Region region : user.getRegions()) {
-			result.addAll(channelStatusJob.triggerStatusChecks(region));
+			futures.add(channelStatusJob.triggerStatusChecks(region));
 		}
-		return result;
+		return futures.stream()
+			.map(CompletableFuture::join)
+			.flatMap(List::stream)
+			.toList();
 	}
 }
