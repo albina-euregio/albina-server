@@ -143,17 +143,17 @@ public class TelegramController {
 	 *
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
-	public StatusInformation getStatus(TelegramConfiguration config) throws IOException, InterruptedException {
+	public StatusInformation getStatus(TelegramConfiguration config, String statusTitle) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
 		HttpResponse<String> response = execute(request, client);
 		if (response.statusCode() != 200) {
 			String message = "Error connecting to api.telegram.org (error code "
 				+ response.statusCode() + "): " + response.body();
 			logger.warn(message);
-			return new StatusInformation(false, message);
+			return new StatusInformation(false, statusTitle, message);
 		}
 		GetMeResponse parsedResponse = objectMapper.readValue(response.body(), GetMeResponse.class);
-		return new StatusInformation(parsedResponse.ok, objectMapper.writeValueAsString(parsedResponse.result));
+		return new StatusInformation(parsedResponse.ok, statusTitle, objectMapper.writeValueAsString(parsedResponse.result));
 	}
 
 	private static HttpResponse<String> execute(HttpRequest request, HttpClient httpClient) throws IOException, InterruptedException {

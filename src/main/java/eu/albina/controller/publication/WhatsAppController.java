@@ -140,7 +140,7 @@ public class WhatsAppController {
 		}
 	}
 
-	public StatusInformation getStatus(WhatsAppConfiguration config) throws IOException, InterruptedException {
+	public StatusInformation getStatus(WhatsAppConfiguration config, String statusTitle) throws IOException, InterruptedException {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
 		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))
@@ -154,12 +154,12 @@ public class WhatsAppController {
 			String message = "Error connecting to whapi.cloud (error code "
 				+ response.statusCode() + "): " + response.body();
 			logger.warn(message);
-			return new StatusInformation(false, message);
+			return new StatusInformation(false, statusTitle, message);
 		}
 		HealthResponse healthResponse = objectMapper.readValue(response.body(), HealthResponse.class);
 		if(healthResponse.status.code != 4) {
-			return new StatusInformation(false, "Whapi response: " + healthResponse.status.text);
+			return new StatusInformation(false, statusTitle,"Whapi response: " + healthResponse.status.text);
 		}
-		return new StatusInformation(true, "Whapi response: " + healthResponse.status.text);
+		return new StatusInformation(true, statusTitle, "Whapi response: " + healthResponse.status.text);
 	}
 }
