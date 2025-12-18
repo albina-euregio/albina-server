@@ -4,11 +4,13 @@ package eu.albina.controller.publication;
 import com.google.common.net.HttpHeaders;
 import eu.albina.controller.CrudRepository;
 import eu.albina.model.Region;
+import eu.albina.model.StatusInformation;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.WhatsAppConfiguration;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.http.MediaType;
 import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +43,18 @@ public class WhatsAppController {
 
 	@Inject
 	WhatsAppConfigurationRepository whatsAppConfigurationRepository;
+
+	/**
+	 * Class for Whapi responses.
+	 * See <a href="https://support.whapi.cloud/help-desk/receiving/webhooks/incoming-webhooks-format/account-and-device-status">support.whapi.cloud</a>
+	 * @param code 1,2,3,4,5
+	 * @param text INIT, LAUNCH, QR, AUTH, ERROR
+	 */
+	@Serdeable
+	public record WhatsAppStatus(int code, String text){}
+
+	@Serdeable
+	public record HealthResponse(WhatsAppStatus status) {}
 
 	@Repository
 	public interface WhatsAppConfigurationRepository extends CrudRepository<WhatsAppConfiguration, Long> {
@@ -127,18 +142,37 @@ public class WhatsAppController {
 		}
 	}
 
-	public String getHealth(WhatsAppConfiguration config) throws IOException, InterruptedException {
+	public CompletableFuture<StatusInformation> getStatusAsync(WhatsAppConfiguration config, String statusTitle) {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
 		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
 			.build();
 
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		logger.info("Sending request {}", request.uri());
+
+		// Note: Whapi can be extremely slow in answering requests when using non-existing channels and/or API keys
+		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(response -> mapToStatusInformation(response, statusTitle))
+			.exceptionally(ex ->
+				new StatusInformation(false, statusTitle, ex.getMessage())
+			);
+	}
+
+	private StatusInformation mapToStatusInformation(HttpResponse<String> response, String statusTitle) {
 		if (response.statusCode() != 200) {
-			logger.warn("Error connecting to whapi.cloud (error code "
-				+ response.statusCode() + "): " + response.body());
+			String message = "Error connecting to whapi.cloud (error code " + response.statusCode() + "): " + response.body();
+			return new StatusInformation(false, statusTitle, message);
 		}
-		return response.body();
+		try {
+			HealthResponse healthResponse = objectMapper.readValue(response.body(), HealthResponse.class);
+			if (healthResponse.status.code != 4) {
+				return new StatusInformation(false, statusTitle, "Whapi response: " + healthResponse.status.text);
+			} else {
+				return new StatusInformation(true, statusTitle, "Whapi response: " + healthResponse.status.text);
+			}
+		} catch (IOException e) {
+			return new StatusInformation(false, statusTitle, "Invalid Whapi JSON response: " + e.getMessage());
+		}
 	}
 }

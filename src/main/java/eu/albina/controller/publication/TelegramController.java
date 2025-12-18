@@ -14,15 +14,20 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import eu.albina.controller.CrudRepository;
+import eu.albina.model.StatusInformation;
 import eu.albina.util.HttpClientUtil;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.MediaType;
+import io.micronaut.json.tree.JsonNode;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -40,7 +45,13 @@ public class TelegramController {
 	HttpClient client;
 
 	@Inject
+	ObjectMapper objectMapper;
+
+	@Inject
 	TelegramConfigurationRepository telegramConfigurationRepository;
+
+	@Serdeable
+	public record GetMeResponse(boolean ok, JsonNode result){}
 
 	@Repository
 	public interface TelegramConfigurationRepository extends CrudRepository<TelegramConfiguration, Long> {
@@ -133,9 +144,28 @@ public class TelegramController {
 	 *
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
-	public HttpResponse<String> getMe(TelegramConfiguration config) throws IOException, InterruptedException {
+	public CompletableFuture<StatusInformation> getStatusAsync(TelegramConfiguration config, String statusTitle) {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
-		return execute(request, client);
+
+		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(response -> mapToStatusInformation(response, statusTitle))
+			.exceptionally(ex ->
+				new StatusInformation(false, statusTitle, ex.getMessage())
+			);
+	}
+
+	private StatusInformation mapToStatusInformation(HttpResponse<String> response, String statusTitle) {
+		if (response.statusCode() != 200) {
+			String message = "Error connecting to api.telegram.org (error code "
+				+ response.statusCode() + "): " + response.body();
+			return new StatusInformation(false, statusTitle, message);
+		}
+		try {
+			GetMeResponse parsedResponse = objectMapper.readValue(response.body(), GetMeResponse.class);
+			return new StatusInformation(parsedResponse.ok, statusTitle, objectMapper.writeValueAsString(parsedResponse.result));
+		} catch (IOException e) {
+			return new StatusInformation(false, statusTitle, "Invalid JSON response: " + e.getMessage());
+		}
 	}
 
 	private static HttpResponse<String> execute(HttpRequest request, HttpClient httpClient) throws IOException, InterruptedException {
