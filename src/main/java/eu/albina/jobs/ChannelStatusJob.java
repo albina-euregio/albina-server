@@ -77,7 +77,7 @@ public class ChannelStatusJob {
 	}
 
 	public CompletableFuture<StatusInformation> triggerWhatsAppCheck(Region region, LanguageCode language) {
-		String title = "WhatsApp for " + region.getId() + "/" + language;
+		String title = "WhatsApp (" + region.getId() + "/" + language + ")";
 
 		return whatsAppController.getConfiguration(region, language)
 			.map(cfg ->
@@ -95,7 +95,7 @@ public class ChannelStatusJob {
 	}
 
 	public CompletableFuture<StatusInformation> triggerTelegramCheck(Region region, LanguageCode language) {
-		String title = "Telegram for " + region.getId() + "/" + language;
+		String title = "Telegram (" + region.getId() + "/" + language + ")";
 		return telegramController.getConfiguration(region, language)
 			.map(cfg ->
 				telegramController.getStatusAsync(cfg, title)
@@ -113,7 +113,7 @@ public class ChannelStatusJob {
 
 	public CompletableFuture<StatusInformation> triggerBlogCheck(Region region, LanguageCode language) {
 		return CompletableFuture.supplyAsync(() -> {
-			String title = "Blog for " + region.getId() + "/" + language;
+			String title = "Blog (" + region.getId() + "/" + language + ")";
 			StatusInformation blogStatus;
 			if (regionRepository.getPublishBlogRegions().contains(region)) {
 				try {
