@@ -45,8 +45,9 @@ public class WhatsAppController {
 	WhatsAppConfigurationRepository whatsAppConfigurationRepository;
 
 	/**
-	 *
-	 * @param code Whapi returns numbers 1,2,3,4,5, if albina-server encounters error it sets code to -1, code 0 is used if no whatsapp config is set
+	 * Class for Whapi responses.
+	 * See <a href="https://support.whapi.cloud/help-desk/receiving/webhooks/incoming-webhooks-format/account-and-device-status">support.whapi.cloud</a>
+	 * @param code 1,2,3,4,5
 	 * @param text INIT, LAUNCH, QR, AUTH, ERROR
 	 */
 	@Serdeable
@@ -145,12 +146,12 @@ public class WhatsAppController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
 		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))
-			.timeout(Duration.ofSeconds(3))
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
 			.build();
 
 		logger.info("Sending request {}", request.uri());
 
+		// Note: Whapi can be extremely slow in answering requests when using non-existing channels and/or API keys
 		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 			.thenApply(response -> mapToStatusInformation(response, statusTitle))
 			.exceptionally(ex ->
