@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>io.micronaut.platform</groupId>
 		<artifactId>micronaut-parent</artifactId>
-		<version>4.9.4</version>
+		<version>4.10.6</version>
 	</parent>
 
 	<properties>
@@ -24,7 +24,7 @@
 		<hibernate.version>6.6.2.Final</hibernate.version>
 		<liquibase.version>4.30.0</liquibase.version>
 		<itextpdf.version>9.3.0</itextpdf.version>
-		<micronaut.version>4.9.4</micronaut.version>
+		<micronaut.version>4.10.6</micronaut.version>
 		<micronaut.runtime>tomcat</micronaut.runtime>
 		<micronaut.aot.enabled>false</micronaut.aot.enabled>
 		<micronaut.aot.packageName>eu.albina.aot.generated</micronaut.aot.packageName>
