@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +23,8 @@ import eu.albina.model.enumerations.Recognizability;
 import eu.albina.model.enumerations.SlopeGradient;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.model.enumerations.Wetness;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Controller for danger sources variant texts.
@@ -430,7 +430,7 @@ public class DangerSourceVariantTextController {
 			String runoutIntoGreenText = addOnSentences.get(AddOns.runout_into_green);
 			result = concatTexts(result, runoutIntoGreenText);
 		}
-		if (dangerSourceVariant.getNaturalRelease() != null) {
+		if (dangerSourceVariant.getNaturalRelease() != null && dangerSourceVariant.getNaturalRelease() != Probability.unlikely) {
 			String naturalAvalanchesText = replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
 					addOnSentences.get(AddOns.natural_release));
 			result = concatTexts(result, naturalAvalanchesText);
