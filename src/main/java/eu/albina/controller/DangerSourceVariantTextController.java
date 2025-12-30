@@ -399,7 +399,7 @@ public class DangerSourceVariantTextController {
 
 	private String addAddOns(DangerSourceVariant dangerSourceVariant) {
 		String result = "";
-		if (dangerSourceVariant.getRemoteTriggering() != null) {
+		if (dangerSourceVariant.getRemoteTriggering() != null && dangerSourceVariant.getRemoteTriggering() != Probability.unlikely) {
 			String remoteTriggeringText = replaceRemoteTriggering(dangerSourceVariant.getRemoteTriggering(),
 					addOnSentences.get(AddOns.remote_triggering));
 			result = concatTexts(result, remoteTriggeringText);
