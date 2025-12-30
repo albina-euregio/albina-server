@@ -372,7 +372,7 @@ public class DangerSourceVariantTextController {
 			Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":0\\}"),
 			Map.entry("steilen", "\\{\"curlyName\":\"steilen\",\"line\":0\\}"),
 			Map.entry("möglich.",
-					"\\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
+					"\\{\"curlyName\":\"wieviele\",\"line\":0\\},\\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
 			Map.entry("Alarmzeichen",
 					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\},\"Altschnee03§sowie_Alarmzeichen\":\\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0\\}"));
 
@@ -525,15 +525,15 @@ public class DangerSourceVariantTextController {
 			switch (naturalRelease) {
 				case likely:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
+							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
 					break;
 				case possible:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				case unlikely:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+							"{\"curlyName\":\"wieviele\",\"line\":5}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				default:
 					break;
