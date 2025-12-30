@@ -281,6 +281,28 @@ public class StatisticsController {
 		sb.append("AspectNW");
 		sb.append(csvDeliminator);
 
+		// DANGER SOURCE VARIANT EXISTENCE INFORMATION
+		sb.append("ElevationAboveOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("ElevationBelowOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectNOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectNEOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectEOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectSEOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectSOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectSWOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectWOfExistence");
+		sb.append(csvDeliminator);
+		sb.append("AspectNWOfExistence");
+		sb.append(csvDeliminator);
+
 		// GLIDE SNOW AVALANCHES
 		sb.append("GlidingSnowActivity");
 		sb.append(csvDeliminator);
@@ -486,6 +508,76 @@ public class StatisticsController {
 				sb.append("0");
 			sb.append(csvDeliminator);
 			if (dangerSourceVariant.getAspects().contains(Aspect.NW))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+		} else {
+			for (int i = 0; i < 8; i++) {
+				sb.append(notAvailableString);
+				sb.append(csvDeliminator);
+			}
+		}
+
+		if (dangerSourceVariant.getTreelineLowOfExistence() != null && dangerSourceVariant.getTreelineLowOfExistence())
+			sb.append("treeline");
+		else {
+			if (dangerSourceVariant.getElevationLowOfExistence() != null && dangerSourceVariant.getElevationLowOfExistence() <= 0)
+				sb.append(notAvailableString);
+			else if (dangerSourceVariant.getElevationLowOfExistence() != null)
+				sb.append(dangerSourceVariant.getElevationLowOfExistence());
+			else
+				sb.append(notAvailableString);
+		}
+		sb.append(csvDeliminator);
+		if (dangerSourceVariant.getTreelineHighOfExistence() != null && dangerSourceVariant.getTreelineHighOfExistence())
+			sb.append("treeline");
+		else {
+			if (dangerSourceVariant.getElevationHighOfExistence() != null && dangerSourceVariant.getElevationHighOfExistence() <= 0)
+				sb.append(notAvailableString);
+			else if (dangerSourceVariant.getElevationHighOfExistence() != null)
+				sb.append(dangerSourceVariant.getElevationHighOfExistence());
+			else
+				sb.append(notAvailableString);
+		}
+		sb.append(csvDeliminator);
+		if (dangerSourceVariant.getAspectsOfExistence() != null && !dangerSourceVariant.getAspectsOfExistence().isEmpty()) {
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.N))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.NE))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.E))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.SE))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.S))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.SW))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.W))
+				sb.append("1");
+			else
+				sb.append("0");
+			sb.append(csvDeliminator);
+			if (dangerSourceVariant.getAspectsOfExistence().contains(Aspect.NW))
 				sb.append("1");
 			else
 				sb.append("0");
