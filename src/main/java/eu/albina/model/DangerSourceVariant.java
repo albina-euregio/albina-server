@@ -5,8 +5,6 @@ import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import io.micronaut.serde.annotation.Serdeable;
-
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblemType;
 import eu.albina.model.enumerations.AvalancheType;
@@ -27,6 +25,7 @@ import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.model.enumerations.Thickness;
 import eu.albina.model.enumerations.Wetness;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
@@ -165,7 +164,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "TEXTCAT")
 	private String textcat;
 
-	// TODO add uncertainties
+	@Lob
+	@Column(name = "UNCERTAINTY")
+	private String uncertainty;
 
 	/** --------------------- */
 	/** GLIDE SNOW AVALANCHES */
@@ -556,6 +557,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setTextcat(String textcat) {
 		this.textcat = textcat;
+	}
+
+	public String getUncertainty() {
+		return this.uncertainty;
+	}
+
+	public void setUncertainty(String uncertainty) {
+		this.uncertainty = uncertainty;
 	}
 
 	public GlidingSnowActivity getGlidingSnowActivity() {

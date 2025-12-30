@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import io.micronaut.serde.ObjectMapper;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Singleton;
 import org.apache.commons.text.StringEscapeUtils;
 
 import eu.albina.model.AvalancheBulletin;
@@ -29,6 +25,9 @@ import eu.albina.model.enumerations.DangerSign;
 import eu.albina.model.enumerations.GrainShape;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TerrainType;
+import io.micronaut.serde.ObjectMapper;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Controller for statistics.
@@ -241,6 +240,8 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append("Comment");
 		sb.append(csvDeliminator);
+		sb.append("Uncertainty");
+		sb.append(csvDeliminator);
 
 		// EAWS MATRIX INFORMATION
 		sb.append("DangerRating");
@@ -419,6 +420,8 @@ public class StatisticsController {
 		sb.append(dangerSourceVariant.getDangerSigns() != null ? dangerSourceVariant.getDangerSigns().stream().map(DangerSign::toString).collect(Collectors.joining(",")) : notAvailableString);
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getComment() != null ? dangerSourceVariant.getComment().replace(";", ",") : notAvailableString);
+		sb.append(csvDeliminator);
+		sb.append(dangerSourceVariant.getUncertainty() != null ? dangerSourceVariant.getUncertainty().replace(";", ",") : notAvailableString);
 		sb.append(csvDeliminator);
 
 		addEawsMatrixInformation(sb, dangerSourceVariant.getEawsMatrixInformation());
