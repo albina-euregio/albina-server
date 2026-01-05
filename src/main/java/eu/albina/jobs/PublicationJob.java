@@ -4,21 +4,27 @@ package eu.albina.jobs;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.base.Stopwatch;
-import eu.albina.controller.RegionRepository;
-import eu.albina.controller.ServerInstanceRepository;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Stopwatch;
+
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionRepository;
+import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -26,6 +32,8 @@ import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * A job handling all the tasks and logic necessary to
@@ -69,7 +77,8 @@ public class PublicationJob {
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
-		List<Region> regions = Objects.requireNonNullElseGet(strategy.getRegions(), () -> regionRepository.getPublishBulletinRegions()).stream()
+		List<Region> publishBulletinRegions = regionRepository.getPublishBulletinRegions();
+		List<Region> regions = Objects.requireNonNullElse(strategy.getRegions(), publishBulletinRegions).stream()
 			.filter(region -> {
 				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
 				logger.info("Internal status for region {} is {}", region.getId(), status);
@@ -121,14 +130,14 @@ public class PublicationJob {
 
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
-		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionRepository.getPublishBulletinRegions());
+		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, publishBulletinRegions);
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		logger.info("Publication phase 1 done after {}", stopwatch);
 
 		// update all regions to create complete maps
-		List<AvalancheReport> allRegions = regionRepository.getPublishBulletinRegions().stream().flatMap(region -> {
+		List<AvalancheReport> allRegions = publishBulletinRegions.stream().flatMap(region -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
@@ -177,8 +186,9 @@ public class PublicationJob {
 					tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
 				}));
 			}
-			for (Region superRegion : getSuperRegions(regions)) {
-				// update all super regions
+
+			for (Region superRegion : getSuperRegions(publishBulletinRegions)) {
+				// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
 				phase2.add(Thread.startVirtualThread(() -> {
 					List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).collect(Collectors.toList());
