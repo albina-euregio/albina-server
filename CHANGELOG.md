@@ -2,13 +2,33 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [8.0.11] - 2026-01-05
+
+### 🚀 Features
+
+- New StatusService: determine API status for WhatsApp, Telegram, blog
+
+### 🐛 Bug Fixes
+
+- Publication: Republish super regions even if published region is not part of the super region
+
+### ⚙️ Miscellaneous Tasks
+
+- Update micronaut to 4.10.6
+
+## [8.0.10] - 2025-12-10
+
+### 🚀 Features
+
+- matrix-parameter: show parameter in pdf only of avalanche type is slab
+
 ## [8.0.9] - 2025-12-05
 
 ### 🐛 Bug Fixes
 
 - DangerSourceService: remove @Transactional for all GET endpoints
 - AvalancheBulletinService: remove unwanted @Transactional
-- DangerSourceService: queryParam is single region 
+- DangerSourceService: queryParam is single region
 
 ## [8.0.8] - 2025-12-02
 
