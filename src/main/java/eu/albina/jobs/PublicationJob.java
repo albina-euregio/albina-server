@@ -77,7 +77,8 @@ public class PublicationJob {
 		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
 		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
-		List<Region> regions = Objects.requireNonNullElseGet(strategy.getRegions(), () -> regionRepository.getPublishBulletinRegions()).stream()
+		List<Region> publishBulletinRegions = regionRepository.getPublishBulletinRegions();
+		List<Region> regions = Objects.requireNonNullElse(strategy.getRegions(), publishBulletinRegions).stream()
 			.filter(region -> {
 				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
 				logger.info("Internal status for region {} is {}", region.getId(), status);
@@ -129,14 +130,14 @@ public class PublicationJob {
 
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
-		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, regionRepository.getPublishBulletinRegions());
+		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, publishBulletinRegions);
 		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		logger.info("Publication phase 1 done after {}", stopwatch);
 
 		// update all regions to create complete maps
-		List<AvalancheReport> allRegions = regionRepository.getPublishBulletinRegions().stream().flatMap(region -> {
+		List<AvalancheReport> allRegions = publishBulletinRegions.stream().flatMap(region -> {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
 			logger.info("Load region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
@@ -186,7 +187,7 @@ public class PublicationJob {
 				}));
 			}
 
-			for (Region superRegion : getSuperRegions(regionRepository.getPublishBulletinRegions())) {
+			for (Region superRegion : getSuperRegions(publishBulletinRegions)) {
 				// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
 				phase2.add(Thread.startVirtualThread(() -> {
 					List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
