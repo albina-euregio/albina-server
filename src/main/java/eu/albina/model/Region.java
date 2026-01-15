@@ -10,17 +10,16 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import io.micronaut.core.annotation.Introspected;
-import io.micronaut.json.tree.JsonNode;
-import io.micronaut.serde.ObjectMapper;
-import io.micronaut.serde.annotation.Serdeable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
 import eu.albina.model.enumerations.TextcatTextfield;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.json.tree.JsonNode;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -146,6 +145,9 @@ public class Region implements PersistentObject {
 
 	@Column(name = "ENABLE_WEATHERBOX")
 	private boolean enableWeatherbox;
+	
+	@Column(name = "ENABLE_LINEA_EXPORT")
+	private boolean enableLineaExport;
 
 	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextcatTextfield.Converter.COLUMN_DEFINITION)
 	@Convert(converter = TextcatTextfield.Converter.class)
@@ -786,6 +788,14 @@ public class Region implements PersistentObject {
 
 	public void setEnableWeatherbox(boolean enableWeatherbox) {
 		this.enableWeatherbox = enableWeatherbox;
+	}
+
+	public boolean isEnableLineaExport() {
+		return enableLineaExport;
+	}
+
+	public void setEnableLineaExport(boolean enableLineaExport) {
+		this.enableLineaExport = enableLineaExport;
 	}
 
 	public LanguageCode getDefaultLang() { return defaultLang; }
