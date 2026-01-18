@@ -4,6 +4,7 @@ package eu.albina.jobs;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.blog.BlogController;
 import eu.albina.controller.publication.blog.BlogItem;
+import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.exception.AlbinaException;
@@ -44,6 +45,9 @@ public class ChannelStatusJob {
 	@Inject
 	TelegramController telegramController;
 
+	@Inject
+	RapidMailController rapidMailController;
+
 	Map<String, List<StatusInformation>> statusInformationMap = new ConcurrentHashMap<>();
 
 	public CompletableFuture<List<StatusInformation>> getOrTriggerStatusForRegion(String regionId) throws AlbinaException {
@@ -61,14 +65,16 @@ public class ChannelStatusJob {
 
 		CompletableFuture<StatusInformation> telegram =	triggerTelegramCheck(region, language);
 		CompletableFuture<StatusInformation> whatsapp =	triggerWhatsAppCheck(region, language);
+		CompletableFuture<StatusInformation> mail =	triggerMailCheck(region, language);
 		CompletableFuture<StatusInformation> blog =	triggerBlogCheck(region, language);
 
 		return CompletableFuture
-			.allOf(telegram, whatsapp, blog)
+			.allOf(telegram, whatsapp, mail, blog)
 			.thenApply(v -> {
 				List<StatusInformation> result = List.of(
 					telegram.join(),
 					whatsapp.join(),
+					mail.join(),
 					blog.join()
 				);
 				statusInformationMap.put(region.getId(), result);
@@ -99,6 +105,23 @@ public class ChannelStatusJob {
 		return telegramController.getConfiguration(region, language)
 			.map(cfg ->
 				telegramController.getStatusAsync(cfg, title)
+					.thenApply(status -> {
+						logger.info(status.toLogLine());
+						return status;
+					})
+			)
+			.orElseGet(() -> {
+				StatusInformation status = new StatusInformation(true, title, "No config");
+				logger.info(status.toLogLine());
+				return CompletableFuture.completedFuture(status);
+			});
+	}
+
+	public CompletableFuture<StatusInformation> triggerMailCheck(Region region, LanguageCode language) {
+		String title = "Mail (" + region.getId() + "/" + language + ")";
+		return rapidMailController.getConfiguration(region, language)
+			.map(cfg ->
+				rapidMailController.getStatusAsync(cfg, title)
 					.thenApply(status -> {
 						logger.info(status.toLogLine());
 						return status;

@@ -12,24 +12,26 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.albina.controller.CrudRepository;
+import eu.albina.exception.AlbinaException;
+import eu.albina.model.Region;
+import eu.albina.model.StatusInformation;
 import eu.albina.model.Subscriber;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.RapidMailConfiguration;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.http.MediaType;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.albina.exception.AlbinaException;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.RapidMailConfiguration;
 
 @Singleton
 public class RapidMailController {
@@ -166,5 +168,36 @@ public class RapidMailController {
 			subject
 		);
 		sendMessage(request, config);
+	}
+
+	/**
+	 * Use /recipientlists query endpoint to get status information about rapidmail.
+	 * @param config
+	 * @param statusTitle
+	 * @return CompletableFuture with status information (number of recipient lists that were found)
+	 */
+	public CompletableFuture<StatusInformation> getStatusAsync(RapidMailConfiguration config, String statusTitle) {
+		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/recipientlists"))
+				.header("Authorization", calcBasicAuth(config))
+				.header("Accept", MediaType.APPLICATION_JSON)
+				.build();
+
+		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+				.thenApply(response -> mapToStatusInformation(response, statusTitle))
+				.exceptionally(ex -> new StatusInformation(false, statusTitle, ex.getMessage()));
+	}
+
+	private StatusInformation mapToStatusInformation(HttpResponse<String> response, String statusTitle) {
+		if (response.statusCode() != 200) {
+			String message = "Error connecting to rapidmail (error code "
+					+ response.statusCode() + "): " + response.body();
+			return new StatusInformation(false, statusTitle, message);
+		}
+		try {
+			RapidMailRecipientListResponse parsedResponse = objectMapper.readValue(response.body(), RapidMailRecipientListResponse.class);
+			return new StatusInformation(parsedResponse.totalItems() > 0, statusTitle, parsedResponse.totalItems() + " recipient lists");
+		} catch (IOException e) {
+			return new StatusInformation(false, statusTitle, "Invalid JSON response: " + e.getMessage());
+		}
 	}
 }
