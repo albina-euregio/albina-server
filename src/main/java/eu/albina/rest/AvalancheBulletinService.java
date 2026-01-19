@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.StandardSystemProperty;
@@ -495,11 +494,6 @@ public class AvalancheBulletinService {
 					Map<String, AvalancheBulletin> avalancheBulletins = avalancheBulletinController
 						.createBulletin(bulletin, startDate, endDate, region);
 					avalancheReportController.saveReport(avalancheBulletins, startDate, region, user);
-
-					// save report for super regions
-					for (Region superRegion : region.getSuperRegions()) {
-						avalancheReportController.saveReport(avalancheBulletins, startDate, superRegion, user);
-					}
 				} else
 					throw new AlbinaException("User is not authorized for this region!");
 
@@ -623,13 +617,6 @@ public class AvalancheBulletinService {
 						.filter(bulletin -> bulletin.affectsRegion(region))
 						.collect(Collectors.toList());
 					avalancheReportController.submitReport(regionBulletins, startDate, region, user);
-					// submit report for super regions
-					for (Region superRegion : region.getSuperRegions()) {
-						List<AvalancheBulletin> superRegionBulletins = allBulletins.stream()
-							.filter(bulletin -> bulletin.affectsRegion(superRegion))
-							.collect(Collectors.toList());
-						avalancheReportController.submitReport(superRegionBulletins, startDate, superRegion, user);
-					}
 
 					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
 					try {
@@ -638,11 +625,7 @@ public class AvalancheBulletinService {
 					}
 				}
 
-				List<Region> regions = Stream.concat(
-					Stream.of(region),
-					region.getSuperRegions().stream().filter(Region::isPublishBulletins)
-				).distinct().collect(Collectors.toList());
-
+				List<Region> regions = List.of(region);
 				publicationJob.execute(PublicationStrategy.change(startDate, regions));
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
@@ -678,15 +661,6 @@ public class AvalancheBulletinService {
 					.collect(Collectors.toList());
 
 				avalancheReportController.submitReport(regionBulletins, startDate, region, user);
-
-				// submit report for super regions
-				for (Region superRegion : region.getSuperRegions()) {
-					List<AvalancheBulletin> superRegionBulletins = allBulletins.stream()
-						.filter(bulletin -> bulletin.affectsRegion(superRegion))
-						.collect(Collectors.toList());
-
-					avalancheReportController.submitReport(superRegionBulletins, startDate, superRegion, user);
-				}
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {

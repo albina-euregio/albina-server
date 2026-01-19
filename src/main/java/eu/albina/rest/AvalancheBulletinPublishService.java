@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.publication.PublicationController;
@@ -84,10 +83,7 @@ public class AvalancheBulletinPublishService {
 
 			User user = userRepository.findByIdOrElseThrow(principal);
 			Region region = regionRepository.findById(regionId).orElseThrow();
-			List<Region> regions = Stream.concat(
-				Stream.of(region),
-				region.getSuperRegions().stream().filter(Region::isPublishBulletins)
-			).distinct().collect(Collectors.toList());
+			List<Region> regions = List.of(region);
 
 			if (user.hasPermissionForRegion(region.getId())) {
 				publicationJob.execute(PublicationStrategy.publish(startDate, regions));

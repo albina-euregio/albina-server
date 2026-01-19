@@ -131,10 +131,6 @@ public class AvalancheBulletinController {
 		}
 
 		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
-		// save report for super regions
-		for (Region superRegion : region.getSuperRegions()) {
-			avalancheReportController.saveReport(resultBulletins, startDate, superRegion, user);
-		}
 
 		return resultBulletins;
 	}
@@ -314,10 +310,6 @@ public class AvalancheBulletinController {
 		resultBulletins.put(updatedBulletin.getId(), updatedBulletin);
 
 		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
-		// save report for super regions
-		for (Region superRegion : region.getSuperRegions()) {
-			avalancheReportController.saveReport(resultBulletins, startDate, superRegion, user);
-		}
 
 		logger.info("Bulletin {} for region {} updated by {}", updatedBulletin.getId(), region.getId(), user);
 
@@ -346,10 +338,6 @@ public class AvalancheBulletinController {
 		}
 
 		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
-		// save report for super regions
-		for (Region superRegion : region.getSuperRegions()) {
-			avalancheReportController.saveReport(resultBulletins, startDate, superRegion, user);
-		}
 
 		return resultBulletins;
 	}
