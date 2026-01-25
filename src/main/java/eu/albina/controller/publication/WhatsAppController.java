@@ -6,6 +6,7 @@ import eu.albina.controller.CrudRepository;
 import eu.albina.model.Region;
 import eu.albina.model.StatusInformation;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.TelegramConfiguration;
 import eu.albina.model.publication.WhatsAppConfiguration;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.http.MediaType;
@@ -22,6 +23,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -58,7 +60,12 @@ public class WhatsAppController {
 
 	@Repository
 	public interface WhatsAppConfigurationRepository extends CrudRepository<WhatsAppConfiguration, Long> {
+		List<WhatsAppConfiguration> findByRegion(Region region);
 		Optional<WhatsAppConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
+	}
+
+	public List<WhatsAppConfiguration> getConfigurations(Region region) {
+		return whatsAppConfigurationRepository.findByRegion(region);
 	}
 
 	public Optional<WhatsAppConfiguration> getConfiguration(Region region, LanguageCode languageCode) {

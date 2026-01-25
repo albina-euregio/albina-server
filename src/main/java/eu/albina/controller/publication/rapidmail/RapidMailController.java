@@ -49,9 +49,14 @@ public class RapidMailController {
 
 	@Repository
 	public interface RapidMailConfigurationRepository extends CrudRepository<RapidMailConfiguration, Long> {
+		List<RapidMailConfiguration> findByRegion(Region region);
 		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatter(Region region, LanguageCode languageCode, String subjectMatter);
 		Optional<RapidMailConfiguration> findByLanguageCodeAndSubjectMatter(LanguageCode languageCode, String subjectMatter);
 		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatterIsNull(Region region, LanguageCode languageCode);
+	}
+
+	public List<RapidMailConfiguration> getConfigurations(@Nonnull Region region) {
+		return rapidMailConfigurationRepository.findByRegion(region);
 	}
 
 	public Optional<RapidMailConfiguration> getConfiguration(@Nonnull Region region, @Nonnull LanguageCode languageCode, @Nonnull String subjectMatter) {

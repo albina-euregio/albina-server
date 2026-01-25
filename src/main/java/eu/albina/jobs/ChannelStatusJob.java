@@ -3,15 +3,12 @@ package eu.albina.jobs;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.blog.BlogController;
-import eu.albina.controller.publication.blog.BlogItem;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.controller.publication.TelegramController;
 import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.StatusInformation;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.BlogConfiguration;
 import io.micronaut.scheduling.annotation.Scheduled;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -22,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  * A job to check status of the different publication channels (Telegram, WhatsApp, Blog).
@@ -60,98 +58,25 @@ public class ChannelStatusJob {
 	}
 
 	public CompletableFuture<List<StatusInformation>> triggerStatusChecks(Region region) {
-		LanguageCode language = region.getDefaultLang();
-		logger.info("Health check triggered for {}/{}", region.getId(), language);
+		logger.info("Health check triggered for {}", region.getId());
 
-		CompletableFuture<StatusInformation> telegram =	triggerTelegramCheck(region, language);
-		CompletableFuture<StatusInformation> whatsapp =	triggerWhatsAppCheck(region, language);
-		CompletableFuture<StatusInformation> mail =	triggerMailCheck(region, language);
-		CompletableFuture<StatusInformation> blog =	triggerBlogCheck(region, language);
+		List<CompletableFuture<StatusInformation>> status = Stream.of(
+				telegramController.getConfigurations(region).stream().map(c -> telegramController.getStatusAsync(c, "Telegram (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
+				whatsAppController.getConfigurations(region).stream().map(c -> whatsAppController.getStatusAsync(c, "WhatsApp (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
+				rapidMailController.getConfigurations(region).stream().map(c -> rapidMailController.getStatusAsync(c, "Mail (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
+				blogController.getConfigurations(region).stream().map(c -> blogController.getStatusAsync(c, "Blog (%s/%s)".formatted(c.getRegion(), c.getLanguageCode())))
+			)
+			.flatMap(s -> s)
+			.toList();
 
 		return CompletableFuture
-			.allOf(telegram, whatsapp, mail, blog)
+			.allOf(status.toArray(CompletableFuture[]::new))
 			.thenApply(v -> {
-				List<StatusInformation> result = List.of(
-					telegram.join(),
-					whatsapp.join(),
-					mail.join(),
-					blog.join()
-				);
+				List<StatusInformation> result = status.stream().map(CompletableFuture::join).toList();
+				result.forEach(s -> logger.info(s.toLogLine()));
 				statusInformationMap.put(region.getId(), result);
 				return result;
 			});
-	}
-
-	public CompletableFuture<StatusInformation> triggerWhatsAppCheck(Region region, LanguageCode language) {
-		String title = "WhatsApp (" + region.getId() + "/" + language + ")";
-
-		return whatsAppController.getConfiguration(region, language)
-			.map(cfg ->
-				whatsAppController.getStatusAsync(cfg, title)
-					.thenApply(status -> {
-						logger.info(status.toLogLine());
-						return status;
-					})
-			)
-			.orElseGet(() -> {
-				StatusInformation status = new StatusInformation(true, title, "No config");
-				logger.info(status.toLogLine());
-				return CompletableFuture.completedFuture(status);
-			});
-	}
-
-	public CompletableFuture<StatusInformation> triggerTelegramCheck(Region region, LanguageCode language) {
-		String title = "Telegram (" + region.getId() + "/" + language + ")";
-		return telegramController.getConfiguration(region, language)
-			.map(cfg ->
-				telegramController.getStatusAsync(cfg, title)
-					.thenApply(status -> {
-						logger.info(status.toLogLine());
-						return status;
-					})
-			)
-			.orElseGet(() -> {
-				StatusInformation status = new StatusInformation(true, title, "No config");
-				logger.info(status.toLogLine());
-				return CompletableFuture.completedFuture(status);
-			});
-	}
-
-	public CompletableFuture<StatusInformation> triggerMailCheck(Region region, LanguageCode language) {
-		String title = "Mail (" + region.getId() + "/" + language + ")";
-		return rapidMailController.getConfiguration(region, language)
-			.map(cfg ->
-				rapidMailController.getStatusAsync(cfg, title)
-					.thenApply(status -> {
-						logger.info(status.toLogLine());
-						return status;
-					})
-			)
-			.orElseGet(() -> {
-				StatusInformation status = new StatusInformation(true, title, "No config");
-				logger.info(status.toLogLine());
-				return CompletableFuture.completedFuture(status);
-			});
-	}
-
-	public CompletableFuture<StatusInformation> triggerBlogCheck(Region region, LanguageCode language) {
-		return CompletableFuture.supplyAsync(() -> {
-			String title = "Blog (" + region.getId() + "/" + language + ")";
-			StatusInformation blogStatus;
-			if (regionRepository.getPublishBlogRegions().contains(region)) {
-				try {
-					BlogConfiguration config = blogController.getConfiguration(region, language).orElseThrow();
-					BlogItem latest = blogController.getLatestBlogPost(config);
-					blogStatus = new StatusInformation(true, title, "latest=" + latest.getTitle());
-				} catch (Exception e) {
-					blogStatus = new StatusInformation(false, title, e.getMessage());
-				}
-			} else {
-				blogStatus = new StatusInformation(true, title, "region not in publishBlogRegions");
-			}
-			logger.info(blogStatus.toLogLine());
-			return blogStatus;
-		});
 	}
 
 	@Scheduled(cron = "0 0 4 * * ?")

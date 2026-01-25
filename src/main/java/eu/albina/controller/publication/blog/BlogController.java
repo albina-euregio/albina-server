@@ -7,6 +7,7 @@ import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.model.Region;
+import eu.albina.model.StatusInformation;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Singleton
 public class BlogController {
@@ -51,7 +53,12 @@ public class BlogController {
 	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
 		Optional<BlogConfiguration> findByBlogId(String blogId);
 
+		List<BlogConfiguration> findByRegion(Region region);
 		Optional<BlogConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
+	}
+
+	public List<BlogConfiguration> getConfigurations(Region region) {
+		return blogConfigurationRepository.findByRegion(region);
 	}
 
 	public Optional<BlogConfiguration> getConfiguration(Region region, LanguageCode languageCode) throws NoResultException {
@@ -165,6 +172,17 @@ public class BlogController {
 			updateConfigurationLastPublished(config, object);
 		}
 
+	}
+
+	public CompletableFuture<StatusInformation> getStatusAsync(BlogConfiguration config, String title) {
+		return CompletableFuture.supplyAsync(() -> {
+			try {
+				BlogItem latest = getLatestBlogPost(config);
+				return new StatusInformation(true, title, "latest=" + latest.getTitle());
+			} catch (Exception e) {
+				return new StatusInformation(false, title, e.getMessage());
+			}
+		});
 	}
 
 }
