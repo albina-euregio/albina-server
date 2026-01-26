@@ -9,16 +9,21 @@ import eu.albina.controller.publication.WhatsAppController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import eu.albina.model.StatusInformation;
+import eu.albina.model.publication.RapidMailConfiguration;
+
 import io.micronaut.scheduling.annotation.Scheduled;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -63,7 +68,9 @@ public class ChannelStatusJob {
 		List<CompletableFuture<StatusInformation>> status = Stream.of(
 				telegramController.getConfigurations(region).stream().map(c -> telegramController.getStatusAsync(c, "Telegram (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
 				whatsAppController.getConfigurations(region).stream().map(c -> whatsAppController.getStatusAsync(c, "WhatsApp (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
-				rapidMailController.getConfigurations(region).stream().map(c -> rapidMailController.getStatusAsync(c, "Mail (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
+				rapidMailController.getConfigurations(region).stream()
+					.collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(RapidMailConfiguration::getUsername)))).stream()
+					.map(c -> rapidMailController.getStatusAsync(c, "Mail (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
 				blogController.getConfigurations(region).stream().map(c -> blogController.getStatusAsync(c, "Blog (%s/%s)".formatted(c.getRegion(), c.getLanguageCode())))
 			)
 			.flatMap(s -> s)
