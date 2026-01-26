@@ -180,7 +180,10 @@ public class BlogController {
 				BlogItem latest = getLatestBlogPost(config);
 				return new StatusInformation(true, title, "latest=" + latest.getTitle());
 			} catch (Exception e) {
-				return new StatusInformation(false, title, e.getMessage());
+				if(e instanceof NoSuchElementException) {
+					return new  StatusInformation(false, title, "No published blog posts.");
+				}
+				return new StatusInformation(false, title, e.toString());
 			}
 		});
 	}

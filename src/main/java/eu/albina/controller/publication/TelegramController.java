@@ -155,7 +155,7 @@ public class TelegramController {
 		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 			.thenApply(response -> mapToStatusInformation(response, statusTitle))
 			.exceptionally(ex ->
-				new StatusInformation(false, statusTitle, ex.getMessage())
+				new StatusInformation(false, statusTitle, ex.toString())
 			);
 	}
 

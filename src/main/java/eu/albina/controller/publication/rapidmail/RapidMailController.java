@@ -202,7 +202,7 @@ public class RapidMailController {
 			RapidMailRecipientListResponse parsedResponse = objectMapper.readValue(response.body(), RapidMailRecipientListResponse.class);
 			return new StatusInformation(parsedResponse.totalItems() > 0, statusTitle, parsedResponse.totalItems() + " recipient lists");
 		} catch (IOException e) {
-			return new StatusInformation(false, statusTitle, "Invalid JSON response: " + e.getMessage());
+			return new StatusInformation(false, statusTitle, "Invalid JSON response: " + e.toString());
 		}
 	}
 }
