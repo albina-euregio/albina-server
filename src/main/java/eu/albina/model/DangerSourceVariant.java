@@ -5,8 +5,6 @@ import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import io.micronaut.serde.annotation.Serdeable;
-
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblemType;
 import eu.albina.model.enumerations.AvalancheType;
@@ -27,6 +25,7 @@ import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.model.enumerations.Thickness;
 import eu.albina.model.enumerations.Wetness;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
@@ -118,6 +117,23 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "TREELINE_LOW")
 	private Boolean treelineLow;
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "danger_source_variant_aspects_of_existence", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
+	@Column(name = "ASPECT")
+	private Set<Aspect> aspectsOfExistence;
+
+	@Column(name = "ELEVATION_HIGH_OF_EXISTENCE")
+	private Integer elevationHighOfExistence;
+
+	@Column(name = "TREELINE_HIGH_OF_EXISTENCE")
+	private Boolean treelineHighOfExistence;
+
+	@Column(name = "ELEVATION_LOW_OF_EXISTENCE")
+	private Integer elevationLowOfExistence;
+
+	@Column(name = "TREELINE_LOW_OF_EXISTENCE")
+	private Boolean treelineLowOfExistence;
+
 	@Column(name = "DANGER_INCREASE_WITH_ELEVATION")
 	private Boolean dangerIncreaseWithElevation;
 
@@ -165,7 +181,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "TEXTCAT")
 	private String textcat;
 
-	// TODO add uncertainties
+	@Lob
+	@Column(name = "UNCERTAINTY")
+	private String uncertainty;
 
 	/** --------------------- */
 	/** GLIDE SNOW AVALANCHES */
@@ -298,6 +316,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	public DangerSourceVariant() {
 		regions = new LinkedHashSet<>();
 		aspects = new LinkedHashSet<>();
+		aspectsOfExistence = new LinkedHashSet<>();
 		dangerSigns = new LinkedHashSet<>();
 		terrainTypes = new LinkedHashSet<>();
 	}
@@ -458,6 +477,54 @@ public class DangerSourceVariant extends AbstractPersistentObject
 		this.treelineLow = treelineLow;
 	}
 
+	public Set<Aspect> getAspectsOfExistence() {
+		return this.aspectsOfExistence;
+	}
+
+	public void setAspectsOfExistence(Set<Aspect> aspectsOfExistence) {
+		this.aspectsOfExistence = aspectsOfExistence;
+	}
+
+	public Integer getElevationHighOfExistence() {
+		return this.elevationHighOfExistence;
+	}
+
+	public void setElevationHighOfExistence(Integer elevationHighOfExistence) {
+		this.elevationHighOfExistence = elevationHighOfExistence;
+	}
+
+	public Boolean isTreelineHighOfExistence() {
+		return this.treelineHighOfExistence;
+	}
+
+	public Boolean getTreelineHighOfExistence() {
+		return this.treelineHighOfExistence;
+	}
+
+	public void setTreelineHighOfExistence(Boolean treelineHighOfExistence) {
+		this.treelineHighOfExistence = treelineHighOfExistence;
+	}
+
+	public Integer getElevationLowOfExistence() {
+		return this.elevationLowOfExistence;
+	}
+
+	public void setElevationLowOfExistence(Integer elevationLowOfExistence) {
+		this.elevationLowOfExistence = elevationLowOfExistence;
+	}
+
+	public Boolean isTreelineLowOfExistence() {
+		return this.treelineLowOfExistence;
+	}
+
+	public Boolean getTreelineLowOfExistence() {
+		return this.treelineLowOfExistence;
+	}
+
+	public void setTreelineLowOfExistence(Boolean treelineLowOfExistence) {
+		this.treelineLowOfExistence = treelineLowOfExistence;
+	}
+
 	public Boolean isDangerIncreaseWithElevation() {
 		return this.dangerIncreaseWithElevation;
 	}
@@ -556,6 +623,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setTextcat(String textcat) {
 		this.textcat = textcat;
+	}
+
+	public String getUncertainty() {
+		return this.uncertainty;
+	}
+
+	public void setUncertainty(String uncertainty) {
+		this.uncertainty = uncertainty;
 	}
 
 	public GlidingSnowActivity getGlidingSnowActivity() {

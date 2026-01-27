@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +23,8 @@ import eu.albina.model.enumerations.Recognizability;
 import eu.albina.model.enumerations.SlopeGradient;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.model.enumerations.Wetness;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Controller for danger sources variant texts.
@@ -372,7 +372,7 @@ public class DangerSourceVariantTextController {
 			Map.entry("an_steilen", "\\{\"curlyName\":\"an_steilen\",\"line\":0\\}"),
 			Map.entry("steilen", "\\{\"curlyName\":\"steilen\",\"line\":0\\}"),
 			Map.entry("möglich.",
-					"\\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
+					"\\{\"curlyName\":\"wieviele\",\"line\":0\\},\\{\"curlyName\":\"Auslösung01§möglich\",\"line\":0\\}"),
 			Map.entry("Alarmzeichen",
 					"\\{\"curlyName\":\"Alarmzeichen\",\"line\":0\\},\"Altschnee03§sowie_Alarmzeichen\":\\{\"curlyName\":\"Altschnee03§sowie_Alarmzeichen\",\"line\":0\\}"));
 
@@ -430,7 +430,7 @@ public class DangerSourceVariantTextController {
 			String runoutIntoGreenText = addOnSentences.get(AddOns.runout_into_green);
 			result = concatTexts(result, runoutIntoGreenText);
 		}
-		if (dangerSourceVariant.getNaturalRelease() != null) {
+		if (dangerSourceVariant.getNaturalRelease() != null && dangerSourceVariant.getNaturalRelease() != Probability.unlikely) {
 			String naturalAvalanchesText = replaceNaturalAvalanches(dangerSourceVariant.getNaturalRelease(),
 					addOnSentences.get(AddOns.natural_release));
 			result = concatTexts(result, naturalAvalanchesText);
@@ -525,15 +525,15 @@ public class DangerSourceVariantTextController {
 			switch (naturalRelease) {
 				case likely:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
+							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":1}");
 					break;
 				case possible:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+							"{\"curlyName\":\"wieviele\",\"line\":0}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				case unlikely:
 					result = result.replaceAll(textcatPlaceholder.get("möglich."),
-							"{\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
+							"{\"curlyName\":\"wieviele\",\"line\":5}, {\"curlyName\":\"Auslösung01§möglich\",\"line\":0}");
 					break;
 				default:
 					break;
