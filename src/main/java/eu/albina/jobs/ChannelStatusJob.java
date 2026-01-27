@@ -70,7 +70,7 @@ public class ChannelStatusJob {
 				whatsAppController.getConfigurations(region).stream().map(c -> whatsAppController.getStatusAsync(c, "WhatsApp (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
 				rapidMailController.getConfigurations(region).stream()
 					.collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(RapidMailConfiguration::getUsername)))).stream()
-					.map(c -> rapidMailController.getStatusAsync(c, "Mail (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
+					.map(c -> rapidMailController.getStatusAsync(c, "Mail (%s)".formatted(c.getRegion()))),
 				blogController.getConfigurations(region).stream().map(c -> blogController.getStatusAsync(c, "Blog (%s/%s)".formatted(c.getRegion(), c.getLanguageCode())))
 			)
 			.flatMap(s -> s)
