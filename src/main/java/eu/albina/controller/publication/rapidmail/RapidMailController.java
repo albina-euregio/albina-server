@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -49,9 +50,14 @@ public class RapidMailController {
 
 	@Repository
 	public interface RapidMailConfigurationRepository extends CrudRepository<RapidMailConfiguration, Long> {
+		List<RapidMailConfiguration> findByRegion(Region region);
 		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatter(Region region, LanguageCode languageCode, String subjectMatter);
 		Optional<RapidMailConfiguration> findByLanguageCodeAndSubjectMatter(LanguageCode languageCode, String subjectMatter);
 		Optional<RapidMailConfiguration> findByRegionAndLanguageCodeAndSubjectMatterIsNull(Region region, LanguageCode languageCode);
+	}
+
+	public List<RapidMailConfiguration> getConfigurations(@Nonnull Region region) {
+		return rapidMailConfigurationRepository.findByRegion(region);
 	}
 
 	public Optional<RapidMailConfiguration> getConfiguration(@Nonnull Region region, @Nonnull LanguageCode languageCode, @Nonnull String subjectMatter) {
@@ -182,9 +188,29 @@ public class RapidMailController {
 				.header("Accept", MediaType.APPLICATION_JSON)
 				.build();
 
+		return sendWithRetry(request, statusTitle, 0, 3);
+	}
+
+	private CompletableFuture<StatusInformation> sendWithRetry(HttpRequest request, String statusTitle, int attempt, int maxRetries) {
 		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-				.thenApply(response -> mapToStatusInformation(response, statusTitle))
+				.thenCompose(response -> {
+					if (shouldRetry(response.statusCode()) && attempt < maxRetries - 1) {
+						long delayMs = (long) Math.pow(2, attempt) * 1000;
+						logger.warn("{}: Received status {}, retrying after {}ms (attempt {}/{})",
+								statusTitle, response.statusCode(), delayMs, attempt + 2, maxRetries);
+						return delay(delayMs).thenCompose(v -> sendWithRetry(request, statusTitle, attempt + 1, maxRetries));
+					}
+					return CompletableFuture.completedFuture(mapToStatusInformation(response, statusTitle));
+				})
 				.exceptionally(ex -> new StatusInformation(false, statusTitle, ex.getMessage()));
+	}
+
+	private boolean shouldRetry(int statusCode) {
+		return statusCode == 502 || statusCode == 503 || statusCode == 504;
+	}
+
+	private CompletableFuture<Void> delay(long millis) {
+		return CompletableFuture.runAsync(() -> {}, CompletableFuture.delayedExecutor(millis, TimeUnit.MILLISECONDS));
 	}
 
 	private StatusInformation mapToStatusInformation(HttpResponse<String> response, String statusTitle) {
@@ -197,7 +223,7 @@ public class RapidMailController {
 			RapidMailRecipientListResponse parsedResponse = objectMapper.readValue(response.body(), RapidMailRecipientListResponse.class);
 			return new StatusInformation(parsedResponse.totalItems() > 0, statusTitle, parsedResponse.totalItems() + " recipient lists");
 		} catch (IOException e) {
-			return new StatusInformation(false, statusTitle, "Invalid JSON response: " + e.getMessage());
+			return new StatusInformation(false, statusTitle, "Invalid JSON response: " + e.toString());
 		}
 	}
 }

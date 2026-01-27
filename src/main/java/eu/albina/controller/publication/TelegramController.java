@@ -55,7 +55,12 @@ public class TelegramController {
 
 	@Repository
 	public interface TelegramConfigurationRepository extends CrudRepository<TelegramConfiguration, Long> {
+		List<TelegramConfiguration> findByRegion(Region region);
 		Optional<TelegramConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
+	}
+
+	public List<TelegramConfiguration> getConfigurations(Region region) {
+		return telegramConfigurationRepository.findByRegion(region);
 	}
 
 	public Optional<TelegramConfiguration> getConfiguration(Region region, LanguageCode languageCode) {
@@ -150,7 +155,7 @@ public class TelegramController {
 		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 			.thenApply(response -> mapToStatusInformation(response, statusTitle))
 			.exceptionally(ex ->
-				new StatusInformation(false, statusTitle, ex.getMessage())
+				new StatusInformation(false, statusTitle, ex.toString())
 			);
 	}
 
