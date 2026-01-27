@@ -68,6 +68,7 @@ public class ChannelStatusJob {
 		List<CompletableFuture<StatusInformation>> status = Stream.of(
 				telegramController.getConfigurations(region).stream().map(c -> telegramController.getStatusAsync(c, "Telegram (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
 				whatsAppController.getConfigurations(region).stream().map(c -> whatsAppController.getStatusAsync(c, "WhatsApp (%s/%s)".formatted(c.getRegion(), c.getLanguageCode()))),
+                                // deduplicate by RapidMail account
 				rapidMailController.getConfigurations(region).stream()
 					.collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(RapidMailConfiguration::getUsername)))).stream()
 					.map(c -> rapidMailController.getStatusAsync(c, "Mail (%s)".formatted(c.getRegion()))),
