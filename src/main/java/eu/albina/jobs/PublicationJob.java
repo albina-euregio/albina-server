@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
@@ -187,7 +186,8 @@ public class PublicationJob {
 				}));
 			}
 
-			for (Region superRegion : getSuperRegions(publishBulletinRegions)) {
+			Set<Region> superRegions = publishBulletinRegions.stream().flatMap(r -> r.getSuperRegions().stream()).collect(Collectors.toSet());
+			for (Region superRegion : superRegions) {
 				// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
 				phase2.add(Thread.startVirtualThread(() -> {
 					List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
@@ -223,18 +223,6 @@ public class PublicationJob {
 			}
 			logger.info("Publication phase 3 done after {}", stopwatch);
 		});
-	}
-
-	private static Set<Region> getSuperRegions(List<Region> regions) {
-		Set<Region> superRegions = new HashSet<>();
-		for (Region region : regions) {
-			for (Region superRegion : region.getSuperRegions()) {
-				if (superRegions.stream().noneMatch(updateRegion -> updateRegion.getId().equals(superRegion.getId()))) {
-					superRegions.add(superRegion);
-				}
-			}
-		}
-		return superRegions;
 	}
 
 }
