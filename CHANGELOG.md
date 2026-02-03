@@ -2,6 +2,23 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [8.1.0] - 2026-02-02
+
+### 🚀 Features
+
+- Add status check for Telegram, WhatsApp and Email publication
+- Retry email publication
+- Add configuration parameter to enable LINEA export per province
+
+### 🐛 Bug Fixes
+
+- Fix url endpoint to create PDF
+- Update micro region names
+
+### ⚙️ Miscellaneous Tasks
+
+- Do not store super-region reports in database
+
 ## [8.0.11] - 2026-01-05
 
 ### 🚀 Features
