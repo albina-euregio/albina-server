@@ -79,15 +79,15 @@ public class AvalancheReportController {
 
 		AvalancheReport findFirstByStatusInOrderByDateDesc(Set<BulletinStatus> status);
 
-		@Query("""
-			select new eu.albina.model.AvalancheReportStatus(r.date, r.timestamp, r.status)
-			from AvalancheReport r
-			where r.date between :startDate and :endDate and r.region = :region and r.status is not null
-		""")
-		List<AvalancheReportStatus> listByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
+		@Query(value = """
+			select r.date, r.timestamp, r.status
+			from avalanche_reports r
+			where r.date between :startDate and :endDate and r.region_id = :regionID and r.status is not null
+		""", nativeQuery = true)
+		List<AvalancheReportStatus> listByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, String regionID);
 
 		default List<AvalancheReportStatus> listByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
-			return listByDateBetweenAndRegion(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate), region);
+			return listByDateBetweenAndRegion(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate), region.getId());
 		}
 	}
 
