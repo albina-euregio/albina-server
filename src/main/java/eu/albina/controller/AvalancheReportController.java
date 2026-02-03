@@ -80,29 +80,6 @@ public class AvalancheReportController {
 	}
 
 	/**
-	 * Return the actual status of the bulletins for every day in a given time
-	 * period for a given {@code region}.
-	 *
-	 * @param startDate the start date of the time period
-	 * @param endDate   the end date of the time period
-	 * @param region    the region of interest
-	 * @return a map of all days within the time period and the actual status of the
-	 * bulletins of this day
-	 * @throws AlbinaException if no {@code region} was defined
-	 */
-	public Map<Instant, BulletinStatus> getInternalStatus(Instant startDate, Instant endDate, Region region)
-		throws AlbinaException {
-
-		if (region == null)
-			throw new AlbinaException("No region defined!");
-
-		Collection<AvalancheReport> reports = getInternalReports(startDate, endDate, region);
-
-		return reports.stream().filter(report -> report.getStatus() != null)
-			.collect(Collectors.toMap(report -> report.getDate().toInstant(), AvalancheReport::getStatus, (a, b) -> b));
-	}
-
-	/**
 	 * Return the actual status of the bulletins for a specific {@code date} for a
 	 * given {@code region} or null if no report was found.
 	 *
@@ -264,31 +241,6 @@ public class AvalancheReportController {
 			} else
 				result.put(avalancheReport.getDate().toInstant(), avalancheReport);
 		return result;
-	}
-
-	/**
-	 * Return all most recent reports for a specific time period and {@code region}.
-	 *
-	 * @param startDate start date if the time period
-	 * @param endDate   end date of the time period
-	 * @param region    the region of interest
-	 * @return all most recent reports for a specific time period and {@code region}
-	 */
-	private Collection<AvalancheReport> getInternalReports(Instant startDate, Instant endDate, Region region) {
-		Map<Instant, AvalancheReport> result = new HashMap<>();
-		List<AvalancheReport> reports = avalancheReportRepository.findByDateBetweenAndRegion(startDate, endDate, region);
-
-		// select most recent report
-		for (AvalancheReport avalancheReport : reports) {
-			avalancheReport.setRegion(region);
-			if (result.containsKey(avalancheReport.getDate().toInstant())) {
-				if (result.get(avalancheReport.getDate().toInstant()).getTimestamp().isBefore(avalancheReport.getTimestamp()))
-					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
-			} else
-				result.put(avalancheReport.getDate().toInstant(), avalancheReport);
-		}
-
-		return result.values();
 	}
 
 	/**
