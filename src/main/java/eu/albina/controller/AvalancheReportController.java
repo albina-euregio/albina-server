@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import eu.albina.model.AvalancheReportStatus;
 import eu.albina.util.JsonUtil;
 import io.micronaut.data.annotation.Join;
+import io.micronaut.data.annotation.Query;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
@@ -78,6 +79,11 @@ public class AvalancheReportController {
 
 		AvalancheReport findFirstByStatusInOrderByDateDesc(Set<BulletinStatus> status);
 
+		@Query("""
+			select new eu.albina.model.AvalancheReportStatus(r.date, r.timestamp, r.status)
+			from AvalancheReport r
+			where r.date between :startDate and :endDate and r.region = :region and r.status is not null
+		""")
 		List<AvalancheReportStatus> listByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
 
 		default List<AvalancheReportStatus> listByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
