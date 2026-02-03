@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import eu.albina.model.AvalancheReportStatus;
 import eu.albina.util.JsonUtil;
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Repository;
@@ -77,6 +78,11 @@ public class AvalancheReportController {
 
 		AvalancheReport findFirstByStatusInOrderByDateDesc(Set<BulletinStatus> status);
 
+		List<AvalancheReportStatus> listByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
+
+		default List<AvalancheReportStatus> listByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
+			return listByDateBetweenAndRegion(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate), region);
+		}
 	}
 
 	/**

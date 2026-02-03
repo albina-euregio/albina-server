@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.model.AvalancheReportStatus;
 import eu.albina.controller.RegionRepository;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheReport;
@@ -91,14 +92,14 @@ public class AvalancheBulletinStatusService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
-			Map<Instant, AvalancheReport> internalStatus = avalancheReportRepository.findByDateBetweenAndRegion(startDate, endDate, region).stream().collect(Collectors.toMap(
-				avalancheReport -> avalancheReport.getDate().toInstant(),
+			Map<Instant, AvalancheReportStatus> internalStatus = avalancheReportRepository.listByDateBetweenAndRegion(startDate, endDate, region).stream().collect(Collectors.toMap(
+				avalancheReport -> avalancheReport.date().toInstant(),
 				avalancheReport -> avalancheReport,
-				(r1, r2) -> Stream.of(r1, r2).max(Comparator.comparing(AvalancheReport::getTimestamp)).orElseThrow()
+				(r1, r2) -> Stream.of(r1, r2).max(Comparator.comparing(AvalancheReportStatus::date)).orElseThrow()
 			));
 
 			return internalStatus.values().stream()
-				.map(avalancheReport -> new Status(avalancheReport.getDate().toInstant(), avalancheReport.getStatus(), null))
+				.map(avalancheReport -> new Status(avalancheReport.date().toInstant(), avalancheReport.status(), null))
 				.toList();
 		} catch (Exception e) {
 			logger.warn("Error loading status for " + regionId, e);
