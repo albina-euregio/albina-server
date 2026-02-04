@@ -1243,19 +1243,13 @@ public class PdfUtil {
 	}
 
 	protected String getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {
-		return String.format("%s/%s/%s/%s",
-			avalancheReport.getServerInstance().mapsPath(),
-			avalancheReport.getValidityDateString(),
-			avalancheReport.getPublicationTimeString(),
-			MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg));
+		String filename = MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg);
+		return avalancheReport.getMapsPath().resolve(filename).toString();
 	}
 
 	protected String getMapImage(DaytimeDependency daytimeDependency) throws MalformedURLException {
-		return String.format("%s/%s/%s/%s",
-			avalancheReport.getServerInstance().mapsPath(),
-			avalancheReport.getValidityDateString(),
-			avalancheReport.getPublicationTimeString(),
-			MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale));
+		String filename = MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale);
+		return avalancheReport.getMapsPath().resolve(filename).toString();
 	}
 
 	private String replaceLinebreaks(String text) {

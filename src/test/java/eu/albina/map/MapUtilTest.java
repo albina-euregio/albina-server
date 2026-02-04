@@ -168,7 +168,7 @@ public class MapUtilTest {
 
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			byte[] expected = Resources.toByteArray(Resources.getResource(name));
-			byte[] actual = Files.readAllBytes(Path.of(serverInstance.mapsPath() + "/2019-01-17/2019-01-16_16-00-00/" + name));
+			byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve(name));
 			ImageTestUtils.assertImageEquals(name, expected, actual, 0, 0, ignore -> {
 			});
 		}
@@ -202,7 +202,7 @@ public class MapUtilTest {
 		MapUtil.createMapyrusMaps(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
-		byte[] actual = Files.readAllBytes(Path.of(serverInstance.mapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
+		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
 		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
@@ -218,7 +218,7 @@ public class MapUtilTest {
 		MapUtil.createMapyrusMaps(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
-		byte[] actual = Files.readAllBytes(Path.of(serverInstance.mapsPath() + "/2021-01-24/2021-01-23_16-00-00/fd_ES-CT-L_thumbnail.png"));
+		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
 		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
