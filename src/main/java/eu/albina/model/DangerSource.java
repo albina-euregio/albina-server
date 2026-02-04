@@ -28,7 +28,7 @@ public class DangerSource extends AbstractPersistentObject {
 	@Column(name = "TITLE")
 	private String title;
 
-	@Column(name = "DESCRIPTION")
+	@Column(name = "DESCRIPTION", columnDefinition = "longtext")
 	private String description;
 
 	public String getOwnerRegion() {
