@@ -95,7 +95,7 @@ public class AvalancheBulletinStatusService {
 			Map<Instant, AvalancheReportStatus> internalStatus = avalancheReportRepository.listByDateBetweenAndRegion(startDate, endDate, region).stream().collect(Collectors.toMap(
 				avalancheReport -> avalancheReport.date().toInstant(),
 				avalancheReport -> avalancheReport,
-				(r1, r2) -> Stream.of(r1, r2).max(Comparator.comparing(AvalancheReportStatus::date)).orElseThrow()
+				(r1, r2) -> Stream.of(r1, r2).max(Comparator.comparing(AvalancheReportStatus::timestamp)).orElseThrow()
 			));
 
 			return internalStatus.values().stream()
