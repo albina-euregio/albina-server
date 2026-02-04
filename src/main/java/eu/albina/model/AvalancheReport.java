@@ -359,16 +359,19 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		return getBulletins().stream().anyMatch(AvalancheBulletin::isHasDaytimeDependency);
 	}
 
+	@JsonIgnore
 	public String getSimpleHtmlUrl() {
 		String htmlDirectory = Paths.get(serverInstance.htmlDirectory()).getFileName().toString();
 		return String.format("%s/%s", region.getStaticUrl(), htmlDirectory);
 	}
 
+	@JsonIgnore
 	public String getMapsUrl() {
 		String mapsDirectory = Paths.get(serverInstance.mapsPath()).getFileName().toString();
 		return String.format("%s/%s/%s/%s", region.getStaticUrl(), mapsDirectory, getValidityDateString(), getPublicationTimeString());
 	}
 
+	@JsonIgnore
 	public String getPdfUrl(LanguageCode lang) {
 		String pdfDirectory = Paths.get(serverInstance.pdfDirectory()).getFileName().toString();
 		String date = getValidityDateString();
