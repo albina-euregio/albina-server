@@ -31,11 +31,11 @@ public class GlobalVariables {
 		return new LocalServerInstance(
 			publishAt5PM,
 			publishAt8AM,
-			mapsPath,
-			mapProductionUrl,
-			pdfDirectory,
-			htmlDirectory,
-			mediaPath
+			Objects.requireNonNull(mapsPath, "mapsPath"),
+			Objects.requireNonNull(mapProductionUrl, "mapProductionUrl"),
+			Objects.requireNonNull(pdfDirectory, "pdfDirectory"),
+			Objects.requireNonNull(htmlDirectory, "htmlDirectory"),
+			Objects.requireNonNull(mediaPath, "mediaPath")
 		);
 	}
 
@@ -44,10 +44,10 @@ public class GlobalVariables {
 			publishAt5PM,
 			publishAt8AM,
 			Objects.requireNonNullElse(mapsPath, this.mapsPath),
-			mapProductionUrl,
+			Objects.requireNonNull(mapProductionUrl, "mapProductionUrl"),
 			Objects.requireNonNullElse(pdfDirectory, this.pdfDirectory),
-			htmlDirectory,
-			mediaPath
+			Objects.requireNonNull(htmlDirectory, "htmlDirectory"),
+			Objects.requireNonNull(mediaPath, "mediaPath")
 		);
 	}
 }
