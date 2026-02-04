@@ -47,15 +47,15 @@ public class ServerInstanceService {
 	}
 
 	@Serdeable
-	public record PublicLocalServerConfiguration(String name, String apiUrl, String version) {
+	public record ServerVersionInfo(String version) {
 	}
 
 	@Get("/info")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	@Operation(summary = "Get public local server configuration")
-	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
-	public PublicLocalServerConfiguration getPublicLocalServerConfiguration() {
-		return new PublicLocalServerConfiguration(null, null, globalVariables.version);
+	@Operation(summary = "Get server version info")
+	@ApiResponse(description = "server version info", content = @Content(schema = @Schema(implementation = ServerVersionInfo.class)))
+	public ServerVersionInfo getServerVersionInfo() {
+		return new ServerVersionInfo(globalVariables.version);
 	}
 
 	@Get
