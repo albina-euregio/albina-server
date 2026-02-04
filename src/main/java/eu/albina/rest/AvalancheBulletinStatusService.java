@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.model.AvalancheReportStatus;
 import eu.albina.controller.RegionRepository;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheReport;
@@ -25,9 +26,12 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller("/bulletins/status")
 @Tag(name = "bulletins/status")
@@ -37,6 +41,9 @@ public class AvalancheBulletinStatusService {
 
 	@Inject
 	private AvalancheReportController avalancheReportController;
+
+	@Inject
+	private AvalancheReportController.AvalancheReportRepository avalancheReportRepository;
 
 	@Inject
 	RegionRepository regionRepository;
@@ -85,9 +92,14 @@ public class AvalancheBulletinStatusService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
-			return avalancheReportController
-				.getInternalStatus(startDate, endDate, region).entrySet().stream()
-				.map(entry -> new Status(entry.getKey(), entry.getValue(), null))
+			Map<Instant, AvalancheReportStatus> internalStatus = avalancheReportRepository.listByDateBetweenAndRegion(startDate, endDate, region).stream().collect(Collectors.toMap(
+				avalancheReport -> avalancheReport.date().toInstant(),
+				avalancheReport -> avalancheReport,
+				(r1, r2) -> Stream.of(r1, r2).max(Comparator.comparing(AvalancheReportStatus::date)).orElseThrow()
+			));
+
+			return internalStatus.values().stream()
+				.map(avalancheReport -> new Status(avalancheReport.date().toInstant(), avalancheReport.status(), null))
 				.toList();
 		} catch (Exception e) {
 			logger.warn("Error loading status for " + regionId, e);
