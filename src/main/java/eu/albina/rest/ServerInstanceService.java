@@ -10,6 +10,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 
+import eu.albina.model.LocalServerInstance;
 import eu.albina.util.GlobalVariables;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -61,9 +62,9 @@ public class ServerInstanceService {
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get local server configuration")
-	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
-	public ServerInstance getLocalServerConfiguration() {
-		throw new UnsupportedOperationException();
+	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = LocalServerInstance.class)))
+	public LocalServerInstance getLocalServerConfiguration() {
+		return globalVariables.getLocalServerInstance();
 	}
 
 	@Get("/external")
