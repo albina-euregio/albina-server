@@ -64,6 +64,9 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@JoinColumn(name = "DANGER_SOURCE_ID")
 	private DangerSource dangerSource;
 
+	@Column(name = "TITLE")
+	private String title;
+
 	@Column(name = "CREATION_DATE")
 	private Instant creationDate;
 
@@ -343,6 +346,14 @@ public class DangerSourceVariant extends AbstractPersistentObject
 
 	public void setDangerSource(DangerSource dangerSource) {
 		this.dangerSource = dangerSource;
+	}
+
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Instant getCreationDate() {
