@@ -27,6 +27,7 @@ import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
 import eu.albina.util.AlbinaUtil;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.data.annotation.DateUpdated;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -76,6 +77,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Column(name = "ADDITIONAL_USER_NAME", length = 191)
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private Set<String> additionalAuthors;
+
+	@Column(name = "SAVE_DATE")
+	@DateUpdated
+	private ZonedDateTime saveDate;
 
 	@Column(name = "PUBLICATION_DATE")
 	private ZonedDateTime publicationDate;
@@ -245,6 +250,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public void addAdditionalAuthor(String additionalAuthor) {
 		if (!this.additionalAuthors.contains(additionalAuthor))
 			this.additionalAuthors.add(additionalAuthor);
+	}
+
+	public ZonedDateTime getSaveDate() {
+		return saveDate;
+	}
+
+	public void setSaveDate(ZonedDateTime saveDate) {
+		this.saveDate = saveDate;
 	}
 
 	public String getOwnerRegion() {
