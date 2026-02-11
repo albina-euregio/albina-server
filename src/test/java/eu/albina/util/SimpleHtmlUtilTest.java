@@ -42,8 +42,8 @@ public class SimpleHtmlUtilTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, null, "/mnt/simple_local/", null);
-		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, null, "/mnt/simple_local/", null);
+		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, null, "/mnt/simple_local/", null, null);
+		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, null, "/mnt/simple_local/", null, null);
 		regionEuregio = regionTestUtils.regionEuregio();
 		regionTyrol = regionTestUtils.regionTyrol();
 		regionAran = regionTestUtils.regionAran();

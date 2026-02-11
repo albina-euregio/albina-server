@@ -125,7 +125,7 @@ public class PublicationJob {
 				.collect(Collectors.toList());
 			logger.info("Publishing region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
 
-			avalancheReportController.publishReport(regionBulletins, startDate, region, publicationDate);
+			avalancheReportController.publishReport(regionBulletins, startDate, region, globalVariables.getLocalServerInstance().publicationUser(), publicationDate);
 		}
 
 		// get all published bulletins

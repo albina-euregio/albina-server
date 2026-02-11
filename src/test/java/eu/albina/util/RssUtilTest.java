@@ -28,7 +28,7 @@ public class RssUtilTest {
 
 	@Test
 	public void rss(@TempDir Path folder) throws Exception {
-		LocalServerInstance serverInstance = new LocalServerInstance(false, false, null, null, null, null, folder.resolve("media_files").toString());
+		LocalServerInstance serverInstance = new LocalServerInstance(false, false, null, null, null, null, folder.resolve("media_files").toString(), null);
 		Path directory = MediaFileService.getMediaPath(serverInstance, regionTestUtils.regionTyrol(), LanguageCode.de);
 		Files.createDirectories(directory);
 		MoreFiles.touch(directory.resolve("2020-12-12.mp3"));

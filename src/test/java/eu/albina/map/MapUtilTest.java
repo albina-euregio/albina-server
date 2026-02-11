@@ -55,7 +55,7 @@ public class MapUtilTest {
 	public void setUp() throws Exception {
 		folder = Paths.get("target/test-results");
 		Files.createDirectories(folder);
-		serverInstance = new LocalServerInstance(false, false, folder.toString(), "../avalanche-warning-maps/", folder.toString(), null, null);
+		serverInstance = new LocalServerInstance(false, false, folder.toString(), "../avalanche-warning-maps/", folder.toString(), null, null, null);
 		regionAran = regionTestUtils.regionAran();
 		regionAragon = regionTestUtils.regionAragon();
 		regionEuregio = regionTestUtils.regionEuregio();

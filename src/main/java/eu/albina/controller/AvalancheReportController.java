@@ -19,15 +19,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import eu.albina.model.AvalancheReportStatus;
-import eu.albina.util.JsonUtil;
-import io.micronaut.data.annotation.Join;
-import io.micronaut.data.annotation.Query;
-import io.micronaut.data.annotation.Repository;
-import io.micronaut.serde.ObjectMapper;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +26,20 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.AvalancheReportStatus;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.JsonUtil;
+import io.micronaut.context.annotation.Value;
+import io.micronaut.data.annotation.Join;
+import io.micronaut.data.annotation.Query;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.serde.ObjectMapper;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 
 /**
  * Controller for avalanche reports.
@@ -53,6 +54,9 @@ public class AvalancheReportController {
 
 	@Inject
 	AvalancheReportRepository avalancheReportRepository;
+
+	@Inject
+	UserRepository userRepository;
 
 	@Inject
 	ObjectMapper objectMapper;
@@ -350,13 +354,14 @@ public class AvalancheReportController {
 	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
 	 */
-	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
+	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, String username,
 										 Instant publicationDate) {
+		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
 		AvalancheReport report = getInternalReport(startDate, region);
 
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
-		avalancheReport.setUser(null); // FIXME region.getWarningServiceEmail
+		avalancheReport.setUser(user);
 		avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
 		if (report == null) {

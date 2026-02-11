@@ -26,6 +26,8 @@ public class GlobalVariables {
 	String mediaPath;
 	@Value("${albina.conf.mapProductionUrl}")
 	String mapProductionUrl;
+	@Value("${albina.conf.publicationUser:}")
+	String publicationUser;
 
 	public LocalServerInstance getLocalServerInstance() {
 		return new LocalServerInstance(
@@ -35,7 +37,8 @@ public class GlobalVariables {
 			Objects.requireNonNull(mapProductionUrl, "mapProductionUrl"),
 			Objects.requireNonNull(pdfDirectory, "pdfDirectory"),
 			Objects.requireNonNull(htmlDirectory, "htmlDirectory"),
-			Objects.requireNonNull(mediaPath, "mediaPath")
+			Objects.requireNonNull(mediaPath, "mediaPath"),
+			Objects.requireNonNull(publicationUser, "publicationUser")
 		);
 	}
 
@@ -47,7 +50,8 @@ public class GlobalVariables {
 			Objects.requireNonNull(mapProductionUrl, "mapProductionUrl"),
 			Objects.requireNonNullElse(pdfDirectory, this.pdfDirectory),
 			Objects.requireNonNull(htmlDirectory, "htmlDirectory"),
-			Objects.requireNonNull(mediaPath, "mediaPath")
+			Objects.requireNonNull(mediaPath, "mediaPath"),
+			Objects.requireNonNull(publicationUser, "publicationUser")
 		);
 	}
 }
