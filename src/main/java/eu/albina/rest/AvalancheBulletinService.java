@@ -47,7 +47,6 @@ import eu.albina.model.enumerations.Role;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
 import eu.albina.util.PdfUtil;
-import io.micronaut.context.annotation.Value;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -113,9 +112,6 @@ public class AvalancheBulletinService {
 
 	@Inject
 	PublicationJob publicationJob;
-
-	@Value("${albina.conf.tmpOverride:}")
-	String tmpOverride;
 
 	@Get("/edit")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
@@ -280,7 +276,7 @@ public class AvalancheBulletinService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = regionRepository.findById(regionId).orElseThrow();
 			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
-			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(tmpOverride).toString(), null);
+			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(globalVariables.tmpOverride).toString(), null);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return new SystemFile(pdf.toFile());
@@ -308,7 +304,7 @@ public class AvalancheBulletinService {
 			pdfRateLimiter.acquire();
 			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
 			Region region = regionRepository.findById(regionId).orElseThrow();
-			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(tmpOverride).toString(), null);
+			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(globalVariables.tmpOverride).toString(), null);
 			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return new SystemFile(pdf.toFile());
@@ -383,7 +379,9 @@ public class AvalancheBulletinService {
 				.collect(Collectors.toList());
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
-			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(tmpOverride).toString(), resolveTmpPath(tmpOverride).toString());
+			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(
+					resolveTmpPath(globalVariables.tmpOverride).toString(),
+					resolveTmpPath(globalVariables.tmpOverride).toString());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setStatus(BulletinStatus.draft); // preview
 
