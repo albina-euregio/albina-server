@@ -23,14 +23,15 @@ import com.google.common.base.Stopwatch;
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionRepository;
-import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.GlobalVariables;
+
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -58,7 +59,7 @@ public class PublicationJob {
 	RegionRepository regionRepository;
 
 	@Inject
-	ServerInstanceRepository serverInstanceRepository;
+	private GlobalVariables globalVariables;
 
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
@@ -66,7 +67,7 @@ public class PublicationJob {
 	 */
 	public synchronized void execute(PublicationStrategy strategy) {
 		Stopwatch stopwatch = Stopwatch.createStarted();
-		ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
+		LocalServerInstance serverInstance = globalVariables.getLocalServerInstance();
 		if (!strategy.isEnabled(serverInstance)) {
 			return;
 		}
@@ -95,7 +96,7 @@ public class PublicationJob {
 			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
 
 			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
-				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate, serverInstance.getUserName());
+				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate);
 			}
 		}
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
@@ -124,7 +125,7 @@ public class PublicationJob {
 				.collect(Collectors.toList());
 			logger.info("Publishing region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
 
-			avalancheReportController.publishReport(regionBulletins, startDate, region, serverInstance.getUserName(), publicationDate);
+			avalancheReportController.publishReport(regionBulletins, startDate, region, globalVariables.getLocalServerInstance().publicationUser(), publicationDate);
 		}
 
 		// get all published bulletins

@@ -15,7 +15,6 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
@@ -56,8 +55,7 @@ public interface EmailUtil {
 		Map<String, Object> root = new HashMap<>();
 		Map<String, Object> image = new HashMap<>();
 
-		final ServerInstance serverInstance = avalancheReport.getServerInstance();
-		final String serverImagesUrl = serverInstance.getServerImagesUrl();
+		final String serverImagesUrl = avalancheReport.getRegion().getServerImagesUrl();
 		final Region region = avalancheReport.getRegion();
 		final List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
 
@@ -77,15 +75,15 @@ public interface EmailUtil {
 		// overview maps
 		if (avalancheReport.hasDaytimeDependency()) {
 			mapImage.put("overview",
-					region.getMapsUrl(lang, avalancheReport, avalancheReport) +"/"
+					avalancheReport.getMapsUrl() +"/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
 			mapImage.put("overviewPM",
-					region.getMapsUrl(lang, avalancheReport, avalancheReport) + "/"
+					avalancheReport.getMapsUrl() + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false));
 			mapImage.put("widthPM", "width=\"600\"");
 		} else {
 			mapImage.put("overview",
-					region.getMapsUrl(lang, avalancheReport, avalancheReport) + "/"
+					avalancheReport.getMapsUrl() + "/"
 							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
 			mapImage.put("overviewPM", serverImagesUrl + "/empty.png");
 			mapImage.put("widthPM", "");
@@ -283,15 +281,12 @@ public interface EmailUtil {
 			bulletin.put("tendency", tendency);
 
 			bulletin.put("dangerratingcolorstyle",
-					getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating(), serverInstance));
+					getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating(), region));
 			bulletin.put("headlinestyle", getHeadlineStyle(avalancheBulletin.getHighestDangerRating()));
 
-			addDaytimeInfo(lang, region, avalancheBulletin, bulletin, false, serverInstance);
+			addDaytimeInfo(lang, avalancheReport, avalancheBulletin, bulletin, false);
 			Map<String, Object> pm = new HashMap<>();
-			if (avalancheBulletin.isHasDaytimeDependency())
-				addDaytimeInfo(lang, region, avalancheBulletin, pm, true, serverInstance);
-			else
-				addDaytimeInfo(lang, region, avalancheBulletin, pm, false, serverInstance);
+			addDaytimeInfo(lang, avalancheReport, avalancheBulletin, pm, avalancheBulletin.isHasDaytimeDependency());
 			bulletin.put("pm", pm);
 
 			arrayList.add(bulletin);
@@ -301,7 +296,7 @@ public interface EmailUtil {
 		Map<String, Object> links = new HashMap<>();
 		links.put("website", avalancheReport.getRegion().getWebsiteUrlWithDate(lang, avalancheReport));
 		links.put("unsubscribe", "{%link_unsubscribe}");
-		links.put("pdf", avalancheReport.getRegion().getPdfUrl(lang, avalancheReport));
+		links.put("pdf", avalancheReport.getPdfUrl(lang));
 		links.put("imprint", region.getImprintLink(lang));
 		Map<String, Object> socialMediaLinks = new HashMap<>();
 		socialMediaLinks.put("facebook", region.getWebsiteUrl(lang) + "/#followDialog");
@@ -321,15 +316,16 @@ public interface EmailUtil {
 		return out.toString();
 	}
 
-	private static void addDaytimeInfo(LanguageCode lang, Region region, AvalancheBulletin avalancheBulletin, Map<String, Object> bulletin,
-									   boolean isAfternoon, ServerInstance serverInstance) {
+	private static void addDaytimeInfo(LanguageCode lang, AvalancheReport avalancheReport, AvalancheBulletin avalancheBulletin, Map<String, Object> bulletin,
+									   boolean isAfternoon) {
 		AvalancheBulletinDaytimeDescription daytimeBulletin;
 		if (isAfternoon)
 			daytimeBulletin = avalancheBulletin.getAfternoon();
 		else
 			daytimeBulletin = avalancheBulletin.getForenoon();
 
-		final String serverImagesUrl =  serverInstance.getServerImagesUrl();
+		final Region region = avalancheReport.getRegion();
+		final String serverImagesUrl =  region.getServerImagesUrl();
 
 		// danger rating
 		Map<String, Object> dangerRating = new HashMap<>();
@@ -361,24 +357,24 @@ public interface EmailUtil {
 
 		// maps
 		if (isAfternoon)
-			bulletin.put("map", region.getMapsUrl(lang, avalancheBulletin, avalancheBulletin) + "/"
+			bulletin.put("map", avalancheReport.getMapsUrl() + "/"
 					+ MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.jpg));
 		else
-			bulletin.put("map", region.getMapsUrl(lang, avalancheBulletin, avalancheBulletin) + "/"
+			bulletin.put("map", avalancheReport.getMapsUrl() + "/"
 					+ MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.jpg));
 
 		// avalanche problems
-		bulletin.put("avalancheProblem1", createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, region, serverInstance));
-		bulletin.put("avalancheProblem2", createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), lang, region, serverInstance));
-		bulletin.put("avalancheProblem3", createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), lang, region, serverInstance));
-		bulletin.put("avalancheProblem4", createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), lang, region, serverInstance));
-		bulletin.put("avalancheProblem5", createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, region, serverInstance));
+		bulletin.put("avalancheProblem1", createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, region));
+		bulletin.put("avalancheProblem2", createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), lang, region));
+		bulletin.put("avalancheProblem3", createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), lang, region));
+		bulletin.put("avalancheProblem4", createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), lang, region));
+		bulletin.put("avalancheProblem5", createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, region));
 	}
 
 	private static Map<String, Object> createAvalancheProblem(eu.albina.model.AvalancheProblem avalancheProblem,
-															  LanguageCode lang, Region region, ServerInstance serverInstance) {
+															  LanguageCode lang, Region region) {
 		Map<String, Object> avalancheProblemMap = new HashMap<>();
-		final String serverImagesUrl =  serverInstance.getServerImagesUrl();
+		final String serverImagesUrl =  region.getServerImagesUrl();
 
 		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
 			avalancheProblemMap.put("empty", false);
@@ -459,9 +455,9 @@ public interface EmailUtil {
 		return avalancheProblemMap;
 	}
 
-	private static String getDangerRatingColorStyle(DangerRating dangerRating, ServerInstance serverInstance) {
+	private static String getDangerRatingColorStyle(DangerRating dangerRating, Region region) {
 		if (dangerRating.equals(DangerRating.very_high)) {
-			return "background=\"" + serverInstance.getServerImagesUrl() + "bg_checkered.png"
+			return "background=\"" + region.getServerImagesUrl() + "bg_checkered.png"
 					+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
 		} else
 			return "style=\"background-color: " + dangerRating.getColor()

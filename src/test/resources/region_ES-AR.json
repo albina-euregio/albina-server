@@ -80,6 +80,7 @@
 	"logoBwPath": "logo/grey/avalanche_report.png",
 	"coatOfArms": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Escudo_d%27Arag%C3%B3n.svg",
 	"staticUrl": "https://static.avalanche.report",
+	"serverImagesUrl": "https://static.avalanche.report/images/",
 	"ttsLanguages": [
 		"ca",
 		"es",

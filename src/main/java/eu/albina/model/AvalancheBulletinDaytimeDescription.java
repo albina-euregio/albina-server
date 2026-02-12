@@ -28,7 +28,6 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "avalanche_bulletin_daytime_descriptions")
@@ -101,9 +100,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "AVALANCHE_PROBLEM_5_ID")
 	private AvalancheProblem avalancheProblem5;
-
-	@Transient
-	private transient ServerInstance serverInstance;
 
 	public AvalancheBulletinDaytimeDescription() {
 		this.terrainFeatureAbove = new HashSet<>();
@@ -341,15 +337,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 	@JsonIgnore
 	boolean isDangerLevelElevationDependency() {
-		return serverInstance == null || serverInstance.isDangerLevelElevationDependency();
-	}
-
-	ServerInstance serverInstance() {
-		return serverInstance;
-	}
-
-	void serverInstance(ServerInstance serverInstance) {
-		this.serverInstance = serverInstance;
+		return true; // FIXME
 	}
 
 	@Override

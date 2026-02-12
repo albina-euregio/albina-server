@@ -8,6 +8,7 @@ import java.util.List;
 
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
+import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -19,7 +20,6 @@ import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 
 @MicronautTest
@@ -31,26 +31,18 @@ public class EmailUtilTest {
 	@Inject
 	RegionTestUtils regionTestUtils;
 
-	private ServerInstance serverInstanceEuregio;
-	private ServerInstance serverInstanceAran;
+	private LocalServerInstance serverInstanceEuregio;
+	private LocalServerInstance serverInstanceAran;
 	private Region regionTyrol;
 	private Region regionAran;
 
 	@BeforeEach
 	public void setUp() throws IOException {
-		serverInstanceEuregio = new ServerInstance();
-		serverInstanceEuregio.setServerImagesUrl("/mnt/images/");
-		serverInstanceEuregio.setMapsPath("/mnt/bulletins/");
-		serverInstanceEuregio.setPdfDirectory("/mnt/bulletins/");
-		serverInstanceEuregio.setMediaPath("/mnt/media/");
-		serverInstanceAran = new ServerInstance();
-		serverInstanceAran.setServerImagesUrl("https://static.lauegi.report/images/");
-		serverInstanceAran.setMapsPath("/mnt/albina_files_local/");
-		serverInstanceAran.setPdfDirectory("/mnt/albina_files_local/");
+		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, "/mnt/simple_local/", null, null, null);
+		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, "/mnt/simple_local/", null, null, null);
 		regionTyrol = regionTestUtils.regionTyrol();
-		regionTyrol.setServerInstance(serverInstanceEuregio);
+		regionTyrol.setServerImagesUrl("/mnt/images/");
 		regionAran = regionTestUtils.regionAran();
-		regionAran.setServerInstance(serverInstanceAran);
 	}
 
 	@Test

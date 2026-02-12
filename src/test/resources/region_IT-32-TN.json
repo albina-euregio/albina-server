@@ -30,6 +30,7 @@
     "mapLogoPosition": "bottomright",
     "imageColorbarColorPath": "logo/color/colorbar.gif",
     "imageColorbarBwPath": "logo/grey/colorbar.gif",
+	"serverImagesUrl": "https://static.avalanche.report/images/",
 	"languageConfigurations": [
 		{
 			"lang": "en",

@@ -5,9 +5,12 @@ import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.GlobalVariables;
+
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -26,17 +29,17 @@ class AvalancheReportMultichannelMessageTest {
 	@Inject
 	RegionTestUtils regionTestUtils;
 
+	@Inject
+	private GlobalVariables globalVariables;
+
 	@Test
 	void test() throws Exception {
-		ServerInstance serverInstanceEuregio = new ServerInstance();
-		serverInstanceEuregio.setMapsPath("/mnt/bulletins/");
-
+		LocalServerInstance serverInstance = globalVariables.getLocalServerInstance("/mnt/bulletins/", "/mnt/bulletins/");
 		Region region = regionTestUtils.regionTyrol();
-		region.setServerInstance(serverInstanceEuregio);
 
 		URL resource = Resources.getResource("2025-03-14.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
-		AvalancheReport report = AvalancheReport.of(bulletins, region, serverInstanceEuregio);
+		AvalancheReport report = AvalancheReport.of(bulletins, region, serverInstance);
 		MultichannelMessage message = MultichannelMessage.of(report, LanguageCode.de);
 		assertEquals("Lawinenvorhersage für Tirol, Freitag, 14. März 2025", message.getSubject());
 		assertEquals("Lawinenvorhersage für Freitag, 14. März 2025: https://lawinen.report/bulletin/2025-03-14", message.getSocialMediaText());

@@ -11,8 +11,9 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import eu.albina.controller.RegionRepository;
-import eu.albina.controller.ServerInstanceRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.model.LocalServerInstance;
+import eu.albina.util.GlobalVariables;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
@@ -35,7 +36,6 @@ import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
@@ -61,7 +61,7 @@ public class MediaFileService {
 	RegionRepository regionRepository;
 
 	@Inject
-	private ServerInstanceRepository serverInstanceRepository;
+	private GlobalVariables globalVariables;
 
 	@Inject
 	private UserRepository userRepository;
@@ -94,7 +94,7 @@ public class MediaFileService {
 			}
 
 			Instant date = DateControllerUtil.parseDateOrThrow(dateString);
-			ServerInstance localServerInstance = serverInstanceRepository.getLocalServerInstance();
+			LocalServerInstance localServerInstance = globalVariables.getLocalServerInstance();
 
 			Path fileLocation = getMediaPath(localServerInstance, region, language);
 			Files.createDirectories(fileLocation);
@@ -146,7 +146,7 @@ public class MediaFileService {
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language
 	) throws Exception {
-		final ServerInstance serverInstance = serverInstanceRepository.getLocalServerInstance();
+		final LocalServerInstance serverInstance = globalVariables.getLocalServerInstance();
 		final Region region = new Region(regionId);
 		return RssUtil.getRss(
 			language,
@@ -154,15 +154,15 @@ public class MediaFileService {
 			getMediaPath(serverInstance, region, language));
 	}
 
-	public static Path getMediaPath(ServerInstance serverInstance, Region region, LanguageCode lang) {
-		Path mediaPath = Paths.get(serverInstance.getMediaPath());
+	public static Path getMediaPath(LocalServerInstance serverInstance, Region region, LanguageCode lang) {
+		Path mediaPath = Paths.get(serverInstance.mediaPath());
 		return mediaPath
 			.resolve(region.getId())
 			.resolve(lang.name());
 	}
 
-	public static String getMediaFileUrl(LanguageCode lang, Region region, ServerInstance serverInstance) {
-		String mediaFileDirectory = Paths.get(serverInstance.getMediaPath()).getFileName().toString();
+	public static String getMediaFileUrl(LanguageCode lang, Region region, LocalServerInstance serverInstance) {
+		String mediaFileDirectory = Paths.get(serverInstance.mediaPath()).getFileName().toString();
 		return String.format("%s/%s/%s/%s", region.getStaticUrl(), mediaFileDirectory, region.getId(), lang);
 	}
 

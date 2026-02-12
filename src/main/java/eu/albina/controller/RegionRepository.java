@@ -7,21 +7,16 @@ import io.micronaut.data.annotation.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public interface RegionRepository extends CrudRepository<Region, String> {
 
-	default List<Region> getRegions() {
-		return findAll().stream().filter(region -> !region.getServerInstance().isExternalServer()).collect(Collectors.toList());
-	}
-
 	default List<Region> getPublishBulletinRegions() {
-		return findAll().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBulletins()).collect(Collectors.toList());
+		return findAll().stream().filter(Region::isPublishBulletins).toList();
 	}
 
 	default List<Region> getPublishBlogRegions() {
-		return findAll().stream().filter(region -> !region.getServerInstance().isExternalServer() && region.isPublishBlogs()).collect(Collectors.toList());
+		return findAll().stream().filter(Region::isPublishBlogs).toList();
 	}
 
 	default List<Region> getRegionsOrBulletinRegions(List<String> regionIds) {

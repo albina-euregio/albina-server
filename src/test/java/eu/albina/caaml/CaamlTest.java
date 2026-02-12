@@ -17,6 +17,7 @@ import java.util.List;
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
 import eu.albina.controller.RegionRepository;
+import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import eu.albina.util.JsonUtil;
 import io.micronaut.serde.ObjectMapper;
@@ -36,14 +37,13 @@ import com.google.common.io.Resources;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.AlbinaUtil;
 
 @MicronautTest
 public class CaamlTest {
 
-	private ServerInstance serverInstanceEuregio;
+	private LocalServerInstance serverInstance;
 	private Region regionEuregio;
 
 	@Inject
@@ -63,17 +63,15 @@ public class CaamlTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		serverInstanceEuregio = new ServerInstance();
-		serverInstanceEuregio.setHtmlDirectory("/foo/bar/baz/simple/");
-		serverInstanceEuregio.setMapsPath("/foo/bar/baz/bulletins/");
+		serverInstance = new LocalServerInstance(false, false, "/foo/bar/baz/bulletins/", null, null,"/foo/bar/baz/simple/", null, null);
 		regionEuregio = regionTestUtils.regionEuregio();
 	}
 
 	private String createCaaml(CaamlVersion version) throws Exception {
 		final URL resource = Resources.getResource("2019-01-16.json");
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
-		AvalancheReport.of(bulletins, null, serverInstanceEuregio); // test without region for eu.albina.rest.AvalancheBulletinService.getJSONBulletins
-		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		AvalancheReport.of(bulletins, null, serverInstance); // test without region for eu.albina.rest.AvalancheBulletinService.getJSONBulletins
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		return caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 	}
 
@@ -135,13 +133,13 @@ public class CaamlTest {
 		URL url = URI.create(String.format("https://static.avalanche.report/bulletins/%s/avalanche_report.json", date)).toURL();
 		LoggerFactory.getLogger(getClass()).info("Fetching bulletins from {}", url);
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(url);
-		return AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		return AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 	}
 
 	private AvalancheReport loadFromDatabase(LocalDate date) throws Exception {
 		Instant instant = date.atStartOfDay(AlbinaUtil.localZone()).withZoneSameInstant(ZoneOffset.UTC).toInstant();
 		List<AvalancheBulletin> bulletins = new AvalancheReportController().getPublishedBulletins(instant, regionRepository.getPublishBulletinRegions());
-		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));
 		Files.createDirectories(path.getParent());
 		String json = objectMapper.cloneWithViewClass(JsonUtil.Views.Public.class).writeValueAsString(bulletins);

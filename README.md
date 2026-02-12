@@ -67,6 +67,13 @@ Environment=JDBC_PASSWORD=...
 Environment=JWT_GENERATOR_SIGNATURE_SECRET=...
 Environment=MICRONAUT_SERVER_PORT=8080
 Environment=UMASK=0022
+Environment=ALBINA_PUBLISH_AT_5PM=true
+Environment=ALBINA_PUBLISH_AT_8PM=true
+Environment=ALBINA_PDF_DIRECTORY=/var/www/static.avalanche.report/bulletins
+Environment=ALBINA_HTML_DIRECTORY=/var/www/static.avalanche.report/simple
+Environment=ALBINA_MAPS_PATH=/var/www/static.avalanche.report/bulletins
+Environment=ALBINA_MEDIA_PATH=/var/www/static.avalanche.report/media_files
+Environment=ALBINA_MAP_PRODUCTION_URL=/opt/avalanche-warning-maps
 ExecStartPre=/usr/bin/mkdir -p tomcat.8080/work/Tomcat/localhost/albina#api
 ExecStart=/usr/lib/jvm/jre-21/bin/java -jar albina.jar
 Type=simple

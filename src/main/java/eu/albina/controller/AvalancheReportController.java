@@ -19,15 +19,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import eu.albina.model.AvalancheReportStatus;
-import eu.albina.util.JsonUtil;
-import io.micronaut.data.annotation.Join;
-import io.micronaut.data.annotation.Query;
-import io.micronaut.data.annotation.Repository;
-import io.micronaut.serde.ObjectMapper;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +26,20 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.AvalancheReportStatus;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
+import eu.albina.util.JsonUtil;
+import io.micronaut.context.annotation.Value;
+import io.micronaut.data.annotation.Join;
+import io.micronaut.data.annotation.Query;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.serde.ObjectMapper;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 
 /**
  * Controller for avalanche reports.
@@ -349,7 +350,6 @@ public class AvalancheReportController {
 	 * @param bulletins       the bulletins which are affected by the publication
 	 * @param startDate       the start date of the time period
 	 * @param region          the region that should be published
-	 * @param username        the user who publishes the report
 	 * @param publicationDate the timestamp when the report was published
 	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
@@ -410,7 +410,7 @@ public class AvalancheReportController {
 		}
 
 		avalancheReportRepository.save(avalancheReport);
-		logger.info("Report for region {} published by {}", region.getId(), user);
+		logger.info("Report for region {} published", region.getId());
 		return avalancheReport;
 	}
 

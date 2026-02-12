@@ -62,6 +62,7 @@
 	"logoPath": "logo/color/avalanche_report.png",
 	"logoBwPath": "logo/grey/avalanche_report.png",
 	"staticUrl": "https://static.avalanche.report",
+	"serverImagesUrl": "https://static.avalanche.report/images/",
 	"languageConfigurations": [
 		{
 			"lang": "en",

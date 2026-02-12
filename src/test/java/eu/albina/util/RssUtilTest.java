@@ -9,6 +9,7 @@ import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 
 import eu.albina.RegionTestUtils;
+import eu.albina.model.LocalServerInstance;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 import com.google.common.io.MoreFiles;
 
-import eu.albina.model.ServerInstance;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.rest.MediaFileService;
 
@@ -28,8 +28,7 @@ public class RssUtilTest {
 
 	@Test
 	public void rss(@TempDir Path folder) throws Exception {
-		ServerInstance serverInstance = new ServerInstance();
-		serverInstance.setMediaPath(folder.resolve("media_files").toString());
+		LocalServerInstance serverInstance = new LocalServerInstance(false, false, null, null, null, null, folder.resolve("media_files").toString(), null);
 		Path directory = MediaFileService.getMediaPath(serverInstance, regionTestUtils.regionTyrol(), LanguageCode.de);
 		Files.createDirectories(directory);
 		MoreFiles.touch(directory.resolve("2020-12-12.mp3"));

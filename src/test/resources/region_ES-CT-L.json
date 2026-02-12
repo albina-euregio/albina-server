@@ -34,6 +34,7 @@
 	"logoBwPath": "logo/grey/lauegi.png",
 	"defaultLang": "en",
 	"staticUrl": "https://static.lauegi.report",
+	"serverImagesUrl": "https://static.lauegi.report/images/",
 	"languageConfigurations": [
 		{
 			"lang": "en",

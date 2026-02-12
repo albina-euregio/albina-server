@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.List;
 
 import eu.albina.controller.RegionRepository;
-import eu.albina.controller.ServerInstanceRepository;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -41,9 +40,6 @@ public class RegionService {
 
 	@Inject
 	private ObjectMapper objectMapper;
-
-	@Inject
-	private ServerInstanceRepository serverInstanceRepository;
 
 	@Get
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
@@ -80,13 +76,11 @@ public class RegionService {
 				// This happens whenever new fields are added to the backend but not yet to the frontend.
 				existing.updateFromJSON(regionString, objectMapper);
 				existing.fixLanguageConfigurations();
-				existing.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.update(existing);
 				return existing;
 			} else {
 				Region region = objectMapper.readValue(regionString, Region.class);
 				region.fixLanguageConfigurations();
-				region.setServerInstance(serverInstanceRepository.getLocalServerInstance());
 				regionRepository.update(region); // with `save` we get  "detached entity passed to persist: eu.albina.model.ServerInstance"
 				return region;
 			}

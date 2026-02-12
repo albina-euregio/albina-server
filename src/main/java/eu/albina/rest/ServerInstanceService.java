@@ -10,6 +10,7 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.security.annotation.Secured;
 
+import eu.albina.model.LocalServerInstance;
 import eu.albina.util.GlobalVariables;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -46,25 +47,24 @@ public class ServerInstanceService {
 	}
 
 	@Serdeable
-	public record PublicLocalServerConfiguration(String name, String apiUrl, String version) {
+	public record ServerVersionInfo(String version) {
 	}
 
 	@Get("/info")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	@Operation(summary = "Get public local server configuration")
-	@ApiResponse(description = "public configuration", content = @Content(schema = @Schema(implementation = PublicLocalServerConfiguration.class)))
-	public PublicLocalServerConfiguration getPublicLocalServerConfiguration() {
-		ServerInstance serverInstance = serverInstanceRepository.findByExternalServerFalse();
-		return new PublicLocalServerConfiguration(serverInstance.getName(), serverInstance.getApiUrl(), globalVariables.version);
+	@Operation(summary = "Get server version info")
+	@ApiResponse(description = "server version info", content = @Content(schema = @Schema(implementation = ServerVersionInfo.class)))
+	public ServerVersionInfo getServerVersionInfo() {
+		return new ServerVersionInfo(globalVariables.version);
 	}
 
 	@Get
 	@Secured({ Role.Str.SUPERADMIN, Role.Str.ADMIN })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get local server configuration")
-	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = ServerInstance.class)))
-	public ServerInstance getLocalServerConfiguration() {
-		return serverInstanceRepository.findByExternalServerFalse();
+	@ApiResponse(description = "configuration", content = @Content(schema = @Schema(implementation = LocalServerInstance.class)))
+	public LocalServerInstance getLocalServerConfiguration() {
+		return globalVariables.getLocalServerInstance();
 	}
 
 	@Get("/external")

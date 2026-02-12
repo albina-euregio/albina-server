@@ -2,7 +2,6 @@
 package eu.albina.model;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,7 +30,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -168,10 +166,6 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_WEATHER_TEXT_FIELD")
 	private boolean enableWeatherTextField;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "SERVER_INSTANCE_ID")
-	private ServerInstance serverInstance;
-
 	@Column(name = "PDF_COLOR", length = 191)
 	private String pdfColor;
 
@@ -239,6 +233,9 @@ public class Region implements PersistentObject {
 
 	@Column(name = "STATIC_URL", length = 191)
 	private String staticUrl;
+
+	@Column(name = "SERVER_IMAGES_URL", length = 191)
+	private String serverImagesUrl;
 
 	/**
 	 * Default constructor. Initializes all collections of the region.
@@ -402,22 +399,6 @@ public class Region implements PersistentObject {
 		String url = getFromLanguageConfig(lang, RegionLanguageConfiguration::getUrlWithDate, "");
 		String date = avalancheReport.getValidityDateString();
 		return String.format(url, date);
-	}
-
-	public String getSimpleHtmlUrl(LanguageCode lang) {
-		String htmlDirectory = Paths.get(serverInstance.getHtmlDirectory()).getFileName().toString();
-		return String.format("%s/%s", getStaticUrl(), htmlDirectory);
-	}
-
-	public String getMapsUrl(LanguageCode lang, HasValidityDate validityDate, HasPublicationDate publicationDate) {
-		String mapsDirectory = Paths.get(serverInstance.getMapsPath()).getFileName().toString();
-		return String.format("%s/%s/%s/%s", getStaticUrl(), mapsDirectory, validityDate.getValidityDateString(), publicationDate.getPublicationTimeString());
-	}
-
-	public String getPdfUrl(LanguageCode lang, HasValidityDate avalancheReport) {
-		String pdfDirectory = Paths.get(serverInstance.getPdfDirectory()).getFileName().toString();
-		String date = avalancheReport.getValidityDateString();
-		return String.format("%s/%s/%s/%s_%s_%s.pdf", getStaticUrl(), pdfDirectory, date, date, getId(), lang);
 	}
 
 	public String getImprintLink(LanguageCode lang) {
@@ -600,14 +581,6 @@ public class Region implements PersistentObject {
 
 	public void setEnableStressLevel(boolean enableStressLevel) {
 		this.enableStressLevel = enableStressLevel;
-	}
-
-	public ServerInstance getServerInstance() {
-		return serverInstance;
-	}
-
-	public void setServerInstance(ServerInstance serverInstance) {
-		this.serverInstance = serverInstance;
 	}
 
 	public String getPdfColor() {
@@ -834,6 +807,14 @@ public class Region implements PersistentObject {
 
 	public void setEnableGeneralHeadline(boolean enableGeneralHeadline) {
 		this.enableGeneralHeadline = enableGeneralHeadline;
+	}
+
+	public String getServerImagesUrl() {
+		return serverImagesUrl;
+	}
+
+	public void setServerImagesUrl(String serverImagesUrl) {
+		this.serverImagesUrl = serverImagesUrl;
 	}
 
 	public boolean affects(String regionId) {
