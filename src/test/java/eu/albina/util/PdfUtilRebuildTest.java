@@ -46,7 +46,7 @@ public class PdfUtilRebuildTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		serverInstance = new LocalServerInstance(false, false, "https://static.avalanche.report/bulletins", "../avalanche-warning-maps/", "/tmp/bulletins/", null, null, null);
+		serverInstance = new LocalServerInstance(false, false, "https://static.avalanche.report/bulletins", "../avalanche-warning-maps/", "/tmp/bulletins/", null, null);
 
 		Region regionTyrol = regionTestUtils.regionTyrol();
 		Region regionSouthTyrol = regionTestUtils.regionSouthTyrol();

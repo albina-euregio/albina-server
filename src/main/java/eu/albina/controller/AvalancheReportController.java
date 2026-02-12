@@ -32,8 +32,7 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.JsonUtil;
-import io.micronaut.context.annotation.Value;
-import io.micronaut.data.annotation.Join;
+
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.serde.ObjectMapper;
@@ -281,9 +280,8 @@ public class AvalancheReportController {
 	 * @param avalancheBulletins the affected bulletins
 	 * @param date               the start date of the report
 	 * @param region             the region of the report
-	 * @param user               the user who saves the report
 	 */
-	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region, User user) {
+	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region) {
 		AvalancheReport latestReport = getInternalReport(date, region);
 		BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
 		BulletinStatus newStatus = deriveStatus(avalancheBulletins, latestStatus);
@@ -294,7 +292,6 @@ public class AvalancheReportController {
 			: new AvalancheReport();
 		avalancheReport.setStatus(newStatus);
 		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
-		avalancheReport.setUser(user);
 		avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
 		Collection<AvalancheBulletin> bulletins = avalancheBulletins.values().stream().map(b -> b.withRegionFilter(region)).toList();
@@ -306,7 +303,7 @@ public class AvalancheReportController {
 
 		avalancheReportRepository.save(avalancheReport);
 
-		logger.info("Report for region {} saved by {}", region.getId(), user);
+		logger.info("Report for region {} saved", region.getId());
 	}
 
 	private static BulletinStatus deriveStatus(Map<String, AvalancheBulletin> avalancheBulletins, BulletinStatus latestStatus) {
@@ -352,14 +349,12 @@ public class AvalancheReportController {
 	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
 	 */
-	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, String username,
+	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
 										 Instant publicationDate) {
-		User user = username != null ? userRepository.findById(username).orElseThrow() : null;
 		AvalancheReport report = getInternalReport(startDate, region);
 
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
-		avalancheReport.setUser(user);
 		avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
 		if (report == null) {
@@ -428,7 +423,6 @@ public class AvalancheReportController {
 		AvalancheReport report = getInternalReport(startDate, region);
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
-		avalancheReport.setUser(user);
 		avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
 		avalancheReport.setRegion(region);
 		if (report == null) {

@@ -38,8 +38,8 @@ public class EmailUtilTest {
 
 	@BeforeEach
 	public void setUp() throws IOException {
-		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, "/mnt/simple_local/", null, null, null);
-		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, "/mnt/simple_local/", null, null, null);
+		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, "/mnt/simple_local/", null, null);
+		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, "/mnt/simple_local/", null, null);
 		regionTyrol = regionTestUtils.regionTyrol();
 		regionTyrol.setServerImagesUrl("/mnt/images/");
 		regionAran = regionTestUtils.regionAran();
