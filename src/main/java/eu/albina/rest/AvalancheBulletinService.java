@@ -294,6 +294,7 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Get published bulletin as PDF")
 	public SystemFile getPublishedBulletinAsPDF(
 		@PathVariable("bulletinId") String bulletinId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		@QueryValue("grayscale") boolean grayscale,
 		@QueryValue("lang") LanguageCode language) {
@@ -302,10 +303,12 @@ public class AvalancheBulletinService {
 		logger.info("Get published bulletin as PDF {}", bulletinId);
 		try {
 			pdfRateLimiter.acquire();
-			AvalancheBulletin bulletin = avalancheBulletinController.getBulletin(bulletinId);
+			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = regionRepository.findById(regionId).orElseThrow();
+			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
 			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(globalVariables.tmpOverride).toString(), null);
-			AvalancheReport avalancheReport = AvalancheReport.of(List.of(bulletin), region, serverInstance);
+			bulletins = bulletins.stream().filter(b -> bulletinId.equals(b.getId())).toList();
+			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return new SystemFile(pdf.toFile());
 		} catch (Exception e) {
