@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.util.GlobalVariables;
 import io.micronaut.http.HttpStatus;
@@ -40,7 +41,6 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
 import eu.albina.model.publication.RapidMailConfiguration;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.RssUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -112,7 +112,7 @@ public class MediaFileService {
 			logger.info("{} successfully uploaded to {}", txtFileName, txtFile);
 
 			// send emails
-			LocalDate localDate = date.atZone(AlbinaUtil.localZone()).toLocalDate();
+			LocalDate localDate = date.atZone(PublicationStrategy.localZone()).toLocalDate();
 			String formattedDate = language.getLongDate(localDate);
 
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;

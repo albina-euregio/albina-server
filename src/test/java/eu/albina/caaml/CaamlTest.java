@@ -17,6 +17,7 @@ import java.util.List;
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
 import eu.albina.controller.RegionRepository;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import eu.albina.util.JsonUtil;
@@ -38,7 +39,6 @@ import eu.albina.controller.AvalancheReportController;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.AlbinaUtil;
 
 @MicronautTest
 public class CaamlTest {
@@ -137,7 +137,7 @@ public class CaamlTest {
 	}
 
 	private AvalancheReport loadFromDatabase(LocalDate date) throws Exception {
-		Instant instant = date.atStartOfDay(AlbinaUtil.localZone()).withZoneSameInstant(ZoneOffset.UTC).toInstant();
+		Instant instant = date.atStartOfDay(PublicationStrategy.localZone()).withZoneSameInstant(ZoneOffset.UTC).toInstant();
 		List<AvalancheBulletin> bulletins = new AvalancheReportController().getPublishedBulletins(instant, regionRepository.getPublishBulletinRegions());
 		AvalancheReport report = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		Path path = Paths.get(String.format("/tmp/bulletins/%s/avalanche_report.json", date));

@@ -30,7 +30,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 
 import jakarta.inject.Inject;
@@ -72,7 +71,7 @@ public class PublicationJob {
 		if (!strategy.isEnabled(serverInstance)) {
 			return;
 		}
-		Clock system = Clock.system(AlbinaUtil.localZone());
+		Clock system = Clock.system(PublicationStrategy.localZone());
 		Instant startDate = strategy.getStartDate(system);
 		Instant endDate = strategy.getEndDate(system);
 		Instant publicationDate = ZonedDateTime.now().withNano(0).toInstant();

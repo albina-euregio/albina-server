@@ -10,11 +10,16 @@ import jakarta.annotation.Nullable;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
 public interface PublicationStrategy {
+
+	static ZoneId localZone() {
+		return ZoneId.of("Europe/Vienna");
+	}
 
 	static PublicationStrategy publishAt5PM() {
 		return new PublicationStrategy() {

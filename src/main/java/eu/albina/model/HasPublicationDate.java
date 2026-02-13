@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
-import static eu.albina.util.AlbinaUtil.localZone;
+import static eu.albina.jobs.PublicationStrategy.localZone;
 
 import java.time.LocalTime;
 import java.time.ZoneOffset;

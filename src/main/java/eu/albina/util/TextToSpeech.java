@@ -46,6 +46,7 @@ import com.google.common.net.MediaType;
 import com.google.errorprone.annotations.CheckReturnValue;
 
 import eu.albina.caaml.Caaml6;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -275,7 +276,7 @@ public class TextToSpeech {
 		}
 
 		private String getValidityDate(ValidTime validTime) {
-			return lang.getLongDate(validTime.getStartTime().atZone(AlbinaUtil.localZone()).toLocalDate().plusDays(1));
+			return lang.getLongDate(validTime.getStartTime().atZone(PublicationStrategy.localZone()).toLocalDate().plusDays(1));
 		}
 
 		void paragraph(String element) {

@@ -12,7 +12,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Range;
 
 import eu.albina.exception.AlbinaException;
-import eu.albina.util.AlbinaUtil;
+import eu.albina.jobs.PublicationStrategy;
 
 interface DateControllerUtil {
 	String DATE_FORMAT_DESCRIPTION = "Date in the format yyyy-MM-dd'T'HH:mm:ssZZ";
@@ -24,7 +24,7 @@ interface DateControllerUtil {
 	private static ZonedDateTime parseDateString(String date) {
 		Objects.requireNonNull(date, "date");
 		return date.length() == "2006-01-02".length()
-			? LocalDate.parse(date).atStartOfDay(AlbinaUtil.localZone())
+			? LocalDate.parse(date).atStartOfDay(PublicationStrategy.localZone())
 			: ZonedDateTime.parse(date);
 	}
 
@@ -32,7 +32,7 @@ interface DateControllerUtil {
 		if (date != null) {
 			return parseDate(date);
 		} else {
-			return LocalDate.now().atStartOfDay(AlbinaUtil.localZone()).toInstant();
+			return LocalDate.now().atStartOfDay(PublicationStrategy.localZone()).toInstant();
 		}
 	}
 
@@ -54,7 +54,7 @@ interface DateControllerUtil {
 
 	static ZoneId parseTimezoneOrLocal(String timezone) {
 		if (Strings.isNullOrEmpty(timezone)) {
-			return AlbinaUtil.localZone();
+			return PublicationStrategy.localZone();
 		} else {
 			return ZoneId.of(timezone);
 		}
