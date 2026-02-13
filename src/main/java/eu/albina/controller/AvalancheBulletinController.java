@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import eu.albina.util.AlbinaUtil;
 import io.micronaut.data.annotation.Repository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -56,7 +55,7 @@ public class AvalancheBulletinController {
 		List<AvalancheBulletin> findByValidFromOrValidUntil(ZonedDateTime startDate, ZonedDateTime endDate);
 
 		default List<AvalancheBulletin> findByValidFromOrValidUntil(Instant startDate, Instant endDate) {
-			return findByValidFromOrValidUntil(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate));
+			return findByValidFromOrValidUntil(startDate.atZone(ZoneOffset.UTC), endDate.atZone(ZoneOffset.UTC));
 		}
 	}
 

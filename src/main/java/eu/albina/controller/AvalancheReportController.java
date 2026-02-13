@@ -30,7 +30,6 @@ import eu.albina.model.AvalancheReportStatus;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.JsonUtil;
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Query;
@@ -67,14 +66,14 @@ public class AvalancheReportController {
 		List<AvalancheReport> findByDateAndRegion(ZonedDateTime date, Region region);
 
 		default List<AvalancheReport> findByDateAndRegion(Instant date, Region region) {
-			return findByDateAndRegion(AlbinaUtil.getZonedDateTimeUtc(date), region);
+			return findByDateAndRegion(date.atZone(ZoneOffset.UTC), region);
 		}
 
 		@Join(value = "region", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
 
 		default List<AvalancheReport> findByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
-			return findByDateBetweenAndRegion(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate), region);
+			return findByDateBetweenAndRegion(startDate.atZone(ZoneOffset.UTC), endDate.atZone(ZoneOffset.UTC), region);
 		}
 
 		AvalancheReport findFirstByStatusInOrderByDateDesc(Set<BulletinStatus> status);
@@ -87,7 +86,7 @@ public class AvalancheReportController {
 		List<AvalancheReportStatus> listByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, String regionID);
 
 		default List<AvalancheReportStatus> listByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
-			return listByDateBetweenAndRegion(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate), region.getId());
+			return listByDateBetweenAndRegion(startDate.atZone(ZoneOffset.UTC), endDate.atZone(ZoneOffset.UTC), region.getId());
 		}
 	}
 
@@ -293,7 +292,7 @@ public class AvalancheReportController {
 			? latestReport
 			: new AvalancheReport();
 		avalancheReport.setStatus(newStatus);
-		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
+		avalancheReport.setTimestamp(ZonedDateTime.now().withNano(0).toInstant().atZone(ZoneOffset.UTC));
 		avalancheReport.setDate(date.atZone(ZoneOffset.UTC));
 		avalancheReport.setRegion(region);
 		Collection<AvalancheBulletin> bulletins = avalancheBulletins.values().stream().map(b -> b.withRegionFilter(region)).toList();
@@ -424,7 +423,7 @@ public class AvalancheReportController {
 	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user) {
 		AvalancheReport report = getInternalReport(startDate, region);
 		AvalancheReport avalancheReport = new AvalancheReport();
-		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
+		avalancheReport.setTimestamp(ZonedDateTime.now().withNano(0).toInstant().atZone(ZoneOffset.UTC));
 		avalancheReport.setDate(startDate.atZone(ZoneOffset.UTC));
 		avalancheReport.setRegion(region);
 		if (report == null) {

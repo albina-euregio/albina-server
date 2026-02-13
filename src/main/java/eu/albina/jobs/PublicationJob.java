@@ -4,6 +4,7 @@ package eu.albina.jobs;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -74,7 +75,7 @@ public class PublicationJob {
 		Clock system = Clock.system(AlbinaUtil.localZone());
 		Instant startDate = strategy.getStartDate(system);
 		Instant endDate = strategy.getEndDate(system);
-		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
+		Instant publicationDate = ZonedDateTime.now().withNano(0).toInstant();
 		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
 		List<Region> publishBulletinRegions = regionRepository.getPublishBulletinRegions();
