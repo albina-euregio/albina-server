@@ -2,7 +2,7 @@
 package eu.albina.model;
 
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 import com.google.common.base.MoreObjects;
@@ -63,7 +63,7 @@ public class PushSubscription {
 	}
 
 	public void setSubscribeDate(Instant subscribeDate) {
-		this.subscribeDate = ZonedDateTime.ofInstant(subscribeDate, ZoneId.of("UTC"));
+		this.subscribeDate = ZonedDateTime.ofInstant(subscribeDate, ZoneOffset.UTC);
 	}
 
 	public String getAuth() {

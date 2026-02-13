@@ -4,7 +4,7 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -294,7 +294,7 @@ public class AvalancheReportController {
 			: new AvalancheReport();
 		avalancheReport.setStatus(newStatus);
 		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
-		avalancheReport.setDate(date.atZone(ZoneId.of("UTC")));
+		avalancheReport.setDate(date.atZone(ZoneOffset.UTC));
 		avalancheReport.setRegion(region);
 		Collection<AvalancheBulletin> bulletins = avalancheBulletins.values().stream().map(b -> b.withRegionFilter(region)).toList();
 		try {
@@ -356,8 +356,8 @@ public class AvalancheReportController {
 		AvalancheReport report = getInternalReport(startDate, region);
 
 		AvalancheReport avalancheReport = new AvalancheReport();
-		avalancheReport.setTimestamp(publicationDate.atZone(ZoneId.of("UTC")));
-		avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
+		avalancheReport.setTimestamp(publicationDate.atZone(ZoneOffset.UTC));
+		avalancheReport.setDate(startDate.atZone(ZoneOffset.UTC));
 		avalancheReport.setRegion(region);
 		if (report == null) {
 			avalancheReport.setStatus(BulletinStatus.missing);
@@ -425,7 +425,7 @@ public class AvalancheReportController {
 		AvalancheReport report = getInternalReport(startDate, region);
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(AlbinaUtil.getZonedDateTimeNowNoNanos());
-		avalancheReport.setDate(startDate.atZone(ZoneId.of("UTC")));
+		avalancheReport.setDate(startDate.atZone(ZoneOffset.UTC));
 		avalancheReport.setRegion(region);
 		if (report == null) {
 			avalancheReport.setStatus(BulletinStatus.missing);

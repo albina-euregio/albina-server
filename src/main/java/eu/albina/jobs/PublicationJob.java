@@ -3,7 +3,7 @@ package eu.albina.jobs;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -131,7 +131,7 @@ public class PublicationJob {
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
 		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, publishBulletinRegions);
-		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
+		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC)));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		logger.info("Publication phase 1 done after {}", stopwatch);

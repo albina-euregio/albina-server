@@ -2,7 +2,7 @@
 package eu.albina.controller;
 
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -458,12 +458,12 @@ public class AvalancheBulletinController {
 					bulletin.getPublishedRegions().add(entry);
 				}
 
-				bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
+				bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
 				avalancheBulletinRepository.save(bulletin);
 			}
 
 			// set publication date for all bulletins
-			bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
+			bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
 			avalancheBulletinRepository.save(bulletin);
 		}
 	}
