@@ -64,14 +64,12 @@ public class AvalancheReportController {
 	@Repository
 	public interface AvalancheReportRepository extends CrudRepository<AvalancheReport, String> {
 
-		@Join(value = "user", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateAndRegion(ZonedDateTime date, Region region);
 
 		default List<AvalancheReport> findByDateAndRegion(Instant date, Region region) {
 			return findByDateAndRegion(AlbinaUtil.getZonedDateTimeUtc(date), region);
 		}
 
-		@Join(value = "user", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
 
 		default List<AvalancheReport> findByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
