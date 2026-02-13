@@ -281,7 +281,7 @@ public interface SimpleHtmlUtil {
 		result.put("text", text);
 
 		dangerLevel.put("warningPicto", region.getServerImagesUrl() + "warning_pictos/color/level_"
-				+ AlbinaUtil.getWarningLevelId(daytimeDescription) + ".png");
+				+ daytimeDescription.getWarningLevelId() + ".png");
 		dangerLevel.put("elevation",
 				getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang));
 

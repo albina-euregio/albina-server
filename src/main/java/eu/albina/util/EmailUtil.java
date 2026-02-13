@@ -338,7 +338,7 @@ public interface EmailUtil {
 			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_0_0.png");
 		} else {
 			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_"
-					+ AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
+					+ daytimeBulletin.getWarningLevelId() + ".png");
 		}
 		// dangerRating.put("symbol", "cid:warning_picto/" +
 		// getWarningLevelId(daytimeBulletin,
