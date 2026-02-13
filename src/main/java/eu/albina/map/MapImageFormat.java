@@ -4,10 +4,17 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.StandardSystemProperty;
 import com.google.common.io.MoreFiles;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public enum MapImageFormat {
@@ -23,26 +30,10 @@ public enum MapImageFormat {
 			Path pngFile = checkAndReplaceExtension(pdfFile, "pdf", "png");
 			logger.debug("Converting {} to {}", pdfFile, pngFile);
 			int dpi = 300;
-			if (IS_OS_WINDOWS) {
-				new ProcessBuilder("gswin32",
-					"-sDEVICE=png16m",
-					"-dTextAlphaBits=4",
-					"-dGraphicsAlphaBits=4",
-					"-r" + dpi,
-					"-o",
-					pngFile.toString(),
-					pdfFile.toString()
-				).inheritIO().start().waitFor();
-			} else {
-				new ProcessBuilder("gs",
-					"-sDEVICE=png16m",
-					"-dTextAlphaBits=4",
-					"-dGraphicsAlphaBits=4",
-					"-r" + dpi,
-					"-o",
-					pngFile.toString(),
-					pdfFile.toString()
-				).inheritIO().start().waitFor();
+			try (PDDocument document = Loader.loadPDF(Files.readAllBytes(pdfFile))) {
+				PDFRenderer renderer = new PDFRenderer(document);
+				BufferedImage image = renderer.renderImageWithDPI(0, dpi, ImageType.ARGB);
+				ImageIOUtil.writeImage(image, pngFile.toString(), 300);
 			}
 			return pngFile;
 		}

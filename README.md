@@ -25,7 +25,7 @@ This project uses Transifex for its translations: https://app.transifex.com/albi
 
 ```shell
 # install requirements
-apt/dnf install java-21-openjdk-headless ghostscript imagemagick webp
+apt/dnf install java-21-openjdk-headless imagemagick webp
 # build
 # or download build artifact from GitLab: https://gitlab.com/albina-euregio/albina-server/-/pipelines?scope=tags
 mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$(git describe --tags)

@@ -106,6 +106,11 @@
 			<artifactId>layout</artifactId>
 			<version>${itextpdf.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox-tools</artifactId>
+			<version>3.0.6</version>
+		</dependency>
 
 		<!-- authentication -->
 		<dependency>
