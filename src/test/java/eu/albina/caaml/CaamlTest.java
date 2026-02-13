@@ -63,7 +63,7 @@ public class CaamlTest {
 
 	@BeforeEach
 	public void setUp() throws Exception {
-		serverInstance = new LocalServerInstance(false, false, "/foo/bar/baz/bulletins/", null, null,"/foo/bar/baz/simple/", null, null);
+		serverInstance = new LocalServerInstance(false, false, "/foo/bar/baz/bulletins/", null, null,"/foo/bar/baz/simple/", null);
 		regionEuregio = regionTestUtils.regionEuregio();
 	}
 

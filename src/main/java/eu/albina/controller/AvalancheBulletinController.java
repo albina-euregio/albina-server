@@ -128,7 +128,7 @@ public class AvalancheBulletinController {
 			}
 		}
 
-		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
+		avalancheReportController.saveReport(resultBulletins, startDate, region);
 
 		return resultBulletins;
 	}
@@ -307,7 +307,7 @@ public class AvalancheBulletinController {
 		avalancheBulletinRepository.update(updatedBulletin);
 		resultBulletins.put(updatedBulletin.getId(), updatedBulletin);
 
-		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
+		avalancheReportController.saveReport(resultBulletins, startDate, region);
 
 		logger.info("Bulletin {} for region {} updated by {}", updatedBulletin.getId(), region.getId(), user);
 
@@ -323,7 +323,7 @@ public class AvalancheBulletinController {
 	 * @return a map of all bulletin ids and bulletins for this day
 	 */
 	public synchronized Map<String, AvalancheBulletin> deleteBulletin(String bulletinId, Instant startDate, Instant endDate,
-																	  Region region, User user) {
+																	  Region region) {
 		Map<String, AvalancheBulletin> resultBulletins = new HashMap<>();
 
 		List<AvalancheBulletin> loadedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
@@ -335,7 +335,7 @@ public class AvalancheBulletinController {
 				avalancheBulletinRepository.delete(loadedBulletin);
 		}
 
-		avalancheReportController.saveReport(resultBulletins, startDate, region, user);
+		avalancheReportController.saveReport(resultBulletins, startDate, region);
 
 		return resultBulletins;
 	}

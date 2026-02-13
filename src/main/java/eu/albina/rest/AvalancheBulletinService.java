@@ -495,7 +495,7 @@ public class AvalancheBulletinService {
 					loadUser(bulletin);
 					Map<String, AvalancheBulletin> avalancheBulletins = avalancheBulletinController
 						.createBulletin(bulletin, startDate, endDate, region);
-					avalancheReportController.saveReport(avalancheBulletins, startDate, region, user);
+					avalancheReportController.saveReport(avalancheBulletins, startDate, region);
 				} else
 					throw new AlbinaException("User is not authorized for this region!");
 
@@ -530,7 +530,7 @@ public class AvalancheBulletinService {
 				List<Region> regions = regionRepository.findAll();
 
 				if (user.hasPermissionForRegion(region.getId())) {
-					avalancheBulletinController.deleteBulletin(bulletinId, startDate, endDate, region, user);
+					avalancheBulletinController.deleteBulletin(bulletinId, startDate, endDate, region);
 
 				} else
 					throw new AlbinaException("User is not authorized for this region!");

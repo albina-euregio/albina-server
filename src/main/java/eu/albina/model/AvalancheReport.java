@@ -54,14 +54,6 @@ import org.slf4j.LoggerFactory;
 @Introspected(excludedAnnotations = {JsonIgnore.class})
 public class AvalancheReport extends AbstractPersistentObject implements HasValidityDate, HasPublicationDate {
 
-	/**
-	 * Information about the author of the avalanche bulletin
-	 */
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USER_ID")
-	@JsonSerialize(as = NameAndEmail.class)
-	private User user;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID")
 	private Region region;
@@ -180,14 +172,6 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 			"bulletins must be subset of globalBulletins");
 		this.bulletins = bulletins;
 		this.globalBulletins = globalBulletins;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public Region getRegion() {

@@ -11,7 +11,6 @@ public record LocalServerInstance(
 	String mapProductionUrl,
 	String pdfDirectory,
 	String htmlDirectory,
-	String mediaPath,
-	String publicationUser
+	String mediaPath
 ) {
 }

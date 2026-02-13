@@ -67,7 +67,7 @@ public class AvalancheReportTest {
 
 	@Test
 	public void testDates() throws Exception {
-		LocalServerInstance serverInstance = new LocalServerInstance(false, false, "/foo/bar/baz/bulletins", null, "/foo/bar/baz/bulletins", null ,null, null);
+		LocalServerInstance serverInstance = new LocalServerInstance(false, false, "/foo/bar/baz/bulletins", null, "/foo/bar/baz/bulletins", null ,null);
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		Region regionEuregio = regionTestUtils.regionEuregio();
@@ -132,7 +132,7 @@ public class AvalancheReportTest {
 
 	@Test
 	public void createJsonTest(@TempDir Path folder) throws IOException {
-		LocalServerInstance serverInstance = new LocalServerInstance(false, false, folder.toString(), null, folder.toString(), folder.toString(), null, null);
+		LocalServerInstance serverInstance = new LocalServerInstance(false, false, folder.toString(), null, folder.toString(), folder.toString(), null);
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json"));
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTestUtils.regionTyrol(), serverInstance);
 		avalancheReport.createJsonFile(objectMapper);
