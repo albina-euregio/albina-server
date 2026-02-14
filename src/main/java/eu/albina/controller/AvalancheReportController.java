@@ -32,7 +32,7 @@ import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.AlbinaUtil;
 import eu.albina.util.JsonUtil;
-
+import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.serde.ObjectMapper;
@@ -63,12 +63,14 @@ public class AvalancheReportController {
 	@Repository
 	public interface AvalancheReportRepository extends CrudRepository<AvalancheReport, String> {
 
+		@Join(value = "region", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateAndRegion(ZonedDateTime date, Region region);
 
 		default List<AvalancheReport> findByDateAndRegion(Instant date, Region region) {
 			return findByDateAndRegion(AlbinaUtil.getZonedDateTimeUtc(date), region);
 		}
 
+		@Join(value = "region", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
 
 		default List<AvalancheReport> findByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
