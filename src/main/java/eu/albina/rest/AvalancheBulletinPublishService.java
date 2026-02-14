@@ -14,6 +14,7 @@ import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.jobs.PublicationStrategy;
 import eu.albina.util.GlobalVariables;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -125,7 +126,7 @@ public class AvalancheBulletinPublishService {
 	@Transactional
 	public void sendEmail(@QueryValue("region") String regionId,
 							  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-							  @QueryValue("lang") LanguageCode language) {
+							  @Nullable @QueryValue("lang") LanguageCode language) {
 		try {
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendMails(publicationController);
@@ -142,7 +143,7 @@ public class AvalancheBulletinPublishService {
 	@Transactional
 	public void triggerTelegramChannel(@QueryValue("region") String regionId,
 										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-										   @QueryValue("lang") LanguageCode language) {
+										   @Nullable @QueryValue("lang") LanguageCode language) {
 		try {
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendTelegramMessage(publicationController);
@@ -159,7 +160,7 @@ public class AvalancheBulletinPublishService {
 	@Transactional
 	public void triggerWhatsAppChannel(@QueryValue("region") String regionId,
 										   @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-										   @QueryValue("lang") LanguageCode language) {
+										   @Nullable @QueryValue("lang") LanguageCode language) {
 		try {
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendWhatsAppMessage(publicationController);
@@ -176,7 +177,7 @@ public class AvalancheBulletinPublishService {
 	@Transactional
 	public void triggerPushNotifications(@QueryValue("region") String regionId,
 											 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-											 @QueryValue("lang") LanguageCode language) {
+											 @Nullable @QueryValue("lang") LanguageCode language) {
 		try {
 			for (MultichannelMessage posting : getMultichannelMessage(regionId, date, language)) {
 				posting.sendPushNotifications(publicationController);
