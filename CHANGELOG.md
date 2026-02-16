@@ -2,6 +2,12 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [8.1.1] - 2026-02-16
+
+### 🐛 Bug Fixes
+
+- Fix PDF creation
+
 ## [8.1.0] - 2026-02-02
 
 ### 🚀 Features
