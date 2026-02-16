@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.micronaut.core.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -265,17 +266,30 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Get published bulletins as PDF")
 	public SystemFile getPublishedBulletinsAsPDF(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@Nullable @QueryValue("bulletinId") String bulletinId,
+		@Nullable @QueryValue("microRegionId") String microRegionId,
 		@QueryValue("region") String regionId,
 		@QueryValue("grayscale") boolean grayscale,
 		@QueryValue("lang") LanguageCode language) {
 
 		Stopwatch stopwatch = Stopwatch.createStarted();
-		logger.info("Get published bulletins as PDF {}", regionId);
+		logger.info("Get published bulletins as PDF regionId={} bulletinId={} microRegionId={}", regionId, bulletinId, microRegionId);
 		try {
 			pdfRateLimiter.acquire();
 			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = regionRepository.findById(regionId).orElseThrow();
-			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
+			List<AvalancheBulletin> bulletins = region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
+				? avalancheReportController.getPublishedBulletins(startDate, List.of(region))
+				: avalancheReportController.getPublishedBulletins(startDate, region.getSubRegions());
+			if (bulletinId!= null && !bulletinId.isEmpty()) {
+				bulletins = bulletins.stream().filter(b -> bulletinId.equals(b.getId())).toList();
+			}
+			if (microRegionId!= null && !microRegionId.isEmpty()) {
+				bulletins = bulletins.stream().filter(b -> b.getPublishedRegions().contains(microRegionId)).toList();
+			}
+			if (bulletins.isEmpty()) {
+				throw new NoSuchElementException("No bulletins found!");
+			}
 			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(globalVariables.tmpOverride).toString(), null);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
@@ -285,37 +299,6 @@ public class AvalancheBulletinService {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} finally {
 			logger.info("Get published bulletin as PDF {} took {}", regionId, stopwatch);
-		}
-	}
-
-	@Get("/{bulletinId}/pdf")
-	@Secured(SecurityRule.IS_ANONYMOUS)
-	@Produces(MediaType.APPLICATION_PDF)
-	@Operation(summary = "Get published bulletin as PDF")
-	public SystemFile getPublishedBulletinAsPDF(
-		@PathVariable("bulletinId") String bulletinId,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@QueryValue("region") String regionId,
-		@QueryValue("grayscale") boolean grayscale,
-		@QueryValue("lang") LanguageCode language) {
-
-		Stopwatch stopwatch = Stopwatch.createStarted();
-		logger.info("Get published bulletin as PDF {}", bulletinId);
-		try {
-			pdfRateLimiter.acquire();
-			Instant startDate = DateControllerUtil.parseDateOrToday(date);
-			Region region = regionRepository.findById(regionId).orElseThrow();
-			List<AvalancheBulletin> bulletins = avalancheReportController.getPublishedBulletins(startDate, List.of(region));
-			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(globalVariables.tmpOverride).toString(), null);
-			bulletins = bulletins.stream().filter(b -> bulletinId.equals(b.getId())).toList();
-			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
-			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
-			return new SystemFile(pdf.toFile());
-		} catch (Exception e) {
-			logger.warn("Error creating PDF", e);
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} finally {
-			logger.info("Get published bulletin as PDF {} took {}", bulletinId, stopwatch);
 		}
 	}
 

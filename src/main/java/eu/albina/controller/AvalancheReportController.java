@@ -487,7 +487,7 @@ public class AvalancheReportController {
 	 * @return all published bulletins with the most recent version number
 	 * @throws AlbinaException if the report could not be loaded from the DB
 	 */
-	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, List<Region> regions) {
+	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, Collection<Region> regions) {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<>();
 
