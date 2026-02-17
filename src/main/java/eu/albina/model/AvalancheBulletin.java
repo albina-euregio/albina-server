@@ -17,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.util.JsonUtil;
 
 import eu.albina.model.enumerations.DangerPattern;
@@ -25,7 +27,7 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.StrategicMindset;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-import eu.albina.util.AlbinaUtil;
+
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.annotation.DateUpdated;
 import io.micronaut.serde.annotation.Serdeable;
@@ -778,7 +780,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Override
 	@JsonIgnore
 	public LocalDate getValidityDate() {
-		ZonedDateTime zonedDateTime = validUntil.withZoneSameInstant(AlbinaUtil.localZone());
+		ZonedDateTime zonedDateTime = validUntil.withZoneSameInstant(PublicationStrategy.localZone());
 		LocalTime localTime = zonedDateTime.toLocalTime();
 		if (localTime.equals(LocalTime.of(0, 0))) {
 			// used until 2024-05-01

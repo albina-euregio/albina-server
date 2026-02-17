@@ -582,9 +582,9 @@ public class PdfUtil {
 
 		Image regionImg;
 		if (grayscale)
-			regionImg = getImage("warning_pictos/grey/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
+			regionImg = getImage("warning_pictos/grey/level_" + daytimeBulletin.getWarningLevelId() + ".png");
 		else
-			regionImg = getImage("warning_pictos/color/level_" + AlbinaUtil.getWarningLevelId(daytimeBulletin) + ".png");
+			regionImg = getImage("warning_pictos/color/level_" + daytimeBulletin.getWarningLevelId() + ".png");
 		if (regionImg != null) {
 			regionImg.getAccessibilityProperties().setAlternateDescription(getDangerRatingText(daytimeBulletin, lang));
 			regionImg.scaleToFit(70, 30);

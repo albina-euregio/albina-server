@@ -3,7 +3,8 @@ package eu.albina.jobs;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,7 +30,6 @@ import eu.albina.model.AvalancheReport;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
-import eu.albina.util.AlbinaUtil;
 import eu.albina.util.GlobalVariables;
 
 import jakarta.inject.Inject;
@@ -71,10 +71,10 @@ public class PublicationJob {
 		if (!strategy.isEnabled(serverInstance)) {
 			return;
 		}
-		Clock system = Clock.system(AlbinaUtil.localZone());
+		Clock system = Clock.system(PublicationStrategy.localZone());
 		Instant startDate = strategy.getStartDate(system);
 		Instant endDate = strategy.getEndDate(system);
-		Instant publicationDate = AlbinaUtil.getInstantNowNoNanos();
+		Instant publicationDate = ZonedDateTime.now().withNano(0).toInstant();
 		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
 
 		List<Region> publishBulletinRegions = regionRepository.getPublishBulletinRegions();
@@ -131,7 +131,7 @@ public class PublicationJob {
 		// get all published bulletins
 		// FIXME set publicationDate for all bulletins (somehow a hack)
 		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, publishBulletinRegions);
-		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC"))));
+		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC)));
 		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		logger.info("Publication phase 1 done after {}", stopwatch);

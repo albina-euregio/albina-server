@@ -2,7 +2,7 @@
 package eu.albina.controller;
 
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import eu.albina.util.AlbinaUtil;
 import io.micronaut.data.annotation.Repository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -56,7 +55,7 @@ public class AvalancheBulletinController {
 		List<AvalancheBulletin> findByValidFromOrValidUntil(ZonedDateTime startDate, ZonedDateTime endDate);
 
 		default List<AvalancheBulletin> findByValidFromOrValidUntil(Instant startDate, Instant endDate) {
-			return findByValidFromOrValidUntil(AlbinaUtil.getZonedDateTimeUtc(startDate), AlbinaUtil.getZonedDateTimeUtc(endDate));
+			return findByValidFromOrValidUntil(startDate.atZone(ZoneOffset.UTC), endDate.atZone(ZoneOffset.UTC));
 		}
 	}
 
@@ -458,12 +457,12 @@ public class AvalancheBulletinController {
 					bulletin.getPublishedRegions().add(entry);
 				}
 
-				bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
+				bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
 				avalancheBulletinRepository.save(bulletin);
 			}
 
 			// set publication date for all bulletins
-			bulletin.setPublicationDate(publicationDate.atZone(ZoneId.of("UTC")));
+			bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
 			avalancheBulletinRepository.save(bulletin);
 		}
 	}

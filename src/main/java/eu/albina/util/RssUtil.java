@@ -23,6 +23,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -54,7 +55,7 @@ public interface RssUtil {
 				item.appendChild(document.createElement("title")).setTextContent(path.getFileName().toString());
 				item.appendChild(document.createElement("description")).setTextContent(path.getFileName().toString());
 				Instant pubDate = Files.getLastModifiedTime(path).toInstant();
-				item.appendChild(document.createElement("pubDate")).setTextContent(DateTimeFormatter.RFC_1123_DATE_TIME.format(pubDate.atZone(AlbinaUtil.localZone())));
+				item.appendChild(document.createElement("pubDate")).setTextContent(DateTimeFormatter.RFC_1123_DATE_TIME.format(pubDate.atZone(PublicationStrategy.localZone())));
 				Element guid = (Element) item.appendChild(document.createElement("guid"));
 				guid.setAttribute("isPermaLink", Boolean.FALSE.toString());
 				guid.setTextContent(UUID.nameUUIDFromBytes((path.getFileName() + pubDate.toString()).getBytes(StandardCharsets.UTF_8)).toString());

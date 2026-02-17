@@ -106,6 +106,15 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.terrainFeatureBelow = new HashSet<>();
 	}
 
+	public String getWarningLevelId() {
+		if (isHasElevationDependency())
+			return DangerRating.getString(dangerRating(false)) + "_"
+				+ DangerRating.getString(dangerRating(true));
+		else
+			return DangerRating.getString(dangerRating(true)) + "_"
+				+ DangerRating.getString(dangerRating(true));
+	}
+
 	public boolean isHasElevationDependency() {
 		if (isDangerLevelElevationDependency()) {
 			return hasElevationDependency;

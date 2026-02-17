@@ -4,17 +4,27 @@ package eu.albina.jobs;
 import eu.albina.controller.RegionRepository;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
-import eu.albina.util.AlbinaUtil;
+
 import jakarta.annotation.Nullable;
 
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
 public interface PublicationStrategy {
+
+	static ZoneId localZone() {
+		return ZoneId.of("Europe/Vienna");
+	}
+
+	static LocalTime validityStart() {
+		return LocalTime.of(17, 0);
+	}
 
 	static PublicationStrategy publishAt5PM() {
 		return new PublicationStrategy() {
@@ -32,7 +42,7 @@ public interface PublicationStrategy {
 			public Instant getStartDate(Clock clock) {
 				return ZonedDateTime.of(
 					LocalDate.now(clock),
-					AlbinaUtil.validityStart(),
+					validityStart(),
 					clock.getZone()
 				).toInstant();
 			}
@@ -55,7 +65,7 @@ public interface PublicationStrategy {
 			public Instant getStartDate(Clock clock) {
 				return ZonedDateTime.of(
 					LocalDate.now(clock).minusDays(1),
-					AlbinaUtil.validityStart(),
+					validityStart(),
 					clock.getZone()
 				).toInstant();
 			}
@@ -78,7 +88,7 @@ public interface PublicationStrategy {
 			public Instant getStartDate(Clock clock) {
 				return ZonedDateTime.of(
 					LocalDate.now(clock),
-					AlbinaUtil.validityStart(),
+					validityStart(),
 					clock.getZone()
 				).toInstant();
 			}

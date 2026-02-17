@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.UserRepository;
-import eu.albina.util.AlbinaUtil;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.util.JsonUtil;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -107,7 +107,7 @@ public class AuthenticationService {
 
 	@Scheduled(initialDelay = "1s", fixedRate = "1m")
 	public void updateExpiration() {
-		ZonedDateTime now = ZonedDateTime.now(AlbinaUtil.localZone());
+		ZonedDateTime now = ZonedDateTime.now(PublicationStrategy.localZone());
 		long seconds = ChronoUnit.SECONDS.between(
 			now,
 			now.plusDays(1).withHour(3) // tomorrow at 03:00

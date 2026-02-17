@@ -8,14 +8,12 @@ import java.time.Instant;
 
 import org.junit.jupiter.api.Test;
 
-import eu.albina.util.AlbinaUtil;
-
 class PublicationStrategyTest {
 
     @Test
     public void testPublicationJob() {
         PublicationStrategy job = PublicationStrategy.publishAt5PM();
-        Clock clock = Clock.fixed(Instant.parse("2022-03-26T16:01:02Z"), AlbinaUtil.localZone());
+        Clock clock = Clock.fixed(Instant.parse("2022-03-26T16:01:02Z"), PublicationStrategy.localZone());
         assertEquals(job.getStartDate(clock), Instant.parse("2022-03-26T16:00:00Z")); // ok
         assertEquals(job.getEndDate(clock), Instant.parse("2022-03-27T15:00:00Z")); // ok (time change)
     }
@@ -23,7 +21,7 @@ class PublicationStrategyTest {
     @Test
     public void testUpdateJob() {
 		PublicationStrategy job = PublicationStrategy.updateAt8AM();
-        Clock clock = Clock.fixed(Instant.parse("2022-03-27T06:01:02Z"), AlbinaUtil.localZone());
+        Clock clock = Clock.fixed(Instant.parse("2022-03-27T06:01:02Z"), PublicationStrategy.localZone());
         assertEquals(job.getStartDate(clock), Instant.parse("2022-03-26T16:00:00Z")); // ok
         assertEquals(job.getEndDate(clock), Instant.parse("2022-03-27T15:00:00Z")); // ok (time change)
     }

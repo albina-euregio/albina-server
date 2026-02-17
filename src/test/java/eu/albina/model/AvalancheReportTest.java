@@ -26,9 +26,10 @@ import com.google.common.io.Resources;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.publication.MultichannelMessage;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.AlbinaUtil;
+
 import org.junit.jupiter.api.io.TempDir;
 
 @MicronautTest
@@ -94,11 +95,11 @@ public class AvalancheReportTest {
 		Assertions.assertEquals("https://lawinen.report/bulletin/2019-01-17", avalancheReport.getRegion().getWebsiteUrlWithDate(LanguageCode.de, avalancheReport));
 		Assertions.assertEquals("https://static.avalanche.report/bulletins/2019-01-17/2019-01-17_EUREGIO_de.pdf", avalancheReport.getPdfUrl(LanguageCode.de));
 		Assertions.assertTrue(avalancheReport.isLatest(
-			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), AlbinaUtil.localZone())));
+			Clock.fixed(Instant.parse("2019-01-16T19:40:00Z"), PublicationStrategy.localZone())));
 		Assertions.assertTrue(avalancheReport.isLatest(
-			Clock.fixed(Instant.parse("2019-01-17T10:40:00Z"), AlbinaUtil.localZone())));
+			Clock.fixed(Instant.parse("2019-01-17T10:40:00Z"), PublicationStrategy.localZone())));
 		Assertions.assertFalse(avalancheReport.isLatest(
-			Clock.fixed(Instant.parse("2019-01-17T16:00:00Z"), AlbinaUtil.localZone())));
+			Clock.fixed(Instant.parse("2019-01-17T16:00:00Z"), PublicationStrategy.localZone())));
 
 		// should yield strings in correct timezone, even if publication date is in a different timezone
 		Assertions.assertEquals("2019-01-16T16:00Z", bulletins.getFirst().getPublicationDate().toString());
