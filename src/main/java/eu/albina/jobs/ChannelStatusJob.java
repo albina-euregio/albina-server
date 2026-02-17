@@ -87,7 +87,7 @@ public class ChannelStatusJob {
 			});
 	}
 
-	@Scheduled(cron = "0 0 4 * * ?")
+	@Scheduled(cron = "0 15 7,16 * * ?")
 	public void execute() {
 		// for all regions with their default language, check WhatsApp, Telegram and Blog
 		for (Region region : regionRepository.getPublishBulletinRegions()) {
