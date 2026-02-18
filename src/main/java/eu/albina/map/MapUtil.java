@@ -277,10 +277,9 @@ public interface MapUtil {
 			}
 		}
 
-		final Path outputFilePng = MapImageFormat.png.convertFrom(outputFile);
-		if (MapLevel.overlay.equals(mapLevel)) {
-			MapImageFormat.pngTransparent.convertFrom(outputFilePng);
-		}
+		final Path outputFilePng = MapLevel.overlay.equals(mapLevel)
+			? MapImageFormat.pngTransparent.convertFrom(outputFile)
+			: MapImageFormat.png.convertFrom(outputFile);
 
 		MapImageFormat.jpg.convertFrom(outputFilePng);
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletin == null) {

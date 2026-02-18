@@ -12,6 +12,7 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,33 +30,30 @@ public enum MapImageFormat {
 		Path convertFrom(Path pdfFile) throws IOException, InterruptedException {
 			Path pngFile = checkAndReplaceExtension(pdfFile, "pdf", "png");
 			logger.debug("Converting {} to {}", pdfFile, pngFile);
-			int dpi = 300;
 			try (PDDocument document = Loader.loadPDF(Files.readAllBytes(pdfFile))) {
 				PDFRenderer renderer = new PDFRenderer(document);
 				BufferedImage image = renderer.renderImageWithDPI(0, dpi, ImageType.ARGB);
-				ImageIOUtil.writeImage(image, pngFile.toString(), 300);
+				ImageIOUtil.writeImage(image, pngFile.toString(), dpi);
 			}
 			return pngFile;
 		}
 	}, pngTransparent {
 		@Override
-		Path convertFrom(Path pngFile) throws IOException, InterruptedException {
-			checkAndReplaceExtension(pngFile, "png", "png");
+		Path convertFrom(Path pdfFile) throws IOException, InterruptedException {
+			Path pngFile = checkAndReplaceExtension(pdfFile, "pdf", "png");
 			logger.debug("Creating transparency for {}", pngFile);
-			if (IS_OS_WINDOWS) {
-				new ProcessBuilder("cmd.exe", "/C", "convert",
-					"-transparent",
-					"white",
-					pngFile.toString(),
-					pngFile.toString()
-				).inheritIO().start().waitFor();
-			} else {
-				new ProcessBuilder("convert",
-					"-transparent",
-					"white",
-					pngFile.toString(),
-					pngFile.toString()
-				).inheritIO().start().waitFor();
+			try (PDDocument document = Loader.loadPDF(Files.readAllBytes(pdfFile))) {
+				PDFRenderer renderer = new PDFRenderer(document);
+				BufferedImage image = renderer.renderImageWithDPI(0, dpi, ImageType.ARGB);
+				for (int y = 0; y < image.getHeight(); y++) {
+					for (int x = 0; x < image.getWidth(); x++) {
+						Color color = new Color(image.getRGB(x, y));
+						if (color.equals(Color.white)) {
+							image.setRGB(x, y, new Color(color.getRed(), color.getGreen(), color.getBlue(), 0).getRGB());
+						}
+					}
+				}
+				ImageIOUtil.writeImage(image, pngFile.toString(), dpi);
 			}
 			return pngFile;
 		}
@@ -98,6 +96,7 @@ public enum MapImageFormat {
 			return webpFile;
 		}
 	};
+	private static final int dpi = 300;
 	private static final boolean IS_OS_WINDOWS = StandardSystemProperty.OS_NAME.value().contains("Windows");
 	private static final Logger logger = LoggerFactory.getLogger(MapImageFormat.class);
 
