@@ -277,11 +277,17 @@ public interface MapUtil {
 			}
 		}
 
-		final Path outputFilePng = MapLevel.overlay.equals(mapLevel)
-			? MapImageFormat.pngTransparent.convertFrom(outputFile)
-			: MapImageFormat.png.convertFrom(outputFile);
+		BufferedImage image = MapImageFormat.renderPDF(outputFile);
 
-		MapImageFormat.jpg.convertFrom(outputFilePng);
+		for (MapImageFormat format : List.of(MapImageFormat.png, MapImageFormat.jpg)) {
+			Path file = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, format);
+			logger.debug("Converting {} to {}", outputFile, file);
+			BufferedImage image0 = MapLevel.overlay.equals(mapLevel) && format != MapImageFormat.jpg
+				? MapImageFormat.makeTransparent(image)
+				: image;
+			ImageIO.write(image0, format.name(), file.toFile());
+		}
+
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletin == null) {
 			// create combined am/pm maps
 			final String amFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.am, grayscale, MapImageFormat.jpg)).toString();
@@ -292,7 +298,10 @@ public interface MapUtil {
 		}
 
 		if (!BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
-			MapImageFormat.webp.convertFrom(outputFilePng);
+			Path pngFile = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, MapImageFormat.png);
+			Path webpFile = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, MapImageFormat.webp);
+			logger.debug("Converting {} to {}", pngFile, webpFile);
+			new ProcessBuilder("cwebp", pngFile.toString(), "-o", webpFile.toString()).inheritIO().start().waitFor();
 		}
 	}
 
