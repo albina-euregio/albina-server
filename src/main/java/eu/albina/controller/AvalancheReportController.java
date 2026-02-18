@@ -68,6 +68,8 @@ public class AvalancheReportController {
 		@Join(value = "region", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
 
+		List<AvalancheReport> findByDateBetweenAndRegionAndStatusIn(ZonedDateTime startDate, ZonedDateTime endDate, Region region, Set<BulletinStatus> status);
+
 		AvalancheReport findFirstByStatusInOrderByDateDesc(Set<BulletinStatus> status);
 
 		@Query(value = """
@@ -191,10 +193,11 @@ public class AvalancheReportController {
 	 * @return all public reports for a specific time period and {@code region}
 	 */
 	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, Region region) {
-		List<AvalancheReport> reports = avalancheReportRepository.findByDateBetweenAndRegion(
+		List<AvalancheReport> reports = avalancheReportRepository.findByDateBetweenAndRegionAndStatusIn(
 			startDate.atZone(ZoneOffset.UTC),
 			endDate.atZone(ZoneOffset.UTC),
-			region
+			region,
+			EnumSet.of(BulletinStatus.published, BulletinStatus.republished)
 		);
 		Map<Instant, AvalancheReport> result = getHighestStatusMap(reports);
 		return result.values();
