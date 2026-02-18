@@ -65,16 +65,8 @@ public class AvalancheReportController {
 		@Join(value = "region", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateAndRegion(ZonedDateTime date, Region region);
 
-		default List<AvalancheReport> findByDateAndRegion(Instant date, Region region) {
-			return findByDateAndRegion(date.atZone(ZoneOffset.UTC), region);
-		}
-
 		@Join(value = "region", type = Join.Type.FETCH)
 		List<AvalancheReport> findByDateBetweenAndRegion(ZonedDateTime startDate, ZonedDateTime endDate, Region region);
-
-		default List<AvalancheReport> findByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
-			return findByDateBetweenAndRegion(startDate.atZone(ZoneOffset.UTC), endDate.atZone(ZoneOffset.UTC), region);
-		}
 
 		AvalancheReport findFirstByStatusInOrderByDateDesc(Set<BulletinStatus> status);
 
@@ -199,7 +191,11 @@ public class AvalancheReportController {
 	 * @return all public reports for a specific time period and {@code region}
 	 */
 	public Collection<AvalancheReport> getPublicReports(Instant startDate, Instant endDate, Region region) {
-		List<AvalancheReport> reports = avalancheReportRepository.findByDateBetweenAndRegion(startDate, endDate, region);
+		List<AvalancheReport> reports = avalancheReportRepository.findByDateBetweenAndRegion(
+			startDate.atZone(ZoneOffset.UTC),
+			endDate.atZone(ZoneOffset.UTC),
+			region
+		);
 		Map<Instant, AvalancheReport> result = getHighestStatusMap(reports);
 		return result.values();
 	}
@@ -214,7 +210,7 @@ public class AvalancheReportController {
 	 * null if not report was found
 	 */
 	public AvalancheReport getPublicReport(Instant date, Region region) {
-		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date, region);
+		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date.atZone(ZoneOffset.UTC), region);
 		return getHighestStatus(reports);
 	}
 
@@ -264,7 +260,7 @@ public class AvalancheReportController {
 	 * or null if no report was found
 	 */
 	public AvalancheReport getInternalReport(Instant date, Region region) {
-		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date, region);
+		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date.atZone(ZoneOffset.UTC), region);
 		// select most recent report
 		return reports.stream().max(Comparator.comparing(AvalancheReport::getTimestamp)).orElse(null);
 	}
@@ -569,7 +565,7 @@ public class AvalancheReportController {
 	@Transactional
 	public void setMediaFileFlag(Instant date, Region region) {
 		AvalancheReport result = null;
-		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date, region);
+		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date.atZone(ZoneOffset.UTC), region);
 
 		// select most recent report
 		for (AvalancheReport avalancheReport : reports)

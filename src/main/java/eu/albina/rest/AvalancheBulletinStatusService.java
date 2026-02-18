@@ -2,7 +2,6 @@
 package eu.albina.rest;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.model.AvalancheReportStatus;
 import eu.albina.controller.RegionRepository;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheReport;
@@ -25,8 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +92,11 @@ public class AvalancheBulletinStatusService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
-			Map<Instant, AvalancheReport> internalStatus = avalancheReportRepository.findByDateBetweenAndRegion(startDate, endDate, region).stream().collect(Collectors.toMap(
+			Map<Instant, AvalancheReport> internalStatus = avalancheReportRepository.findByDateBetweenAndRegion(
+				startDate.atZone(ZoneOffset.UTC),
+				endDate.atZone(ZoneOffset.UTC),
+				region
+			).stream().collect(Collectors.toMap(
 				avalancheReport -> avalancheReport.getDate().toInstant(),
 				avalancheReport -> avalancheReport,
 				(r1, r2) -> Stream.of(r1, r2).max(Comparator.comparing(AvalancheReport::getTimestamp)).orElseThrow()
