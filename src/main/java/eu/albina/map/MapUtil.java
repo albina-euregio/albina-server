@@ -277,23 +277,35 @@ public interface MapUtil {
 			}
 		}
 
-		final Path outputFilePng = MapImageFormat.png.convertFrom(outputFile);
-		if (MapLevel.overlay.equals(mapLevel)) {
-			MapImageFormat.pngTransparent.convertFrom(outputFilePng);
+		BufferedImage image = MapImageFormat.renderPDF(outputFile);
+
+		for (MapImageFormat format : List.of(MapImageFormat.png, MapImageFormat.jpg)) {
+			Path file = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, format);
+			logger.debug("Converting {} to {}", outputFile, file);
+			BufferedImage image0 = MapLevel.overlay.equals(mapLevel) && format != MapImageFormat.jpg
+				? MapImageFormat.makeTransparent(image)
+				: image;
+			ImageIO.write(image0, format.name(), file.toFile());
 		}
 
-		MapImageFormat.jpg.convertFrom(outputFilePng);
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletin == null) {
 			// create combined am/pm maps
-			final String amFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.am, grayscale, MapImageFormat.jpg)).toString();
-			final String pmFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.pm, grayscale, MapImageFormat.jpg)).toString();
-			final String fdFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.fd, grayscale, MapImageFormat.jpg)).toString();
+			Path amFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.am, grayscale, MapImageFormat.jpg));
+			Path pmFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.pm, grayscale, MapImageFormat.jpg));
+			Path fdFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.fd, grayscale, MapImageFormat.jpg));
 			logger.debug("Combining {} and {} to {}", amFile, pmFile, fdFile);
-			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
+
+			BufferedImage amImage = ImageIO.read(amFile.toFile());
+			BufferedImage pmImage = ImageIO.read((pmFile).toFile());
+			BufferedImage fdImage = MapImageFormat.stitchVertically(amImage, pmImage);
+			ImageIO.write(fdImage, MapImageFormat.jpg.name(), (fdFile).toFile());
 		}
 
 		if (!BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {
-			MapImageFormat.webp.convertFrom(outputFilePng);
+			Path pngFile = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, MapImageFormat.png);
+			Path webpFile = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, MapImageFormat.webp);
+			logger.debug("Converting {} to {}", pngFile, webpFile);
+			new ProcessBuilder("cwebp", pngFile.toString(), "-o", webpFile.toString()).inheritIO().start().waitFor();
 		}
 	}
 
