@@ -290,11 +290,15 @@ public interface MapUtil {
 
 		if (DaytimeDependency.pm.equals(daytimeDependency) && bulletin == null) {
 			// create combined am/pm maps
-			final String amFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.am, grayscale, MapImageFormat.jpg)).toString();
-			final String pmFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.pm, grayscale, MapImageFormat.jpg)).toString();
-			final String fdFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.fd, grayscale, MapImageFormat.jpg)).toString();
+			Path amFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.am, grayscale, MapImageFormat.jpg));
+			Path pmFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.pm, grayscale, MapImageFormat.jpg));
+			Path fdFile = outputDirectory.resolve(filename(region, mapLevel, DaytimeDependency.fd, grayscale, MapImageFormat.jpg));
 			logger.debug("Combining {} and {} to {}", amFile, pmFile, fdFile);
-			new ProcessBuilder("convert", "+append", amFile, pmFile, fdFile).inheritIO().start().waitFor();
+
+			BufferedImage amImage = ImageIO.read(amFile.toFile());
+			BufferedImage pmImage = ImageIO.read((pmFile).toFile());
+			BufferedImage fdImage = MapImageFormat.stitchVertically(amImage, pmImage);
+			ImageIO.write(fdImage, MapImageFormat.jpg.name(), (fdFile).toFile());
 		}
 
 		if (!BulletinStatus.isDraftOrUpdated(avalancheReport.getStatus())) {

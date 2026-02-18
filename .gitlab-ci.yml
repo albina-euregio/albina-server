@@ -24,7 +24,7 @@ build:
     stage: build
     script:
         - apt-get update -y
-        - apt-get install -y imagemagick webp
+        - apt-get install -y webp
         - if [ -e "../avalanche-warning-maps" ]; then rm -rf ../avalanche-warning-maps; fi
         - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
         - export GIT_VERSION=$(git describe --tags)

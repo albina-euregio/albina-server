@@ -9,6 +9,7 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,6 +44,15 @@ public enum MapImageFormat {
 			}
 		}
 		return image;
+	}
+
+	static BufferedImage stitchVertically(BufferedImage amImage,  BufferedImage pmImage) {
+		int width = Math.max(amImage.getWidth(), pmImage.getWidth());
+		int height = amImage.getHeight() + pmImage.getHeight();
+		BufferedImage combined = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		combined.getGraphics().drawImage(amImage, 0, 0, null);
+		combined.getGraphics().drawImage(pmImage, 0, amImage.getHeight(), null);
+		return combined;
 	}
 
 	static Path checkAndReplaceExtension(Path file, MapImageFormat src, MapImageFormat dst) {
