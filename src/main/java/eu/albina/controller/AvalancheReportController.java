@@ -361,25 +361,21 @@ public class AvalancheReportController {
 	private void publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
 							   Instant publicationDate, UnaryOperator<BulletinStatus> bulletinStatusOperator) {
 		AvalancheReport report = getInternalReport(startDate, region);
+		boolean mediaFileUploaded = report != null && report.isMediaFileUploaded();
+		BulletinStatus status0 = report != null ? report.getStatus() : BulletinStatus.missing;
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(publicationDate.atZone(ZoneOffset.UTC));
 		avalancheReport.setDate(startDate.atZone(ZoneOffset.UTC));
 		avalancheReport.setRegion(region);
-		if (report == null) {
-			avalancheReport.setStatus(BulletinStatus.missing);
-			logger.info("Status set to MISSING for region {}", region.getId());
-		} else {
-			avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
-			BulletinStatus status0 = report.getStatus();
-			BulletinStatus status1 = bulletinStatusOperator.apply(status0);
-			logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
-			avalancheReport.setStatus(status1);
-		}
+		avalancheReport.setMediaFileUploaded(mediaFileUploaded);
+		BulletinStatus status1 = bulletinStatusOperator.apply(status0);
+		logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
+		avalancheReport.setStatus(status1);
 
-		// set json string after status is published/republished
-		Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
 		try {
-			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins1));
+			// set JSON string after status is published/republished
+			bulletins = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
+			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins));
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
