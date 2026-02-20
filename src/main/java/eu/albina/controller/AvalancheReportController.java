@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,27 +96,15 @@ public class AvalancheReportController {
 	 * @param regions   the regions of interest
 	 * @return a map of all days within the time period and the official status of
 	 * the bulletins of this day
-	 * @throws AlbinaException if no region was defined
 	 */
-	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, List<Region> regions)
-		throws AlbinaException {
-		Map<Instant, BulletinStatus> result = new HashMap<>();
-
-		if (regions == null || regions.isEmpty())
-			throw new AlbinaException("No region defined!");
-
-		for (Region region : regions) {
-			Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
-			for (AvalancheReport avalancheReport : reports) {
-				if (result.containsKey(avalancheReport.getDate().toInstant())) {
-					if (result.get(avalancheReport.getDate().toInstant()).comparePublicationStatus(avalancheReport.getStatus()) < 0)
-						result.put(avalancheReport.getDate().toInstant(), avalancheReport.getStatus());
-				} else
-					result.put(avalancheReport.getDate().toInstant(), avalancheReport.getStatus());
-			}
-		}
-
-		return result;
+	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, List<Region> regions) {
+		return regions.stream()
+			.flatMap(region -> getPublicReports(startDate, endDate, region).stream())
+			.collect(Collectors.toMap(
+				r -> r.getDate().toInstant(),
+				AvalancheReport::getStatus,
+				(s1, s2) -> Stream.of(s1, s2).max(BulletinStatus::comparePublicationStatus).orElseThrow()
+			));
 	}
 
 	/**
