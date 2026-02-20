@@ -63,14 +63,10 @@ public class AvalancheBulletinStatusService {
 		ZoneId zoneId = DateControllerUtil.parseTimezoneOrLocal(timezone);
 
 		try {
-			Map<Instant, BulletinStatus> status;
-			if (regionId == null || regionId.isEmpty()) {
-				status = avalancheReportController.getStatus(startDate, endDate,
-						regionRepository.getPublishBulletinRegions());
-			} else {
-				status = avalancheReportController.getStatus(startDate, endDate, regionRepository.findById(regionId).orElseThrow());
-			}
-
+			List<Region> regions = regionId == null || regionId.isEmpty()
+				? regionRepository.getPublishBulletinRegions()
+				: List.of(regionRepository.findById(regionId).orElseThrow());
+			Map<Instant, BulletinStatus> status = avalancheReportController.getStatus(startDate, endDate, regions);
 			return status.entrySet().stream()
 				.map(entry -> new Status(entry.getKey(), entry.getValue(), null))
 				.toList();

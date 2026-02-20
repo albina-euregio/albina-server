@@ -86,33 +86,6 @@ public class AvalancheReportController {
 
 	/**
 	 * Return the official status of the bulletins for every day in a given time
-	 * period for a given {@code region}. For each day the highest status is
-	 * returned ({@code republished} > {@code published} > {@code submitted} >
-	 * {@code draft} > {@code missing}).
-	 *
-	 * @param startDate the start date of the time period
-	 * @param endDate   the end date of the time period
-	 * @param region    the region of interest
-	 * @return a map of all days within the time period and the official status of
-	 * the bulletins of this day
-	 * @throws AlbinaException if no region was defined
-	 */
-	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, Region region)
-		throws AlbinaException {
-		Map<Instant, BulletinStatus> result = new HashMap<>();
-
-		if (region == null)
-			throw new AlbinaException("No region defined!");
-
-		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
-		for (AvalancheReport avalancheReport : reports)
-			result.put(avalancheReport.getDate().toInstant(), avalancheReport.getStatus());
-
-		return result;
-	}
-
-	/**
-	 * Return the official status of the bulletins for every day in a given time
 	 * period for multiple {@code regions}. For each day the highest status is
 	 * returned ({@code republished} > {@code published} > {@code submitted} >
 	 * {@code draft} > {@code missing}).
