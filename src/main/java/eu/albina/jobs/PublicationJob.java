@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Stopwatch;
 
-import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheBulletinController.AvalancheBulletinRepository;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionRepository;
