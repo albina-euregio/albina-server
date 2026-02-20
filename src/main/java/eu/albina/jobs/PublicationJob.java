@@ -80,7 +80,8 @@ public class PublicationJob {
 		List<Region> publishBulletinRegions = regionRepository.getPublishBulletinRegions();
 		List<Region> regions = Objects.requireNonNullElse(strategy.getRegions(), publishBulletinRegions).stream()
 			.filter(region -> {
-				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
+				AvalancheReport report = avalancheReportController.getInternalReport(startDate, region);
+				BulletinStatus status = report != null ? report.getStatus() : null;
 				logger.info("Internal status for region {} is {}", region.getId(), status);
 				return status == BulletinStatus.submitted || status == BulletinStatus.resubmitted;
 			}).collect(Collectors.toList());

@@ -85,23 +85,6 @@ public class AvalancheReportController {
 	}
 
 	/**
-	 * Return the actual status of the bulletins for a specific {@code date} for a
-	 * given {@code region} or null if no report was found.
-	 *
-	 * @param date   the date of interest
-	 * @param region the region of interest
-	 * @return the actual status of the bulletins of this day or null if no report
-	 * was found
-	 */
-	public BulletinStatus getInternalStatusForDay(Instant date, Region region) {
-		AvalancheReport report = getInternalReport(date, region);
-		if (report != null)
-			return report.getStatus();
-		else
-			return null;
-	}
-
-	/**
 	 * Return the official status of the bulletins for every day in a given time
 	 * period for a given {@code region}. For each day the highest status is
 	 * returned ({@code republished} > {@code published} > {@code submitted} >
