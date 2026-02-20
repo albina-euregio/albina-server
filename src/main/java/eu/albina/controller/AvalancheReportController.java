@@ -216,7 +216,7 @@ public class AvalancheReportController {
 		return getHighestStatus(reports);
 	}
 
-	private AvalancheReport getHighestStatus(List<AvalancheReport> reports) {
+	static AvalancheReport getHighestStatus(List<AvalancheReport> reports) {
 		AvalancheReport result = null;
 		for (AvalancheReport avalancheReport : reports) {
 			if (result == null)
@@ -234,7 +234,7 @@ public class AvalancheReportController {
 		return result;
 	}
 
-	private Map<Instant, AvalancheReport> getHighestStatusMap(List<AvalancheReport> reports) {
+	static Map<Instant, AvalancheReport> getHighestStatusMap(List<AvalancheReport> reports) {
 		Map<Instant, AvalancheReport> result = new HashMap<>();
 		for (AvalancheReport avalancheReport : reports)
 			if (result.containsKey(avalancheReport.getDate().toInstant())) {
