@@ -352,7 +352,7 @@ public class AvalancheReportController {
 	public void publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
 							  Instant publicationDate) {
 		try {
-			publishReport(bulletins, startDate, region, publicationDate, AvalancheReportController::publishReport);
+			publishReport(bulletins, startDate, region, publicationDate, BulletinStatus::publishReport);
 		} finally {
 			logger.info("Report for region {} published", region.getId());
 		}
@@ -387,39 +387,6 @@ public class AvalancheReportController {
 		avalancheReportRepository.save(avalancheReport);
 	}
 
-	private static BulletinStatus publishReport(BulletinStatus status) {
-		return switch (status) {
-			case missing -> {
-				logger.warn("Bulletins have to be created first!");
-				yield BulletinStatus.missing;
-			}
-			case draft -> {
-				logger.warn("Bulletins have to be submitted first!");
-				yield BulletinStatus.updated;
-			}
-			case submitted -> {
-				logger.info("Status set to PUBLISHED");
-				yield BulletinStatus.published;
-			}
-			case published -> {
-				logger.warn("Bulletins already published!");
-				yield BulletinStatus.published;
-			}
-			case updated -> {
-				logger.warn("Bulletins have to be resubmitted first!");
-				yield BulletinStatus.updated;
-			}
-			case resubmitted -> {
-				logger.info("Status set to REPUBLISHED");
-				yield BulletinStatus.republished;
-			}
-			case republished -> {
-				logger.warn("Bulletins already republished!");
-				yield BulletinStatus.republished;
-			}
-		};
-	}
-
 	/**
 	 * Change status of report with a given validity time and region to
 	 * <code>submitted</code> (if the previous status was <code>draft</code>) or
@@ -434,43 +401,10 @@ public class AvalancheReportController {
 	 */
 	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user) {
 		try {
-			publishReport(bulletins, startDate, region, ZonedDateTime.now().withNano(0).toInstant(), AvalancheReportController::submitReport);
+			publishReport(bulletins, startDate, region, ZonedDateTime.now().withNano(0).toInstant(), BulletinStatus::submitReport);
 		} finally {
 			logger.info("Report for region {} submitted by {}", region.getId(), user);
 		}
-	}
-
-	private static BulletinStatus submitReport(BulletinStatus status) {
-		return switch (status) {
-			case missing -> {
-				logger.warn("Bulletins have to be created first!");
-				yield BulletinStatus.missing;
-			}
-			case draft -> {
-				logger.info("Status set to SUBMITTED");
-				yield BulletinStatus.submitted;
-			}
-			case submitted -> {
-				logger.warn("Bulletins already submitted!");
-				yield BulletinStatus.submitted;
-			}
-			case published -> {
-				logger.warn("Bulletins already published!");
-				yield BulletinStatus.published;
-			}
-			case updated -> {
-				logger.info("Status set to RESUBMITTED");
-				yield BulletinStatus.resubmitted;
-			}
-			case resubmitted -> {
-				logger.info("Bulletins already resubmitted!");
-				yield BulletinStatus.resubmitted;
-			}
-			case republished -> {
-				logger.warn("Bulletins already republished!");
-				yield BulletinStatus.republished;
-			}
-		};
 	}
 
 	/**

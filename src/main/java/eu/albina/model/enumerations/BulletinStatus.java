@@ -1,11 +1,83 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public enum BulletinStatus {
 	republished, resubmitted, updated, published, submitted, draft, missing;
 
+	private static final Logger logger = LoggerFactory.getLogger(BulletinStatus.class);
+
 	public static boolean isDraftOrUpdated(BulletinStatus status) {
 		return status == draft || status == updated;
+	}
+
+	public BulletinStatus publishReport() {
+		return switch (this) {
+			case missing -> {
+				logger.warn("Bulletins have to be created first!");
+				yield missing;
+			}
+			case draft -> {
+				logger.warn("Bulletins have to be submitted first!");
+				yield updated;
+			}
+			case submitted -> {
+				logger.info("Status set to PUBLISHED");
+				yield published;
+			}
+			case published -> {
+				logger.warn("Bulletins already published!");
+				yield published;
+			}
+			case updated -> {
+				logger.warn("Bulletins have to be resubmitted first!");
+				yield updated;
+			}
+			case resubmitted -> {
+				logger.info("Status set to REPUBLISHED");
+				yield republished;
+			}
+			case republished -> {
+				logger.warn("Bulletins already republished!");
+				yield republished;
+			}
+		};
+	}
+
+	public BulletinStatus submitReport() {
+		return switch (this) {
+			case missing -> {
+				logger.warn("Bulletins have to be created first!");
+				yield missing;
+			}
+			case draft -> {
+				logger.info("Status set to SUBMITTED");
+				yield submitted;
+			}
+			case submitted -> {
+				logger.warn("Bulletins already submitted!");
+				yield submitted;
+			}
+			case published -> {
+				logger.warn("Bulletins already published!");
+				yield published;
+			}
+			case updated -> {
+				logger.info("Status set to RESUBMITTED");
+				yield resubmitted;
+			}
+			case resubmitted -> {
+				logger.info("Bulletins already resubmitted!");
+				yield resubmitted;
+			}
+			case republished -> {
+				logger.warn("Bulletins already republished!");
+				yield republished;
+			}
+		};
 	}
 
 	public int comparePublicationStatus(BulletinStatus status) {
