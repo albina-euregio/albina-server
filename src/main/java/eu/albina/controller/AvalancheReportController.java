@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,49 +82,6 @@ public class AvalancheReportController {
 		default List<AvalancheReportStatus> listByDateBetweenAndRegion(Instant startDate, Instant endDate, Region region) {
 			return listByDateBetweenAndRegion(startDate.atZone(ZoneOffset.UTC), endDate.atZone(ZoneOffset.UTC), region.getId());
 		}
-	}
-
-	/**
-	 * Return the official status of the bulletins for every day in a given time
-	 * period for multiple {@code regions}. For each day the highest status is
-	 * returned ({@code republished} > {@code published} > {@code submitted} >
-	 * {@code draft} > {@code missing}).
-	 *
-	 * @param startDate the start date of the time period
-	 * @param endDate   the end date of the time period
-	 * @param regions   the regions of interest
-	 * @return a map of all days within the time period and the official status of
-	 * the bulletins of this day
-	 */
-	public Map<Instant, BulletinStatus> getStatus(Instant startDate, Instant endDate, List<Region> regions) {
-		return regions.stream()
-			.flatMap(region -> getPublicReports(startDate, endDate, region).stream())
-			.collect(Collectors.toMap(
-				r -> r.getDate().toInstant(),
-				AvalancheReport::getStatus,
-				(s1, s2) -> Stream.of(s1, s2).max(BulletinStatus::comparePublicationStatus).orElseThrow()
-			));
-	}
-
-	/**
-	 * Return the publication status of the bulletins for every day in a given time
-	 * period for a given {@code region}. For each day the status is only returned
-	 * if it is {@code republished} or {@code published}.
-	 *
-	 * @param startDate the start date of the time period
-	 * @param endDate   the end date of the time period
-	 * @param region    the region of interest
-	 * @return a map of all days within the time period and the status of the
-	 * bulletins of this day if it is {@code republished} or
-	 * {@code published}
-	 */
-	public Map<Instant, AvalancheReport> getPublicationStatus(Instant startDate, Instant endDate, Region region) {
-
-		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
-
-		return reports.stream()
-			.filter(report -> BulletinStatus.isPublishedOrRepublished(report.getStatus()))
-			.collect(Collectors.toMap(avalancheReport -> startDate, avalancheReport -> avalancheReport, (a, b) -> b));
 	}
 
 	/**

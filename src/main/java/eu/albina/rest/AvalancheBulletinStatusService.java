@@ -26,10 +26,9 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,7 +52,7 @@ public class AvalancheBulletinStatusService {
 	}
 
 	@Get
-	public List<Status> getStatus(@QueryValue("region") String regionId,
+	public Collection<Status> getStatus(@QueryValue("region") String regionId,
 									 @QueryValue("timezone") String timezone,
 									 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
 									 @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
@@ -66,10 +65,13 @@ public class AvalancheBulletinStatusService {
 			List<Region> regions = regionId == null || regionId.isEmpty()
 				? regionRepository.getPublishBulletinRegions()
 				: List.of(regionRepository.findById(regionId).orElseThrow());
-			Map<Instant, BulletinStatus> status = avalancheReportController.getStatus(startDate, endDate, regions);
-			return status.entrySet().stream()
-				.map(entry -> new Status(entry.getKey(), entry.getValue(), null))
-				.toList();
+			return regions.stream()
+				.flatMap(region -> avalancheReportController.getPublicReports(startDate, endDate, region).stream())
+				.map(r -> new Status(r.getDate().toInstant(), r.getStatus(), null))
+				.collect(Collectors.toMap(Status::date, r -> r,
+					(s1, s2) -> Stream.of(s1, s2).max(Comparator.comparing(Status::status, BulletinStatus::comparePublicationStatus)).orElseThrow()
+				))
+				.values();
 		} catch (Exception e) {
 			logger.warn("Error loading status", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -79,7 +81,7 @@ public class AvalancheBulletinStatusService {
 	@Get("/internal")
 	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public List<Status> getInternalStatus(@QueryValue("region") String regionId,
+	public Collection<Status> getInternalStatus(@QueryValue("region") String regionId,
 										  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
 										  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
@@ -88,19 +90,15 @@ public class AvalancheBulletinStatusService {
 			Instant startDate = DateControllerUtil.parseDateOrToday(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
-			Map<Instant, AvalancheReport> internalStatus = avalancheReportRepository.findByDateBetweenAndRegion(
+			return avalancheReportRepository.findByDateBetweenAndRegion(
 				startDate.atZone(ZoneOffset.UTC),
 				endDate.atZone(ZoneOffset.UTC),
 				region
-			).stream().collect(Collectors.toMap(
-				avalancheReport -> avalancheReport.getDate().toInstant(),
-				avalancheReport -> avalancheReport,
-				(r1, r2) -> Stream.of(r1, r2).max(Comparator.comparing(AvalancheReport::getTimestamp)).orElseThrow()
-			));
-
-			return internalStatus.values().stream()
-				.map(avalancheReport -> new Status(avalancheReport.getDate().toInstant(), avalancheReport.getStatus(), null))
-				.toList();
+			).stream()
+				.sorted(Comparator.comparing(AvalancheReport::getTimestamp))
+				.map(r -> new Status(r.getDate().toInstant(), r.getStatus(), null))
+				.collect(Collectors.toMap(Status::date, r -> r, (s1, s2) -> s2))
+				.values();
 		} catch (Exception e) {
 			logger.warn("Error loading status for " + regionId, e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -118,11 +116,13 @@ public class AvalancheBulletinStatusService {
 		Instant endDate = DateControllerUtil.parseDateOrNull(end);
 
 		Region region = regionRepository.findById(regionId).orElseThrow();
-		return avalancheReportController
-			.getPublicationStatus(startDate, endDate, region)
-			.entrySet().stream()
-			.map(entry -> new Status(entry.getKey(), null, entry.getValue()))
-			.toList();
+
+		Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate, endDate, region);
+
+		return reports.stream()
+			.map(r -> new Status(r.getDate().toInstant(), r.getStatus(), r))
+			.collect(Collectors.toMap(Status::date, r -> r, (s1, s2) -> s2))
+			.values().stream().toList();
 	}
 
 	@Get("/publication")
@@ -134,20 +134,11 @@ public class AvalancheBulletinStatusService {
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate;
 
-		try {
-			Map<Instant, AvalancheReport> status = avalancheReportController
-					.getPublicationStatus(startDate, endDate, regionRepository.findById(regionId).orElseThrow());
+		Region region = regionRepository.findById(regionId).orElseThrow();
 
-			if (status.size() > 1)
-				logger.warn("More than one report found!");
-			else if (status.isEmpty())
-				throw new AlbinaException("No publication found!");
+		Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate, endDate, region);
 
-			Entry<Instant, AvalancheReport> entry = status.entrySet().iterator().next();
-			return new Status(entry.getKey(), null, entry.getValue());
-		} catch (Exception e) {
-			logger.warn("Error loading status", e);
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
+		AvalancheReport report = reports.iterator().next();
+		return new Status(report.getDate().toInstant(), null, report);
 	}
 }
