@@ -91,38 +91,29 @@ public class PublicationJob {
 
 		for (Region region : regions) {
 			logger.info("Publish bulletins for region {}", region.getId());
-			BulletinStatus internalStatus = avalancheReportController.getInternalStatusForDay(startDate, region);
 
-			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
+			List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
+			for (AvalancheBulletin bulletin : bulletins) {
 
-			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
+				// select bulletins within the region
+				if (bulletin.affectsRegionWithoutSuggestions(region)) {
 
-				List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
-
-				for (AvalancheBulletin bulletin : bulletins) {
-
-					// select bulletins within the region
-					if (bulletin.affectsRegionWithoutSuggestions(region)) {
-
-						// publish all saved regions
-						Set<String> result = bulletin.getSavedRegions().stream()
-							.filter(entry -> entry.startsWith(region.getId()))
-							.collect(Collectors.toSet());
-						for (String entry : result) {
-							bulletin.getSavedRegions().remove(entry);
-							bulletin.getPublishedRegions().add(entry);
-						}
-
-						bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
-						avalancheBulletinRepository.save(bulletin);
+					// publish all saved regions
+					Set<String> result = bulletin.getSavedRegions().stream()
+						.filter(entry -> entry.startsWith(region.getId()))
+						.collect(Collectors.toSet());
+					for (String entry : result) {
+						bulletin.getSavedRegions().remove(entry);
+						bulletin.getPublishedRegions().add(entry);
 					}
-
-					// set publication date for all bulletins
-					bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
-					avalancheBulletinRepository.save(bulletin);
 				}
+
+				// set publication date for all bulletins
+				bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
+				avalancheBulletinRepository.save(bulletin);
 			}
 		}
+
 		List<AvalancheBulletin> publishedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
 			return;
