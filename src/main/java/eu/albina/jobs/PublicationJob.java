@@ -97,15 +97,12 @@ public class PublicationJob {
 
 				// select bulletins within the region
 				if (bulletin.affectsRegionWithoutSuggestions(region)) {
-
 					// publish all saved regions
-					Set<String> result = bulletin.getSavedRegions().stream()
+					Set<String> savedRegions = bulletin.getSavedRegions().stream()
 						.filter(entry -> entry.startsWith(region.getId()))
 						.collect(Collectors.toSet());
-					for (String entry : result) {
-						bulletin.getSavedRegions().remove(entry);
-						bulletin.getPublishedRegions().add(entry);
-					}
+					bulletin.getSavedRegions().removeAll(savedRegions);
+					bulletin.getPublishedRegions().addAll(savedRegions);
 				}
 
 				// set publication date for all bulletins
