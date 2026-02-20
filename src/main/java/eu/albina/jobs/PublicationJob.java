@@ -89,45 +89,42 @@ public class PublicationJob {
 			return;
 		}
 
+		final List<AvalancheBulletin> publishedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
+
+		for (AvalancheBulletin bulletin : publishedBulletins) {
+			// set publication date for all bulletins
+			bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
+			avalancheBulletinRepository.save(bulletin);
+		}
+
 		for (Region region : regions) {
 			logger.info("Publish bulletins for region {}", region.getId());
 
-			List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
-			for (AvalancheBulletin bulletin : bulletins) {
-
+			for (AvalancheBulletin bulletin : publishedBulletins) {
 				// select bulletins within the region
-				if (bulletin.affectsRegionWithoutSuggestions(region)) {
-					// publish all saved regions
-					Set<String> savedRegions = bulletin.getSavedRegions().stream()
-						.filter(entry -> entry.startsWith(region.getId()))
-						.collect(Collectors.toSet());
-					bulletin.getSavedRegions().removeAll(savedRegions);
-					bulletin.getPublishedRegions().addAll(savedRegions);
+				if (!bulletin.affectsRegionWithoutSuggestions(region)) {
+					continue;
 				}
-
-				// set publication date for all bulletins
-				bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
+				// publish all saved regions
+				Set<String> savedRegions = bulletin.getSavedRegions().stream()
+					.filter(entry -> entry.startsWith(region.getId()))
+					.collect(Collectors.toSet());
+				if (savedRegions.isEmpty()) {
+					continue;
+				}
+				bulletin.getSavedRegions().removeAll(savedRegions);
+				bulletin.getPublishedRegions().addAll(savedRegions);
 				avalancheBulletinRepository.save(bulletin);
 			}
 		}
 
-		List<AvalancheBulletin> publishedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
-		if (publishedBulletins.isEmpty()) {
-			return;
-		}
-
-		publishedBulletins = publishedBulletins.stream()
-			.filter(avalancheBulletin -> avalancheBulletin.getPublishedRegions() != null
-				&& !avalancheBulletin.getPublishedRegions().isEmpty())
-			.collect(Collectors.toList());
+		publishedBulletins.removeIf(b -> b.getPublishedRegions() == null || b.getPublishedRegions().isEmpty());
 		if (publishedBulletins.isEmpty()) {
 			logger.info("No published regions found in bulletins.");
 			return;
 		}
-		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
-		String validityDateString = AvalancheReport.of(publishedBulletins, null, serverInstance).getValidityDateString();
-		String publicationTimeString = AvalancheReport.of(publishedBulletins, null, serverInstance).getPublicationTimeString();
 
+		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
 		Collections.sort(publishedBulletins);
 
 		// publish all regions which have to be published
@@ -135,24 +132,18 @@ public class PublicationJob {
 			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
 				.collect(Collectors.toList());
-			logger.info("Publishing region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
+			logger.info("Publishing region {} with bulletins {} and publication time {}", region, regionBulletins, publicationDate);
 
 			avalancheReportController.publishReport(regionBulletins, startDate, region, publicationDate);
 		}
-
-		// get all published bulletins
-		// FIXME set publicationDate for all bulletins (somehow a hack)
-		publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, publishBulletinRegions);
-		publishedBulletins.forEach(bulletin -> bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC)));
-		List<AvalancheBulletin> publishedBulletins0 = publishedBulletins;
 
 		logger.info("Publication phase 1 done after {}", stopwatch);
 
 		// update all regions to create complete maps
 		List<AvalancheReport> allRegions = publishBulletinRegions.stream().flatMap(region -> {
-			List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
+			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
-			logger.info("Load region {} with bulletins {} and publication time {}", region, regionBulletins, publicationTimeString);
+			logger.info("Load region {} with bulletins {} and publication time {}", region, regionBulletins, publicationDate);
 			if (regionBulletins.isEmpty()) {
 				logger.info("Skipping region {} since bulletins {} is empty", region, regionBulletins);
 				return Stream.empty();
@@ -169,7 +160,7 @@ public class PublicationJob {
 				logger.info("Skipping region {} since report {} has status {}", region, avalancheReport, status);
 				return Stream.empty();
 			}
-			avalancheReport.setBulletins(regionBulletins, publishedBulletins0);
+			avalancheReport.setBulletins(regionBulletins, publishedBulletins);
 			avalancheReport.setServerInstance(serverInstance);
 			return Stream.of(avalancheReport);
 		}).toList();
@@ -203,9 +194,9 @@ public class PublicationJob {
 			for (Region superRegion : superRegions) {
 				// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
 				phase2.add(Thread.startVirtualThread(() -> {
-					List<AvalancheBulletin> regionBulletins = publishedBulletins0.stream()
+					List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
 						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).collect(Collectors.toList());
-					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationTimeString);
+					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationDate);
 					AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
 					publicationController.createRegionResources(superRegion, report);
 				}));
@@ -220,7 +211,7 @@ public class PublicationJob {
 			}
 			logger.info("Publication phase 2 done after {}", stopwatch);
 
-			publicationController.createSymbolicLinks(AvalancheReport.of(publishedBulletins0, null, serverInstance));
+			publicationController.createSymbolicLinks(AvalancheReport.of(publishedBulletins, null, serverInstance));
 
 			Collection<Thread> phase3 = new ArrayList<>();
 			for (Runnable runnable : tasksAfterDirectoryUpdate) {
