@@ -284,7 +284,7 @@ public class AvalancheReportController {
 	 */
 	public void saveReport(Map<String, AvalancheBulletin> bulletins, Instant startDate, Region region) {
 		try {
-			publishReport(new ArrayList<>(bulletins.values()), startDate, region, ZonedDateTime.now().withNano(0).toInstant(), s -> BulletinStatus.saveReport(s, bulletins.isEmpty()));
+			publishReport(new ArrayList<>(bulletins.values()), startDate, region, ZonedDateTime.now().withNano(0).toInstant(), BulletinStatus::saveReport);
 		} finally {
 			logger.info("Report for region {} saved", region.getId());
 		}
@@ -317,8 +317,8 @@ public class AvalancheReportController {
 		AvalancheReport report = getInternalReport(startDate, region);
 		boolean mediaFileUploaded = report != null && report.isMediaFileUploaded();
 
-		BulletinStatus status0 = report != null ? report.getStatus() : BulletinStatus.missing;
-		BulletinStatus status1 = bulletinStatusOperator.apply(status0);
+		BulletinStatus status0 = report != null ? report.getStatus() : bulletins.isEmpty() ? null : BulletinStatus.missing;
+		BulletinStatus status1 = status0 == null ? null : bulletinStatusOperator.apply(status0);
 		logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
 
 		// reuse existing report if status does not change

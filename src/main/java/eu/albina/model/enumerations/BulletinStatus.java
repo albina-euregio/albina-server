@@ -80,15 +80,10 @@ public enum BulletinStatus {
 		};
 	}
 
-	public static BulletinStatus saveReport(BulletinStatus status, boolean empty) {
-		if (status == null) {
-			return empty ? null : draft;
-		}
-
-		return switch (status) {
+	public BulletinStatus saveReport() {
+		return switch (this) {
 			case missing, republished, resubmitted, updated, published -> updated;
-			case draft -> empty ? null : draft;
-			case submitted -> draft;
+			case draft, submitted -> draft;
 		};
 	}
 
