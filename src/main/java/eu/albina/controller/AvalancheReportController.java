@@ -278,33 +278,16 @@ public class AvalancheReportController {
 	 * {@code republished} to {@code updated}. A broacast message about the changes
 	 * is sent.
 	 *
-	 * @param avalancheBulletins the affected bulletins
-	 * @param date               the start date of the report
+	 * @param bulletins the affected bulletins
+	 * @param startDate               the start date of the report
 	 * @param region             the region of the report
 	 */
-	public void saveReport(Map<String, AvalancheBulletin> avalancheBulletins, Instant date, Region region) {
-		AvalancheReport latestReport = getInternalReport(date, region);
-		BulletinStatus latestStatus = latestReport == null ? null : latestReport.getStatus();
-		BulletinStatus newStatus = BulletinStatus.saveReport(latestStatus, avalancheBulletins.isEmpty());
-
-		// reuse existing report if status does not change
-		AvalancheReport avalancheReport = latestReport != null && Objects.equals(latestStatus, newStatus)
-			? latestReport
-			: new AvalancheReport();
-		avalancheReport.setStatus(newStatus);
-		avalancheReport.setTimestamp(ZonedDateTime.now().withNano(0).toInstant().atZone(ZoneOffset.UTC));
-		avalancheReport.setDate(date.atZone(ZoneOffset.UTC));
-		avalancheReport.setRegion(region);
-		Collection<AvalancheBulletin> bulletins = avalancheBulletins.values().stream().map(b -> b.withRegionFilter(region)).toList();
+	public void saveReport(Map<String, AvalancheBulletin> bulletins, Instant startDate, Region region) {
 		try {
-			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins));
-		} catch (IOException e) {
-			throw new UncheckedIOException(e);
+			publishReport(new ArrayList<>(bulletins.values()), startDate, region, ZonedDateTime.now().withNano(0).toInstant(), s -> BulletinStatus.saveReport(s, bulletins.isEmpty()));
+		} finally {
+			logger.info("Report for region {} saved", region.getId());
 		}
-
-		avalancheReportRepository.save(avalancheReport);
-
-		logger.info("Report for region {} saved", region.getId());
 	}
 
 	/**
@@ -333,15 +316,20 @@ public class AvalancheReportController {
 							   Instant publicationDate, UnaryOperator<BulletinStatus> bulletinStatusOperator) {
 		AvalancheReport report = getInternalReport(startDate, region);
 		boolean mediaFileUploaded = report != null && report.isMediaFileUploaded();
-		BulletinStatus status0 = report != null ? report.getStatus() : BulletinStatus.missing;
 
-		report = new AvalancheReport();
+		BulletinStatus status0 = report != null ? report.getStatus() : BulletinStatus.missing;
+		BulletinStatus status1 = bulletinStatusOperator.apply(status0);
+		logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
+
+		// reuse existing report if status does not change
+		if (report == null || !Objects.equals(status0, status1)) {
+			report = new AvalancheReport();
+		}
+
 		report.setTimestamp(publicationDate.atZone(ZoneOffset.UTC));
 		report.setDate(startDate.atZone(ZoneOffset.UTC));
 		report.setRegion(region);
 		report.setMediaFileUploaded(mediaFileUploaded);
-		BulletinStatus status1 = bulletinStatusOperator.apply(status0);
-		logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
 		report.setStatus(status1);
 
 		try {
