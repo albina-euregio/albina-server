@@ -363,24 +363,25 @@ public class AvalancheReportController {
 		AvalancheReport report = getInternalReport(startDate, region);
 		boolean mediaFileUploaded = report != null && report.isMediaFileUploaded();
 		BulletinStatus status0 = report != null ? report.getStatus() : BulletinStatus.missing;
-		AvalancheReport avalancheReport = new AvalancheReport();
-		avalancheReport.setTimestamp(publicationDate.atZone(ZoneOffset.UTC));
-		avalancheReport.setDate(startDate.atZone(ZoneOffset.UTC));
-		avalancheReport.setRegion(region);
-		avalancheReport.setMediaFileUploaded(mediaFileUploaded);
+
+		report = new AvalancheReport();
+		report.setTimestamp(publicationDate.atZone(ZoneOffset.UTC));
+		report.setDate(startDate.atZone(ZoneOffset.UTC));
+		report.setRegion(region);
+		report.setMediaFileUploaded(mediaFileUploaded);
 		BulletinStatus status1 = bulletinStatusOperator.apply(status0);
 		logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
-		avalancheReport.setStatus(status1);
+		report.setStatus(status1);
 
 		try {
 			// set JSON string after status is published/republished
 			bulletins = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
-			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins));
+			report.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins));
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
 
-		avalancheReportRepository.save(avalancheReport);
+		avalancheReportRepository.save(report);
 	}
 
 	/**
