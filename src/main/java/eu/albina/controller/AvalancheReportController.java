@@ -352,47 +352,19 @@ public class AvalancheReportController {
 	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
 										 Instant publicationDate) {
 		AvalancheReport report = getInternalReport(startDate, region);
-
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(publicationDate.atZone(ZoneOffset.UTC));
 		avalancheReport.setDate(startDate.atZone(ZoneOffset.UTC));
 		avalancheReport.setRegion(region);
 		if (report == null) {
 			avalancheReport.setStatus(BulletinStatus.missing);
+			logger.info("Status set to MISSING for region {}", region.getId());
 		} else {
 			avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
-			switch (report.getStatus()) {
-				case missing:
-					avalancheReport.setStatus(BulletinStatus.missing);
-					logger.warn("Bulletins have to be created first!");
-					break;
-				case draft:
-					avalancheReport.setStatus(BulletinStatus.updated);
-					logger.warn("Bulletins have to be submitted first!");
-					break;
-				case submitted:
-					avalancheReport.setStatus(BulletinStatus.published);
-					logger.info("Status set to PUBLISHED for region {}", region.getId());
-					break;
-				case published:
-					avalancheReport.setStatus(BulletinStatus.published);
-					logger.warn("Bulletins already published!");
-					break;
-				case updated:
-					avalancheReport.setStatus(BulletinStatus.updated);
-					logger.warn("Bulletins have to be resubmitted first!");
-					break;
-				case resubmitted:
-					avalancheReport.setStatus(BulletinStatus.republished);
-					logger.info("Status set to REPUBLISHED for region {}", region.getId());
-					break;
-				case republished:
-					avalancheReport.setStatus(BulletinStatus.republished);
-					logger.warn("Bulletins already republished!");
-					break;
-				default:
-					break;
-			}
+			BulletinStatus status0 = report.getStatus();
+			BulletinStatus status1 = publishReport(status0);
+			logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
+			avalancheReport.setStatus(status1);
 		}
 
 		Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
@@ -405,6 +377,39 @@ public class AvalancheReportController {
 		avalancheReportRepository.save(avalancheReport);
 		logger.info("Report for region {} published", region.getId());
 		return avalancheReport;
+	}
+
+	private static BulletinStatus publishReport(BulletinStatus status) {
+		return switch (status) {
+			case missing -> {
+				logger.warn("Bulletins have to be created first!");
+				yield BulletinStatus.missing;
+			}
+			case draft -> {
+				logger.warn("Bulletins have to be submitted first!");
+				yield BulletinStatus.updated;
+			}
+			case submitted -> {
+				logger.info("Status set to PUBLISHED");
+				yield BulletinStatus.published;
+			}
+			case published -> {
+				logger.warn("Bulletins already published!");
+				yield BulletinStatus.published;
+			}
+			case updated -> {
+				logger.warn("Bulletins have to be resubmitted first!");
+				yield BulletinStatus.updated;
+			}
+			case resubmitted -> {
+				logger.info("Status set to REPUBLISHED");
+				yield BulletinStatus.republished;
+			}
+			case republished -> {
+				logger.warn("Bulletins already republished!");
+				yield BulletinStatus.republished;
+			}
+		};
 	}
 
 	/**
@@ -430,38 +435,11 @@ public class AvalancheReportController {
 			logger.info("Status set to MISSING for region {}", region.getId());
 		} else {
 			avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
-			switch (report.getStatus()) {
-				case missing:
-					avalancheReport.setStatus(BulletinStatus.missing);
-					logger.warn("Bulletins have to be created first!");
-					break;
-				case draft:
-					avalancheReport.setStatus(BulletinStatus.submitted);
-					logger.info("Status set to SUBMITTED for region {}", region.getId());
-					break;
-				case submitted:
-					avalancheReport.setStatus(BulletinStatus.submitted);
-					logger.warn("Bulletins already submitted!");
-					break;
-				case published:
-					avalancheReport.setStatus(BulletinStatus.published);
-					logger.warn("Bulletins already published!");
-					break;
-				case updated:
-					avalancheReport.setStatus(BulletinStatus.resubmitted);
-					logger.info("Status set to RESUBMITTED for region {}", region.getId());
-					break;
-				case resubmitted:
-					avalancheReport.setStatus(BulletinStatus.resubmitted);
-					logger.info("Bulletins already resubmitted!");
-					break;
-				case republished:
-					avalancheReport.setStatus(BulletinStatus.republished);
-					logger.warn("Bulletins already republished!");
-					break;
-				default:
-					break;
-			}
+			avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
+			BulletinStatus status0 = report.getStatus();
+			BulletinStatus status1 = submitReport(status0);
+			logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
+			avalancheReport.setStatus(status1);
 		}
 
 		// set json string after status is published/republished
@@ -474,6 +452,39 @@ public class AvalancheReportController {
 
 		avalancheReportRepository.save(avalancheReport);
 		logger.info("Report for region {} submitted by {}", region.getId(), user);
+	}
+
+	private static BulletinStatus submitReport(BulletinStatus status) {
+		return switch (status) {
+			case missing -> {
+				logger.warn("Bulletins have to be created first!");
+				yield BulletinStatus.missing;
+			}
+			case draft -> {
+				logger.info("Status set to SUBMITTED");
+				yield BulletinStatus.submitted;
+			}
+			case submitted -> {
+				logger.warn("Bulletins already submitted!");
+				yield BulletinStatus.submitted;
+			}
+			case published -> {
+				logger.warn("Bulletins already published!");
+				yield BulletinStatus.published;
+			}
+			case updated -> {
+				logger.info("Status set to RESUBMITTED");
+				yield BulletinStatus.resubmitted;
+			}
+			case resubmitted -> {
+				logger.info("Bulletins already resubmitted!");
+				yield BulletinStatus.resubmitted;
+			}
+			case republished -> {
+				logger.warn("Bulletins already republished!");
+				yield BulletinStatus.republished;
+			}
+		};
 	}
 
 	/**
