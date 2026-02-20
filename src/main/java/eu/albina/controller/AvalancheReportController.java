@@ -216,40 +216,19 @@ public class AvalancheReportController {
 		return getHighestStatus(reports);
 	}
 
+	static final Comparator<AvalancheReport> BY_TIMESTAMP = Comparator.comparing(AvalancheReport::getTimestamp);
+	static final Comparator<AvalancheReport> BY_STATUS = Comparator.comparing(AvalancheReport::getStatus, Comparator.nullsFirst(BulletinStatus::comparePublicationStatus));
+
 	static AvalancheReport getHighestStatus(List<AvalancheReport> reports) {
-		AvalancheReport result = null;
-		for (AvalancheReport avalancheReport : reports) {
-			if (result == null)
-				result = avalancheReport;
-			else {
-				if (avalancheReport.getStatus() == null)
-					continue;
-				if (result.getStatus() == null)
-					result = avalancheReport;
-				else if (result.getStatus().comparePublicationStatus(avalancheReport.getStatus()) <= 0
-					&& result.getTimestamp().isBefore(avalancheReport.getTimestamp()))
-					result = avalancheReport;
-			}
-		}
-		return result;
+		return reports.stream().max(BY_STATUS.thenComparing(BY_TIMESTAMP)).orElse(null);
 	}
 
 	static Map<Instant, AvalancheReport> getHighestStatusMap(List<AvalancheReport> reports) {
-		Map<Instant, AvalancheReport> result = new HashMap<>();
-		for (AvalancheReport avalancheReport : reports)
-			if (result.containsKey(avalancheReport.getDate().toInstant())) {
-				if (avalancheReport.getStatus() == null)
-					continue;
-				if (result.get(avalancheReport.getDate().toInstant()).getStatus() == null)
-					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
-				else if (result.get(avalancheReport.getDate().toInstant()).getStatus()
-					.comparePublicationStatus(avalancheReport.getStatus()) <= 0
-					&& result.get(avalancheReport.getDate().toInstant()).getTimestamp()
-					.isBefore(avalancheReport.getTimestamp()))
-					result.put(avalancheReport.getDate().toInstant(), avalancheReport);
-			} else
-				result.put(avalancheReport.getDate().toInstant(), avalancheReport);
-		return result;
+		return reports.stream().collect(Collectors.toMap(
+			r -> r.getDate().toInstant(),
+			r -> r,
+			(r1, r2) -> getHighestStatus(List.of(r1, r2))
+		));
 	}
 
 	/**
@@ -264,7 +243,7 @@ public class AvalancheReportController {
 	public AvalancheReport getInternalReport(Instant date, Region region) {
 		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date.atZone(ZoneOffset.UTC), region);
 		// select most recent report
-		return reports.stream().max(Comparator.comparing(AvalancheReport::getTimestamp)).orElse(null);
+		return reports.stream().max(BY_TIMESTAMP).orElse(null);
 	}
 
 	/**
