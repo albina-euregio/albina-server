@@ -59,7 +59,6 @@ public class AvalancheBulletinStatusService {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(start);
 		Instant endDate = DateControllerUtil.parseDateOrToday(end);
-		ZoneId zoneId = DateControllerUtil.parseTimezoneOrLocal(timezone);
 
 		try {
 			List<Region> regions = regionId == null || regionId.isEmpty()

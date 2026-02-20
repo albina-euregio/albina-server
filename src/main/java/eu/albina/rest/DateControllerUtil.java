@@ -4,11 +4,9 @@ package eu.albina.rest;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Range;
 
 import eu.albina.exception.AlbinaException;
@@ -49,14 +47,6 @@ interface DateControllerUtil {
 			return parseDate(date);
 		} else {
 			return null;
-		}
-	}
-
-	static ZoneId parseTimezoneOrLocal(String timezone) {
-		if (Strings.isNullOrEmpty(timezone)) {
-			return PublicationStrategy.localZone();
-		} else {
-			return ZoneId.of(timezone);
 		}
 	}
 
