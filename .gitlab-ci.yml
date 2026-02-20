@@ -7,7 +7,7 @@ workflow:
       when: never
     - if: $CI_COMMIT_BRANCH
 
-image: maven:3-eclipse-temurin-21
+image: maven:3-eclipse-temurin-21-alpine
 
 variables:
     MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
@@ -23,8 +23,7 @@ cache:
 build:
     stage: build
     script:
-        - apt-get update -y
-        - apt-get install -y webp
+        - apk add git libwebp-tools
         - if [ -e "../avalanche-warning-maps" ]; then rm -rf ../avalanche-warning-maps; fi
         - git clone --depth 1 https://gitlab.com/albina-euregio/avalanche-warning-maps.git ../avalanche-warning-maps/
         - export GIT_VERSION=$(git describe --tags)
@@ -57,8 +56,7 @@ build:
         - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
         - chmod 644 ~/.ssh/known_hosts
     script:
-        - apt-get update -y
-        - apt-get install -y rsync
+        - apk add git rsync
         - export GIT_VERSION=$(git describe --tags)
         - mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$GIT_VERSION
         - mvn install -Dmaven.test.skip=true
