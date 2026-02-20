@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Stopwatch;
 
 import eu.albina.controller.AvalancheBulletinController;
+import eu.albina.controller.AvalancheBulletinController.AvalancheBulletinRepository;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PublicationController;
@@ -53,7 +54,7 @@ public class PublicationJob {
 	AvalancheReportController avalancheReportController;
 
 	@Inject
-	AvalancheBulletinController avalancheBulletinController;
+	AvalancheBulletinRepository avalancheBulletinRepository;
 
 	@Inject
 	RegionRepository regionRepository;
@@ -96,10 +97,34 @@ public class PublicationJob {
 			logger.info("Internal status for region {} is {}", region.getId(), internalStatus);
 
 			if (internalStatus == BulletinStatus.submitted || internalStatus == BulletinStatus.resubmitted) {
-				avalancheBulletinController.publishBulletins(startDate, endDate, region, publicationDate);
+
+				List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
+
+				for (AvalancheBulletin bulletin : bulletins) {
+
+					// select bulletins within the region
+					if (bulletin.affectsRegionWithoutSuggestions(region)) {
+
+						// publish all saved regions
+						Set<String> result = bulletin.getSavedRegions().stream()
+							.filter(entry -> entry.startsWith(region.getId()))
+							.collect(Collectors.toSet());
+						for (String entry : result) {
+							bulletin.getSavedRegions().remove(entry);
+							bulletin.getPublishedRegions().add(entry);
+						}
+
+						bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
+						avalancheBulletinRepository.save(bulletin);
+					}
+
+					// set publication date for all bulletins
+					bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
+					avalancheBulletinRepository.save(bulletin);
+				}
 			}
 		}
-		List<AvalancheBulletin> publishedBulletins = avalancheBulletinController.getAllBulletins(startDate, endDate);
+		List<AvalancheBulletin> publishedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 		if (publishedBulletins.isEmpty()) {
 			return;
 		}

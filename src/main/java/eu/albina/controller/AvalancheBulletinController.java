@@ -44,12 +44,6 @@ public class AvalancheBulletinController {
 	@Inject
 	AvalancheReportController avalancheReportController;
 
-	@Inject
-	ServerInstanceRepository serverInstanceRepository;
-
-	@Inject
-	private UserRepository userRepository;
-
 	@Repository
 	public interface AvalancheBulletinRepository extends CrudRepository<AvalancheBulletin, String> {
 		List<AvalancheBulletin> findByValidFromOrValidUntil(ZonedDateTime startDate, ZonedDateTime endDate);
@@ -426,49 +420,6 @@ public class AvalancheBulletinController {
 		logger.info("Bulletins for region {} submitted", region.getId());
 
 		return bulletins;
-	}
-
-	/**
-	 * Publish all bulletins for the given {@code region} in the given time period.
-	 * Sets the author of the bulletins and moves all saved regions to published
-	 * regions.
-	 *
-	 * @param startDate       the start date of the time period
-	 * @param endDate         the end date of the time period
-	 * @param region          the region that should be published
-	 * @param publicationDate the timestamp of the publication
-	 */
-	public void publishBulletins(Instant startDate, Instant endDate, Region region,
-								 Instant publicationDate) {
-
-		List<AvalancheBulletin> bulletins = getAllBulletins(startDate, endDate);
-
-		for (AvalancheBulletin bulletin : bulletins) {
-
-			// select bulletins within the region
-			if (bulletin.affectsRegionWithoutSuggestions(region)) {
-
-				// publish all saved regions
-				Set<String> result = bulletin.getSavedRegions().stream()
-					.filter(entry -> entry.startsWith(region.getId()))
-					.collect(Collectors.toSet());
-				for (String entry : result) {
-					bulletin.getSavedRegions().remove(entry);
-					bulletin.getPublishedRegions().add(entry);
-				}
-
-				bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
-				avalancheBulletinRepository.save(bulletin);
-			}
-
-			// set publication date for all bulletins
-			bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
-			avalancheBulletinRepository.save(bulletin);
-		}
-	}
-
-	public List<AvalancheBulletin> getAllBulletins(Instant startDate, Instant endDate) {
-		return avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 	}
 
 	/**
