@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -346,11 +347,19 @@ public class AvalancheReportController {
 	 * @param startDate       the start date of the time period
 	 * @param region          the region that should be published
 	 * @param publicationDate the timestamp when the report was published
-	 * @return a list of the ids of the published reports
 	 * @throws AlbinaException if more than one report was found
 	 */
-	public AvalancheReport publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
-										 Instant publicationDate) {
+	public void publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
+							  Instant publicationDate) {
+		try {
+			publishReport(bulletins, startDate, region, publicationDate, AvalancheReportController::publishReport);
+		} finally {
+			logger.info("Report for region {} published", region.getId());
+		}
+	}
+
+	private void publishReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region,
+							   Instant publicationDate, UnaryOperator<BulletinStatus> bulletinStatusOperator) {
 		AvalancheReport report = getInternalReport(startDate, region);
 		AvalancheReport avalancheReport = new AvalancheReport();
 		avalancheReport.setTimestamp(publicationDate.atZone(ZoneOffset.UTC));
@@ -362,11 +371,12 @@ public class AvalancheReportController {
 		} else {
 			avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
 			BulletinStatus status0 = report.getStatus();
-			BulletinStatus status1 = publishReport(status0);
+			BulletinStatus status1 = bulletinStatusOperator.apply(status0);
 			logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
 			avalancheReport.setStatus(status1);
 		}
 
+		// set json string after status is published/republished
 		Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
 		try {
 			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins1));
@@ -375,8 +385,6 @@ public class AvalancheReportController {
 		}
 
 		avalancheReportRepository.save(avalancheReport);
-		logger.info("Report for region {} published", region.getId());
-		return avalancheReport;
 	}
 
 	private static BulletinStatus publishReport(BulletinStatus status) {
@@ -425,33 +433,11 @@ public class AvalancheReportController {
 	 * @param user      the user who submits the report
 	 */
 	public void submitReport(List<AvalancheBulletin> bulletins, Instant startDate, Region region, User user) {
-		AvalancheReport report = getInternalReport(startDate, region);
-		AvalancheReport avalancheReport = new AvalancheReport();
-		avalancheReport.setTimestamp(ZonedDateTime.now().withNano(0).toInstant().atZone(ZoneOffset.UTC));
-		avalancheReport.setDate(startDate.atZone(ZoneOffset.UTC));
-		avalancheReport.setRegion(region);
-		if (report == null) {
-			avalancheReport.setStatus(BulletinStatus.missing);
-			logger.info("Status set to MISSING for region {}", region.getId());
-		} else {
-			avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
-			avalancheReport.setMediaFileUploaded(report.isMediaFileUploaded());
-			BulletinStatus status0 = report.getStatus();
-			BulletinStatus status1 = submitReport(status0);
-			logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
-			avalancheReport.setStatus(status1);
-		}
-
-		// set json string after status is published/republished
-		Collection<AvalancheBulletin> bulletins1 = bulletins.stream().map(b -> b.withRegionFilter(region)).toList();
 		try {
-			avalancheReport.setJsonString(objectMapper.cloneWithViewClass(JsonUtil.Views.Internal.class).writeValueAsString(bulletins1));
-		} catch (IOException e) {
-			throw new UncheckedIOException(e);
+			publishReport(bulletins, startDate, region, ZonedDateTime.now().withNano(0).toInstant(), AvalancheReportController::submitReport);
+		} finally {
+			logger.info("Report for region {} submitted by {}", region.getId(), user);
 		}
-
-		avalancheReportRepository.save(avalancheReport);
-		logger.info("Report for region {} submitted by {}", region.getId(), user);
 	}
 
 	private static BulletinStatus submitReport(BulletinStatus status) {
