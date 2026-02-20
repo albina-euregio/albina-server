@@ -389,6 +389,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 			.add("region.enabledLanguages", region.getEnabledLanguages())
 			.add("date", date)
 			.add("timestamp", timestamp)
+			.add("status", status)
 			.add("bulletins", bulletins)
 			.toString();
 	}
