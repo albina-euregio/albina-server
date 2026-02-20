@@ -18,7 +18,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.JsonUtil;
@@ -130,7 +129,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 
 	@JsonIgnore
 	public List<AvalancheBulletin> getPublishedBulletins(ObjectMapper objectMapper) {
-		if (getStatus() != BulletinStatus.published && getStatus() != BulletinStatus.republished) {
+		if (!BulletinStatus.isPublishedOrRepublished(getStatus())) {
 			IllegalStateException ex = new IllegalStateException("Report %s has not been published!".formatted(this));
 			LoggerFactory.getLogger(AvalancheReport.class).warn(ex.getMessage(), ex);
 			return List.of();

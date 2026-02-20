@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,8 +12,14 @@ public enum BulletinStatus {
 
 	private static final Logger logger = LoggerFactory.getLogger(BulletinStatus.class);
 
+	public static final Set<BulletinStatus> PUBLISHED_OR_REPUBLISHED = Set.of(published, republished);
+
 	public static boolean isDraftOrUpdated(BulletinStatus status) {
 		return status == draft || status == updated;
+	}
+
+	public static boolean isPublishedOrRepublished(BulletinStatus status) {
+		return status == published || status == republished;
 	}
 
 	public BulletinStatus publishReport() {

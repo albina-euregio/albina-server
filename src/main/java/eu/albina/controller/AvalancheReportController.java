@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,8 +179,7 @@ public class AvalancheReportController {
 		Collection<AvalancheReport> reports = getPublicReports(startDate, endDate, region);
 
 		return reports.stream()
-			.filter(avalancheReport -> avalancheReport.getStatus() == BulletinStatus.published
-				|| avalancheReport.getStatus() == BulletinStatus.republished)
+			.filter(report -> BulletinStatus.isPublishedOrRepublished(report.getStatus()))
 			.collect(Collectors.toMap(avalancheReport -> startDate, avalancheReport -> avalancheReport, (a, b) -> b));
 	}
 
@@ -198,7 +196,7 @@ public class AvalancheReportController {
 			startDate.atZone(ZoneOffset.UTC),
 			endDate.atZone(ZoneOffset.UTC),
 			region,
-			EnumSet.of(BulletinStatus.published, BulletinStatus.republished)
+			BulletinStatus.PUBLISHED_OR_REPUBLISHED
 		);
 		Map<Instant, AvalancheReport> result = getHighestStatusMap(reports);
 		return result.values();
@@ -433,7 +431,7 @@ public class AvalancheReportController {
 	public List<String> getPublishedReportIds(Instant date, List<Region> regions) {
 		return regions.stream()
 			.map(region -> getPublicReport(date, region))
-			.filter(report -> report.getStatus() == BulletinStatus.published || report.getStatus() == BulletinStatus.republished)
+			.filter(report -> BulletinStatus.isPublishedOrRepublished(report.getStatus()))
 			.map(AbstractPersistentObject::getId)
 			.toList();
 	}
@@ -476,6 +474,6 @@ public class AvalancheReportController {
 	 * @return the date of the latest published bulletin
 	 */
 	public Instant getLatestDate() throws AlbinaException {
-		return avalancheReportRepository.findFirstByStatusInOrderByDateDesc(EnumSet.of(BulletinStatus.published, BulletinStatus.republished)).getDate().toInstant();
+		return avalancheReportRepository.findFirstByStatusInOrderByDateDesc(BulletinStatus.PUBLISHED_OR_REPUBLISHED).getDate().toInstant();
 	}
 }

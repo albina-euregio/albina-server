@@ -155,7 +155,7 @@ public class PublicationJob {
 				return Stream.empty();
 			}
 			BulletinStatus status = avalancheReport.getStatus();
-			if (status != BulletinStatus.published && status != BulletinStatus.republished) {
+			if (!BulletinStatus.isPublishedOrRepublished(status)) {
 				// maybe another region was not published at all
 				logger.info("Skipping region {} since report {} has status {}", region, avalancheReport, status);
 				return Stream.empty();
