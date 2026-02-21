@@ -323,6 +323,11 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	}
 
 	@JsonIgnore
+	public Path getMapsPathForPDF() {
+		return Paths.get(getServerInstance().mapsPath(), getValidityDateString());
+	}
+
+	@JsonIgnore
 	public Path getPdfDirectory() {
 		return Paths.get(getServerInstance().pdfDirectory(), getValidityDateString(), getPublicationTimeString());
 	}
