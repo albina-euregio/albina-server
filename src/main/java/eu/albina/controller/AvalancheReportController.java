@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -251,19 +252,21 @@ public class AvalancheReportController {
 	 * @throws AlbinaException if the report could not be loaded from the DB
 	 */
 	public List<AvalancheBulletin> getPublishedBulletins(Instant date, Collection<Region> regions) {
+		return mergeOrSplitBulletins(regions.stream().map(region -> getPublicReport(date, region)));
+	}
 
-		List<AvalancheBulletin> bulletins = regions.stream()
-			.map(region -> getPublicReport(date, region))
+	public List<AvalancheBulletin> mergeOrSplitBulletins(Stream<AvalancheReport> reports) {
+		List<AvalancheBulletin> bulletins = reports
 			.filter(Objects::nonNull)
 			.flatMap(report -> report.getPublishedBulletins(objectMapper).stream())
 			.toList();
 
-		bulletins = new ArrayList<>(mergeOrSplit(bulletins));
+		bulletins = new ArrayList<>(mergeOrSplitBulletins(bulletins));
 		Collections.sort(bulletins);
 		return bulletins;
 	}
 
-	static Collection<AvalancheBulletin> mergeOrSplit(Iterable<AvalancheBulletin> bulletins) {
+	private static Collection<AvalancheBulletin> mergeOrSplitBulletins(Iterable<AvalancheBulletin> bulletins) {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<>();
 		for (AvalancheBulletin bulletin : bulletins) {
