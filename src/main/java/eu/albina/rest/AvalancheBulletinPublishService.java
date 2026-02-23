@@ -191,7 +191,7 @@ public class AvalancheBulletinPublishService {
 	private List<MultichannelMessage> getMultichannelMessage(String regionId, String date, LanguageCode language) throws AlbinaException {
 		Region region = regionRepository.findById(regionId).orElseThrow();
 		Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-		ArrayList<AvalancheBulletin> bulletins = avalancheReportController
+		List<AvalancheBulletin> bulletins = avalancheReportController
 			.getPublishedBulletins(startDate, Collections.singletonList(region));
 		AvalancheReport avalancheReport = avalancheReportController.getInternalReport(startDate, region);
 		avalancheReport.setBulletins(bulletins);

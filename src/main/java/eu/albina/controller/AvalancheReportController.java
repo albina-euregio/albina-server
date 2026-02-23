@@ -250,53 +250,53 @@ public class AvalancheReportController {
 	 * @return all published bulletins with the most recent version number
 	 * @throws AlbinaException if the report could not be loaded from the DB
 	 */
-	public ArrayList<AvalancheBulletin> getPublishedBulletins(Instant date, Collection<Region> regions) {
+	public List<AvalancheBulletin> getPublishedBulletins(Instant date, Collection<Region> regions) {
+
+		List<AvalancheBulletin> bulletins = regions.stream()
+			.map(region -> getPublicReport(date, region))
+			.filter(Objects::nonNull)
+			.flatMap(report -> report.getPublishedBulletins(objectMapper).stream())
+			.toList();
+
+		bulletins = new ArrayList<>(mergeOrSplit(bulletins));
+		Collections.sort(bulletins);
+		return bulletins;
+	}
+
+	static Collection<AvalancheBulletin> mergeOrSplit(Iterable<AvalancheBulletin> bulletins) {
 		int revision = 1;
 		Map<String, AvalancheBulletin> resultMap = new HashMap<>();
+		for (AvalancheBulletin bulletin : bulletins) {
+			if (resultMap.containsKey(bulletin.getId())) {
+				boolean match = false;
 
-		for (Region region : regions) {
-			// get bulletins for this region
-			AvalancheReport report = getPublicReport(date, region);
-			if (report == null) {
-				continue;
-			}
-			List<AvalancheBulletin> publishedBulletinsForRegion = report.getPublishedBulletins(objectMapper);
-			for (AvalancheBulletin bulletin : publishedBulletinsForRegion) {
-				if (resultMap.containsKey(bulletin.getId())) {
-					boolean match = false;
-
-					// merge bulletins with same base id
-					for (String bulletinId : resultMap.keySet()) {
-						if (bulletinId.split("_")[0].startsWith(bulletin.getId())) {
-							if (resultMap.get(bulletinId).equals(bulletin)) {
-								for (String publishedRegion : bulletin.getPublishedRegions())
-									resultMap.get(bulletinId).addPublishedRegion(publishedRegion);
-								for (String savedRegion : bulletin.getSavedRegions())
-									resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
-								for (String suggestedRegion : bulletin.getSuggestedRegions())
-									resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
-								match = true;
-								break;
-							} else {
-								continue;
-							}
+				// merge bulletins with same base id
+				for (String bulletinId : resultMap.keySet()) {
+					if (bulletinId.split("_")[0].startsWith(bulletin.getId())) {
+						if (resultMap.get(bulletinId).equals(bulletin)) {
+							for (String publishedRegion : bulletin.getPublishedRegions())
+								resultMap.get(bulletinId).addPublishedRegion(publishedRegion);
+							for (String savedRegion : bulletin.getSavedRegions())
+								resultMap.get(bulletin.getId()).addSavedRegion(savedRegion);
+							for (String suggestedRegion : bulletin.getSuggestedRegions())
+								resultMap.get(bulletin.getId()).addSuggestedRegion(suggestedRegion);
+							match = true;
+							break;
+						} else {
+							continue;
 						}
 					}
+				}
 
-					if (!match) {
-						bulletin.setId(bulletin.getId() + "_" + revision);
-						revision++;
-						resultMap.put(bulletin.getId(), bulletin);
-					}
-				} else
+				if (!match) {
+					bulletin.setId(bulletin.getId() + "_" + revision);
+					revision++;
 					resultMap.put(bulletin.getId(), bulletin);
-			}
+				}
+			} else
+				resultMap.put(bulletin.getId(), bulletin);
 		}
-
-		ArrayList<AvalancheBulletin> bulletins = new ArrayList<>(resultMap.values());
-		Collections.sort(bulletins);
-
-		return bulletins;
+		return resultMap.values();
 	}
 
 	/**
