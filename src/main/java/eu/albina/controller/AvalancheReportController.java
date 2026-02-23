@@ -111,7 +111,8 @@ public class AvalancheReportController {
 	 * null if not report was found
 	 */
 	public AvalancheReport getPublicReport(Instant date, Region region) {
-		List<AvalancheReport> reports = avalancheReportRepository.findByDateAndRegion(date.atZone(ZoneOffset.UTC), region);
+		ZonedDateTime startDate = date.atZone(ZoneOffset.UTC);
+		List<AvalancheReport> reports = avalancheReportRepository.findByDateBetweenAndRegionAndStatusIn(startDate, startDate, region, BulletinStatus.PUBLISHED_OR_REPUBLISHED);
 		return getHighestStatus(reports);
 	}
 
