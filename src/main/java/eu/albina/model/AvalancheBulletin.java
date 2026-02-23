@@ -716,6 +716,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public boolean affectsRegionOnlyPublished(Region region) {
+		if (getPublishedRegions() == null) {
+			return false;
+		}
 		return getPublishedRegions().stream().anyMatch(region::affects);
 	}
 

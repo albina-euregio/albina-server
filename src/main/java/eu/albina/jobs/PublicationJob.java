@@ -90,18 +90,13 @@ public class PublicationJob {
 			return;
 		}
 
-		final List<AvalancheBulletin> publishedBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
+		final List<AvalancheBulletin> allBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 
-		for (AvalancheBulletin bulletin : publishedBulletins) {
-			// set publication date for all bulletins
-			bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
-			avalancheBulletinRepository.save(bulletin);
-		}
-
+		// publish all regions which have to be published
 		for (Region region : regions) {
 			logger.info("Publish bulletins for region {}", region.getId());
 
-			for (AvalancheBulletin bulletin : publishedBulletins) {
+			for (AvalancheBulletin bulletin : allBulletins) {
 				// select bulletins within the region
 				if (!bulletin.affectsRegionWithoutSuggestions(region)) {
 					continue;
@@ -115,30 +110,28 @@ public class PublicationJob {
 				}
 				bulletin.getSavedRegions().removeAll(savedRegions);
 				bulletin.getPublishedRegions().addAll(savedRegions);
+				bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
 				avalancheBulletinRepository.save(bulletin);
 			}
-		}
 
-		publishedBulletins.removeIf(b -> b.getPublishedRegions() == null || b.getPublishedRegions().isEmpty());
-		if (publishedBulletins.isEmpty()) {
-			logger.info("No published regions found in bulletins.");
-			return;
-		}
-
-		logger.info("Publishing bulletins with publicationDate={} startDate={}", publicationDate, startDate);
-		Collections.sort(publishedBulletins);
-
-		// publish all regions which have to be published
-		for (Region region : regions) {
-			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
+			List<AvalancheBulletin> regionBulletins = allBulletins.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
+				.sorted()
 				.collect(Collectors.toList());
+
+			if (regionBulletins.isEmpty()) {
+				logger.info("No published bulletins found for region {}.", region);
+				return;
+			}
+
 			logger.info("Publishing region {} with bulletins {} and publication time {}", region, regionBulletins, publicationDate);
 
 			avalancheReportController.publishReport(regionBulletins, startDate, region, publicationDate);
 		}
 
 		logger.info("Publication phase 1 done after {}", stopwatch);
+
+		final List<AvalancheBulletin> publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, publishBulletinRegions);
 
 		// update all regions to create complete maps
 		List<AvalancheReport> allRegions = publishBulletinRegions.stream().flatMap(region -> {
