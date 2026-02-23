@@ -7,14 +7,12 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,41 +129,44 @@ public class PublicationJob {
 
 		logger.info("Publication phase 1 done after {}", stopwatch);
 
-		final List<AvalancheBulletin> publishedBulletins = avalancheReportController.getPublishedBulletins(startDate, publishBulletinRegions);
+		List<AvalancheReport> publishedReports = publishBulletinRegions.stream()
+			.map(region -> {
+				AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
+				if (avalancheReport == null) {
+					logger.info("Skipping region {} since report {} is null", regions, avalancheReport);
+					return null;
+				}
+				if (!BulletinStatus.isPublishedOrRepublished(avalancheReport.getStatus())) {
+					// maybe another region was not published at all
+					logger.info("Skipping region {} since report {} has status {}", region, avalancheReport, avalancheReport.getStatus());
+					return null;
+				}
+				return avalancheReport;
+			})
+			.filter(Objects::nonNull)
+			.toList();
 
-		// update all regions to create complete maps
-		List<AvalancheReport> allRegions = publishBulletinRegions.stream().flatMap(region -> {
-			List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
-				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region)).collect(Collectors.toList());
-			logger.info("Load region {} with bulletins {} and publication time {}", region, regionBulletins, publicationDate);
-			if (regionBulletins.isEmpty()) {
-				logger.info("Skipping region {} since bulletins {} is empty", region, regionBulletins);
-				return Stream.empty();
-			}
-			AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
-			logger.info("Load region {} with report {}", region, avalancheReport);
-			if (avalancheReport == null) {
-				logger.info("Skipping region {} since report {} is null", region, avalancheReport);
-				return Stream.empty();
-			}
-			BulletinStatus status = avalancheReport.getStatus();
-			if (!BulletinStatus.isPublishedOrRepublished(status)) {
-				// maybe another region was not published at all
-				logger.info("Skipping region {} since report {} has status {}", region, avalancheReport, status);
-				return Stream.empty();
-			}
-			avalancheReport.setBulletins(regionBulletins, publishedBulletins);
+		// all bulletins (aka. globalBulletins) are needed to create complete maps
+		List<AvalancheBulletin> globalBulletins = avalancheReportController.mergeOrSplitBulletins(publishedReports.stream());
+
+		for (AvalancheReport avalancheReport : publishedReports) {
+			Region region = avalancheReport.getRegion();
+			List<AvalancheBulletin> regionBulletins = globalBulletins.stream().filter(b -> b.affectsRegionOnlyPublished(region)).toList();
+			logger.info("Load region {} with report {} and its bulletins {}", region, avalancheReport, regionBulletins);
+			avalancheReport.setBulletins(regionBulletins, globalBulletins);
 			avalancheReport.setServerInstance(serverInstance);
-			return Stream.of(avalancheReport);
-		}).toList();
+		}
 
 		// starting from here, everything should be run async in executor, method should return
-
 		Thread.startVirtualThread(() -> {
 			Queue<Runnable> tasksAfterDirectoryUpdate = new ConcurrentLinkedDeque<>();
 
 			Collection<Thread> phase2 = new ArrayList<>();
-			for (AvalancheReport avalancheReport : allRegions) {
+			for (AvalancheReport avalancheReport : publishedReports) {
+				if (avalancheReport.getBulletins().isEmpty()) {
+					logger.info("Skipping region {} since bulletins {} is empty", avalancheReport, avalancheReport.getBulletins());
+					continue;
+				}
 				phase2.add(Thread.startVirtualThread(() -> {
 					logger.info("Creating resources for {}", avalancheReport);
 					publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
@@ -188,7 +189,7 @@ public class PublicationJob {
 			for (Region superRegion : superRegions) {
 				// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
 				phase2.add(Thread.startVirtualThread(() -> {
-					List<AvalancheBulletin> regionBulletins = publishedBulletins.stream()
+					List<AvalancheBulletin> regionBulletins = globalBulletins.stream()
 						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).collect(Collectors.toList());
 					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationDate);
 					AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
@@ -205,7 +206,7 @@ public class PublicationJob {
 			}
 			logger.info("Publication phase 2 done after {}", stopwatch);
 
-			publicationController.createSymbolicLinks(AvalancheReport.of(publishedBulletins, null, serverInstance));
+			publicationController.createSymbolicLinks(AvalancheReport.of(globalBulletins, null, serverInstance));
 
 			Collection<Thread> phase3 = new ArrayList<>();
 			for (Runnable runnable : tasksAfterDirectoryUpdate) {
