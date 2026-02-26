@@ -133,7 +133,7 @@ public class PublicationJob {
 			.map(region -> {
 				AvalancheReport avalancheReport = avalancheReportController.getPublicReport(startDate, region);
 				if (avalancheReport == null) {
-					logger.info("Skipping region {} since report {} is null", regions, avalancheReport);
+					logger.info("Skipping region {} since report is null", region);
 					return null;
 				}
 				if (!BulletinStatus.isPublishedOrRepublished(avalancheReport.getStatus())) {
