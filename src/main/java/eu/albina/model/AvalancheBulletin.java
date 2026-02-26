@@ -200,8 +200,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private DangerPattern dangerPattern2;
 
 	/** Collection containing all text parts available for a bulletin */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "AVALANCHE_BULLETIN_ID")
+	@OneToMany(mappedBy = "avalancheBulletin", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JsonIgnore
 	private Collection<AvalancheBulletinText> textPartsMap;
 
@@ -402,12 +401,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		textPartsMap.removeIf(p -> p.getId().getTextType() == textPart);
 		for (Text text : texts) {
 			AvalancheBulletinText.AvalancheBulletinTextId id = new AvalancheBulletinText.AvalancheBulletinTextId();
-			//id.setAvalancheBulletin(this);
-			id.setAvalancheBulletinId(this.id);
 			id.setLanguageCode(text.languageCode());
 			id.setTextType(textPart);
 			AvalancheBulletinText t = new AvalancheBulletinText();
 			t.setId(id);
+			t.setAvalancheBulletin(this);
 			t.setText(text.text());
 			textPartsMap.add(t);
 		}
@@ -871,7 +869,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			}
 		}
 
-		textPartsMap = bulletin.textPartsMap;
+		for (TextPart textPart : TextPart.values()) {
+			putTexts(textPart, bulletin.getTexts(textPart));
+		}
 
 		setAvActivityHighlightsTextcat(bulletin.getAvActivityHighlightsTextcat());
 		setAvActivityCommentTextcat(bulletin.getAvActivityCommentTextcat());
