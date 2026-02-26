@@ -127,7 +127,6 @@ public class Caaml6 {
 		final String lowerBound = p.getElevationLow() > 0 ? Integer.toString(p.getElevationLow()) : p.getTreelineLow() ? "treeline" : null;
 		final String upperBound = p.getElevationHigh() > 0 ? Integer.toString(p.getElevationHigh()) : p.getTreelineHigh() ? "treeline" : null;
 		result.setElevation(new ElevationBoundaryOrBand(lowerBound, upperBound));
-		result.setComment(p.getTerrainFeature(lang));
 		result.setValidTimePeriod(validTimePeriod);
 		final EawsMatrixInformation matrixInformation = p.getEawsMatrixInformation();
 		if (matrixInformation != null) {
