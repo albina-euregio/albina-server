@@ -20,6 +20,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.micronaut.data.jpa.repository.JpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +61,7 @@ public class AvalancheReportController {
 	ObjectMapper objectMapper;
 
 	@Repository
-	public interface AvalancheReportRepository extends CrudRepository<AvalancheReport, String> {
+	public interface AvalancheReportRepository extends JpaRepository<AvalancheReport, String> {
 
 		List<AvalancheReport> findByDateAndRegion(ZonedDateTime date, Region region);
 
@@ -217,7 +218,7 @@ public class AvalancheReportController {
 			throw new UncheckedIOException(e);
 		}
 
-		avalancheReportRepository.save(report);
+		avalancheReportRepository.saveAndFlush(report);
 	}
 
 	/**
