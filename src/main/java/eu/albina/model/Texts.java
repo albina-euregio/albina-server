@@ -2,42 +2,23 @@
 package eu.albina.model;
 
 import java.util.Set;
-import java.util.TreeSet;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
 import eu.albina.model.enumerations.LanguageCode;
 
 @Serdeable
-public class Texts {
+public record Texts(Set<Text> texts) {
 
 	@JsonValue
-	private Set<Text> texts;
-
-	public Texts() {
-		texts = new TreeSet<>(); // sort texts by language to allow caching of API calls
-	}
-
-	@JsonCreator
-	public Texts(Set<Text> texts) {
-		this.texts = texts;
-	}
-
-	public Set<Text> getTexts() {
+	@Override
+	public Set<Text> texts() {
 		return texts;
 	}
 
 	public String getText(LanguageCode languageCode) {
-		return texts.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
+		return texts.stream().filter(text -> text.languageCode() == languageCode).findFirst().map(Text::text).orElse(null);
 	}
 
-	public void setTexts(Set<Text> texts) {
-		this.texts = texts;
-	}
-
-	public void addText(Text text) {
-		this.texts.add(text);
-	}
 }

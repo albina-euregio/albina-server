@@ -210,7 +210,7 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	}
 
 	public String getTerrainFeature(LanguageCode languageCode) {
-		return terrainFeature.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
+		return terrainFeature.stream().filter(text -> text.languageCode() == languageCode).findFirst().map(Text::text).orElse(null);
 	}
 
 	public void setTerrainFeature(Set<Text> terrainFeature) {

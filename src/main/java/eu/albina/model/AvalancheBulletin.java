@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -382,21 +383,21 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		Set<Text> texts = textPartsMap.stream()
 			.filter(p -> p.getId().getTextType() == textPart)
 			.map(p -> new Text(p.getId().getLanguageCode(), p.getText()))
-			.collect(Collectors.toSet());
+			.collect(Collectors.toCollection(TreeSet::new));
 		return new Texts(texts);
 	}
 
 	private void putTexts(TextPart textPart, Texts texts) {
 		textPartsMap.removeIf(p -> p.getId().getTextType() == textPart);
-		for (Text text : texts.getTexts()) {
+		for (Text text : texts.texts()) {
 			AvalancheBulletinText.AvalancheBulletinTextId id = new AvalancheBulletinText.AvalancheBulletinTextId();
 			//id.setAvalancheBulletin(this);
 			id.setAvalancheBulletinId(this.id);
-			id.setLanguageCode(text.getLanguage());
+			id.setLanguageCode(text.languageCode());
 			id.setTextType(textPart);
 			AvalancheBulletinText t = new AvalancheBulletinText();
 			t.setId(id);
-			t.setText(text.getText());
+			t.setText(text.text());
 			textPartsMap.add(t);
 		}
 	}
