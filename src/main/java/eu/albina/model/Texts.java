@@ -7,22 +7,12 @@ import java.util.TreeSet;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.Table;
 
 import eu.albina.model.enumerations.LanguageCode;
 
-@Entity
-@Table(name = "texts")
 @Serdeable
-public class Texts extends AbstractPersistentObject {
+public class Texts {
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
 	@JsonValue
 	private Set<Text> texts;
 

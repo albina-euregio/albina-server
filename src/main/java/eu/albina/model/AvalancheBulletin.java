@@ -4,13 +4,14 @@ package eu.albina.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,11 +41,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapKeyColumn;
-import jakarta.persistence.MapKeyEnumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -200,20 +198,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Column(name = "DANGER_PATTERN_2", length = 191)
 	private DangerPattern dangerPattern2;
 
-	/** Map containing all text parts available for a bulletin */
+	/** Collection containing all text parts available for a bulletin */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
-	@MapKeyEnumerated(EnumType.STRING)
-	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
+	@JoinColumn(name = "AVALANCHE_BULLETIN_ID")
 	@JsonIgnore
-	private Map<TextPart, Texts> textPartsMap;
+	private Collection<AvalancheBulletinText> textPartsMap;
 
 	/**
 	 * Standard constructor for an avalanche bulletin.
 	 */
 	public AvalancheBulletin() {
 		additionalAuthors = new LinkedHashSet<>();
-		textPartsMap = new LinkedHashMap<>();
+		textPartsMap = new ArrayList<>();
 		publishedRegions = new LinkedHashSet<>();
 		savedRegions = new LinkedHashSet<>();
 		suggestedRegions = new LinkedHashSet<>();
@@ -268,10 +264,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void setOwnerRegion(String ownerRegion) {
 		this.ownerRegion = ownerRegion;
-	}
-
-	public Map<TextPart, Texts> getTextPartsMap() {
-		return textPartsMap;
 	}
 
 	public String getHighlightsTextcat() {
@@ -386,15 +378,35 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.generalHeadlineCommentNotes = generalHeadlineCommentNotes;
 	}
 
+	private Texts getTexts(TextPart textPart) {
+		Set<Text> texts = textPartsMap.stream()
+			.filter(p -> p.getId().getTextType() == textPart)
+			.map(p -> new Text(p.getId().getLanguageCode(), p.getText()))
+			.collect(Collectors.toSet());
+		return new Texts(texts);
+	}
+
+	private void putTexts(TextPart textPart, Texts texts) {
+		textPartsMap.removeIf(p -> p.getId().getTextType() == textPart);
+		for (Text text : texts.getTexts()) {
+			AvalancheBulletinText.AvalancheBulletinTextId id = new AvalancheBulletinText.AvalancheBulletinTextId();
+			//id.setAvalancheBulletin(this);
+			id.setAvalancheBulletinId(this.id);
+			id.setLanguageCode(text.getLanguage());
+			id.setTextType(textPart);
+			AvalancheBulletinText t = new AvalancheBulletinText();
+			t.setId(id);
+			t.setText(text.getText());
+			textPartsMap.add(t);
+		}
+	}
+
 	public Texts getHighlights() {
-		return textPartsMap.get(TextPart.highlights);
+		return getTexts(TextPart.highlights);
 	}
 
 	public String getTextPartIn(TextPart textPart, LanguageCode lang) {
-		Texts texts = textPartsMap.get(textPart);
-		if (texts == null) {
-			return null;
-		}
+		Texts texts = getTexts(textPart);
 		String text = texts.getText(lang);
 		if (text == null || text.isBlank()) {
 			return null;
@@ -407,11 +419,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setHighlights(Texts highlights) {
-		textPartsMap.put(TextPart.highlights, highlights);
+		putTexts(TextPart.highlights, highlights);
 	}
 
 	public Texts getAvActivityHighlights() {
-		return textPartsMap.get(TextPart.avActivityHighlights);
+		return getTexts(TextPart.avActivityHighlights);
 	}
 
 	public String getAvActivityHighlightsIn(LanguageCode lang) {
@@ -419,11 +431,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setAvActivityHighlights(Texts avActivityHighlights) {
-		textPartsMap.put(TextPart.avActivityHighlights, avActivityHighlights);
+		putTexts(TextPart.avActivityHighlights, avActivityHighlights);
 	}
 
 	public Texts getAvActivityComment() {
-		return textPartsMap.get(TextPart.avActivityComment);
+		return getTexts(TextPart.avActivityComment);
 	}
 
 	public String getAvActivityCommentIn(LanguageCode lang) {
@@ -431,11 +443,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setAvActivityComment(Texts avActivityComment) {
-		textPartsMap.put(TextPart.avActivityComment, avActivityComment);
+		putTexts(TextPart.avActivityComment, avActivityComment);
 	}
 
 	public Texts getSynopsisHighlights() {
-		return textPartsMap.get(TextPart.synopsisHighlights);
+		return getTexts(TextPart.synopsisHighlights);
 	}
 
 	public String getSynopsisHighlightsIn(LanguageCode lang) {
@@ -443,11 +455,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setSynopsisHighlights(Texts synopsisHighlights) {
-		textPartsMap.put(TextPart.synopsisHighlights, synopsisHighlights);
+		putTexts(TextPart.synopsisHighlights, synopsisHighlights);
 	}
 
 	public Texts getSynopsisComment() {
-		return textPartsMap.get(TextPart.synopsisComment);
+		return getTexts(TextPart.synopsisComment);
 	}
 
 	public String getSynopsisCommentIn(LanguageCode lang) {
@@ -455,11 +467,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setSynopsisComment(Texts synopsisComment) {
-		textPartsMap.put(TextPart.synopsisComment, synopsisComment);
+		putTexts(TextPart.synopsisComment, synopsisComment);
 	}
 
 	public Texts getSnowpackStructureHighlights() {
-		return textPartsMap.get(TextPart.snowpackStructureHighlights);
+		return getTexts(TextPart.snowpackStructureHighlights);
 	}
 
 	public String getSnowpackStructureHighlightsIn(LanguageCode lang) {
@@ -467,11 +479,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setSnowpackStructureHighlights(Texts snowpackStructureHighlights) {
-		textPartsMap.put(TextPart.snowpackStructureHighlights, snowpackStructureHighlights);
+		putTexts(TextPart.snowpackStructureHighlights, snowpackStructureHighlights);
 	}
 
 	public Texts getSnowpackStructureComment() {
-		return textPartsMap.get(TextPart.snowpackStructureComment);
+		return getTexts(TextPart.snowpackStructureComment);
 	}
 
 	public String getSnowpackStructureCommentIn(LanguageCode lang) {
@@ -479,11 +491,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setSnowpackStructureComment(Texts snowpackStructureComment) {
-		textPartsMap.put(TextPart.snowpackStructureComment, snowpackStructureComment);
+		putTexts(TextPart.snowpackStructureComment, snowpackStructureComment);
 	}
 
 	public Texts getTravelAdvisoryHighlights() {
-		return textPartsMap.get(TextPart.travelAdvisoryHighlights);
+		return getTexts(TextPart.travelAdvisoryHighlights);
 	}
 
 	public String getTravelAdvisoryHighlightsIn(LanguageCode lang) {
@@ -491,11 +503,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setTravelAdvisoryHighlights(Texts travelAdvisoryHighlights) {
-		textPartsMap.put(TextPart.travelAdvisoryHighlights, travelAdvisoryHighlights);
+		putTexts(TextPart.travelAdvisoryHighlights, travelAdvisoryHighlights);
 	}
 
 	public Texts getTravelAdvisoryComment() {
-		return textPartsMap.get(TextPart.travelAdvisoryComment);
+		return getTexts(TextPart.travelAdvisoryComment);
 	}
 
 	public String getTravelAdvisoryCommentIn(LanguageCode lang) {
@@ -503,11 +515,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setTravelAdvisoryComment(Texts travelAdvisoryComment) {
-		textPartsMap.put(TextPart.travelAdvisoryComment, travelAdvisoryComment);
+		putTexts(TextPart.travelAdvisoryComment, travelAdvisoryComment);
 	}
 
 	public Texts getTendencyComment() {
-		return textPartsMap.get(TextPart.tendencyComment);
+		return getTexts(TextPart.tendencyComment);
 	}
 
 	public String getTendencyCommentIn(LanguageCode lang) {
@@ -515,11 +527,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setTendencyComment(Texts tendencyComment) {
-		textPartsMap.put(TextPart.tendencyComment, tendencyComment);
+		putTexts(TextPart.tendencyComment, tendencyComment);
 	}
 
 	public Texts getGeneralHeadlineComment() {
-		return textPartsMap.get(TextPart.generalHeadlineComment);
+		return getTexts(TextPart.generalHeadlineComment);
 	}
 
 	public String getGeneralHeadlineCommentIn(LanguageCode lang) {
@@ -527,7 +539,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setGeneralHeadlineComment(Texts generalHeadlineComment) {
-		textPartsMap.put(TextPart.generalHeadlineComment, generalHeadlineComment);
+		putTexts(TextPart.generalHeadlineComment, generalHeadlineComment);
 	}
 
 	public Tendency getTendency() {

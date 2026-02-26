@@ -4,30 +4,27 @@ package eu.albina.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.serde.annotation.Serdeable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Lob;
 
 import eu.albina.model.enumerations.LanguageCode;
 
 import java.util.Comparator;
 
-@Embeddable
 @Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Text implements Comparable<Text> {
 
 	private static final Comparator<Text> COMPARATOR = Comparator.comparing(Text::getLanguage, Comparator.nullsLast(Comparator.naturalOrder()));
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode languageCode;
-
-	@Lob
-	@Column(name = "TEXT")
 	private String text;
+
+	public Text() {
+	}
+
+	public Text(LanguageCode languageCode, String text) {
+		this.languageCode = languageCode;
+		this.text = text;
+	}
 
 	@JsonProperty("languageCode")
 	public LanguageCode getLanguage() {
