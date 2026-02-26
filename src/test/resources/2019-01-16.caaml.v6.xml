@@ -60,7 +60,6 @@
       <aspect>E</aspect>
       <aspect>N</aspect>
       <validTimePeriod>earlier</validTimePeriod>
-      <comment> Many starting zones have released the snow but not entirely.</comment>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
