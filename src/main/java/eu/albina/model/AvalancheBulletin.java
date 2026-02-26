@@ -379,6 +379,18 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.generalHeadlineCommentNotes = generalHeadlineCommentNotes;
 	}
 
+	@Serdeable
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	record Text(LanguageCode languageCode, String text) implements Comparable<Text> {
+
+		private static final Comparator<Text> COMPARATOR = Comparator.comparing(Text::languageCode);
+
+		@Override
+		public int compareTo(Text o) {
+			return COMPARATOR.compare(this, o);
+		}
+	}
+
 	private Set<Text> getTexts(TextPart textPart) {
 		return textPartsMap.stream()
 			.filter(p -> p.getId().getTextType() == textPart)
@@ -932,5 +944,4 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public int compareTo(AvalancheBulletin other) {
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
 	}
-
 }
