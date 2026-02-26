@@ -379,17 +379,16 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.generalHeadlineCommentNotes = generalHeadlineCommentNotes;
 	}
 
-	private Texts getTexts(TextPart textPart) {
-		Set<Text> texts = textPartsMap.stream()
+	private Set<Text> getTexts(TextPart textPart) {
+		return textPartsMap.stream()
 			.filter(p -> p.getId().getTextType() == textPart)
 			.map(p -> new Text(p.getId().getLanguageCode(), p.getText()))
 			.collect(Collectors.toCollection(TreeSet::new));
-		return new Texts(texts);
 	}
 
-	private void putTexts(TextPart textPart, Texts texts) {
+	private void putTexts(TextPart textPart, Set<Text> texts) {
 		textPartsMap.removeIf(p -> p.getId().getTextType() == textPart);
-		for (Text text : texts.texts()) {
+		for (Text text : texts) {
 			AvalancheBulletinText.AvalancheBulletinTextId id = new AvalancheBulletinText.AvalancheBulletinTextId();
 			//id.setAvalancheBulletin(this);
 			id.setAvalancheBulletinId(this.id);
@@ -402,28 +401,27 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		}
 	}
 
-	public Texts getHighlights() {
+	public Set<Text> getHighlights() {
 		return getTexts(TextPart.highlights);
 	}
 
 	public String getTextPartIn(TextPart textPart, LanguageCode lang) {
-		Texts texts = getTexts(textPart);
-		String text = texts.getText(lang);
-		if (text == null || text.isBlank()) {
-			return null;
-		}
-		return text.trim();
+		Set<Text> texts = getTexts(textPart);
+		return texts.stream().filter(t -> t.languageCode() == lang).findFirst()
+			.map(Text::text)
+			.map(String::trim)
+			.filter(s -> !s.isBlank()).orElse(null);
 	}
 
 	public String getHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.highlights, lang);
 	}
 
-	public void setHighlights(Texts highlights) {
+	public void setHighlights(Set<Text> highlights) {
 		putTexts(TextPart.highlights, highlights);
 	}
 
-	public Texts getAvActivityHighlights() {
+	public Set<Text> getAvActivityHighlights() {
 		return getTexts(TextPart.avActivityHighlights);
 	}
 
@@ -431,11 +429,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.avActivityHighlights, lang);
 	}
 
-	public void setAvActivityHighlights(Texts avActivityHighlights) {
+	public void setAvActivityHighlights(Set<Text> avActivityHighlights) {
 		putTexts(TextPart.avActivityHighlights, avActivityHighlights);
 	}
 
-	public Texts getAvActivityComment() {
+	public Set<Text> getAvActivityComment() {
 		return getTexts(TextPart.avActivityComment);
 	}
 
@@ -443,11 +441,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.avActivityComment, lang);
 	}
 
-	public void setAvActivityComment(Texts avActivityComment) {
+	public void setAvActivityComment(Set<Text> avActivityComment) {
 		putTexts(TextPart.avActivityComment, avActivityComment);
 	}
 
-	public Texts getSynopsisHighlights() {
+	public Set<Text> getSynopsisHighlights() {
 		return getTexts(TextPart.synopsisHighlights);
 	}
 
@@ -455,11 +453,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.synopsisHighlights, lang);
 	}
 
-	public void setSynopsisHighlights(Texts synopsisHighlights) {
+	public void setSynopsisHighlights(Set<Text> synopsisHighlights) {
 		putTexts(TextPart.synopsisHighlights, synopsisHighlights);
 	}
 
-	public Texts getSynopsisComment() {
+	public Set<Text> getSynopsisComment() {
 		return getTexts(TextPart.synopsisComment);
 	}
 
@@ -467,11 +465,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.synopsisComment, lang);
 	}
 
-	public void setSynopsisComment(Texts synopsisComment) {
+	public void setSynopsisComment(Set<Text> synopsisComment) {
 		putTexts(TextPart.synopsisComment, synopsisComment);
 	}
 
-	public Texts getSnowpackStructureHighlights() {
+	public Set<Text> getSnowpackStructureHighlights() {
 		return getTexts(TextPart.snowpackStructureHighlights);
 	}
 
@@ -479,11 +477,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.snowpackStructureHighlights, lang);
 	}
 
-	public void setSnowpackStructureHighlights(Texts snowpackStructureHighlights) {
+	public void setSnowpackStructureHighlights(Set<Text> snowpackStructureHighlights) {
 		putTexts(TextPart.snowpackStructureHighlights, snowpackStructureHighlights);
 	}
 
-	public Texts getSnowpackStructureComment() {
+	public Set<Text> getSnowpackStructureComment() {
 		return getTexts(TextPart.snowpackStructureComment);
 	}
 
@@ -491,11 +489,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.snowpackStructureComment, lang);
 	}
 
-	public void setSnowpackStructureComment(Texts snowpackStructureComment) {
+	public void setSnowpackStructureComment(Set<Text> snowpackStructureComment) {
 		putTexts(TextPart.snowpackStructureComment, snowpackStructureComment);
 	}
 
-	public Texts getTravelAdvisoryHighlights() {
+	public Set<Text> getTravelAdvisoryHighlights() {
 		return getTexts(TextPart.travelAdvisoryHighlights);
 	}
 
@@ -503,11 +501,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.travelAdvisoryHighlights, lang);
 	}
 
-	public void setTravelAdvisoryHighlights(Texts travelAdvisoryHighlights) {
+	public void setTravelAdvisoryHighlights(Set<Text> travelAdvisoryHighlights) {
 		putTexts(TextPart.travelAdvisoryHighlights, travelAdvisoryHighlights);
 	}
 
-	public Texts getTravelAdvisoryComment() {
+	public Set<Text> getTravelAdvisoryComment() {
 		return getTexts(TextPart.travelAdvisoryComment);
 	}
 
@@ -515,11 +513,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.travelAdvisoryComment, lang);
 	}
 
-	public void setTravelAdvisoryComment(Texts travelAdvisoryComment) {
+	public void setTravelAdvisoryComment(Set<Text> travelAdvisoryComment) {
 		putTexts(TextPart.travelAdvisoryComment, travelAdvisoryComment);
 	}
 
-	public Texts getTendencyComment() {
+	public Set<Text> getTendencyComment() {
 		return getTexts(TextPart.tendencyComment);
 	}
 
@@ -527,11 +525,11 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.tendencyComment, lang);
 	}
 
-	public void setTendencyComment(Texts tendencyComment) {
+	public void setTendencyComment(Set<Text> tendencyComment) {
 		putTexts(TextPart.tendencyComment, tendencyComment);
 	}
 
-	public Texts getGeneralHeadlineComment() {
+	public Set<Text> getGeneralHeadlineComment() {
 		return getTexts(TextPart.generalHeadlineComment);
 	}
 
@@ -539,7 +537,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTextPartIn(TextPart.generalHeadlineComment, lang);
 	}
 
-	public void setGeneralHeadlineComment(Texts generalHeadlineComment) {
+	public void setGeneralHeadlineComment(Set<Text> generalHeadlineComment) {
 		putTexts(TextPart.generalHeadlineComment, generalHeadlineComment);
 	}
 
