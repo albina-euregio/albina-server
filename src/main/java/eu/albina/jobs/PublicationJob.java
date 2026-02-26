@@ -149,6 +149,11 @@ public class PublicationJob {
 		// all bulletins (aka. globalBulletins) are needed to create complete maps
 		List<AvalancheBulletin> globalBulletins = avalancheReportController.mergeOrSplitBulletins(publishedReports.stream());
 
+		for (AvalancheBulletin bulletin : globalBulletins) {
+			// for an update: even when AT-07 is unchanged, its generated resources need to go to the new publicationDate folder
+			bulletin.setPublicationDate(publicationDate.atZone(ZoneOffset.UTC));
+		}
+
 		for (AvalancheReport avalancheReport : publishedReports) {
 			Region region = avalancheReport.getRegion();
 			List<AvalancheBulletin> regionBulletins = globalBulletins.stream().filter(b -> b.affectsRegionOnlyPublished(region)).toList();
