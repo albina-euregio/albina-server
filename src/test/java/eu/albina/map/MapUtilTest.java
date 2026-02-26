@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.StandardSystemProperty;
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
+import eu.albina.controller.publication.PublicationController;
 import eu.albina.model.LocalServerInstance;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
@@ -41,6 +42,9 @@ public class MapUtilTest {
 
 	@Inject
 	RegionTestUtils regionTestUtils;
+
+	@Inject
+	PublicationController publicationController;
 
 	private LocalServerInstance serverInstance;
 	private Path folder;
@@ -165,6 +169,7 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
 
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			byte[] expected = Resources.toByteArray(Resources.getResource(name));
@@ -188,6 +193,8 @@ public class MapUtilTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstance);
 		avalancheReport.setBulletins(bulletinsTyrol, bulletins);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
+
 		assertEquals("2019-01-17/2019-01-16_16-00-00/2019-01-17_AT-07_en.pdf",
 			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
@@ -200,6 +207,7 @@ public class MapUtilTest {
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAragon, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("fd_ES-CT-L_thumbnail.png"));
@@ -216,6 +224,7 @@ public class MapUtilTest {
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("fd_ES-CT-L_thumbnail.png"));
@@ -233,6 +242,7 @@ public class MapUtilTest {
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
 		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
 	}
 
@@ -243,6 +253,7 @@ public class MapUtilTest {
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
 	}
 
@@ -251,7 +262,9 @@ public class MapUtilTest {
 	public void testPreviewMaps() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
-		MapUtil.createMapyrusMaps(AvalancheReport.of(bulletins, regionEuregio, serverInstance));
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
+		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
         byte[] actual = Files.readAllBytes(Path.of(StandardSystemProperty.JAVA_IO_TMPDIR.value() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
@@ -266,6 +279,7 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
+		publicationController.createSymbolicLinks(avalancheReport);
 		new PdfUtil(avalancheReport, LanguageCode.en, false).createPdf();
 	}
 

@@ -586,7 +586,8 @@ public class AvalancheBulletinService {
 			Region region = regionRepository.findById(regionId).orElseThrow();
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				BulletinStatus status = avalancheReportController.getInternalStatusForDay(startDate, region);
+				AvalancheReport report = avalancheReportController.getInternalReport(startDate, region);
+				BulletinStatus status = report != null ? report.getStatus() : null;
 
 				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted)) {
 					List<AvalancheBulletin> bulletins = List.of(bulletinsArray);
