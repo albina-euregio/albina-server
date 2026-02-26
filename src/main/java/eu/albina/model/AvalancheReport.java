@@ -390,7 +390,6 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("region", region)
-			.add("region.enabledLanguages", region != null ? region.getEnabledLanguages() : null)
 			.add("date", date)
 			.add("timestamp", timestamp)
 			.add("status", status)
