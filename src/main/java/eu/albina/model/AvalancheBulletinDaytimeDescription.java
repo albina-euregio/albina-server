@@ -2,29 +2,23 @@
 package eu.albina.model;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import eu.albina.model.enumerations.Complexity;
 import eu.albina.model.enumerations.DangerRating;
-import eu.albina.model.enumerations.LanguageCode;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -55,27 +49,9 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private boolean treeline;
 
-	@Lob
-	@Column(name = "TERRAIN_FEATURE_ABOVE_TEXTCAT")
-	private String terrainFeatureAboveTextcat;
-
-	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
-	@Column(name = "TERRAIN_FEATURE_ABOVE")
-	private Set<Text> terrainFeatureAbove;
-
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DANGER_RATING_BELOW", length = 191)
 	private DangerRating dangerRatingBelow;
-
-	@Lob
-	@Column(name = "TERRAIN_FEATURE_BELOW_TEXTCAT")
-	private String terrainFeatureBelowTextcat;
-
-	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
-	@Column(name = "TERRAIN_FEATURE_BELOW")
-	private Set<Text> terrainFeatureBelow;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "COMPLEXITY", length = 191)
@@ -100,11 +76,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "AVALANCHE_PROBLEM_5_ID")
 	private AvalancheProblem avalancheProblem5;
-
-	public AvalancheBulletinDaytimeDescription() {
-		this.terrainFeatureAbove = new HashSet<>();
-		this.terrainFeatureBelow = new HashSet<>();
-	}
 
 	public String getWarningLevelId() {
 		if (isHasElevationDependency())
@@ -159,60 +130,12 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		this.dangerRatingAbove = dangerRatingAbove;
 	}
 
-	private String getTerrainFeatureAboveTextcat() {
-		return terrainFeatureAboveTextcat;
-	}
-
-	public void setTerrainFeatureAboveTextcat(String terrainFeatureTextcat) {
-		this.terrainFeatureAboveTextcat = terrainFeatureTextcat;
-	}
-
-	private Set<Text> getTerrainFeatureAbove() {
-		return terrainFeatureAbove;
-	}
-
-	public String getTerrainFeatureAbove(LanguageCode languageCode) {
-		return terrainFeature(true).stream().filter(text -> text.languageCode() == languageCode).findFirst().map(Text::text).orElse(null);
-	}
-
-	public void setTerrainFeatureAbove(Set<Text> terrainFeature) {
-		this.terrainFeatureAbove = terrainFeature;
-	}
-
-	public void addTerrainFeatureAbove(Text terrainFeature) {
-		this.terrainFeatureAbove.add(terrainFeature);
-	}
-
 	public DangerRating getDangerRatingBelow() {
 		return dangerRatingBelow;
 	}
 
 	public void setDangerRatingBelow(DangerRating dangerRatingBelow) {
 		this.dangerRatingBelow = dangerRatingBelow;
-	}
-
-	private String getTerrainFeatureBelowTextcat() {
-		return terrainFeatureBelowTextcat;
-	}
-
-	public void setTerrainFeatureBelowTextcat(String terrainFeatureTextcat) {
-		this.terrainFeatureBelowTextcat = terrainFeatureTextcat;
-	}
-
-	private Set<Text> getTerrainFeatureBelow() {
-		return terrainFeatureBelow;
-	}
-
-	public String getTerrainFeatureBelow(LanguageCode languageCode) {
-		return terrainFeature(false).stream().filter(text -> text.languageCode() == languageCode).findFirst().map(Text::text).orElse(null);
-	}
-
-	public void setTerrainFeatureBelow(Set<Text> terrainFeature) {
-		this.terrainFeatureBelow = terrainFeature;
-	}
-
-	public void addTerrainFeatureBelow(Text terrainFeature) {
-		this.terrainFeatureBelow.add(terrainFeature);
 	}
 
 	public Complexity getComplexity() {
@@ -294,56 +217,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		return highest;
 	}
 
-	public Set<Text> terrainFeature(boolean above) {
-		if (isDangerLevelElevationDependency()) {
-			if (isHasElevationDependency() && !above) {
-				return getTerrainFeatureBelow();
-			} else {
-				return getTerrainFeatureAbove();
-			}
-		} else {
-			return highestDangerRatingTerrainFeature();
-		}
-	}
-
-	private Set<Text> highestDangerRatingTerrainFeature() {
-		Set<Text> terrainFeature = null;
-		if (terrainFeatureAbove != null && !terrainFeatureAbove.isEmpty()) {
-			terrainFeature = getTerrainFeatureAbove();
-			if (terrainFeatureBelow != null  && !terrainFeatureBelow.isEmpty() && getDangerRatingBelow().ordinal() > getDangerRatingAbove().ordinal()) {
-				terrainFeature = getTerrainFeatureBelow();
-			}
-		} else if (terrainFeatureBelow != null && !terrainFeatureBelow.isEmpty()) {
-			terrainFeature = getTerrainFeatureBelow();
-		}
-		return terrainFeature;
-	}
-
-	public String terrainFeatureTextcat(boolean above) {
-		if (isDangerLevelElevationDependency()) {
-			if (isHasElevationDependency() && !above) {
-				return getTerrainFeatureBelowTextcat();
-			} else {
-				return getTerrainFeatureAboveTextcat();
-			}
-		} else {
-			return highestDangerRatingTerrainFeatureTextcat();
-		}
-	}
-
-	private String highestDangerRatingTerrainFeatureTextcat() {
-		String terrainFeatureTextcat = null;
-		if (terrainFeatureAbove != null && !terrainFeatureAbove.isEmpty()) {
-			terrainFeatureTextcat = getTerrainFeatureAboveTextcat();
-			if (terrainFeatureBelow != null  && !terrainFeatureBelow.isEmpty() && getDangerRatingBelow().ordinal() > getDangerRatingAbove().ordinal()) {
-				terrainFeatureTextcat = getTerrainFeatureBelowTextcat();
-			}
-		} else if (terrainFeatureBelow != null && !terrainFeatureBelow.isEmpty()) {
-			terrainFeatureTextcat = getTerrainFeatureBelowTextcat();
-		}
-		return terrainFeatureTextcat;
-	}
-
 	@JsonIgnore
 	boolean isDangerLevelElevationDependency() {
 		return true; // FIXME
@@ -367,11 +240,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			return false;
 		if (!Objects.equals(this.dangerRatingAbove, other.dangerRatingAbove))
 			return false;
-		if (!Objects.equals(this.terrainFeatureAboveTextcat, other.terrainFeatureAboveTextcat))
-			return false;
 		if (!Objects.equals(this.dangerRatingBelow, other.dangerRatingBelow))
-			return false;
-		if (!Objects.equals(this.terrainFeatureBelowTextcat, other.terrainFeatureBelowTextcat))
 			return false;
 		if (!Objects.equals(this.complexity, other.complexity))
 			return false;

@@ -833,11 +833,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				forenoon.setTreeline(bulletin.getForenoon().getTreeline());
 				forenoon.setElevation(bulletin.getForenoon().getElevation());
 				forenoon.setDangerRatingAbove(bulletin.getForenoon().dangerRating(true));
-				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().terrainFeatureTextcat(true));
-				forenoon.setTerrainFeatureAbove(bulletin.getForenoon().terrainFeature(true));
 				forenoon.setDangerRatingBelow(bulletin.getForenoon().dangerRating(false));
-				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().terrainFeatureTextcat(false));
-				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().terrainFeature(false));
 				forenoon.setComplexity(bulletin.getForenoon().getComplexity());
 				forenoon.setAvalancheProblem1(bulletin.getForenoon().getAvalancheProblem1());
 				forenoon.setAvalancheProblem2(bulletin.getForenoon().getAvalancheProblem2());
@@ -855,11 +851,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				afternoon.setTreeline(bulletin.getAfternoon().getTreeline());
 				afternoon.setElevation(bulletin.getAfternoon().getElevation());
 				afternoon.setDangerRatingAbove(bulletin.getAfternoon().dangerRating(true));
-				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().terrainFeatureTextcat(true));
-				afternoon.setTerrainFeatureAbove(bulletin.getAfternoon().terrainFeature(true));
 				afternoon.setDangerRatingBelow(bulletin.getAfternoon().dangerRating(false));
-				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().terrainFeatureTextcat(false));
-				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().terrainFeature(false));
 				afternoon.setComplexity(bulletin.getAfternoon().getComplexity());
 				afternoon.setAvalancheProblem1(bulletin.getAfternoon().getAvalancheProblem1());
 				afternoon.setAvalancheProblem2(bulletin.getAfternoon().getAvalancheProblem2());
