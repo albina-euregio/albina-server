@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -28,13 +31,17 @@ import eu.albina.model.enumerations.DangerPattern;
 @Serdeable
 public class GenericObservation {
 	@EmbeddedId
+	@JsonUnwrapped
 	private GenericObservationId id;
 
 	@NotNull
 	@Column(name = "OBS_TYPE", nullable = false)
+	@Enumerated(EnumType.STRING)
+	@JsonProperty("$type")
 	private ObservationType obsType;
 
 	@Column(name = "EXTERNAL_URL")
+	@JsonProperty("$externalUrl")
 	private String externalUrl;
 
 	@Column(name = "STABILITY")
@@ -48,19 +55,21 @@ public class GenericObservation {
 	private String authorName;
 
 	@Column(name = "OBS_CONTENT")
+	@JsonProperty("content")
 	private String obsContent;
 
 	@Column(name = "OBS_DATA")
+	@JsonProperty("$data")
 	private String obsData;
 
 	@Column(name = "ELEVATION")
-	private Double elevation;
+	private Integer elevation;
 
 	@Column(name = "ELEVATION_LOWER_BOUND")
-	private Double elevationLowerBound;
+	private Integer elevationLowerBound;
 
 	@Column(name = "ELEVATION_UPPER_BOUND")
-	private Double elevationUpperBound;
+	private Integer elevationUpperBound;
 
 	@Column(name = "EVENT_DATE")
 	private Instant eventDate;
@@ -96,6 +105,7 @@ public class GenericObservation {
 	private String extraDialogRows;
 
 	@Column(name = "EXTERNAL_IMG")
+	@JsonProperty("$externalImgs")
 	private String externalImg;
 
 	@Column(name = "PERSON_INVOLVEMENT")
@@ -103,9 +113,11 @@ public class GenericObservation {
 	private PersonInvolvement personInvolvement;
 
 	@Column(name = "DELETED")
+	@JsonProperty("$deleted")
 	private Boolean deleted;
 
 	@Column(name = "ALLOW_EDIT")
+	@JsonProperty("allowEdit")
 	private Boolean allowEdit;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -176,27 +188,27 @@ public class GenericObservation {
 		this.obsData = obsData;
 	}
 
-	public Double getElevation() {
+	public Integer getElevation() {
 		return elevation;
 	}
 
-	public void setElevation(Double elevation) {
+	public void setElevation(Integer elevation) {
 		this.elevation = elevation;
 	}
 
-	public Double getElevationLowerBound() {
+	public Integer getElevationLowerBound() {
 		return elevationLowerBound;
 	}
 
-	public void setElevationLowerBound(Double elevationLowerBound) {
+	public void setElevationLowerBound(Integer elevationLowerBound) {
 		this.elevationLowerBound = elevationLowerBound;
 	}
 
-	public Double getElevationUpperBound() {
+	public Integer getElevationUpperBound() {
 		return elevationUpperBound;
 	}
 
-	public void setElevationUpperBound(Double elevationUpperBound) {
+	public void setElevationUpperBound(Integer elevationUpperBound) {
 		this.elevationUpperBound = elevationUpperBound;
 	}
 
@@ -344,13 +356,16 @@ public class GenericObservation {
 	}
 
 	@Embeddable
+	@Serdeable
 	public static class GenericObservationId {
 		@NotNull
 		@Column(name = "SOURCE", nullable = false, length = 191)
+		@JsonProperty("$source")
 		private String source;
 
 		@NotNull
 		@Column(name = "ID", nullable = false, length = 191)
+		@JsonProperty("$id")
 		private String id;
 
 		public GenericObservationId() {
