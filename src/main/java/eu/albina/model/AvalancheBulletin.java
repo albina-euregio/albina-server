@@ -392,21 +392,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	private Set<Text> getTexts(TextPart textPart) {
 		return textPartsMap.stream()
-			.filter(p -> p.getId().getTextType() == textPart)
-			.map(p -> new Text(p.getId().getLanguageCode(), p.getText()))
+			.filter(p -> p.getTextType() == textPart)
+			.map(p -> new Text(p.getLanguageCode(), p.getText()))
 			.collect(Collectors.toCollection(TreeSet::new));
 	}
 
 	private void putTexts(TextPart textPart, Set<Text> texts) {
-		textPartsMap.removeIf(p -> p.getId().getTextType() == textPart);
+		textPartsMap.removeIf(p -> p.getTextType() == textPart);
 		for (Text text : texts) {
-			AvalancheBulletinText.AvalancheBulletinTextId id = new AvalancheBulletinText.AvalancheBulletinTextId();
-			id.setLanguageCode(text.languageCode());
-			id.setTextType(textPart);
-			AvalancheBulletinText t = new AvalancheBulletinText();
-			t.setId(id);
-			t.setAvalancheBulletin(this);
-			t.setText(text.text());
+			AvalancheBulletinText t = new AvalancheBulletinText(this, textPart, text.languageCode(), text.text());
 			textPartsMap.add(t);
 		}
 	}

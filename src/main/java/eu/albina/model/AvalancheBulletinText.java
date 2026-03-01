@@ -3,35 +3,48 @@ package eu.albina.model;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.TextPart;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "avalanche_bulletin_texts")
+@IdClass(AvalancheBulletinText.AvalancheBulletinTextId.class)
 public class AvalancheBulletinText {
-	@EmbeddedId
-	private AvalancheBulletinTextId id;
+	@Id
+	@ManyToOne
+	private AvalancheBulletin avalancheBulletin;
+
+	@Id
+	@Enumerated(EnumType.STRING)
+	private TextPart textType;
+
+	@Id
+	@Enumerated(EnumType.STRING)
+	private LanguageCode languageCode;
 
 	@Column(name = "TEXT")
 	private String text;
 
-	@ManyToOne
-	@MapsId("avalancheBulletinId")
-	@JoinColumn(name = "AVALANCHE_BULLETIN_ID")
-	@JsonIgnore
-	private AvalancheBulletin avalancheBulletin;
+	public AvalancheBulletinText() {
+	}
+
+	public AvalancheBulletinText(AvalancheBulletin avalancheBulletin, TextPart textType, LanguageCode languageCode, String text) {
+		this.avalancheBulletin = avalancheBulletin;
+		this.textType = textType;
+		this.languageCode = languageCode;
+		this.text = text;
+	}
 
 	public AvalancheBulletin getAvalancheBulletin() {
 		return avalancheBulletin;
@@ -41,12 +54,20 @@ public class AvalancheBulletinText {
 		this.avalancheBulletin = avalancheBulletin;
 	}
 
-	public AvalancheBulletinTextId getId() {
-		return id;
+	public TextPart getTextType() {
+		return textType;
 	}
 
-	public void setId(AvalancheBulletinTextId id) {
-		this.id = id;
+	public void setTextType(TextPart textType) {
+		this.textType = textType;
+	}
+
+	public LanguageCode getLanguageCode() {
+		return languageCode;
+	}
+
+	public void setLanguageCode(LanguageCode languageCode) {
+		this.languageCode = languageCode;
 	}
 
 	public String getText() {
@@ -57,27 +78,25 @@ public class AvalancheBulletinText {
 		this.text = text;
 	}
 
-	@Embeddable
-	public static class AvalancheBulletinTextId {
-		@Column(name = "AVALANCHE_BULLETIN_ID", nullable = false, length = 191)
-		private String avalancheBulletinId;
+	public static class AvalancheBulletinTextId implements Serializable {
+		@ManyToOne
+		@JoinColumn(name = "AVALANCHE_BULLETIN_ID")
+		private AvalancheBulletin avalancheBulletin;
 
-		@NotNull
 		@Enumerated(EnumType.STRING)
-		@Column(name = "TEXT_TYPE", nullable = false)
+		@Column(name = "TEXT_TYPE")
 		private TextPart textType;
 
-		@NotNull
 		@Enumerated(EnumType.STRING)
-		@Column(name = "LANGUAGE_CODE", nullable = false, length = 191)
+		@Column(name = "LANGUAGE_CODE", length = 191)
 		private LanguageCode languageCode;
 
-		public String getAvalancheBulletinId() {
-			return avalancheBulletinId;
+		public AvalancheBulletin getAvalancheBulletin() {
+			return avalancheBulletin;
 		}
 
-		public void setAvalancheBulletinId(String avalancheBulletinId) {
-			this.avalancheBulletinId = avalancheBulletinId;
+		public void setAvalancheBulletin(AvalancheBulletin avalancheBulletin) {
+			this.avalancheBulletin = avalancheBulletin;
 		}
 
 		public TextPart getTextType() {
@@ -98,17 +117,13 @@ public class AvalancheBulletinText {
 
 		@Override
 		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			AvalancheBulletinTextId entity = (AvalancheBulletinTextId) o;
-			return Objects.equals(this.avalancheBulletinId, entity.avalancheBulletinId) &&
-				Objects.equals(this.textType, entity.textType) &&
-					Objects.equals(this.languageCode, entity.languageCode);
+			if (!(o instanceof AvalancheBulletinTextId that)) return false;
+			return Objects.equals(avalancheBulletin, that.avalancheBulletin) && textType == that.textType && languageCode == that.languageCode;
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(avalancheBulletinId, textType, languageCode);
+			return Objects.hash(avalancheBulletin, textType, languageCode);
 		}
 	}
 }
