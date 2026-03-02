@@ -48,6 +48,7 @@ public class AvalancheProblem extends AbstractPersistentObject {
 
 	@Column(name = "ASPECTS", columnDefinition = Aspect.Converter.COLUMN_DEFINITION)
 	@Convert(converter = Aspect.Converter.class)
+	@JsonDeserialize(as = LinkedHashSet.class)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
