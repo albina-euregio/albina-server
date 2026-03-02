@@ -4,13 +4,15 @@ package eu.albina.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,11 +42,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapKeyColumn;
-import jakarta.persistence.MapKeyEnumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -200,20 +199,17 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Column(name = "DANGER_PATTERN_2", length = 191)
 	private DangerPattern dangerPattern2;
 
-	/** Map containing all text parts available for a bulletin */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "avalanche_bulletin_texts", joinColumns = @JoinColumn(name = "AVALANCHE_BULLETIN_ID"), inverseJoinColumns = @JoinColumn(name = "TEXTS_ID"))
-	@MapKeyEnumerated(EnumType.STRING)
-	@MapKeyColumn(name = "TEXT_TYPE", length = 191)
+	/** Collection containing all text parts available for a bulletin */
+	@OneToMany(mappedBy = "avalancheBulletin", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JsonIgnore
-	private Map<TextPart, Texts> textPartsMap;
+	private Collection<AvalancheBulletinText> textPartsMap;
 
 	/**
 	 * Standard constructor for an avalanche bulletin.
 	 */
 	public AvalancheBulletin() {
 		additionalAuthors = new LinkedHashSet<>();
-		textPartsMap = new LinkedHashMap<>();
+		textPartsMap = new ArrayList<>();
 		publishedRegions = new LinkedHashSet<>();
 		savedRegions = new LinkedHashSet<>();
 		suggestedRegions = new LinkedHashSet<>();
@@ -268,10 +264,6 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void setOwnerRegion(String ownerRegion) {
 		this.ownerRegion = ownerRegion;
-	}
-
-	public Map<TextPart, Texts> getTextPartsMap() {
-		return textPartsMap;
 	}
 
 	public String getHighlightsTextcat() {
@@ -386,148 +378,171 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		this.generalHeadlineCommentNotes = generalHeadlineCommentNotes;
 	}
 
-	public Texts getHighlights() {
-		return textPartsMap.get(TextPart.highlights);
+	@Serdeable
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	record Text(LanguageCode languageCode, String text) implements Comparable<Text> {
+
+		private static final Comparator<Text> COMPARATOR = Comparator.comparing(Text::languageCode);
+
+		@Override
+		public int compareTo(Text o) {
+			return COMPARATOR.compare(this, o);
+		}
+	}
+
+	private Set<Text> getTexts(TextPart textPart) {
+		return textPartsMap.stream()
+			.filter(p -> p.getTextType() == textPart)
+			.map(p -> new Text(p.getLanguageCode(), p.getText()))
+			.collect(Collectors.toCollection(TreeSet::new));
+	}
+
+	private void putTexts(TextPart textPart, Set<Text> texts) {
+		textPartsMap.removeIf(p -> p.getTextType() == textPart);
+		for (Text text : texts) {
+			AvalancheBulletinText t = new AvalancheBulletinText(this, textPart, text.languageCode(), text.text());
+			textPartsMap.add(t);
+		}
+	}
+
+	public Set<Text> getHighlights() {
+		return getTexts(TextPart.highlights);
 	}
 
 	public String getTextPartIn(TextPart textPart, LanguageCode lang) {
-		Texts texts = textPartsMap.get(textPart);
-		if (texts == null) {
-			return null;
-		}
-		String text = texts.getText(lang);
-		if (text == null || text.isBlank()) {
-			return null;
-		}
-		return text.trim();
+		Set<Text> texts = getTexts(textPart);
+		return texts.stream().filter(t -> t.languageCode() == lang).findFirst()
+			.map(Text::text)
+			.map(String::trim)
+			.filter(s -> !s.isBlank()).orElse(null);
 	}
 
 	public String getHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.highlights, lang);
 	}
 
-	public void setHighlights(Texts highlights) {
-		textPartsMap.put(TextPart.highlights, highlights);
+	public void setHighlights(Set<Text> highlights) {
+		putTexts(TextPart.highlights, highlights);
 	}
 
-	public Texts getAvActivityHighlights() {
-		return textPartsMap.get(TextPart.avActivityHighlights);
+	public Set<Text> getAvActivityHighlights() {
+		return getTexts(TextPart.avActivityHighlights);
 	}
 
 	public String getAvActivityHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.avActivityHighlights, lang);
 	}
 
-	public void setAvActivityHighlights(Texts avActivityHighlights) {
-		textPartsMap.put(TextPart.avActivityHighlights, avActivityHighlights);
+	public void setAvActivityHighlights(Set<Text> avActivityHighlights) {
+		putTexts(TextPart.avActivityHighlights, avActivityHighlights);
 	}
 
-	public Texts getAvActivityComment() {
-		return textPartsMap.get(TextPart.avActivityComment);
+	public Set<Text> getAvActivityComment() {
+		return getTexts(TextPart.avActivityComment);
 	}
 
 	public String getAvActivityCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.avActivityComment, lang);
 	}
 
-	public void setAvActivityComment(Texts avActivityComment) {
-		textPartsMap.put(TextPart.avActivityComment, avActivityComment);
+	public void setAvActivityComment(Set<Text> avActivityComment) {
+		putTexts(TextPart.avActivityComment, avActivityComment);
 	}
 
-	public Texts getSynopsisHighlights() {
-		return textPartsMap.get(TextPart.synopsisHighlights);
+	public Set<Text> getSynopsisHighlights() {
+		return getTexts(TextPart.synopsisHighlights);
 	}
 
 	public String getSynopsisHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.synopsisHighlights, lang);
 	}
 
-	public void setSynopsisHighlights(Texts synopsisHighlights) {
-		textPartsMap.put(TextPart.synopsisHighlights, synopsisHighlights);
+	public void setSynopsisHighlights(Set<Text> synopsisHighlights) {
+		putTexts(TextPart.synopsisHighlights, synopsisHighlights);
 	}
 
-	public Texts getSynopsisComment() {
-		return textPartsMap.get(TextPart.synopsisComment);
+	public Set<Text> getSynopsisComment() {
+		return getTexts(TextPart.synopsisComment);
 	}
 
 	public String getSynopsisCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.synopsisComment, lang);
 	}
 
-	public void setSynopsisComment(Texts synopsisComment) {
-		textPartsMap.put(TextPart.synopsisComment, synopsisComment);
+	public void setSynopsisComment(Set<Text> synopsisComment) {
+		putTexts(TextPart.synopsisComment, synopsisComment);
 	}
 
-	public Texts getSnowpackStructureHighlights() {
-		return textPartsMap.get(TextPart.snowpackStructureHighlights);
+	public Set<Text> getSnowpackStructureHighlights() {
+		return getTexts(TextPart.snowpackStructureHighlights);
 	}
 
 	public String getSnowpackStructureHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.snowpackStructureHighlights, lang);
 	}
 
-	public void setSnowpackStructureHighlights(Texts snowpackStructureHighlights) {
-		textPartsMap.put(TextPart.snowpackStructureHighlights, snowpackStructureHighlights);
+	public void setSnowpackStructureHighlights(Set<Text> snowpackStructureHighlights) {
+		putTexts(TextPart.snowpackStructureHighlights, snowpackStructureHighlights);
 	}
 
-	public Texts getSnowpackStructureComment() {
-		return textPartsMap.get(TextPart.snowpackStructureComment);
+	public Set<Text> getSnowpackStructureComment() {
+		return getTexts(TextPart.snowpackStructureComment);
 	}
 
 	public String getSnowpackStructureCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.snowpackStructureComment, lang);
 	}
 
-	public void setSnowpackStructureComment(Texts snowpackStructureComment) {
-		textPartsMap.put(TextPart.snowpackStructureComment, snowpackStructureComment);
+	public void setSnowpackStructureComment(Set<Text> snowpackStructureComment) {
+		putTexts(TextPart.snowpackStructureComment, snowpackStructureComment);
 	}
 
-	public Texts getTravelAdvisoryHighlights() {
-		return textPartsMap.get(TextPart.travelAdvisoryHighlights);
+	public Set<Text> getTravelAdvisoryHighlights() {
+		return getTexts(TextPart.travelAdvisoryHighlights);
 	}
 
 	public String getTravelAdvisoryHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.travelAdvisoryHighlights, lang);
 	}
 
-	public void setTravelAdvisoryHighlights(Texts travelAdvisoryHighlights) {
-		textPartsMap.put(TextPart.travelAdvisoryHighlights, travelAdvisoryHighlights);
+	public void setTravelAdvisoryHighlights(Set<Text> travelAdvisoryHighlights) {
+		putTexts(TextPart.travelAdvisoryHighlights, travelAdvisoryHighlights);
 	}
 
-	public Texts getTravelAdvisoryComment() {
-		return textPartsMap.get(TextPart.travelAdvisoryComment);
+	public Set<Text> getTravelAdvisoryComment() {
+		return getTexts(TextPart.travelAdvisoryComment);
 	}
 
 	public String getTravelAdvisoryCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.travelAdvisoryComment, lang);
 	}
 
-	public void setTravelAdvisoryComment(Texts travelAdvisoryComment) {
-		textPartsMap.put(TextPart.travelAdvisoryComment, travelAdvisoryComment);
+	public void setTravelAdvisoryComment(Set<Text> travelAdvisoryComment) {
+		putTexts(TextPart.travelAdvisoryComment, travelAdvisoryComment);
 	}
 
-	public Texts getTendencyComment() {
-		return textPartsMap.get(TextPart.tendencyComment);
+	public Set<Text> getTendencyComment() {
+		return getTexts(TextPart.tendencyComment);
 	}
 
 	public String getTendencyCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.tendencyComment, lang);
 	}
 
-	public void setTendencyComment(Texts tendencyComment) {
-		textPartsMap.put(TextPart.tendencyComment, tendencyComment);
+	public void setTendencyComment(Set<Text> tendencyComment) {
+		putTexts(TextPart.tendencyComment, tendencyComment);
 	}
 
-	public Texts getGeneralHeadlineComment() {
-		return textPartsMap.get(TextPart.generalHeadlineComment);
+	public Set<Text> getGeneralHeadlineComment() {
+		return getTexts(TextPart.generalHeadlineComment);
 	}
 
 	public String getGeneralHeadlineCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.generalHeadlineComment, lang);
 	}
 
-	public void setGeneralHeadlineComment(Texts generalHeadlineComment) {
-		textPartsMap.put(TextPart.generalHeadlineComment, generalHeadlineComment);
+	public void setGeneralHeadlineComment(Set<Text> generalHeadlineComment) {
+		putTexts(TextPart.generalHeadlineComment, generalHeadlineComment);
 	}
 
 	public Tendency getTendency() {
@@ -820,11 +835,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				forenoon.setTreeline(bulletin.getForenoon().getTreeline());
 				forenoon.setElevation(bulletin.getForenoon().getElevation());
 				forenoon.setDangerRatingAbove(bulletin.getForenoon().dangerRating(true));
-				forenoon.setTerrainFeatureAboveTextcat(bulletin.getForenoon().terrainFeatureTextcat(true));
-				forenoon.setTerrainFeatureAbove(bulletin.getForenoon().terrainFeature(true));
 				forenoon.setDangerRatingBelow(bulletin.getForenoon().dangerRating(false));
-				forenoon.setTerrainFeatureBelowTextcat(bulletin.getForenoon().terrainFeatureTextcat(false));
-				forenoon.setTerrainFeatureBelow(bulletin.getForenoon().terrainFeature(false));
 				forenoon.setComplexity(bulletin.getForenoon().getComplexity());
 				forenoon.setAvalancheProblem1(bulletin.getForenoon().getAvalancheProblem1());
 				forenoon.setAvalancheProblem2(bulletin.getForenoon().getAvalancheProblem2());
@@ -842,11 +853,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 				afternoon.setTreeline(bulletin.getAfternoon().getTreeline());
 				afternoon.setElevation(bulletin.getAfternoon().getElevation());
 				afternoon.setDangerRatingAbove(bulletin.getAfternoon().dangerRating(true));
-				afternoon.setTerrainFeatureAboveTextcat(bulletin.getAfternoon().terrainFeatureTextcat(true));
-				afternoon.setTerrainFeatureAbove(bulletin.getAfternoon().terrainFeature(true));
 				afternoon.setDangerRatingBelow(bulletin.getAfternoon().dangerRating(false));
-				afternoon.setTerrainFeatureBelowTextcat(bulletin.getAfternoon().terrainFeatureTextcat(false));
-				afternoon.setTerrainFeatureBelow(bulletin.getAfternoon().terrainFeature(false));
 				afternoon.setComplexity(bulletin.getAfternoon().getComplexity());
 				afternoon.setAvalancheProblem1(bulletin.getAfternoon().getAvalancheProblem1());
 				afternoon.setAvalancheProblem2(bulletin.getAfternoon().getAvalancheProblem2());
@@ -856,7 +863,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			}
 		}
 
-		textPartsMap = bulletin.textPartsMap;
+		for (TextPart textPart : TextPart.values()) {
+			putTexts(textPart, bulletin.getTexts(textPart));
+		}
 
 		setAvActivityHighlightsTextcat(bulletin.getAvActivityHighlightsTextcat());
 		setAvActivityCommentTextcat(bulletin.getAvActivityCommentTextcat());
@@ -929,5 +938,4 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	public int compareTo(AvalancheBulletin other) {
 		return Integer.compare(other.getHighestDangerRatingDouble(), getHighestDangerRatingDouble());
 	}
-
 }

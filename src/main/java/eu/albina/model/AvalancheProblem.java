@@ -4,7 +4,6 @@ package eu.albina.model;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -13,7 +12,6 @@ import io.micronaut.serde.annotation.Serdeable;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Direction;
-import eu.albina.model.enumerations.LanguageCode;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CollectionTable;
@@ -25,8 +23,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -96,19 +92,8 @@ public class AvalancheProblem extends AbstractPersistentObject {
 			@AttributeOverride(name = "frequency", column = @Column(name = "FREQUENCY", length = 191)) })
 	private EawsMatrixInformation eawsMatrixInformation;
 
-	@Lob
-	@Column(name = "TERRAIN_FEATURE_TEXTCAT")
-	private String terrainFeatureTextcat;
-
-	@ElementCollection(fetch = FetchType.EAGER)
-	@JoinTable(name = "text_parts", joinColumns = @JoinColumn(name = "TEXTS_ID"))
-	@Column(name = "TERRAIN_FEATURE")
-	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	private Set<Text> terrainFeature;
-
 	public AvalancheProblem() {
 		this.aspects = new LinkedHashSet<>();
-		this.terrainFeature = new TreeSet<>(); // sort texts by language to allow caching of API calls
 	}
 
 	public AvalancheType getAvalancheType() {
@@ -197,30 +182,6 @@ public class AvalancheProblem extends AbstractPersistentObject {
 		this.eawsMatrixInformation = eawsMatrixInformation;
 	}
 
-	public String getTerrainFeatureTextcat() {
-		return terrainFeatureTextcat;
-	}
-
-	public void setTerrainFeatureTextcat(String terrainFeatureTextcat) {
-		this.terrainFeatureTextcat = terrainFeatureTextcat;
-	}
-
-	public Set<Text> getTerrainFeature() {
-		return terrainFeature;
-	}
-
-	public String getTerrainFeature(LanguageCode languageCode) {
-		return terrainFeature.stream().filter(text -> text.getLanguage() == languageCode).findFirst().map(Text::getText).orElse(null);
-	}
-
-	public void setTerrainFeature(Set<Text> terrainFeature) {
-		this.terrainFeature = terrainFeature;
-	}
-
-	public void addTerrainFeature(Text terrainFeature) {
-		this.terrainFeature.add(terrainFeature);
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
@@ -246,8 +207,6 @@ public class AvalancheProblem extends AbstractPersistentObject {
 		if (!Objects.equals(this.matrixInformation, other.matrixInformation))
 			return false;
 		if (!Objects.equals(this.eawsMatrixInformation, other.eawsMatrixInformation))
-			return false;
-		if (!Objects.equals(this.terrainFeatureTextcat, other.terrainFeatureTextcat))
 			return false;
 
 		return true;
