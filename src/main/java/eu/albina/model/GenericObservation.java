@@ -4,8 +4,8 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
@@ -58,8 +58,9 @@ public class GenericObservation {
 	@JsonProperty("content")
 	private String obsContent;
 
-	@Column(name = "OBS_DATA")
+	@Column(name = "OBS_DATA", columnDefinition = "json")
 	@JsonProperty("$data")
+	@JsonRawValue
 	private String obsData;
 
 	@Column(name = "ELEVATION")
