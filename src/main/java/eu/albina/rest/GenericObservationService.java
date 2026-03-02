@@ -1,5 +1,6 @@
 package eu.albina.rest;
 
+import java.time.ZoneOffset;
 import java.util.List;
 
 import io.micronaut.core.annotation.NonNull;
@@ -33,7 +34,10 @@ public class GenericObservationService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
-		return genericObservationRepository.findByEventDateBetween(DateControllerUtil.parseDateOrNull(start), DateControllerUtil.parseDateOrNull(end));
+		return genericObservationRepository.findByEventDateBetween(
+			DateControllerUtil.parseDateOrNull(start).atZone(ZoneOffset.UTC),
+			DateControllerUtil.parseDateOrNull(end).atZone(ZoneOffset.UTC)
+		);
 	}
 
 	@Get("/:source/:id")

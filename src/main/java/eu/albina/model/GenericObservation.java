@@ -1,6 +1,6 @@
 package eu.albina.model;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -73,7 +73,7 @@ public class GenericObservation {
 	private Integer elevationUpperBound;
 
 	@Column(name = "EVENT_DATE")
-	private Instant eventDate;
+	private ZonedDateTime eventDate;
 
 	@Column(name = "LATITUDE")
 	private Double latitude;
@@ -88,7 +88,7 @@ public class GenericObservation {
 	private String regionId;
 
 	@Column(name = "REPORT_DATE")
-	private Instant reportDate;
+	private ZonedDateTime reportDate;
 
 	@Column(name = "AVALANCHE_PROBLEMS", columnDefinition = AvalancheProblem.Converter.COLUMN_DEFINITION)
 	@Convert(converter = AvalancheProblem.Converter.class)
@@ -213,11 +213,11 @@ public class GenericObservation {
 		this.elevationUpperBound = elevationUpperBound;
 	}
 
-	public Instant getEventDate() {
+	public ZonedDateTime getEventDate() {
 		return eventDate;
 	}
 
-	public void setEventDate(Instant eventDate) {
+	public void setEventDate(ZonedDateTime eventDate) {
 		this.eventDate = eventDate;
 	}
 
@@ -253,11 +253,11 @@ public class GenericObservation {
 		this.regionId = regionId;
 	}
 
-	public Instant getReportDate() {
+	public ZonedDateTime getReportDate() {
 		return reportDate;
 	}
 
-	public void setReportDate(Instant reportDate) {
+	public void setReportDate(ZonedDateTime reportDate) {
 		this.reportDate = reportDate;
 	}
 
