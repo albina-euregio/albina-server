@@ -165,9 +165,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "NATURAL_RELEASE")
 	private Probability naturalRelease;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "DANGER_SIGN")
+	@Column(name = "DANGER_SIGNS", columnDefinition = DangerSign.Converter.COLUMN_DEFINITION)
+	@Convert(converter = DangerSign.Converter.class)
 	private Set<DangerSign> dangerSigns;
 
 	/** Information about the selected field in the EAWS matrix */
