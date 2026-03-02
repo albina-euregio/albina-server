@@ -61,7 +61,7 @@ public class GenericObservation {
 	@Column(name = "OBS_DATA", columnDefinition = "json")
 	@JsonProperty("$data")
 	@JsonRawValue
-	private String obsData;
+	private Object obsData;
 
 	@Column(name = "ELEVATION")
 	private Integer elevation;
@@ -181,11 +181,11 @@ public class GenericObservation {
 		this.obsContent = obsContent;
 	}
 
-	public String getObsData() {
+	public Object getObsData() {
 		return obsData;
 	}
 
-	public void setObsData(String obsData) {
+	public void setObsData(Object obsData) {
 		this.obsData = obsData;
 	}
 
