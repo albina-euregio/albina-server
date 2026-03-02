@@ -20,6 +20,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import eu.albina.model.converter.EnumSetToStringConverter;
 import eu.albina.model.enumerations.Aspect;
@@ -61,6 +63,7 @@ public class GenericObservation {
 	@Column(name = "OBS_DATA", columnDefinition = "json")
 	@JsonProperty("$data")
 	@JsonRawValue
+	@JdbcTypeCode(SqlTypes.JSON)
 	private Object obsData;
 
 	@Column(name = "ELEVATION")
@@ -102,8 +105,10 @@ public class GenericObservation {
 	@Convert(converter = ImportantObservation.Converter.class)
 	private Set<ImportantObservation> importantObservation;
 
-	@Column(name = "EXTRA_DIALOG_ROWS")
-	private String extraDialogRows;
+	@Column(name = "EXTRA_DIALOG_ROWS", columnDefinition = "json")
+	@JsonRawValue
+	@JdbcTypeCode(SqlTypes.JSON)
+	private Object extraDialogRows;
 
 	@Column(name = "EXTERNAL_IMG")
 	@JsonProperty("$externalImgs")
@@ -285,11 +290,11 @@ public class GenericObservation {
 		this.importantObservation = importantObservation;
 	}
 
-	public String getExtraDialogRows() {
+	public Object getExtraDialogRows() {
 		return extraDialogRows;
 	}
 
-	public void setExtraDialogRows(String extraDialogRows) {
+	public void setExtraDialogRows(Object extraDialogRows) {
 		this.extraDialogRows = extraDialogRows;
 	}
 
