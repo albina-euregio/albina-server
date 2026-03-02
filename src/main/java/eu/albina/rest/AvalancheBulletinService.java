@@ -32,6 +32,7 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.controller.publication.PublicationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
 import eu.albina.jobs.PublicationStrategy;
@@ -110,6 +111,9 @@ public class AvalancheBulletinService {
 
 	@Inject
 	private UserRepository userRepository;
+
+	@Inject
+	PublicationController publicationController;
 
 	@Inject
 	PublicationJob publicationJob;
@@ -372,6 +376,7 @@ public class AvalancheBulletinService {
 			avalancheReport.setStatus(BulletinStatus.draft); // preview
 
 			MapUtil.createMapyrusMaps(avalancheReport);
+			publicationController.createSymbolicLinks(avalancheReport);
 
 			final Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
 
