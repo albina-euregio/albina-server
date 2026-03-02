@@ -25,6 +25,8 @@ import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TerrainType;
 import eu.albina.model.enumerations.Thickness;
 import eu.albina.model.enumerations.Wetness;
+
+import io.micronaut.data.annotation.DateUpdated;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -71,6 +73,7 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	private Instant creationDate;
 
 	@Column(name = "UPDATE_DATE")
+	@DateUpdated
 	private Instant updateDate;
 
 	/** Validity of the danger source variant. */

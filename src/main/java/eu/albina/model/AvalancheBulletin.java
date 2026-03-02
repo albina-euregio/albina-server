@@ -79,9 +79,9 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	private Set<String> additionalAuthors;
 
-	@Column(name = "SAVE_DATE")
+	@Column(name = "UPDATE_DATE")
 	@DateUpdated
-	private ZonedDateTime saveDate;
+	private ZonedDateTime updateDate;
 
 	@Column(name = "PUBLICATION_DATE")
 	private ZonedDateTime publicationDate;
@@ -250,12 +250,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			this.additionalAuthors.add(additionalAuthor);
 	}
 
-	public ZonedDateTime getSaveDate() {
-		return saveDate;
+	public ZonedDateTime getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setSaveDate(ZonedDateTime saveDate) {
-		this.saveDate = saveDate;
+	public void setUpdateDate(ZonedDateTime saveDate) {
+		this.updateDate = saveDate;
 	}
 
 	public String getOwnerRegion() {
