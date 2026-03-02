@@ -26,6 +26,8 @@ import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -63,6 +65,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	@Column(name = "TIMESTAMP")
 	private ZonedDateTime timestamp;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
 	private BulletinStatus status;
 
