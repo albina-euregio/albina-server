@@ -299,9 +299,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "REMOTE_TRIGGERING")
 	private Probability remoteTriggering;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "TERRAIN_TYPE")
+	@Column(name = "TERRAIN_TYPES")
+	@Convert(converter = TerrainType.Converter.class)
 	private Set<TerrainType> terrainTypes;
 
 	/** --------------------- */
