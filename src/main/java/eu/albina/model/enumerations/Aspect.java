@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import eu.albina.model.converter.EnumSetToStringConverter;
 import eu.albina.util.XMLResourceBundleControl;
 
 public enum Aspect {
@@ -16,7 +17,7 @@ public enum Aspect {
 
 	public String toString(Locale locale) {
 		return ResourceBundle.getBundle("i18n.Aspect", locale, new XMLResourceBundleControl())
-				.getString(name());
+			.getString(name());
 	}
 
 	public String toCaamlString() {
@@ -61,15 +62,15 @@ public enum Aspect {
 	}
 
 	private static int bitmask(Aspect aspect) {
-        return switch (aspect) {
-            case N -> 0b10000000;
-            case NE -> 0b01000000;
-            case E -> 0b00100000;
-            case SE -> 0b00010000;
-            case S -> 0b00001000;
-            case SW -> 0b00000100;
-            case W -> 0b00000010;
-            case NW -> 0b00000001;
+		return switch (aspect) {
+			case N -> 0b10000000;
+			case NE -> 0b01000000;
+			case E -> 0b00100000;
+			case SE -> 0b00010000;
+			case S -> 0b00001000;
+			case SW -> 0b00000100;
+			case W -> 0b00000010;
+			case NW -> 0b00000001;
 		};
 	}
 
@@ -85,5 +86,16 @@ public enum Aspect {
 		}
 		Aspect middleAspect = Stream.of(Aspect.N, Aspect.S, Aspect.W, Aspect.E).filter(sorted.subList(1, sorted.size() - 1)::contains).findFirst().orElseThrow();
 		return List.of(sorted.getFirst(), middleAspect, sorted.getLast());
+	}
+
+	@jakarta.persistence.Converter
+	public static class Converter extends EnumSetToStringConverter<Aspect> {
+
+		public static final String COLUMN_DEFINITION = "set('N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW')";
+
+		@Override
+		protected Class<Aspect> getEnumClass() {
+			return Aspect.class;
+		}
 	}
 }

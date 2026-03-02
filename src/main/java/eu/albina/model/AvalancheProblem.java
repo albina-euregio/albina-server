@@ -16,6 +16,7 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -45,10 +46,8 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	@Column(name = "AVALANCHE_PROBLEM", length = 191)
 	private eu.albina.model.enumerations.AvalancheProblem avalancheProblem;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "avalanche_problem_aspects", joinColumns = @JoinColumn(name = "AVALANCHE_PROBLEM_ID", referencedColumnName = "ID"))
-	@Column(name = "ASPECT")
-	@JsonDeserialize(as = LinkedHashSet.class)
+	@Column(name = "ASPECTS", columnDefinition = Aspect.Converter.COLUMN_DEFINITION)
+	@Convert(converter = Aspect.Converter.class)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")

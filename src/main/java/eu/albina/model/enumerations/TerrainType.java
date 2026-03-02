@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model.enumerations;
 
+import eu.albina.model.converter.EnumSetToStringConverter;
+
 public enum TerrainType {
 	gullies_and_bowls,
 	adjacent_to_ridgelines,
@@ -24,4 +26,14 @@ public enum TerrainType {
 	regions_with_a_lot_of_snow,
 	regions_exposed_to_precipitation,
 	regions_exposed_to_heavier_precipitation,
+	;
+
+	@jakarta.persistence.Converter
+	public static class Converter extends EnumSetToStringConverter<TerrainType> {
+
+		@Override
+		protected Class<TerrainType> getEnumClass() {
+			return TerrainType.class;
+		}
+	}
 }

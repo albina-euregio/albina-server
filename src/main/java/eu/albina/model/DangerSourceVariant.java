@@ -18,6 +18,7 @@ import eu.albina.model.enumerations.Distribution;
 import eu.albina.model.enumerations.GlidingSnowActivity;
 import eu.albina.model.enumerations.GrainShape;
 import eu.albina.model.enumerations.HandHardness;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Probability;
 import eu.albina.model.enumerations.Recognizability;
 import eu.albina.model.enumerations.SnowpackPosition;
@@ -33,6 +34,7 @@ import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -106,9 +108,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "AVALANCHE_TYPE")
 	private AvalancheType avalancheType;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "ASPECT")
+	@Column(name = "ASPECTS", columnDefinition = Aspect.Converter.COLUMN_DEFINITION)
+	@Convert(converter = Aspect.Converter.class)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
@@ -123,9 +124,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "TREELINE_LOW")
 	private Boolean treelineLow;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_aspects_of_existence", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "ASPECT")
+	@Column(name = "ASPECTS_OF_EXISTENCE", columnDefinition = Aspect.Converter.COLUMN_DEFINITION)
+	@Convert(converter = Aspect.Converter.class)
 	private Set<Aspect> aspectsOfExistence;
 
 	@Column(name = "ELEVATION_HIGH_OF_EXISTENCE")
@@ -165,9 +165,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "NATURAL_RELEASE")
 	private Probability naturalRelease;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_danger_signs", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "DANGER_SIGN")
+	@Column(name = "DANGER_SIGNS", columnDefinition = DangerSign.Converter.COLUMN_DEFINITION)
+	@Convert(converter = DangerSign.Converter.class)
 	private Set<DangerSign> dangerSigns;
 
 	/** Information about the selected field in the EAWS matrix */
@@ -246,10 +245,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "SLAB_DISTRIBUTION")
 	private Distribution slabDistribution;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_weak_layer_grain_shapes", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "WEAK_LAYER_GRAIN_SHAPE")
-	@Enumerated(EnumType.STRING)
+	@Column(name = "WEAK_LAYER_GRAIN_SHAPES")
+	@Convert(converter = GrainShape.Converter.class)
 	private Set<GrainShape> weakLayerGrainShapes;
 
 	@Column(name = "WEAK_LAYER_GRAIN_SIZE_UPPER_LIMIT", columnDefinition = "double")
@@ -300,9 +297,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "REMOTE_TRIGGERING")
 	private Probability remoteTriggering;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_terrain_types", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "TERRAIN_TYPE")
+	@Column(name = "TERRAIN_TYPES")
+	@Convert(converter = TerrainType.Converter.class)
 	private Set<TerrainType> terrainTypes;
 
 	/** --------------------- */
