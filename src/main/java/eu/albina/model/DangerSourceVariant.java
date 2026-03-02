@@ -18,6 +18,7 @@ import eu.albina.model.enumerations.Distribution;
 import eu.albina.model.enumerations.GlidingSnowActivity;
 import eu.albina.model.enumerations.GrainShape;
 import eu.albina.model.enumerations.HandHardness;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Probability;
 import eu.albina.model.enumerations.Recognizability;
 import eu.albina.model.enumerations.SnowpackPosition;
@@ -33,6 +34,7 @@ import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -106,9 +108,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "AVALANCHE_TYPE")
 	private AvalancheType avalancheType;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_aspects", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "ASPECT")
+	@Column(name = "ASPECTS", columnDefinition = Aspect.Converter.COLUMN_DEFINITION)
+	@Convert(converter = Aspect.Converter.class)
 	private Set<Aspect> aspects;
 
 	@Column(name = "ELEVATION_HIGH")
@@ -123,9 +124,8 @@ public class DangerSourceVariant extends AbstractPersistentObject
 	@Column(name = "TREELINE_LOW")
 	private Boolean treelineLow;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "danger_source_variant_aspects_of_existence", joinColumns = @JoinColumn(name = "DANGER_SOURCE_VARIANT_ID"))
-	@Column(name = "ASPECT")
+	@Column(name = "ASPECTS_OF_EXISTENCE", columnDefinition = Aspect.Converter.COLUMN_DEFINITION)
+	@Convert(converter = Aspect.Converter.class)
 	private Set<Aspect> aspectsOfExistence;
 
 	@Column(name = "ELEVATION_HIGH_OF_EXISTENCE")
