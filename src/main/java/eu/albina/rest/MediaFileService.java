@@ -10,42 +10,40 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
-import eu.albina.controller.RegionRepository;
-import eu.albina.controller.UserRepository;
-import eu.albina.jobs.PublicationStrategy;
-import eu.albina.model.LocalServerInstance;
-import eu.albina.util.GlobalVariables;
-import io.micronaut.http.HttpStatus;
-import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Part;
-import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.QueryValue;
-import io.micronaut.http.exceptions.HttpStatusException;
-import io.micronaut.http.multipart.CompletedFileUpload;
-import io.micronaut.security.annotation.Secured;
-import jakarta.inject.Inject;
-import jakarta.servlet.annotation.MultipartConfig;
-import io.micronaut.http.annotation.Consumes;
-import io.micronaut.http.annotation.Produces;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
+import eu.albina.controller.RegionRepository;
+import eu.albina.controller.UserRepository;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
 import eu.albina.exception.AlbinaException;
+import eu.albina.jobs.PublicationStrategy;
+import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
-import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.util.GlobalVariables;
 import eu.albina.util.RssUtil;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Consumes;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Part;
+import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.inject.Inject;
+import jakarta.servlet.annotation.MultipartConfig;
 
 @MultipartConfig
 @Controller("/media")
@@ -75,13 +73,13 @@ public class MediaFileService {
 	@Consumes({MediaType.MULTIPART_FORM_DATA})
 	@Operation(summary = "Save media file")
 	public void saveMediaFile(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String dateString,
-		@QueryValue("region") String regionId,
-		@QueryValue("lang") LanguageCode language,
-		@QueryValue("important") boolean important,
-		@Part("text") String text,
-		@Part("file") CompletedFileUpload file,
-		Principal principal) {
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String dateString,
+			@QueryValue("region") String regionId,
+			@QueryValue("lang") LanguageCode language,
+			@QueryValue("important") boolean important,
+			@Part("text") String text,
+			@Part("file") CompletedFileUpload file,
+			Principal principal) {
 		try {
 			logger.info("Saving media file: {} (size={}, type={})", file.getFilename(), 0, file.getContentType());
 
@@ -117,18 +115,34 @@ public class MediaFileService {
 
 			String mp3FileUrl = getMediaFileUrl(language, region, localServerInstance) + "/" + mp3FileName;
 
-			String subject = MessageFormat.format(language.getBundleString("email.media.subject"), region.getWebsiteName(language), formattedDate, user.getName());
-			String emailHtml = String.format("%s<br><br>%s<br><br>%s",
-				text.replace("\n", "<br>"),
-				String.format("<a href=\"%s\">%s</a>", mp3FileUrl, language.getBundleString("email.media.link.mp3")),
-				MessageFormat.format(language.getBundleString("email.media.text"), user.getName()));
-			RapidMailConfiguration config = rapidMailController.getConfiguration(region, language, "media").orElseThrow();
-			rapidMailController.sendEmail(config, emailHtml, subject);
+			final String subject = MessageFormat.format(language.getBundleString("email.media.subject"),
+					region.getWebsiteName(language), formattedDate, user.getName());
+			final String emailHtml = String.format("%s<br><br>%s<br><br>%s",
+					text.replace("\n", "<br>"),
+					String.format("<a href=\"%s\">%s</a>", mp3FileUrl,
+							language.getBundleString("email.media.link.mp3")),
+					MessageFormat.format(language.getBundleString("email.media.text"), user.getName()));
+			rapidMailController.getConfiguration(region, language, "media").ifPresent(
+					config -> {
+						try {
+							rapidMailController.sendEmail(config, emailHtml, subject);
+						} catch (Exception ex) {
+							logger.warn("Failed to send email to mailing list (media)", ex);
+						}
+					});
 
 			if (important) {
-				subject = MessageFormat.format(language.getBundleString("email.media.important.subject"), region.getWebsiteName(language), formattedDate, user.getName());
-				config = rapidMailController.getConfiguration(region, language, "media+").orElseThrow();
-				rapidMailController.sendEmail(config, emailHtml, subject);
+				final String importantSubject = MessageFormat.format(
+						language.getBundleString("email.media.important.subject"), region.getWebsiteName(language),
+						formattedDate, user.getName());
+				rapidMailController.getConfiguration(region, language, "media+").ifPresent(
+						config -> {
+							try {
+								rapidMailController.sendEmail(config, emailHtml, importantSubject);
+							} catch (Exception ex) {
+								logger.warn("Failed to send email to mailing list (media+)", ex);
+							}
+						});
 			}
 
 			// set publication flag
@@ -143,22 +157,22 @@ public class MediaFileService {
 	@Produces("application/rss+xml")
 	@Operation(summary = "Get media files as RSS feed")
 	public String getRssFeed(
-		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
+			@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language
 	) throws Exception {
 		final LocalServerInstance serverInstance = globalVariables.getLocalServerInstance();
 		final Region region = new Region(regionId);
 		return RssUtil.getRss(
-			language,
-			region,
-			getMediaPath(serverInstance, region, language));
+				language,
+				region,
+				getMediaPath(serverInstance, region, language));
 	}
 
 	public static Path getMediaPath(LocalServerInstance serverInstance, Region region, LanguageCode lang) {
 		Path mediaPath = Paths.get(serverInstance.mediaPath());
 		return mediaPath
-			.resolve(region.getId())
-			.resolve(lang.name());
+				.resolve(region.getId())
+				.resolve(lang.name());
 	}
 
 	public static String getMediaFileUrl(LanguageCode lang, Region region, LocalServerInstance serverInstance) {
