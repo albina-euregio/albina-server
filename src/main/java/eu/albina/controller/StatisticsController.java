@@ -441,9 +441,9 @@ public class StatisticsController {
 		sb.append(csvDeliminator);
 		sb.append(dangerSourceVariant.getDangerSigns() != null ? dangerSourceVariant.getDangerSigns().stream().map(DangerSign::toString).collect(Collectors.joining(",")) : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getComment() != null ? dangerSourceVariant.getComment().replace(";", ",") : notAvailableString);
+		sb.append(dangerSourceVariant.getComment() != null ? StringEscapeUtils.escapeCsv(dangerSourceVariant.getComment().replace(";", ",")) : notAvailableString);
 		sb.append(csvDeliminator);
-		sb.append(dangerSourceVariant.getUncertainty() != null ? dangerSourceVariant.getUncertainty().replace(";", ",") : notAvailableString);
+		sb.append(dangerSourceVariant.getUncertainty() != null ? StringEscapeUtils.escapeCsv(dangerSourceVariant.getUncertainty().replace(";", ",")) : notAvailableString);
 		sb.append(csvDeliminator);
 
 		addEawsMatrixInformation(sb, dangerSourceVariant.getEawsMatrixInformation());
