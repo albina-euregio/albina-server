@@ -16,5 +16,5 @@ SET STATUS = CASE STATUS
                  else null end;
 
 ALTER TABLE avalanche_reports
-    MODIFY COLUMN STATUS set ('republished', 'resubmitted', 'updated', 'published', 'submitted', 'draft', 'missing');
+    MODIFY COLUMN STATUS enum ('republished', 'resubmitted', 'updated', 'published', 'submitted', 'draft', 'missing');
 
