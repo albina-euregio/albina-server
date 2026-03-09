@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HttpClientUtil;
@@ -15,22 +18,88 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.Year;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
+import java.util.concurrent.ExecutionException;
 
 @Singleton
-class Wordpress {
+public class Wordpress {
 
 	@Inject
 	HttpClient client;
 
 	@Inject
 	ObjectMapper objectMapper;
+
+	final LoadingCache<URI, List<BlogItem>> postsCache = CacheBuilder.newBuilder()
+		.expireAfterWrite(Duration.ofMinutes(5))
+		.build(new CacheLoader<>() {
+			@Override
+			public List<BlogItem> load(URI uri) throws Exception {
+				HttpRequest request = HttpRequest.newBuilder(uri).build();
+				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				Item[] items = objectMapper.readValue(response.body(), Item[].class);
+				return List.of(items);
+			}
+		});
+
+	final LoadingCache<URI, BlogItem> postCache = CacheBuilder.newBuilder()
+		.expireAfterWrite(Duration.ofMinutes(5))
+		.build(new CacheLoader<>() {
+			@Override
+			public BlogItem load(URI uri) throws Exception {
+				HttpRequest request = HttpRequest.newBuilder(uri).build();
+				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				return objectMapper.readValue(response.body(), Item.class);
+			}
+		});
+
+	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
+		Map<String, Object> params = new TreeMap<>(Map.of(
+			"lang", config.getLanguageCode(),
+			"_embed", "wp:term",
+			"_fields", String.join(",",
+				"_links",
+				"_embedded",
+				"categories",
+				"date",
+				"featured_image_url",
+				"featured_media",
+				"id",
+				"link",
+				"polylang_current_lang",
+				"polylang_translations",
+				"tags",
+				"title"
+			),
+			"per_page", Integer.toString(99)
+		));
+		if (searchText != null && !searchText.isBlank()) {
+			params.put("search", searchText);
+		}
+		if (searchCategory != null && !searchCategory.isBlank()) {
+			params.put("categories", searchCategory);
+		}
+		if (year != null && year.getValue() > 0) {
+			params.put("after", year.atMonth(1).atDay(1));
+			params.put("before", year.atMonth(12).atDay(31));
+		}
+		URI uri = URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(params));
+		return postsCache.get(uri);
+	}
+
+	public BlogItem getCachedBlogPost(BlogConfiguration config, String blogPostId) throws ExecutionException {
+		URI uri = URI.create(config.getBlogApiUrl() + "posts/" + blogPostId);
+		return postCache.get(uri);
+	}
 
 	public List<Item> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments

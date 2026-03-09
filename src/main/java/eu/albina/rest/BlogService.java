@@ -3,13 +3,16 @@ package eu.albina.rest;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PublicationController;
+import eu.albina.controller.publication.blog.Wordpress;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 
+import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,10 @@ import eu.albina.model.publication.BlogConfiguration;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.time.Year;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 @Controller("/blogs")
 @Tag(name = "blogs")
 public class BlogService {
@@ -36,6 +43,9 @@ public class BlogService {
 
 	@Inject
 	BlogController blogController;
+
+	@Inject
+	Wordpress wordpress;
 
 	@Inject
 	private PublicationController publicationController;
@@ -129,5 +139,27 @@ public class BlogService {
 			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
 		}
 		return blogController.getConfiguration(region, language).orElseThrow();
+	}
+
+	@Get("/posts")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	List<? extends BlogItem> getBlogPosts(
+		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
+		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
+		@QueryValue(defaultValue = "") String searchText,
+		@QueryValue(defaultValue = "") String searchCategory,
+		@QueryValue(defaultValue = "0") Year year) throws ExecutionException {
+		BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
+		return wordpress.getCachedBlogPosts(configuration, searchText, searchCategory, year);
+	}
+
+	@Get("/post")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	BlogItem getBlogPosts(
+		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
+		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
+		@QueryValue String id) throws ExecutionException {
+		BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
+		return wordpress.getCachedBlogPost(configuration, id);
 	}
 }
