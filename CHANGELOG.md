@@ -2,6 +2,41 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [8.2.0] - 2026-03-09
+
+### 🐛 Bug Fixes
+
+- Media file: Do not throw an exception if no mailing list is present for the current language
+- Use correct bulletins and images for PDF production
+
+### 🚀 Features
+
+- Add title to danger source variant
+- Trigger health check at 7:15 AM and 4:15 PM
+- Extend PDF endpoint with ?bulletinId= or ?microRegionId= parameters
+- Add updateDate to bulletin
+- Move server instance configurations to environment variables
+
+### 🚜 Refactor
+
+- Remove LocalServerInstance
+- Remove unused AvalancheReport.user
+- Simplify DB schema for texts
+- Simplify DB schema by usage of SET instead of separate SQL tables
+- Use org.apache.pdfbox to transform PDF to PNG (remove gs)
+- Improve loading time of province status
+- Simplify publication job
+- Remove unused AvalancheProblem.terrainFeature
+- Remove unused AvalancheBulletinDaytimeDescription.terrainFeature
+- Set AvalancheReport status as @Enumerated(EnumType.STRING)
+- Remove LocalServerInstance configuration
+- Escape comment and uncertainty strings in the statistics export
+- Move tmpOverride to GlobalVariables
+
+### ⚙️ Miscellaneous Tasks
+
+- Update micronaut to 4.10.15
+
 ## [8.1.1] - 2026-02-16
 
 ### 🐛 Bug Fixes
