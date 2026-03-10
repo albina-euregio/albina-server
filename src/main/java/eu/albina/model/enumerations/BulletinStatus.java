@@ -31,7 +31,7 @@ public enum BulletinStatus {
 			}
 			case draft -> {
 				logger.warn("Bulletins have to be submitted first!");
-				yield updated;
+				yield draft;
 			}
 			case submitted -> {
 				logger.info("Status set to PUBLISHED");
@@ -91,8 +91,8 @@ public enum BulletinStatus {
 
 	public BulletinStatus saveReport() {
 		return switch (this) {
-			case missing, republished, resubmitted, updated, published -> updated;
-			case draft, submitted -> draft;
+			case republished, resubmitted, updated, published -> updated;
+			case missing, draft, submitted -> draft;
 		};
 	}
 
