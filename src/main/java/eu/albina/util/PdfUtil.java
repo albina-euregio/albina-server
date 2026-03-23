@@ -421,6 +421,21 @@ public class PdfUtil {
 			table.addCell(cell);
 		}
 
+		String travelAdvisoryComment = avalancheBulletin.getTravelAdvisoryCommentIn(lang);
+		if (travelAdvisoryComment != null) {
+			Paragraph paragraph = new Paragraph(
+				replaceLinebreaks(travelAdvisoryComment))
+				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor)
+				.setMultipliedLeading(leadingText);
+			cell = new Cell(1, 1).add(paragraph);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setPaddingLeft(paddingLeft);
+			cell.setBorder(Border.NO_BORDER);
+			cell.setBorderLeft(new SolidBorder(blue, 4));
+			cell.setBackgroundColor(greyVeryVeryLight);
+			table.addCell(cell);
+		}
+
 		// snowpack structure and tendency
 		DangerPattern dangerPattern1 = avalancheBulletin.getDangerPattern1();
 		DangerPattern dangerPattern2 = avalancheBulletin.getDangerPattern2();
