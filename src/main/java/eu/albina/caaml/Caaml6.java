@@ -58,13 +58,11 @@ public class Caaml6 {
 
 	public static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
 		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
-		// TODO (general-headline): insert conditional - only set general headline if activated in backend
-		String generalHeadline = avalancheReport.getGeneralHeadline(lang);
-		if (!Strings.isNullOrEmpty(generalHeadline)) {
+		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
 			bulletins.setCustomData(new AvalancheBulletinsCustomData(
 				new AvalancheBulletinsCustomData.ALBINA(generalHeadline)
 			));
-		}
+		});
 		return bulletins;
 	}
 
@@ -97,7 +95,7 @@ public class Caaml6 {
 				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
 				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
 			.distinct().collect(Collectors.toList()));
-		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang));
+		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang).orElse(null));
 		bulletin.setLang(lang.name());
 		bulletin.setMetaData(null);
 		bulletin.setPublicationTime(avalancheBulletin.getPublicationDate().toInstant().truncatedTo(ChronoUnit.SECONDS));
@@ -107,7 +105,7 @@ public class Caaml6 {
 		bulletin.setSnowpackStructure(org.caaml.v6.Texts.of(avalancheBulletin.getSnowpackStructureHighlightsIn(lang), avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 		bulletin.setSource(null);
 		bulletin.setTendency(List.of(new Tendency(
-			avalancheBulletin.getTendencyCommentIn(lang),
+			avalancheBulletin.getTendencyCommentIn(lang).orElse(null),
 			avalancheBulletin.getTendency() != null ? TendencyType.forValue(avalancheBulletin.getTendency().name()) : null,
 			new ValidTime(avalancheBulletin.getValidFrom().plusDays(1).toInstant(), avalancheBulletin.getValidUntil().plusDays(1).toInstant())
 		)));

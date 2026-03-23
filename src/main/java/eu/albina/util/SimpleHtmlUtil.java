@@ -178,21 +178,9 @@ public interface SimpleHtmlUtil {
 					bulletin.put("pm", "");
 				}
 
-				if (avalancheBulletin.getHighlightsIn(lang) != null
-						&& !avalancheBulletin.getHighlightsIn(lang).isEmpty())
-					bulletin.put("highlights", avalancheBulletin.getHighlightsIn(lang));
-				else
-					bulletin.put("highlights", "");
-				if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null
-						&& !avalancheBulletin.getAvActivityHighlightsIn(lang).isEmpty())
-					bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
-				else
-					bulletin.put("avAvalancheHighlights", "");
-				if (avalancheBulletin.getAvActivityCommentIn(lang) != null
-						&& !avalancheBulletin.getAvActivityCommentIn(lang).isEmpty())
-					bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
-				else
-					bulletin.put("avAvalancheComment", "");
+				bulletin.put("highlights", avalancheBulletin.getHighlightsIn(lang).orElse(""));
+				bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang).orElse(""));
+				bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang).orElse(""));
 				if (avalancheBulletin.getDangerPattern1() != null)
 					bulletin.put("dangerPattern1",
                         	avalancheBulletin.getDangerPattern1().toString(lang.getLocale()) + "<br>");
@@ -203,16 +191,8 @@ public interface SimpleHtmlUtil {
                         	avalancheBulletin.getDangerPattern2().toString(lang.getLocale()) + "<br>");
 				else
 					bulletin.put("dangerPattern2", "");
-				if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
-						&& !avalancheBulletin.getSnowpackStructureCommentIn(lang).isEmpty())
-					bulletin.put("snowpackStructureComment", avalancheBulletin.getSnowpackStructureCommentIn(lang));
-				else
-					bulletin.put("snowpackStructureComment", "");
-				if (avalancheBulletin.getTendencyCommentIn(lang) != null
-						&& !avalancheBulletin.getTendencyCommentIn(lang).isEmpty())
-					bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
-				else
-					bulletin.put("tendencyComment", "");
+				bulletin.put("snowpackStructureComment", avalancheBulletin.getSnowpackStructureCommentIn(lang).orElse(""));
+				bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang).orElse(""));
 				arrayList.add(bulletin);
 			}
 		}

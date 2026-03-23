@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
@@ -116,9 +117,7 @@ public interface EmailUtil {
 			text.put("pm", "");
 		}
 
-		if (!region.isEnableGeneralHeadline()) {
-			text.put("generalHeadline", avalancheReport.getGeneralHeadline(lang));
-		}
+		avalancheReport.getGeneralHeadline(lang).ifPresent(t -> text.put("generalHeadline", t));
 
 		Map<String, Object> dangerRatings = new HashMap<>();
 		dangerRatings.put("low", DangerRating.low.toString(lang.getLocale(), false));
@@ -148,57 +147,40 @@ public interface EmailUtil {
 			bulletin.put("warningLevelText",
 					avalancheBulletin.getHighestDangerRating().toString(lang.getLocale(), true));
 
-			if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
-				bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang));
-			else
-				bulletin.put("avAvalancheHighlights", "");
+			bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang).orElse(""));
+			bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang).orElse(""));
 
-			if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
-				bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang));
-			else
-				bulletin.put("avAvalancheComment", "");
-
-			if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
-					|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
-					|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null
-					|| avalancheBulletin.getTendencyCommentIn(lang) != null) {
+			DangerPattern dangerPattern1 = avalancheBulletin.getDangerPattern1();
+			DangerPattern dangerPattern2 = avalancheBulletin.getDangerPattern2();
+			Optional<String> snowpackStructureComment = avalancheBulletin.getSnowpackStructureCommentIn(lang);
+			Optional<String> snowpackStructureHighlights = avalancheBulletin.getSnowpackStructureHighlightsIn(lang);
+			Optional<String> tendencyComment = avalancheBulletin.getTendencyCommentIn(lang);
+			if (dangerPattern1 != null || dangerPattern2 != null
+					|| snowpackStructureComment.isPresent()
+					|| snowpackStructureHighlights.isPresent()
+					|| tendencyComment.isPresent()) {
 				bulletin.put("snowpackstyle", getSnowpackStyle(true));
-				if (avalancheBulletin.getDangerPattern1() != null || avalancheBulletin.getDangerPattern2() != null
-						|| avalancheBulletin.getSnowpackStructureCommentIn(lang) != null
-						|| avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null) {
+				if (dangerPattern1 != null || dangerPattern2 != null
+						|| snowpackStructureComment.isPresent()
+						|| snowpackStructureHighlights.isPresent()) {
 					bulletin.put("snowpackStructureHeadline", lang.getBundleString("headline.snowpack"));
+					bulletin.put("snowpackStructureHighlights", snowpackStructureHighlights.orElse(""));
+					bulletin.put("snowpackStructureComment", snowpackStructureComment.orElse(""));
 
-					if (avalancheBulletin.getSnowpackStructureHighlightsIn(lang) != null)
-						bulletin.put("snowpackStructureHighlights",
-								avalancheBulletin.getSnowpackStructureHighlightsIn(lang));
-					else
-						bulletin.put("snowpackStructureHighlights", "");
-
-					if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
-						bulletin.put("snowpackStructureComment",
-								avalancheBulletin.getSnowpackStructureCommentIn(lang));
-					else
-						bulletin.put("snowpackStructureComment", "");
-
-					if (avalancheBulletin.getDangerPattern1() != null
-							|| avalancheBulletin.getDangerPattern2() != null) {
+					if (dangerPattern1 != null || dangerPattern2 != null) {
 						bulletin.put("dangerPatternsHeadline", lang.getBundleString("headline.danger-patterns"));
-						if (avalancheBulletin.getDangerPattern1() != null) {
-                            bulletin.put("dangerPattern1",
-									avalancheBulletin.getDangerPattern1().toString(lang.getLocale()));
-							bulletin.put("dangerPatternLink1", getDangerPatternLink(lang, region,
-									avalancheBulletin.getDangerPattern1()));
+						if (dangerPattern1 != null) {
+                            bulletin.put("dangerPattern1", dangerPattern1.toString(lang.getLocale()));
+							bulletin.put("dangerPatternLink1", getDangerPatternLink(lang, region, dangerPattern1));
 							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
 						} else {
 							bulletin.put("dangerPattern1", "");
 							bulletin.put("dangerPatternLink1", "");
 							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
 						}
-						if (avalancheBulletin.getDangerPattern2() != null) {
-                            bulletin.put("dangerPattern2",
-									avalancheBulletin.getDangerPattern2().toString(lang.getLocale()));
-							bulletin.put("dangerPatternLink2", getDangerPatternLink(lang, region,
-									avalancheBulletin.getDangerPattern2()));
+						if (dangerPattern2 != null) {
+                            bulletin.put("dangerPattern2", dangerPattern2.toString(lang.getLocale()));
+							bulletin.put("dangerPatternLink2", getDangerPatternLink(lang, region, dangerPattern2));
 							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
 						} else {
 							bulletin.put("dangerPattern2", "");
@@ -228,19 +210,16 @@ public interface EmailUtil {
 				}
 
 				// weather
-				if (avalancheBulletin.getSynopsisCommentIn(lang) != null) {
+				avalancheBulletin.getSynopsisCommentIn(lang).ifPresent(t -> {
 					bulletin.put("synopsisHeadline", lang.getBundleString("headline.synopsis"));
-					bulletin.put("synopsisComment", avalancheBulletin.getSynopsisCommentIn(lang));
-				}
+					bulletin.put("synopsisComment", t);
+				});
 
 				// tendency
-				if (avalancheBulletin.getTendencyCommentIn(lang) != null) {
+				tendencyComment.ifPresent(t -> {
 					bulletin.put("tendencyHeadline", lang.getBundleString("headline.tendency"));
-					bulletin.put("tendencyComment", avalancheBulletin.getTendencyCommentIn(lang));
-				} else {
-					bulletin.put("tendencyHeadline", "");
-					bulletin.put("tendencyComment", "");
-				}
+					bulletin.put("tendencyComment", t);
+				});
 			} else {
 				bulletin.put("snowpackstyle", getSnowpackStyle(false));
 				bulletin.put("snowpackStructureHeadline", "");

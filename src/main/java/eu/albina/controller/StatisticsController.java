@@ -875,10 +875,7 @@ public class StatisticsController {
 				sb.append(notAvailableString);
 			sb.append(csvDeliminator);
 
-			if (avalancheBulletin.getAvActivityHighlightsIn(lang) != null)
-				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityHighlightsIn(lang)));
-			else
-				sb.append(notAvailableString);
+			sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityHighlightsIn(lang).orElse(notAvailableString)));
 			if (extended) {
 				sb.append(csvDeliminator);
 				if (avalancheBulletin.getAvActivityHighlightsTextcat() != null)
@@ -887,10 +884,7 @@ public class StatisticsController {
 					sb.append(notAvailableString);
 			}
 			sb.append(csvDeliminator);
-			if (avalancheBulletin.getAvActivityCommentIn(lang) != null)
-				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityCommentIn(lang)));
-			else
-				sb.append(notAvailableString);
+			sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getAvActivityCommentIn(lang).orElse(notAvailableString)));
 			if (extended) {
 				sb.append(csvDeliminator);
 				if (avalancheBulletin.getAvActivityCommentTextcat() != null)
@@ -899,10 +893,7 @@ public class StatisticsController {
 					sb.append(notAvailableString);
 			}
 			sb.append(csvDeliminator);
-			if (avalancheBulletin.getSnowpackStructureCommentIn(lang) != null)
-				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getSnowpackStructureCommentIn(lang)));
-			else
-				sb.append(notAvailableString);
+			sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getSnowpackStructureCommentIn(lang).orElse(notAvailableString)));
 			if (extended) {
 				sb.append(csvDeliminator);
 				if (avalancheBulletin.getSnowpackStructureCommentTextcat() != null)
@@ -911,10 +902,7 @@ public class StatisticsController {
 					sb.append(notAvailableString);
 			}
 			sb.append(csvDeliminator);
-			if (avalancheBulletin.getTendencyCommentIn(lang) != null)
-				sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getTendencyCommentIn(lang)));
-			else
-				sb.append(notAvailableString);
+			sb.append(StringEscapeUtils.escapeCsv(avalancheBulletin.getTendencyCommentIn(lang).orElse(notAvailableString)));
 			if (extended) {
 				sb.append(csvDeliminator);
 				if (avalancheBulletin.getTendencyCommentTextcat() != null)

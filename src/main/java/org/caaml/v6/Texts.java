@@ -4,6 +4,8 @@ package org.caaml.v6;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.micronaut.serde.annotation.Serdeable;
 
+import java.util.Optional;
+
 /**
  * Texts element with highlight and comment for the avalanche activity.
  *
@@ -34,11 +36,12 @@ public class Texts {
 		this.highlights = highlights;
 	}
 
-	public static Texts of(String highlights, String comment) {
-		if (highlights == null && comment == null) {
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+	public static Texts of(Optional<String> highlights, Optional<String> comment) {
+		if (highlights.isEmpty() && comment.isEmpty()) {
 			return null;
 		}
-		return new Texts(highlights, comment);
+		return new Texts(highlights.orElse(null), comment.orElse(null));
 	}
 
 	public String getComment() { return comment; }

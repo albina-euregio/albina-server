@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -409,15 +410,15 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.highlights);
 	}
 
-	public String getTextPartIn(TextPart textPart, LanguageCode lang) {
+	public Optional<String> getTextPartIn(TextPart textPart, LanguageCode lang) {
 		Set<Text> texts = getTexts(textPart);
 		return texts.stream().filter(t -> t.languageCode() == lang).findFirst()
 			.map(Text::text)
 			.map(String::trim)
-			.filter(s -> !s.isBlank()).orElse(null);
+			.filter(s -> !s.isBlank());
 	}
 
-	public String getHighlightsIn(LanguageCode lang) {
+	public Optional<String> getHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.highlights, lang);
 	}
 
@@ -429,7 +430,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.avActivityHighlights);
 	}
 
-	public String getAvActivityHighlightsIn(LanguageCode lang) {
+	public Optional<String> getAvActivityHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.avActivityHighlights, lang);
 	}
 
@@ -441,7 +442,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.avActivityComment);
 	}
 
-	public String getAvActivityCommentIn(LanguageCode lang) {
+	public Optional<String> getAvActivityCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.avActivityComment, lang);
 	}
 
@@ -453,7 +454,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.synopsisHighlights);
 	}
 
-	public String getSynopsisHighlightsIn(LanguageCode lang) {
+	public Optional<String> getSynopsisHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.synopsisHighlights, lang);
 	}
 
@@ -465,7 +466,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.synopsisComment);
 	}
 
-	public String getSynopsisCommentIn(LanguageCode lang) {
+	public Optional<String> getSynopsisCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.synopsisComment, lang);
 	}
 
@@ -477,7 +478,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.snowpackStructureHighlights);
 	}
 
-	public String getSnowpackStructureHighlightsIn(LanguageCode lang) {
+	public Optional<String> getSnowpackStructureHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.snowpackStructureHighlights, lang);
 	}
 
@@ -489,7 +490,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.snowpackStructureComment);
 	}
 
-	public String getSnowpackStructureCommentIn(LanguageCode lang) {
+	public Optional<String> getSnowpackStructureCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.snowpackStructureComment, lang);
 	}
 
@@ -501,7 +502,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.travelAdvisoryHighlights);
 	}
 
-	public String getTravelAdvisoryHighlightsIn(LanguageCode lang) {
+	public Optional<String> getTravelAdvisoryHighlightsIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.travelAdvisoryHighlights, lang);
 	}
 
@@ -513,7 +514,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.travelAdvisoryComment);
 	}
 
-	public String getTravelAdvisoryCommentIn(LanguageCode lang) {
+	public Optional<String> getTravelAdvisoryCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.travelAdvisoryComment, lang);
 	}
 
@@ -525,7 +526,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.tendencyComment);
 	}
 
-	public String getTendencyCommentIn(LanguageCode lang) {
+	public Optional<String> getTendencyCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.tendencyComment, lang);
 	}
 
@@ -537,7 +538,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return getTexts(TextPart.generalHeadlineComment);
 	}
 
-	public String getGeneralHeadlineCommentIn(LanguageCode lang) {
+	public Optional<String> getGeneralHeadlineCommentIn(LanguageCode lang) {
 		return getTextPartIn(TextPart.generalHeadlineComment, lang);
 	}
 

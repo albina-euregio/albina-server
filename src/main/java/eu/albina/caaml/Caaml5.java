@@ -252,12 +252,11 @@ interface Caaml5 {
 		}
 
 		for (TextPart part : TextPart.values()) {
-			final String text = bulletin.getTextPartIn(part, languageCode);
-			if (text != null && !text.isEmpty()) {
+			bulletin.getTextPartIn(part, languageCode).ifPresent(text -> {
 				Element textPart = doc.createElement(toCaamlv5String(part));
 				textPart.appendChild(doc.createTextNode(text));
 				bulletinMeasurements.appendChild(textPart);
-			}
+			});
 		}
 
 		bulletinResultsOf.appendChild(bulletinMeasurements);
