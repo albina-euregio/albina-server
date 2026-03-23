@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
-import eu.albina.model.enumerations.TextcatTextfield;
+import eu.albina.model.enumerations.TextPart;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.json.tree.JsonNode;
 import io.micronaut.serde.ObjectMapper;
@@ -143,13 +143,13 @@ public class Region implements PersistentObject {
 
 	@Column(name = "ENABLE_WEATHERBOX")
 	private boolean enableWeatherbox;
-	
+
 	@Column(name = "ENABLE_LINEA_EXPORT")
 	private boolean enableLineaExport;
 
-	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextcatTextfield.Converter.COLUMN_DEFINITION)
-	@Convert(converter = TextcatTextfield.Converter.class)
-	private Set<TextcatTextfield> enabledEditableFields;
+	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
+	@Convert(converter = TextPart.Converter.class)
+	private Set<TextPart> enabledEditableFields;
 
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
@@ -743,11 +743,11 @@ public class Region implements PersistentObject {
 		this.enableModelling = enableModelling;
 	}
 
-	public Set<TextcatTextfield> getEnabledEditableFields() {
+	public Set<TextPart> getEnabledEditableFields() {
 		return enabledEditableFields;
 	}
 
-	public void setEnabledEditableFields(Set<TextcatTextfield> enabledEditableFields) {
+	public void setEnabledEditableFields(Set<TextPart> enabledEditableFields) {
 		this.enabledEditableFields = enabledEditableFields;
 	}
 
