@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Position;
-import eu.albina.model.enumerations.TextcatTextfield;
+import eu.albina.model.enumerations.TextPart;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.json.tree.JsonNode;
 import io.micronaut.serde.ObjectMapper;
@@ -143,13 +143,17 @@ public class Region implements PersistentObject {
 
 	@Column(name = "ENABLE_WEATHERBOX")
 	private boolean enableWeatherbox;
-	
+
 	@Column(name = "ENABLE_LINEA_EXPORT")
 	private boolean enableLineaExport;
 
-	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextcatTextfield.Converter.COLUMN_DEFINITION)
-	@Convert(converter = TextcatTextfield.Converter.class)
-	private Set<TextcatTextfield> enabledEditableFields;
+	@Column(name = "ENABLED_TEXTCAT_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
+	@Convert(converter = TextPart.Converter.class)
+	private Set<TextPart> enabledTextcatFields;
+
+	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
+	@Convert(converter = TextPart.Converter.class)
+	private Set<TextPart> enabledEditableFields;
 
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
@@ -159,12 +163,6 @@ public class Region implements PersistentObject {
 
 	@Column(name = "ENABLE_STRESS_LEVEL")
 	private boolean enableStressLevel;
-
-	@Column(name = "ENABLE_GENERAL_HEADLINE")
-	private boolean enableGeneralHeadline;
-
-	@Column(name = "ENABLE_WEATHER_TEXT_FIELD")
-	private boolean enableWeatherTextField;
 
 	@Column(name = "PDF_COLOR", length = 191)
 	private String pdfColor;
@@ -739,21 +737,25 @@ public class Region implements PersistentObject {
 		return enableModelling;
 	}
 
+	public Set<TextPart> getEnabledTextcatFields() {
+		return enabledTextcatFields;
+	}
+
+	public void setEnabledTextcatFields(Set<TextPart> enabledTextcatFields) {
+		this.enabledTextcatFields = enabledTextcatFields;
+	}
+
 	public void setEnableModelling(boolean enableModelling) {
 		this.enableModelling = enableModelling;
 	}
 
-	public Set<TextcatTextfield> getEnabledEditableFields() {
+	public Set<TextPart> getEnabledEditableFields() {
 		return enabledEditableFields;
 	}
 
-	public void setEnabledEditableFields(Set<TextcatTextfield> enabledEditableFields) {
+	public void setEnabledEditableFields(Set<TextPart> enabledEditableFields) {
 		this.enabledEditableFields = enabledEditableFields;
 	}
-
-	public boolean isEnableWeatherTextField() { return enableWeatherTextField; }
-
-	public void setEnableWeatherTextField(boolean enableWeatherTextField) { this.enableWeatherTextField = enableWeatherTextField; }
 
 	public boolean isEnableWeatherbox() {
 		return enableWeatherbox;
@@ -801,14 +803,6 @@ public class Region implements PersistentObject {
 		this.coatOfArms = coatOfArms;
 	}
 
-	public boolean isEnableGeneralHeadline() {
-		return enableGeneralHeadline;
-	}
-
-	public void setEnableGeneralHeadline(boolean enableGeneralHeadline) {
-		this.enableGeneralHeadline = enableGeneralHeadline;
-	}
-
 	public String getServerImagesUrl() {
 		return serverImagesUrl;
 	}
@@ -826,6 +820,12 @@ public class Region implements PersistentObject {
 
 	public boolean isForeign(String regionId) {
 		return !affects(regionId);
+	}
+
+	@JsonIgnore
+	public boolean isEnableGeneralHeadline() {
+		return Objects.requireNonNullElse(enabledTextcatFields, Set.of()).contains(TextPart.generalHeadlineComment)
+			|| Objects.requireNonNullElse(enabledEditableFields, Set.of()).contains(TextPart.generalHeadlineComment);
 	}
 
 	@Override

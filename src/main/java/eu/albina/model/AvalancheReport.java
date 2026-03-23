@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -340,10 +341,8 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 		return Paths.get(getServerInstance().htmlDirectory(), getValidityDateString());
 	}
 
-	public String getGeneralHeadline(LanguageCode lang) {
-		return !this.bulletins.isEmpty()
-			? this.bulletins.getFirst().getGeneralHeadlineCommentIn(lang)
-			: "";
+	public Optional<String> getGeneralHeadline(LanguageCode lang) {
+		return this.bulletins.stream().findFirst().flatMap(b -> b.getGeneralHeadlineCommentIn(lang));
 	}
 
 	public boolean hasDaytimeDependency() {

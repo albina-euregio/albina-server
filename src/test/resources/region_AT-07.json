@@ -20,6 +20,14 @@
 		"es",
 		"ca"
 	],
+	"enabledTextcatFields": [
+		"avActivityComment",
+		"avActivityHighlights",
+		"highlights",
+		"snowpackStructureComment",
+		"snowpackStructureHighlights",
+		"tendencyComment"
+	],
     "publishBulletins": true,
     "publishBlogs": false,
     "createCaamlV5": true,
