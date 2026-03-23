@@ -10,3 +10,7 @@ alter table regions
 -- changeset albina:008_000701 failOnError:true
 update regions set ENABLED_TEXTCAT_FIELDS = CONCAT(ENABLED_TEXTCAT_FIELDS, ',generalHeadlineComment') where ENABLE_GENERAL_HEADLINE = 1;
 alter table regions drop column ENABLE_GENERAL_HEADLINE;
+
+-- changeset albina:008_000702 failOnError:true
+update regions set ENABLED_TEXTCAT_FIELDS = CONCAT(ENABLED_TEXTCAT_FIELDS, ',synopsisComment') where ENABLE_WEATHER_TEXT_FIELD = 1;
+alter table regions drop column ENABLE_WEATHER_TEXT_FIELD;

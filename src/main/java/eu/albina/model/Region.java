@@ -164,9 +164,6 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_STRESS_LEVEL")
 	private boolean enableStressLevel;
 
-	@Column(name = "ENABLE_WEATHER_TEXT_FIELD")
-	private boolean enableWeatherTextField;
-
 	@Column(name = "PDF_COLOR", length = 191)
 	private String pdfColor;
 
@@ -759,10 +756,6 @@ public class Region implements PersistentObject {
 	public void setEnabledEditableFields(Set<TextPart> enabledEditableFields) {
 		this.enabledEditableFields = enabledEditableFields;
 	}
-
-	public boolean isEnableWeatherTextField() { return enableWeatherTextField; }
-
-	public void setEnableWeatherTextField(boolean enableWeatherTextField) { this.enableWeatherTextField = enableWeatherTextField; }
 
 	public boolean isEnableWeatherbox() {
 		return enableWeatherbox;
