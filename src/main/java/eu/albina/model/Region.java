@@ -164,9 +164,6 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_STRESS_LEVEL")
 	private boolean enableStressLevel;
 
-	@Column(name = "ENABLE_GENERAL_HEADLINE")
-	private boolean enableGeneralHeadline;
-
 	@Column(name = "ENABLE_WEATHER_TEXT_FIELD")
 	private boolean enableWeatherTextField;
 
@@ -813,14 +810,6 @@ public class Region implements PersistentObject {
 		this.coatOfArms = coatOfArms;
 	}
 
-	public boolean isEnableGeneralHeadline() {
-		return enableGeneralHeadline;
-	}
-
-	public void setEnableGeneralHeadline(boolean enableGeneralHeadline) {
-		this.enableGeneralHeadline = enableGeneralHeadline;
-	}
-
 	public String getServerImagesUrl() {
 		return serverImagesUrl;
 	}
@@ -838,6 +827,12 @@ public class Region implements PersistentObject {
 
 	public boolean isForeign(String regionId) {
 		return !affects(regionId);
+	}
+
+	@JsonIgnore
+	public boolean isEnableGeneralHeadline() {
+		return Objects.requireNonNullElse(enabledTextcatFields, Set.of()).contains(TextPart.generalHeadlineComment)
+			|| Objects.requireNonNullElse(enabledEditableFields, Set.of()).contains(TextPart.generalHeadlineComment);
 	}
 
 	@Override
