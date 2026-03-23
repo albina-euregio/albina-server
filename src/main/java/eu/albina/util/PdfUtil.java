@@ -419,10 +419,21 @@ public class PdfUtil {
 		});
 
 		avalancheBulletin.getTravelAdvisoryCommentIn(lang).ifPresent(text -> {
+			Paragraph headline = new Paragraph(lang.getBundleString("headline.travelAdvisory"))
+				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
+				.setMultipliedLeading(leadingHeadline);
+			Cell c = new Cell(1, 1).add(headline);
+			c.setTextAlignment(TextAlignment.LEFT);
+			c.setPaddingLeft(paddingLeft);
+			c.setBorder(Border.NO_BORDER);
+			c.setBorderLeft(new SolidBorder(blue, 4));
+			c.setBackgroundColor(greyVeryVeryLight);
+			table.addCell(c);
+
 			Paragraph paragraph = new Paragraph(replaceLinebreaks(text))
 				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor)
 				.setMultipliedLeading(leadingText);
-			Cell c = new Cell(1, 1).add(paragraph);
+			c = new Cell(1, 1).add(paragraph);
 			c.setTextAlignment(TextAlignment.LEFT);
 			c.setPaddingLeft(paddingLeft);
 			c.setBorder(Border.NO_BORDER);
