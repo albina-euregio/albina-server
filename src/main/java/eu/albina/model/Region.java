@@ -147,6 +147,10 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_LINEA_EXPORT")
 	private boolean enableLineaExport;
 
+	@Column(name = "ENABLED_TEXTCAT_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
+	@Convert(converter = TextPart.Converter.class)
+	private Set<TextPart> enabledTextcatFields;
+
 	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
 	@Convert(converter = TextPart.Converter.class)
 	private Set<TextPart> enabledEditableFields;
@@ -737,6 +741,14 @@ public class Region implements PersistentObject {
 
 	public boolean isEnableModelling() {
 		return enableModelling;
+	}
+
+	public Set<TextPart> getEnabledTextcatFields() {
+		return enabledTextcatFields;
+	}
+
+	public void setEnabledTextcatFields(Set<TextPart> enabledTextcatFields) {
+		this.enabledTextcatFields = enabledTextcatFields;
 	}
 
 	public void setEnableModelling(boolean enableModelling) {
