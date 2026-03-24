@@ -400,21 +400,22 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	private void putTexts(TextPart textPart, Set<Text> texts) {
-		Map<LanguageCode, String> newTextsByLang = texts.stream()
-			.collect(Collectors.toMap(Text::languageCode, Text::text, (a, b) -> b));
+		Map<LanguageCode, AvalancheBulletinText> existing = textPartsMap.stream()
+			.filter(p -> p.getTextType() == textPart)
+			.collect(Collectors.toMap(AvalancheBulletinText::getLanguageCode, t -> t));
 
-		// Update or remove existing entries
-		textPartsMap.removeIf(existing -> {
-			if (existing.getTextType() != textPart) return false; // do not modify entries of other text parts
-			String newText = newTextsByLang.remove(existing.getLanguageCode());
-			if (newText == null) return true; // remove orphan
-    		existing.setText(newText);
-			return false; // keep updated entry
-		});
-
-		// Add new entries
-		newTextsByLang.forEach((lang, text) ->
-			textPartsMap.add(new AvalancheBulletinText(this, textPart, lang, text)));
+		for (Text text : texts) {
+			AvalancheBulletinText e = existing.remove(text.languageCode);
+			if (e != null) {
+				// update text of existing AvalancheBulletinText object
+				e.setText(text.text);
+			} else {
+				// add new AvalancheBulletinText object
+				textPartsMap.add(new AvalancheBulletinText(this, textPart, text.languageCode, text.text));
+			}
+		}
+		// remove obsolete languages
+		textPartsMap.removeAll(existing.values());
 	}
 
 	public Set<Text> getHighlights() {
