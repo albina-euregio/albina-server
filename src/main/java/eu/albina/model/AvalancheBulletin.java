@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -399,11 +400,21 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	private void putTexts(TextPart textPart, Set<Text> texts) {
-		textPartsMap.removeIf(p -> p.getTextType() == textPart);
-		for (Text text : texts) {
-			AvalancheBulletinText t = new AvalancheBulletinText(this, textPart, text.languageCode(), text.text());
-			textPartsMap.add(t);
-		}
+		Map<LanguageCode, String> newTextsByLang = texts.stream()
+			.collect(Collectors.toMap(Text::languageCode, Text::text, (a, b) -> b));
+
+		// Update or remove existing entries
+		textPartsMap.removeIf(existing -> {
+			if (existing.getTextType() != textPart) return false; // do not modify entries of other text parts
+			String newText = newTextsByLang.remove(existing.getLanguageCode());
+			if (newText == null) return true; // remove orphan
+    		existing.setText(newText);
+			return false; // keep updated entry
+		});
+
+		// Add new entries
+		newTextsByLang.forEach((lang, text) ->
+			textPartsMap.add(new AvalancheBulletinText(this, textPart, lang, text)));
 	}
 
 	public Set<Text> getHighlights() {
