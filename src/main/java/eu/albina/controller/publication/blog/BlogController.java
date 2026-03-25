@@ -49,6 +49,10 @@ public class BlogController {
 	@Inject
 	RapidMailController rapidMailController;
 
+	public AbstractBlog blogImplementation(BlogConfiguration config) {
+		return config.isBlogger() ? blogger : wordpress;
+	}
+
 	@Repository
 	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
 		Optional<BlogConfiguration> findByBlogId(String blogId);
@@ -81,9 +85,7 @@ public class BlogController {
 			return Collections.emptyList();
 		}
 
-		List<? extends BlogItem> blogPosts = config.isBlogger()
-			? blogger.getBlogPosts(config)
-			: wordpress.getBlogPosts(config);
+		List<? extends BlogItem> blogPosts = blogImplementation(config).getBlogPosts(config);
 		logger.info("Found {} new blog posts for {}", blogPosts.size(), config);
 		return blogPosts;
 	}
@@ -92,9 +94,7 @@ public class BlogController {
 		Objects.requireNonNull(config, "config");
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
-		BlogItem blogPost = config.isBlogger()
-			? blogger.getLatestBlogPost(config)
-			: wordpress.getLatestBlogPost(config);
+		BlogItem blogPost = blogImplementation(config).getLatestBlogPost(config);
 		logger.info("Fetched latest blog post for region={} lang={}", config.getRegion().getId(), config.getLanguageCode().toString());
 		return blogPost;
 	}
@@ -103,9 +103,7 @@ public class BlogController {
 		Objects.requireNonNull(config, "config");
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
-		return config.isBlogger()
-			? blogger.getBlogPost(config, blogPostId)
-			: wordpress.getBlogPost(config, blogPostId);
+		return blogImplementation(config).getBlogPost(config, blogPostId);
 	}
 
 	public MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {

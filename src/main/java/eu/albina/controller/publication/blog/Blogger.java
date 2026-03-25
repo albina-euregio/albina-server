@@ -29,7 +29,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 @Singleton
-public class Blogger implements AbstractBlog {
+class Blogger implements AbstractBlog {
 
 	@Inject
 	HttpClient client;

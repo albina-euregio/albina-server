@@ -3,8 +3,6 @@ package eu.albina.rest;
 
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PublicationController;
-import eu.albina.controller.publication.blog.Blogger;
-import eu.albina.controller.publication.blog.Wordpress;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -44,12 +42,6 @@ public class BlogService {
 
 	@Inject
 	BlogController blogController;
-
-	@Inject
-	Blogger blogger;
-
-	@Inject
-	Wordpress wordpress;
 
 	@Inject
 	private PublicationController publicationController;
@@ -154,9 +146,7 @@ public class BlogService {
 		@QueryValue(defaultValue = "") String searchCategory,
 		@QueryValue(defaultValue = "0") Year year) throws ExecutionException {
 		BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
-		return configuration.isBlogger()
-			? blogger.getCachedBlogPosts(configuration, searchText, searchCategory, year)
-			: wordpress.getCachedBlogPosts(configuration, searchText, searchCategory, year);
+		return blogController.blogImplementation(configuration).getCachedBlogPosts(configuration, searchText, searchCategory, year);
 	}
 
 	@Get("/post")
@@ -166,8 +156,6 @@ public class BlogService {
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
 		@QueryValue String id) throws ExecutionException {
 		BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
-		return configuration.isBlogger()
-			? blogger.getCachedBlogPost(configuration, id)
-			: wordpress.getCachedBlogPost(configuration, id);
+		return blogController.blogImplementation(configuration).getCachedBlogPost(configuration, id);
 	}
 }

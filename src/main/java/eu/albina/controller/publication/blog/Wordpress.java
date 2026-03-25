@@ -31,7 +31,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 @Singleton
-public class Wordpress implements AbstractBlog {
+class Wordpress implements AbstractBlog {
 
 	@Inject
 	HttpClient client;
