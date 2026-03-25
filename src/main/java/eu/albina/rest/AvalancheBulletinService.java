@@ -89,7 +89,7 @@ import jakarta.transaction.Transactional;
 	description = "Server component to compose and publish multilingual avalanche bulletins",
 	license = @License(name = "GNU Affero General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"),
 	contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")
-), servers = {@Server(url = "/albina/api")})
+), servers = {@Server(url = "/albina/api"), @Server(url = "/albina_dev/api")})
 public class AvalancheBulletinService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinService.class);
