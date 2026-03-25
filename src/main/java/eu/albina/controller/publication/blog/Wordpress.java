@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HttpClientUtil;
+
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
@@ -48,7 +48,7 @@ class Wordpress implements AbstractBlog {
 				HttpRequest request = HttpRequest.newBuilder(uri).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				Item[] items = objectMapper.readValue(response.body(), Item[].class);
-				return List.of(items);
+				return Arrays.stream(items).map(Item::toBlogItem).toList();
 			}
 		});
 
@@ -59,7 +59,7 @@ class Wordpress implements AbstractBlog {
 			public BlogItem load(URI uri) throws Exception {
 				HttpRequest request = HttpRequest.newBuilder(uri).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				return objectMapper.readValue(response.body(), Item.class);
+				return objectMapper.readValue(response.body(), Item.class).toBlogItem();
 			}
 		});
 
@@ -105,7 +105,7 @@ class Wordpress implements AbstractBlog {
 	}
 
 	@Override
-	public List<Item> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
+	public List<BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
@@ -115,25 +115,25 @@ class Wordpress implements AbstractBlog {
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		Item[] items = objectMapper.readValue(response.body(), Item[].class);
-		return List.of(items);
+		return Arrays.stream(items).map(Item::toBlogItem).toList();
 	}
 
 	@Override
-	public Item getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
+	public BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
 			"lang", config.getLanguageCode(),
 			"per_page", Integer.toString(1)
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		Item[] items = objectMapper.readValue(response.body(), Item[].class);
-		return Arrays.stream(items).collect(MoreCollectors.onlyElement());
+		return Arrays.stream(items).collect(MoreCollectors.onlyElement()).toBlogItem();
 	}
 
 	@Override
-	public Item getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
+	public BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts/" + blogPostId)).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		return objectMapper.readValue(response.body(), Item.class);
+		return objectMapper.readValue(response.body(), Item.class).toBlogItem();
 	}
 
 	@Serdeable
@@ -150,36 +150,15 @@ class Wordpress implements AbstractBlog {
 		String polylang_current_lang,
 		PolylangTranslation[] polylang_translations,
 		String featured_image_url
-	) implements BlogItem {
-
-		@Override
-		@JsonInclude
-		public String getId() {
-			return String.valueOf(id);
-		}
-
-		@Override
-		@JsonInclude
-		public String getTitle() {
-			return StringEscapeUtils.unescapeHtml4(title.rendered);
-		}
-
-		@Override
-		@JsonInclude
-		public String getContent() {
-			return content.rendered;
-		}
-
-		@Override
-		@JsonInclude
-		public OffsetDateTime getPublished() {
-			return LocalDateTime.parse(date_gmt).atOffset(ZoneOffset.UTC);
-		}
-
-		@Override
-		@JsonInclude
-		public String getAttachmentUrl() {
-			return featured_image_url;
+	) {
+		public BlogItem toBlogItem() {
+			return new BlogItem(
+				String.valueOf(id),
+				StringEscapeUtils.unescapeHtml4(title.rendered),
+				content.rendered,
+				LocalDateTime.parse(date_gmt).atOffset(ZoneOffset.UTC),
+				featured_image_url
+			);
 		}
 	}
 

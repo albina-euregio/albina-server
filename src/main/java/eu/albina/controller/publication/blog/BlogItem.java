@@ -5,31 +5,22 @@ import eu.albina.model.publication.BlogConfiguration;
 
 import java.time.OffsetDateTime;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micronaut.core.annotation.Introspected;
 
 @Introspected
-public interface BlogItem {
-	@JsonInclude
-	String getId();
+public record BlogItem(
+	String id,
+	String title,
+	String content,
+	OffsetDateTime published,
+	String attachmentUrl
+	) {
 
-	@JsonInclude
-	String getTitle();
-
-	@JsonInclude
-	String getContent();
-
-	@JsonInclude
-	OffsetDateTime getPublished();
-
-	@JsonInclude
-	String getAttachmentUrl();
-
-	default String getTitleAndUrl(BlogConfiguration config) {
-		return getTitle() + ": " + this.getAvalancheReportUrl(config);
+	public String getTitleAndUrl(BlogConfiguration config) {
+		return title() + ": " + this.getAvalancheReportUrl(config);
 	}
 
-	default String getAvalancheReportUrl(BlogConfiguration config) {
-		return  config.getRegion().getWebsiteUrl(config.getLanguageCode()) + "/blog/" + config.getBlogUrl() + "/" + getId();
+	public String getAvalancheReportUrl(BlogConfiguration config) {
+		return config.getRegion().getWebsiteUrl(config.getLanguageCode()) + "/blog/" + config.getBlogUrl() + "/" + id();
 	}
 }

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -9,6 +8,7 @@ import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 
 import eu.albina.util.HttpClientUtil;
+
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.inject.Inject;
@@ -22,7 +22,6 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.Year;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,31 +37,31 @@ class Blogger implements AbstractBlog {
 	@Inject
 	ObjectMapper objectMapper;
 
-	final LoadingCache<URI, List<? extends BlogItem>> postsCache = CacheBuilder.newBuilder()
+	final LoadingCache<URI, List<BlogItem>> postsCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.build(new CacheLoader<>() {
 			@Override
-			public List<? extends BlogItem> load(URI uri) throws Exception {
+			public List<BlogItem> load(URI uri) throws Exception {
 				HttpRequest request = HttpRequest.newBuilder(uri).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				Root root = objectMapper.readValue(response.body(), Root.class);
-				return root.items != null ? root.items : Collections.emptyList();
+				return root.toBlogItems();
 			}
 		});
 
-	final LoadingCache<URI, Item> postCache = CacheBuilder.newBuilder()
+	final LoadingCache<URI, BlogItem> postCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.build(new CacheLoader<>() {
 			@Override
-			public Item load(URI uri) throws Exception {
+			public BlogItem load(URI uri) throws Exception {
 				HttpRequest request = HttpRequest.newBuilder(uri).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				return objectMapper.readValue(response.body(), Item.class);
+				return objectMapper.readValue(response.body(), Item.class).toBlogItem();
 			}
 		});
 
 	@Override
-	public List<? extends BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
+	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
 		Map<String, Object> params = new TreeMap<>(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"fetchBodies", Boolean.TRUE.toString(),
@@ -93,7 +92,7 @@ class Blogger implements AbstractBlog {
 	}
 
 	@Override
-	public List<Item> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
+	public List<BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
@@ -103,11 +102,11 @@ class Blogger implements AbstractBlog {
 		))))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		Root root = objectMapper.readValue(response.body(), Root.class);
-		return root.items != null ? root.items : Collections.emptyList();
+		return root.toBlogItems();
 	}
 
 	@Override
-	public Item getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
+	public BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"fetchBodies", Boolean.TRUE.toString(),
@@ -116,25 +115,31 @@ class Blogger implements AbstractBlog {
 		))))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		Root root = objectMapper.readValue(response.body(), Root.class);
-		return root.items.stream().collect(MoreCollectors.onlyElement());
+		return root.toBlogItems().stream().collect(MoreCollectors.onlyElement());
 	}
 
 	@Override
-	public Item getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
+	public BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create("%s/%s?%s".formatted(posts(config), blogPostId, HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey")
 		))))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		return objectMapper.readValue(response.body(), Item.class);
+		return objectMapper.readValue(response.body(), Item.class).toBlogItem();
 	}
 
-	@Serdeable
 	record Root(
 		String kind,
 		String nextPageToken,
 		List<Item> items,
 		String etag
 	) {
+
+		public List<BlogItem> toBlogItems() {
+			if (items == null) {
+				return List.of();
+			}
+			return items.stream().map(Item::toBlogItem).toList();
+		}
 	}
 
 	@Serdeable
@@ -153,40 +158,16 @@ class Blogger implements AbstractBlog {
 		Replies replies,
 		List<String> labels,
 		String etag
-	) implements BlogItem {
+	)  {
 
-		@Override
-		@JsonInclude
-		public String getId() {
-			return id;
-		}
-
-		@Override
-		@JsonInclude
-		public String getTitle() {
-			return title;
-		}
-
-		@Override
-		@JsonInclude
-		public String getContent() {
-			return content;
-		}
-
-		@Override
-		@JsonInclude
-		public OffsetDateTime getPublished() {
-			return OffsetDateTime.parse(published);
-		}
-
-		@Override
-		@JsonInclude
-		public String getAttachmentUrl() {
-			if (images != null && !images.isEmpty()) {
-				return images.getFirst().url;
-			} else {
-				return null;
-			}
+		public BlogItem toBlogItem() {
+			return new BlogItem(
+				id,
+				title,
+				content,
+				OffsetDateTime.parse(published),
+				images != null && !images.isEmpty() ? images.getFirst().url : null
+			);
 		}
 	}
 

@@ -54,7 +54,7 @@ public class BlogService {
 			logger.debug("POST send latest blog post for {} in {}", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
 			posting.sendToAllChannels(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -70,7 +70,7 @@ public class BlogService {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
 			posting.sendMails(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -86,7 +86,7 @@ public class BlogService {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
 			posting.sendTelegramMessage(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -102,7 +102,7 @@ public class BlogService {
 			logger.debug("POST send latest blog post for {} in {} via whatsapp", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
 			posting.sendWhatsAppMessage(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -118,7 +118,7 @@ public class BlogService {
 			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
 			BlogConfiguration config = getBlogConfiguration(regionId, language);
 			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.getId());
+			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
 			posting.sendPushNotifications(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -139,7 +139,7 @@ public class BlogService {
 
 	@Get("/posts")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	List<? extends BlogItem> getBlogPosts(
+	List<BlogItem> getBlogPosts(
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
 		@QueryValue(defaultValue = "") String searchText,

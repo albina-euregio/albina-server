@@ -70,22 +70,22 @@ public class BlogController {
 	}
 
 	public void updateConfigurationLastPublished(BlogConfiguration config, BlogItem object) {
-		if (!object.getPublished().toInstant().isAfter(config.getLastPublishedTimestamp().toInstant())) {
+		if (!object.published().toInstant().isAfter(config.getLastPublishedTimestamp().toInstant())) {
 			return;
 		}
-		config.setLastPublishedBlogId(object.getId());
-		config.setLastPublishedTimestamp(object.getPublished());
+		config.setLastPublishedBlogId(object.id());
+		config.setLastPublishedTimestamp(object.published());
 		logger.info("Updating lastPublishedTimestamp={} lastPublishedBlogId={} for {}",
 			config.getLastPublishedTimestamp(), config.getLastPublishedBlogId(), config);
 		blogConfigurationRepository.update(config);
 	}
 
-	public List<? extends BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
+	public List<BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		if (config == null || config.getBlogApiUrl() == null) {
 			return Collections.emptyList();
 		}
 
-		List<? extends BlogItem> blogPosts = blogImplementation(config).getBlogPosts(config);
+		List<BlogItem> blogPosts = blogImplementation(config).getBlogPosts(config);
 		logger.info("Found {} new blog posts for {}", blogPosts.size(), config);
 		return blogPosts;
 	}
@@ -123,7 +123,7 @@ public class BlogController {
 			return;
 		}
 
-		List<? extends BlogItem> blogPosts;
+		List<BlogItem> blogPosts;
 		try {
 			blogPosts = getBlogPosts(config);
 		} catch (IOException e) {
@@ -132,7 +132,7 @@ public class BlogController {
 		}
 
 		for (BlogItem object : blogPosts) {
-			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
+			MultichannelMessage posting = getSocialMediaPosting(config, object.id());
 			posting.sendToAllChannels(publicationController);
 			updateConfigurationLastPublished(config, object);
 		}
@@ -150,7 +150,7 @@ public class BlogController {
 		Region regionOverride = regionRepository.findById(regionOverrideId).orElseThrow();
 		config.setRegion(regionOverride);
 
-		List<? extends BlogItem> blogPosts;
+		List<BlogItem> blogPosts;
 		try {
 			blogPosts = getBlogPosts(config);
 		} catch (IOException | InterruptedException e) {
@@ -159,7 +159,7 @@ public class BlogController {
 		}
 
 		for (BlogItem object : blogPosts) {
-			MultichannelMessage posting = getSocialMediaPosting(config, object.getId());
+			MultichannelMessage posting = getSocialMediaPosting(config, object.id());
 			posting.tryRunWithLogging("Email newsletter", () -> {
 				RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(config.getLanguageCode(), subjectMatter)
 					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));
@@ -176,7 +176,7 @@ public class BlogController {
 		return CompletableFuture.supplyAsync(() -> {
 			try {
 				BlogItem latest = getLatestBlogPost(config);
-				return new StatusInformation(true, title, "latest=" + latest.getTitle());
+				return new StatusInformation(true, title, "latest=" + latest.title());
 			} catch (Exception e) {
 				if(e instanceof NoSuchElementException) {
 					return new  StatusInformation(false, title, "No published blog posts.");

@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.model.publication.RapidMailConfiguration;
@@ -40,17 +39,17 @@ public class BlogControllerTest {
 		config.setLanguageCode(LanguageCode.de);
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
 		config.setRegion(regionTestUtils.regionTyrol());
-		List<? extends BlogItem> blogPosts = blogController.getBlogPosts(config);
+		List<BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
-		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
-		assertTrue(blogController.getBlogPost(config, blogPosts.getFirst().getId()).getContent().length() > 100, "blog has >100 chars");
+		assertTrue(blogPosts.stream().anyMatch(item -> item.attachmentUrl() != null), "one blog has image");
+		assertTrue(blogController.getBlogPost(config, blogPosts.getFirst().id()).content().length() > 100, "blog has >100 chars");
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
-		assertEquals("Inizio dell’inverno in montagna", blogController.getBlogPost(config, "1851").getTitle());
-		assertEquals(OffsetDateTime.parse("2023-11-30T14:20:44Z"), blogController.getBlogPost(config, "2084").getPublished());
+		assertEquals("Inizio dell’inverno in montagna", blogController.getBlogPost(config, "1851").title());
+		assertEquals(OffsetDateTime.parse("2023-11-30T14:20:44Z"), blogController.getBlogPost(config, "2084").published());
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-tn/wp-json/wp/v2/");
-		assertNull(blogController.getBlogPost(config, "495").getAttachmentUrl());
+		assertNull(blogController.getBlogPost(config, "495").attachmentUrl());
 	}
 
 	@Disabled
@@ -58,9 +57,9 @@ public class BlogControllerTest {
 	public void testBlogPosts() throws Exception {
 		BlogConfiguration config = blogController.getConfiguration(regionTestUtils.regionTyrol(), LanguageCode.de).orElseThrow();
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
-		List<? extends BlogItem> blogPosts = blogController.getBlogPosts(config);
+		List<BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
-		assertTrue(blogPosts.stream().anyMatch(item -> item.getAttachmentUrl() != null), "one blog has image");
+		assertTrue(blogPosts.stream().anyMatch(item -> item.attachmentUrl() != null), "one blog has image");
 		blogController.updateConfigurationLastPublished(config, blogPosts.getFirst());
 	}
 
@@ -69,14 +68,14 @@ public class BlogControllerTest {
 	public void testLatestBlogPost() throws Exception {
 		BlogConfiguration config = blogController.getConfiguration(regionTestUtils.regionTyrol(), LanguageCode.de).orElseThrow();
 		BlogItem blogItem = blogController.getLatestBlogPost(config);
-		assertTrue(blogItem.getContent().length() > 100, "blog has >100 chars");
+		assertTrue(blogItem.content().length() > 100, "blog has >100 chars");
 	}
 
 	@Disabled
 	@Test
 	public void testBlogPost() throws Exception {
         BlogConfiguration configuration = blogController.getConfiguration(regionTestUtils.regionTyrol(), LanguageCode.de).orElseThrow();
-		String blogPost = blogController.getBlogPost(configuration, "1227558273754407795").getContent();
+		String blogPost = blogController.getBlogPost(configuration, "1227558273754407795").content();
 		assertTrue(blogPost.contains("Lawinenabgänge, Rissbildungen und Setzungsgeräusche sind eindeutige Alarmsignale"));
 	}
 
@@ -84,7 +83,7 @@ public class BlogControllerTest {
 	@Test
 	public void testTicket150() throws Exception {
 		BlogConfiguration config = blogController.getConfiguration(regionTestUtils.regionSouthTyrol(), LanguageCode.de).orElseThrow();
-		String blogPost = blogController.getBlogPost(config, "4564885875858452565").getContent();
+		String blogPost = blogController.getBlogPost(config, "4564885875858452565").content();
 		assertTrue(blogPost.contains("In dieser Woche sorgte das Wetter für traumhafte Verhältnisse in den Bergen mit milden Temperaturen und schwachem Wind."));
 	}
 
@@ -96,10 +95,10 @@ public class BlogControllerTest {
 		config.setBlogId("5267718003722031964");
 		config.setApiKey("xxx");
 		BlogItem blogPost = blogController.getBlogPost(config, "576660231960838111");
-		assertEquals("2023-11-22T08:44-08:00", blogPost.getPublished().toString());
-		assertEquals("2023-11-22T16:44:00Z", blogPost.getPublished().toInstant().toString());
-		assertEquals("Boletín de Aludes para el Jueves 23/11/2023", blogPost.getTitle());
-		config.setLastPublishedTimestamp(blogPost.getPublished());
+		assertEquals("2023-11-22T08:44-08:00", blogPost.published().toString());
+		assertEquals("2023-11-22T16:44:00Z", blogPost.published().toInstant().toString());
+		assertEquals("Boletín de Aludes para el Jueves 23/11/2023", blogPost.title());
+		config.setLastPublishedTimestamp(blogPost.published());
 		Assumptions.assumeTrue(Instant.now().isBefore(Instant.parse("2023-11-24T12:00:00Z")));
 		assertEquals(Collections.emptyList(), blogController.getBlogPosts(config));
 	}
