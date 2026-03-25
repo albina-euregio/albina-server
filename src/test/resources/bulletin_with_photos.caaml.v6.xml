@@ -1,0 +1,59 @@
+<bulletins xmlns="http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS">
+  <bulletin bulletinID="15492bd9-a537-4203-91f4-00182846d1f4" lang="en">
+    <publicationTime>2026-03-25T05:27:23Z</publicationTime>
+    <validTime>
+      <startTime>2026-03-24T16:00:00Z</startTime>
+      <endTime>2026-03-25T16:00:00Z</endTime>
+    </validTime>
+    <unscheduled>true</unscheduled>
+    <region regionID="AT-07-14-04">
+      <name>Kalkkögel</name>
+    </region>
+    <region regionID="AT-07-09">
+      <name>Grieskogel Mountains</name>
+    </region>
+    <region regionID="AT-07-14-05">
+      <name>Serles Ridge</name>
+    </region>
+    <region regionID="AT-07-14-02">
+      <name>Kühtai - Geigen Ridge</name>
+    </region>
+    <region regionID="AT-07-14-03">
+      <name>Sellrain - Alpein Mountains</name>
+    </region>
+    <region regionID="AT-07-22">
+      <name>Stubai Alps Central</name>
+    </region>
+    <region regionID="AT-07-03">
+      <name>Mieming Mountains</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <tendency>
+      <tendencyType>increasing</tendencyType>
+      <validTime>
+        <startTime>2026-03-25T16:00:00Z</startTime>
+        <endTime>2026-03-26T16:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-03-25</mainDate>
+        <bulletinPhoto>
+          <url>https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-18-Rauhekopfscharte-Krabach-Marvin-Kaerle-2.jpeg</url>
+          <copyright>Kärle</copyright>
+          <microRegionId>AT-07-03</microRegionId>
+        </bulletinPhoto>
+        <bulletinPhoto>
+          <url>https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-19-Noerdlicher-Daunkogel-Benjamin-Gasser-Lawine-4-Large-768x576.jpg</url>
+          <copyright>Benjamin Gasser</copyright>
+          <date>2026-03-19</date>
+          <microRegionId>AT-07-22</microRegionId>
+        </bulletinPhoto>
+      </ALBINA>
+      <LWD_Tyrol/>
+    </customData>
+  </bulletin>
+</bulletins>
