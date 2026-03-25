@@ -29,7 +29,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 @Singleton
-public class Blogger {
+public class Blogger implements AbstractBlog {
 
 	@Inject
 	HttpClient client;
@@ -60,6 +60,7 @@ public class Blogger {
 			}
 		});
 
+	@Override
 	public List<? extends BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
 		Map<String, Object> params = new TreeMap<>(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
@@ -78,6 +79,7 @@ public class Blogger {
 		return postsCache.get(uri);
 	}
 
+	@Override
 	public BlogItem getCachedBlogPost(BlogConfiguration config, String blogPostId) throws ExecutionException {
 		URI uri = URI.create("%s/%s?%s".formatted(posts(config), blogPostId, HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey")
@@ -89,6 +91,7 @@ public class Blogger {
 		return config.getBlogApiUrl() + config.getBlogId() + "/posts";
 	}
 
+	@Override
 	public List<Item> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
 		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
@@ -102,6 +105,7 @@ public class Blogger {
 		return root.items != null ? root.items : Collections.emptyList();
 	}
 
+	@Override
 	public Item getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
@@ -114,6 +118,7 @@ public class Blogger {
 		return root.items.stream().collect(MoreCollectors.onlyElement());
 	}
 
+	@Override
 	public Item getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create("%s/%s?%s".formatted(posts(config), blogPostId, HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey")

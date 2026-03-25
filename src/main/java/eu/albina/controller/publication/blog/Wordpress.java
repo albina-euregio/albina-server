@@ -31,7 +31,7 @@ import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 @Singleton
-public class Wordpress {
+public class Wordpress implements AbstractBlog {
 
 	@Inject
 	HttpClient client;
@@ -62,6 +62,7 @@ public class Wordpress {
 			}
 		});
 
+	@Override
 	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
 		Map<String, Object> params = new TreeMap<>(Map.of(
 			"lang", config.getLanguageCode(),
@@ -96,11 +97,13 @@ public class Wordpress {
 		return postsCache.get(uri);
 	}
 
+	@Override
 	public BlogItem getCachedBlogPost(BlogConfiguration config, String blogPostId) throws ExecutionException {
 		URI uri = URI.create(config.getBlogApiUrl() + "posts/" + blogPostId);
 		return postCache.get(uri);
 	}
 
+	@Override
 	public List<Item> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
@@ -114,6 +117,7 @@ public class Wordpress {
 		return List.of(items);
 	}
 
+	@Override
 	public Item getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
 			"lang", config.getLanguageCode(),
@@ -124,6 +128,7 @@ public class Wordpress {
 		return Arrays.stream(items).collect(MoreCollectors.onlyElement());
 	}
 
+	@Override
 	public Item getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts/" + blogPostId)).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
