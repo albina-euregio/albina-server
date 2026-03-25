@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -152,26 +153,31 @@ class Wordpress implements AbstractBlog {
 	) implements BlogItem {
 
 		@Override
+		@JsonInclude
 		public String getId() {
 			return String.valueOf(id);
 		}
 
 		@Override
+		@JsonInclude
 		public String getTitle() {
 			return StringEscapeUtils.unescapeHtml4(title.rendered);
 		}
 
 		@Override
+		@JsonInclude
 		public String getContent() {
 			return content.rendered;
 		}
 
 		@Override
+		@JsonInclude
 		public OffsetDateTime getPublished() {
 			return LocalDateTime.parse(date_gmt).atOffset(ZoneOffset.UTC);
 		}
 
 		@Override
+		@JsonInclude
 		public String getAttachmentUrl() {
 			return featured_image_url;
 		}

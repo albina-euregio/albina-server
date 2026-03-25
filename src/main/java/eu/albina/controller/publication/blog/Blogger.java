@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -155,26 +156,31 @@ class Blogger implements AbstractBlog {
 	) implements BlogItem {
 
 		@Override
+		@JsonInclude
 		public String getId() {
 			return id;
 		}
 
 		@Override
+		@JsonInclude
 		public String getTitle() {
 			return title;
 		}
 
 		@Override
+		@JsonInclude
 		public String getContent() {
 			return content;
 		}
 
 		@Override
+		@JsonInclude
 		public OffsetDateTime getPublished() {
 			return OffsetDateTime.parse(published);
 		}
 
 		@Override
+		@JsonInclude
 		public String getAttachmentUrl() {
 			if (images != null && !images.isEmpty()) {
 				return images.getFirst().url;
