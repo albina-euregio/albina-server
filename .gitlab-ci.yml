@@ -13,13 +13,6 @@ variables:
     MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
     MAVEN_ARGS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
-cache:
-    paths:
-        - .m2/repository
-    key:
-        files:
-            - pom.xml
-
 test:
     stage: build
     script:
