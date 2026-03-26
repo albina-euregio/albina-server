@@ -5,9 +5,9 @@ import eu.albina.model.publication.BlogConfiguration;
 
 import java.time.OffsetDateTime;
 
-import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 
-@Introspected
+@Serdeable
 public record BlogItem(
 	String id,
 	String title,

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
+import io.micronaut.serde.ObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,6 +34,9 @@ public class BlogControllerTest {
 	@Inject
 	RegionTestUtils regionTestUtils;
 
+	@Inject
+	ObjectMapper objectMapper;
+
 	@Test
 	void testWordpress() throws Exception {
 		BlogConfiguration config = new BlogConfiguration();
@@ -45,8 +49,9 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.stream().anyMatch(item -> item.attachmentUrl() != null), "one blog has image");
 		assertTrue(blogController.getBlogPost(config, blogPosts.getFirst().id()).content().length() > 100, "blog has >100 chars");
 
-		blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, null);
-		blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, Year.of(2023));
+		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, null);
+		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, Year.of(2023));
+		objectMapper.writeValueAsString(blogPosts);
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
 		assertEquals("Inizio dell’inverno in montagna", blogController.getBlogPost(config, "1851").title());
