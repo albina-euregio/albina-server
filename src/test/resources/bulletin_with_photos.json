@@ -58,7 +58,9 @@
                 "id": "a4478a78-68c5-4d2b-82d1-8c03ac173d59",
                 "url": "https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-18-Rauhekopfscharte-Krabach-Marvin-Kaerle-2.jpeg",
                 "copyright": "Kärle",
-                "microRegionId": "AT-07-03"
+                "microRegionId": "AT-07-03",
+                "latitude": 47.2833,
+                "longitude": 11.3167
             },
             {
                 "id": "2f259514-eb7f-4604-9ea9-85e07815edd6",

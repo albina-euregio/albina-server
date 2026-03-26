@@ -45,12 +45,15 @@
           <url>https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-18-Rauhekopfscharte-Krabach-Marvin-Kaerle-2.jpeg</url>
           <copyright>Kärle</copyright>
           <microRegionId>AT-07-03</microRegionId>
+          <latitude>47.2833</latitude>
+          <longitude>11.3167</longitude>
         </bulletinPhoto>
         <bulletinPhoto>
           <url>https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-19-Noerdlicher-Daunkogel-Benjamin-Gasser-Lawine-4-Large-768x576.jpg</url>
           <copyright>Benjamin Gasser</copyright>
           <date>2026-03-19</date>
           <microRegionId>AT-07-22</microRegionId>
+          <locationName>Daunkogel</locationName>
         </bulletinPhoto>
       </ALBINA>
       <LWD_Tyrol/>

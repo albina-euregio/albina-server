@@ -126,8 +126,10 @@ public class Caaml6 {
 			photo.getUrl(),
 			Strings.emptyToNull(photo.getCopyright()),
 			photo.getDate(),
-			Strings.emptyToNull(photo.getMicroRegionId())
-		);
+			Strings.emptyToNull(photo.getMicroRegionId()),
+			Strings.emptyToNull(photo.getLocationName()),
+			photo.getLatitude(),
+			photo.getLongitude());
 	}
 
 	public static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang, ValidTimePeriod validTimePeriod) {

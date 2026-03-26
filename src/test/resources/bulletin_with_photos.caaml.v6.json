@@ -23,13 +23,16 @@
                         {
                             "url": "https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-18-Rauhekopfscharte-Krabach-Marvin-Kaerle-2.jpeg",
                             "copyright": "Kärle",
-                            "microRegionId": "AT-07-03"
+                            "microRegionId": "AT-07-03",
+                            "latitude": 47.2833,
+                            "longitude": 11.3167
                         },
                         {
                             "url": "https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-19-Noerdlicher-Daunkogel-Benjamin-Gasser-Lawine-4-Large-768x576.jpg",
                             "copyright": "Benjamin Gasser",
                             "date": "2026-03-19",
-                            "microRegionId": "AT-07-22"
+                            "microRegionId": "AT-07-22",
+                            "locationName": "Daunkogel"
                         }
                     ]
                 },

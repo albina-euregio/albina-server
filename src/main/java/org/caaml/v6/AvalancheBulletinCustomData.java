@@ -73,12 +73,18 @@ public class AvalancheBulletinCustomData {
 		public final String copyright;
 		public final java.time.LocalDate date;
 		public final String microRegionId;
+		public final String locationName;
+		public final Double latitude;
+		public final Double longitude;
 
-		public BulletinPhoto(String url, String copyright, java.time.LocalDate date, String microRegionId) {
+		public BulletinPhoto(String url, String copyright, java.time.LocalDate date, String microRegionId, String locationName, Double latitude, Double longitude) {
 			this.url = url;
 			this.copyright = copyright;
 			this.date = date;
 			this.microRegionId = microRegionId;
+			this.locationName = locationName;
+			this.latitude = latitude;
+			this.longitude = longitude;
 		}
 
 		public String getUrl() {
@@ -95,6 +101,18 @@ public class AvalancheBulletinCustomData {
 
 		public String getMicroRegionId() {
 			return microRegionId;
+		}
+
+		public String getLocationName() {
+			return locationName;
+		}
+
+		public Double getLatitude() {
+			return latitude;
+		}
+
+		public Double getLongitude() {
+			return longitude;
 		}
 	}
 }
