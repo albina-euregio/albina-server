@@ -13,8 +13,7 @@ CREATE TABLE avalanche_bulletin_photos
     LATITUDE              double       DEFAULT NULL,
     LONGITUDE             double       DEFAULT NULL,
     PRIMARY KEY (ID),
-    CONSTRAINT avalanche_bulletin_photos_avalanche_bulletins_FK FOREIGN KEY (AVALANCHE_BULLETIN_ID) REFERENCES avalanche_bulletins (ID) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT avalanche_bulletin_photos_bulletin_url_UK UNIQUE (AVALANCHE_BULLETIN_ID, URL)
+    CONSTRAINT avalanche_bulletin_photos_avalanche_bulletins_FK FOREIGN KEY (AVALANCHE_BULLETIN_ID) REFERENCES avalanche_bulletins (ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE INDEX avalanche_bulletin_photos_avalanche_bulletin_idx ON avalanche_bulletin_photos (AVALANCHE_BULLETIN_ID);
