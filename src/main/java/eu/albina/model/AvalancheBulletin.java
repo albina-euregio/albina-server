@@ -23,15 +23,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import eu.albina.jobs.PublicationStrategy;
-import eu.albina.util.JsonUtil;
-
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.StrategicMindset;
 import eu.albina.model.enumerations.Tendency;
 import eu.albina.model.enumerations.TextPart;
-
+import eu.albina.util.JsonUtil;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.annotation.DateUpdated;
 import io.micronaut.serde.annotation.Serdeable;
@@ -206,12 +204,17 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@JsonIgnore
 	private Collection<AvalancheBulletinText> textPartsMap;
 
+	/** Collection containing all photos of a bulletin */
+	@OneToMany(mappedBy = "avalancheBulletin", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private Collection<AvalancheBulletinPhoto> photos;
+
 	/**
 	 * Standard constructor for an avalanche bulletin.
 	 */
 	public AvalancheBulletin() {
 		additionalAuthors = new LinkedHashSet<>();
 		textPartsMap = new ArrayList<>();
+		photos = new ArrayList<>();
 		publishedRegions = new LinkedHashSet<>();
 		savedRegions = new LinkedHashSet<>();
 		suggestedRegions = new LinkedHashSet<>();
@@ -724,6 +727,17 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return result;
 	}
 
+	public Collection<AvalancheBulletinPhoto> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(Collection<AvalancheBulletinPhoto> photos) {
+		this.photos = photos != null ? new ArrayList<>(photos) : new ArrayList<>();
+		for (AvalancheBulletinPhoto photo : this.photos) {
+			photo.setAvalancheBulletin(this);
+		}
+	}
+
 	public boolean isHasDaytimeDependency() {
 		return hasDaytimeDependency;
 	}
@@ -879,6 +893,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		for (TextPart textPart : TextPart.values()) {
 			putTexts(textPart, bulletin.getTexts(textPart));
 		}
+
+		setPhotos(bulletin.getPhotos() != null
+			? bulletin.getPhotos().stream().map(AvalancheBulletinPhoto::new).collect(Collectors.toCollection(ArrayList::new))
+			: new ArrayList<>());
 
 		setAvActivityHighlightsTextcat(bulletin.getAvActivityHighlightsTextcat());
 		setAvActivityCommentTextcat(bulletin.getAvActivityCommentTextcat());

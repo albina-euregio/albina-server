@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
@@ -33,12 +34,21 @@ public class AvalancheBulletinCustomData {
 	public static class ALBINA {
 		public final String mainDate;
 
-		public ALBINA(String mainDate) {
+		@JacksonXmlElementWrapper(useWrapping = false)
+		@JacksonXmlProperty(localName = "bulletinPhoto")
+		public final List<BulletinPhoto> bulletinPhotos;
+
+		public ALBINA(String mainDate, List<BulletinPhoto> bulletinPhotos) {
 			this.mainDate = mainDate;
+			this.bulletinPhotos = bulletinPhotos;
 		}
 
 		public String getMainDate() {
 			return mainDate;
+		}
+
+		public List<BulletinPhoto> getBulletinPhotos() {
+			return bulletinPhotos;
 		}
 	}
 
@@ -54,6 +64,55 @@ public class AvalancheBulletinCustomData {
 
 		public List<String> getDangerPatterns() {
 			return dangerPatterns;
+		}
+	}
+
+	@Serdeable
+	public static class BulletinPhoto {
+		public final String url;
+		public final String copyright;
+		public final java.time.LocalDate date;
+		public final String microRegionId;
+		public final String locationName;
+		public final Double latitude;
+		public final Double longitude;
+
+		public BulletinPhoto(String url, String copyright, java.time.LocalDate date, String microRegionId, String locationName, Double latitude, Double longitude) {
+			this.url = url;
+			this.copyright = copyright;
+			this.date = date;
+			this.microRegionId = microRegionId;
+			this.locationName = locationName;
+			this.latitude = latitude;
+			this.longitude = longitude;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public String getCopyright() {
+			return copyright;
+		}
+
+		public java.time.LocalDate getDate() {
+			return date;
+		}
+
+		public String getMicroRegionId() {
+			return microRegionId;
+		}
+
+		public String getLocationName() {
+			return locationName;
+		}
+
+		public Double getLatitude() {
+			return latitude;
+		}
+
+		public Double getLongitude() {
+			return longitude;
 		}
 	}
 }

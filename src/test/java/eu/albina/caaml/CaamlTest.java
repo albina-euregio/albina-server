@@ -207,4 +207,9 @@ public class CaamlTest {
 	public void toCAAMLv6_ES_AR() throws Exception {
 		toCAAMLv6("aludes.aragon.es/2025-09-17.json", "aludes.aragon.es/2025-09-17.caaml.v6.json");
 	}
+
+	@Test
+	public void toCAAMLv6_custom_data_images() throws Exception {
+		toCAAMLv6("bulletin_with_photos.json", "bulletin_with_photos.caaml.v6.json");
+	}
 }

@@ -1,0 +1,76 @@
+[
+    {
+        "id": "15492bd9-a537-4203-91f4-00182846d1f4",
+        "publicationDate": "2026-03-25T05:27:23Z",
+        "updateDate": "2026-03-25T12:25:26Z",
+        "ownerRegion": "AT-07",
+        "highlights": [],
+        "avActivityHighlights": [],
+        "avActivityComment": [],
+        "synopsisHighlights": [],
+        "synopsisComment": [],
+        "snowpackStructureHighlights": [],
+        "snowpackStructureComment": [],
+        "travelAdvisoryHighlights": [],
+        "travelAdvisoryComment": [],
+        "tendencyComment": [],
+        "tendency": "increasing",
+        "generalHeadlineComment": [],
+        "validity": {
+            "from": "2026-03-24T16:00:00Z",
+            "until": "2026-03-25T16:00:00Z"
+        },
+        "suggestedRegions": [],
+        "savedRegions": [
+            "AT-07-14-04",
+            "AT-07-09",
+            "AT-07-14-05",
+            "AT-07-14-02",
+            "AT-07-14-03",
+            "AT-07-22",
+            "AT-07-03"
+        ],
+        "publishedRegions": [
+            "AT-07-14-04",
+            "AT-07-09",
+            "AT-07-14-05",
+            "AT-07-14-02",
+            "AT-07-14-03",
+            "AT-07-22",
+            "AT-07-03"
+        ],
+        "forenoon": {
+            "id": "3a601066-10e4-4d72-939d-4023664f014e",
+            "warningLevelId": "1_1",
+            "hasElevationDependency": false,
+            "dangerRatingAbove": "low",
+            "dangerRatingBelow": "low"
+        },
+        "afternoon": {
+            "id": "0cb8fb69-2ead-4920-a411-7d1c252c881d",
+            "warningLevelId": "1_1",
+            "hasElevationDependency": false,
+            "dangerRatingAbove": "low",
+            "dangerRatingBelow": "low"
+        },
+        "photos": [
+            {
+                "id": "a4478a78-68c5-4d2b-82d1-8c03ac173d59",
+                "url": "https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-18-Rauhekopfscharte-Krabach-Marvin-Kaerle-2.jpeg",
+                "copyright": "Kärle",
+                "microRegionId": "AT-07-03",
+                "latitude": 47.2833,
+                "longitude": 11.3167
+            },
+            {
+                "id": "2f259514-eb7f-4604-9ea9-85e07815edd6",
+                "url": "https://blog.avalanche.report/at-07/wp-content/uploads/sites/4/2026/03/2026-03-19-Noerdlicher-Daunkogel-Benjamin-Gasser-Lawine-4-Large-768x576.jpg",
+                "copyright": "Benjamin Gasser",
+                "date": "2026-03-19",
+                "microRegionId": "AT-07-22",
+                "locationName": "Daunkogel"
+            }
+        ],
+        "hasDaytimeDependency": false
+    }
+]

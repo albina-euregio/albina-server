@@ -21,6 +21,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheBulletinPhoto;
 import eu.albina.model.AvalancheProblem;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.EawsMatrixInformation;
@@ -85,8 +86,13 @@ public class Caaml6 {
 			.filter(Objects::nonNull)
 			.map(dp -> dp.name().toUpperCase())
 			.collect(Collectors.toList());
+		List<AvalancheBulletinCustomData.BulletinPhoto> images = avalancheBulletin.getPhotos() == null
+			? List.of()
+			: avalancheBulletin.getPhotos().stream()
+				.map(Caaml6::toCaamlBulletinPhoto)
+				.collect(Collectors.toList());
 		bulletin.setCustomData(new AvalancheBulletinCustomData(
-			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDateString()),
+			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDateString(), images.isEmpty() ? null : images),
 			new AvalancheBulletinCustomData.LwdTyrol(dangerPatterns)
 		));
 		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
@@ -113,6 +119,17 @@ public class Caaml6 {
 		bulletin.setValidTime(new ValidTime(avalancheBulletin.getValidFrom().toInstant(), avalancheBulletin.getValidUntil().toInstant()));
 		bulletin.setWeatherForecast(org.caaml.v6.Texts.of(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
 		return bulletin;
+	}
+
+	private static AvalancheBulletinCustomData.BulletinPhoto toCaamlBulletinPhoto(AvalancheBulletinPhoto photo) {
+		return new AvalancheBulletinCustomData.BulletinPhoto(
+			photo.getUrl(),
+			Strings.emptyToNull(photo.getCopyright()),
+			photo.getDate(),
+			Strings.emptyToNull(photo.getMicroRegionId()),
+			Strings.emptyToNull(photo.getLocationName()),
+			photo.getLatitude(),
+			photo.getLongitude());
 	}
 
 	public static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang, ValidTimePeriod validTimePeriod) {
