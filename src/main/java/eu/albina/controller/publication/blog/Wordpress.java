@@ -156,7 +156,7 @@ class Wordpress implements AbstractBlog {
 				String.valueOf(id),
 				StringEscapeUtils.unescapeHtml4(title.rendered),
 				content != null ? content.rendered : null,
-				LocalDateTime.parse(date_gmt).atOffset(ZoneOffset.UTC),
+				LocalDateTime.parse(Objects.requireNonNullElse(date_gmt, date)).atOffset(ZoneOffset.UTC),
 				featured_image_url
 			);
 		}
