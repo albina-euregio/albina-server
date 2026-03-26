@@ -5,6 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MoreCollectors;
+
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HttpClientUtil;
 
@@ -47,6 +48,7 @@ class Wordpress implements AbstractBlog {
 			public List<BlogItem> load(URI uri) throws Exception {
 				HttpRequest request = HttpRequest.newBuilder(uri).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				HttpClientUtil.checkResponse(response);
 				Item[] items = objectMapper.readValue(response.body(), Item[].class);
 				return Arrays.stream(items).map(Item::toBlogItem).toList();
 			}
@@ -59,6 +61,7 @@ class Wordpress implements AbstractBlog {
 			public BlogItem load(URI uri) throws Exception {
 				HttpRequest request = HttpRequest.newBuilder(uri).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				HttpClientUtil.checkResponse(response);
 				return objectMapper.readValue(response.body(), Item.class).toBlogItem();
 			}
 		});
@@ -114,6 +117,7 @@ class Wordpress implements AbstractBlog {
 			"order", "asc"
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpClientUtil.checkResponse(response);
 		Item[] items = objectMapper.readValue(response.body(), Item[].class);
 		return Arrays.stream(items).map(Item::toBlogItem).toList();
 	}
@@ -125,6 +129,7 @@ class Wordpress implements AbstractBlog {
 			"per_page", Integer.toString(1)
 		)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpClientUtil.checkResponse(response);
 		Item[] items = objectMapper.readValue(response.body(), Item[].class);
 		return Arrays.stream(items).collect(MoreCollectors.onlyElement()).toBlogItem();
 	}
@@ -133,6 +138,7 @@ class Wordpress implements AbstractBlog {
 	public BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts/" + blogPostId)).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpClientUtil.checkResponse(response);
 		return objectMapper.readValue(response.body(), Item.class).toBlogItem();
 	}
 
