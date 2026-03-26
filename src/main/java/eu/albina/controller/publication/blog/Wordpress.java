@@ -155,7 +155,7 @@ class Wordpress implements AbstractBlog {
 			return new BlogItem(
 				String.valueOf(id),
 				StringEscapeUtils.unescapeHtml4(title.rendered),
-				content.rendered,
+				content != null ? content.rendered : null,
 				LocalDateTime.parse(date_gmt).atOffset(ZoneOffset.UTC),
 				featured_image_url
 			);
