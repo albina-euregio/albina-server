@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.Year;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.attachmentUrl() != null), "one blog has image");
 		assertTrue(blogController.getBlogPost(config, blogPosts.getFirst().id()).content().length() > 100, "blog has >100 chars");
+
+		blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, null);
+		blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, Year.of(2023));
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
 		assertEquals("Inizio dell’inverno in montagna", blogController.getBlogPost(config, "1851").title());

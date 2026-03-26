@@ -91,8 +91,8 @@ class Wordpress implements AbstractBlog {
 			params.put("categories", searchCategory);
 		}
 		if (year != null && year.getValue() > 0) {
-			params.put("after", year.atMonth(1).atDay(1));
-			params.put("before", year.atMonth(12).atDay(31));
+			params.put("after", year.atMonth(1).atDay(1).atStartOfDay().atZone(ZoneOffset.UTC).toInstant());
+			params.put("before", year.atMonth(12).atDay(31).atTime(23, 59, 59).atZone(ZoneOffset.UTC).toInstant());
 		}
 		URI uri = URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(params));
 		return postsCache.get(uri);
