@@ -4,6 +4,7 @@ package eu.albina.controller.publication.blog;
 import eu.albina.model.publication.BlogConfiguration;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -13,6 +14,7 @@ public record BlogItem(
 	String title,
 	String content,
 	OffsetDateTime published,
+	Collection<String> categories,
 	String attachmentUrl
 	) {
 

@@ -51,6 +51,7 @@ public class BlogControllerTest {
 
 		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, null);
 		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, Year.of(2023));
+		assertEquals(List.of("Aktuelle Situation"), blogPosts.getFirst().categories());
 		objectMapper.writeValueAsString(blogPosts);
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");

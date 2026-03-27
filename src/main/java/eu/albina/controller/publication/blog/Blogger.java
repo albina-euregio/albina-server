@@ -166,6 +166,7 @@ class Blogger implements AbstractBlog {
 				title,
 				content,
 				OffsetDateTime.parse(published),
+				null,
 				images != null && !images.isEmpty() ? images.getFirst().url : null
 			);
 		}

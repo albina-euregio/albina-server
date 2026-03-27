@@ -38,17 +38,19 @@ class Wordpress implements AbstractBlog {
 	@Inject
 	ObjectMapper objectMapper;
 
-	final LoadingCache<URI, List<BlogItem>> postsCache = HttpClientUtil.newHttpCache(client, body-> {
-		Item[] items = objectMapper.readValue(body, Item[].class);
-		return Arrays.stream(items).map(Item::toBlogItem).toList();
-	});
+	final LoadingCache<URI, List<Item>> postsCache = HttpClientUtil.newHttpCache(() -> client, body->
+		List.of(objectMapper.readValue(body, Item[].class)));
 
-	final LoadingCache<URI, BlogItem> postCache = HttpClientUtil.newHttpCache(client, body ->
-		objectMapper.readValue(body, Item.class).toBlogItem()
-	);
+	final LoadingCache<URI, Item> postCache = HttpClientUtil.newHttpCache(() -> client, body ->
+		objectMapper.readValue(body, Item.class));
+
+	final LoadingCache<URI, List<Category>> categoriesCache = HttpClientUtil.newHttpCache(() -> client, body ->
+		List.of(objectMapper.readValue(body, Category[].class)));
 
 	@Override
 	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
+		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
+		// https://developer.wordpress.org/rest-api/using-the-rest-api/global-parameters/#_embed
 		Map<String, Object> params = new TreeMap<>(Map.of(
 			"lang", config.getLanguageCode(),
 			"_embed", "wp:term",
@@ -79,13 +81,35 @@ class Wordpress implements AbstractBlog {
 			params.put("before", year.atMonth(12).atDay(31).atTime(23, 59, 59).atZone(ZoneOffset.UTC).toInstant());
 		}
 		URI uri = URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(params));
-		return postsCache.get(uri);
+		List<Category> categories = getCachedCategories(config);
+		return postsCache.get(uri).stream().map(item -> item.toBlogItem(categories)).toList();
 	}
 
 	@Override
 	public BlogItem getCachedBlogPost(BlogConfiguration config, String blogPostId) throws ExecutionException {
 		URI uri = URI.create(config.getBlogApiUrl() + "posts/" + blogPostId);
-		return postCache.get(uri);
+		List<Category> categories = getCachedCategories(config);
+		return postCache.get(uri).toBlogItem(categories);
+	}
+
+	List<Category> getCachedCategories(BlogConfiguration config) throws ExecutionException {
+		// https://developer.wordpress.org/rest-api/reference/categories/#arguments
+		Map<String, Object> params = Map.of(
+			"lang", config.getLanguageCode(),
+			"_fields", String.join(",",
+				"id",
+				"count",
+				"description",
+				"name",
+				"slug",
+				"taxonomy",
+				"polylang_current_lang",
+				"polylang_translations"
+			),
+			"per_page", Integer.toString(99)
+		);
+		URI uri = URI.create(config.getBlogApiUrl() + "categories?" + HttpClientUtil.queryParams(params));
+		return categoriesCache.get(uri);
 	}
 
 	@Override
@@ -100,7 +124,7 @@ class Wordpress implements AbstractBlog {
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		HttpClientUtil.checkResponse(response);
 		Item[] items = objectMapper.readValue(response.body(), Item[].class);
-		return Arrays.stream(items).map(Item::toBlogItem).toList();
+		return Arrays.stream(items).map(item -> item.toBlogItem(null)).toList();
 	}
 
 	@Override
@@ -112,7 +136,7 @@ class Wordpress implements AbstractBlog {
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		HttpClientUtil.checkResponse(response);
 		Item[] items = objectMapper.readValue(response.body(), Item[].class);
-		return Arrays.stream(items).collect(MoreCollectors.onlyElement()).toBlogItem();
+		return Arrays.stream(items).collect(MoreCollectors.onlyElement()).toBlogItem(null);
 	}
 
 	@Override
@@ -120,7 +144,7 @@ class Wordpress implements AbstractBlog {
 		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts/" + blogPostId)).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		HttpClientUtil.checkResponse(response);
-		return objectMapper.readValue(response.body(), Item.class).toBlogItem();
+		return objectMapper.readValue(response.body(), Item.class).toBlogItem(null);
 	}
 
 	@Serdeable
@@ -133,20 +157,35 @@ class Wordpress implements AbstractBlog {
 		Rendered content,
 		Rendered excerpt,
 		long featured_media,
-		long[] categories,
+		List<Long> categories,
 		String polylang_current_lang,
 		PolylangTranslation[] polylang_translations,
 		String featured_image_url
 	) {
-		public BlogItem toBlogItem() {
+		public BlogItem toBlogItem(List<Category> categories) {
+			categories = Objects.requireNonNullElse(categories, List.of());
 			return new BlogItem(
 				String.valueOf(id),
 				StringEscapeUtils.unescapeHtml4(title.rendered),
 				content != null ? content.rendered : null,
 				LocalDateTime.parse(Objects.requireNonNullElse(date_gmt, date)).atOffset(ZoneOffset.UTC),
+				categories.stream().filter(c -> this.categories.contains(c.id)).map(Category::name).toList(),
 				featured_image_url
 			);
 		}
+	}
+
+	@Serdeable
+	record Category(
+		long id,
+		long count,
+		String description,
+		String name,
+		String slug,
+		String taxonomy,
+		String polylangCurrentLang,
+		PolylangTranslation[] polylang_translations
+	) {
 	}
 
 	@Serdeable

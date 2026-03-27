@@ -17,6 +17,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public interface HttpClientUtil {
@@ -42,14 +43,14 @@ public interface HttpClientUtil {
 		}
 	}
 
-	static <T> LoadingCache<URI, T> newHttpCache(HttpClient client, IOFunction<String, T> function) {
+	static <T> LoadingCache<URI, T> newHttpCache(Supplier<HttpClient> client, IOFunction<String, T> function) {
 		return CacheBuilder.newBuilder()
 			.expireAfterWrite(Duration.ofMinutes(5))
 			.build(new CacheLoader<>() {
 				@Override
 				public T load(URI uri) throws Exception {
 					HttpRequest request = HttpRequest.newBuilder(uri).build();
-					HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+					HttpResponse<String> response = client.get().send(request, HttpResponse.BodyHandlers.ofString());
 					checkResponse(response);
 					return function.apply(response.body());
 				}
