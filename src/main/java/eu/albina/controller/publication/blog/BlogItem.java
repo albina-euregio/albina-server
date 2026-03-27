@@ -4,23 +4,25 @@ package eu.albina.controller.publication.blog;
 import eu.albina.model.publication.BlogConfiguration;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 
-public interface BlogItem {
-	String getId();
+import io.micronaut.serde.annotation.Serdeable;
 
-	String getTitle();
+@Serdeable
+public record BlogItem(
+	String id,
+	String title,
+	String content,
+	OffsetDateTime published,
+	Collection<String> categories,
+	String attachmentUrl
+	) {
 
-	String getContent();
-
-	OffsetDateTime getPublished();
-
-	String getAttachmentUrl();
-
-	default String getTitleAndUrl(BlogConfiguration config) {
-		return getTitle() + ": " + this.getAvalancheReportUrl(config);
+	public String getTitleAndUrl(BlogConfiguration config) {
+		return title() + ": " + this.getAvalancheReportUrl(config);
 	}
 
-	default String getAvalancheReportUrl(BlogConfiguration config) {
-		return  config.getRegion().getWebsiteUrl(config.getLanguageCode()) + "/blog/" + config.getBlogUrl() + "/" + getId();
+	public String getAvalancheReportUrl(BlogConfiguration config) {
+		return config.getRegion().getWebsiteUrl(config.getLanguageCode()) + "/blog/" + config.getBlogUrl() + "/" + id();
 	}
 }

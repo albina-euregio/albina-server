@@ -25,12 +25,12 @@ record BlogItemMultichannelMessage(BlogConfiguration config, BlogItem blogPost) 
 
 	@Override
 	public String getAttachmentUrl() {
-		return blogPost.getAttachmentUrl();
+		return blogPost.attachmentUrl();
 	}
 
 	@Override
 	public String getSubject() {
-		return blogPost.getTitle();
+		return blogPost.title();
 	}
 
 	@Override
@@ -40,7 +40,7 @@ record BlogItemMultichannelMessage(BlogConfiguration config, BlogItem blogPost) 
 
 	@Override
 	public String getHtmlMessage() {
-		return blogPost.getContent();
+		return blogPost.content();
 	}
 
 	@Override
