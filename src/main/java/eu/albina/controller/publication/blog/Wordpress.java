@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MoreCollectors;
 
@@ -20,7 +18,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.Year;
@@ -41,30 +38,14 @@ class Wordpress implements AbstractBlog {
 	@Inject
 	ObjectMapper objectMapper;
 
-	final LoadingCache<URI, List<BlogItem>> postsCache = CacheBuilder.newBuilder()
-		.expireAfterWrite(Duration.ofMinutes(5))
-		.build(new CacheLoader<>() {
-			@Override
-			public List<BlogItem> load(URI uri) throws Exception {
-				HttpRequest request = HttpRequest.newBuilder(uri).build();
-				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				HttpClientUtil.checkResponse(response);
-				Item[] items = objectMapper.readValue(response.body(), Item[].class);
-				return Arrays.stream(items).map(Item::toBlogItem).toList();
-			}
-		});
+	final LoadingCache<URI, List<BlogItem>> postsCache = HttpClientUtil.newHttpCache(client, body-> {
+		Item[] items = objectMapper.readValue(body, Item[].class);
+		return Arrays.stream(items).map(Item::toBlogItem).toList();
+	});
 
-	final LoadingCache<URI, BlogItem> postCache = CacheBuilder.newBuilder()
-		.expireAfterWrite(Duration.ofMinutes(5))
-		.build(new CacheLoader<>() {
-			@Override
-			public BlogItem load(URI uri) throws Exception {
-				HttpRequest request = HttpRequest.newBuilder(uri).build();
-				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				HttpClientUtil.checkResponse(response);
-				return objectMapper.readValue(response.body(), Item.class).toBlogItem();
-			}
-		});
+	final LoadingCache<URI, BlogItem> postCache = HttpClientUtil.newHttpCache(client, body ->
+		objectMapper.readValue(body, Item.class).toBlogItem()
+	);
 
 	@Override
 	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
