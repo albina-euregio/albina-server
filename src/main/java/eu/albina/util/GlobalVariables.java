@@ -12,8 +12,6 @@ public class GlobalVariables {
 
 	@Value("${albina.conf.git.version}")
 	public String version;
-	@Value("${albina.conf.tmpOverride:}")
-	public String tmpOverride;
 	@Value("${albina.conf.publishAt5PM}")
 	boolean publishAt5PM;
 	@Value("${albina.conf.publishAt8AM}")
