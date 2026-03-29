@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -58,7 +57,7 @@ public class Caaml6 {
 	}
 
 	public static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
-		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).collect(Collectors.toList()));
+		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).toList());
 		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
 			bulletins.setCustomData(new AvalancheBulletinsCustomData(
 				new AvalancheBulletinsCustomData.ALBINA(generalHeadline)
@@ -75,22 +74,22 @@ public class Caaml6 {
 			bulletin.setAvalancheProblems(Stream.concat(
 				avalancheBulletin.getForenoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.EARLIER)),
 				avalancheBulletin.getAfternoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.LATER))
-			).filter(Objects::nonNull).collect(Collectors.toList()));
+			).filter(Objects::nonNull).toList());
 		} else {
 			bulletin.setAvalancheProblems(avalancheBulletin.getForenoon().getAvalancheProblems().stream()
 				.map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.ALL_DAY))
-				.filter(Objects::nonNull).collect(Collectors.toList()));
+				.filter(Objects::nonNull).toList());
 		}
 		bulletin.setBulletinID(avalancheBulletin.getId());
 		List<String> dangerPatterns = Stream.of(avalancheBulletin.getDangerPattern1(), avalancheBulletin.getDangerPattern2())
 			.filter(Objects::nonNull)
 			.map(dp -> dp.name().toUpperCase())
-			.collect(Collectors.toList());
+			.toList();
 		List<AvalancheBulletinCustomData.BulletinPhoto> images = avalancheBulletin.getPhotos() == null
 			? List.of()
 			: avalancheBulletin.getPhotos().stream()
 				.map(Caaml6::toCaamlBulletinPhoto)
-				.collect(Collectors.toList());
+				.toList();
 		bulletin.setCustomData(new AvalancheBulletinCustomData(
 			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDateString(), images.isEmpty() ? null : images),
 			new AvalancheBulletinCustomData.LwdTyrol(dangerPatterns)
@@ -100,14 +99,14 @@ public class Caaml6 {
 			.flatMap(daytime -> Stream.of(
 				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
 				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
-			.distinct().collect(Collectors.toList()));
+			.distinct().toList());
 		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang).orElse(null));
 		bulletin.setLang(lang.name());
 		bulletin.setMetaData(null);
 		bulletin.setPublicationTime(avalancheBulletin.getPublicationDate().toInstant().truncatedTo(ChronoUnit.SECONDS));
 		bulletin.setRegions(avalancheBulletin.getPublishedRegions().stream()
 			.map(id -> new org.caaml.v6.Region(id, lang.getRegionName(id)))
-			.collect(Collectors.toList()));
+			.toList());
 		bulletin.setSnowpackStructure(org.caaml.v6.Texts.of(avalancheBulletin.getSnowpackStructureHighlightsIn(lang), avalancheBulletin.getSnowpackStructureCommentIn(lang)));
 		bulletin.setSource(null);
 		bulletin.setTendency(List.of(new Tendency(
@@ -137,7 +136,7 @@ public class Caaml6 {
 			return null;
 		}
 		final org.caaml.v6.AvalancheProblem result = new org.caaml.v6.AvalancheProblem();
-		result.setAspects(p.getAspects().stream().map(a -> org.caaml.v6.Aspect.forValue(a.name())).collect(Collectors.toList()));
+		result.setAspects(p.getAspects().stream().map(a -> org.caaml.v6.Aspect.forValue(a.name())).toList());
 		result.setProblemType(AvalancheProblemType.forValue(p.getAvalancheProblem().toString()));
 		final String lowerBound = p.getElevationLow() > 0 ? Integer.toString(p.getElevationLow()) : p.getTreelineLow() ? "treeline" : null;
 		final String upperBound = p.getElevationHigh() > 0 ? Integer.toString(p.getElevationHigh()) : p.getTreelineHigh() ? "treeline" : null;

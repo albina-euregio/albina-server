@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Controller("/user/stress-level")
 @Tag(name = "user")
@@ -85,7 +84,7 @@ public class StressLevelService {
 					.filter(u -> u.hasRole(Role.FORECASTER) || u.hasRole(Role.FOREMAN))
 					.filter(u -> user.getRoles().stream().anyMatch(u::hasRole))
 					.filter(u -> u.hasPermissionForRegion(regionId))
-					.collect(Collectors.toList());
+					.toList();
 			return StressLevel.randomizeUsers(stressLevelRepository.findByUserInAndDateBetween(users, startDate, endDate));
 		} catch (Exception e) {
 			logger.warn("Failed to get stress levels for region: " + regionId, e);

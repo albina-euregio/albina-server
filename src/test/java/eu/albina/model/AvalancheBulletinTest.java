@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @MicronautTest
 public class AvalancheBulletinTest {
@@ -71,7 +70,7 @@ public class AvalancheBulletinTest {
 	public void testSortByDangerRating() throws IOException {
 		List<AvalancheBulletin> bulletins = new ArrayList<>(avalancheBulletinTestUtils.readBulletins(Resources.getResource("2030-02-16_1.json")));
 		Collections.sort(bulletins);
-		List<Integer> actual = bulletins.stream().map(AvalancheBulletin::getHighestDangerRatingDouble).collect(Collectors.toList());
+		List<Integer> actual = bulletins.stream().map(AvalancheBulletin::getHighestDangerRatingDouble).toList();
 		Assertions.assertEquals(List.of(14, 10, 8, 6, 4), actual);
 	}
 }

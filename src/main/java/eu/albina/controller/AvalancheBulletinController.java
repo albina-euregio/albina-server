@@ -370,12 +370,11 @@ public class AvalancheBulletinController {
 	 */
 	public List<AvalancheBulletin> getBulletins(Instant startDate, Instant endDate, List<Region> regions) {
 		List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
-		List<AvalancheBulletin> results = bulletins.stream()
+		return bulletins.stream()
 			.filter(bulletin -> regions.stream()
 				.anyMatch(bulletin::affectsRegionWithoutSuggestions))
-			.collect(Collectors.toList());
-
-		return results;
+			.sorted()
+			.toList();
 	}
 
 	/**

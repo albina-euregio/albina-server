@@ -128,7 +128,7 @@ public class StatisticsController {
 		List<AvalancheBulletin> bulletins = regions.stream()
 			.map(region -> avalancheReportController.getPublicReports(startDate,
 				endDate, region)).flatMap(reports -> getPublishedBulletinsFromReports(reports).stream())
-			.collect(Collectors.toList());
+			.toList();
 		// get latest reports
 		// get bulletins from report json
 
@@ -181,7 +181,7 @@ public class StatisticsController {
 	}
 
 	private List<AvalancheBulletin> getPublishedBulletinsFromReports(Collection<AvalancheReport> reports) {
-		return reports.stream().flatMap(r -> r.getPublishedBulletins(objectMapper).stream()).collect(Collectors.toList());
+		return reports.stream().flatMap(r -> r.getPublishedBulletins(objectMapper).stream()).toList();
 	}
 
 	/**

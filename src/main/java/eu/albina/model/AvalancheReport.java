@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
@@ -147,7 +146,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 			return Arrays.stream(objectMapper.readValue(getJsonString(), AvalancheBulletin[].class))
 				// only add bulletins with published regions
 				.filter(bulletin -> bulletin.getPublishedRegions() != null && !bulletin.getPublishedRegions().isEmpty())
-				.collect(Collectors.toList());
+				.toList();
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -161,7 +160,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 			return;
 		}
 		Region region = getRegion();
-		Collection<AvalancheBulletin> bulletins = getBulletins().stream().map(b -> b.withRegionFilter(region)).collect(Collectors.toList());
+		Collection<AvalancheBulletin> bulletins = getBulletins().stream().map(b -> b.withRegionFilter(region)).toList();
 		String jsonString = objectMapper.cloneWithViewClass(JsonUtil.Views.Public.class).writeValueAsString(bulletins);
 		Files.writeString(path, jsonString, StandardCharsets.UTF_8);
 	}

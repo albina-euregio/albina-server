@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import io.micronaut.core.annotation.Nullable;
 import org.slf4j.Logger;
@@ -178,9 +177,7 @@ public class AvalancheBulletinService {
 			logger.warn("No region defined.");
 		}
 
-		List<AvalancheBulletin> bulletins = avalancheBulletinController.getBulletins(startDate, endDate, regions);
-		Collections.sort(bulletins);
-		return bulletins;
+		return avalancheBulletinController.getBulletins(startDate, endDate, regions);
 	}
 
 	@Get
@@ -366,7 +363,7 @@ public class AvalancheBulletinService {
 			List<AvalancheBulletin> bulletins = Arrays.stream(bulletinsArray)
 				.filter(bulletin -> bulletin.affectsRegionWithoutSuggestions(region))
 				.sorted()
-				.collect(Collectors.toList());
+				.toList();
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
 			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(
@@ -562,7 +559,7 @@ public class AvalancheBulletinService {
 				} else
 					throw new AlbinaException("User is not authorized for this region!");
 
-				List<String> regionIDs = regionRepository.findAll().stream().map(Region::getId).collect(Collectors.toList());
+				List<String> regionIDs = regionRepository.findAll().stream().map(Region::getId).toList();
 				return getJSONBulletins(date, regionIDs);
 			} catch (AlbinaException e) {
 				logger.warn("Error creating bulletin", e);
@@ -609,7 +606,7 @@ public class AvalancheBulletinService {
 						endDate, region, user);
 					List<AvalancheBulletin> regionBulletins = allBulletins.stream()
 						.filter(bulletin -> bulletin.affectsRegion(region))
-						.collect(Collectors.toList());
+						.toList();
 					avalancheReportController.submitReport(regionBulletins, startDate, region, user);
 
 					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
@@ -652,7 +649,7 @@ public class AvalancheBulletinService {
 
 				List<AvalancheBulletin> regionBulletins = allBulletins.stream()
 					.filter(bulletin -> bulletin.affectsRegion(region))
-					.collect(Collectors.toList());
+					.toList();
 
 				avalancheReportController.submitReport(regionBulletins, startDate, region, user);
 			} else

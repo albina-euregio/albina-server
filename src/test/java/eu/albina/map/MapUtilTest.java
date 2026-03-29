@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.google.common.base.StandardSystemProperty;
 import eu.albina.AvalancheBulletinTestUtils;
@@ -189,7 +188,7 @@ public class MapUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final List<AvalancheBulletin> bulletinsTyrol = bulletins.stream()
 			.filter(avalancheBulletin -> avalancheBulletin.affectsRegionOnlyPublished(regionTyrol))
-			.collect(Collectors.toList());
+			.toList();
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletinsTyrol, regionTyrol, serverInstance);
 		avalancheReport.setBulletins(bulletinsTyrol, bulletins);
 		MapUtil.createMapyrusMaps(avalancheReport);

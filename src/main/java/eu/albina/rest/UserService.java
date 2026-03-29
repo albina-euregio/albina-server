@@ -4,7 +4,6 @@ package eu.albina.rest;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.exceptions.HttpStatusException;
@@ -69,7 +68,7 @@ public class UserService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get all regions")
 	public List<String> getRegions() {
-		return regionRepository.findAll().stream().map(Region::getId).collect(Collectors.toList());
+		return regionRepository.findAll().stream().map(Region::getId).toList();
 	}
 
 	@Post

@@ -82,7 +82,7 @@ public class PublicationJob {
 				BulletinStatus status = report != null ? report.getStatus() : null;
 				logger.info("Internal status for region {} is {}", region.getId(), status);
 				return status == BulletinStatus.submitted || status == BulletinStatus.resubmitted;
-			}).collect(Collectors.toList());
+			}).toList();
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");
 			return;
@@ -115,7 +115,7 @@ public class PublicationJob {
 			List<AvalancheBulletin> regionBulletins = allBulletins.stream()
 				.filter(bulletin -> bulletin.affectsRegionOnlyPublished(region))
 				.sorted()
-				.collect(Collectors.toList());
+				.toList();
 
 			if (regionBulletins.isEmpty()) {
 				logger.info("No published bulletins found for region {}.", region);
@@ -195,7 +195,7 @@ public class PublicationJob {
 				// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
 				phase2.add(Thread.startVirtualThread(() -> {
 					List<AvalancheBulletin> regionBulletins = globalBulletins.stream()
-						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).collect(Collectors.toList());
+						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).toList();
 					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationDate);
 					AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
 					publicationController.createRegionResources(superRegion, report);

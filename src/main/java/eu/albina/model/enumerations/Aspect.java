@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import eu.albina.model.converter.EnumSetToStringConverter;
@@ -80,7 +79,7 @@ public enum Aspect {
 			.dropWhile(aspects::contains)
 			.dropWhile(Predicate.not(aspects::contains))
 			.takeWhile(aspects::contains)
-			.collect(Collectors.toList());
+			.toList();
 		if (sorted.size() < 4) {
 			return sorted;
 		}

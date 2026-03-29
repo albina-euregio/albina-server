@@ -172,7 +172,7 @@ public class TextToSpeech {
 				.dropWhile(aspects::contains)
 				.dropWhile(Predicate.not(aspects::contains))
 				.takeWhile(aspects::contains)
-				.collect(Collectors.toList());
+				.toList();
 			if (sorted.size() < 4) {
 				return sorted;
 			}
@@ -218,7 +218,7 @@ public class TextToSpeech {
 		}
 
 		private String dangerRatingTexts0(List<DangerRating> dangerRatings, ValidTimePeriod validTimePeriod) {
-			dangerRatings = dangerRatings.stream().filter(dr -> dr.getValidTimePeriod() == validTimePeriod).collect(Collectors.toList());
+			dangerRatings = dangerRatings.stream().filter(dr -> dr.getValidTimePeriod() == validTimePeriod).toList();
 			if (dangerRatings.stream().allMatch(dr -> dr.getElevation() == null)) {
 				DangerRating rating = dangerRatings.getFirst();
 				return lang.getBundleString("speech.danger-rating", Map.of(

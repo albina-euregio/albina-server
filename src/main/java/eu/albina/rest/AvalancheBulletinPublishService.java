@@ -3,10 +3,8 @@ package eu.albina.rest;
 
 import java.security.Principal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.publication.PublicationController;
@@ -198,7 +196,7 @@ public class AvalancheBulletinPublishService {
 		avalancheReport.setServerInstance(globalVariables.getLocalServerInstance());
 		return (language != null ? Collections.singleton(language) : region.getEnabledLanguages()).stream()
 			.map(lang -> MultichannelMessage.of(avalancheReport, lang))
-			.collect(Collectors.toList());
+			.toList();
 	}
 
 }
