@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
@@ -16,12 +18,12 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.http.server.types.files.StreamedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.StandardSystemProperty;
 import com.google.common.base.Stopwatch;
 import com.google.common.util.concurrent.RateLimiter;
 
@@ -45,6 +47,7 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Role;
+import eu.albina.util.DeleteTempDirectoryOnClose;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
 import eu.albina.util.PdfUtil;
@@ -60,7 +63,6 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
-import io.micronaut.http.server.types.files.SystemFile;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -265,7 +267,7 @@ public class AvalancheBulletinService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get published bulletins as PDF")
-	public SystemFile getPublishedBulletinsAsPDF(
+	public StreamedFile getPublishedBulletinsAsPDF(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Nullable @QueryValue("bulletinId") String bulletinId,
 		@Nullable @QueryValue("microRegionId") String microRegionId,
@@ -275,7 +277,7 @@ public class AvalancheBulletinService {
 
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		logger.info("Get published bulletins as PDF regionId={} bulletinId={} microRegionId={}", regionId, bulletinId, microRegionId);
-		try {
+		try (DeleteTempDirectoryOnClose path = DeleteTempDirectoryOnClose.of("AvalancheBulletinService")) {
 			pdfRateLimiter.acquire();
 			Instant startDate = DateControllerUtil.parseDateOrToday(date);
 			Region region = regionRepository.findById(regionId).orElseThrow();
@@ -291,10 +293,11 @@ public class AvalancheBulletinService {
 			if (bulletins.isEmpty()) {
 				throw new NoSuchElementException("No bulletins found!");
 			}
-			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(resolveTmpPath(globalVariables.tmpOverride).toString(), null);
+			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(
+				path.tempDirectory().toString(), path.tempDirectory().toString());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
-			return new SystemFile(pdf.toFile());
+			return toStreamedFile(pdf);
 		} catch (Exception e) {
 			logger.warn("Error creating PDF", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -350,14 +353,14 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get bulletin preview as PDF")
-	public SystemFile getPreviewPdf(
+	public StreamedFile getPreviewPdf(
 		@Body AvalancheBulletin[] bulletinsArray,
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language) {
 
 		logger.debug("POST PDF preview {}", regionId);
 
-		try {
+		try (DeleteTempDirectoryOnClose path = DeleteTempDirectoryOnClose.of("AvalancheBulletinService")) {
 			Region region = regionRepository.findById(regionId).orElseThrow();
 			ZonedDateTime publicationDate = ZonedDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 			List<AvalancheBulletin> bulletins = Arrays.stream(bulletinsArray)
@@ -367,8 +370,7 @@ public class AvalancheBulletinService {
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
 			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(
-					resolveTmpPath(globalVariables.tmpOverride).toString(),
-					resolveTmpPath(globalVariables.tmpOverride).toString());
+				path.tempDirectory().toString(), path.tempDirectory().toString());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setStatus(BulletinStatus.draft); // preview
 
@@ -376,20 +378,18 @@ public class AvalancheBulletinService {
 			publicationController.createSymbolicLinks(avalancheReport);
 
 			final Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
-
-			return new SystemFile(pdf.toFile()).attach();
+			return toStreamedFile(pdf);
 		} catch (Exception e) {
 			logger.warn("Error creating PDFs", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	private Path resolveTmpPath(String override) throws Exception {
-		Path path = (override == null || override.isBlank())
-			? Path.of(StandardSystemProperty.JAVA_IO_TMPDIR.value())
-			: Path.of(override);
-		Files.createDirectories(path);
-		return path;
+	private static StreamedFile toStreamedFile(Path pdf) throws IOException {
+		byte[] bytes = Files.readAllBytes(pdf);
+		StreamedFile streamedFile = new StreamedFile(new ByteArrayInputStream(bytes), MediaType.APPLICATION_PDF_TYPE);
+		streamedFile.attach(pdf.getFileName().toString());
+		return streamedFile;
 	}
 
 	@Get("/{bulletinId}")

@@ -239,11 +239,13 @@ public class PublicationController {
 				Paths.get(serverInstance.pdfDirectory(), validityDateString)
 			);
 			if (avalancheReport.isLatest()) {
+				Path latest = Paths.get(serverInstance.pdfDirectory(), "latest");
+				Files.createDirectories(latest);
 				createSymbolicLinks(
 					Paths.get(serverInstance.pdfDirectory(), validityDateString, publicationTimeString),
-					Paths.get(serverInstance.pdfDirectory(), "latest")
+					latest
 				);
-				stripDateFromFilenames(Paths.get(serverInstance.pdfDirectory(), "latest"), validityDateString);
+				stripDateFromFilenames(latest, validityDateString);
 				createSymbolicLinks(
 					Paths.get(serverInstance.htmlDirectory(), validityDateString),
 					Paths.get(serverInstance.htmlDirectory())
