@@ -126,8 +126,8 @@ public class StatisticsService {
 	}
 
 	@Post("/vr")
-	@Operation(summary = "Save VR statistics")
-	public void saveMediaFile(
+	@Operation(summary = "Save virtual reality statistics")
+	public void saveVirtualRealityStatistics(
 		@Header String authorization,
 		InputStream inputStream
 	) throws IOException {
