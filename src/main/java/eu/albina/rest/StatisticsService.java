@@ -132,7 +132,7 @@ public class StatisticsService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	public void saveVirtualRealityStatistics(
 		@Header String authorization,
-		@Body InputStream inputStream
+		@Body String json
 	) throws IOException {
 		String token = System.getenv("ALBINA_VR_STATISTICS_TOKEN");
 		if (token == null || token.isEmpty() || !token.equals(authorization)) {
@@ -140,8 +140,6 @@ public class StatisticsService {
 		}
 		String directory = System.getenv("ALBINA_VR_STATISTICS_DIRECTORY");
 		Path file = Path.of(directory).resolve(UUID.randomUUID() + ".json");
-		try (OutputStream outputStream = Files.newOutputStream(file)) {
-			inputStream.transferTo(outputStream);
-		}
+		Files.writeString(file, json);
 	}
 }
