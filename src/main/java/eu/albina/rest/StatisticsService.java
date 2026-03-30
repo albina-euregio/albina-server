@@ -17,6 +17,7 @@ import java.util.UUID;
 import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Header;
@@ -131,7 +132,7 @@ public class StatisticsService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	public void saveVirtualRealityStatistics(
 		@Header String authorization,
-		InputStream inputStream
+		@Body InputStream inputStream
 	) throws IOException {
 		String token = System.getenv("ALBINA_VR_STATISTICS_TOKEN");
 		if (token == null || token.isEmpty() || !token.equals(authorization)) {
