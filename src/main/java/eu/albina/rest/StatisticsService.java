@@ -27,6 +27,7 @@ import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.http.server.types.files.StreamedFile;
 import io.micronaut.security.annotation.Secured;
 
+import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,6 +128,7 @@ public class StatisticsService {
 
 	@Post("/vr")
 	@Operation(summary = "Save virtual reality statistics")
+	@Secured(SecurityRule.IS_ANONYMOUS)
 	public void saveVirtualRealityStatistics(
 		@Header String authorization,
 		InputStream inputStream
