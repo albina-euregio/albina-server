@@ -696,6 +696,8 @@ public class StatisticsController {
 		for (String problem : problems) {
 			sb.append(problem);
 			sb.append(csvDeliminator);
+			sb.append(problem + "AvalancheType");
+			sb.append(csvDeliminator);
 			sb.append(problem + "ElevationAbove");
 			sb.append(csvDeliminator);
 			sb.append(problem + "ElevationBelow");
@@ -1039,6 +1041,8 @@ public class StatisticsController {
 		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
 			sb.append(avalancheProblem.getAvalancheProblem().toStringId());
 			sb.append(csvDeliminator);
+			sb.append(avalancheProblem.getAvalancheType() != null ? avalancheProblem.getAvalancheType() : notAvailableString);
+			sb.append(csvDeliminator);
 			if (avalancheProblem.getTreelineLow())
 				sb.append(lang.getBundleString("elevation.treeline"));
 			else {
@@ -1114,7 +1118,7 @@ public class StatisticsController {
 				}
 			}
 		} else {
-			for (int i = 0; i < 11; i++) {
+			for (int i = 0; i < 12; i++) {
 				sb.append(notAvailableString);
 				sb.append(csvDeliminator);
 			}
