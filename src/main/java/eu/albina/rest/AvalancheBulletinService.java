@@ -149,7 +149,7 @@ public class AvalancheBulletinService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds,
 		@QueryValue("lang") LanguageCode language,
-		@QueryValue("version") CaamlVersion version) {
+		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V6_JSON) CaamlVersion version) {
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
@@ -190,7 +190,7 @@ public class AvalancheBulletinService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language,
-		@QueryValue("version") CaamlVersion version) {
+		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V5) CaamlVersion version) {
 		List<String> regionIds = regionId != null ? Collections.singletonList(regionId) : Collections.emptyList();
 		return getPublishedCaamlBulletins(date, regionIds, language, version);
 	}
@@ -207,7 +207,7 @@ public class AvalancheBulletinService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds,
 		@QueryValue("lang") LanguageCode language,
-		@QueryValue("version") CaamlVersion version) {
+		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V5) CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
@@ -231,7 +231,7 @@ public class AvalancheBulletinService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds,
 		@QueryValue("lang") LanguageCode language,
-		@QueryValue("version") CaamlVersion version) {
+		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V6_JSON) CaamlVersion version) {
 		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
 	}
 

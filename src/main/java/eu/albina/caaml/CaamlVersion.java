@@ -10,6 +10,12 @@ public enum CaamlVersion {
 
 	V5, V6, V6_JSON;
 
+	public interface Str {
+		String V5 = "V5";
+		String V6 = "V6";
+		String V6_JSON = "V6_JSON";
+	}
+
 	String filenameSuffix() {
 		if (this == V5)
 			return ".xml";
