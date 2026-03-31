@@ -4,6 +4,8 @@ package eu.albina.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +54,7 @@ public class StatisticsControllerTest {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, false, false, true);
+		// Files.writeString(Paths.get("src/test/resources/2030-02-16.statistics.csv"), csvString);
 		Assertions.assertEquals(expected, csvString);
 	}
 
@@ -60,6 +63,7 @@ public class StatisticsControllerTest {
 		final String expected = Resources.toString(Resources.getResource("2030-02-16.statistics.extended.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getAvalancheBulletinCsvString(LanguageCode.de, bulletinsAmPm, true, false, true);
+		// Files.writeString(Paths.get("src/test/resources/2030-02-16.statistics.extended.csv"), csvString);
 		Assertions.assertEquals(expected, csvString);
 	}
 
@@ -68,6 +72,7 @@ public class StatisticsControllerTest {
 		final String expected = Resources.toString(Resources.getResource("danger_source_variants.statistics.csv"),
 				StandardCharsets.UTF_8).replaceAll("\r?\n", StatisticsController.csvLineBreak);
 		String csvString = StatisticsController.getDangerSourceVariantsCsvString(dangerSourceVariants);
+		// Files.writeString(Paths.get("src/test/resources/danger_source_variants.statistics.csv"), csvString);
 		Assertions.assertEquals(expected, csvString);
 	}
 }
