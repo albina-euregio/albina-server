@@ -48,7 +48,6 @@ public class AvalancheBulletinPhoto extends AbstractPersistentObject {
 	}
 
 	public AvalancheBulletinPhoto(AvalancheBulletinPhoto source) {
-		setId(source.getId());
 		setUrl(source.getUrl());
 		setCopyright(source.getCopyright());
 		setDate(source.getDate());

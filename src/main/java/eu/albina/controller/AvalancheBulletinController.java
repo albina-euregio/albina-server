@@ -100,6 +100,7 @@ public class AvalancheBulletinController {
 			} else if (isOwnBulletin(newBulletin, region)) {
 				// own bulletin
 				// Bulletin has to be created
+				resetPhotoIds(newBulletin);
 				newBulletin.setId(null);
 				avalancheBulletinRepository.save(newBulletin);
 				resultBulletins.put(newBulletin.getId(), newBulletin);
@@ -124,6 +125,13 @@ public class AvalancheBulletinController {
 		avalancheReportController.saveReport(resultBulletins, startDate, region);
 
 		return resultBulletins;
+	}
+
+	private static void resetPhotoIds(AvalancheBulletin bulletin) {
+		if (bulletin.getPhotos() == null) {
+			return;
+		}
+		bulletin.getPhotos().forEach(photo -> photo.setId(null));
 	}
 
 	private static boolean isOwnBulletin(AvalancheBulletin newBulletin, Region region) {

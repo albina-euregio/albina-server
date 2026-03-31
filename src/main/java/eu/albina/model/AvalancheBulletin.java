@@ -732,7 +732,12 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	public void setPhotos(Collection<AvalancheBulletinPhoto> photos) {
-		this.photos = photos != null ? new ArrayList<>(photos) : new ArrayList<>();
+		if (this.photos == null) {
+			this.photos = new ArrayList<>();
+		} else {
+			this.photos.clear();
+		}
+		this.photos.addAll(photos);
 		for (AvalancheBulletinPhoto photo : this.photos) {
 			photo.setAvalancheBulletin(this);
 		}
