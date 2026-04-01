@@ -43,7 +43,7 @@ interface DateControllerUtil {
 	}
 
 	static Instant parseDateOrNull(String date) {
-		if (date != null) {
+		if (date != null && !date.isEmpty()) {
 			return parseDate(date);
 		} else {
 			return null;

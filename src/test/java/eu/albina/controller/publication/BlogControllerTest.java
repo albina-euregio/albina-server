@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.Year;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,9 +48,12 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.stream().anyMatch(item -> item.attachmentUrl() != null), "one blog has image");
 		assertTrue(blogController.getBlogPost(config, blogPosts.getFirst().id()).content().length() > 100, "blog has >100 chars");
 
-		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, null);
-		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, Year.of(2023));
+		Instant startDate = Instant.parse("2023-01-01T00:00:00Z");
+		Instant endDate = Instant.parse("2024-01-01T00:00:00Z");
+		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, null, null);
+		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, startDate, endDate);
 		assertEquals(List.of("Aktuelle Situation"), blogPosts.getFirst().categories());
+		assertEquals(OffsetDateTime.parse("2023-12-28T16:33:31Z"), blogPosts.getFirst().published());
 		objectMapper.writeValueAsString(blogPosts);
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");

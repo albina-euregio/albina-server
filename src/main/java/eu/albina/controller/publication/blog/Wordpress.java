@@ -18,9 +18,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.Year;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +48,7 @@ class Wordpress implements AbstractBlog {
 		List.of(objectMapper.readValue(body, Category[].class)));
 
 	@Override
-	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
+	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Instant startDate, Instant endDate) throws ExecutionException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
 		// https://developer.wordpress.org/rest-api/using-the-rest-api/global-parameters/#_embed
 		Map<String, Object> params = new TreeMap<>(Map.of(
@@ -76,9 +76,9 @@ class Wordpress implements AbstractBlog {
 		if (searchCategory != null && !searchCategory.isBlank()) {
 			params.put("categories", searchCategory);
 		}
-		if (year != null && year.getValue() > 0) {
-			params.put("after", year.atMonth(1).atDay(1).atStartOfDay().atZone(ZoneOffset.UTC).toInstant());
-			params.put("before", year.atMonth(12).atDay(31).atTime(23, 59, 59).atZone(ZoneOffset.UTC).toInstant());
+		if (startDate != null && endDate != null) {
+			params.put("after", startDate);
+			params.put("before", endDate);
 		}
 		URI uri = URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(params));
 		List<Category> categories = getCachedCategories(config);

@@ -20,8 +20,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.Year;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -61,7 +61,7 @@ class Blogger implements AbstractBlog {
 		});
 
 	@Override
-	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Year year) throws ExecutionException {
+	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Instant startDate, Instant endDate) throws ExecutionException {
 		Map<String, Object> params = new TreeMap<>(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"fetchBodies", Boolean.TRUE.toString(),
@@ -71,9 +71,9 @@ class Blogger implements AbstractBlog {
 		if (searchText != null && !searchText.isBlank()) {
 			params.put("q", searchText);
 		}
-		if (year != null && year.getValue() > 0) {
-			params.put("startDate", year.atMonth(1).atDay(1));
-			params.put("endDate", year.atMonth(12).atDay(31));
+		if (startDate != null && endDate != null) {
+			params.put("startDate", startDate);
+			params.put("endDate", endDate);
 		}
 		URI uri = URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(params)));
 		return postsCache.get(uri);

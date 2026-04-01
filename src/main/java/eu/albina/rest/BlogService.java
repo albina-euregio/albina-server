@@ -27,7 +27,7 @@ import eu.albina.model.publication.BlogConfiguration;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import java.time.Year;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -144,14 +144,17 @@ public class BlogService {
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
 		@QueryValue(defaultValue = "") String searchText,
 		@QueryValue(defaultValue = "") String searchCategory,
-		@QueryValue(defaultValue = "0") Year year) throws ExecutionException {
+		@QueryValue(value = "startDate", defaultValue = "") String start,
+		@QueryValue(value = "endDate", defaultValue = "") String end) throws ExecutionException {
+		Instant startDate = DateControllerUtil.parseDateOrNull(start);
+		Instant endDate = DateControllerUtil.parseDateOrNull(end);
 		BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
-		return blogController.blogImplementation(configuration).getCachedBlogPosts(configuration, searchText, searchCategory, year);
+		return blogController.blogImplementation(configuration).getCachedBlogPosts(configuration, searchText, searchCategory, startDate, endDate);
 	}
 
 	@Get("/post")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	BlogItem getBlogPosts(
+	BlogItem getBlogPost(
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
 		@QueryValue String id) throws ExecutionException {
