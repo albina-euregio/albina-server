@@ -46,7 +46,7 @@ public class AvalancheBulletinStatusService {
 	RegionRepository regionRepository;
 
 	@Serdeable
-	public record Status(Instant date, BulletinStatus status, AvalancheReport report) {
+	public record Status(Instant date, Instant timestamp, BulletinStatus status) {
 	}
 
 	@Get
@@ -64,7 +64,7 @@ public class AvalancheBulletinStatusService {
 				: List.of(regionRepository.findById(regionId).orElseThrow());
 			return regions.stream()
 				.flatMap(region -> avalancheReportController.getPublicReports(startDate, endDate, region).stream())
-				.map(r -> new Status(r.getDate().toInstant(), r.getStatus(), null))
+				.map(r -> new Status(r.getDate().toInstant(), r.getTimestamp().toInstant(), r.getStatus()))
 				.collect(Collectors.toMap(Status::date, r -> r,
 					(s1, s2) -> Stream.of(s1, s2).max(Comparator.comparing(Status::status, BulletinStatus::comparePublicationStatus)).orElseThrow()
 				))
@@ -93,7 +93,7 @@ public class AvalancheBulletinStatusService {
 				region
 			).stream()
 				.sorted(Comparator.comparing(AvalancheReport::getTimestamp))
-				.map(r -> new Status(r.getDate().toInstant(), r.getStatus(), null))
+				.map(r -> new Status(r.getDate().toInstant(), r.getTimestamp().toInstant(), r.getStatus()))
 				.collect(Collectors.toMap(Status::date, r -> r, (s1, s2) -> s2))
 				.values();
 		} catch (Exception e) {
@@ -116,6 +116,6 @@ public class AvalancheBulletinStatusService {
 		Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate, endDate, region);
 
 		AvalancheReport report = reports.iterator().next();
-		return new Status(report.getDate().toInstant(), null, report);
+		return new Status(report.getDate().toInstant(), report.getTimestamp().toInstant(), report.getStatus());
 	}
 }
