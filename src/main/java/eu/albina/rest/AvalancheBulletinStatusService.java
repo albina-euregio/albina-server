@@ -1,9 +1,19 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionRepository;
-import eu.albina.exception.AlbinaException;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -19,18 +29,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
-import jakarta.validation.constraints.NotBlank;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller("/bulletins/status")
 @Tag(name = "bulletins/status")
@@ -102,26 +100,6 @@ public class AvalancheBulletinStatusService {
 			logger.warn("Error loading status for " + regionId, e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-	}
-
-	@Get("/publications")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	public List<Status> getPublicationsStatus(@QueryValue("region") @NotBlank String regionId,
-											  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String start,
-											  @Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
-
-		Instant startDate = DateControllerUtil.parseDateOrToday(start);
-		Instant endDate = DateControllerUtil.parseDateOrNull(end);
-
-		Region region = regionRepository.findById(regionId).orElseThrow();
-
-		Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate, endDate, region);
-
-		return reports.stream()
-			.map(r -> new Status(r.getDate().toInstant(), r.getStatus(), r))
-			.collect(Collectors.toMap(Status::date, r -> r, (s1, s2) -> s2))
-			.values().stream().toList();
 	}
 
 	@Get("/publication")
