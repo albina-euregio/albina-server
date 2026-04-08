@@ -2,6 +2,42 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [8.2.2] - 2026-04-08
+
+### 🚀 Features
+
+- Add Region.enabledEditableFields
+- Store images for bulletins
+- Added avalanche type to bulletin export in StatisticsController
+- Use TravelAdvisoryComment in PDF
+- Add /albina_dev/api to OpenAPIDefinition
+
+### 🐛 Bug Fixes
+
+- Fix VR enpoints
+- Fix putTexts (jakarta.persistence.EntityExistsException)
+
+### 🚜 Refactor
+
+- Use startDate and endDate instead of year for blogs
+- Merge TextcatTextfield into TextPart
+- DeleteTempDirectoryOnClose to replace albina.conf.tmpOverride
+- Remove unused /publications endpoint
+- Remove report in Status object
+- Config textfields (free text, textcat) via lists in region object
+- Caching Wordpress API
+- Caching Blogger API
+
+### ⚙️ Miscellaneous Tasks
+
+- Update micronaut to 4.10.18
+
+## [8.2.1] - 2026-03-10
+
+### 🐛 Bug Fixes
+
+- Fix BulletinStatus ("missing" should turn into "draft")
+
 ## [8.2.0] - 2026-03-09
 
 ### 🐛 Bug Fixes
