@@ -294,7 +294,7 @@ public class AvalancheBulletinService {
 				throw new NoSuchElementException("No bulletins found!");
 			}
 			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(
-				path.tempDirectory().toString(), path.tempDirectory().toString());
+				path.tempDirectory().toString(), null);
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			Path pdf = new PdfUtil(avalancheReport, language, grayscale).createPdf();
 			return toStreamedFile(pdf);
