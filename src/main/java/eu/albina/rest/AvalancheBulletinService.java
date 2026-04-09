@@ -378,7 +378,7 @@ public class AvalancheBulletinService {
 			publicationController.createSymbolicLinks(avalancheReport);
 
 			final Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
-			return toStreamedFile(pdf);
+			return toStreamedFile(pdf).attach(pdf.getFileName().toString());
 		} catch (Exception e) {
 			logger.warn("Error creating PDFs", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -387,9 +387,7 @@ public class AvalancheBulletinService {
 
 	private static StreamedFile toStreamedFile(Path pdf) throws IOException {
 		byte[] bytes = Files.readAllBytes(pdf);
-		StreamedFile streamedFile = new StreamedFile(new ByteArrayInputStream(bytes), MediaType.APPLICATION_PDF_TYPE);
-		streamedFile.attach(pdf.getFileName().toString());
-		return streamedFile;
+		return new StreamedFile(new ByteArrayInputStream(bytes), MediaType.APPLICATION_PDF_TYPE);
 	}
 
 	@Get("/{bulletinId}")
