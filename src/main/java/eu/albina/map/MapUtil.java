@@ -307,6 +307,13 @@ public interface MapUtil {
 			logger.debug("Converting {} to {}", pngFile, webpFile);
 			new ProcessBuilder("cwebp", pngFile.toString(), "-o", webpFile.toString()).inheritIO().start().waitFor();
 		}
+
+		// remove pdf and png (we only keep jpg and webp for save disk space)
+		for (MapImageFormat format : List.of(MapImageFormat.pdf, MapImageFormat.png)) {
+			Path file = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, format);
+			logger.debug("Deleting {}", file);
+			Files.deleteIfExists(file);
+		}
 	}
 
 	private static String getFont(String font, Closer closer) throws IOException {
