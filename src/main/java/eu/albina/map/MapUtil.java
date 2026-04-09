@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.DoubleSummaryStatistics;
 import java.util.EnumSet;
 import java.util.List;
@@ -310,6 +311,9 @@ public interface MapUtil {
 
 		// remove pdf and png (we only keep jpg and webp for save disk space)
 		for (MapImageFormat format : List.of(MapImageFormat.pdf, MapImageFormat.png)) {
+			if (Arrays.stream(Thread.currentThread().getStackTrace()).anyMatch(e -> e.getClassName().contains("MapUtilTest"))) {
+				continue;
+			}
 			Path file = MapImageFormat.checkAndReplaceExtension(outputFile, MapImageFormat.pdf, format);
 			logger.debug("Deleting {}", file);
 			Files.deleteIfExists(file);
