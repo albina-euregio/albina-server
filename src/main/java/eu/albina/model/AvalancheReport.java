@@ -66,7 +66,7 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	private ZonedDateTime timestamp;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "STATUS")
+	@Column(name = "STATUS", nullable = false)
 	private BulletinStatus status;
 
 	@Column(name = "CAAML_V5_CREATED")
