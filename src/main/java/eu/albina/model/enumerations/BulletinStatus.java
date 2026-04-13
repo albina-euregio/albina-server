@@ -13,6 +13,8 @@ public enum BulletinStatus {
 
 	private static final Logger logger = LoggerFactory.getLogger(BulletinStatus.class);
 
+	public static final String COLUMN_DEFINITION = "enum ('republished', 'resubmitted', 'updated', 'published', 'submitted', 'draft', 'missing')";
+
 	public static final Set<BulletinStatus> PUBLISHED_OR_REPUBLISHED = Set.of(published, republished);
 
 	public static boolean isDraftOrUpdated(BulletinStatus status) {
