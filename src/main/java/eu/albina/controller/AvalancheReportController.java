@@ -194,8 +194,8 @@ public class AvalancheReportController {
 		AvalancheReport report = getInternalReport(startDate, region);
 		boolean mediaFileUploaded = report != null && report.isMediaFileUploaded();
 
-		BulletinStatus status0 = report != null ? report.getStatus() : bulletins.isEmpty() ? null : BulletinStatus.missing;
-		BulletinStatus status1 = status0 == null ? null : bulletinStatusOperator.apply(status0);
+		BulletinStatus status0 = report != null ? report.getStatus() : BulletinStatus.missing;
+		BulletinStatus status1 = status0 == null ? BulletinStatus.missing : bulletinStatusOperator.apply(status0);
 		logger.info("Status changed from {} to {} for region {}", status0, status1, region.getId());
 
 		// reuse existing report if status does not change
