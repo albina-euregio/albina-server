@@ -81,7 +81,7 @@ public class PublicationJob {
 				AvalancheReport report = avalancheReportController.getInternalReport(startDate, region);
 				BulletinStatus status = report != null ? report.getStatus() : null;
 				logger.info("Internal status for region {} is {}", region.getId(), status);
-				return status == BulletinStatus.submitted || status == BulletinStatus.resubmitted;
+				return status == BulletinStatus.submitted || status == BulletinStatus.resubmitted || status == BulletinStatus.published || status == BulletinStatus.republished;
 			}).toList();
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");

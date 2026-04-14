@@ -589,7 +589,7 @@ public class AvalancheBulletinService {
 				AvalancheReport report = avalancheReportController.getInternalReport(startDate, region);
 				BulletinStatus status = report != null ? report.getStatus() : null;
 
-				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted)) {
+				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted) && (status != BulletinStatus.published) && (status != BulletinStatus.republished)) {
 					List<AvalancheBulletin> bulletins = List.of(bulletinsArray);
 
 					avalancheBulletinController.saveBulletins(bulletins, startDate, endDate, region, user);
