@@ -8,9 +8,11 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,6 @@ import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.util.GlobalVariables;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -59,6 +60,13 @@ public class PublicationJob {
 	@Inject
 	private GlobalVariables globalVariables;
 
+	private final Map<Instant, Set<String>> regionsInProgressByPublicationDate = new ConcurrentHashMap<>();
+
+	public boolean isRegionInProgress(Instant startDate, String regionName) {
+		Set<String> regions = regionsInProgressByPublicationDate.get(startDate);
+		return regions != null && regions.contains(regionName);
+	}
+
 	/**
 	 * Execute all necessary tasks to publish the bulletins at 5PM, depending
 	 * on the current settings.
@@ -87,6 +95,10 @@ public class PublicationJob {
 			logger.info("No bulletins to publish/update/change.");
 			return;
 		}
+
+		Set<String> publicationRegionsInProgress = regionsInProgressByPublicationDate.computeIfAbsent(startDate,
+			key -> ConcurrentHashMap.newKeySet());
+		regions.forEach(region -> publicationRegionsInProgress.add(region.getId()));
 
 		final List<AvalancheBulletin> allBulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 
@@ -164,68 +176,80 @@ public class PublicationJob {
 
 		// starting from here, everything should be run async in executor, method should return
 		Thread.startVirtualThread(() -> {
-			Queue<Runnable> tasksAfterDirectoryUpdate = new ConcurrentLinkedDeque<>();
+			try {
+				Queue<Runnable> tasksAfterDirectoryUpdate = new ConcurrentLinkedDeque<>();
 
-			Collection<Thread> phase2 = new ArrayList<>();
-			for (AvalancheReport avalancheReport : publishedReports) {
-				if (avalancheReport.getBulletins().isEmpty()) {
-					logger.info("Skipping region {} since bulletins {} is empty", avalancheReport, avalancheReport.getBulletins());
-					continue;
-				}
-				phase2.add(Thread.startVirtualThread(() -> {
-					logger.info("Creating resources for {}", avalancheReport);
-					publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
-
-					if (strategy.isChange()) {
-						logger.info("Skipping sendToAllChannels since publication isChange");
-						return;
+				Collection<Thread> phase2 = new ArrayList<>();
+				for (AvalancheReport avalancheReport : publishedReports) {
+					if (avalancheReport.getBulletins().isEmpty()) {
+						logger.info("Skipping region {} since bulletins {} is empty", avalancheReport, avalancheReport.getBulletins());
+						continue;
 					}
-					if (!regions.contains(avalancheReport.getRegion())) {
-						logger.info("Skipping sendToAllChannels since report {} is not part of {}", avalancheReport, regions);
-						return;
+					phase2.add(Thread.startVirtualThread(() -> {
+						logger.info("Creating resources for {}", avalancheReport);
+						publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
+
+						if (strategy.isChange()) {
+							logger.info("Skipping sendToAllChannels since publication isChange");
+							return;
+						}
+						if (!regions.contains(avalancheReport.getRegion())) {
+							logger.info("Skipping sendToAllChannels since report {} is not part of {}", avalancheReport, regions);
+							return;
+						}
+						// send notifications only for updated regions after all maps were created
+						logger.info("Scheduling sendToAllChannels for {}", avalancheReport);
+						tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
+					}));
+				}
+
+				Set<Region> superRegions = publishBulletinRegions.stream().flatMap(r -> r.getSuperRegions().stream()).collect(Collectors.toSet());
+				for (Region superRegion : superRegions) {
+					// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
+					phase2.add(Thread.startVirtualThread(() -> {
+						List<AvalancheBulletin> regionBulletins = globalBulletins.stream()
+							.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).toList();
+						logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationDate);
+						AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
+						publicationController.createRegionResources(superRegion, report);
+					}));
+				}
+
+				for (Thread thread : phase2) {
+					try {
+						thread.join();
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
 					}
-					// send notifications only for updated regions after all maps were created
-					logger.info("Scheduling sendToAllChannels for {}", avalancheReport);
-					tasksAfterDirectoryUpdate.add(() -> publicationController.sendToAllChannels(avalancheReport));
-				}));
-			}
-
-			Set<Region> superRegions = publishBulletinRegions.stream().flatMap(r -> r.getSuperRegions().stream()).collect(Collectors.toSet());
-			for (Region superRegion : superRegions) {
-				// update all super regions (even if 'regions' is not part of the super region an aggregated warning region can affect the super region)
-				phase2.add(Thread.startVirtualThread(() -> {
-					List<AvalancheBulletin> regionBulletins = globalBulletins.stream()
-						.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).toList();
-					logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationDate);
-					AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
-					publicationController.createRegionResources(superRegion, report);
-				}));
-			}
-
-			for (Thread thread : phase2) {
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
 				}
-			}
-			logger.info("Publication phase 2 done after {}", stopwatch);
+				logger.info("Publication phase 2 done after {}", stopwatch);
 
-			publicationController.createSymbolicLinks(AvalancheReport.of(globalBulletins, null, serverInstance));
+				publicationController.createSymbolicLinks(AvalancheReport.of(globalBulletins, null, serverInstance));
 
-			Collection<Thread> phase3 = new ArrayList<>();
-			for (Runnable runnable : tasksAfterDirectoryUpdate) {
-				phase3.add(Thread.startVirtualThread(runnable));
-			}
-
-			for (Thread thread : phase3) {
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
+				Collection<Thread> phase3 = new ArrayList<>();
+				for (Runnable runnable : tasksAfterDirectoryUpdate) {
+					phase3.add(Thread.startVirtualThread(runnable));
 				}
+
+				for (Thread thread : phase3) {
+					try {
+						thread.join();
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+				}
+				logger.info("Publication phase 3 done after {}", stopwatch);
+			} catch (Exception e) {
+				logger.error("Error during publication of regions: {}", regions.stream().map(Region::getId).collect(Collectors.toList()), e);
+			} finally {
+				regions.forEach(region -> {
+					publicationRegionsInProgress.remove(region.getId());
+					logger.debug("Removed region {} from regionsInProgress", region.getId());
+				});
+				if (publicationRegionsInProgress.isEmpty()) {
+					regionsInProgressByPublicationDate.remove(startDate, publicationRegionsInProgress);
+				}	
 			}
-			logger.info("Publication phase 3 done after {}", stopwatch);
 		});
 	}
 
