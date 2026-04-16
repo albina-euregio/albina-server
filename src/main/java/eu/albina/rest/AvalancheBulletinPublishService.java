@@ -10,6 +10,9 @@ import eu.albina.controller.AvalancheBulletinController;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.UserRepository;
+import eu.albina.controller.publication.MultichannelMessage;
+import eu.albina.exception.AlbinaException;
+import eu.albina.jobs.PublicationJob;
 import eu.albina.jobs.PublicationStrategy;
 import eu.albina.util.GlobalVariables;
 import io.micronaut.core.annotation.Nullable;
@@ -26,9 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
-import eu.albina.controller.publication.MultichannelMessage;
-import eu.albina.exception.AlbinaException;
-import eu.albina.jobs.PublicationJob;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -70,7 +70,7 @@ public class AvalancheBulletinPublishService {
 	 * Publish a major update to an already published bulletin (not at 5PM nor 8AM).
 	 */
 	@Post
-	@Secured(Role.Str.FORECASTER)
+	@Secured({Role.Str.FORECASTER, Role.Str.ADMIN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
 	public void publishBulletins(@QueryValue("region") String regionId,
@@ -119,7 +119,7 @@ public class AvalancheBulletinPublishService {
 	}
 
 	@Post("/email")
-	@Secured(Role.Str.ADMIN)
+	@Secured({Role.Str.FORECASTER, Role.Str.ADMIN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
 	public void sendEmail(@QueryValue("region") String regionId,
@@ -136,7 +136,7 @@ public class AvalancheBulletinPublishService {
 	}
 
 	@Post("/telegram")
-	@Secured(Role.Str.ADMIN)
+	@Secured({Role.Str.FORECASTER, Role.Str.ADMIN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
 	public void triggerTelegramChannel(@QueryValue("region") String regionId,
@@ -153,7 +153,7 @@ public class AvalancheBulletinPublishService {
 	}
 
 	@Post("/whatsapp")
-	@Secured(Role.Str.ADMIN)
+	@Secured({Role.Str.FORECASTER, Role.Str.ADMIN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
 	public void triggerWhatsAppChannel(@QueryValue("region") String regionId,
@@ -170,7 +170,7 @@ public class AvalancheBulletinPublishService {
 	}
 
 	@Post("/push")
-	@Secured(Role.Str.ADMIN)
+	@Secured({Role.Str.FORECASTER, Role.Str.ADMIN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
 	public void triggerPushNotifications(@QueryValue("region") String regionId,

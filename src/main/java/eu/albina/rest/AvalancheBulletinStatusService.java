@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.RegionRepository;
+import eu.albina.jobs.PublicationJob;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -43,10 +44,13 @@ public class AvalancheBulletinStatusService {
 	private AvalancheReportController.AvalancheReportRepository avalancheReportRepository;
 
 	@Inject
-	RegionRepository regionRepository;
+	private RegionRepository regionRepository;
+
+	@Inject
+	private PublicationJob publicationJob;
 
 	@Serdeable
-	public record Status(Instant date, Instant timestamp, BulletinStatus status) {
+	public record Status(Instant date, Instant timestamp, BulletinStatus status, Boolean isBeingPublished) {
 	}
 
 	@Get
@@ -64,7 +68,7 @@ public class AvalancheBulletinStatusService {
 				: List.of(regionRepository.findById(regionId).orElseThrow());
 			return regions.stream()
 				.flatMap(region -> avalancheReportController.getPublicReports(startDate, endDate, region).stream())
-				.map(r -> new Status(r.getDate().toInstant(), r.getTimestamp().toInstant(), r.getStatus()))
+				.map(r -> new Status(r.getDate().toInstant(), r.getTimestamp().toInstant(), r.getStatus(), null))
 				.collect(Collectors.toMap(Status::date, r -> r,
 					(s1, s2) -> Stream.of(s1, s2).max(Comparator.comparing(Status::status, BulletinStatus::comparePublicationStatus)).orElseThrow()
 				))
@@ -93,7 +97,7 @@ public class AvalancheBulletinStatusService {
 				region
 			).stream()
 				.sorted(Comparator.comparing(AvalancheReport::getTimestamp))
-				.map(r -> new Status(r.getDate().toInstant(), r.getTimestamp().toInstant(), r.getStatus()))
+				.map(r -> new Status(r.getDate().toInstant(), r.getTimestamp().toInstant(), r.getStatus(), null))
 				.collect(Collectors.toMap(Status::date, r -> r, (s1, s2) -> s2))
 				.values();
 		} catch (Exception e) {
@@ -115,7 +119,11 @@ public class AvalancheBulletinStatusService {
 
 		Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate, endDate, region);
 
+		if(reports.isEmpty()) {
+			return new Status(startDate, null, BulletinStatus.missing, false);
+		}
+
 		AvalancheReport report = reports.iterator().next();
-		return new Status(report.getDate().toInstant(), report.getTimestamp().toInstant(), report.getStatus());
+		return new Status(report.getDate().toInstant(), report.getTimestamp().toInstant(), report.getStatus(), publicationJob.isRegionInProgress(report.getDate().toInstant(),regionId));
 	}
 }
