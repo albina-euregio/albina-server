@@ -1,0 +1,1112 @@
+<bulletins xmlns="http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS">
+  <bulletin bulletinID="469c9cf3-e31c-498e-b89b-77ae09b174b7" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="AT-07-23-02">
+      <name>Zillertal Alps Northeast</name>
+    </region>
+    <region regionID="AT-07-23-01">
+      <name>Zillertal Alps Northwest</name>
+    </region>
+    <region regionID="AT-07-20">
+      <name>Weißkugel Group</name>
+    </region>
+    <region regionID="AT-07-21">
+      <name>Gurgler Group</name>
+    </region>
+    <region regionID="AT-07-26-01">
+      <name>Glockner Group South</name>
+    </region>
+    <region regionID="AT-07-22">
+      <name>Stubai Alps Central</name>
+    </region>
+    <region regionID="AT-07-24">
+      <name>Venediger Group South</name>
+    </region>
+    <dangerRating>
+      <mainValue>high</mainValue>
+      <elevation uom="m">
+        <upperBound>2500</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <lowerBound>2500</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2500</upperBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>many</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2500</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>2800</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <highlights>As a consequence of the rain natural wet avalanches are to be expected.</highlights>
+    <avalancheActivity>
+      <highlights>A dangerous avalanche situation will prevail. Wet snow represents the main danger.</highlights>
+      <comment>As a consequence of the rain, the likelihood of wet avalanches being released will increase in particular below approximately 2500 m, especially on steep west, north and east facing slopes. In these regions natural avalanches are to be expected, even large ones. &lt;br/> &lt;br/> Dry and wet avalanches can additionally in some places be released, even by a single winter sport participant. This applies on steep west, north and east facing slopes above approximately 2500 m. Avalanches can be triggered in deep layers and reach large size. &lt;br/> &lt;br/> In addition the fresh wind slabs in high Alpine regions are capable of being triggered in some cases, in particular on near-ridge shady slopes.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. Up to 2500 m rain will fall. The rain will give rise to a loss of strength within the snowpack especially on steep shady slopes. &lt;br/> &lt;br/> 10 to 20 cm of snow, and even more in some localities, will fall above approximately 2500 m. As a consequence of a strong wind, sometimes easily released wind slabs will form in high Alpine regions. &lt;br/> &lt;br/> Steep west, north and east facing slopes above approximately 2500 m: Isolated avalanche prone weak layers exist in the top section of the old snowpack. Faceted weak layers exist in the bottom section of the old snowpack.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Decrease in danger of wet avalanches as the snowfall level drops. Above approximately 2000 m snow will fall in some regions.</highlights>
+      <tendencyType>decreasing</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP3</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="2fa71a64-bd03-44af-95d6-356a944ace16" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="AT-07-27">
+      <name>Deferegger Alps East</name>
+    </region>
+    <region regionID="AT-07-19">
+      <name>Glockturm Group</name>
+    </region>
+    <region regionID="AT-07-25">
+      <name>Lasörling Group</name>
+    </region>
+    <region regionID="IT-32-BZ-18-02">
+      <name>Gröden Dolomites</name>
+    </region>
+    <region regionID="IT-32-BZ-18-01">
+      <name>Lüsner Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-20">
+      <name>Sexten Dolomites</name>
+    </region>
+    <region regionID="IT-32-BZ-10">
+      <name>Pfunderer Mountains East</name>
+    </region>
+    <region regionID="IT-32-BZ-11">
+      <name>Durreck Range</name>
+    </region>
+    <region regionID="IT-32-BZ-02-01">
+      <name>Langtaufers</name>
+    </region>
+    <region regionID="IT-32-BZ-05-03">
+      <name>Upper Ahr Valley</name>
+    </region>
+    <region regionID="IT-32-BZ-12">
+      <name>Rieserferner Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-05-02">
+      <name>Zillertal Alps South</name>
+    </region>
+    <region regionID="IT-32-BZ-13">
+      <name>Deferegger Alps West</name>
+    </region>
+    <region regionID="IT-32-BZ-05-01">
+      <name>Pfitsch</name>
+    </region>
+    <region regionID="IT-32-BZ-01-02">
+      <name>Sesvenna Group South</name>
+    </region>
+    <region regionID="IT-32-BZ-01-01">
+      <name>Sesvenna Group North</name>
+    </region>
+    <region regionID="IT-32-BZ-02-02">
+      <name>Planeil Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-08-01">
+      <name>Hirzer Range</name>
+    </region>
+    <region regionID="IT-32-BZ-19">
+      <name>Prags Dolomites</name>
+    </region>
+    <region regionID="IT-32-BZ-09">
+      <name>Pfunderer Mountains West</name>
+    </region>
+    <region regionID="IT-32-BZ-08-02">
+      <name>Mount Saint Jakob Range</name>
+    </region>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <upperBound>2800</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>2800</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2800</upperBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2500</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>Wet snow represents the main danger. As a consequence of the rain natural wet avalanches are to be expected.</highlights>
+      <comment>As a consequence of the rain, the likelihood of wet avalanches being released will increase in particular on steep shady slopes below approximately 2500 m. In these regions natural avalanches are to be expected, even large ones. Moist and wet avalanches can additionally in some places be released, even by a single winter sport participant, this also applies on steep west, north and east facing slopes below approximately 2800 m. &lt;br/> &lt;br/> Individual avalanche prone locations for dry avalanches are to be found on very steep shady slopes above approximately 2500 m. &lt;br/> In addition the fresh wind slabs in high Alpine regions are capable of being triggered in isolated cases, in particular on near-ridge shady slopes. Wind slabs are mostly small.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. Up to 2500 m rain will fall. The rain will give rise to a loss of strength within the snowpack especially on steep shady slopes. &lt;br/> &lt;br/> Steep west, north and east facing slopes above approximately 2500 m: Isolated avalanche prone weak layers exist in the top section of the old snowpack. Faceted weak layers exist in the bottom section of the old snowpack. &lt;br/> &lt;br/> Above approximately 2500 m snow will fall. As a consequence of a strong wind, small wind slabs will form in high Alpine regions.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Slight decrease in danger of wet avalanches as the snowfall level drops. Above approximately 2000 m snow will fall in some regions.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP3</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="dd246c9f-cb4a-4b2c-84d5-19e8dc145b1e" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="IT-32-BZ-07-01">
+      <name>Upper Passeier Valley</name>
+    </region>
+    <region regionID="IT-32-BZ-07-02">
+      <name>Texel Mountains</name>
+    </region>
+    <region regionID="IT-32-BZ-04-02">
+      <name>Ratschings</name>
+    </region>
+    <region regionID="IT-32-BZ-04-01">
+      <name>Stubai Alps South</name>
+    </region>
+    <region regionID="IT-32-BZ-14">
+      <name>Ortler Range</name>
+    </region>
+    <region regionID="IT-32-BZ-03">
+      <name>Schnals Ridge</name>
+    </region>
+    <region regionID="IT-32-BZ-15">
+      <name>Ulten Valley</name>
+    </region>
+    <region regionID="IT-32-BZ-06">
+      <name>Saldurn-Mastaun Ridge</name>
+    </region>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <upperBound>2800</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>2800</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2800</upperBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>wind_slab</problemType>
+      <elevation uom="m">
+        <lowerBound>2800</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>NW</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2500</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <highlights>As a consequence of the rain natural wet avalanches are to be expected.</highlights>
+    <avalancheActivity>
+      <highlights>Wet snow represents the main danger. Wind slabs in high Alpine regions.</highlights>
+      <comment>As a consequence of the rain, the likelihood of wet avalanches being released will increase in particular below approximately 2500 m, especially on steep west, north and east facing slopes. In these regions natural avalanches are to be expected, even large ones. Moist and wet avalanches can additionally in some places be released, even by a single winter sport participant, this also applies on steep west, north and east facing slopes below approximately 2800 m. &lt;br/> &lt;br/> Individual avalanche prone locations for dry avalanches are to be found on very steep shady slopes above approximately 2500 m. Such avalanche prone locations are difficult to recognise. Especially transitions from a shallow to a deep snowpack are unfavourable. In addition the fresh wind slabs in high Alpine regions are capable of being triggered in some cases, in particular on near-ridge shady slopes.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. Up to 2500 m and above rain will fall. The rain will give rise to a loss of strength within the snowpack especially on steep shady slopes. &lt;br/> &lt;br/> 10 to 20 cm of snow, and even more in some localities, will fall above approximately 2500 m. As a consequence of a strong wind, sometimes easily released wind slabs will form in high Alpine regions. &lt;br/> &lt;br/> Steep west, north and east facing slopes above approximately 2500 m: Isolated avalanche prone weak layers exist in the top section of the old snowpack. Faceted weak layers exist in the bottom section of the old snowpack.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Slight decrease in danger of wet avalanches as the snowfall level drops. Above approximately 2000 m snow will fall in some regions.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP3</dangerPatterns>
+        <dangerPatterns>DP6</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="ad27580e-20a8-4039-b880-cbee6f8a0692" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="IT-32-TN-02">
+      <name>Southern Adamello</name>
+    </region>
+    <region regionID="IT-32-TN-01">
+      <name>Adamello - Presanella</name>
+    </region>
+    <region regionID="IT-32-TN-04">
+      <name>Northern Brenta - Peller</name>
+    </region>
+    <region regionID="IT-32-TN-05">
+      <name>Southern Brenta</name>
+    </region>
+    <region regionID="IT-32-TN-19">
+      <name>Sole, Pejo and Rabbi</name>
+    </region>
+    <region regionID="IT-32-TN-20">
+      <name>Maddalene</name>
+    </region>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <upperBound>2200</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2200</upperBound>
+      </elevation>
+      <aspect>SW</aspect>
+      <aspect>NE</aspect>
+      <aspect>S</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>SE</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>loose</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>new_snow</problemType>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+      </elevation>
+      <aspect>SW</aspect>
+      <aspect>NE</aspect>
+      <aspect>S</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>SE</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>As a consequence of the rain, the likelihood of wet avalanches being released will increase.</highlights>
+      <comment>As a consequence of the rain, the likelihood of wet avalanches being released will increase in particular below approximately 2200 m, especially on steep west, north and east facing slopes. In these regions natural avalanches are to be expected, even large ones in isolated cases. &lt;br/> &lt;br/> In addition the fresh wind slabs in high Alpine regions are capable of being triggered in some cases, in particular on near-ridge slopes. &lt;br/> The avalanche prone locations for dry avalanches are to be found on very steep shady slopes above approximately 2200 m. Such avalanche prone locations are difficult to recognise. Especially transitions from a shallow to a deep snowpack are unfavourable.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Below approximately 1800 m only a little snow is lying. At higher altitudes there are 30 to 80 cm of snow, and even as much as 150 cm in some localities. The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. Up to 2200 m rain will fall. The rain will give rise to a loss of strength within the snowpack especially on steep shady slopes. &lt;br/> &lt;br/> 20 to 40 cm of snow, and even more in some localities, will fall above approximately 2200 m. As a consequence of a strong wind, sometimes easily released wind slabs will form in high Alpine regions. &lt;br/> &lt;br/> Steep west, north and east facing slopes above approximately 2400 m: Large-grained weak layers exist in the bottom section of the old snowpack.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Slight decrease in danger of wet avalanches as the snowfall level drops.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP3</dangerPatterns>
+        <dangerPatterns>DP6</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="f4aed095-2785-41ca-9251-b505121ffc86" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="AT-07-02-02">
+      <name>Lechtal Alps East</name>
+    </region>
+    <region regionID="AT-07-14-01">
+      <name>Kauner Ridge</name>
+    </region>
+    <region regionID="AT-07-10">
+      <name>Verwall Mountains Central</name>
+    </region>
+    <region regionID="AT-07-17-01">
+      <name>Kitzbühel Alps Brixental</name>
+    </region>
+    <region regionID="AT-07-11">
+      <name>Verwall Mountains East</name>
+    </region>
+    <region regionID="AT-07-01">
+      <name>Allgäu Alps East</name>
+    </region>
+    <region regionID="AT-07-12">
+      <name>Silvretta East</name>
+    </region>
+    <region regionID="AT-07-13">
+      <name>Samnaun Mountains</name>
+    </region>
+    <region regionID="AT-07-03">
+      <name>Mieming Mountains</name>
+    </region>
+    <region regionID="AT-07-15">
+      <name>Tuxer Alps West</name>
+    </region>
+    <region regionID="AT-07-16">
+      <name>Tuxer Alps East</name>
+    </region>
+    <region regionID="AT-07-07">
+      <name>Lechtal Alps West</name>
+    </region>
+    <region regionID="AT-07-08">
+      <name>Lechtal Alps Central</name>
+    </region>
+    <region regionID="AT-07-14-04">
+      <name>Kalkkögel</name>
+    </region>
+    <region regionID="AT-07-09">
+      <name>Grieskogel Mountains</name>
+    </region>
+    <region regionID="AT-07-14-05">
+      <name>Serles Ridge</name>
+    </region>
+    <region regionID="AT-07-14-02">
+      <name>Kühtai - Geigen Ridge</name>
+    </region>
+    <region regionID="AT-07-14-03">
+      <name>Sellrain - Alpein Mountains</name>
+    </region>
+    <region regionID="AT-07-04-01">
+      <name>Karwendel Mountains West</name>
+    </region>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <upperBound>2800</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>2800</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2800</upperBound>
+      </elevation>
+      <aspect>SW</aspect>
+      <aspect>NE</aspect>
+      <aspect>S</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>SE</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2500</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>The danger of moist and wet avalanches will already be elevated in the early morning.</highlights>
+      <comment>The danger of moist and wet avalanches will already be elevated in the early morning. This applies on steep shady slopes below approximately 2500 m, as well as on very steep sunny slopes below approximately 2800 m. Wet avalanches can in some places be released by a single winter sport participant. Avalanches can penetrate deep layers and reach large size. &lt;br/> &lt;br/> Individual avalanche prone locations for dry avalanches are to be found on very steep shady slopes above approximately 2500 m. Such avalanche prone locations are difficult to recognise. Especially transitions from a shallow to a deep snowpack are unfavourable.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. This applies in all aspects below approximately 2500 m, as well as on sunny slopes at elevated altitudes. The snowpack will be weakly bonded in some places. &lt;br/> &lt;br/> Steep west, north and east facing slopes above approximately 2500 m: Isolated avalanche prone weak layers exist in the top section of the old snowpack. Towards its base, the snowpack consists of faceted crystals.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Slight decrease in danger of wet avalanches as the temperature drops. Down to 2000 m snow will fall in some regions.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP10</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="f672cf37-70d4-4015-a949-40cbc578aacf" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="IT-32-TN-13">
+      <name>Primiero - Pale di S. Martino</name>
+    </region>
+    <region regionID="IT-32-TN-16">
+      <name>Fassa Valley</name>
+    </region>
+    <region regionID="IT-32-TN-08">
+      <name>Southern Lagorai</name>
+    </region>
+    <region regionID="IT-32-TN-07">
+      <name>Northern Lagorai</name>
+    </region>
+    <region regionID="IT-32-TN-09">
+      <name>Latemar</name>
+    </region>
+    <dangerRating>
+      <mainValue>considerable</mainValue>
+      <elevation uom="m">
+        <upperBound>2200</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>2200</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m">
+        <upperBound>2200</upperBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheProblem>
+      <problemType>persistent_weak_layers</problemType>
+      <elevation uom="m">
+        <lowerBound>2400</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>3</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>Wet snow represents the main danger. As a consequence of the rain natural wet avalanches are to be expected.</highlights>
+      <comment>As a consequence of the rain, the likelihood of wet avalanches being released will increase in particular on steep shady slopes below approximately 2200 m. In these regions natural avalanches are to be expected, even large ones. &lt;br/> &lt;br/> Individual avalanche prone locations for dry avalanches are to be found on very steep shady slopes above approximately 2400 m. Such avalanche prone locations are difficult to recognise. Especially transitions from a shallow to a deep snowpack are unfavourable. &lt;br/> In addition the fresh wind slabs in high Alpine regions are capable of being triggered in isolated cases, in particular on near-ridge shady slopes. Wind slabs are mostly small.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Below approximately 1800 m only a little snow is lying. At higher altitudes there are 30 to 80 cm of snow, and even as much as 150 cm in some localities. The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. The sleet will give rise to a loss of strength within the snowpack in some places below approximately 2200 m. &lt;br/> &lt;br/> Steep west, north and east facing slopes above approximately 2200 m: Faceted weak layers exist in the bottom section of the old snowpack. &lt;br/> Above approximately 2200 m snow will fall. As a consequence of a strong wind, small wind slabs will form in high Alpine regions. &lt;br/> &lt;br/></comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Slight decrease in danger of wet avalanches as the snowfall level drops. Above approximately 2000 m snow will fall in some regions.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP3</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="45a83aa6-d8a0-49a5-bb2b-644da76ac711" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="AT-07-05">
+      <name>Brandenberg Alps</name>
+    </region>
+    <region regionID="AT-07-06">
+      <name>Kaiser Mountains - Waidring Alps</name>
+    </region>
+    <region regionID="AT-07-18">
+      <name>Kitzbühel Alps Wildseeloder</name>
+    </region>
+    <region regionID="AT-07-02-01">
+      <name>Ammergau Alps South</name>
+    </region>
+    <region regionID="AT-07-04-02">
+      <name>Karwendel Mountains East</name>
+    </region>
+    <region regionID="AT-07-17-02">
+      <name>Kitzbühel Alps Wildschönau</name>
+    </region>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m"/>
+      <aspect>SW</aspect>
+      <aspect>NE</aspect>
+      <aspect>S</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>SE</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>loose</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>Wet snow represents the main danger.</highlights>
+      <comment>Wet avalanches can in some places be released by small loads, especially on very steep slopes. &lt;br/> Avalanches can in very isolated cases penetrate near-ground layers of the snowpack and reach medium size, in particular on very steep shady slopes above approximately 2000 m.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>The snowpack will be wet all the way through over a wide area. As a consequence of mild temperatures and high relative humidity the snowpack can not consolidate. The snowpack remains weakly bonded in some places. &lt;br/> Towards its base, the snowpack consists of faceted crystals, especially on shady slopes at elevated altitudes.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Slight decrease in danger of wet avalanches as the temperature drops. Down to 2000 m snow will fall in some regions.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP10</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="e42c7e4f-e080-4f3b-a998-9cf6ad7e8195" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="AT-07-28">
+      <name>Schober Group West</name>
+    </region>
+    <region regionID="AT-07-26-02">
+      <name>Goldried</name>
+    </region>
+    <region regionID="AT-07-29-03">
+      <name>Kreuzeck Group East Tirol</name>
+    </region>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m"/>
+      <aspect>SW</aspect>
+      <aspect>NE</aspect>
+      <aspect>S</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>SE</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>Wet snow represents the main danger.</highlights>
+      <comment>The danger of moist and wet avalanches will already exist in the early morning. This applies on very steep sunny slopes in particular below approximately 2800 m, as well as in all aspects below approximately 2500 m. &lt;br/> As a consequence of the rain, the likelihood of avalanches being released will increase especially on steep shady slopes below approximately 2500 m. Avalanches can in isolated cases penetrate near-ground layers of the snowpack and reach medium size. &lt;br/> &lt;br/> In very isolated cases dry avalanches can also be released in the old snowpack. Avalanche prone locations are to be found in particular on very steep shady slopes above approximately 2500 m.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Outgoing longwave radiation during the night will be severely restricted. The surface of the snowpack will freeze very little and will already be soft in the early morning. &lt;br/> &lt;br/> Some rain will fall in some regions. These weather conditions will give rise to increasing and thorough wetting of the snowpack. &lt;br/> &lt;br/> Faceted weak layers exist in the bottom section of the old snowpack, especially on steep west, north and east facing slopes above approximately 2500 m.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>The danger of wet avalanches will persist.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP3</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="791c58b8-2729-4e8b-8a91-e06c3cb0e3fb" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="AT-07-29-02">
+      <name>Lienz Dolomites</name>
+    </region>
+    <region regionID="AT-07-29-01">
+      <name>Carnic Alps East Tirol</name>
+    </region>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m"/>
+      <aspect>SW</aspect>
+      <aspect>NE</aspect>
+      <aspect>S</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>SE</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>poor</snowpackStability>
+      <frequency>some</frequency>
+      <avalancheSize>1</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>loose</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>Wet snow requires caution.</highlights>
+      <comment>As a consequence of the rain, the likelihood of wet avalanches being released will increase. This applies in all aspects. Avalanches are rather small but easily released. Avalanches can in isolated cases release deeper layers of the snowpack and reach medium size.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>Outgoing longwave radiation during the night will be severely restricted. The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. &lt;br/> &lt;br/> Some rain will fall. These weather conditions will give rise to increasing and thorough wetting of the snowpack.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>The danger of wet avalanches will persist.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP3</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+  <bulletin bulletinID="94ebdbc5-2894-40ce-9340-07ed2e33406d" lang="en">
+    <publicationTime>2026-04-12T15:00:00Z</publicationTime>
+    <validTime>
+      <startTime>2026-04-12T15:00:00Z</startTime>
+      <endTime>2026-04-13T15:00:00Z</endTime>
+    </validTime>
+    <unscheduled>false</unscheduled>
+    <region regionID="IT-32-BZ-08-03">
+      <name>Sarntal Alps South</name>
+    </region>
+    <region regionID="IT-32-BZ-16">
+      <name>Nonsberger Alps East</name>
+    </region>
+    <region regionID="IT-32-BZ-17">
+      <name>Dolomites of Fiemme North</name>
+    </region>
+    <region regionID="IT-32-TN-12">
+      <name>Prealps</name>
+    </region>
+    <region regionID="IT-32-TN-15">
+      <name>Cembra Valley</name>
+    </region>
+    <region regionID="IT-32-TN-03">
+      <name>Bondone and Stivo</name>
+    </region>
+    <region regionID="IT-32-TN-14">
+      <name>Vallarsa</name>
+    </region>
+    <region regionID="IT-32-TN-17">
+      <name>Western Nonsberg Alps</name>
+    </region>
+    <region regionID="IT-32-TN-06">
+      <name>Folgaria - Lavarone</name>
+    </region>
+    <region regionID="IT-32-TN-18">
+      <name>Ledro Valley</name>
+    </region>
+    <region regionID="IT-32-TN-11">
+      <name>Paganella</name>
+    </region>
+    <region regionID="IT-32-TN-10">
+      <name>Marzola - Valsugana</name>
+    </region>
+    <region regionID="IT-32-TN-21">
+      <name>Pine' - Mocheni Valley</name>
+    </region>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <elevation uom="m">
+        <upperBound>2000</upperBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>moderate</mainValue>
+      <elevation uom="m">
+        <lowerBound>2000</lowerBound>
+      </elevation>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <dangerRating>
+      <mainValue>low</mainValue>
+      <validTimePeriod>all_day</validTimePeriod>
+    </dangerRating>
+    <avalancheProblem>
+      <problemType>wet_snow</problemType>
+      <elevation uom="m">
+        <lowerBound>2000</lowerBound>
+      </elevation>
+      <aspect>NE</aspect>
+      <aspect>W</aspect>
+      <aspect>NW</aspect>
+      <aspect>E</aspect>
+      <aspect>N</aspect>
+      <validTimePeriod>all_day</validTimePeriod>
+      <snowpackStability>very_poor</snowpackStability>
+      <frequency>few</frequency>
+      <avalancheSize>2</avalancheSize>
+      <customData>
+        <ALBINA>
+          <avalancheType>slab</avalancheType>
+        </ALBINA>
+      </customData>
+    </avalancheProblem>
+    <avalancheActivity>
+      <highlights>Wet snow represents the main danger. As a consequence of the rain natural wet avalanches are to be expected.</highlights>
+      <comment>The danger of moist and wet avalanches will already be elevated in the early morning. As a consequence of the rain, the likelihood of wet avalanches being released will increase in particular on steep shady slopes. Individual natural avalanches are to be expected, even medium-sized ones.</comment>
+    </avalancheActivity>
+    <snowpackStructure>
+      <comment>The surface of the snowpack will cool hardly at all during the overcast night and will already be soft in the early morning. Up to 2200 m and above rain will fall. The weather conditions towards the evening will give rise to increasing and thorough wetting of the snowpack. This situation will give rise to a loss of strength within the snowpack especially on steep shady slopes.</comment>
+    </snowpackStructure>
+    <tendency>
+      <highlights>Slight decrease in danger of wet avalanches as the snowfall level drops. Above approximately 2000 m snow will fall in some regions.</highlights>
+      <tendencyType>steady</tendencyType>
+      <validTime>
+        <startTime>2026-04-13T15:00:00Z</startTime>
+        <endTime>2026-04-14T15:00:00Z</endTime>
+      </validTime>
+    </tendency>
+    <customData>
+      <ALBINA>
+        <mainDate>2026-04-13</mainDate>
+      </ALBINA>
+      <LWD_Tyrol>
+        <dangerPatterns>DP10</dangerPatterns>
+        <dangerPatterns>DP1</dangerPatterns>
+      </LWD_Tyrol>
+    </customData>
+  </bulletin>
+</bulletins>
