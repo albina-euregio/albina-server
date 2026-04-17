@@ -117,10 +117,6 @@
 						"lowerBound": "2500"
 					},
 					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
-					"validTimePeriod": "all_day"
 				}
 			],
 			"lang": "en",
@@ -250,10 +246,6 @@
 					"elevation": {
 						"lowerBound": "2800"
 					},
-					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
 					"validTimePeriod": "all_day"
 				}
 			],
@@ -462,10 +454,6 @@
 						"lowerBound": "2800"
 					},
 					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
-					"validTimePeriod": "all_day"
 				}
 			],
 			"lang": "en",
@@ -606,10 +594,6 @@
 						"lowerBound": "2200"
 					},
 					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
-					"validTimePeriod": "all_day"
 				}
 			],
 			"lang": "en",
@@ -738,10 +722,6 @@
 					"elevation": {
 						"lowerBound": "2800"
 					},
-					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
 					"validTimePeriod": "all_day"
 				}
 			],
@@ -921,10 +901,6 @@
 						"lowerBound": "2200"
 					},
 					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
-					"validTimePeriod": "all_day"
 				}
 			],
 			"lang": "en",
@@ -1015,10 +991,6 @@
 			"dangerRatings": [
 				{
 					"mainValue": "moderate",
-					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
 					"validTimePeriod": "all_day"
 				}
 			],
@@ -1115,10 +1087,6 @@
 				{
 					"mainValue": "moderate",
 					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
-					"validTimePeriod": "all_day"
 				}
 			],
 			"lang": "en",
@@ -1201,10 +1169,6 @@
 			"dangerRatings": [
 				{
 					"mainValue": "moderate",
-					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
 					"validTimePeriod": "all_day"
 				}
 			],
@@ -1293,10 +1257,6 @@
 					"elevation": {
 						"lowerBound": "2000"
 					},
-					"validTimePeriod": "all_day"
-				},
-				{
-					"mainValue": "low",
 					"validTimePeriod": "all_day"
 				}
 			],

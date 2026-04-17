@@ -41,10 +41,6 @@
       </elevation>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
       <elevation uom="m">
@@ -213,10 +209,6 @@
       </elevation>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
       <elevation uom="m">
@@ -325,10 +317,6 @@
       <elevation uom="m">
         <lowerBound>2800</lowerBound>
       </elevation>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
     <avalancheProblem>
@@ -452,10 +440,6 @@
       <elevation uom="m">
         <lowerBound>2200</lowerBound>
       </elevation>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
     <avalancheProblem>
@@ -607,10 +591,6 @@
       </elevation>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
       <elevation uom="m">
@@ -715,10 +695,6 @@
       </elevation>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
       <elevation uom="m">
@@ -813,10 +789,6 @@
       <mainValue>moderate</mainValue>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
       <elevation uom="m"/>
@@ -883,10 +855,6 @@
       <mainValue>moderate</mainValue>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
       <elevation uom="m"/>
@@ -948,10 +916,6 @@
     </region>
     <dangerRating>
       <mainValue>moderate</mainValue>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
     <avalancheProblem>
@@ -1058,10 +1022,6 @@
       <elevation uom="m">
         <lowerBound>2000</lowerBound>
       </elevation>
-      <validTimePeriod>all_day</validTimePeriod>
-    </dangerRating>
-    <dangerRating>
-      <mainValue>low</mainValue>
       <validTimePeriod>all_day</validTimePeriod>
     </dangerRating>
     <avalancheProblem>
