@@ -94,12 +94,13 @@ public class Caaml6 {
 			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDateString(), images.isEmpty() ? null : images),
 			new AvalancheBulletinCustomData.LwdTyrol(dangerPatterns)
 		));
-		bulletin.setDangerRatings(Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
-			.filter(Objects::nonNull)
-			.flatMap(daytime -> Stream.of(
-				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
-				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
-			.distinct().toList());
+		bulletin.setDangerRatings((avalancheBulletin.isHasDaytimeDependency()
+				? Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
+				: Stream.of(avalancheBulletin.getForenoon()))
+				.flatMap(daytime -> Stream.of(
+						getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
+						getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
+				.distinct().toList());
 		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang).orElse(null));
 		bulletin.setLang(lang.name());
 		bulletin.setMetaData(null);
