@@ -17,8 +17,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import io.micronaut.core.annotation.Nullable;
-import io.micronaut.http.server.types.files.StreamedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +49,7 @@ import eu.albina.util.DeleteTempDirectoryOnClose;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
 import eu.albina.util.PdfUtil;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -63,6 +62,7 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.http.server.types.files.StreamedFile;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -589,7 +589,7 @@ public class AvalancheBulletinService {
 				AvalancheReport report = avalancheReportController.getInternalReport(startDate, region);
 				BulletinStatus status = report != null ? report.getStatus() : null;
 
-				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted) && (status != BulletinStatus.published) && (status != BulletinStatus.republished)) {
+				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted) && !BulletinStatus.isPublishedOrRepublished(status)) {
 					List<AvalancheBulletin> bulletins = List.of(bulletinsArray);
 
 					avalancheBulletinController.saveBulletins(bulletins, startDate, endDate, region, user);
