@@ -114,7 +114,7 @@ public class PublicationJob {
 					continue;
 				}
 				// publish all saved regions
-				Set<String> savedRegions = bulletin.getSavedRegions().stream()
+				Set<String> savedRegions = bulletin.getSavedOrPublishedRegions().stream()
 					.filter(entry -> entry.startsWith(region.getId()))
 					.collect(Collectors.toSet());
 				if (savedRegions.isEmpty()) {

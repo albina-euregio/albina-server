@@ -665,6 +665,13 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return savedRegions;
 	}
 
+	public Set<String> getSavedOrPublishedRegions() {
+		Set<String> result = new LinkedHashSet<>();
+		result.addAll(savedRegions);
+		result.addAll(publishedRegions);
+		return result;
+	}
+
 	public void setSavedRegions(Set<String> regions) {
 		this.savedRegions = regions;
 	}
