@@ -34,7 +34,12 @@ public interface PublicationStrategy {
 			}
 
 			@Override
-			public boolean isChange() {
+			public boolean skipSendToAllChannels() {
+				return false;
+			}
+
+			@Override
+			public boolean isManualPublication() {
 				return false;
 			}
 
@@ -57,7 +62,12 @@ public interface PublicationStrategy {
 			}
 
 			@Override
-			public boolean isChange() {
+			public boolean skipSendToAllChannels() {
+				return false;
+			}
+
+			@Override
+			public boolean isManualPublication() {
 				return false;
 			}
 
@@ -65,29 +75,6 @@ public interface PublicationStrategy {
 			public Instant getStartDate(Clock clock) {
 				return ZonedDateTime.of(
 					LocalDate.now(clock).minusDays(1),
-					validityStart(),
-					clock.getZone()
-				).toInstant();
-			}
-		};
-	}
-
-	static PublicationStrategy change() {
-		return new PublicationStrategy() {
-			@Override
-			public boolean isEnabled(LocalServerInstance serverInstance) {
-				return true;
-			}
-
-			@Override
-			public boolean isChange() {
-				return true;
-			}
-
-			@Override
-			public Instant getStartDate(Clock clock) {
-				return ZonedDateTime.of(
-					LocalDate.now(clock),
 					validityStart(),
 					clock.getZone()
 				).toInstant();
@@ -105,8 +92,13 @@ public interface PublicationStrategy {
 			}
 
 			@Override
-			public boolean isChange() {
+			public boolean skipSendToAllChannels() {
 				return false;
+			}
+
+			@Override
+			public boolean isManualPublication() {
+				return true;
 			}
 
 			@Override
@@ -131,7 +123,12 @@ public interface PublicationStrategy {
 			}
 
 			@Override
-			public boolean isChange() {
+			public boolean skipSendToAllChannels() {
+				return true;
+			}
+
+			@Override
+			public boolean isManualPublication() {
 				return true;
 			}
 
@@ -149,7 +146,9 @@ public interface PublicationStrategy {
 
 	boolean isEnabled(LocalServerInstance serverInstance);
 
-	boolean isChange();
+	boolean skipSendToAllChannels();
+
+	boolean isManualPublication();
 
 	Instant getStartDate(Clock clock);
 
