@@ -91,7 +91,7 @@ public class PublicationJob {
 				logger.info("Internal status for region {} is {}", region.getId(), status);
 				return status == BulletinStatus.submitted
 					|| status == BulletinStatus.resubmitted
-					|| (strategy.isChange() && BulletinStatus.isPublishedOrRepublished(status));
+					|| (strategy.isManualPublication() && BulletinStatus.isPublishedOrRepublished(status));
 			}).toList();
 		if (regions.isEmpty()) {
 			logger.info("No bulletins to publish/update/change.");
@@ -114,7 +114,7 @@ public class PublicationJob {
 					continue;
 				}
 				// publish all saved regions
-				Set<String> savedRegions = bulletin.getSavedRegions().stream()
+				Set<String> savedRegions = bulletin.getSavedOrPublishedRegions().stream()
 					.filter(entry -> entry.startsWith(region.getId()))
 					.collect(Collectors.toSet());
 				if (savedRegions.isEmpty()) {
@@ -191,8 +191,8 @@ public class PublicationJob {
 						logger.info("Creating resources for {}", avalancheReport);
 						publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 
-						if (strategy.isChange()) {
-							logger.info("Skipping sendToAllChannels since publication isChange");
+						if (strategy.skipSendToAllChannels()) {
+							logger.info("Skipping sendToAllChannels for strategy {}", strategy.getClass().getSimpleName());
 							return;
 						}
 						if (!regions.contains(avalancheReport.getRegion())) {
