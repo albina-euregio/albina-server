@@ -147,6 +147,9 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_LINEA_EXPORT")
 	private boolean enableLineaExport;
 
+	@Column(name = "ENABLE_ICON")
+	private boolean enableIcon;
+
 	@Column(name = "ENABLED_TEXTCAT_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
 	@Convert(converter = TextPart.Converter.class)
 	private Set<TextPart> enabledTextcatFields;
@@ -539,6 +542,14 @@ public class Region implements PersistentObject {
 
 	public void setEnableMediaFile(boolean enableMediaFile) {
 		this.enableMediaFile = enableMediaFile;
+	}
+
+	public boolean isEnableIcon() {
+		return enableIcon;
+	}
+
+	public void setEnableIcon(boolean enableIcon) {
+		this.enableIcon = enableIcon;
 	}
 
 	public boolean isEnableAvalancheProblemCornices() {
