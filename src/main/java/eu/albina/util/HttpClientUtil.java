@@ -7,6 +7,8 @@ import com.google.common.cache.LoadingCache;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import org.apache.commons.io.function.IOFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -35,6 +37,20 @@ public interface HttpClientUtil {
 		return data.entrySet().stream()
 			.map(entry -> entry.getKey() + "=" + URLEncoder.encode(String.valueOf(entry.getValue()), StandardCharsets.UTF_8))
 			.collect(Collectors.joining("&"));
+	}
+
+	static boolean isUrlAvailable(HttpClient client, String url) {
+		Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
+		try {
+			HttpRequest request = HttpRequest.newBuilder(URI.create(url))
+				.method("HEAD", HttpRequest.BodyPublishers.noBody())
+				.build();
+			HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+			return response.statusCode() >= 200 && response.statusCode() < 300;
+		} catch (Exception e) {
+			logger.warn("Could not reach attachment URL {}: {}", url, e.getMessage());
+			return false;
+		}
 	}
 
 	static void checkResponse(HttpResponse<String> response) throws IOException {

@@ -1,22 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
-import com.google.common.net.HttpHeaders;
-import eu.albina.controller.CrudRepository;
-import eu.albina.model.Region;
-import eu.albina.model.StatusInformation;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.publication.TelegramConfiguration;
-import eu.albina.model.publication.WhatsAppConfiguration;
-import io.micronaut.data.annotation.Repository;
-import io.micronaut.http.MediaType;
-import io.micronaut.serde.ObjectMapper;
-import io.micronaut.serde.annotation.Serdeable;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -32,6 +16,24 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.net.HttpHeaders;
+
+import eu.albina.controller.CrudRepository;
+import eu.albina.model.Region;
+import eu.albina.model.StatusInformation;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.publication.WhatsAppConfiguration;
+import eu.albina.util.HttpClientUtil;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.http.MediaType;
+import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 @Singleton
 public class WhatsAppController {
@@ -76,9 +78,10 @@ public class WhatsAppController {
 		try {
 			String message = posting.getSocialMediaText();
 			String attachmentUrl = posting.getAttachmentUrl();
-			if (attachmentUrl != null) {
+			if (attachmentUrl != null && HttpClientUtil.isUrlAvailable(client, attachmentUrl)) {
 				sendPhoto(config, message, attachmentUrl);
 			} else {
+				logger.warn("Attachment URL {} is not available, falling back to text message", attachmentUrl);
 				sendMessage(config, message);
 			}
 		} catch (Exception e) {
