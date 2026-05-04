@@ -63,6 +63,8 @@ import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.http.server.types.files.StreamedFile;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -353,6 +355,7 @@ public class AvalancheBulletinService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.APPLICATION_PDF)
 	@Operation(summary = "Get bulletin preview as PDF")
+	@ExecuteOn(TaskExecutors.IO)
 	public StreamedFile getPreviewPdf(
 		@Body AvalancheBulletin[] bulletinsArray,
 		@QueryValue("region") String regionId,
