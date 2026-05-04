@@ -16,6 +16,8 @@ import java.util.UUID;
 
 import eu.albina.controller.RegionRepository;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -59,6 +61,7 @@ public class StatisticsService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.TEXT_CSV)
 	@Operation(summary = "Get bulletin statistics")
+	@ExecuteOn(TaskExecutors.IO)
 	public StreamedFile getBulletinCsv(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate,
@@ -105,6 +108,7 @@ public class StatisticsService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Produces(MediaType.TEXT_CSV)
 	@Operation(summary = "Get danger source statistics")
+	@ExecuteOn(TaskExecutors.IO)
 	public StreamedFile getDangerSourceCsv(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate) {
