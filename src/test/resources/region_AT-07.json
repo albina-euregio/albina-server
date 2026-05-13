@@ -46,7 +46,6 @@
     "enableDangerSources": false,
     "enableObservations": false,
     "enableModelling": false,
-    "enableWeatherbox": false,
     "showMatrix": true,
     "enableStrategicMindset": false,
     "enableStressLevel": false,

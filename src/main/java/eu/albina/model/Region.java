@@ -141,9 +141,6 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_MODELLING")
 	private boolean enableModelling;
 
-	@Column(name = "ENABLE_WEATHERBOX")
-	private boolean enableWeatherbox;
-
 	@Column(name = "ENABLE_LINEA_EXPORT")
 	private boolean enableLineaExport;
 
@@ -766,14 +763,6 @@ public class Region implements PersistentObject {
 
 	public void setEnabledEditableFields(Set<TextPart> enabledEditableFields) {
 		this.enabledEditableFields = enabledEditableFields;
-	}
-
-	public boolean isEnableWeatherbox() {
-		return enableWeatherbox;
-	}
-
-	public void setEnableWeatherbox(boolean enableWeatherbox) {
-		this.enableWeatherbox = enableWeatherbox;
 	}
 
 	public boolean isEnableLineaExport() {
