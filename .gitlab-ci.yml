@@ -80,3 +80,12 @@ deploy to production:
         - if: "$CI_COMMIT_TAG"
           when: manual
           allow_failure: true
+
+deploy to www2:
+    extends: .deploy
+    environment:
+        name: www2
+    rules:
+        - if: "$CI_COMMIT_TAG"
+          when: manual
+          allow_failure: true
