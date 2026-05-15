@@ -32,7 +32,6 @@
 	"enableDangerSources": false,
 	"enableObservations": false,
 	"enableModelling": false,
-	"enableWeatherbox": false,
 	"enableEditableFields": false,
 	"showMatrix": true,
 	"enableStrategicMindset": false,
