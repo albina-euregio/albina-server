@@ -2,6 +2,6 @@
 package eu.albina.model.enumerations;
 
 public enum DangerRatingModificator {
-	minus, equal, plus;
+	none, minus, equal, plus;
 
 }
