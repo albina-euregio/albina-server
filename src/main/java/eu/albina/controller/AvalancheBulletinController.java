@@ -14,18 +14,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import io.micronaut.data.annotation.Repository;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.AbstractPersistentObject;
 import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheProblem;
 import eu.albina.model.Region;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.DangerRating;
+import io.micronaut.data.annotation.Repository;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Controller for avalanche bulletins.
@@ -480,6 +481,7 @@ public class AvalancheBulletinController {
 		boolean missingSnowpackStructureComment = false;
 		boolean pendingSuggestions = false;
 		boolean missingDangerRating = false;
+		boolean missingDangerRatingModificator = false;
 
 		List<AvalancheBulletin> bulletins = avalancheBulletinRepository.findByValidFromOrValidUntil(startDate, endDate);
 
@@ -530,6 +532,19 @@ public class AvalancheBulletinController {
 					&& bulletin.getAfternoon().dangerRating(false) == DangerRating.missing)) {
 					missingDangerRating = true;
 				}
+
+				for (AvalancheProblem avalancheProblem : bulletin.getForenoon() != null ? bulletin.getForenoon().getAvalancheProblems() : List.<AvalancheProblem>of()) {
+					if (avalancheProblem != null && (avalancheProblem.getEawsMatrixInformation() == null
+						|| avalancheProblem.getEawsMatrixInformation().getDangerRatingModificator() == null)) {
+						missingDangerRatingModificator = true;
+					}
+				}
+				for (AvalancheProblem avalancheProblem : bulletin.getAfternoon() != null ? bulletin.getAfternoon().getAvalancheProblems() : List.<AvalancheProblem>of()) {
+					if (avalancheProblem != null && (avalancheProblem.getEawsMatrixInformation() == null
+						|| avalancheProblem.getEawsMatrixInformation().getDangerRatingModificator() == null)) {
+						missingDangerRatingModificator = true;
+					}
+				}
 			}
 		}
 
@@ -547,6 +562,8 @@ public class AvalancheBulletinController {
 			json.add("pendingSuggestions");
 		if (missingDangerRating)
 			json.add("missingDangerRating");
+		if (missingDangerRatingModificator)
+			json.add("missingDangerRatingModificator");
 
 		return json;
 	}
