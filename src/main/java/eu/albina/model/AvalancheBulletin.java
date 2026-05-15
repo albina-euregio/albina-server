@@ -785,6 +785,19 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	}
 
 	@JsonIgnore
+	public boolean hasNoSnow() {
+		if (forenoon != null && (DangerRating.no_snow.equals(forenoon.dangerRating(true))
+				|| DangerRating.no_snow.equals(forenoon.dangerRating(false)))) {
+			return true;
+		}
+		if (hasDaytimeDependency && afternoon != null && (DangerRating.no_snow.equals(afternoon.dangerRating(true))
+				|| DangerRating.no_snow.equals(afternoon.dangerRating(false)))) {
+			return true;
+		}
+		return false;
+	}
+
+	@JsonIgnore
 	public DangerRating getHighestDangerRating() {
 		DangerRating result = DangerRating.missing;
 		if (forenoon != null && forenoon.dangerRating(true) != null

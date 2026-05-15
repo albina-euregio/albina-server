@@ -506,7 +506,7 @@ public class AvalancheBulletinController {
 					if (entry.startsWith(region.getId()))
 						pendingSuggestions = true;
 
-			if (bulletin.affectsRegionWithoutSuggestions(region)) {
+			if (bulletin.affectsRegionWithoutSuggestions(region) && !bulletin.hasNoSnow()) {
 				if (missingAvActivityHighlights || bulletin.getAvActivityHighlightsTextcat() == null
 					|| bulletin.getAvActivityHighlightsTextcat().isEmpty())
 					missingAvActivityHighlights = true;
