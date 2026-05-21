@@ -2,6 +2,69 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [8.3.3] - 2026-05-21
+
+### 🐛 Bug Fixes
+
+- Add annotation for IO-bound operations, increase read-timeout
+- IsUrlAvailable for checking attachmentUrls in social media messages
+
+### 🚀 Features
+
+- Add region config to enable/disable weather maps
+- Remove region config to enable/disable weatherbox
+- Do not check texts of bulletin if danger rating is no_snow
+- Add deployment to www2 in gitlab-ci
+- Add none ad danger-rating-modificator
+- Check danger-rating-modificator while submit/publish
+
+## [8.3.2] - 
+
+### 🚀 Features
+
+- Store publication checklist in database
+
+### 🐛 Bug Fixes
+
+- Update publication date when republishing
+
+## [8.3.1] - 
+
+### 🐛 Bug Fixes
+
+- Do not trigger updates at 8am for already published bulletins
+
+## [8.3.0] - 
+
+### 🐛 Bug Fixes
+
+- Fix Caaml6: use afternoon only if hasDaytimeDependency
+- Add fallback to missing status for AvalancheReport
+
+### 🚀 Features
+
+- Store regionsInProgress while publishing
+
+### ⚙️ Miscellaneous Tasks
+
+- Update guava to 33.6.0
+
+## [8.2.4] - 
+
+### 🐛 Bug Fixes
+
+- Do not remove png maps
+
+## [8.2.3] - 
+
+### 🚜 Refactor
+
+- Remove pdf and png maps
+
+### 🐛 Bug Fixes
+
+- Fix AvalancheBulletinService.getPublishedBulletinsAsPDF
+
 ## [8.2.2] - 2026-04-08
 
 ### 🚀 Features
