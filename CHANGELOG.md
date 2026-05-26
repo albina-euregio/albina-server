@@ -18,7 +18,7 @@
 - Add none ad danger-rating-modificator
 - Check danger-rating-modificator while submit/publish
 
-## [8.3.2] - 
+## [8.3.2] - 2026-04-28
 
 ### 🚀 Features
 
@@ -28,13 +28,13 @@
 
 - Update publication date when republishing
 
-## [8.3.1] - 
+## [8.3.1] - 2026-04-21
 
 ### 🐛 Bug Fixes
 
 - Do not trigger updates at 8am for already published bulletins
 
-## [8.3.0] - 
+## [8.3.0] - 2026-04-20
 
 ### 🐛 Bug Fixes
 
@@ -49,13 +49,13 @@
 
 - Update guava to 33.6.0
 
-## [8.2.4] - 
+## [8.2.4] - 2026-04-09
 
 ### 🐛 Bug Fixes
 
 - Do not remove png maps
 
-## [8.2.3] - 
+## [8.2.3] - 2026-04-09
 
 ### 🚜 Refactor
 
