@@ -43,6 +43,16 @@ build:
         paths:
             - target/albina.jar
 
+osv-scanner:
+    stage: build
+    image:
+        name: ghcr.io/google/osv-scanner:latest
+        entrypoint: [""]
+    allow_failure: true
+    script:
+        - /osv-scanner --version
+        - /osv-scanner .
+
 .deploy:
     stage: deploy
     needs: [build]
