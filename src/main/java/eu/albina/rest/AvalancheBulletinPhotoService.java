@@ -71,7 +71,8 @@ public class AvalancheBulletinPhotoService {
 				"-resize", "1600", "0",
 				file.toString(), "-o", webpFile.toString()
 			).inheritIO().start().waitFor();
-			return new BulletinPhoto(webpFile.toUri().toString());
+			String url = webpFile.toUri().toString().replace("file:///var/www/", "https://"); // FIXME
+			return new BulletinPhoto(url);
 		} catch (Exception e) {
 			logger.error("POST upload bulletin error", e);
 			throw new RuntimeException(e);
