@@ -6,29 +6,28 @@ import eu.albina.util.DeleteTempDirectoryOnClose;
 import eu.albina.util.GlobalVariables;
 
 import com.google.common.io.MoreFiles;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Part;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
-import org.apache.commons.io.FilenameUtils;
 import org.caaml.v6.AvalancheBulletinCustomData.BulletinPhoto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Set;
 import java.util.UUID;
 
 @Controller("/bulletins/photo")
@@ -36,6 +35,9 @@ import java.util.UUID;
 public class AvalancheBulletinPhotoService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AvalancheBulletinPhotoService.class);
+
+	private static final Set<String> ALLOWED_CONTENT_TYPES = Set.of(
+		MediaType.IMAGE_JPEG, MediaType.IMAGE_PNG, MediaType.IMAGE_WEBP);
 
 	@Inject
 	private GlobalVariables globalVariables;
@@ -51,6 +53,11 @@ public class AvalancheBulletinPhotoService {
 	) {
 		UUID uuid = UUID.randomUUID();
 		logger.info("POST upload bulletin photo {}", file0.getFilename());
+		MediaType contentType = file0.getContentType().orElse(null);
+		if (contentType == null || !ALLOWED_CONTENT_TYPES.contains(contentType.getName())) {
+			throw new HttpStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+				"Only %s images are allowed".formatted(ALLOWED_CONTENT_TYPES));
+		}
 		try (DeleteTempDirectoryOnClose dir = DeleteTempDirectoryOnClose.of("photo")) {
 			String extension = MoreFiles.getFileExtension(Path.of(file0.getFilename()));
 			Path file = dir.tempDirectory().resolve(uuid + "." + extension);
