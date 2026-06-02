@@ -77,6 +77,10 @@ public class AvalancheBulletinCustomData {
 		public final Double latitude;
 		public final Double longitude;
 
+		public BulletinPhoto(String url) {
+			this(url, null, null, null, null, null, null);
+		}
+
 		public BulletinPhoto(String url, String copyright, java.time.LocalDate date, String microRegionId, String locationName, Double latitude, Double longitude) {
 			this.url = url;
 			this.copyright = copyright;
