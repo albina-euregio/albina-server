@@ -235,6 +235,9 @@ public class Region implements PersistentObject {
 	@Column(name = "SERVER_IMAGES_URL", length = 191)
 	private String serverImagesUrl;
 
+	@Column(name = "EDUCATION_URL", length = 191)
+	private String educationUrl;
+
 	/**
 	 * Default constructor. Initializes all collections of the region.
 	 */
@@ -809,6 +812,14 @@ public class Region implements PersistentObject {
 
 	public void setServerImagesUrl(String serverImagesUrl) {
 		this.serverImagesUrl = serverImagesUrl;
+	}
+
+	public String getEducationUrl() {
+		return educationUrl;
+	}
+
+	public void setEducationUrl(String educationUrl) {
+		this.educationUrl = educationUrl;
 	}
 
 	public boolean affects(String regionId) {
