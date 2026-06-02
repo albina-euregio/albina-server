@@ -4,13 +4,17 @@ package eu.albina.rest;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.DeleteTempDirectoryOnClose;
 import eu.albina.util.GlobalVariables;
+
+import com.google.common.io.MoreFiles;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Header;
+import io.micronaut.http.annotation.Part;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -40,17 +44,17 @@ public class AvalancheBulletinPhotoService {
 	@Secured({Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Upload bulletin photo")
-	@Consumes({MediaType.IMAGE_JPEG, MediaType.IMAGE_PNG, MediaType.IMAGE_WEBP})
+	@Consumes({MediaType.MULTIPART_FORM_DATA})
 	public BulletinPhoto uploadBulletinPhoto(
-		@Header String contentType,
 		@QueryValue("region") String regionId,
-		@Body InputStream inputStream
+		@Part("file") CompletedFileUpload file0
 	) {
 		UUID uuid = UUID.randomUUID();
-		logger.info("POST upload bulletin photo {}", contentType);
+		logger.info("POST upload bulletin photo {}", file0.getFilename());
 		try (DeleteTempDirectoryOnClose dir = DeleteTempDirectoryOnClose.of("photo")) {
-			Path file = dir.tempDirectory().resolve(uuid + "." + FilenameUtils.getExtension(contentType));
-			Files.copy(inputStream, file, StandardCopyOption.REPLACE_EXISTING);
+			String extension = MoreFiles.getFileExtension(Path.of(file0.getFilename()));
+			Path file = dir.tempDirectory().resolve(uuid + "." + extension);
+			Files.copy(file0.getInputStream(), file, StandardCopyOption.REPLACE_EXISTING);
 			logger.info("POST upload bulletin photo to {} ({} bytes) done", file, Files.size(file));
 			Path mediaPath = Path.of(globalVariables.getLocalServerInstance().mediaPath());
 			Path webpFile = mediaPath.resolve(regionId).resolve(uuid + ".webp");
