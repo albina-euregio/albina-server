@@ -34,7 +34,6 @@ import eu.albina.controller.UserRepository;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
-import eu.albina.jobs.PublicationStrategy;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -566,64 +565,6 @@ public class AvalancheBulletinService {
 				logger.warn("Error creating bulletin", e);
 				throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.toJSON());
 			}
-		}
-	}
-
-	@Post("/change")
-	@Secured(Role.Str.FORECASTER)
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Change bulletins")
-	@Transactional
-	public void changeBulletins(
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Body AvalancheBulletin[] bulletinsArray,
-		@QueryValue("region") String regionId,
-		Principal principal) {
-		logger.debug("POST JSON bulletins change");
-
-		try {
-			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			Instant endDate = startDate.plus(1, ChronoUnit.DAYS);
-
-			User user = userRepository.findByIdOrElseThrow(principal);
-			Region region = regionRepository.findById(regionId).orElseThrow();
-
-			if (user.hasPermissionForRegion(region.getId())) {
-				AvalancheReport report = avalancheReportController.getInternalReport(startDate, region);
-				BulletinStatus status = report != null ? report.getStatus() : null;
-
-				if ((status != BulletinStatus.submitted) && (status != BulletinStatus.resubmitted) && !BulletinStatus.isPublishedOrRepublished(status)) {
-					List<AvalancheBulletin> bulletins = List.of(bulletinsArray);
-
-					avalancheBulletinController.saveBulletins(bulletins, startDate, endDate, region, user);
-
-					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-					}
-
-					List<AvalancheBulletin> allBulletins = avalancheBulletinController.submitBulletins(startDate,
-						endDate, region, user);
-					List<AvalancheBulletin> regionBulletins = allBulletins.stream()
-						.filter(bulletin -> bulletin.affectsRegion(region))
-						.toList();
-					avalancheReportController.submitReport(regionBulletins, startDate, region, user);
-
-					// eu.albina.model.AvalancheReport.timestamp has second precision due to MySQL's datatype datetime
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-					}
-				}
-
-				List<Region> regions = List.of(region);
-				publicationJob.execute(PublicationStrategy.change(startDate, regions));
-			} else
-				throw new AlbinaException("User is not authorized for this region!");
-		} catch (AlbinaException e) {
-			logger.warn("Error creating bulletin", e);
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 

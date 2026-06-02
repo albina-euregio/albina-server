@@ -81,7 +81,8 @@ public class PublicationJob {
 		Instant startDate = strategy.getStartDate(system);
 		Instant endDate = strategy.getEndDate(system);
 		Instant publicationDate = ZonedDateTime.now().withNano(0).toInstant();
-		logger.info("{} triggered startDate={} endDate={} publicationDate={}", getClass().getSimpleName(), startDate, endDate, publicationDate);
+		logger.info("{} triggered strategy={} startDate={} endDate={} publicationDate={}", getClass().getSimpleName(),
+				strategy.getClass().getEnclosingMethod().getName(), startDate, endDate, publicationDate);
 
 		List<Region> publishBulletinRegions = regionRepository.getPublishBulletinRegions();
 		List<Region> regions = Objects.requireNonNullElse(strategy.getRegions(), publishBulletinRegions).stream()
@@ -189,10 +190,13 @@ public class PublicationJob {
 					}
 					phase2.add(Thread.startVirtualThread(() -> {
 						logger.info("Creating resources for {}", avalancheReport);
-						publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
-
+						if(strategy.createCAAMLOnly()) {
+							publicationController.createCaamlV6(avalancheReport);
+						} else {
+							publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
+						}
 						if (strategy.skipSendToAllChannels()) {
-							logger.info("Skipping sendToAllChannels for strategy {}", strategy.getClass().getSimpleName());
+							logger.info("Skipping sendToAllChannels for strategy {}", strategy.getClass().getEnclosingMethod().getName());
 							return;
 						}
 						if (!regions.contains(avalancheReport.getRegion())) {
@@ -216,7 +220,7 @@ public class PublicationJob {
 						if(strategy.createCAAMLOnly()) {
 							publicationController.createCaamlV6(report);
 						} else {
-						publicationController.createRegionResources(superRegion, report);
+							publicationController.createRegionResources(superRegion, report);
 						}
 					}));
 				}
