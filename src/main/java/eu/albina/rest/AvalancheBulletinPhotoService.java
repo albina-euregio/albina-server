@@ -65,6 +65,7 @@ public class AvalancheBulletinPhotoService {
 			logger.info("POST upload bulletin photo to {} ({} bytes) done", file, Files.size(file));
 			Path mediaPath = Path.of(globalVariables.getLocalServerInstance().mediaPath());
 			Path webpFile = mediaPath.resolve(regionId).resolve(uuid + ".webp");
+			Files.createDirectories(webpFile.getParent());
 			logger.info("POST upload bulletin photo: converting {} to {}", file, webpFile);
 			new ProcessBuilder("cwebp",
 				// Resize the source to a rectangle with size width x height. If either (but not both) of the width or height parameters is 0, the value will be calculated preserving the aspect-ratio.

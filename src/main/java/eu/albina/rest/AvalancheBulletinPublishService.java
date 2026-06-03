@@ -74,8 +74,9 @@ public class AvalancheBulletinPublishService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Transactional
 	public void publishBulletins(@QueryValue("region") String regionId,
-											@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-											Principal principal) {
+			@QueryValue(value = "strategy", defaultValue = "publish") PublicationStrategy.Type strategy,
+			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+			Principal principal) {
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
@@ -85,7 +86,7 @@ public class AvalancheBulletinPublishService {
 			List<Region> regions = List.of(region);
 
 			if (user.hasPermissionForRegion(region.getId())) {
-				publicationJob.execute(PublicationStrategy.publish(startDate, regions));
+				publicationJob.execute(strategy.toStrategy(startDate, regions));
 			} else
 				throw new AlbinaException("User is not authorized for this region!");
 		} catch (AlbinaException e) {
@@ -103,15 +104,11 @@ public class AvalancheBulletinPublishService {
 	@Transactional
 	public void publishAllBulletins(
 			@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-			@QueryValue("change") boolean change) {
+			@QueryValue(value = "strategy", defaultValue = "publish") PublicationStrategy.Type strategy) {
 
 		try {
 			Instant startDate = DateControllerUtil.parseDateOrThrow(date);
-			if (change) {
-				publicationJob.execute(PublicationStrategy.change(startDate, regionRepository.getPublishBulletinRegions()));
-			} else {
-				publicationJob.execute(PublicationStrategy.publish(startDate, regionRepository.getPublishBulletinRegions()));
-			}
+			publicationJob.execute(strategy.toStrategy(startDate, regionRepository.getPublishBulletinRegions()));
 		} catch (AlbinaException e) {
 			logger.warn("Error publishing bulletins", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

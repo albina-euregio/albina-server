@@ -113,7 +113,7 @@ public interface PublicationStrategy {
 		};
 	}
 
-	static PublicationStrategy change(Instant startDate, List<Region> regions) {
+	static PublicationStrategy noMessages(Instant startDate, List<Region> regions) {
 		Objects.requireNonNull(startDate, "startDate");
 		Objects.requireNonNull(regions, "regions");
 		return new PublicationStrategy() {
@@ -144,11 +144,63 @@ public interface PublicationStrategy {
 		};
 	}
 
+	static PublicationStrategy minimalCAAML(Instant startDate, List<Region> regions) {
+		Objects.requireNonNull(startDate, "startDate");
+		Objects.requireNonNull(regions, "regions");
+		return new PublicationStrategy() {
+			@Override
+			public boolean isEnabled(LocalServerInstance serverInstance) {
+				return true;
+			}
+
+			@Override
+			public boolean skipSendToAllChannels() {
+				return true;
+			}
+
+			@Override
+			public boolean isManualPublication() {
+				return true;
+			}
+
+			@Override
+			public boolean createCAAMLOnly() {
+				return true;
+			}
+
+			@Override
+			public Instant getStartDate(Clock clock) {
+				return startDate;
+			}
+
+			@Override
+			public List<Region> getRegions() {
+				return regions;
+			}
+		};
+	}
+
+	enum Type {
+		publish, noMessages, minimalCAAML;
+
+		public PublicationStrategy toStrategy(Instant startDate, List<Region> regions) {
+			return switch (this) {
+				case publish -> PublicationStrategy.publish(startDate, regions);
+				case noMessages -> PublicationStrategy.noMessages(startDate, regions);
+				case minimalCAAML -> PublicationStrategy.minimalCAAML(startDate, regions);
+			};
+		}
+	}
+
 	boolean isEnabled(LocalServerInstance serverInstance);
 
 	boolean skipSendToAllChannels();
 
 	boolean isManualPublication();
+
+	default boolean createCAAMLOnly() {
+		return false;
+	}
 
 	Instant getStartDate(Clock clock);
 
