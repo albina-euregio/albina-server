@@ -138,6 +138,9 @@ public class Region implements PersistentObject {
 	@Column(name = "ENABLE_OBSERVATIONS")
 	private boolean enableObservations;
 
+	@Column(name = "ENABLE_INCIDENTS")
+	private boolean enableIncidents;
+
 	@Column(name = "ENABLE_MODELLING")
 	private boolean enableModelling;
 
@@ -742,6 +745,14 @@ public class Region implements PersistentObject {
 
 	public void setEnableObservations(boolean enableObservations) {
 		this.enableObservations = enableObservations;
+	}
+
+	public boolean isEnableIncidents() {
+		return enableIncidents;
+	}
+
+	public void setEnableIncidents(boolean enableIncidents) {
+		this.enableIncidents = enableIncidents;
 	}
 
 	public boolean isEnableModelling() {
