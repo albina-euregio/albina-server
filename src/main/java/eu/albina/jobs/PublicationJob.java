@@ -192,6 +192,7 @@ public class PublicationJob {
 						logger.info("Creating resources for {}", avalancheReport);
 						if(strategy.createCAAMLOnly()) {
 							publicationController.createCaamlV6(avalancheReport);
+							publicationController.createSimpleHtml(avalancheReport);
 						} else {
 							publicationController.createRegionResources(avalancheReport.getRegion(), avalancheReport);
 						}
@@ -219,6 +220,7 @@ public class PublicationJob {
 						AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
 						if(strategy.createCAAMLOnly()) {
 							publicationController.createCaamlV6(report);
+							publicationController.createSimpleHtml(report);
 						} else {
 							publicationController.createRegionResources(superRegion, report);
 						}
@@ -258,7 +260,7 @@ public class PublicationJob {
 				});
 				if (publicationRegionsInProgress.isEmpty()) {
 					regionsInProgressByPublicationDate.remove(startDate, publicationRegionsInProgress);
-				}	
+				}
 			}
 		});
 	}
