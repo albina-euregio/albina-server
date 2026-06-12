@@ -3,12 +3,20 @@ package eu.albina.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Consumes;
+import io.micronaut.http.annotation.Part;
+import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.serde.annotation.Serdeable;
+
 import eu.albina.controller.CrudRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.model.Incident;
+import eu.albina.model.IncidentAttachment;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
+import eu.albina.util.GlobalVariables;
+
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -32,8 +40,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Controller("/incidents")
 @Tag(name = "incidents")
@@ -56,8 +68,11 @@ public class IncidentService {
 	@Inject
 	ObjectMapper objectMapper;
 
+	@Inject
+	GlobalVariables globalVariables;
+
 	@Get
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "List incidents for a region")
 	public List<IncidentView> getIncidents(@QueryValue("region") String regionId) {
@@ -67,7 +82,7 @@ public class IncidentService {
 	}
 
 	@Get("/{id}")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get an incident by ID")
 	public IncidentView getIncident(@PathVariable String id) {
@@ -77,7 +92,7 @@ public class IncidentService {
 	}
 
 	@Post
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create an incident")
 	public HttpResponse<IncidentView> createIncident(
@@ -98,7 +113,7 @@ public class IncidentService {
 	}
 
 	@Put("/{id}")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update an incident")
 	public IncidentView updateIncident(@PathVariable String id, @Body String body) {
@@ -115,7 +130,7 @@ public class IncidentService {
 	}
 
 	@Delete("/{id}")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete an incident")
 	public HttpResponse<Void> deleteIncident(@PathVariable String id) {
@@ -124,6 +139,32 @@ public class IncidentService {
 		}
 		incidentRepository.deleteById(id);
 		return HttpResponse.noContent();
+	}
+
+	@Post("/{id}/attachment")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Upload incident attachment")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public IncidentAttachment uploadIncidentAttachment(
+		@PathVariable String id,
+		@Part("file") CompletedFileUpload file) {
+		if (!incidentRepository.existsById(id)) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+		}
+		UUID uuid = UUID.randomUUID();
+		try {
+			Path attachment = Path.of(globalVariables.getIncidentsPath()).resolve(id).resolve(uuid.toString());
+			Files.createDirectories(attachment.getParent());
+			Files.copy(file.getInputStream(), attachment, StandardCopyOption.REPLACE_EXISTING);
+			logger.info("Uploaded attachment {} for incident {} to {} ({} bytes)",
+				file.getFilename(), id, attachment, Files.size(attachment));
+			String mediaType = file.getContentType().map(MediaType::getName).orElse(null);
+			return new IncidentAttachment(uuid, Instant.now(), null, file.getFilename(), mediaType);
+		} catch (IOException e) {
+			logger.warn("Failed to save incident attachment", e);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	@Serdeable
