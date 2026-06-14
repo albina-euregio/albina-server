@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Part;
+import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.http.server.types.files.SystemFile;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.serde.annotation.Serdeable;
 
 import eu.albina.controller.CrudRepository;
@@ -146,6 +149,8 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get incident attachment")
+	@Produces({MediaType.IMAGE_WEBP, MediaType.IMAGE_JPEG, MediaType.APPLICATION_PDF, MediaType.ALL})
+	@ExecuteOn(TaskExecutors.IO)
 	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
 		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
@@ -158,6 +163,7 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete incident attachment")
+	@ExecuteOn(TaskExecutors.IO)
 	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
 		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
@@ -178,6 +184,7 @@ public class IncidentService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Upload incident attachment")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@ExecuteOn(TaskExecutors.IO)
 	public IncidentAttachment uploadIncidentAttachment(
 		@PathVariable UUID id,
 		@Part("file") CompletedFileUpload file) {
