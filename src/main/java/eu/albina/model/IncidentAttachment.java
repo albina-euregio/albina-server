@@ -13,7 +13,6 @@ import io.micronaut.serde.annotation.Serdeable;
 public record IncidentAttachment(
 	UUID uuid,
 	Instant dateAdded,
-	byte[] file,
 	String fileName,
 	String mediaType,
 	Instant dateCreated,
@@ -24,7 +23,7 @@ public record IncidentAttachment(
 	String attachmentCategory,
 	List<String> attachmentTags) {
 
-	public IncidentAttachment(UUID uuid, Instant dateAdded, byte[] file, String fileName, String mediaType) {
-		this(uuid, dateAdded, file, fileName, mediaType, null, "", "", "", null, null, List.of());
+	public IncidentAttachment(UUID uuid, Instant dateAdded, String fileName, String mediaType) {
+		this(uuid, dateAdded, fileName, mediaType, null, "", "", "", null, null, List.of());
 	}
 }

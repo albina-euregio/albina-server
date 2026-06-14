@@ -7,6 +7,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Part;
 import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.http.server.types.files.SystemFile;
 import io.micronaut.serde.annotation.Serdeable;
 
 import eu.albina.controller.CrudRepository;
@@ -145,20 +146,12 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get incident attachment")
-	public IncidentAttachment getIncidentAttachment(@PathVariable String id, @PathVariable UUID attachmentId) {
+	public SystemFile getIncidentAttachment(@PathVariable String id, @PathVariable UUID attachmentId) {
 		if (!incidentRepository.existsById(id)) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		Path attachment = getAttachmentPath(id, attachmentId);
-		try {
-			byte[] file = Files.readAllBytes(attachment);
-			Instant dateAdded = Files.getLastModifiedTime(attachment).toInstant();
-			String mediaType = Files.probeContentType(attachment);
-			return new IncidentAttachment(attachmentId, dateAdded, file, null, mediaType);
-		} catch (IOException e) {
-			logger.warn("Failed to read incident attachment", e);
-			throw new HttpStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-		}
+		return new SystemFile(attachment.toFile());
 	}
 
 	@Delete("/{id}/attachment/{attachmentId}")
@@ -199,7 +192,7 @@ public class IncidentService {
 			logger.info("Uploaded attachment {} for incident {} to {} ({} bytes)",
 				file.getFilename(), id, attachment, Files.size(attachment));
 			String mediaType = file.getContentType().map(MediaType::getName).orElse(null);
-			return new IncidentAttachment(uuid, Instant.now(), null, file.getFilename(), mediaType);
+			return new IncidentAttachment(uuid, Instant.now(), file.getFilename(), mediaType);
 		} catch (IOException e) {
 			logger.warn("Failed to save incident attachment", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
