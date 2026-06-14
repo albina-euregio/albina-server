@@ -149,14 +149,14 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get incident attachment")
-	@Produces({MediaType.IMAGE_WEBP, MediaType.IMAGE_JPEG, MediaType.APPLICATION_PDF, MediaType.ALL})
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@ExecuteOn(TaskExecutors.IO)
 	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
 		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		Path attachment = getAttachmentPath(id, attachmentId);
-		return new SystemFile(attachment.toFile());
+		return new SystemFile(attachment.toFile(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
 	}
 
 	@Delete("/{id}/attachment/{attachmentId}")
