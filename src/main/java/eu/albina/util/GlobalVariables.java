@@ -24,8 +24,14 @@ public class GlobalVariables {
 	String mapsPath;
 	@Value("${albina.conf.mediaPath}")
 	String mediaPath;
+	@Value("${albina.conf.incidentsPath}")
+	String incidentsPath;
 	@Value("${albina.conf.mapProductionUrl}")
 	String mapProductionUrl;
+
+	public String getIncidentsPath() {
+		return Objects.requireNonNull(incidentsPath, "incidentsPath");
+	}
 
 	public LocalServerInstance getLocalServerInstance() {
 		return new LocalServerInstance(

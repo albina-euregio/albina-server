@@ -3,12 +3,24 @@ package eu.albina.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Consumes;
+import io.micronaut.http.annotation.Part;
+import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.http.server.types.files.SystemFile;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.micronaut.serde.annotation.Serdeable;
+
 import eu.albina.controller.CrudRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.model.Incident;
+import eu.albina.model.IncidentAttachment;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
+import eu.albina.util.GlobalVariables;
+
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -32,8 +44,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Controller("/incidents")
 @Tag(name = "incidents")
@@ -56,8 +72,11 @@ public class IncidentService {
 	@Inject
 	ObjectMapper objectMapper;
 
+	@Inject
+	GlobalVariables globalVariables;
+
 	@Get
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "List incidents for a region")
 	public List<IncidentView> getIncidents(@QueryValue("region") String regionId) {
@@ -67,17 +86,17 @@ public class IncidentService {
 	}
 
 	@Get("/{id}")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get an incident by ID")
-	public IncidentView getIncident(@PathVariable String id) {
-		return incidentRepository.findById(id)
+	public IncidentView getIncident(@PathVariable UUID id) {
+		return incidentRepository.findById(id.toString())
 			.map(i -> IncidentView.of(i, objectMapper))
 			.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 	}
 
 	@Post
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create an incident")
 	public HttpResponse<IncidentView> createIncident(
@@ -98,13 +117,13 @@ public class IncidentService {
 	}
 
 	@Put("/{id}")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update an incident")
-	public IncidentView updateIncident(@PathVariable String id, @Body String body) {
+	public IncidentView updateIncident(@PathVariable UUID id, @Body String body) {
 		try {
 			objectMapper.readTree(body); // validate JSON
-			Incident incident = incidentRepository.findById(id)
+			Incident incident = incidentRepository.findById(id.toString())
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 			incident.setData(body);
 			return IncidentView.of(incidentRepository.update(incident), objectMapper);
@@ -115,15 +134,80 @@ public class IncidentService {
 	}
 
 	@Delete("/{id}")
-	@Secured({ Role.Str.ADMIN, Role.Str.FORECASTER })
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete an incident")
-	public HttpResponse<Void> deleteIncident(@PathVariable String id) {
-		if (!incidentRepository.existsById(id)) {
+	public HttpResponse<Void> deleteIncident(@PathVariable UUID id) {
+		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
-		incidentRepository.deleteById(id);
+		incidentRepository.deleteById(id.toString());
 		return HttpResponse.noContent();
+	}
+
+	@Get("/{id}/attachment/{attachmentId}")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Get incident attachment")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	@ExecuteOn(TaskExecutors.IO)
+	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
+		if (!incidentRepository.existsById(id.toString())) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+		}
+		Path attachment = getAttachmentPath(id, attachmentId);
+		return new SystemFile(attachment.toFile(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
+	}
+
+	@Delete("/{id}/attachment/{attachmentId}")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Delete incident attachment")
+	@ExecuteOn(TaskExecutors.IO)
+	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
+		if (!incidentRepository.existsById(id.toString())) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+		}
+		Path attachment = getAttachmentPath(id, attachmentId);
+		try {
+			Files.delete(attachment);
+			logger.info("Deleted attachment {} for incident {}", attachmentId, id);
+			return HttpResponse.noContent();
+		} catch (IOException e) {
+			logger.warn("Failed to delete incident attachment", e);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@Post("/{id}/attachment")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Upload incident attachment")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@ExecuteOn(TaskExecutors.IO)
+	public IncidentAttachment uploadIncidentAttachment(
+		@PathVariable UUID id,
+		@Part("file") CompletedFileUpload file) {
+		if (!incidentRepository.existsById(id.toString())) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+		}
+		UUID uuid = UUID.randomUUID();
+		try {
+			Path attachment = getAttachmentPath(id, uuid);
+			Files.createDirectories(attachment.getParent());
+			Files.copy(file.getInputStream(), attachment, StandardCopyOption.REPLACE_EXISTING);
+			logger.info("Uploaded attachment {} for incident {} to {} ({} bytes)",
+				file.getFilename(), id, attachment, Files.size(attachment));
+			String mediaType = file.getContentType().map(MediaType::getName).orElse(null);
+			return new IncidentAttachment(uuid, Instant.now(), file.getFilename(), mediaType);
+		} catch (IOException e) {
+			logger.warn("Failed to save incident attachment", e);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	private Path getAttachmentPath(UUID id, UUID attachmentId) {
+		return Path.of(globalVariables.getIncidentsPath()).resolve(id.toString()).resolve(attachmentId.toString());
 	}
 
 	@Serdeable
