@@ -149,7 +149,7 @@ public class IncidentService {
 		if (!incidentRepository.existsById(id)) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
-		Path attachment = Path.of(globalVariables.getIncidentsPath()).resolve(id).resolve(attachmentId.toString());
+		Path attachment = getAttachmentPath(id, attachmentId);
 		try {
 			byte[] file = Files.readAllBytes(attachment);
 			Instant dateAdded = Files.getLastModifiedTime(attachment).toInstant();
@@ -158,6 +158,25 @@ public class IncidentService {
 		} catch (IOException e) {
 			logger.warn("Failed to read incident attachment", e);
 			throw new HttpStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
+	@Delete("/{id}/attachment/{attachmentId}")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Delete incident attachment")
+	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable String id, @PathVariable UUID attachmentId) {
+		if (!incidentRepository.existsById(id)) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+		}
+		Path attachment = getAttachmentPath(id, attachmentId);
+		try {
+			Files.delete(attachment);
+			logger.info("Deleted attachment {} for incident {}", attachmentId, id);
+			return HttpResponse.noContent();
+		} catch (IOException e) {
+			logger.warn("Failed to delete incident attachment", e);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
@@ -174,7 +193,7 @@ public class IncidentService {
 		}
 		UUID uuid = UUID.randomUUID();
 		try {
-			Path attachment = Path.of(globalVariables.getIncidentsPath()).resolve(id).resolve(uuid.toString());
+			Path attachment = getAttachmentPath(id, uuid);
 			Files.createDirectories(attachment.getParent());
 			Files.copy(file.getInputStream(), attachment, StandardCopyOption.REPLACE_EXISTING);
 			logger.info("Uploaded attachment {} for incident {} to {} ({} bytes)",
@@ -185,6 +204,10 @@ public class IncidentService {
 			logger.warn("Failed to save incident attachment", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+	}
+
+	private Path getAttachmentPath(String id, UUID attachmentId) {
+		return Path.of(globalVariables.getIncidentsPath()).resolve(id).resolve(attachmentId.toString());
 	}
 
 	@Serdeable
