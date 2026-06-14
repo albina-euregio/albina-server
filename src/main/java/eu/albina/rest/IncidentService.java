@@ -86,8 +86,8 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get an incident by ID")
-	public IncidentView getIncident(@PathVariable String id) {
-		return incidentRepository.findById(id)
+	public IncidentView getIncident(@PathVariable UUID id) {
+		return incidentRepository.findById(id.toString())
 			.map(i -> IncidentView.of(i, objectMapper))
 			.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 	}
@@ -117,10 +117,10 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update an incident")
-	public IncidentView updateIncident(@PathVariable String id, @Body String body) {
+	public IncidentView updateIncident(@PathVariable UUID id, @Body String body) {
 		try {
 			objectMapper.readTree(body); // validate JSON
-			Incident incident = incidentRepository.findById(id)
+			Incident incident = incidentRepository.findById(id.toString())
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 			incident.setData(body);
 			return IncidentView.of(incidentRepository.update(incident), objectMapper);
@@ -134,11 +134,11 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete an incident")
-	public HttpResponse<Void> deleteIncident(@PathVariable String id) {
-		if (!incidentRepository.existsById(id)) {
+	public HttpResponse<Void> deleteIncident(@PathVariable UUID id) {
+		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
-		incidentRepository.deleteById(id);
+		incidentRepository.deleteById(id.toString());
 		return HttpResponse.noContent();
 	}
 
@@ -146,8 +146,8 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get incident attachment")
-	public SystemFile getIncidentAttachment(@PathVariable String id, @PathVariable UUID attachmentId) {
-		if (!incidentRepository.existsById(id)) {
+	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
+		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		Path attachment = getAttachmentPath(id, attachmentId);
@@ -158,8 +158,8 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete incident attachment")
-	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable String id, @PathVariable UUID attachmentId) {
-		if (!incidentRepository.existsById(id)) {
+	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
+		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		Path attachment = getAttachmentPath(id, attachmentId);
@@ -179,9 +179,9 @@ public class IncidentService {
 	@Operation(summary = "Upload incident attachment")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public IncidentAttachment uploadIncidentAttachment(
-		@PathVariable String id,
+		@PathVariable UUID id,
 		@Part("file") CompletedFileUpload file) {
-		if (!incidentRepository.existsById(id)) {
+		if (!incidentRepository.existsById(id.toString())) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		UUID uuid = UUID.randomUUID();
@@ -199,8 +199,8 @@ public class IncidentService {
 		}
 	}
 
-	private Path getAttachmentPath(String id, UUID attachmentId) {
-		return Path.of(globalVariables.getIncidentsPath()).resolve(id).resolve(attachmentId.toString());
+	private Path getAttachmentPath(UUID id, UUID attachmentId) {
+		return Path.of(globalVariables.getIncidentsPath()).resolve(id.toString()).resolve(attachmentId.toString());
 	}
 
 	@Serdeable
