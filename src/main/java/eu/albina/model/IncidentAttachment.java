@@ -11,7 +11,7 @@ import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
 public record IncidentAttachment(
-	UUID uuid,
+	UUID id,
 	Instant dateAdded,
 	String fileName,
 	String mediaType,
