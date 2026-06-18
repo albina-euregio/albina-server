@@ -71,13 +71,10 @@ public class RegionService {
 			String id = objectMapper.readValue(regionString, Region.class).getId();
 			Optional<Region> optionalRegion = regionRepository.findById(id);
 			if (optionalRegion.isPresent()) {
-				Region existing = optionalRegion.get();
-				// Avoid overwriting fields that are not contained in the JSON object sent by the frontend.
-				// This happens whenever new fields are added to the backend but not yet to the frontend.
-				existing.updateFromJSON(regionString, objectMapper);
-				existing.fixLanguageConfigurations();
-				regionRepository.update(existing);
-				return existing;
+				Region region = objectMapper.readValue(regionString, Region.class);
+				region.fixLanguageConfigurations();
+				regionRepository.update(region);
+				return region;
 			} else {
 				Region region = objectMapper.readValue(regionString, Region.class);
 				region.fixLanguageConfigurations();
