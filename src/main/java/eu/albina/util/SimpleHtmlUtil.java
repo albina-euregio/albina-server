@@ -23,22 +23,22 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.LanguageCode;
 
-public interface SimpleHtmlUtil {
+public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
-	Logger logger = LoggerFactory.getLogger(SimpleHtmlUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(SimpleHtmlUtil.class);
 
-	static void createRegionSimpleHtml(AvalancheReport avalancheReport) {
+	public static void createRegionSimpleHtml(AvalancheReport avalancheReport) {
 		if (avalancheReport.getBulletins().isEmpty()) {
 			return;
 		}
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
-			createSimpleHtml(avalancheReport, lang);
+			new SimpleHtmlUtil(avalancheReport, lang).createSimpleHtml();
 		}
 	}
 
-	static void createSimpleHtml(AvalancheReport avalancheReport, LanguageCode lang) {
+	void createSimpleHtml() {
 		try {
-			String simpleHtmlString = createSimpleHtmlString(avalancheReport, lang);
+			String simpleHtmlString = createSimpleHtmlString();
 			String filename = avalancheReport.getRegion().getId() + "_" + lang.toString() + ".html";
 			Path dirPath = avalancheReport.getHtmlDirectory();
 			Files.createDirectories(dirPath);
@@ -49,7 +49,7 @@ public interface SimpleHtmlUtil {
 		}
 	}
 
-	static String createSimpleHtmlString(AvalancheReport avalancheReport, LanguageCode lang) {
+	String createSimpleHtmlString() {
 		Region region = avalancheReport.getRegion();
 		String publicationDate = avalancheReport.getPublicationDate(lang);
 		String prefix = avalancheReport.getSimpleHtmlUrl() + "/"
@@ -95,7 +95,7 @@ public interface SimpleHtmlUtil {
 			if (bulletin.getPublishedRegions() == null || bulletin.getPublishedRegions().isEmpty()) {
 				continue;
 			}
-			appendBulletin(pw, bulletin, lang, region, avalancheReport);
+			appendBulletin(pw, bulletin);
 		}
 
 		pw.format("</section>\n</body>\n</html>\n");
@@ -103,18 +103,17 @@ public interface SimpleHtmlUtil {
 		return out.toString();
 	}
 
-	private static void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, LanguageCode lang, Region region,
-			AvalancheReport avalancheReport) {
+	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin) {
 		String regions = String.join(", ", bulletin.getPublishedRegions().stream().map(lang::getRegionName).toList());
 		String mapsUrl = avalancheReport.getMapsUrl();
 
 		pw.format("<article>\n");
 		pw.format("<p>\n");
 		if (bulletin.isHasDaytimeDependency()) {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>", regions, mapsUrl, lang, region);
-			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>", regions, mapsUrl, lang, region);
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>", regions, mapsUrl);
+			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>", regions, mapsUrl);
 		} else {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, "", regions, mapsUrl, lang, region);
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, "", regions, mapsUrl);
 		}
 		pw.format("</p>\n");
 		pw.format("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">%s\n</h3>\n", bulletin.getHighlightsIn(lang).orElse(""));
@@ -130,15 +129,16 @@ public interface SimpleHtmlUtil {
 		pw.format("</article>\n");
 	}
 
-	private static void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,
+	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,
 			AvalancheBulletinDaytimeDescription daytimeDescription, DaytimeDependency daytimeDependency, String content,
-			String regions, String mapsUrl, LanguageCode lang, Region region) {
+			String regions, String mapsUrl) {
+		Region region = avalancheReport.getRegion();
 
 		String dangerLevelText = "<b>" + lang.getBundleString("headline.danger-rating") + "</b><br>";
 		String avalancheProblemText = daytimeDescription.getAvalancheProblems().stream()
 			.noneMatch(p -> p != null && p.getAvalancheProblem() != null) ? "" : "<b>" + lang.getBundleString("headline.avalanche-problem") + "</b><br>";
 		String warningPicto = region.getServerImagesUrl() + "warning_pictos/color/level_" + daytimeDescription.getWarningLevelId() + ".png";
-		String elevation = getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline(), lang);
+		String elevation = getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline());
 
 		String mapWebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.webp);
 		String mapJpg = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
@@ -159,12 +159,13 @@ public interface SimpleHtmlUtil {
 		pw.format("<table>\n");
 		daytimeDescription.getAvalancheProblems().stream()
 			.filter(p -> p != null && p.getAvalancheProblem() != null)
-			.forEach(p -> appendProblem(pw, p, lang, region));
+			.forEach(p -> appendProblem(pw, p));
 		pw.format("</table>\n");
 		pw.format("</p>\n");
 	}
 
-	private static void appendProblem(PrintWriter pw, AvalancheProblem avalancheProblem, LanguageCode lang, Region region) {
+	private void appendProblem(PrintWriter pw, AvalancheProblem avalancheProblem) {
+		Region region = avalancheReport.getRegion();
 		pw.format("<tr>\n");
 		pw.format("<td style=\"margin-right: 10px;\" >\n");
 		pw.format("<table>\n");
@@ -184,10 +185,10 @@ public interface SimpleHtmlUtil {
 		pw.format("<td>\n");
 		pw.format("<table>\n");
 		pw.format("<tr>\n");
-		pw.format("<td>%s\n</td>\n", getElevationHighText(avalancheProblem, lang));
+		pw.format("<td>%s\n</td>\n", getElevationHighText(avalancheProblem));
 		pw.format("</tr>\n");
 		pw.format("<tr>\n");
-		pw.format("<td>%s\n</td>\n", getElevationLowText(avalancheProblem, lang));
+		pw.format("<td>%s\n</td>\n", getElevationLowText(avalancheProblem));
 		pw.format("</tr>\n");
 		pw.format("</table>\n");
 		pw.format("</td>\n");
@@ -215,7 +216,7 @@ public interface SimpleHtmlUtil {
 		}
 	}
 
-	private static String getElevationLowText(AvalancheProblem avalancheProblem, LanguageCode lang) {
+	private String getElevationLowText(AvalancheProblem avalancheProblem) {
 		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
@@ -240,7 +241,7 @@ public interface SimpleHtmlUtil {
 		}
 	}
 
-	private static String getElevationHighText(AvalancheProblem avalancheProblem, LanguageCode lang) {
+	private String getElevationHighText(AvalancheProblem avalancheProblem) {
 		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
@@ -265,7 +266,7 @@ public interface SimpleHtmlUtil {
 		}
 	}
 
-	private static String getElevationString(int elevation, boolean treeline, LanguageCode lang) {
+	private String getElevationString(int elevation, boolean treeline) {
 		String result = "";
 		if (treeline) {
 			result = lang.getBundleString("elevation.treeline");
