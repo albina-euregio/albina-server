@@ -37,18 +37,6 @@ public interface SimpleHtmlUtil {
 
 	Logger logger = LoggerFactory.getLogger(SimpleHtmlUtil.class);
 
-	Color blueColor = new Color(0, 172, 251);
-	Color greyLightColor = new Color(201, 201, 201);
-	Color greyDarkColor = new Color(85, 95, 96);
-	Color whiteColor = new Color(255, 255, 255);
-	Color greyVeryVeryLightColor = new Color(242, 247, 250);
-	Color dangerLevel1Color = new Color(197, 255, 118);
-	Color dangerLevel2Color = new Color(255, 255, 70);
-	Color dangerLevel3Color = new Color(255, 152, 44);
-	Color dangerLevel4Color = new Color(255, 0, 23);
-	Color dangerLevel5ColorRed = new Color(255, 0, 23);
-	Color dangerLevel5ColorBlack = new Color(0, 0, 0);
-
 	private static Configuration createFreemarkerConfigurationInstance()  {
 		Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
 		cfg.setClassForTemplateLoading(EmailUtil.class, "/templates");
