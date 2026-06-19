@@ -106,38 +106,17 @@ public interface SimpleHtmlUtil {
 
 	private static void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, LanguageCode lang, Region region,
 			AvalancheReport avalancheReport) {
-		String mapsUrl = avalancheReport.getMapsUrl();
-		String mapAMjpg, mapAMwebp, mapPMjpg, mapPMwebp, heightPMSmall, fontSize, am, pm;
-		DaytimeView forenoon = buildDaytime(bulletin.getForenoon(), lang, region);
-		DaytimeView afternoon;
-		if (bulletin.isHasDaytimeDependency()) {
-			mapAMjpg = mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.am, false, MapImageFormat.jpg);
-			mapAMwebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.am, false, MapImageFormat.webp);
-			mapPMjpg = mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.pm, false, MapImageFormat.jpg);
-			mapPMwebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.pm, false, MapImageFormat.webp);
-			heightPMSmall = "height=\"50\"";
-			fontSize = "";
-			am = "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>";
-			pm = "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>";
-			afternoon = buildDaytime(bulletin.getAfternoon(), lang, region);
-		} else {
-			mapAMjpg = mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.fd, false, MapImageFormat.jpg);
-			mapAMwebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.fd, false, MapImageFormat.webp);
-			mapPMjpg = region.getServerImagesUrl() + "empty.png";
-			mapPMwebp = region.getServerImagesUrl() + "empty.webp";
-			heightPMSmall = "style=\"height: 0; margin: 0\"";
-			fontSize = "style=\"font-size: 0\"";
-			am = "";
-			pm = "";
-			afternoon = emptyDaytime();
-		}
-
 		String regions = String.join(", ", bulletin.getPublishedRegions().stream().map(lang::getRegionName).toList());
+		String mapsUrl = avalancheReport.getMapsUrl();
 
 		pw.format("<article>\n");
 		pw.format("<p>\n");
-		appendDaytime(pw, forenoon, regions, "", am, mapAMwebp, mapAMjpg, "<table>", "height=\"50\" ");
-		appendDaytime(pw, afternoon, regions, " " + heightPMSmall, pm, mapPMwebp, mapPMjpg, "<table " + fontSize + ">", heightPMSmall);
+		if (bulletin.isHasDaytimeDependency()) {
+			appendDaytime(pw, buildDaytime(bulletin.getForenoon(), lang, region), regions, "", "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>", mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.am, false, MapImageFormat.webp), mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.am, false, MapImageFormat.jpg), "<table>", "height=\"50\" ");
+			appendDaytime(pw, buildDaytime(bulletin.getAfternoon(), lang, region), regions, " " + "height=\"50\"", "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>", mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.pm, false, MapImageFormat.webp), mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.pm, false, MapImageFormat.jpg), "<table " + "" + ">", "height=\"50\"");
+		} else {
+			appendDaytime(pw, buildDaytime(bulletin.getForenoon(), lang, region), regions, "", "", mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.fd, false, MapImageFormat.webp), mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.fd, false, MapImageFormat.jpg), "<table>", "height=\"50\" ");
+		}
 		pw.format("</p>\n");
 		pw.format("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">%s\n</h3>\n", bulletin.getHighlightsIn(lang).orElse(""));
 		pw.format("<h3>%s\n</h3>\n", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
