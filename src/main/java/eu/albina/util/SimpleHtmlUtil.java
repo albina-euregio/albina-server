@@ -187,7 +187,7 @@ public interface SimpleHtmlUtil {
 		root.put("bulletins", arrayList);
 
 		// Get template
-		Template temp = createFreemarkerConfigurationInstance().getTemplate(region.getSimpleHtmlTemplateName());
+		Template temp = createFreemarkerConfigurationInstance().getTemplate("simple-bulletin.min.html");
 
 		// Merge template and model
 		Writer out = new StringWriter();
