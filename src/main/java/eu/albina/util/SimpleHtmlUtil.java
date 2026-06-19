@@ -104,16 +104,14 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	}
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin) {
-		String regions = String.join(", ", bulletin.getPublishedRegions().stream().map(lang::getRegionName).toList());
-		String mapsUrl = avalancheReport.getMapsUrl();
 
 		pw.format("<article>\n");
 		pw.format("<p>\n");
 		if (bulletin.isHasDaytimeDependency()) {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>", regions, mapsUrl);
-			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>", regions, mapsUrl);
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>");
+			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>");
 		} else {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, "", regions, mapsUrl);
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, "");
 		}
 		pw.format("</p>\n");
 		pw.format("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">%s\n</h3>\n", bulletin.getHighlightsIn(lang).orElse(""));
@@ -130,8 +128,9 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	}
 
 	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,
-			AvalancheBulletinDaytimeDescription daytimeDescription, DaytimeDependency daytimeDependency, String content,
-			String regions, String mapsUrl) {
+			AvalancheBulletinDaytimeDescription daytimeDescription, DaytimeDependency daytimeDependency, String content) {
+		String regions = String.join(", ", bulletin.getPublishedRegions().stream().map(lang::getRegionName).toList());
+		String mapsUrl = avalancheReport.getMapsUrl();
 		Region region = avalancheReport.getRegion();
 
 		String dangerLevelText = "<b>" + lang.getBundleString("headline.danger-rating") + "</b><br>";
