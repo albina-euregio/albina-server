@@ -2,6 +2,8 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,63 +59,52 @@ public interface SimpleHtmlUtil {
 		String previousDayLink = String.format("%s/%s/%s_%s.html", avalancheReport.getSimpleHtmlUrl(), avalancheReport.getValidityDateString(Period.ofDays(-1)), region.getId(), lang);
 		String nextDayLink = String.format("%s/%s/%s_%s.html", avalancheReport.getSimpleHtmlUrl(), avalancheReport.getValidityDateString(Period.ofDays(1)), region.getId(), lang);
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("<!DOCTYPE html>\n");
-		sb.append("<html lang=\"en\">\n");
-		sb.append("<head>\n");
-		sb.append("<title>").append(region.getWebsiteName(lang)).append(" ").append(avalancheReport.getDate(lang)).append("\n");
-		sb.append("</title>\n");
-		sb.append("<meta charset=\"utf-8\">\n");
-		sb.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
-		sb.append("<style>*{box-sizing: border-box;}body{font-family: Open Sans, Arial, Helvetica, sans-serif;}header{background-color: #FFF; padding: 10px; text-align: center; font-size: 35px; color: #19abff;}a{color: #19abff; margin: 0px; padding: 0px;}h3{padding: 0px; margin: 0px;}h4{padding-top: 20px; padding: 0px; margin: 0px;}h5{padding: 0px; margin: 0px; color: #000000; font-size: large; font-weight: normal;}article{padding: 20px; width: 100%; background-color: #f2f7fa; margin: 10px 0px;}rating1{background-color: #ccff66; color: #000000; font-weight: bold;}rating2{background-color: #ffff00; color: #000000; font-weight: bold;}rating3{color: #ff9900; font-weight: bold;}rating4{color: #ff0000; font-weight: bold;}rating5{color: #ff0000; font-weight: bold;}.day-link{font-size: large; font-weight: normal; margin: 0; padding: 10px 0;}.top-link{font-size: large; font-weight: normal; margin: 0; padding: 10px 0;}.headline-small{padding-top: 20px;}.headline-small-a{text-decoration: none; text-transform: uppercase; font-size: x-large;}.previous-day{float: left;}.next-day{float: right;}section:after{content: \"\"; display: table; clear: both;}\n");
-		sb.append("</style>\n");
-		sb.append("</head>\n");
-		sb.append("<body>\n");
-		sb.append("<header>\n");
-		sb.append("<p class=\"top-link\">\n");
-		sb.append("<a class=\"previous-day\" href=\"").append(website).append("\">").append(lang.getBundleString("standard.link.text")).append("\n");
-		sb.append("</a>\n");
-		sb.append("<a class=\"next-day\" href=\"").append(prefix).append("_de.html\">DE&nbsp;\n");
-		sb.append("</a>\n");
-		sb.append("<a class=\"next-day\" href=\"").append(prefix).append("_it.html\">IT&nbsp;\n");
-		sb.append("</a>\n");
-		sb.append("<a class=\"next-day\" href=\"").append(prefix).append("_en.html\">EN&nbsp;\n");
-		sb.append("</a>\n");
-		sb.append("<a class=\"next-day\" href=\"").append(prefix).append("_es.html\">ES&nbsp;\n");
-		sb.append("</a>\n");
-		sb.append("<a class=\"next-day\" href=\"").append(prefix).append("_ca.html\">CA&nbsp;\n");
-		sb.append("</a>\n");
-		sb.append("<a class=\"next-day\" href=\"").append(prefix).append("_ar.html\">AR&nbsp;\n");
-		sb.append("</a>\n");
-		sb.append("</p>\n");
-		sb.append("<h4>\n");
-		sb.append("<a href=\"").append(website).append("\">").append(region.getWebsiteName(lang)).append("\n");
-		sb.append("</a>\n");
-		sb.append("</h4>\n");
-		sb.append("<h3>").append(avalancheReport.getDate(lang)).append("\n");
-		sb.append("</h3>\n");
-		sb.append("<h5>").append(publicationDate.isEmpty() ? "" : lang.getBundleString("published")).append("<b>").append(publicationDate).append("</b></h5>\n");
-		sb.append("<p class=\"day-link\">\n");
-		sb.append("<a class=\"previous-day\" href=\"").append(previousDayLink).append("\"> &#8592; ").append(avalancheReport.getPreviousValidityDateString(lang)).append("\n");
-		sb.append("</a>\n");
-		sb.append("<a class=\"next-day\" href=\"").append(nextDayLink).append("\">").append(avalancheReport.getNextValidityDateString(lang)).append(" &#8594;\n");
-		sb.append("</a>\n");
-		sb.append("</p>\n");
-		sb.append("</header>\n");
-		sb.append("<section>\n");
+		StringWriter out = new StringWriter();
+		PrintWriter pw = new PrintWriter(out);
+		pw.format("<!DOCTYPE html>\n");
+		pw.format("<html lang=\"en\">\n");
+		pw.format("<head>\n");
+		pw.format("<title>%s %s\n</title>\n", region.getWebsiteName(lang), avalancheReport.getDate(lang));
+		pw.format("<meta charset=\"utf-8\">\n");
+		pw.format("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
+		pw.format("<style>*{box-sizing: border-box;}body{font-family: Open Sans, Arial, Helvetica, sans-serif;}header{background-color: #FFF; padding: 10px; text-align: center; font-size: 35px; color: #19abff;}a{color: #19abff; margin: 0px; padding: 0px;}h3{padding: 0px; margin: 0px;}h4{padding-top: 20px; padding: 0px; margin: 0px;}h5{padding: 0px; margin: 0px; color: #000000; font-size: large; font-weight: normal;}article{padding: 20px; width: 100%%; background-color: #f2f7fa; margin: 10px 0px;}rating1{background-color: #ccff66; color: #000000; font-weight: bold;}rating2{background-color: #ffff00; color: #000000; font-weight: bold;}rating3{color: #ff9900; font-weight: bold;}rating4{color: #ff0000; font-weight: bold;}rating5{color: #ff0000; font-weight: bold;}.day-link{font-size: large; font-weight: normal; margin: 0; padding: 10px 0;}.top-link{font-size: large; font-weight: normal; margin: 0; padding: 10px 0;}.headline-small{padding-top: 20px;}.headline-small-a{text-decoration: none; text-transform: uppercase; font-size: x-large;}.previous-day{float: left;}.next-day{float: right;}section:after{content: \"\"; display: table; clear: both;}\n</style>\n");
+		pw.format("</head>\n");
+		pw.format("<body>\n");
+		pw.format("<header>\n");
+		pw.format("<p class=\"top-link\">\n");
+		pw.format("<a class=\"previous-day\" href=\"%s\">%s\n</a>\n", website, lang.getBundleString("standard.link.text"));
+		pw.format("<a class=\"next-day\" href=\"%s_de.html\">DE&nbsp;\n</a>\n", prefix);
+		pw.format("<a class=\"next-day\" href=\"%s_it.html\">IT&nbsp;\n</a>\n", prefix);
+		pw.format("<a class=\"next-day\" href=\"%s_en.html\">EN&nbsp;\n</a>\n", prefix);
+		pw.format("<a class=\"next-day\" href=\"%s_es.html\">ES&nbsp;\n</a>\n", prefix);
+		pw.format("<a class=\"next-day\" href=\"%s_ca.html\">CA&nbsp;\n</a>\n", prefix);
+		pw.format("<a class=\"next-day\" href=\"%s_ar.html\">AR&nbsp;\n</a>\n", prefix);
+		pw.format("</p>\n");
+		pw.format("<h4>\n");
+		pw.format("<a href=\"%s\">%s\n</a>\n", website, region.getWebsiteName(lang));
+		pw.format("</h4>\n");
+		pw.format("<h3>%s\n</h3>\n", avalancheReport.getDate(lang));
+		pw.format("<h5>%s<b>%s</b></h5>\n", publicationDate.isEmpty() ? "" : lang.getBundleString("published"), publicationDate);
+		pw.format("<p class=\"day-link\">\n");
+		pw.format("<a class=\"previous-day\" href=\"%s\"> &#8592; %s\n</a>\n", previousDayLink, avalancheReport.getPreviousValidityDateString(lang));
+		pw.format("<a class=\"next-day\" href=\"%s\">%s &#8594;\n</a>\n", nextDayLink, avalancheReport.getNextValidityDateString(lang));
+		pw.format("</p>\n");
+		pw.format("</header>\n");
+		pw.format("<section>\n");
 
 		for (AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 			if (bulletin.getPublishedRegions() == null || bulletin.getPublishedRegions().isEmpty()) {
 				continue;
 			}
-			appendBulletin(sb, bulletin, lang, region, avalancheReport);
+			appendBulletin(pw, bulletin, lang, region, avalancheReport);
 		}
 
-		sb.append("</section>\n</body>\n</html>\n");
-		return sb.toString();
+		pw.format("</section>\n</body>\n</html>\n");
+		pw.flush();
+		return out.toString();
 	}
 
-	private static void appendBulletin(StringBuilder sb, AvalancheBulletin bulletin, LanguageCode lang, Region region,
+	private static void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, LanguageCode lang, Region region,
 			AvalancheReport avalancheReport) {
 		String mapsUrl = avalancheReport.getMapsUrl();
 		String mapAMjpg, mapAMwebp, mapPMjpg, mapPMwebp, heightPMSmall, fontSize, am, pm;
@@ -143,85 +134,81 @@ public interface SimpleHtmlUtil {
 
 		String regions = String.join(", ", bulletin.getPublishedRegions().stream().map(lang::getRegionName).toList());
 
-		sb.append("<article>\n");
-		sb.append("<p>\n");
-		appendDaytime(sb, forenoon, regions, "", am, mapAMwebp, mapAMjpg, "<table>", "height=\"50\" ");
-		appendDaytime(sb, afternoon, regions, " " + heightPMSmall, pm, mapPMwebp, mapPMjpg, "<table " + fontSize + ">", heightPMSmall);
-		sb.append("</p>\n");
-		sb.append("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">").append(bulletin.getHighlightsIn(lang).orElse("")).append("\n</h3>\n");
-		sb.append("<h3>").append(bulletin.getAvActivityHighlightsIn(lang).orElse("")).append("\n</h3>\n");
-		sb.append("<p>").append(bulletin.getAvActivityCommentIn(lang).orElse("")).append("\n</p>\n");
-		sb.append("<h3>").append(lang.getBundleString("headline.snowpack")).append("\n</h3>\n");
+		pw.format("<article>\n");
+		pw.format("<p>\n");
+		appendDaytime(pw, forenoon, regions, "", am, mapAMwebp, mapAMjpg, "<table>", "height=\"50\" ");
+		appendDaytime(pw, afternoon, regions, " " + heightPMSmall, pm, mapPMwebp, mapPMjpg, "<table " + fontSize + ">", heightPMSmall);
+		pw.format("</p>\n");
+		pw.format("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">%s\n</h3>\n", bulletin.getHighlightsIn(lang).orElse(""));
+		pw.format("<h3>%s\n</h3>\n", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
+		pw.format("<p>%s\n</p>\n", bulletin.getAvActivityCommentIn(lang).orElse(""));
+		pw.format("<h3>%s\n</h3>\n", lang.getBundleString("headline.snowpack"));
 		String dangerPattern1 = bulletin.getDangerPattern1() != null ? bulletin.getDangerPattern1().toString(lang.getLocale()) + "<br>" : "";
 		String dangerPattern2 = bulletin.getDangerPattern2() != null ? bulletin.getDangerPattern2().toString(lang.getLocale()) + "<br>" : "";
-		sb.append("<p>").append(dangerPattern1).append(dangerPattern2).append("\n</p>\n");
-		sb.append("<p>").append(bulletin.getSnowpackStructureCommentIn(lang).orElse("")).append("\n</p>\n");
-		sb.append("<h3>").append(lang.getBundleString("headline.tendency")).append("\n</h3>\n");
-		sb.append("<p>").append(bulletin.getTendencyCommentIn(lang).orElse("")).append("\n</p>\n");
-		sb.append("</article>\n");
+		pw.format("<p>%s%s\n</p>\n", dangerPattern1, dangerPattern2);
+		pw.format("<p>%s\n</p>\n", bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
+		pw.format("<h3>%s\n</h3>\n", lang.getBundleString("headline.tendency"));
+		pw.format("<p>%s\n</p>\n", bulletin.getTendencyCommentIn(lang).orElse(""));
+		pw.format("</article>\n");
 	}
 
-	private static void appendDaytime(StringBuilder sb, DaytimeView daytime, String regions, String pAttr, String content,
+	private static void appendDaytime(PrintWriter pw, DaytimeView daytime, String regions, String pAttr, String content,
 			String mapWebp, String mapJpg, String tableTag, String imgAttr) {
-		sb.append("<p").append(pAttr).append(">").append(content).append("\n");
-		sb.append("<picture>\n");
-		sb.append("<source type=\"image/webp\" srcset=\"").append(mapWebp).append("\">\n");
-		sb.append("<img style=\"margin-right: 10px;\" src=\"").append(mapJpg).append("\" alt=\"").append(regions).append("\">\n");
-		sb.append("</picture>\n");
-		sb.append("<br>").append(daytime.dangerLevelText()).append("\n");
-		sb.append(tableTag).append("\n");
-		sb.append("<tr>\n");
-		sb.append("<td>\n");
-		sb.append("<img height=\"50\" style=\"margin-right: 10px;\" src=\"").append(daytime.warningPicto()).append("\"/>\n");
-		sb.append("</td>\n");
-		sb.append("<td>").append(daytime.elevation()).append("\n");
-		sb.append("</td>\n");
-		sb.append("</tr>\n");
-		sb.append("</table>").append(daytime.avalancheProblemText()).append("\n");
-		sb.append(tableTag).append("\n");
+		pw.format("<p%s>%s\n", pAttr, content);
+		pw.format("<picture>\n");
+		pw.format("<source type=\"image/webp\" srcset=\"%s\">\n", mapWebp);
+		pw.format("<img style=\"margin-right: 10px;\" src=\"%s\" alt=\"%s\">\n", mapJpg, regions);
+		pw.format("</picture>\n");
+		pw.format("<br>%s\n", daytime.dangerLevelText());
+		pw.format("%s\n", tableTag);
+		pw.format("<tr>\n");
+		pw.format("<td>\n");
+		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", daytime.warningPicto());
+		pw.format("</td>\n");
+		pw.format("<td>%s\n</td>\n", daytime.elevation());
+		pw.format("</tr>\n");
+		pw.format("</table>%s\n", daytime.avalancheProblemText());
+		pw.format("%s\n", tableTag);
 		for (ProblemView problem : daytime.problems()) {
 			if (problem.exist()) {
-				appendProblem(sb, problem, imgAttr);
+				appendProblem(pw, problem, imgAttr);
 			}
 		}
-		sb.append("</table>\n");
-		sb.append("</p>\n");
+		pw.format("</table>\n");
+		pw.format("</p>\n");
 	}
 
-	private static void appendProblem(StringBuilder sb, ProblemView problem, String imgAttr) {
-		sb.append("<tr>\n");
-		sb.append("<td style=\"margin-right: 10px;\" >\n");
-		sb.append("<table>\n");
-		sb.append("<tr>\n");
-		sb.append("<td style=\"text-align: center;\">\n");
-		sb.append("<img ").append(imgAttr).append("src=\"").append(problem.icon()).append("\"/>\n");
-		sb.append("</td>\n");
-		sb.append("</tr>\n");
-		sb.append("<tr>\n");
-		sb.append("<td style=\"text-align: center; font-size: small; max-width: 80px;\">").append(problem.text()).append("\n");
-		sb.append("</td>\n");
-		sb.append("</tr>\n");
-		sb.append("</table>\n");
-		sb.append("</td>\n");
-		sb.append("<td>\n");
-		sb.append("<img ").append(imgAttr).append("style=\"margin-right: 10px;\" src=\"").append(problem.elevationIcon()).append("\"/>\n");
-		sb.append("</td>\n");
-		sb.append("<td>\n");
-		sb.append("<table>\n");
-		sb.append("<tr>\n");
-		sb.append("<td>").append(problem.elevationHigh()).append("\n");
-		sb.append("</td>\n");
-		sb.append("</tr>\n");
-		sb.append("<tr>\n");
-		sb.append("<td>").append(problem.elevationLow()).append("\n");
-		sb.append("</td>\n");
-		sb.append("</tr>\n");
-		sb.append("</table>\n");
-		sb.append("</td>\n");
-		sb.append("<td>\n");
-		sb.append("<img ").append(imgAttr).append("style=\"margin-right: 10px;\" src=\"").append(problem.aspectsIcon()).append("\"/>\n");
-		sb.append("</td>\n");
-		sb.append("</tr>\n");
+	private static void appendProblem(PrintWriter pw, ProblemView problem, String imgAttr) {
+		pw.format("<tr>\n");
+		pw.format("<td style=\"margin-right: 10px;\" >\n");
+		pw.format("<table>\n");
+		pw.format("<tr>\n");
+		pw.format("<td style=\"text-align: center;\">\n");
+		pw.format("<img %ssrc=\"%s\"/>\n", imgAttr, problem.icon());
+		pw.format("</td>\n");
+		pw.format("</tr>\n");
+		pw.format("<tr>\n");
+		pw.format("<td style=\"text-align: center; font-size: small; max-width: 80px;\">%s\n</td>\n", problem.text());
+		pw.format("</tr>\n");
+		pw.format("</table>\n");
+		pw.format("</td>\n");
+		pw.format("<td>\n");
+		pw.format("<img %sstyle=\"margin-right: 10px;\" src=\"%s\"/>\n", imgAttr, problem.elevationIcon());
+		pw.format("</td>\n");
+		pw.format("<td>\n");
+		pw.format("<table>\n");
+		pw.format("<tr>\n");
+		pw.format("<td>%s\n</td>\n", problem.elevationHigh());
+		pw.format("</tr>\n");
+		pw.format("<tr>\n");
+		pw.format("<td>%s\n</td>\n", problem.elevationLow());
+		pw.format("</tr>\n");
+		pw.format("</table>\n");
+		pw.format("</td>\n");
+		pw.format("<td>\n");
+		pw.format("<img %sstyle=\"margin-right: 10px;\" src=\"%s\"/>\n", imgAttr, problem.aspectsIcon());
+		pw.format("</td>\n");
+		pw.format("</tr>\n");
 	}
 
 	record DaytimeView(String dangerLevelText, String avalancheProblemText, String warningPicto, String elevation,
@@ -338,14 +325,12 @@ public interface SimpleHtmlUtil {
 	}
 
 	private static String getElevationString(int elevation, boolean treeline, LanguageCode lang) {
-		StringBuilder sb = new StringBuilder();
+		String result = "";
 		if (treeline) {
-			sb.append(lang.getBundleString("elevation.treeline"));
+			result = lang.getBundleString("elevation.treeline");
 		} else if (elevation > 0) {
-			sb.append(elevation);
-			sb.append("m");
+			result = elevation + "m";
 		}
-		sb.append("<br>");
-		return sb.toString();
+		return result + "<br>";
 	}
 }
