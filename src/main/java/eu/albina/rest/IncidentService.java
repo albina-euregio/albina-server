@@ -3,6 +3,7 @@ package eu.albina.rest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Part;
@@ -48,6 +49,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
@@ -133,6 +135,24 @@ public class IncidentService {
 		}
 	}
 
+	@Post("/{id}/publish")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Publish an incident")
+	public IncidentView publishIncident(@PathVariable UUID id, @Body String body) {
+		try {
+			objectMapper.readTree(body); // validate JSON
+			Incident incident = incidentRepository.findById(id.toString())
+				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
+			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+			incident.setPublicData(body);
+			return IncidentView.of(incidentRepository.update(incident), objectMapper);
+		} catch (IOException e) {
+			logger.warn("Invalid JSON body for incident", e);
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
 	@Delete("/{id}")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
@@ -211,11 +231,25 @@ public class IncidentService {
 	}
 
 	@Serdeable
-	public record IncidentView(String id, String regionId, Instant createdAt, Instant updatedAt, JsonNode data) {
+	public record IncidentView(
+		String id,
+		String regionId,
+		Instant createdAt,
+		Instant updatedAt,
+		JsonNode data,
+		@Nullable Instant publishedAt,
+		@Nullable JsonNode publicData
+	) {
 		static IncidentView of(Incident i, ObjectMapper objectMapper) {
 			try {
-				return new IncidentView(i.getId(), i.getRegion().getId(), i.getCreatedAt(), i.getUpdatedAt(),
-					objectMapper.readTree(i.getData()));
+				return new IncidentView(i.getId(),
+					i.getRegion().getId(),
+					i.getCreatedAt(),
+					i.getUpdatedAt(),
+					objectMapper.readTree(i.getData()),
+					i.getPublishedAt(),
+					i.getPublicData() != null ? objectMapper.readTree(i.getPublicData()): null
+				);
 			} catch (IOException e) {
 				throw new UncheckedIOException(e);
 			}
