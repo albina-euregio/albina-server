@@ -2,7 +2,6 @@
 package eu.albina.util;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -23,7 +22,6 @@ import com.google.common.io.Resources;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.enumerations.LanguageCode;
-import freemarker.template.TemplateException;
 
 @MicronautTest
 public class SimpleHtmlUtilTest {
@@ -41,7 +39,7 @@ public class SimpleHtmlUtilTest {
 	private Region regionAran;
 
 	@BeforeEach
-	public void setUp() throws Exception {
+	public void setUp() {
 		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, null, "/mnt/simple_local/", null);
 		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, null, "/mnt/simple_local/", null);
 		regionEuregio = regionTestUtils.regionEuregio();
@@ -50,7 +48,7 @@ public class SimpleHtmlUtilTest {
 	}
 
 	@Test
-	public void createSimpleHtmlString() throws IOException, URISyntaxException, TemplateException {
+	public void createSimpleHtmlString() throws IOException {
 		URL resource = Resources.getResource("2019-01-17.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
@@ -60,7 +58,7 @@ public class SimpleHtmlUtilTest {
 	}
 
 	@Test
-	public void createSimpleHtmlStringTyrol() throws IOException, URISyntaxException, TemplateException {
+	public void createSimpleHtmlStringTyrol() throws IOException {
 		URL resource = Resources.getResource("2019-01-17.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final List<AvalancheBulletin> bulletinsTyrol = bulletins.stream()
@@ -73,7 +71,7 @@ public class SimpleHtmlUtilTest {
 	}
 
 	@Test
-	public void createSimpleHtmlStringAran() throws IOException, URISyntaxException, TemplateException {
+	public void createSimpleHtmlStringAran() throws IOException {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
