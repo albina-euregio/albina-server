@@ -136,7 +136,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		String dangerLevelText = "<b>" + lang.getBundleString("headline.danger-rating") + "</b><br>";
 		String avalancheProblemText = daytimeDescription.getAvalancheProblems().stream()
 			.noneMatch(p -> p != null && p.getAvalancheProblem() != null) ? "" : "<b>" + lang.getBundleString("headline.avalanche-problem") + "</b><br>";
-		String warningPicto = region.getServerImagesUrl() + "warning_pictos/color/level_" + daytimeDescription.getWarningLevelId() + ".png";
+		String warningPicto = DataURL.ofResource("images/warning_pictos/color/level_" + daytimeDescription.getWarningLevelId() + ".svg");
 		String elevation = getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline());
 
 		String mapWebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.webp);
@@ -170,7 +170,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("<table>\n");
 		pw.format("<tr>\n");
 		pw.format("<td style=\"text-align: center;\">\n");
-		pw.format("<img height=\"50\" src=\"%s\"/>\n", region.getServerImagesUrl() + avalancheProblem.getAvalancheProblem().getSymbolPath(false));
+		pw.format("<img height=\"50\" src=\"%s\"/>\n", avalancheProblem.getAvalancheProblem().getDataURL());
 		pw.format("</td>\n");
 		pw.format("</tr>\n");
 		pw.format("<tr>\n");
@@ -179,7 +179,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("</table>\n");
 		pw.format("</td>\n");
 		pw.format("<td>\n");
-		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", region.getServerImagesUrl() + getElevationIcon(avalancheProblem));
+		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", avalancheProblem.getElevationDataURL());
 		pw.format("</td>\n");
 		pw.format("<td>\n");
 		pw.format("<table>\n");
@@ -192,27 +192,9 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("</table>\n");
 		pw.format("</td>\n");
 		pw.format("<td>\n");
-		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", region.getServerImagesUrl() + Aspect.getSymbolPath(avalancheProblem.getAspects(), false));
+		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", Aspect.getDataURL(avalancheProblem.getAspects(), false));
 		pw.format("</td>\n");
 		pw.format("</tr>\n");
-	}
-
-	private static String getElevationIcon(AvalancheProblem avalancheProblem) {
-		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
-			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-				// elevation high and low set
-				return "elevation/color/levels_middle_two.png";
-			} else {
-				// elevation high set
-				return "elevation/color/levels_below.png";
-			}
-		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-			// elevation low set
-			return "elevation/color/levels_above.png";
-		} else {
-			// no elevation set
-			return "elevation/color/levels_all.png";
-		}
 	}
 
 	private String getElevationLowText(AvalancheProblem avalancheProblem) {

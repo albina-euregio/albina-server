@@ -12,18 +12,16 @@ import io.micronaut.serde.annotation.Serdeable;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Direction;
+import eu.albina.util.DataURL;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -210,5 +208,23 @@ public class AvalancheProblem extends AbstractPersistentObject {
 			return false;
 
 		return true;
+	}
+
+	public String getElevationDataURL() {
+		if (getTreelineHigh() || getElevationHigh() > 0) {
+			if (getTreelineLow() || getElevationLow() > 0) {
+				// elevation high and low set
+				return DataURL.ofResource("images/elevation/color/levels_middle_two.svg");
+			} else {
+				// elevation high set
+				return DataURL.ofResource("images/elevation/color/levels_below.svg");
+			}
+		} else if (getTreelineLow() || getElevationLow() > 0) {
+			// elevation low set
+			return DataURL.ofResource("images/elevation/color/levels_above.svg");
+		} else {
+			// no elevation set
+			return DataURL.ofResource("images/elevation/color/levels_all.svg");
+		}
 	}
 }
