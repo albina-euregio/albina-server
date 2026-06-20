@@ -214,17 +214,17 @@ public class AvalancheProblem extends AbstractPersistentObject {
 		if (getTreelineHigh() || getElevationHigh() > 0) {
 			if (getTreelineLow() || getElevationLow() > 0) {
 				// elevation high and low set
-				return DataURL.ofResource("images/elevation/color/levels_middle_two.svg");
+				return DataURL.ofResource("images/elevation/color/levels_middle_two.webp");
 			} else {
 				// elevation high set
-				return DataURL.ofResource("images/elevation/color/levels_below.svg");
+				return DataURL.ofResource("images/elevation/color/levels_below.webp");
 			}
 		} else if (getTreelineLow() || getElevationLow() > 0) {
 			// elevation low set
-			return DataURL.ofResource("images/elevation/color/levels_above.svg");
+			return DataURL.ofResource("images/elevation/color/levels_above.webp");
 		} else {
 			// no elevation set
-			return DataURL.ofResource("images/elevation/color/levels_all.svg");
+			return DataURL.ofResource("images/elevation/color/levels_all.webp");
 		}
 	}
 }

@@ -37,7 +37,7 @@ public enum AvalancheProblem {
 	}
 
 	public String getDataURL() {
-		return DataURL.ofResource("images/avalanche_problems/color/" + toStringId() + ".svg");
+		return DataURL.ofResource("images/avalanche_problems/color/" + toStringId() + ".webp");
 	}
 
 }

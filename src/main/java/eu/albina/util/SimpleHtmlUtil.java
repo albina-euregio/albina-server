@@ -136,7 +136,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		String dangerLevelText = "<b>" + lang.getBundleString("headline.danger-rating") + "</b><br>";
 		String avalancheProblemText = daytimeDescription.getAvalancheProblems().stream()
 			.noneMatch(p -> p != null && p.getAvalancheProblem() != null) ? "" : "<b>" + lang.getBundleString("headline.avalanche-problem") + "</b><br>";
-		String warningPicto = DataURL.ofResource("images/warning_pictos/color/level_" + daytimeDescription.getWarningLevelId() + ".svg");
+		String warningPicto = DataURL.ofResource("images/warning_pictos/color/level_" + daytimeDescription.getWarningLevelId() + ".webp");
 		String elevation = getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline());
 
 		String mapWebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.webp);
