@@ -4,6 +4,7 @@ package eu.albina.model.enumerations;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import eu.albina.util.DataURL;
 import eu.albina.util.XMLResourceBundleControl;
 
 public enum AvalancheProblem {
@@ -33,6 +34,10 @@ public enum AvalancheProblem {
 			return "avalanche_problems/grey/" + toStringId() + ".png";
 		else
 			return "avalanche_problems/color/" + toStringId() + ".png";
+	}
+
+	public String getDataURL() {
+		return DataURL.ofResource("images/avalanche_problems/color/" + toStringId() + ".webp");
 	}
 
 }

@@ -1,34 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="65px" height="48px" viewBox="0 0 65 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
-    <title>level_1_1</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <path d="M63.4335528,47.2509378 C63.6250415,47.5842699 63.3844194,48 63,48 L1,48 C0.614426527,48 0.373949291,47.5820208 0.567746407,47.2486898 L25.5677464,4.24868977 C25.7613642,3.91566714 26.2430006,3.91746875 26.4341216,4.25193053 L29.989847,10.4744501 L35.5610522,0.260573935 C35.7481843,-0.0825015475 36.2388892,-0.0879210436 36.4335528,0.25093777 L63.4335528,47.2509378 Z" id="path-1"></path>
-        <path d="M63.4335528,47.2509378 C63.6250415,47.5842699 63.3844194,48 63,48 L1,48 C0.614426527,48 0.373949291,47.5820208 0.567746407,47.2486898 L25.5677464,4.24868977 C25.7613642,3.91566714 26.2430006,3.91746875 26.4341216,4.25193053 L29.989847,10.4744501 L35.5610522,0.260573935 C35.7481843,-0.0825015475 36.2388892,-0.0879210436 36.4335528,0.25093777 L63.4335528,47.2509378 Z" id="path-3"></path>
-    </defs>
-    <g id="Picto-Export" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Levels" transform="translate(-285.000000, -118.000000)">
-            <g id="0-1-2-3-4-5" transform="translate(200.000000, 50.000000)">
-                <g id="level_1_1" transform="translate(85.000000, 68.000000)">
-                    <mask id="mask-2" fill="white">
-                        <use xlink:href="#path-1"></use>
-                    </mask>
-                    <use id="Mountain" fill="#FFFFFF" xlink:href="#path-1"></use>
-                    <g id="Danger-Level-/-Level-1-BG" mask="url(#mask-2)" fill="#CCFF66">
-                        <g transform="translate(0.000000, -1.000000)" id="Warning-Level">
-                            <rect x="0" y="0" width="65" height="50"></rect>
-                        </g>
-                    </g>
-                    <text id="All" mask="url(#mask-2)" font-family="SFProText-Bold, SF Pro Text" font-size="12" font-weight="bold" letter-spacing="0.5" fill="#222222">
-                        <tspan x="29.1708984" y="35">1</tspan>
-                    </text>
-                    <mask id="mask-4" fill="white">
-                        <use xlink:href="#path-3"></use>
-                    </mask>
-                    <path stroke="#222222" d="M63,47.5 L36,0.5 L30,11.5 L26,4.5 L1,47.5 L63,47.5 Z"></path>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="65" height="48" viewBox="0 0 65 48"><title>level_1_1</title><defs><path id="a" d="M63.434 47.25A.5.5 0 0 1 63 48H1a.5.5 0 0 1-.432-.751l25-43a.5.5 0 0 1 .866.003l3.556 6.222L35.56.261a.5.5 0 0 1 .873-.01z"/><path id="c" d="M63.434 47.25A.5.5 0 0 1 63 48H1a.5.5 0 0 1-.432-.751l25-43a.5.5 0 0 1 .866.003l3.556 6.222L35.56.261a.5.5 0 0 1 .873-.01z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><use xlink:href="#a" fill="#fff"/><g fill="#cf6" mask="url(#b)"><path d="M0-1h65v50H0z"/></g><text fill="#222" font-family="SFProText-Bold, SF Pro Text" font-size="12" font-weight="bold" letter-spacing=".5" mask="url(#b)">
+                        <tspan x="29.171" y="35">1</tspan>
+                    </text><path stroke="#222" d="M63 47.5 36 .5l-6 11-4-7-25 43z"/></g></svg>

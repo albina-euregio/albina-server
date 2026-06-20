@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import eu.albina.model.converter.EnumSetToStringConverter;
+import eu.albina.util.DataURL;
 import eu.albina.util.XMLResourceBundleControl;
 
 public enum Aspect {
@@ -58,6 +59,10 @@ public enum Aspect {
 			return "aspects/grey/" + Integer.valueOf(bitmask).toString() + ".png";
 		else
 			return "aspects/color/" + Integer.valueOf(bitmask).toString() + ".png";
+	}
+
+	public static String getDataURL(Set<Aspect> aspects, boolean grayscale) {
+		return DataURL.ofResource("images/" + getSymbolPath(aspects, grayscale));
 	}
 
 	private static int bitmask(Aspect aspect) {
