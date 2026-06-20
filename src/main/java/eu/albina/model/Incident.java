@@ -29,6 +29,12 @@ public class Incident extends AbstractPersistentObject {
 	@Column(name = "DATA", columnDefinition = "json", nullable = false)
 	private String data;
 
+	@Column(name = "PUBLISHED_AT")
+	private Instant publishedAt;
+
+	@Column(name = "PUBLIC_DATA", columnDefinition = "json")
+	private String publicData;
+
 	@PrePersist
 	void prePersist() {
 		Instant now = Instant.now();
@@ -49,4 +55,20 @@ public class Incident extends AbstractPersistentObject {
 
 	public String getData() { return data; }
 	public void setData(String data) { this.data = data; }
+
+	public Instant getPublishedAt() {
+		return publishedAt;
+	}
+
+	public void setPublishedAt(Instant publishedAt) {
+		this.publishedAt = publishedAt;
+	}
+
+	public String getPublicData() {
+		return publicData;
+	}
+
+	public void setPublicData(String publicData) {
+		this.publicData = publicData;
+	}
 }

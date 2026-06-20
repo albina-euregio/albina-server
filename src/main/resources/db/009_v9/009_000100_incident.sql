@@ -14,3 +14,6 @@ CREATE TABLE incidents (
     INDEX idx_incidents_region_status (region_id, report_status),
     INDEX idx_incidents_date_time (date_time)
 );
+
+-- changeset albina:009_000100-public failOnError:true
+ALTER TABLE incidents ADD public_data JSON NULL, ADD published_at datetime NULL;
