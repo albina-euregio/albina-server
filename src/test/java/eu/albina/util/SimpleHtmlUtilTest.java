@@ -49,11 +49,11 @@ public class SimpleHtmlUtilTest {
 
 	@Test
 	public void createSimpleHtmlString() throws IOException {
-		URL resource = Resources.getResource("2019-01-17.json");
+		URL resource = Resources.getResource("2026-04-13.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
-		String expected = Resources.toString(Resources.getResource("2019-01-17.simple.html"), StandardCharsets.UTF_8);
+		String expected = Resources.toString(Resources.getResource("2026-04-13.simple.html"), StandardCharsets.UTF_8);
 		Assertions.assertEquals(expected.trim(), htmlString.trim());
 	}
 
