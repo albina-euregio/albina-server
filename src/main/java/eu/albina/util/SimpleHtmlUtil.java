@@ -141,7 +141,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 
 		String mapWebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.webp);
 		pw.format("<p>%s\n", content);
-		pw.format("<img style=\"margin-right: 10px;\" src=\"%s\" alt=\"%s\">\n", mapWebp, regions);
+		pw.format("<img style=\"margin-right: 10px;\" src=\"%s\" alt=\"%s\" loading=\"lazy\">\n", mapWebp, regions);
 		pw.format("<br>%s\n", dangerLevelText);
 		pw.format("<table>\n");
 		pw.format("<tr>\n");

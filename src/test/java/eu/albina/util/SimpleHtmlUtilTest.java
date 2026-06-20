@@ -11,6 +11,7 @@ import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
+
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
@@ -47,15 +48,19 @@ public class SimpleHtmlUtilTest {
 		regionAran = regionTestUtils.regionAran();
 	}
 
+	private static void assertResourceEquals(String resourceName, String htmlString) throws IOException {
+		String expected = Resources.toString(Resources.getResource(resourceName), StandardCharsets.UTF_8);
+		// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/" + resourceName), htmlString);
+		Assertions.assertEquals(expected.trim(), htmlString.trim());
+	}
+
 	@Test
 	public void createSimpleHtmlString() throws IOException {
 		URL resource = Resources.getResource("2026-04-13.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
-		String expected = Resources.toString(Resources.getResource("2026-04-13.simple.html"), StandardCharsets.UTF_8);
-		// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/2026-04-13.simple.html"), htmlString);
-		Assertions.assertEquals(expected.trim(), htmlString.trim());
+		assertResourceEquals("2026-04-13.simple.html", htmlString);
 	}
 
 	@Test
@@ -77,8 +82,7 @@ public class SimpleHtmlUtilTest {
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.ca).createSimpleHtmlString();
-		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-01-24/2021-01-24.simple.html"), StandardCharsets.UTF_8);
-		Assertions.assertEquals(expected.trim(), htmlString.trim());
+		assertResourceEquals("lauegi.report-2021-01-24/2021-01-24.simple.html", htmlString);
 	}
 
 	@Test
@@ -87,8 +91,7 @@ public class SimpleHtmlUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String html = new SimpleHtmlUtil(avalancheReport, LanguageCode.en).createSimpleHtmlString();
-		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.simple.html"), StandardCharsets.UTF_8);
-		Assertions.assertEquals(expected.trim(), html.trim());
+		assertResourceEquals("lauegi.report-2021-12-10/2021-12-10.simple.html", html);
 	}
 }
 
