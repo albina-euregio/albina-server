@@ -140,12 +140,8 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		String elevation = getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline());
 
 		String mapWebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.webp);
-		String mapJpg = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
 		pw.format("<p>%s\n", content);
-		pw.format("<picture>\n");
-		pw.format("<source type=\"image/webp\" srcset=\"%s\">\n", mapWebp);
-		pw.format("<img style=\"margin-right: 10px;\" src=\"%s\" alt=\"%s\">\n", mapJpg, regions);
-		pw.format("</picture>\n");
+		pw.format("<img style=\"margin-right: 10px;\" src=\"%s\" alt=\"%s\">\n", mapWebp, regions);
 		pw.format("<br>%s\n", dangerLevelText);
 		pw.format("<table>\n");
 		pw.format("<tr>\n");

@@ -54,6 +54,7 @@ public class SimpleHtmlUtilTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
 		String expected = Resources.toString(Resources.getResource("2026-04-13.simple.html"), StandardCharsets.UTF_8);
+		// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/2026-04-13.simple.html"), htmlString);
 		Assertions.assertEquals(expected.trim(), htmlString.trim());
 	}
 
