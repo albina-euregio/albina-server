@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.micronaut.serde.annotation.Serdeable;
@@ -210,6 +211,7 @@ public class AvalancheProblem extends AbstractPersistentObject {
 		return true;
 	}
 
+	@JsonIgnore
 	public String getElevationDataURL() {
 		if (getTreelineHigh() || getElevationHigh() > 0) {
 			if (getTreelineLow() || getElevationLow() > 0) {
