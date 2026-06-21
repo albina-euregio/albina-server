@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
@@ -42,8 +41,8 @@ public class GenericObservation {
 	private ObservationType obsType;
 
 	@Column(name = "EXTERNAL_URL")
-	@JsonProperty("$externalUrl")
-	private String externalUrl;
+	@JsonProperty("$externalURL")
+	private String externalURL;
 
 	@Column(name = "STABILITY")
 	private String stability;
@@ -143,12 +142,12 @@ public class GenericObservation {
 		this.obsType = obsType;
 	}
 
-	public String getExternalUrl() {
-		return externalUrl;
+	public String getExternalURL() {
+		return externalURL;
 	}
 
-	public void setExternalUrl(String externalUrl) {
-		this.externalUrl = externalUrl;
+	public void setExternalURL(String externalUrl) {
+		this.externalURL = externalUrl;
 	}
 
 	public String getStability() {
