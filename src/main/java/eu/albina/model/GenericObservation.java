@@ -7,6 +7,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.micronaut.serde.annotation.Serdeable;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
@@ -38,92 +39,117 @@ public class GenericObservation {
 	@Column(name = "OBS_TYPE", nullable = false)
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("$type")
+	@Schema(description = "Type of this observation")
 	private ObservationType obsType;
 
 	@Column(name = "EXTERNAL_URL")
 	@JsonProperty("$externalURL")
+	@Schema(description = "External URL to display as iframe")
 	private String externalURL;
 
 	@Column(name = "STABILITY")
+	@Schema(description = "Snowpack stability that can be inferred from this observation")
 	private String stability;
 
 	@Column(name = "ASPECTS", columnDefinition = Aspect.Converter.COLUMN_DEFINITION)
 	@Convert(converter = Aspect.Converter.class)
+	@Schema(description = "Aspects corresponding with this observation")
 	private Set<Aspect> aspects;
 
 	@Column(name = "AUTHOR_NAME", length = 191)
+	@Schema(description = "Name of the author")
 	private String authorName;
 
 	@Column(name = "OBS_CONTENT")
 	@JsonProperty("content")
+	@Schema(description = "Free-text content")
 	private String obsContent;
 
 	@Column(name = "OBS_DATA", columnDefinition = "json")
 	@JsonProperty("$data")
 	@Convert(converter = JsonConverter.class)
+	@Schema(description = "Additional data (e.g. original data stored when fetching from external API)")
 	private Object obsData;
 
 	@Column(name = "ELEVATION")
+	@Schema(description = "Elevation in meters")
 	private Integer elevation;
 
 	@Column(name = "ELEVATION_LOWER_BOUND")
+	@Schema(description = "Lower bound of elevation in meters")
 	private Integer elevationLowerBound;
 
 	@Column(name = "ELEVATION_UPPER_BOUND")
+	@Schema(description = "Upper bound of elevation in meters")
 	private Integer elevationUpperBound;
 
 	@Column(name = "EVENT_DATE")
+	@Schema(description = "Date when the event occurred")
 	private LocalDateTime eventDate;
 
 	@Column(name = "LATITUDE")
+	@Schema(description = "Location latitude (WGS 84)")
 	private Double latitude;
 
 	@Column(name = "LOCATION_NAME", length = 191)
+	@Schema(description = "Location name")
 	private String locationName;
 
 	@Column(name = "LONGITUDE")
+	@Schema(description = "Location longitude (WGS 84)")
 	private Double longitude;
 
 	@Column(name = "REGION_ID", length = 191)
+	@Schema(description = "Micro-region code (possibly computed from latitude/longitude)")
 	private String region;
 
 	@Column(name = "REPORT_DATE")
+	@Schema(description = "Date when the observation has been reported")
 	private LocalDateTime reportDate;
 
 	@Column(name = "AVALANCHE_PROBLEMS", columnDefinition = AvalancheProblem.Converter.COLUMN_DEFINITION)
 	@Convert(converter = AvalancheProblem.Converter.class)
+	@Schema(description = "Avalanche problems corresponding with this observation")
 	private Set<AvalancheProblem> avalancheProblems;
 
 	@Column(name = "DANGER_PATTERNS", columnDefinition = DangerPattern.Converter.COLUMN_DEFINITION)
 	@Convert(converter = DangerPattern.Converter.class)
+	@Schema(description = "Danger patterns corresponding with this observation")
 	private Set<DangerPattern> dangerPatterns;
 
 	@Column(name = "IMPORTANT_OBSERVATION", columnDefinition = ImportantObservation.Converter.COLUMN_DEFINITION)
 	@Convert(converter = ImportantObservation.Converter.class)
+	@Schema(description = "Important observations")
 	private Set<ImportantObservation> importantObservation;
 
 	@Column(name = "EXTRA_DIALOG_ROWS", columnDefinition = "json")
 	@Convert(converter = JsonConverter.class)
+	@Schema(description = "Additional information to display as table rows in the observation dialog")
 	private Object extraDialogRows;
 
 	@Column(name = "EXTERNAL_IMG")
 	@JsonProperty("$externalImgs")
+	@Schema(description = "External image to display. Multiple images are persisted using line separator.")
 	private String externalImg;
 
 	@Column(name = "PERSON_INVOLVEMENT")
 	@Enumerated(EnumType.STRING)
+	@Schema(description = "Person involvement")
 	private PersonInvolvement personInvolvement;
 
 	@Column(name = "DELETED")
 	@JsonProperty("$deleted")
+	@Schema(description = "Observations marked as deleted will no longer be returned in the list")
 	private Boolean deleted;
 
 	@Column(name = "ALLOW_EDIT")
 	@JsonProperty("allowEdit")
+	@Schema(description = "Allows modifying observations fetched from external sources")
 	private Boolean allowEdit;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "DANGER_SOURCE")
+	@Schema(description = "Danger source UUID")
 	private DangerSource dangerSource;
 
 	public GenericObservationId getId() {
@@ -363,11 +389,13 @@ public class GenericObservation {
 		@NotNull
 		@Column(name = "SOURCE", nullable = false, length = 191)
 		@JsonProperty("$source")
+		@Schema(description = "Source of this observation")
 		private String source;
 
 		@NotNull
 		@Column(name = "ID", nullable = false, length = 191)
 		@JsonProperty("$id")
+		@Schema(description = "External ID of this observation")
 		private String id;
 
 		public GenericObservationId() {
