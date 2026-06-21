@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.cfg.DateTimeFeature;
 import com.google.common.base.Strings;
 import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
@@ -15,8 +15,8 @@ import jakarta.inject.Singleton;
 import org.caaml.v6.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
@@ -44,14 +44,18 @@ public class Caaml6 {
 
 	public static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
-			return new XmlMapper()
-				.registerModule(new JavaTimeModule())
-				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-				.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+			// Jackson 3: mappers are immutable and configured via the builder;
+			// java.time support is built in (no JavaTimeModule registration needed).
+			return XmlMapper.builder()
+				// Jackson 3 sorts properties alphabetically by default; keep declaration order (Jackson 2 behaviour).
+				.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+				.disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+				.changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+				.build()
 				.writerWithDefaultPrettyPrinter()
 				.writeValueAsString(toCAAML(avalancheReport, lang))
 				.replaceFirst("^<bulletins>", String.format("<bulletins xmlns=\"%s\">", CaamlVersion.V6.namespace()));
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			throw new RuntimeException(e);
 		}
 	}

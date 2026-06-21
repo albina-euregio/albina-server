@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.MoreCollectors;
 import eu.albina.controller.CrudRepository;
 import eu.albina.model.enumerations.LanguageCode;
@@ -67,6 +68,7 @@ public class PushNotificationUtil {
 	}
 
 	@Serdeable
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	public record Message(String title, String body, String image, String url) {
 	}
 
