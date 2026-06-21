@@ -20,10 +20,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import eu.albina.model.converter.EnumSetToStringConverter;
+import eu.albina.model.converter.JsonConverter;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheProblem;
 import eu.albina.model.enumerations.DangerPattern;
@@ -62,8 +61,7 @@ public class GenericObservation {
 
 	@Column(name = "OBS_DATA", columnDefinition = "json")
 	@JsonProperty("$data")
-	@JsonRawValue
-	@JdbcTypeCode(SqlTypes.JSON)
+	@Convert(converter = JsonConverter.class)
 	private Object obsData;
 
 	@Column(name = "ELEVATION")
@@ -106,8 +104,7 @@ public class GenericObservation {
 	private Set<ImportantObservation> importantObservation;
 
 	@Column(name = "EXTRA_DIALOG_ROWS", columnDefinition = "json")
-	@JsonRawValue
-	@JdbcTypeCode(SqlTypes.JSON)
+	@Convert(converter = JsonConverter.class)
 	private Object extraDialogRows;
 
 	@Column(name = "EXTERNAL_IMG")
