@@ -25,8 +25,6 @@
     "pdfFooterLogoBwPath" : "",
     "simpleHtmlTemplateName" : "simple-bulletin.aran.html",
     "geoDataDirectory" : "geodata.Aran\/",
-    "mapLogoColorPath" : "images\/logo\/color\/lauegi.png",
-    "mapLogoBwPath" : "images\/logo\/grey\/lauegi.png",
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",
     "imageColorbarBwPath" : "logo\/grey\/colorbar.gif",
