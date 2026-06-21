@@ -35,8 +35,8 @@ public class GenericObservationService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String end) {
 
 		return genericObservationRepository.findByEventDateBetween(
-			DateControllerUtil.parseDateOrNull(start).atZone(ZoneOffset.UTC),
-			DateControllerUtil.parseDateOrNull(end).atZone(ZoneOffset.UTC)
+			DateControllerUtil.parseDateOrNull(start).atZone(ZoneOffset.UTC).toLocalDateTime(),
+			DateControllerUtil.parseDateOrNull(end).atZone(ZoneOffset.UTC).toLocalDateTime()
 		);
 	}
 
