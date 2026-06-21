@@ -85,7 +85,7 @@ public class GenericObservation {
 	private Double longitude;
 
 	@Column(name = "REGION_ID", length = 191)
-	private String regionId;
+	private String region;
 
 	@Column(name = "REPORT_DATE")
 	private ZonedDateTime reportDate;
@@ -246,12 +246,12 @@ public class GenericObservation {
 		this.longitude = longitude;
 	}
 
-	public String getRegionId() {
-		return regionId;
+	public String getRegion() {
+		return region;
 	}
 
-	public void setRegionId(String regionId) {
-		this.regionId = regionId;
+	public void setRegion(String regionId) {
+		this.region = regionId;
 	}
 
 	public ZonedDateTime getReportDate() {
