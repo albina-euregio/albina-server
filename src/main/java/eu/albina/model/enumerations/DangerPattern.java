@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import eu.albina.model.converter.EnumSetToStringConverter;
 import eu.albina.util.XMLResourceBundleControl;
 
 public enum DangerPattern {
@@ -49,5 +50,16 @@ public enum DangerPattern {
             case dp9 -> "dp9";
             case dp10 -> "dp10";
 		};
+	}
+
+	@jakarta.persistence.Converter
+	public static class Converter extends EnumSetToStringConverter<DangerPattern> {
+
+		public static final String COLUMN_DEFINITION = "set('dp1', 'dp2', 'dp3', 'dp4', 'dp5', 'dp6', 'dp7', 'dp8', 'dp9', 'dp10')";
+
+		@Override
+		protected Class<DangerPattern> getEnumClass() {
+			return DangerPattern.class;
+		}
 	}
 }

@@ -4,6 +4,7 @@ package eu.albina.model.enumerations;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import eu.albina.model.converter.EnumSetToStringConverter;
 import eu.albina.util.DataURL;
 import eu.albina.util.XMLResourceBundleControl;
 
@@ -40,4 +41,14 @@ public enum AvalancheProblem {
 		return DataURL.ofResource("images/avalanche_problems/color/" + toStringId() + ".webp");
 	}
 
+	@jakarta.persistence.Converter
+	public static class Converter extends EnumSetToStringConverter<AvalancheProblem> {
+
+		public static final String COLUMN_DEFINITION = "set('new_snow', 'wind_slab', 'persistent_weak_layers', 'wet_snow', 'gliding_snow', 'favourable_situation', 'cornices', 'no_distinct_avalanche_problem')";
+
+		@Override
+		protected Class<AvalancheProblem> getEnumClass() {
+			return AvalancheProblem.class;
+		}
+	}
 }
