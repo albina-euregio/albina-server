@@ -3,7 +3,7 @@ package org.caaml.v6;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**

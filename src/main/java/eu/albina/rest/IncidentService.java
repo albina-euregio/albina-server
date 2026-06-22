@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
@@ -112,7 +113,7 @@ public class IncidentService {
 			incident.setRegion(region);
 			incident.setData(body);
 			return HttpResponse.created(IncidentView.of(incidentRepository.save(incident), objectMapper));
-		} catch (IOException e) {
+		} catch (JacksonException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -129,7 +130,7 @@ public class IncidentService {
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 			incident.setData(body);
 			return IncidentView.of(incidentRepository.update(incident), objectMapper);
-		} catch (IOException e) {
+		} catch (JacksonException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -147,7 +148,7 @@ public class IncidentService {
 			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 			incident.setPublicData(body);
 			return IncidentView.of(incidentRepository.update(incident), objectMapper);
-		} catch (IOException e) {
+		} catch (JacksonException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -250,8 +251,8 @@ public class IncidentService {
 					i.getPublishedAt(),
 					i.getPublicData() != null ? objectMapper.readTree(i.getPublicData()): null
 				);
-			} catch (IOException e) {
-				throw new UncheckedIOException(e);
+			} catch (JacksonException e) {
+				throw new UncheckedIOException(new IOException(e));
 			}
 		}
 	}

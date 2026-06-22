@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +35,11 @@ public class XMLResourceBundleControl extends ResourceBundle.Control {
 
 		if ("micro-regions_names".equals(baseName)) {
 			URL resource = loader.getResource("micro-regions_names/" + locale + ".json");
-			TreeMap<String, String> strings = new ObjectMapper().readValue(resource, new TypeReference<>() {
-			});
+			TreeMap<String, String> strings;
+			try (InputStream stream = resource.openStream()) {
+				strings = new ObjectMapper().readValue(stream, new TypeReference<>() {
+				});
+			}
 			XMLResourceBundle bundle = new XMLResourceBundle();
 			strings.forEach(bundle::put);
 			return bundle;
