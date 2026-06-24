@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Range;
 import io.swagger.v3.oas.annotations.Parameter;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
@@ -48,11 +51,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Controller("/incidents")
 @Tag(name = "incidents")
@@ -92,21 +98,27 @@ public class IncidentService {
 		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant);
 	}
 
+	private final Cache<String, List<Object>> publicIncidentsCache = CacheBuilder.newBuilder()
+		.expireAfterWrite(Duration.ofMinutes(5))
+		.maximumSize(1000)
+		.build();
+
 	@Get("/public")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "List published incidents for a region (public report)")
 	public List<Object> getPublicIncidents(
 		@QueryValue("region") String regionId,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate
-	) {
-		String startInstant = DateControllerUtil.parseDate(startDate).toString();
-		String endInstant = DateControllerUtil.parseDate(endDate).toString();
-		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant)
-			.stream()
-			.map(Incident::getPublicData)
-			.filter(Objects::nonNull)
-			.toList();
+		@Parameter(description = "Season year, expanded to yyyy-10-01 until (yyyy+1)-10-01")
+		@QueryValue("seasonYear") int seasonYear
+	) throws ExecutionException {
+		return publicIncidentsCache.get(regionId + "-" + seasonYear,() -> {
+			Range<Instant> range = DateControllerUtil.parseHydrologicalYearInstantRange(Year.of(seasonYear));
+			return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, range.lowerEndpoint().toString(), range.upperEndpoint().toString())
+				.stream()
+				.map(Incident::getPublicData)
+				.filter(Objects::nonNull)
+				.toList();
+		});
 	}
 
 	@Get("/{id}")

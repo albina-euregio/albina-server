@@ -4,6 +4,7 @@ package eu.albina.rest;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.Year;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -64,5 +65,17 @@ interface DateControllerUtil {
 		Instant startInstant = startDate.toInstant();
 		Instant endInstant = endDate.toInstant();
 		return Range.closed(startInstant, endInstant);
+	}
+
+	/**
+	 * Expands a season year to the instant range {@code yyyy-10-01} (inclusive) to
+	 * {@code (yyyy+1)-10-01} (exclusive), in the local zone.
+	 */
+	static Range<Instant> parseHydrologicalYearInstantRange(Year seasonYear) {
+		Instant startInstant = LocalDate.of(seasonYear.getValue(), 10, 1)
+			.atStartOfDay(PublicationStrategy.localZone()).toInstant();
+		Instant endInstant = LocalDate.of(seasonYear.getValue() + 1, 10, 1)
+			.atStartOfDay(PublicationStrategy.localZone()).toInstant();
+		return Range.closedOpen(startInstant, endInstant);
 	}
 }
