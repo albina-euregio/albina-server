@@ -20,6 +20,9 @@ public class Incident extends AbstractPersistentObject {
 	@JoinColumn(name = "REGION_ID", nullable = false)
 	private Region region;
 
+	@Column(name = "DATE_TIME", nullable = false)
+	private String dateTime;
+
 	@Column(name = "CREATED_AT", nullable = false)
 	private Instant createdAt;
 
@@ -49,6 +52,14 @@ public class Incident extends AbstractPersistentObject {
 
 	public Region getRegion() { return region; }
 	public void setRegion(Region region) { this.region = region; }
+
+	public String getDateTime() {
+		return dateTime;
+	}
+
+	public void setDateTime(String dateTime) {
+		this.dateTime = dateTime;
+	}
 
 	public Instant getCreatedAt() { return createdAt; }
 	public Instant getUpdatedAt() { return updatedAt; }

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -63,7 +64,7 @@ public class IncidentService {
 
 	@Repository
 	public interface IncidentRepository extends CrudRepository<Incident, String> {
-		List<Incident> findByRegionId(String regionId);
+		List<Incident> findByRegionIdAndDateTimeBetween(String regionId, String startInstant, String endInstant);
 	}
 
 	@Inject
@@ -82,8 +83,14 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "List incidents for a region")
-	public List<IncidentView> getIncidents(@QueryValue("region") String regionId) {
-		return incidentRepository.findByRegionId(regionId).stream()
+	public List<IncidentView> getIncidents(
+		@QueryValue("region") String regionId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate
+	) {
+		String startInstant = DateControllerUtil.parseDate(startDate).toString();
+		String endInstant = DateControllerUtil.parseDate(endDate).toString();
+		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant).stream()
 			.map(i -> IncidentView.of(i, objectMapper))
 			.toList();
 	}
