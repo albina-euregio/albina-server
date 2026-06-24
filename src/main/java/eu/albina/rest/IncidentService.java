@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Part;
@@ -14,7 +13,6 @@ import io.micronaut.http.multipart.CompletedFileUpload;
 import io.micronaut.http.server.types.files.SystemFile;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
-import io.micronaut.serde.annotation.Serdeable;
 
 import eu.albina.controller.CrudRepository;
 import eu.albina.controller.RegionRepository;
@@ -46,7 +44,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -83,25 +80,22 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "List incidents for a region")
-	public List<IncidentView> getIncidents(
+	public List<Incident> getIncidents(
 		@QueryValue("region") String regionId,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate
 	) {
 		String startInstant = DateControllerUtil.parseDate(startDate).toString();
 		String endInstant = DateControllerUtil.parseDate(endDate).toString();
-		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant).stream()
-			.map(i -> IncidentView.of(i, objectMapper))
-			.toList();
+		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant);
 	}
 
 	@Get("/{id}")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get an incident by ID")
-	public IncidentView getIncident(@PathVariable UUID id) {
+	public Incident getIncident(@PathVariable UUID id) {
 		return incidentRepository.findById(id.toString())
-			.map(i -> IncidentView.of(i, objectMapper))
 			.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 	}
 
@@ -109,17 +103,17 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create an incident")
-	public HttpResponse<IncidentView> createIncident(
+	public HttpResponse<Incident> createIncident(
 		@QueryValue("region") String regionId,
 		@Body String body) {
 		try {
-			objectMapper.readTree(body); // validate JSON
+			JsonNode data = objectMapper.readTree(body);
 			Region region = regionRepository.findById(regionId)
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No region with id: " + regionId));
 			Incident incident = new Incident();
 			incident.setRegion(region);
-			incident.setData(body);
-			return HttpResponse.created(IncidentView.of(incidentRepository.save(incident), objectMapper));
+			incident.setData(data);
+			return HttpResponse.created(incidentRepository.save(incident));
 		} catch (JacksonException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -130,13 +124,13 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update an incident")
-	public IncidentView updateIncident(@PathVariable UUID id, @Body String body) {
+	public Incident updateIncident(@PathVariable UUID id, @Body String body) {
 		try {
-			objectMapper.readTree(body); // validate JSON
+			JsonNode data = objectMapper.readTree(body);
 			Incident incident = incidentRepository.findById(id.toString())
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
-			incident.setData(body);
-			return IncidentView.of(incidentRepository.update(incident), objectMapper);
+			incident.setData(data);
+			return incidentRepository.update(incident);
 		} catch (JacksonException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -147,14 +141,14 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Publish an incident")
-	public IncidentView publishIncident(@PathVariable UUID id, @Body String body) {
+	public Incident publishIncident(@PathVariable UUID id, @Body String body) {
 		try {
-			objectMapper.readTree(body); // validate JSON
+			JsonNode publicData = objectMapper.readTree(body);
 			Incident incident = incidentRepository.findById(id.toString())
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-			incident.setPublicData(body);
-			return IncidentView.of(incidentRepository.update(incident), objectMapper);
+			incident.setPublicData(publicData);
+			return incidentRepository.update(incident);
 		} catch (JacksonException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -236,31 +230,5 @@ public class IncidentService {
 
 	private Path getAttachmentPath(UUID id, UUID attachmentId) {
 		return Path.of(globalVariables.getIncidentsPath()).resolve(id.toString()).resolve(attachmentId.toString());
-	}
-
-	@Serdeable
-	public record IncidentView(
-		String id,
-		String regionId,
-		Instant createdAt,
-		Instant updatedAt,
-		JsonNode data,
-		@Nullable Instant publishedAt,
-		@Nullable JsonNode publicData
-	) {
-		static IncidentView of(Incident i, ObjectMapper objectMapper) {
-			try {
-				return new IncidentView(i.getId(),
-					i.getRegion().getId(),
-					i.getCreatedAt(),
-					i.getUpdatedAt(),
-					objectMapper.readTree(i.getData()),
-					i.getPublishedAt(),
-					i.getPublicData() != null ? objectMapper.readTree(i.getPublicData()): null
-				);
-			} catch (JacksonException e) {
-				throw new UncheckedIOException(new IOException(e));
-			}
-		}
 	}
 }

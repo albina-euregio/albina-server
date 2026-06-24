@@ -1,7 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import eu.albina.model.converter.JsonConverter;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -14,10 +20,13 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "incidents")
+@Serdeable
+@Introspected(excludedAnnotations = {JsonIgnore.class})
 public class Incident extends AbstractPersistentObject {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID", nullable = false)
+	@JsonIgnore
 	private Region region;
 
 	@Column(name = "DATE_TIME", nullable = false)
@@ -30,13 +39,15 @@ public class Incident extends AbstractPersistentObject {
 	private Instant updatedAt;
 
 	@Column(name = "DATA", columnDefinition = "json", nullable = false)
-	private String data;
+	@Convert(converter = JsonConverter.class)
+	private Object data;
 
 	@Column(name = "PUBLISHED_AT")
 	private Instant publishedAt;
 
 	@Column(name = "PUBLIC_DATA", columnDefinition = "json")
-	private String publicData;
+	@Convert(converter = JsonConverter.class)
+	private Object publicData;
 
 	@PrePersist
 	void prePersist() {
@@ -64,8 +75,8 @@ public class Incident extends AbstractPersistentObject {
 	public Instant getCreatedAt() { return createdAt; }
 	public Instant getUpdatedAt() { return updatedAt; }
 
-	public String getData() { return data; }
-	public void setData(String data) { this.data = data; }
+	public Object getData() { return data; }
+	public void setData(Object data) { this.data = data; }
 
 	public Instant getPublishedAt() {
 		return publishedAt;
@@ -75,11 +86,11 @@ public class Incident extends AbstractPersistentObject {
 		this.publishedAt = publishedAt;
 	}
 
-	public String getPublicData() {
+	public Object getPublicData() {
 		return publicData;
 	}
 
-	public void setPublicData(String publicData) {
+	public void setPublicData(Object publicData) {
 		this.publicData = publicData;
 	}
 }
