@@ -4,6 +4,8 @@ package eu.albina.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import eu.albina.model.converter.JsonConverter;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
@@ -29,7 +31,8 @@ public class Incident extends AbstractPersistentObject {
 	@JsonIgnore
 	private Region region;
 
-	@Column(name = "DATE_TIME", nullable = false)
+	@Column(name = "DATE_TIME", nullable = false, insertable = false, updatable = false)
+	@Generated(event = {EventType.INSERT, EventType.UPDATE})
 	private String dateTime;
 
 	@Column(name = "CREATED_AT", nullable = false)
