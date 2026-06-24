@@ -186,6 +186,18 @@ public class IncidentService {
 		}
 	}
 
+	@Delete("/{id}/publish")
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@Operation(summary = "Unpublish an incident")
+	public Incident unpublishIncident(@PathVariable UUID id) {
+		Incident incident = incidentRepository.findById(id.toString())
+			.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
+		incident.setPublishedAt(null);
+		incident.setPublicData(null);
+		return incidentRepository.update(incident);
+	}
+
 	@Delete("/{id}")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
