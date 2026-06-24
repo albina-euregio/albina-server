@@ -35,6 +35,7 @@ import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,6 +51,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller("/incidents")
@@ -88,6 +90,23 @@ public class IncidentService {
 		String startInstant = DateControllerUtil.parseDate(startDate).toString();
 		String endInstant = DateControllerUtil.parseDate(endDate).toString();
 		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant);
+	}
+
+	@Get("/public")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	@Operation(summary = "List published incidents for a region (public report)")
+	public List<Object> getPublicIncidents(
+		@QueryValue("region") String regionId,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate
+	) {
+		String startInstant = DateControllerUtil.parseDate(startDate).toString();
+		String endInstant = DateControllerUtil.parseDate(endDate).toString();
+		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant)
+			.stream()
+			.map(Incident::getPublicData)
+			.filter(Objects::nonNull)
+			.toList();
 	}
 
 	@Get("/{id}")
