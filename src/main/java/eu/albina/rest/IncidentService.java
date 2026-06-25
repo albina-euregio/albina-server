@@ -70,6 +70,14 @@ public class IncidentService {
 	@Repository
 	public interface IncidentRepository extends CrudRepository<Incident, String> {
 		List<Incident> findByRegionIdAndDateTimeBetween(String regionId, String startInstant, String endInstant);
+
+		default List<Object> publicIncidents(String regionId, Range<Instant> range) {
+			return findByRegionIdAndDateTimeBetween(regionId, range.lowerEndpoint().toString(), range.upperEndpoint().toString())
+				.stream()
+				.map(Incident::getPublicData)
+				.filter(Objects::nonNull)
+				.toList();
+		}
 	}
 
 	@Inject
@@ -113,11 +121,7 @@ public class IncidentService {
 	) throws ExecutionException {
 		return publicIncidentsCache.get(regionId + "-" + seasonYear,() -> {
 			Range<Instant> range = DateControllerUtil.parseHydrologicalYearInstantRange(Year.of(seasonYear));
-			return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, range.lowerEndpoint().toString(), range.upperEndpoint().toString())
-				.stream()
-				.map(Incident::getPublicData)
-				.filter(Objects::nonNull)
-				.toList();
+			return incidentRepository.publicIncidents(regionId, range);
 		});
 	}
 
