@@ -21,7 +21,7 @@
 		<release.version>25</release.version>
 		<jersey.version>2.40</jersey.version>
 		<slf4j.version>2.0.17</slf4j.version>
-		<hibernate.version>6.6.2.Final</hibernate.version>
+		<hibernate.version>6.6.53.Final</hibernate.version>
 		<liquibase.version>4.30.0</liquibase.version>
 		<itextpdf.version>9.3.0</itextpdf.version>
 		<micronaut.version>5.0.2</micronaut.version>
@@ -38,6 +38,18 @@
 			<url>https://repo.maven.apache.org/maven2</url>
 		</repository>
 	</repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.hibernate.orm</groupId>
+				<artifactId>hibernate-platform</artifactId>
+				<version>${hibernate.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 
