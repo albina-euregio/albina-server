@@ -5,6 +5,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Range;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.jspecify.annotations.NonNull;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -78,6 +79,18 @@ public class IncidentService {
 				.filter(Objects::nonNull)
 				.toList();
 		}
+
+		default void existsOrThrow(UUID id) {
+			if (!existsById(id.toString())) {
+				throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+			}
+		}
+
+		@NonNull
+		default Incident findOrThrow(UUID id) {
+			return findById(id.toString())
+				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
+		}
 	}
 
 	@Inject
@@ -130,8 +143,7 @@ public class IncidentService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Get an incident by ID")
 	public Incident getIncident(@PathVariable UUID id) {
-		return incidentRepository.findById(id.toString())
-			.orElseThrow(() -> noIncident(id));
+		return incidentRepository.findOrThrow(id);
 	}
 
 	@Post
@@ -162,8 +174,7 @@ public class IncidentService {
 	public Incident updateIncident(@PathVariable UUID id, @Body String body) {
 		try {
 			JsonNode data = objectMapper.readTree(body);
-			Incident incident = incidentRepository.findById(id.toString())
-				.orElseThrow(() -> noIncident(id));
+			Incident incident = incidentRepository.findOrThrow(id);
 			incident.setData(data);
 			return incidentRepository.update(incident);
 		} catch (JacksonException e) {
@@ -179,8 +190,7 @@ public class IncidentService {
 	public Incident publishIncident(@PathVariable UUID id, @Body String body) {
 		try {
 			JsonNode publicData = objectMapper.readTree(body);
-			Incident incident = incidentRepository.findById(id.toString())
-				.orElseThrow(() -> noIncident(id));
+			Incident incident = incidentRepository.findOrThrow(id);
 			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 			incident.setPublicData(publicData);
 			return incidentRepository.update(incident);
@@ -195,8 +205,7 @@ public class IncidentService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Unpublish an incident")
 	public Incident unpublishIncident(@PathVariable UUID id) {
-		Incident incident = incidentRepository.findById(id.toString())
-			.orElseThrow(() -> noIncident(id));
+		Incident incident = incidentRepository.findOrThrow(id);
 		incident.setPublishedAt(null);
 		incident.setPublicData(null);
 		return incidentRepository.update(incident);
@@ -207,9 +216,7 @@ public class IncidentService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete an incident")
 	public HttpResponse<Void> deleteIncident(@PathVariable UUID id) {
-		if (!incidentRepository.existsById(id.toString())) {
-			throw noIncident(id);
-		}
+		incidentRepository.existsOrThrow(id);
 		incidentRepository.deleteById(id.toString());
 		return HttpResponse.noContent();
 	}
@@ -221,9 +228,7 @@ public class IncidentService {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@ExecuteOn(TaskExecutors.IO)
 	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
-		if (!incidentRepository.existsById(id.toString())) {
-			throw noIncident(id);
-		}
+		incidentRepository.existsOrThrow(id);
 		Path attachment = getAttachmentPath(id, attachmentId);
 		return new SystemFile(attachment.toFile(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
 	}
@@ -234,9 +239,7 @@ public class IncidentService {
 	@Operation(summary = "Delete incident attachment")
 	@ExecuteOn(TaskExecutors.IO)
 	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
-		if (!incidentRepository.existsById(id.toString())) {
-			throw noIncident(id);
-		}
+		incidentRepository.existsOrThrow(id);
 		Path attachment = getAttachmentPath(id, attachmentId);
 		try {
 			Files.delete(attachment);
@@ -257,9 +260,7 @@ public class IncidentService {
 	public IncidentAttachment uploadIncidentAttachment(
 		@PathVariable UUID id,
 		@Part("file") CompletedFileUpload file) {
-		if (!incidentRepository.existsById(id.toString())) {
-			throw noIncident(id);
-		}
+		incidentRepository.existsOrThrow(id);
 		UUID uuid = UUID.randomUUID();
 		try {
 			Path attachment = getAttachmentPath(id, uuid);
@@ -279,7 +280,4 @@ public class IncidentService {
 		return Path.of(globalVariables.getIncidentsPath()).resolve(id.toString()).resolve(attachmentId.toString());
 	}
 
-	private static HttpStatusException noIncident(UUID id) {
-		return new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
-	}
 }
