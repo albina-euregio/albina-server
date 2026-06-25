@@ -45,15 +45,13 @@ public interface CaamlValidator {
 	 */
 	static boolean validateCaamlBulletin(String caamlString, CaamlVersion version)
 			throws SAXException, IOException {
-		if (version == CaamlVersion.V6) {
-			try (InputStream xsd = Resources.getResource("CAAMLv6_BulletinEAWS.xsd").openStream()) {
-				return validate(caamlString, new StreamSource(xsd));
-			}
-		} else if (version == CaamlVersion.V6_JSON) {
+		if (version == CaamlVersion.V6_JSON) {
 			Verify.verify(validateCAAMLv6(caamlString).isEmpty());
 			return true;
 		}
-		return validate(caamlString, new StreamSource(version.schemaLocation()));
+		try (InputStream xsd = Resources.getResource("CAAMLv6_BulletinEAWS.xsd").openStream()) {
+			return validate(caamlString, new StreamSource(xsd));
+		}
 	}
 
 	static boolean validate(String caamlString, Source schemaFile) throws SAXException, IOException {

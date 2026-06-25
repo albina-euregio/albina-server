@@ -4,7 +4,6 @@
     "subRegions": ["IT-32-BZ", "IT-32-TN", "AT-07"],
     "publishBulletins": false,
     "publishBlogs": false,
-    "createCaamlV5": true,
     "createCaamlV6": true,
     "createJson": true,
     "createMaps": true,

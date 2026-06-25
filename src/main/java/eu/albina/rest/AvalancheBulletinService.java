@@ -191,13 +191,13 @@ public class AvalancheBulletinService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
 		@QueryValue("lang") LanguageCode language,
-		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V5) CaamlVersion version) {
+		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V6) CaamlVersion version) {
 		List<String> regionIds = regionId != null ? Collections.singletonList(regionId) : Collections.emptyList();
 		return getPublishedCaamlBulletins(date, regionIds, language, version);
 	}
 
 	private String makeCAAML(AvalancheReport avalancheReport, LanguageCode language, CaamlVersion version) {
-		return this.caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V5));
+		return this.caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V6));
 	}
 
 	@Get("/caaml")
@@ -208,7 +208,7 @@ public class AvalancheBulletinService {
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds,
 		@QueryValue("lang") LanguageCode language,
-		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V5) CaamlVersion version) {
+		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V6) CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);

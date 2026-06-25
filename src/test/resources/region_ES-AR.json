@@ -16,7 +16,6 @@
 	],
 	"publishBulletins": true,
 	"publishBlogs": false,
-	"createCaamlV5": true,
 	"createCaamlV6": true,
 	"createJson": true,
 	"createMaps": true,

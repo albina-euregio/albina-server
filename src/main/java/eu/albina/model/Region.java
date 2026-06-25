@@ -93,9 +93,6 @@ public class Region implements PersistentObject {
 	@Column(name = "PUBLISH_BLOGS")
 	private boolean publishBlogs;
 
-	@Column(name = "CREATE_CAAML_V5")
-	private boolean createCaamlV5;
-
 	@Column(name = "CREATE_CAAML_V6")
 	private boolean createCaamlV6;
 
@@ -451,14 +448,6 @@ public class Region implements PersistentObject {
 
 	public void setPublishBlogs(boolean publishBlogs) {
 		this.publishBlogs = publishBlogs;
-	}
-
-	public boolean isCreateCaamlV5() {
-		return createCaamlV5;
-	}
-
-	public void setCreateCaamlV5(boolean createCaamlV5) {
-		this.createCaamlV5 = createCaamlV5;
 	}
 
 	public boolean isCreateCaamlV6() {

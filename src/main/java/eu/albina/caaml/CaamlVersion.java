@@ -8,34 +8,30 @@ import org.w3c.dom.Element;
  */
 public enum CaamlVersion {
 
-	V5, V6, V6_JSON;
+	V6, V6_JSON;
 
 	public interface Str {
-		String V5 = "V5";
 		String V6 = "V6";
 		String V6_JSON = "V6_JSON";
 	}
 
 	String filenameSuffix() {
 		return switch (this) {
-			case V5 -> ".xml";
 			case V6 -> "_CAAMLv6.xml";
 			case V6_JSON -> "_CAAMLv6.json";
 		};
 	}
 
 	int version() {
-		return this == V5 ? 5 : 6;
+		return 6;
 	}
 
 	String namespace() {
-		return this == V5 ? "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS"
-				: "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS";
+		return "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS";
 	}
 
 	String schemaLocation() {
-		return this == V5 ? "http://caaml.org/Schemas/V5.0/Profiles/BulletinEAWS/CAAMLv5_BulletinEAWS.xsd"
-				: "http://caaml.org/Schemas/BulletinEAWS/v6.0/xml/CAAMLv6_BulletinEAWS.xsd";
+		return "http://caaml.org/Schemas/BulletinEAWS/v6.0/xml/CAAMLv6_BulletinEAWS.xsd";
 	}
 
 	Element setNamespaceAttributes(Element rootElement) {
