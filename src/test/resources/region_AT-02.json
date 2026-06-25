@@ -51,7 +51,6 @@
     "pdfFooterLogo": true,
     "pdfFooterLogoColorPath": "logo/color/euregio.png",
     "pdfFooterLogoBwPath": "logo/grey/euregio.png",
-    "simpleHtmlTemplateName": "simple-bulletin.min.html",
     "geoDataDirectory": "geodata.Euregio/AT-02/",
     "mapLogoPosition": "bottomright",
     "mapCenterLat": 46.7,

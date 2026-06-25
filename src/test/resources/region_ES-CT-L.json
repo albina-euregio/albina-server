@@ -23,7 +23,6 @@
     "pdfFooterLogo" : false,
     "pdfFooterLogoColorPath" : "",
     "pdfFooterLogoBwPath" : "",
-    "simpleHtmlTemplateName" : "simple-bulletin.aran.html",
     "geoDataDirectory" : "geodata.Aran\/",
     "mapLogoPosition" : "topright",
     "imageColorbarColorPath" : "logo\/color\/colorbar.Aran.gif",

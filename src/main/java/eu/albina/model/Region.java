@@ -197,9 +197,6 @@ public class Region implements PersistentObject {
 	@Column(name = "PDF_FOOTER_LOGO_BW_PATH", length = 191)
 	private String pdfFooterLogoBwPath;
 
-	@Column(name = "SIMPLE_HTML_TEMPLATE_NAME", length = 191)
-	private String simpleHtmlTemplateName;
-
 	@Column(name = "GEO_DATA_DIRECTORY", length = 191)
 	private String geoDataDirectory;
 
@@ -667,14 +664,6 @@ public class Region implements PersistentObject {
 
 	public void setPdfFooterLogoBwPath(String pdfFooterLogoBwPath) {
 		this.pdfFooterLogoBwPath = pdfFooterLogoBwPath;
-	}
-
-	public String getSimpleHtmlTemplateName() {
-		return simpleHtmlTemplateName;
-	}
-
-	public void setSimpleHtmlTemplateName(String simpleHtmlTemplateName) {
-		this.simpleHtmlTemplateName = simpleHtmlTemplateName;
 	}
 
 	public String getGeoDataDirectory() {

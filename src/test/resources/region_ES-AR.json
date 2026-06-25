@@ -65,7 +65,6 @@
 	"pdfFooterLogo": false,
 	"pdfFooterLogoColorPath": "logo/color/euregio.png",
 	"pdfFooterLogoBwPath": "logo/grey/euregio.png",
-	"simpleHtmlTemplateName": "simple-bulletin.html",
 	"geoDataDirectory": "geodata.Aragon/",
 	"mapLogoColorPath": "",
 	"mapLogoBwPath": "",
