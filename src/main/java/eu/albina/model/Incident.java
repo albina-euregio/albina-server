@@ -33,6 +33,7 @@ public class Incident extends AbstractPersistentObject {
 
 	@Column(name = "DATE_TIME", nullable = false, insertable = false, updatable = false)
 	@Generated(event = {EventType.INSERT, EventType.UPDATE})
+	@JsonIgnore
 	private String dateTime;
 
 	@Column(name = "CREATED_AT", nullable = false)
