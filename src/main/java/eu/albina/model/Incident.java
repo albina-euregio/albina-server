@@ -2,8 +2,10 @@
 package eu.albina.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import eu.albina.model.converter.JsonConverter;
+import eu.albina.util.JsonUtil;
 import org.hibernate.annotations.Generated;
 import org.hibernate.generator.EventType;
 import io.micronaut.core.annotation.Introspected;
@@ -24,7 +26,14 @@ import java.time.Instant;
 @Table(name = "incidents")
 @Serdeable
 @Introspected(excludedAnnotations = {JsonIgnore.class})
+@JsonView(JsonUtil.Views.Internal.class)
 public class Incident extends AbstractPersistentObject {
+
+	@Override
+	@JsonView({JsonUtil.Views.Internal.class, JsonUtil.Views.Public.class})
+	public String getId() {
+		return super.getId();
+	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REGION_ID", nullable = false)
@@ -47,10 +56,12 @@ public class Incident extends AbstractPersistentObject {
 	private Object data;
 
 	@Column(name = "PUBLISHED_AT")
+	@JsonView({JsonUtil.Views.Internal.class, JsonUtil.Views.Public.class})
 	private Instant publishedAt;
 
 	@Column(name = "PUBLIC_DATA", columnDefinition = "json")
 	@Convert(converter = JsonConverter.class)
+	@JsonView({JsonUtil.Views.Internal.class, JsonUtil.Views.Public.class})
 	private Object publicData;
 
 	@PrePersist
