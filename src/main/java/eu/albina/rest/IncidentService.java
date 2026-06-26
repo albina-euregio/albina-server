@@ -7,9 +7,7 @@ import com.google.common.collect.Range;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import tools.jackson.core.JacksonException;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import io.micronaut.serde.ObjectMapper;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Part;
@@ -26,6 +24,7 @@ import eu.albina.model.IncidentAttachment;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.GlobalVariables;
+import eu.albina.util.JsonUtil;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -60,7 +59,6 @@ import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -76,11 +74,10 @@ public class IncidentService {
 	public interface IncidentRepository extends CrudRepository<Incident, String> {
 		List<Incident> findByRegionIdAndDateTimeBetween(String regionId, String startInstant, String endInstant);
 
-		default List<Incident.PublicView> publicIncidents(String regionId, Range<Instant> range) {
+		default List<Incident> publicIncidents(String regionId, Range<Instant> range) {
 			return findByRegionIdAndDateTimeBetween(regionId, range.lowerEndpoint().toString(), range.upperEndpoint().toString())
 				.stream()
-				.map(Incident::getPublicView)
-				.filter(Objects::nonNull)
+				.filter(incident -> incident.getPublicData() != null)
 				.toList();
 		}
 
@@ -109,15 +106,25 @@ public class IncidentService {
 	@Inject
 	GlobalVariables globalVariables;
 
-	private final Cache<String, List<Incident.PublicView>> publicIncidentsCache = CacheBuilder.newBuilder()
+	private final Cache<String, String> publicIncidentsCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.maximumSize(1000)
 		.build();
 
+	/** Serialize with the given {@link JsonUtil.Views} class so only the matching fields are emitted. */
+	private String writeWithView(Class<?> view, Object value) {
+		try {
+			return objectMapper.cloneWithViewClass(view).writeValueAsString(value);
+		} catch (IOException e) {
+			throw new HttpStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
+	}
+
 	@Get
 	@Secured(SecurityRule.IS_ANONYMOUS)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "List incidents for a region (public report data when unauthenticated)")
-	public List<?> getIncidents(
+	public String getIncidents(
 		@QueryValue("region") String regionId,
 		@Parameter(description = "Season year, expanded to yyyy-10-01 until (yyyy+1)-10-01")
 		@QueryValue("seasonYear") int seasonYear,
@@ -131,11 +138,13 @@ public class IncidentService {
 			Range<Instant> range = DateControllerUtil.parseHydrologicalYearInstantRange(Year.of(seasonYear));
 			String startInstant = startDate != null ? DateControllerUtil.parseDate(startDate).toString() : range.lowerEndpoint().toString();
 			String endInstant = endDate != null ? DateControllerUtil.parseDate(endDate).toString() : range.upperEndpoint().toString();
-			return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant);
+			List<Incident> incidents = incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant);
+			return writeWithView(JsonUtil.Views.Internal.class, incidents);
 		}
 		return publicIncidentsCache.get(regionId + "-" + seasonYear, () -> {
 			Range<Instant> range = DateControllerUtil.parseHydrologicalYearInstantRange(Year.of(seasonYear));
-			return incidentRepository.publicIncidents(regionId, range);
+			List<Incident> incidents = incidentRepository.publicIncidents(regionId, range);
+			return writeWithView(JsonUtil.Views.Public.class, incidents);
 		});
 	}
 
@@ -148,17 +157,17 @@ public class IncidentService {
 
 	@Get("/{id}")
 	@Secured(SecurityRule.IS_ANONYMOUS)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get an incident by ID (public data when unauthenticated)")
-	public Object getIncident(@PathVariable UUID id, @Nullable Authentication authentication) {
+	public String getIncident(@PathVariable UUID id, @Nullable Authentication authentication) {
 		Incident incident = incidentRepository.findOrThrow(id);
 		if (canViewInternalData(authentication)) {
-			return incident;
+			return writeWithView(JsonUtil.Views.Internal.class, incident);
 		}
-		Incident.PublicView publicView = incident.getPublicView();
-		if (publicView == null) {
+		if (incident.getPublicData() == null) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
-		return publicView;
+		return writeWithView(JsonUtil.Views.Public.class, incident);
 	}
 
 	@Post
@@ -169,14 +178,14 @@ public class IncidentService {
 		@QueryValue("region") String regionId,
 		@Body String body) {
 		try {
-			JsonNode data = objectMapper.readTree(body);
+			Object data = objectMapper.readValue(body, Object.class);
 			Region region = regionRepository.findById(regionId)
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No region with id: " + regionId));
 			Incident incident = new Incident();
 			incident.setRegion(region);
 			incident.setData(data);
 			return HttpResponse.created(incidentRepository.save(incident));
-		} catch (JacksonException e) {
+		} catch (IOException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -188,11 +197,11 @@ public class IncidentService {
 	@Operation(summary = "Update an incident")
 	public Incident updateIncident(@PathVariable UUID id, @Body String body) {
 		try {
-			JsonNode data = objectMapper.readTree(body);
+			Object data = objectMapper.readValue(body, Object.class);
 			Incident incident = incidentRepository.findOrThrow(id);
 			incident.setData(data);
 			return incidentRepository.update(incident);
-		} catch (JacksonException e) {
+		} catch (IOException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -204,12 +213,12 @@ public class IncidentService {
 	@Operation(summary = "Publish an incident")
 	public Incident publishIncident(@PathVariable UUID id, @Body String body) {
 		try {
-			JsonNode publicData = objectMapper.readTree(body);
+			Object publicData = objectMapper.readValue(body, Object.class);
 			Incident incident = incidentRepository.findOrThrow(id);
 			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 			incident.setPublicData(publicData);
 			return incidentRepository.update(incident);
-		} catch (JacksonException e) {
+		} catch (IOException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
