@@ -76,10 +76,10 @@ public class IncidentService {
 	public interface IncidentRepository extends CrudRepository<Incident, String> {
 		List<Incident> findByRegionIdAndDateTimeBetween(String regionId, String startInstant, String endInstant);
 
-		default List<Object> publicIncidents(String regionId, Range<Instant> range) {
+		default List<Incident.PublicView> publicIncidents(String regionId, Range<Instant> range) {
 			return findByRegionIdAndDateTimeBetween(regionId, range.lowerEndpoint().toString(), range.upperEndpoint().toString())
 				.stream()
-				.map(Incident::getPublicData)
+				.map(Incident::getPublicView)
 				.filter(Objects::nonNull)
 				.toList();
 		}
@@ -109,7 +109,7 @@ public class IncidentService {
 	@Inject
 	GlobalVariables globalVariables;
 
-	private final Cache<String, List<Object>> publicIncidentsCache = CacheBuilder.newBuilder()
+	private final Cache<String, List<Incident.PublicView>> publicIncidentsCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.maximumSize(1000)
 		.build();
@@ -154,11 +154,11 @@ public class IncidentService {
 		if (canViewInternalData(authentication)) {
 			return incident;
 		}
-		Object publicData = incident.getPublicData();
-		if (publicData == null) {
+		Incident.PublicView publicView = incident.getPublicView();
+		if (publicView == null) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
-		return publicData;
+		return publicView;
 	}
 
 	@Post

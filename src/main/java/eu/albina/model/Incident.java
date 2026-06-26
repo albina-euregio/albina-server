@@ -97,4 +97,17 @@ public class Incident extends AbstractPersistentObject {
 	public void setPublicData(Object publicData) {
 		this.publicData = publicData;
 	}
+
+	/**
+	 * Public projection of an incident, exposing only the fields visible to
+	 * unauthenticated clients. Returns {@code null} when the incident has not
+	 * been published.
+	 */
+	@Serdeable
+	public record PublicView(String id, Instant publishedAt, Object publicData) {
+	}
+
+	public PublicView getPublicView() {
+		return publicData != null ? new PublicView(id, publishedAt, publicData) : null;
+	}
 }
