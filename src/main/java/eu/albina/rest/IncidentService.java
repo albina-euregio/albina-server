@@ -109,34 +109,31 @@ public class IncidentService {
 	@Inject
 	GlobalVariables globalVariables;
 
-	@Get
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "List incidents for a region")
-	public List<Incident> getIncidents(
-		@QueryValue("region") String regionId,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("startDate") String startDate,
-		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("endDate") String endDate
-	) {
-		String startInstant = DateControllerUtil.parseDate(startDate).toString();
-		String endInstant = DateControllerUtil.parseDate(endDate).toString();
-		return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant);
-	}
-
 	private final Cache<String, List<Object>> publicIncidentsCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.maximumSize(1000)
 		.build();
 
-	@Get("/public")
+	@Get
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	@Operation(summary = "List published incidents for a region (public report)")
-	public List<Object> getPublicIncidents(
+	@Operation(summary = "List incidents for a region (public report data when unauthenticated)")
+	public List<?> getIncidents(
 		@QueryValue("region") String regionId,
 		@Parameter(description = "Season year, expanded to yyyy-10-01 until (yyyy+1)-10-01")
-		@QueryValue("seasonYear") int seasonYear
+		@QueryValue("seasonYear") int seasonYear,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION)
+		@Nullable @QueryValue("startDate") String startDate,
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION)
+		@Nullable @QueryValue("endDate") String endDate,
+		@Nullable Authentication authentication
 	) throws ExecutionException {
-		return publicIncidentsCache.get(regionId + "-" + seasonYear,() -> {
+		if (canViewInternalData(authentication)) {
+			Range<Instant> range = DateControllerUtil.parseHydrologicalYearInstantRange(Year.of(seasonYear));
+			String startInstant = startDate != null ? DateControllerUtil.parseDate(startDate).toString() : range.lowerEndpoint().toString();
+			String endInstant = endDate != null ? DateControllerUtil.parseDate(endDate).toString() : range.upperEndpoint().toString();
+			return incidentRepository.findByRegionIdAndDateTimeBetween(regionId, startInstant, endInstant);
+		}
+		return publicIncidentsCache.get(regionId + "-" + seasonYear, () -> {
 			Range<Instant> range = DateControllerUtil.parseHydrologicalYearInstantRange(Year.of(seasonYear));
 			return incidentRepository.publicIncidents(regionId, range);
 		});
