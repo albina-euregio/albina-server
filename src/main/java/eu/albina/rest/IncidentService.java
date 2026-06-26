@@ -6,6 +6,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Range;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -39,6 +40,7 @@ import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -56,8 +58,10 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.Year;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -138,12 +142,26 @@ public class IncidentService {
 		});
 	}
 
+	private static final Set<String> INTERNAL_ACCESS_ROLES = Set.of(Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER);
+
+	private static boolean canViewInternalData(@Nullable Authentication authentication) {
+		if (authentication == null) return false;
+		return !Collections.disjoint(INTERNAL_ACCESS_ROLES, authentication.getRoles());
+	}
+
 	@Get("/{id}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Get an incident by ID")
-	public Incident getIncident(@PathVariable UUID id) {
-		return incidentRepository.findOrThrow(id);
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	@Operation(summary = "Get an incident by ID (public data when unauthenticated)")
+	public Object getIncident(@PathVariable UUID id, @Nullable Authentication authentication) {
+		Incident incident = incidentRepository.findOrThrow(id);
+		if (canViewInternalData(authentication)) {
+			return incident;
+		}
+		Object publicData = incident.getPublicData();
+		if (publicData == null) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+		}
+		return publicData;
 	}
 
 	@Post
@@ -222,13 +240,16 @@ public class IncidentService {
 	}
 
 	@Get("/{id}/attachment/{attachmentId}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
-	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
-	@Operation(summary = "Get incident attachment")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	@Operation(summary = "Get incident attachment (public data when unauthenticated)")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@ExecuteOn(TaskExecutors.IO)
-	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
-		incidentRepository.existsOrThrow(id);
+	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId,
+			@Nullable Authentication authentication) {
+		Incident incident = incidentRepository.findOrThrow(id);
+		if (!canViewInternalData(authentication) && incident.getPublicData() == null) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
+		}
 		Path attachment = getAttachmentPath(id, attachmentId);
 		return new SystemFile(attachment.toFile(), MediaType.APPLICATION_OCTET_STREAM_TYPE);
 	}
