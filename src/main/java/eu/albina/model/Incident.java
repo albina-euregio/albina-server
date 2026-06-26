@@ -104,10 +104,12 @@ public class Incident extends AbstractPersistentObject {
 	 * been published.
 	 */
 	@Serdeable
-	public record PublicView(String id, Instant publishedAt, Object publicData) {
+	public record PublicView(String id, Instant publishedAt, Object data) {
 	}
 
 	public PublicView getPublicView() {
-		return publicData != null ? new PublicView(id, publishedAt, publicData) : null;
+		return publicData != null ? new PublicView(id, publishedAt,
+			// publicData gets exported as data
+			publicData) : null;
 	}
 }
