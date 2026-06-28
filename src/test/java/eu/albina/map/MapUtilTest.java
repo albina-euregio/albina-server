@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.map;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -13,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.StandardSystemProperty;
+
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.model.LocalServerInstance;
+
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +28,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
+import org.mapyrus.Argument;
+import org.mapyrus.Row;
+import org.mapyrus.dataset.ShapefileDataset;
 
 import eu.albina.ImageTestUtils;
 import eu.albina.model.AvalancheBulletin;
@@ -74,17 +81,17 @@ public class MapUtilTest {
 	@Test
 	public void testOverviewMapFilename() {
 		assertEquals("fd_EUREGIO_map.jpg",
-				MapUtil.getOverviewMapFilename(regionEuregio, DaytimeDependency.fd, false));
+			MapUtil.getOverviewMapFilename(regionEuregio, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map.jpg",
-				MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, false));
+			MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, true));
+			MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, true));
 		assertEquals("am_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.am, false));
 		assertEquals("pm_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.pm, false));
 		assertEquals("fd_IT-32-BZ_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionSouthTyrol, DaytimeDependency.fd, true));
+			MapUtil.getOverviewMapFilename(regionSouthTyrol, DaytimeDependency.fd, true));
 		assertEquals("fd_IT-32-TN_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionTrentino, DaytimeDependency.fd, true));
+			MapUtil.getOverviewMapFilename(regionTrentino, DaytimeDependency.fd, true));
 	}
 
 	@Test
@@ -266,7 +273,7 @@ public class MapUtilTest {
 		publicationController.createSymbolicLinks(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
-        byte[] actual = Files.readAllBytes(Path.of(StandardSystemProperty.JAVA_IO_TMPDIR.value() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		byte[] actual = Files.readAllBytes(Path.of(StandardSystemProperty.JAVA_IO_TMPDIR.value() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
 		ImageTestUtils.assertImageEquals("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png", expected, actual, 0, 0, ignore -> {
 		});
 	}
@@ -319,5 +326,172 @@ public class MapUtilTest {
 		String filename = "test.png";
 		String result = MapUtil.mapProductionResource(geoDataPath, filename).toString();
 		assertEquals("geodata.Euregio" + System.getProperty("file.separator") + filename, result);
+	}
+
+	@Test
+	void testShapefileDataset() throws Exception {
+		URL resource = Resources.getResource("micro_regions_elevation_a_simplified.shp");
+		String filename = Path.of(resource.toURI()).toString();
+		ShapefileDataset ds = new ShapefileDataset(filename, "");
+		assertArrayEquals(new String[]{"style", "code", "threshold", "elevation", "ALB_ID", "GEOMETRY"},
+			ds.getFieldNames());
+		assertEquals("PROJCS[\"WGS 84 / World Mercator\",", ds.getProjection());
+		Row row = ds.fetch();
+		Argument last = row.getLast();
+		assertArrayEquals(new Object[]{"3502", "AT-07-14-01", "3200", "low", "AT-07-14-01-l"},
+			row.subList(0, 5).stream().map(Argument::toString).toArray());
+		assertArrayEquals(new double[]{
+				102.0,
+				48.0,
+				0.0,
+				1199823.9005152367,
+				5945626.200928268,
+				1.0,
+				1199373.1086985667,
+				5944724.617294928,
+				1.0,
+				1195814.2474751961,
+				5939005.018900225,
+				1.0,
+				1195941.349661745,
+				5934048.033624816,
+				1.0,
+				1199881.5174447626,
+				5930997.581147641,
+				1.0,
+				1203313.2764815844,
+				5928836.843976309,
+				1.0,
+				1209414.1814359343,
+				5917397.647186902,
+				1.0,
+				1210125.5371531884,
+				5908150.022862599,
+				1.0,
+				1209070.3625782244,
+				5906013.187868451,
+				1.0,
+				1208277.235391304,
+				5916696.079435631,
+				1.0,
+				1203812.382711593,
+				5925559.638829421,
+				1.0,
+				1194221.2176959254,
+				5931314.337838818,
+				1.0,
+				1192005.3278474882,
+				5928635.426231002,
+				1.0,
+				1199347.530031886,
+				5921392.442995033,
+				1.0,
+				1197760.0268568806,
+				5913454.92711999,
+				1.0,
+				1197029.8772203065,
+				5899770.75437901,
+				1.0,
+				1195592.745207075,
+				5899128.226443707,
+				1.0,
+				1194293.6096680723,
+				5899309.052440637,
+				1.0,
+				1195114.1882318743,
+				5919242.699112196,
+				1.0,
+				1192931.3713662364,
+				5920234.888596577,
+				1.0,
+				1186217.5558552742,
+				5912595.029566867,
+				1.0,
+				1181785.7761583775,
+				5904624.440709023,
+				1.0,
+				1182080.2402687445,
+				5901005.206097213,
+				1.0,
+				1178180.8210318089,
+				5900920.266634016,
+				1.0,
+				1173570.5628905746,
+				5906186.470529516,
+				1.0,
+				1179768.6946242154,
+				5911570.973602085,
+				1.0,
+				1187388.7098642439,
+				5923516.93499402,
+				1.0,
+				1186277.4576417394,
+				5929231.946424037,
+				1.0,
+				1178141.5038698353,
+				5930859.137178405,
+				1.0,
+				1176168.4286408648,
+				5934214.098582563,
+				1.0,
+				1181237.1350610964,
+				5939907.90527594,
+				1.0,
+				1188174.9976422042,
+				5944003.214923156,
+				1.0,
+				1190129.7505474724,
+				5944502.704259365,
+				1.0,
+				1196436.6281255225,
+				5946114.2727018455,
+				1.0,
+				1196904.289444439,
+				5946233.772123543,
+				1.0,
+				1199823.9005152367,
+				5945626.200928268,
+				0.0,
+				1186912.4589117467,
+				5939471.341902834,
+				1.0,
+				1182851.6289842539,
+				5935348.984249159,
+				1.0,
+				1182112.8816734515,
+				5934599.043797293,
+				1.0,
+				1183794.130540736,
+				5933985.74484463,
+				1.0,
+				1185941.8579441682,
+				5933202.280247111,
+				1.0,
+				1186559.989511136,
+				5932976.793437854,
+				1.0,
+				1188817.105203934,
+				5934511.690558841,
+				1.0,
+				1190682.7789523862,
+				5935780.397020934,
+				1.0,
+				1191357.4678017646,
+				5939312.59158533,
+				1.0,
+				1189957.1200604402,
+				5939362.604004665,
+				1.0,
+				1189866.7430590838,
+				5939365.831754708,
+				1.0,
+				1186912.4589117467,
+				5939471.341902834,
+				0.0,
+				0.0,
+				0.0,
+				0.0,
+			},
+			last.getGeometryValue());
 	}
 }
