@@ -101,14 +101,15 @@ public class GeoJsonDataset implements GeographicDataset {
 	}
 
 	private static DoubleStream coordinates(List<LngLatAlt> lngLatAlts) {
-		return Streams.mapWithIndex(
-			lngLatAlts.stream(),
-			(c, index) -> DoubleStream.of(
-				index == 0 ? Argument.MOVETO : Argument.LINETO,
-				c.getLongitude(),
-				c.getLatitude()
-			)
-		).flatMapToDouble(x -> x);
+		return Streams.mapWithIndex(lngLatAlts.stream(), GeoJsonDataset::coordinates).flatMapToDouble(x -> x);
+	}
+
+	private static DoubleStream coordinates(LngLatAlt c, long index) {
+		return DoubleStream.of(
+			index == 0 ? Argument.MOVETO : Argument.LINETO,
+			c.getLongitude(),
+			c.getLatitude()
+		);
 	}
 
 	@Override
