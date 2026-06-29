@@ -3,7 +3,6 @@ package eu.albina.map;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -511,5 +510,21 @@ public class MapUtilTest {
 				0.0
 			),
 			geometryValue);
+	}
+
+	@Test
+	@Disabled
+	void testGeographicDataset() throws Exception {
+		Path path1 = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.shp");
+		GeographicDataset ds1 = new ShapefileDataset(path1.toString(), "");
+		Path path2 = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.geojson");
+		GeographicDataset ds2 = GeoJsonDataset.of(path2);
+		Row row1;
+		while ((row1 = ds1.fetch()) != null) {
+			Row row2 = ds2.fetch();
+			List<Double> l1 = Doubles.asList(row1.getLast().getGeometryValue());
+			List<Double> l2 = Doubles.asList(row2.getLast().getGeometryValue());
+			assertEquals(l1, l2, row1.toString());
+		}
 	}
 }

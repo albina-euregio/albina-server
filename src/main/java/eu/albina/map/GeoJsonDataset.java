@@ -4,6 +4,7 @@ import com.google.common.collect.Streams;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.LngLatAlt;
+import org.geojson.MultiPolygon;
 import org.geojson.Polygon;
 import org.mapyrus.Argument;
 import org.mapyrus.MapyrusException;
@@ -39,6 +40,7 @@ public class GeoJsonDataset implements GeographicDataset {
 
 	public static GeoJsonDataset of(Path path) throws IOException {
 		try (InputStream src = Files.newInputStream(path)) {
+			System.out.println("Reading " + path);
 			FeatureCollection featureCollection = new ObjectMapper().readValue(src, FeatureCollection.class);
 			return new GeoJsonDataset(featureCollection);
 		}
@@ -74,7 +76,12 @@ public class GeoJsonDataset implements GeographicDataset {
 		final Row row = new Row();
 		for (String fieldName : fieldNames) {
 			if (GEOMETRY.equals(fieldName)) {
-				row.add(new Argument(Argument.GEOMETRY_POLYGON, coordinates((Polygon) feature.getGeometry())));
+				System.out.println(feature.getProperties());
+				row.add(new Argument(Argument.GEOMETRY_POLYGON, switch (feature.getGeometry()) {
+					case MultiPolygon multiPolygon -> coordinates(multiPolygon);
+					case Polygon polygon -> coordinates(polygon);
+					default -> throw new UnsupportedOperationException(feature.getGeometry().getClass().toString());
+				}));
 			} else {
 				row.add(new Argument(Argument.STRING, String.valueOf(feature.getProperties().get(fieldName))));
 			}
@@ -85,16 +92,32 @@ public class GeoJsonDataset implements GeographicDataset {
 	/**
 	 * @see org.mapyrus.Argument#createOGCWKT
 	 */
-	private static double[] coordinates(Polygon geometry) {
-		return Stream.of(
-			DoubleStream.of(Argument.GEOMETRY_POLYGON),
-			DoubleStream.of(geometry.getCoordinates().stream().mapToInt(Collection::size).sum()),
-			geometry.getCoordinates().stream().flatMapToDouble(GeoJsonDataset::coordinates),
-			DoubleStream.of(0, 0, 0, 0)
-		).reduce(DoubleStream.of(), DoubleStream::concat).toArray();
+	private static double[] coordinates(MultiPolygon geometry) {
+		return DoubleStream.concat(
+			DoubleStream.of(Argument.GEOMETRY_POLYGON, sizeLLL(geometry.getCoordinates())),
+			DoubleStream.concat(coordinatesLLL(geometry.getCoordinates()), DoubleStream.generate(() -> 0.0).limit(2L * geometry.getCoordinates().size()))
+		).toArray();
 	}
 
-	private static DoubleStream coordinates(List<LngLatAlt> lngLatAlts) {
+	/**
+	 * @see org.mapyrus.Argument#createOGCWKT
+	 */
+	private static double[] coordinates(Polygon geometry) {
+		return DoubleStream.concat(
+			DoubleStream.of(Argument.GEOMETRY_POLYGON, sizeLL(geometry.getCoordinates())),
+			DoubleStream.concat(coordinatesLL(geometry.getCoordinates()), DoubleStream.generate(() -> 0.0).limit(2L * geometry.getCoordinates().size()))
+		).toArray();
+	}
+
+	private static DoubleStream coordinatesLLL(List<List<List<LngLatAlt>>> coordinates) {
+		return coordinates.stream().flatMapToDouble(GeoJsonDataset::coordinatesLL);
+	}
+
+	private static DoubleStream coordinatesLL(List<List<LngLatAlt>> coordinates) {
+		return coordinates.stream().flatMapToDouble(GeoJsonDataset::coordinatesL);
+	}
+
+	private static DoubleStream coordinatesL(List<LngLatAlt> lngLatAlts) {
 		return Streams.mapWithIndex(lngLatAlts.stream(), GeoJsonDataset::coordinates).flatMapToDouble(x -> x);
 	}
 
@@ -104,6 +127,18 @@ public class GeoJsonDataset implements GeographicDataset {
 			c.getLongitude(),
 			c.getLatitude()
 		);
+	}
+
+	private static int sizeLLL(List<List<List<LngLatAlt>>> coordinates) {
+		return coordinates.stream().mapToInt(GeoJsonDataset::sizeLL).sum();
+	}
+
+	private static int sizeLL(List<List<LngLatAlt>> coordinates) {
+		return coordinates.stream().mapToInt(GeoJsonDataset::sizeL).sum();
+	}
+
+	private static int sizeL(List<LngLatAlt> coordinates) {
+		return coordinates.size();
 	}
 
 	@Override
