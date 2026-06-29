@@ -33,7 +33,6 @@ import org.mapyrus.MapyrusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.MoreCollectors;
 import com.google.common.collect.Table;
@@ -48,6 +47,7 @@ import eu.albina.model.Region;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
+import tools.jackson.databind.ObjectMapper;
 
 public interface MapUtil {
 

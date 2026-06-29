@@ -165,18 +165,10 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Jackson 2 retained only for geojson-jackson, which ships Jackson 2
-		     (de)serializers (org.geojson.jackson.LngLatAlt*) and has no Jackson 3
-		     release; used directly in eu.albina.map.MapUtil. Jackson 3 (tools.jackson,
-		     pulled in by Micronaut 5) coexists since it uses a different root package. -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>de.grundid.opendatalab</groupId>
 			<artifactId>geojson-jackson</artifactId>
-			<version>1.14</version>
+			<version>3.0</version>
 		</dependency>
 
 		<dependency>
