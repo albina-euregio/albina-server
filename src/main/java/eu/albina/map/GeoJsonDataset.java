@@ -6,6 +6,7 @@ import org.geojson.Feature;
 import org.geojson.FeatureCollection;
 import org.geojson.Geometry;
 import org.geojson.LngLatAlt;
+import org.geojson.Polygon;
 import org.mapyrus.Argument;
 import org.mapyrus.MapyrusException;
 import org.mapyrus.Row;
@@ -79,7 +80,7 @@ public class GeoJsonDataset implements GeographicDataset {
 		final Row row = new Row();
 		for (String fieldName : fieldNames) {
 			if (GEOMETRY.equals(fieldName)) {
-				row.add(new Argument(Argument.GEOMETRY_POLYGON, coordinates((Geometry<List<LngLatAlt>>) feature.getGeometry())));
+				row.add(new Argument(Argument.GEOMETRY_POLYGON, coordinates((Polygon) feature.getGeometry())));
 			} else {
 				row.add(new Argument(Argument.STRING, String.valueOf(feature.getProperties().get(fieldName))));
 			}
@@ -90,20 +91,22 @@ public class GeoJsonDataset implements GeographicDataset {
 	/**
 	 * @see org.mapyrus.Argument#createOGCWKT
 	 */
-	private static double[] coordinates(Geometry<List<LngLatAlt>> geometry) {
+	private static double[] coordinates(Polygon geometry) {
 		List<LngLatAlt> lngLatAlts = geometry.getCoordinates().getFirst();
-		return DoubleStream.concat(
-			DoubleStream.of(
-				Argument.GEOMETRY_POLYGON,
-				lngLatAlts.size()
-			),
-			Streams.mapWithIndex(
-				lngLatAlts.stream(),
-				(c, index) -> DoubleStream.of(
-					index == 0 ? Argument.MOVETO : Argument.LINETO,
-					c.getLongitude(), c.getLatitude()
-				)
-			).flatMapToDouble(x -> x)
+		return DoubleStream.concat(DoubleStream.concat(
+				DoubleStream.of(
+					Argument.GEOMETRY_POLYGON,
+					lngLatAlts.size()
+				),
+				Streams.mapWithIndex(
+					lngLatAlts.stream(),
+					(c, index) -> DoubleStream.of(
+						index == 0 ? Argument.MOVETO : Argument.LINETO,
+						c.getLongitude(),
+						c.getLatitude()
+					)
+				).flatMapToDouble(x -> x)
+			), DoubleStream.of(0, 0, 0)
 		).toArray();
 	}
 
