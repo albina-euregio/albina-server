@@ -3,8 +3,12 @@ package eu.albina.map;
 import com.google.common.collect.Streams;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
+import org.geojson.LineString;
 import org.geojson.LngLatAlt;
+import org.geojson.MultiLineString;
+import org.geojson.MultiPoint;
 import org.geojson.MultiPolygon;
+import org.geojson.Point;
 import org.geojson.Polygon;
 import org.mapyrus.Argument;
 import org.mapyrus.MapyrusException;
@@ -68,6 +72,9 @@ public class GeoJsonDataset implements GeographicDataset {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	/**
+	 * @see org.mapyrus.Argument#createOGCWKT
+	 */
 	public Row fetch() {
 		if (!featureIterator.hasNext()) {
 			return null;
@@ -80,6 +87,10 @@ public class GeoJsonDataset implements GeographicDataset {
 				row.add(new Argument(Argument.GEOMETRY_POLYGON, switch (feature.getGeometry()) {
 					case MultiPolygon multiPolygon -> coordinates(multiPolygon);
 					case Polygon polygon -> coordinates(polygon);
+					case MultiLineString multiLineString -> coordinates(multiLineString);
+					case LineString lineString -> coordinates(lineString);
+					case MultiPoint multiPoint -> coordinates(multiPoint);
+					case Point point -> coordinates(point);
 					default -> throw new UnsupportedOperationException(feature.getGeometry().getClass().toString());
 				}));
 			} else {
@@ -89,23 +100,51 @@ public class GeoJsonDataset implements GeographicDataset {
 		return row;
 	}
 
-	/**
-	 * @see org.mapyrus.Argument#createOGCWKT
-	 */
-	private static double[] coordinates(MultiPolygon geometry) {
+	private double[] coordinates(Point geometry) {
+		List<LngLatAlt> coordinates = List.of(geometry.getCoordinates());
 		return DoubleStream.concat(
-			DoubleStream.of(Argument.GEOMETRY_POLYGON, sizeLLL(geometry.getCoordinates())),
-			DoubleStream.concat(coordinatesLLL(geometry.getCoordinates()), DoubleStream.generate(() -> 0.0).limit(2L * geometry.getCoordinates().size()))
+			DoubleStream.of(Argument.GEOMETRY_POINT, sizeL(coordinates)),
+			coordinatesL(coordinates)
 		).toArray();
 	}
 
-	/**
-	 * @see org.mapyrus.Argument#createOGCWKT
-	 */
-	private static double[] coordinates(Polygon geometry) {
+	private double[] coordinates(MultiPoint geometry) {
+		List<LngLatAlt> coordinates = geometry.getCoordinates();
 		return DoubleStream.concat(
-			DoubleStream.of(Argument.GEOMETRY_POLYGON, sizeLL(geometry.getCoordinates())),
-			DoubleStream.concat(coordinatesLL(geometry.getCoordinates()), DoubleStream.generate(() -> 0.0).limit(2L * geometry.getCoordinates().size()))
+			DoubleStream.of(Argument.GEOMETRY_MULTIPOINT, sizeL(coordinates)),
+			coordinatesL(coordinates)
+		).toArray();
+	}
+
+	private double[] coordinates(LineString geometry) {
+		List<LngLatAlt> coordinates = geometry.getCoordinates();
+		return DoubleStream.concat(
+			DoubleStream.of(Argument.GEOMETRY_LINESTRING, sizeL(coordinates)),
+			coordinatesL(coordinates)
+		).toArray();
+	}
+
+	private double[] coordinates(MultiLineString geometry) {
+		List<List<LngLatAlt>> coordinates = geometry.getCoordinates();
+		return DoubleStream.concat(
+			DoubleStream.of(Argument.GEOMETRY_MULTILINESTRING, sizeLL(coordinates)),
+			coordinatesLL(coordinates)
+		).toArray();
+	}
+
+	private static double[] coordinates(MultiPolygon geometry) {
+		List<List<List<LngLatAlt>>> coordinates = geometry.getCoordinates();
+		return DoubleStream.concat(
+			DoubleStream.of(Argument.GEOMETRY_POLYGON, sizeLLL(coordinates)),
+			DoubleStream.concat(coordinatesLLL(coordinates), DoubleStream.generate(() -> 0.0).limit(2L * coordinates.size()))
+		).toArray();
+	}
+
+	private static double[] coordinates(Polygon geometry) {
+		List<List<LngLatAlt>> coordinates = geometry.getCoordinates();
+		return DoubleStream.concat(
+			DoubleStream.of(Argument.GEOMETRY_POLYGON, sizeLL(coordinates)),
+			DoubleStream.concat(coordinatesLL(coordinates), DoubleStream.generate(() -> 0.0).limit(2L * coordinates.size()))
 		).toArray();
 	}
 

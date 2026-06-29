@@ -210,30 +210,30 @@ public interface MapUtil {
 		bindings.put("map_level", mapLevel.name());
 
 		bindings.put("raster", MapUtil.mapProductionResource(geodataPath, "raster.png"));
-		bindings.put("cities_p", MapUtil.mapProductionResource(geodataPath, "cities_p.shp"));
-		bindings.put("labels_p", MapUtil.mapProductionResource(geodataPath, "labels_p.shp"));
-		bindings.put("labels_l", MapUtil.mapProductionResource(geodataPath, "labels_l.shp"));
+		bindings.put("cities_p", MapUtil.mapProductionResource(geodataPath, "cities_p.geojson"));
+		bindings.put("labels_p", MapUtil.mapProductionResource(geodataPath, "labels_p.geojson"));
+		bindings.put("labels_l", MapUtil.mapProductionResource(geodataPath, "labels_l.geojson"));
 		switch (mapLevel) {
 			case thumbnail:
-				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout_simplified.shp"));
-				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l_simplified.shp"));
-				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l_simplified.shp"));
-				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a_simplified.shp"));
-				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l_simplified.shp"));
-				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a_simplified.shp"));
-				bindings.put("region_a", MapUtil.mapProductionResource(geodataPath, "region_a_simplified.shp"));
+				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout_simplified.geojson"));
+				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l_simplified.geojson"));
+				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l_simplified.geojson"));
+				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a_simplified.geojson"));
+				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l_simplified.geojson"));
+				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a_simplified.geojson"));
+				bindings.put("region_a", MapUtil.mapProductionResource(geodataPath, "region_a_simplified.geojson"));
 				break;
 			case overlay:
 			case standard:
 			default:
-				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout.shp"));
-				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l.shp"));
-				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l.shp"));
-				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a.shp"));
-				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l.shp"));
-				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a.shp"));
-				bindings.put("regionShapeFile", MapUtil.mapProductionResource(geodataPath, "region.shp"));
-				bindings.put("region_a", MapUtil.mapProductionResource(geodataPath, "region_a.shp"));
+				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout.geojson"));
+				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l.geojson"));
+				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l.geojson"));
+				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a.geojson"));
+				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l.geojson"));
+				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a.geojson"));
+				bindings.put("regionShapeFile", MapUtil.mapProductionResource(geodataPath, "region.geojson"));
+				bindings.put("region_a", MapUtil.mapProductionResource(geodataPath, "region_a.geojson"));
 				break;
 		}
 
