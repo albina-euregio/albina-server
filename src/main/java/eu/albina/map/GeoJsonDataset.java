@@ -1,6 +1,7 @@
 package eu.albina.map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Streams;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -92,21 +94,20 @@ public class GeoJsonDataset implements GeographicDataset {
 	 * @see org.mapyrus.Argument#createOGCWKT
 	 */
 	private static double[] coordinates(Polygon geometry) {
-		List<LngLatAlt> lngLatAlts = geometry.getCoordinates().getFirst();
 		return DoubleStream.concat(DoubleStream.concat(
 				DoubleStream.of(
 					Argument.GEOMETRY_POLYGON,
-					lngLatAlts.size()
+					geometry.getCoordinates().stream().mapToInt(Collection::size).sum()
 				),
-				Streams.mapWithIndex(
+				geometry.getCoordinates().stream().flatMapToDouble(lngLatAlts -> Streams.mapWithIndex(
 					lngLatAlts.stream(),
 					(c, index) -> DoubleStream.of(
 						index == 0 ? Argument.MOVETO : Argument.LINETO,
 						c.getLongitude(),
 						c.getLatitude()
 					)
-				).flatMapToDouble(x -> x)
-			), DoubleStream.of(0, 0, 0)
+				).flatMapToDouble(x -> x))
+			), DoubleStream.of(0, 0, 0, 0)
 		).toArray();
 	}
 
