@@ -1,17 +1,15 @@
 package eu.albina.map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Streams;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
-import org.geojson.Geometry;
 import org.geojson.LngLatAlt;
 import org.geojson.Polygon;
 import org.mapyrus.Argument;
 import org.mapyrus.MapyrusException;
 import org.mapyrus.Row;
 import org.mapyrus.dataset.GeographicDataset;
+import tools.jackson.databind.ObjectMapper;
 
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
@@ -94,21 +92,23 @@ public class GeoJsonDataset implements GeographicDataset {
 	 * @see org.mapyrus.Argument#createOGCWKT
 	 */
 	private static double[] coordinates(Polygon geometry) {
-		return DoubleStream.concat(DoubleStream.concat(
-				DoubleStream.of(
-					Argument.GEOMETRY_POLYGON,
-					geometry.getCoordinates().stream().mapToInt(Collection::size).sum()
-				),
-				geometry.getCoordinates().stream().flatMapToDouble(lngLatAlts -> Streams.mapWithIndex(
-					lngLatAlts.stream(),
-					(c, index) -> DoubleStream.of(
-						index == 0 ? Argument.MOVETO : Argument.LINETO,
-						c.getLongitude(),
-						c.getLatitude()
-					)
-				).flatMapToDouble(x -> x))
-			), DoubleStream.of(0, 0, 0, 0)
-		).toArray();
+		return Stream.of(
+			DoubleStream.of(Argument.GEOMETRY_POLYGON),
+			DoubleStream.of(geometry.getCoordinates().stream().mapToInt(Collection::size).sum()),
+			geometry.getCoordinates().stream().flatMapToDouble(GeoJsonDataset::coordinates),
+			DoubleStream.of(0, 0, 0, 0)
+		).reduce(DoubleStream.of(), DoubleStream::concat).toArray();
+	}
+
+	private static DoubleStream coordinates(List<LngLatAlt> lngLatAlts) {
+		return Streams.mapWithIndex(
+			lngLatAlts.stream(),
+			(c, index) -> DoubleStream.of(
+				index == 0 ? Argument.MOVETO : Argument.LINETO,
+				c.getLongitude(),
+				c.getLatitude()
+			)
+		).flatMapToDouble(x -> x);
 	}
 
 	@Override
