@@ -29,7 +29,9 @@ import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Resources;
 import org.mapyrus.Argument;
+import org.mapyrus.MapyrusException;
 import org.mapyrus.Row;
+import org.mapyrus.dataset.GeographicDataset;
 import org.mapyrus.dataset.ShapefileDataset;
 
 import eu.albina.ImageTestUtils;
@@ -331,11 +333,26 @@ public class MapUtilTest {
 	@Test
 	void testShapefileDataset() throws Exception {
 		URL resource = Resources.getResource("micro_regions_elevation_a_simplified.shp");
-		String filename = Path.of(resource.toURI()).toString();
-		ShapefileDataset ds = new ShapefileDataset(filename, "");
+		Path path = Path.of(resource.toURI());
+		GeographicDataset ds = new ShapefileDataset(path.toString(), "");
+		assertDataset(ds);
+	}
+
+	@Test
+	void testGeoJSONDataset() throws Exception {
+		URL resource = Resources.getResource("micro_regions_elevation_a_simplified.geojson");
+		Path path = Path.of(resource.toURI());
+		GeographicDataset ds = GeoJsonDataset.of(path);
+		assertDataset(ds);
+	}
+
+	private static void assertDataset(GeographicDataset ds) throws MapyrusException {
 		assertArrayEquals(new String[]{"style", "code", "threshold", "elevation", "ALB_ID", "GEOMETRY"},
 			ds.getFieldNames());
-		assertEquals("PROJCS[\"WGS 84 / World Mercator\",", ds.getProjection());
+		assertEquals(ds instanceof GeoJsonDataset
+			? "GEOGCS[\"wgs84\",DATUM[\"WGS_1984\",SPHEROID[\"wgs84\",6378137,298.257223563],TOWGS84[0.000,0.000,0.000]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433]]"
+			: "PROJCS[\"WGS 84 / World Mercator\",",
+			ds.getProjection());
 		Row row = ds.fetch();
 		Argument last = row.getLast();
 		assertArrayEquals(new Object[]{"3502", "AT-07-14-01", "3200", "low", "AT-07-14-01-l"},
