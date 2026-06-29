@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -112,7 +112,7 @@ public class GeoJsonDataset implements GeographicDataset {
 		List<LngLatAlt> coordinates = geometry.getCoordinates();
 		return DoubleStream.concat(
 			DoubleStream.of(Argument.GEOMETRY_MULTIPOINT, sizeL(coordinates)),
-			coordinatesL(coordinates)
+			coordinates.stream().flatMapToDouble(c -> Arrays.stream(coordinates(new Point(c))))
 		).toArray();
 	}
 
