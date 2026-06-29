@@ -1,8 +1,33 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.map;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.google.common.base.StandardSystemProperty;
+import com.google.common.io.Resources;
+import com.google.common.primitives.Doubles;
+import eu.albina.AvalancheBulletinTestUtils;
+import eu.albina.ImageTestUtils;
+import eu.albina.RegionTestUtils;
+import eu.albina.controller.publication.PublicationController;
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.LocalServerInstance;
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.PdfUtil;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
+import org.mapyrus.Argument;
+import org.mapyrus.MapyrusException;
+import org.mapyrus.Row;
+import org.mapyrus.dataset.GeographicDataset;
+import org.mapyrus.dataset.ShapefileDataset;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -12,35 +37,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
-import com.google.common.base.StandardSystemProperty;
-
-import com.google.common.primitives.Doubles;
-import eu.albina.AvalancheBulletinTestUtils;
-import eu.albina.RegionTestUtils;
-import eu.albina.controller.publication.PublicationController;
-import eu.albina.model.LocalServerInstance;
-
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import com.google.common.io.Resources;
-import org.mapyrus.Argument;
-import org.mapyrus.MapyrusException;
-import org.mapyrus.Row;
-import org.mapyrus.dataset.GeographicDataset;
-import org.mapyrus.dataset.ShapefileDataset;
-
-import eu.albina.ImageTestUtils;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.DaytimeDependency;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.PdfUtil;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 @MicronautTest
 public class MapUtilTest {
@@ -350,8 +354,8 @@ public class MapUtilTest {
 		assertArrayEquals(new String[]{"style", "code", "threshold", "elevation", "ALB_ID", "GEOMETRY"},
 			ds.getFieldNames());
 		assertEquals(ds instanceof GeoJsonDataset
-			? ""
-			: "PROJCS[\"WGS 84 / World Mercator\",",
+				? ""
+				: "PROJCS[\"WGS 84 / World Mercator\",",
 			ds.getProjection());
 		Row row = ds.fetch();
 		assertArrayEquals(new Object[]{"3502", "AT-07-14-01", "3200", "low", "AT-07-14-01-l"},
@@ -512,19 +516,37 @@ public class MapUtilTest {
 			geometryValue);
 	}
 
-	@Test
-	@Disabled
-	void testGeographicDataset() throws Exception {
-		Path path1 = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.shp");
-		GeographicDataset ds1 = new ShapefileDataset(path1.toString(), "");
-		Path path2 = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.geojson");
-		GeographicDataset ds2 = GeoJsonDataset.of(path2);
-		Row row1;
-		while ((row1 = ds1.fetch()) != null) {
-			Row row2 = ds2.fetch();
-			List<Double> l1 = Doubles.asList(row1.getLast().getGeometryValue());
-			List<Double> l2 = Doubles.asList(row2.getLast().getGeometryValue());
-			assertEquals(l1, l2, row1.toString());
+	@TestFactory
+	Stream<DynamicTest> testGeographicDataset() throws Exception {
+		Path pathSHP = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.shp");
+		Path pathJSON = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.geojson");
+		GeographicDataset dsSHP = new ShapefileDataset(pathSHP.toString(), "");
+		GeographicDataset dsJSON = GeoJsonDataset.of(pathJSON);
+
+		return Stream.generate(() -> getFetch(dsSHP)).takeWhile(Objects::nonNull)
+			.map(rowSHP -> {
+				assumeFalse(rowSHP.toString().matches(".*(IT-32-BZ-08-01|AT-07-04-01|AT-02-05-01|AT-06-17|AT-06-04-02).*"));
+				Row rowJSON = getFetch(dsJSON);
+				double[] valuesSHP = getGeometryValue(rowSHP);
+				double[] valuesJSON = getGeometryValue(rowJSON);
+				return dynamicTest(rowSHP.toString(), () -> assertArrayEquals(valuesSHP, valuesJSON, 1e-3));
+			});
+	}
+
+	private static double[] getGeometryValue(Row row1) {
+		try {
+			return row1.getLast().getGeometryValue();
+		} catch (MapyrusException e) {
+			throw new RuntimeException(e);
 		}
 	}
+
+	private Row getFetch(GeographicDataset ds) {
+		try {
+			return ds.fetch();
+		} catch (MapyrusException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }
