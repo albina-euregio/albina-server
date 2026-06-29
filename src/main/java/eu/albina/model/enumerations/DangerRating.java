@@ -25,19 +25,6 @@ public enum DangerRating {
 		};
 	}
 
-	public static String getCAAMLv5String(DangerRating dangerRating) {
-		return switch (dangerRating) {
-			case missing -> "n/a";
-			case no_rating -> "n/a";
-			case no_snow -> "n/a";
-			case low -> "1";
-			case moderate -> "2";
-			case considerable -> "3";
-			case high -> "4";
-			case very_high -> "5";
-		};
-	}
-
 	public static String getString(DangerRating dangerRating) {
 		return switch (dangerRating) {
 			case missing -> "0";

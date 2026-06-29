@@ -68,9 +68,6 @@ public class PublicationController {
 
 	public void createRegionResources(Region region, AvalancheReport avalancheReport) {
 		// create CAAML
-		if (region.isCreateCaamlV5()) {
-			createCaamlV5(avalancheReport);
-		}
 		if (region.isCreateCaamlV6()) {
 			createCaamlV6(avalancheReport);
 		}
@@ -118,21 +115,6 @@ public class PublicationController {
 			logger.info("JSON production for {} finished", avalancheReport);
 		} catch (IOException e) {
 			logger.error("Error producing JSON for " + avalancheReport, e);
-		}
-	}
-
-	/**
-	 * Trigger the creation of the CAAMLv5 (XML) files.
-	 */
-	public void createCaamlV5(AvalancheReport avalancheReport) {
-		try {
-			logger.info("CAAMLv5 production for {} started", avalancheReport);
-			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V5);
-			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
-				AvalancheReport::setCaamlV5Created);
-			logger.info("CAAMLv5 production for {} finished", avalancheReport);
-		} catch (IOException e) {
-			logger.error("Error producing CAAMLv5 for " + avalancheReport, e);
 		}
 	}
 

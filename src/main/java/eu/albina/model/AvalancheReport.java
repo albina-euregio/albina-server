@@ -69,9 +69,6 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 	@Column(name = "STATUS", nullable = false, columnDefinition = BulletinStatus.COLUMN_DEFINITION)
 	private BulletinStatus status;
 
-	@Column(name = "CAAML_V5_CREATED")
-	private boolean caamlV5Created;
-
 	@Column(name = "CAAML_V6_CREATED")
 	private boolean caamlV6Created;
 
@@ -206,14 +203,6 @@ public class AvalancheReport extends AbstractPersistentObject implements HasVali
 
 	public void setStatus(BulletinStatus status) {
 		this.status = status;
-	}
-
-	public boolean isCaamlV5Created() {
-		return caamlV5Created;
-	}
-
-	public void setCaamlV5Created(boolean caaml) {
-		this.caamlV5Created = caaml;
 	}
 
 	public boolean isCaamlV6Created() {

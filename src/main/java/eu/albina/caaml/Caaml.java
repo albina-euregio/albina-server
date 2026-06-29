@@ -37,9 +37,7 @@ public class Caaml {
 	}
 
 	public String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
-		if (version == CaamlVersion.V5) {
-			return Caaml5.createCaamlv5(avalancheReport, lang);
-		} else if (version == CaamlVersion.V6_JSON) {
+		if (version == CaamlVersion.V6_JSON) {
 			return caaml6.createJSON(avalancheReport, lang);
 		} else {
 			return Caaml6.createXML(avalancheReport, lang);

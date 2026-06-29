@@ -75,21 +75,6 @@ public class CaamlTest {
 		return caaml.createCaaml(avalancheReport, LanguageCode.en, version);
 	}
 
-	@Disabled("<Operation> needs gml:id")
-	@Test
-	public void createValidCaamlv5() throws Exception {
-		final String xml = createCaaml(CaamlVersion.V5);
-		CaamlValidator.validateCaamlBulletin(xml, CaamlVersion.V5);
-	}
-
-	@Test
-	public void createExpectedCaamlv5() throws Exception {
-		final String expected = Resources
-				.toString(Resources.getResource("2019-01-16.caaml.v5.xml"), StandardCharsets.UTF_8).replace("\t", "  ");
-		final String xml = createCaaml(CaamlVersion.V5);
-		Assertions.assertEquals(expected, xml);
-	}
-
 	@Disabled
 	@Test
 	public void createOldCaamlFiles() throws Exception {
