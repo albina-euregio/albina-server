@@ -1,5 +1,6 @@
 package eu.albina.map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Streams;
 import org.geojson.Feature;
 import org.geojson.FeatureCollection;
@@ -11,6 +12,10 @@ import org.mapyrus.Row;
 import org.mapyrus.dataset.GeographicDataset;
 
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +34,13 @@ public class GeoJsonDataset implements GeographicDataset {
 			featureCollection.getFeatures().get(0).getProperties().keySet().stream(),
 			Stream.of(GEOMETRY)
 		).toArray(String[]::new);
+	}
+
+	public static GeoJsonDataset of(Path path) throws IOException {
+		try (InputStream src = Files.newInputStream(path)) {
+			FeatureCollection featureCollection = new ObjectMapper().readValue(src, FeatureCollection.class);
+			return new GeoJsonDataset(featureCollection);
+		}
 	}
 
 	@Override
@@ -75,10 +87,12 @@ public class GeoJsonDataset implements GeographicDataset {
 		return row;
 	}
 
+	/**
+	 * @see org.mapyrus.Argument#createOGCWKT
+	 */
 	private static double[] coordinates(Geometry<List<LngLatAlt>> geometry) {
-		List<LngLatAlt> lngLatAlts = geometry.getCoordinates().get(0);
+		List<LngLatAlt> lngLatAlts = geometry.getCoordinates().getFirst();
 		return DoubleStream.concat(
-			// see org.mapyrus.Argument.createOGCWKT
 			DoubleStream.of(
 				Argument.GEOMETRY_POLYGON,
 				lngLatAlts.size()

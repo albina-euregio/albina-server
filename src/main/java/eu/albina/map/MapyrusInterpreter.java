@@ -1,7 +1,5 @@
 package eu.albina.map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.geojson.FeatureCollection;
 import org.mapyrus.Context;
 import org.mapyrus.ContextStack;
 import org.mapyrus.FileOrURL;
@@ -14,7 +12,6 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -30,23 +27,14 @@ class MapyrusInterpreter {
 			}
 		}
 
-		private FeatureCollection getFeatureCollection(Path path) throws MapyrusException {
-			try (InputStream src = Files.newInputStream(path)) {
-				return new ObjectMapper().readValue(src, FeatureCollection.class);
-			} catch (IOException e) {
-				throw new MapyrusException("Failed to read " + path + ": " + e);
-			}
-		}
-
 		private void setGeoJsonDataset(Path path) throws MapyrusException {
-			final FeatureCollection featureCollection = getFeatureCollection(path);
 			try {
-				final GeoJsonDataset dataset = new GeoJsonDataset(featureCollection);
+				final GeoJsonDataset dataset = GeoJsonDataset.of(path);
 				final Method getCurrentContext = ContextStack.class.getDeclaredMethod("getCurrentContext");
 				getCurrentContext.setAccessible(true);
 				final Context context = (Context) getCurrentContext.invoke(this);
 				context.setDataset(dataset);
-			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | IOException e) {
 				throw new MapyrusException("Failed to set dataset: " + e);
 			}
 		}
