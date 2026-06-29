@@ -16,6 +16,7 @@ import java.util.Map;
 
 import com.google.common.base.StandardSystemProperty;
 
+import com.google.common.primitives.Doubles;
 import eu.albina.AvalancheBulletinTestUtils;
 import eu.albina.RegionTestUtils;
 import eu.albina.controller.publication.PublicationController;
@@ -354,10 +355,10 @@ public class MapUtilTest {
 			: "PROJCS[\"WGS 84 / World Mercator\",",
 			ds.getProjection());
 		Row row = ds.fetch();
-		Argument last = row.getLast();
 		assertArrayEquals(new Object[]{"3502", "AT-07-14-01", "3200", "low", "AT-07-14-01-l"},
 			row.subList(0, 5).stream().map(Argument::toString).toArray());
-		assertArrayEquals(new double[]{
+		List<Double> geometryValue = Doubles.asList(row.getLast().getGeometryValue());
+		assertEquals(Doubles.asList(
 				102.0,
 				48.0,
 				0.0,
@@ -507,8 +508,8 @@ public class MapUtilTest {
 				0.0,
 				0.0,
 				0.0,
-				0.0,
-			},
-			last.getGeometryValue());
+				0.0
+			),
+			geometryValue);
 	}
 }
