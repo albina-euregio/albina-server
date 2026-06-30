@@ -83,6 +83,14 @@
 			<version>4.1.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<!-- JSON backend for json-unit: it does not support Jackson 3 (tools.jackson),
+			     so provide Gson instead of pulling in Jackson 2 (com.fasterxml) -->
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.11.0</version>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -151,18 +159,8 @@
 		<dependency>
 			<groupId>com.networknt</groupId>
 			<artifactId>json-schema-validator</artifactId>
-			<version>1.5.8</version>
+			<version>3.0.5</version>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.dataformat</groupId>
-					<artifactId>jackson-dataformat-yaml</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.ethlo.time</groupId>
-					<artifactId>itu</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
