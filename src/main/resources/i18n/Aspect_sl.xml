@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="N">Sever</entry>
+  <entry key="NE">Severovzhod</entry>
+  <entry key="E">Vzhod</entry>
+  <entry key="SE">Jugovzhod</entry>
+  <entry key="S">Jug</entry>
+  <entry key="SW">Jugozahod</entry>
+  <entry key="W">Zahod</entry>
+  <entry key="NW">Severozahod</entry>
+</properties>

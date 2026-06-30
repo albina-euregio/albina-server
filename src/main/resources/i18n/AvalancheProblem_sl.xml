@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="new_snow">Nov sneg</entry>
+  <entry key="wind_slab">Napihan sneg</entry>
+  <entry key="persistent_weak_layers">Šibke plasti v starem snegu</entry>
+  <entry key="wet_snow">Moker sneg</entry>
+  <entry key="gliding_snow">Drseč sneg</entry>
+  <entry key="favourable_situation">Ugodne razmere</entry>
+  <entry key="cornices">Opasti</entry>
+  <entry key="no_distinct_avalanche_problem">Ni določljivega plazovnega problema</entry>
+  <entry key="new_snow.speech">grožnja zaradi novega snega</entry>
+  <entry key="wind_slab.speech">grožnja zaradi napihanega snega</entry>
+  <entry key="persistent_weak_layers.speech">grožnja zaradi trdožive šibke plasti</entry>
+  <entry key="wet_snow.speech">grožnja zaradi mokrega snega</entry>
+  <entry key="gliding_snow.speech">grožnja zaradi drsečega snega</entry>
+  <entry key="favourable_situation.speech">ugodne razmere</entry>
+  <entry key="cornices.speech">možnost podiranja opasti</entry>
+  <entry key="no_distinct_avalanche_problem.speech">Ni določljivega plazovnega problema</entry>
+</properties>

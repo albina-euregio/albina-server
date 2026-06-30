@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="missing">brez</entry>
+  <entry key="missing.long">Brez</entry>
+  <entry key="no_snow">ni snežne odeje</entry>
+  <entry key="no_snow.long">Ni snežne odeje</entry>
+  <entry key="no_rating">brez stopnje nevarnosti</entry>
+  <entry key="no_rating.long">Brez stopnje nevarnosti</entry>
+  <entry key="low">majhna</entry>
+  <entry key="low.long">Majhna, 1. stopnja</entry>
+  <entry key="low.speech">majhna nevarnost snežnih plazov, zato 1. stopnja</entry>
+  <entry key="moderate">zmerna</entry>
+  <entry key="moderate.long">Zmerna, 2. stopnja</entry>
+  <entry key="moderate.speech">zmerna nevarnost snežnih plazov, zato 2. stopnja</entry>
+  <entry key="considerable">znatna</entry>
+  <entry key="considerable.long">Znatna, 3. stopnja</entry>
+  <entry key="considerable.speech">znatna nevarnost snežnih plazov, zato 3. stopnja</entry>
+  <entry key="high">velika</entry>
+  <entry key="high.long">Velika, 4. stopnja</entry>
+  <entry key="high.speech">velika nevarnost snežnih plazov, zato 4. stopnja</entry>
+  <entry key="very_high">zelo velika</entry>
+  <entry key="very_high.long">Zelo velika, 5. stopnja</entry>
+  <entry key="very_high.speech">zelo velika nevarnost snežnih plazov, zato 5. stopnja</entry>
+</properties>

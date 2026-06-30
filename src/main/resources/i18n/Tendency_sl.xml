@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="decreasing">Obeti: Zmanjšana plazovne nevarnosti</entry>
+  <entry key="steady">Obeti: Nespremenjena plazovna nevarnost</entry>
+  <entry key="increasing">Obeti: Povečana plazovna nevarnost</entry>
+</properties>

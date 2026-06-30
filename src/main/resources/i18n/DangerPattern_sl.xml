@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <entry key="dp1">dp.1: globoka trdoživa šibka plast</entry>
+  <entry key="dp2">dp.2: drseč sneg</entry>
+  <entry key="dp3">dp.3: dež</entry>
+  <entry key="dp4">dp.4: ohladitev po toploti / otoplitev po mrazu</entry>
+  <entry key="dp5">dp.5: sneženje po dolgem hladnem obdobju</entry>
+  <entry key="dp6">dp.6: mrzel nesprijet sneg z vetrom</entry>
+  <entry key="dp7">dp.7: območja s tanjšo snežno odejo, obkrožena z debelejšo snežno odejo</entry>
+  <entry key="dp8">dp.8: zasnežen površinski srež</entry>
+  <entry key="dp9">dp.9: zasnežena plast babjega pšena</entry>
+  <entry key="dp10">dp.10: spomladanske razmere</entry>
+</properties>
