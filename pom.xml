@@ -22,6 +22,7 @@
 		<jersey.version>2.40</jersey.version>
 		<slf4j.version>2.0.17</slf4j.version>
 		<hibernate.version>6.6.53.Final</hibernate.version>
+		<jackson.version>3.1.4</jackson.version>
 		<liquibase.version>4.30.0</liquibase.version>
 		<itextpdf.version>9.3.0</itextpdf.version>
 		<micronaut.version>5.0.2</micronaut.version>
