@@ -23,6 +23,7 @@
 		<slf4j.version>2.0.17</slf4j.version>
 		<hibernate.version>6.6.53.Final</hibernate.version>
 		<jackson.version>3.2.0</jackson.version>
+		<jackson.annotations.version>2.22</jackson.annotations.version>
 		<liquibase.version>4.30.0</liquibase.version>
 		<itextpdf.version>9.3.0</itextpdf.version>
 		<micronaut.version>5.0.2</micronaut.version>
@@ -48,6 +49,15 @@
 				<version>${hibernate.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<!-- Jackson 3 (tools.jackson) databind still depends on the com.fasterxml
+			     jackson-annotations 2.x line; databind 3.2.0 requires 2.22 (adds
+			     JsonApplyView). The Micronaut BOM otherwise pins an older annotations
+			     version, causing a ClassNotFoundException at (annotation) processing time. -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.annotations.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -293,6 +303,14 @@
 					<!-- Uncomment to enable incremental compilation -->
 					<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
 					<annotationProcessorPaths combine.self="override">
+						<!-- annotationProcessorPaths do not inherit dependencyManagement,
+						     so pin jackson-annotations 2.22 explicitly to match the
+						     tools.jackson databind 3.2.0 pulled in by micronaut-openapi. -->
+						<path>
+							<groupId>com.fasterxml.jackson.core</groupId>
+							<artifactId>jackson-annotations</artifactId>
+							<version>${jackson.annotations.version}</version>
+						</path>
 						<path>
 							<groupId>io.micronaut</groupId>
 							<artifactId>micronaut-inject-java</artifactId>
