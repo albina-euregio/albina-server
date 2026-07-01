@@ -172,6 +172,12 @@
 			<artifactId>json-schema-validator</artifactId>
 			<version>3.0.5</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>tools.jackson.dataformat</groupId>
+					<artifactId>jackson-dataformat-yaml</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
