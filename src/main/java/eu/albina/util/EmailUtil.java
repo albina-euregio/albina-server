@@ -82,7 +82,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
 		pw.format("<title>%s</title>", lang.getBundleString("headline"));
 		pw.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheets/avalanche-report.css\" >");
-		pw.format("<style>%s</style>", css().replace("var(--albina-color)", "#" + color));
+		pw.format("<style>%s</style>", css("templates/EmailUtil.css").replace("var(--albina-color)", "#" + color));
 		pw.print("</head>");
 		pw.print("<body bgcolor=\"#FFFFFF\" topmargin=\"0\" leftmargin=\"0\" marginheight=\"0\" marginwidth=\"0\">");
 
@@ -288,9 +288,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		return out.toString();
 	}
 
-	private static String css() {
+	static String css(String resourceName) {
 		try {
-			URL resource = Resources.getResource("templates/EmailUtil.css");
+			URL resource = Resources.getResource(resourceName);
 			return Resources.readLines(resource, StandardCharsets.UTF_8).stream()
 				.map(String::trim)
 				.filter(l -> !l.isEmpty())
