@@ -23,14 +23,17 @@ import java.util.Objects;
 public class AvalancheBulletinText {
 	@Id
 	@ManyToOne
+	@JoinColumn(name = "AVALANCHE_BULLETIN_ID")
 	private AvalancheBulletin avalancheBulletin;
 
 	@Id
 	@Enumerated(EnumType.STRING)
+	@Column(name = "TEXT_TYPE")
 	private TextPart textType;
 
 	@Id
 	@Enumerated(EnumType.STRING)
+	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode languageCode;
 
 	@Column(name = "TEXT")
@@ -79,16 +82,10 @@ public class AvalancheBulletinText {
 	}
 
 	public static class AvalancheBulletinTextId implements Serializable {
-		@ManyToOne
-		@JoinColumn(name = "AVALANCHE_BULLETIN_ID")
 		private AvalancheBulletin avalancheBulletin;
 
-		@Enumerated(EnumType.STRING)
-		@Column(name = "TEXT_TYPE")
 		private TextPart textType;
 
-		@Enumerated(EnumType.STRING)
-		@Column(name = "LANGUAGE_CODE", length = 191)
 		private LanguageCode languageCode;
 
 		public AvalancheBulletin getAvalancheBulletin() {
