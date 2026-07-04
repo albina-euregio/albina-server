@@ -284,41 +284,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, String color) {
 		Region region = avalancheReport.getRegion();
-		String mapsUrl = avalancheReport.getMapsUrl();
 		DangerRating highestDangerRating = bulletin.getHighestDangerRating();
-		boolean bulletinDaytime = bulletin.isHasDaytimeDependency();
-
-		String textam = bulletinDaytime ? lang.getBundleString("valid-time-period.earlier") : "";
-		String textpm = bulletinDaytime ? lang.getBundleString("valid-time-period.later") : "";
-		String stylepm = getPMStyle(bulletinDaytime);
-		String stylepmtable = getPMStyleTable(bulletinDaytime);
-
-		AvalancheBulletinDaytimeDescription forenoon = bulletin.getForenoon();
-		// when there is no daytime dependency, the afternoon block reuses the forenoon description and its map
-		AvalancheBulletinDaytimeDescription afternoon = bulletinDaytime ? bulletin.getAfternoon() : bulletin.getForenoon();
-		String mapAm = mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.am, false, MapImageFormat.jpg);
-		String mapPm = bulletinDaytime
-			? mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.pm, false, MapImageFormat.jpg)
-			: mapsUrl + "/" + MapUtil.filename(region, bulletin, DaytimeDependency.am, false, MapImageFormat.jpg);
-
-		// tendency
-		String tendencyText = bulletin.getTendency() == null ? "" : bulletin.getTendency().toString(lang.getLocale());
-		String tendencySymbol;
-		String tendencyDate;
-		String serverImagesUrl = region.getServerImagesUrl();
-		if (bulletin.getTendency() == Tendency.decreasing) {
-			tendencySymbol = serverImagesUrl + "tendency/tendency_decreasing_blue.png";
-			tendencyDate = avalancheReport.getTendencyDate(lang);
-		} else if (bulletin.getTendency() == Tendency.steady) {
-			tendencySymbol = serverImagesUrl + "tendency/tendency_steady_blue.png";
-			tendencyDate = avalancheReport.getTendencyDate(lang);
-		} else if (bulletin.getTendency() == Tendency.increasing) {
-			tendencySymbol = serverImagesUrl + "tendency/tendency_increasing_blue.png";
-			tendencyDate = avalancheReport.getTendencyDate(lang);
-		} else {
-			tendencySymbol = serverImagesUrl + "tendency/empty.png";
-			tendencyDate = "";
-		}
 
 		pw.print("<table class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
@@ -338,12 +304,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// forenoon / all-day
-		daytime(pw, false, stylepmtable, textam, mapAm, forenoon, tendencyText, tendencyDate, tendencySymbol);
+		daytime(pw, false, bulletin);
 
 		// afternoon
-		pw.format("<div %s>", stylepm);
-		daytime(pw, true, stylepmtable, textpm, mapPm, afternoon, tendencyText, tendencyDate, tendencySymbol);
-		pw.print("</div>");
+		daytime(pw, true, bulletin);
+
 		pw.print("<table style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		pw.print("<td style=\"vertical-align: top; padding-top: 10px;\">");
@@ -410,9 +375,43 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 	}
 
-	private void daytime(PrintWriter pw, boolean pm, String stylepmtable, String text, String map,
-						 AvalancheBulletinDaytimeDescription description, String tendencyText, String tendencyDate, String tendencySymbol) {
+	private void daytime(PrintWriter pw, boolean pm, AvalancheBulletin bulletin) {
+		Region region = avalancheReport.getRegion();
+		String serverImagesUrl = region.getServerImagesUrl();
+		String mapsUrl = avalancheReport.getMapsUrl();
+		boolean bulletinDaytime = bulletin.isHasDaytimeDependency();
+
+		String text = bulletinDaytime
+			? lang.getBundleString(pm ? "valid-time-period.later" : "valid-time-period.earlier")
+			: "";
+		// when there is no daytime dependency, the afternoon block reuses the forenoon description and its map
+		AvalancheBulletinDaytimeDescription description = pm && bulletinDaytime ? bulletin.getAfternoon() : bulletin.getForenoon();
+		DaytimeDependency daytimeDependency = pm && bulletinDaytime ? DaytimeDependency.pm : DaytimeDependency.am;
+		String map = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
+
+		// tendency
+		String tendencyText = bulletin.getTendency() == null ? "" : bulletin.getTendency().toString(lang.getLocale());
+		String tendencySymbol;
+		String tendencyDate;
+		if (bulletin.getTendency() == Tendency.decreasing) {
+			tendencySymbol = serverImagesUrl + "tendency/tendency_decreasing_blue.png";
+			tendencyDate = avalancheReport.getTendencyDate(lang);
+		} else if (bulletin.getTendency() == Tendency.steady) {
+			tendencySymbol = serverImagesUrl + "tendency/tendency_steady_blue.png";
+			tendencyDate = avalancheReport.getTendencyDate(lang);
+		} else if (bulletin.getTendency() == Tendency.increasing) {
+			tendencySymbol = serverImagesUrl + "tendency/tendency_increasing_blue.png";
+			tendencyDate = avalancheReport.getTendencyDate(lang);
+		} else {
+			tendencySymbol = serverImagesUrl + "tendency/empty.png";
+			tendencyDate = "";
+		}
+
+		String stylepmtable = getPMStyleTable(bulletinDaytime);
 		String styleAttr = pm ? " " + stylepmtable : "";
+		if (pm) {
+			pw.format("<div %s>", getPMStyle(bulletinDaytime));
+		}
 		pw.format("<table style=\"%s\"%s>", pm ? "padding-left: 15px;" : "margin-top: 10px; padding-left: 15px;", styleAttr);
 		pw.print("<tr>");
 		pw.print("<td class=\"daytime-text-div\">");
@@ -478,6 +477,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
+		if (pm) {
+			pw.print("</div>");
+		}
 	}
 
 	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem, boolean first, String tableExtraAttr) {
