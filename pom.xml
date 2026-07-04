@@ -109,13 +109,6 @@
 			<version>33.6.0-jre</version>
 		</dependency>
 
-		<!-- email -->
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<version>2.3.31</version>
-		</dependency>
-
 		<!-- pdf -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.function.Supplier;
 
@@ -14,7 +13,6 @@ import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.EmailUtil;
-import freemarker.template.TemplateException;
 
 record AvalancheReportMultichannelMessage(
 	AvalancheReport avalancheReport,
@@ -22,13 +20,8 @@ record AvalancheReportMultichannelMessage(
 	Supplier<String> htmlMessage) implements MultichannelMessage {
 
 	AvalancheReportMultichannelMessage(AvalancheReport avalancheReport, LanguageCode lang) {
-		this(avalancheReport, lang, Suppliers.memoize(() -> {
-			try {
-				return EmailUtil.createBulletinEmailHtml(avalancheReport, lang);
-			} catch (IOException | TemplateException e) {
-				throw new RuntimeException("Failed to create bulletin email", e);
-			}
-		}));
+		this(avalancheReport, lang,
+			Suppliers.memoize(() -> EmailUtil.createBulletinEmailHtml(avalancheReport, lang)));
 	}
 
 	@Override

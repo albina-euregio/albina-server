@@ -2,18 +2,21 @@
 package eu.albina.util;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.UncheckedIOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.google.common.io.Resources;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
+import eu.albina.model.AvalancheProblem;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
@@ -23,21 +26,11 @@ import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.Tendency;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
 
-public interface EmailUtil {
+public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
-	private static Template getTemplate() throws IOException {
-		Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
-		cfg.setClassForTemplateLoading(EmailUtil.class, "/templates");
-		cfg.setDefaultEncoding("UTF-8");
-		cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-		cfg.setLogTemplateExceptions(false);
-		cfg.setWrapUncheckedExceptions(true);
-		return cfg.getTemplate("albina-email.html");
+	public static String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) {
+		return new EmailUtil(avalancheReport, lang).createBulletinEmailHtml();
 	}
 
 	static String getDangerPatternLink(LanguageCode lang, Region region, DangerPattern dangerPattern) {
@@ -46,410 +39,603 @@ public interface EmailUtil {
 	}
 
 	static String getAvalancheProblemLink(LanguageCode lang, Region region,
-										  eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
+	                                      eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
 		return String.format("%s/education/avalanche-problems#%s",
 			region.getWebsiteUrl(lang), avalancheProblem.toStringId());
 	}
 
-	static String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) throws IOException, TemplateException {
-		// Create data model
-		Map<String, Object> root = new HashMap<>();
-		Map<String, Object> image = new HashMap<>();
+	String createBulletinEmailHtml() {
+		Region region = avalancheReport.getRegion();
+		String serverImagesUrl = region.getServerImagesUrl();
+		String color = region.getEmailColor();
+		String ci = serverImagesUrl + region.getImageColorbarColorPath();
+		String website = region.getWebsiteUrlWithDate(lang, avalancheReport);
+		String mapsUrl = avalancheReport.getMapsUrl();
+		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
+		boolean daytime = avalancheReport.hasDaytimeDependency();
 
-		final String serverImagesUrl = avalancheReport.getRegion().getServerImagesUrl();
-		final Region region = avalancheReport.getRegion();
-		final List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
+		String publicationDate = avalancheReport.getPublicationDate(lang);
+		String publishedAt = publicationDate.isEmpty() ? "" : lang.getBundleString("published");
+		String headline = avalancheReport.getStatus() == BulletinStatus.republished
+			? lang.getBundleString("headline.update")
+			: lang.getBundleString("headline");
+		String textAm = daytime ? lang.getBundleString("valid-time-period.earlier") : "";
+		String textPm = daytime ? lang.getBundleString("valid-time-period.later") : "";
+		String overview = daytime
+			? mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false)
+			: mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false);
+		String overviewPM = daytime
+			? mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false)
+			: serverImagesUrl + "/empty.png";
+		String widthPM = daytime ? "width=\"600\" " : "";
+		String dangerLevel5Style = "background=\"" + serverImagesUrl + "bg_checkered.png"
+			+ "\" height=\"10\" width=\"75\" bgcolor=\"#FF0000\"";
 
-		image.put("logo", serverImagesUrl + region.getLogoPath());
-		image.put("dangerLevel5Style", "background=\"" + serverImagesUrl + "bg_checkered.png"
-			+ "\" height=\"10\" width=\"75\" bgcolor=\"#FF0000\"");
-		image.put("ci", serverImagesUrl + region.getImageColorbarColorPath());
-		image.put("color", region.getEmailColor());
+		StringWriter out = new StringWriter();
+		PrintWriter pw = new PrintWriter(out);
 
-		Map<String, Object> socialMediaImages = new HashMap<>();
-		socialMediaImages.put("facebook", serverImagesUrl + "social_media/facebook.png");
-		socialMediaImages.put("instagram", serverImagesUrl + "social_media/instagram.png");
-		socialMediaImages.put("youtube", serverImagesUrl + "social_media/youtube.png");
-		image.put("socialmedia", socialMediaImages);
-		Map<String, Object> mapImage = new HashMap<>();
+		// head
+		pw.print("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+		pw.print("<html>");
+		pw.print("<head>");
+		pw.print("<meta name=\"viewport\" content=\"width=device-width\"/>");
+		pw.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+		pw.format("<title>%s</title>", lang.getBundleString("headline"));
+		pw.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheets/avalanche-report.css\" >");
+		pw.format("<style>%s</style>", css("templates/EmailUtil.css").replace("var(--albina-color)", "#" + color));
+		pw.print("</head>");
+		pw.print("<body bgcolor=\"#FFFFFF\" topmargin=\"0\" leftmargin=\"0\" marginheight=\"0\" marginwidth=\"0\">");
+
+		// header
+		pw.print("<table class=\"head-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\"/>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.print("<td class=\"header container\" style=\"padding: 15px;\">");
+		pw.print("<div class=\"content\">");
+		pw.print("<table bgcolor=\"\" >");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.format("<p class=\"lead\">%s</p>", headline);
+		pw.format("<h2 style=\"margin-bottom: 5px\">%s</h2>", avalancheReport.getDate(lang));
+		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px\">%s<b>%s</b>", publishedAt, publicationDate);
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("<td align=\"right\">");
+		pw.format("<a class=\"btn\" href=\"%s\">", website);
+		pw.format("<img width=\"110\" src=\"%s\"/>", serverImagesUrl + region.getLogoPath());
+		pw.print("</a>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
 
 		// overview maps
-		if (avalancheReport.hasDaytimeDependency()) {
-			mapImage.put("overview",
-					avalancheReport.getMapsUrl() +"/"
-							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false));
-			mapImage.put("overviewPM",
-					avalancheReport.getMapsUrl() + "/"
-							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false));
-			mapImage.put("widthPM", "width=\"600\"");
-		} else {
-			mapImage.put("overview",
-					avalancheReport.getMapsUrl() + "/"
-							+ MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false));
-			mapImage.put("overviewPM", serverImagesUrl + "/empty.png");
-			mapImage.put("widthPM", "");
+		pw.print("<table align=\"center\" class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print("<tr>");
+		pw.print("<td class=\"container\" bgcolor=\"#FFFFFF\">");
+		pw.print("<div class=\"content\">");
+		pw.print("<table style=\"padding: 15px 0;\">");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.format("<h2 class=\"map-daytime-text\">%s</h2>", textAm);
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<p style=\"margin-bottom: 0px; text-align: center;\">");
+		pw.format("<a href=\"%s\">", website);
+		pw.format("<img width=\"600\" style=\"max-width: 600px;\" src=\"%s\"/>", overview);
+		pw.print("</a>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.format("<h2 class=\"map-daytime-text\" style=\"margin-top: 15px;\">%s</h2>", textPm);
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<p style=\"margin-bottom: 0px; text-align: center;\">");
+		pw.format("<a href=\"%s\">", website);
+		pw.format("<img %sstyle=\"max-width: 600px;\" src=\"%s\"/>", widthPM, overviewPM);
+		pw.print("</a>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+
+		// danger scale
+		pw.print("<table align=\"center\" style=\"width: auto; margin-left: auto; margin-right: auto; text-align: center; border-spacing: 0px;\">");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#CCFF66\">");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#FFFF00\">");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#FF9900\">");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#FF0000\">");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<table %s>", dangerLevel5Style);
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<p class=\"danger-rating-number\">");
+		pw.print("<b>1</b>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<p class=\"danger-rating-number\">");
+		pw.print("<b>2</b>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<p class=\"danger-rating-number\">");
+		pw.print("<b>3</b>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<p class=\"danger-rating-number\">");
+		pw.print("<b>4</b>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<p class=\"danger-rating-number\">");
+		pw.print("<b>5</b>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.format("<p class=\"danger-rating-text\">%s</p>", DangerRating.low.toString(lang.getLocale(), false));
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<p class=\"danger-rating-text\">%s</p>", DangerRating.moderate.toString(lang.getLocale(), false));
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<p class=\"danger-rating-text\">%s</p>", DangerRating.considerable.toString(lang.getLocale(), false));
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<p class=\"danger-rating-text\">%s</p>", DangerRating.high.toString(lang.getLocale(), false));
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<p class=\"danger-rating-text\">%s</p>", DangerRating.very_high.toString(lang.getLocale(), false));
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+
+		// general headline
+		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
+			pw.print("<table bgcolor=\"\" >");
+			pw.print("<tr>");
+			pw.print("<td>");
+			pw.format("<h2 style=\"margin: 24px 0\">%s</h2>", generalHeadline);
+			pw.print("</td>");
+			pw.print("</tr>");
+			pw.print("</table>");
+		});
+
+		for (AvalancheBulletin bulletin : bulletins) {
+			appendBulletin(pw, bulletin, color);
 		}
 
-		image.put("map", mapImage);
-		root.put("image", image);
+		// footer
+		pw.print("<table class=\"footer-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print("<tr>");
+		pw.print("<td class=\"container\">");
+		pw.print("<div class=\"content\">");
+		pw.print("<table>");
+		pw.print("<tr>");
+		pw.print("<td align=\"center\">");
+		pw.print("<p>");
+		pw.format("<a href=\"%s\">%s</a>", region.getImprintLink(lang), lang.getBundleString("email.imprint"));
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.print("<td class=\"container\">");
+		pw.print("<div class=\"content\">");
+		pw.print("<table>");
+		pw.print("<tr>");
+		pw.print("<td align=\"center\">");
+		pw.print("<p>");
+		pw.print("<a href=\"{%link_unsubscribe}\">" + lang.getBundleString("email.unsubscribe") + "</a>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("<img height=\"4px\" style=\"width: 100%;\" src=\"" + ci + "\"/>");
+		pw.print("</body>");
+		pw.print("</html>");
 
-		Map<String, Object> text = new HashMap<>();
-		String publicationDate = avalancheReport.getPublicationDate(lang);
-		text.put("publicationDate", publicationDate);
-		if (publicationDate.isEmpty())
-			text.put("publishedAt", "");
-		else
-			text.put("publishedAt", lang.getBundleString("published"));
-		text.put("date", avalancheReport.getDate(lang));
-		text.put("title", lang.getBundleString("headline"));
-		if (avalancheReport.getStatus() == BulletinStatus.republished)
-			text.put("headline", lang.getBundleString("headline.update"));
-		else
-			text.put("headline", lang.getBundleString("headline"));
-		text.put("follow", lang.getBundleString("email.follow-us"));
-		text.put("unsubscribe", lang.getBundleString("email.unsubscribe"));
-		text.put("imprint", lang.getBundleString("email.imprint"));
-		if (avalancheReport.hasDaytimeDependency()) {
-			text.put("am", lang.getBundleString("valid-time-period.earlier"));
-			text.put("pm", lang.getBundleString("valid-time-period.later"));
-		} else {
-			text.put("am", "");
-			text.put("pm", "");
-		}
-
-		avalancheReport.getGeneralHeadline(lang).ifPresent(t -> text.put("generalHeadline", t));
-
-		Map<String, Object> dangerRatings = new HashMap<>();
-		dangerRatings.put("low", DangerRating.low.toString(lang.getLocale(), false));
-		dangerRatings.put("moderate", DangerRating.moderate.toString(lang.getLocale(), false));
-		dangerRatings.put("considerable", DangerRating.considerable.toString(lang.getLocale(), false));
-		dangerRatings.put("high", DangerRating.high.toString(lang.getLocale(), false));
-		dangerRatings.put("veryHigh", DangerRating.very_high.toString(lang.getLocale(), false));
-		text.put("dangerRating", dangerRatings);
-
-		root.put("text", text);
-
-		ArrayList<Map<String, Object>> arrayList = new ArrayList<>();
-		for (AvalancheBulletin avalancheBulletin : bulletins) {
-			Map<String, Object> bulletin = new HashMap<>();
-
-			bulletin.put("stylepm", getPMStyle(avalancheBulletin.isHasDaytimeDependency()));
-			bulletin.put("stylepmtable", getPMStyleTable(avalancheBulletin.isHasDaytimeDependency()));
-
-			if (avalancheBulletin.isHasDaytimeDependency()) {
-				bulletin.put("textam", lang.getBundleString("valid-time-period.earlier"));
-				bulletin.put("textpm", lang.getBundleString("valid-time-period.later"));
-			} else {
-				bulletin.put("textam", "");
-				bulletin.put("textpm", "");
-			}
-
-			bulletin.put("warningLevelText",
-					avalancheBulletin.getHighestDangerRating().toString(lang.getLocale(), true));
-
-			bulletin.put("avAvalancheHighlights", avalancheBulletin.getAvActivityHighlightsIn(lang).orElse(""));
-			bulletin.put("avAvalancheComment", avalancheBulletin.getAvActivityCommentIn(lang).orElse(""));
-
-			DangerPattern dangerPattern1 = avalancheBulletin.getDangerPattern1();
-			DangerPattern dangerPattern2 = avalancheBulletin.getDangerPattern2();
-			Optional<String> snowpackStructureComment = avalancheBulletin.getSnowpackStructureCommentIn(lang);
-			Optional<String> snowpackStructureHighlights = avalancheBulletin.getSnowpackStructureHighlightsIn(lang);
-			Optional<String> tendencyComment = avalancheBulletin.getTendencyCommentIn(lang);
-			if (dangerPattern1 != null || dangerPattern2 != null
-					|| snowpackStructureComment.isPresent()
-					|| snowpackStructureHighlights.isPresent()
-					|| tendencyComment.isPresent()) {
-				bulletin.put("snowpackstyle", getSnowpackStyle(true));
-				if (dangerPattern1 != null || dangerPattern2 != null
-						|| snowpackStructureComment.isPresent()
-						|| snowpackStructureHighlights.isPresent()) {
-					bulletin.put("snowpackStructureHeadline", lang.getBundleString("headline.snowpack"));
-					bulletin.put("snowpackStructureHighlights", snowpackStructureHighlights.orElse(""));
-					bulletin.put("snowpackStructureComment", snowpackStructureComment.orElse(""));
-
-					if (dangerPattern1 != null || dangerPattern2 != null) {
-						bulletin.put("dangerPatternsHeadline", lang.getBundleString("headline.danger-patterns"));
-						if (dangerPattern1 != null) {
-                            bulletin.put("dangerPattern1", dangerPattern1.toString(lang.getLocale()));
-							bulletin.put("dangerPatternLink1", getDangerPatternLink(lang, region, dangerPattern1));
-							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(true));
-						} else {
-							bulletin.put("dangerPattern1", "");
-							bulletin.put("dangerPatternLink1", "");
-							bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
-						}
-						if (dangerPattern2 != null) {
-                            bulletin.put("dangerPattern2", dangerPattern2.toString(lang.getLocale()));
-							bulletin.put("dangerPatternLink2", getDangerPatternLink(lang, region, dangerPattern2));
-							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(true));
-						} else {
-							bulletin.put("dangerPattern2", "");
-							bulletin.put("dangerPatternLink2", "");
-							bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
-						}
-					} else {
-						bulletin.put("dangerPatternsHeadline", "");
-						bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
-						bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
-						bulletin.put("dangerPattern1", "");
-						bulletin.put("dangerPattern2", "");
-						bulletin.put("dangerPatternLink1", "");
-						bulletin.put("dangerPatternLink2", "");
-					}
-				} else {
-					bulletin.put("snowpackStructureHeadline", "");
-					bulletin.put("snowpackStructureHighlights", "");
-					bulletin.put("snowpackStructureComment", "");
-					bulletin.put("dangerPatternsHeadline", "");
-					bulletin.put("dangerPattern1", "");
-					bulletin.put("dangerPattern2", "");
-					bulletin.put("dangerPatternLink1", "");
-					bulletin.put("dangerPatternLink2", "");
-					bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
-					bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
-				}
-
-				// weather
-				avalancheBulletin.getSynopsisCommentIn(lang).ifPresent(t -> {
-					bulletin.put("synopsisHeadline", lang.getBundleString("headline.synopsis"));
-					bulletin.put("synopsisComment", t);
-				});
-
-				// tendency
-				tendencyComment.ifPresent(t -> {
-					bulletin.put("tendencyHeadline", lang.getBundleString("headline.tendency"));
-					bulletin.put("tendencyComment", t);
-				});
-			} else {
-				bulletin.put("snowpackstyle", getSnowpackStyle(false));
-				bulletin.put("snowpackStructureHeadline", "");
-				bulletin.put("snowpackStructureHighlights", "");
-				bulletin.put("snowpackStructureComment", "");
-				bulletin.put("dangerPatternsHeadline", "");
-				bulletin.put("dangerPattern1", "");
-				bulletin.put("dangerPattern2", "");
-				bulletin.put("dangerPatternLink1", "");
-				bulletin.put("dangerPatternLink2", "");
-				bulletin.put("dangerpatternstyle1", getDangerPatternStyle(false));
-				bulletin.put("dangerpatternstyle2", getDangerPatternStyle(false));
-				bulletin.put("tendencyHeadline", "");
-				bulletin.put("tendencyComment", "");
-			}
-
-			Map<String, Object> tendency = new HashMap<>();
-			if (avalancheBulletin.getTendency() == null) {
-				tendency.put("text", "");
-			} else {
-				tendency.put("text", avalancheBulletin.getTendency().toString(lang.getLocale()));
-			}
-			if (avalancheBulletin.getTendency() == Tendency.decreasing) {
-				tendency.put("symbol",
-						serverImagesUrl + "tendency/tendency_decreasing_blue.png");
-				tendency.put("date", avalancheReport.getTendencyDate(lang));
-			} else if (avalancheBulletin.getTendency() == Tendency.steady) {
-				tendency.put("symbol", serverImagesUrl + "tendency/tendency_steady_blue.png");
-				tendency.put("date", avalancheReport.getTendencyDate(lang));
-			} else if (avalancheBulletin.getTendency() == Tendency.increasing) {
-				tendency.put("symbol",
-						serverImagesUrl + "tendency/tendency_increasing_blue.png");
-				tendency.put("date", avalancheReport.getTendencyDate(lang));
-			} else {
-				tendency.put("symbol", serverImagesUrl + "tendency/empty.png");
-				tendency.put("date", "");
-			}
-			bulletin.put("tendency", tendency);
-
-			bulletin.put("dangerratingcolorstyle",
-					getDangerRatingColorStyle(avalancheBulletin.getHighestDangerRating(), region));
-			bulletin.put("headlinestyle", getHeadlineStyle(avalancheBulletin.getHighestDangerRating()));
-
-			addDaytimeInfo(lang, avalancheReport, avalancheBulletin, bulletin, false);
-			Map<String, Object> pm = new HashMap<>();
-			addDaytimeInfo(lang, avalancheReport, avalancheBulletin, pm, avalancheBulletin.isHasDaytimeDependency());
-			bulletin.put("pm", pm);
-
-			arrayList.add(bulletin);
-		}
-		root.put("bulletins", arrayList);
-
-		Map<String, Object> links = new HashMap<>();
-		links.put("website", avalancheReport.getRegion().getWebsiteUrlWithDate(lang, avalancheReport));
-		links.put("unsubscribe", "{%link_unsubscribe}");
-		links.put("pdf", avalancheReport.getPdfUrl(lang));
-		links.put("imprint", region.getImprintLink(lang));
-		Map<String, Object> socialMediaLinks = new HashMap<>();
-		socialMediaLinks.put("facebook", region.getWebsiteUrl(lang) + "/#followDialog");
-		socialMediaLinks.put("instagram", region.getWebsiteUrl(lang) + "/#followDialog");
-		socialMediaLinks.put("youtube", region.getWebsiteUrl(lang) + "/#followDialog");
-		links.put("socialmedia", socialMediaLinks);
-		root.put("link", links);
-
-		// Get template
-		Template temp = getTemplate();
-
-		// Merge template and model
-		Writer out = new StringWriter();
-		// Writer out = new OutputStreamWriter(System.out);
-		temp.process(root, out);
-
+		pw.flush();
 		return out.toString();
 	}
 
-	private static void addDaytimeInfo(LanguageCode lang, AvalancheReport avalancheReport, AvalancheBulletin avalancheBulletin, Map<String, Object> bulletin,
-									   boolean isAfternoon) {
-		AvalancheBulletinDaytimeDescription daytimeBulletin;
-		if (isAfternoon)
-			daytimeBulletin = avalancheBulletin.getAfternoon();
-		else
-			daytimeBulletin = avalancheBulletin.getForenoon();
-
-		final Region region = avalancheReport.getRegion();
-		final String serverImagesUrl =  region.getServerImagesUrl();
-
-		// danger rating
-		Map<String, Object> dangerRating = new HashMap<>();
-		if ((daytimeBulletin.dangerRating(false) == null
-				|| daytimeBulletin.dangerRating(false) == DangerRating.missing
-				|| daytimeBulletin.dangerRating(false) == DangerRating.no_rating)
-				&& (daytimeBulletin.dangerRating(true) == null
-						|| daytimeBulletin.dangerRating(true) == DangerRating.missing
-						|| daytimeBulletin.dangerRating(true) == DangerRating.no_rating)) {
-			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_0_0.png");
-		} else {
-			dangerRating.put("symbol", serverImagesUrl + "warning_pictos/color/level_"
-					+ daytimeBulletin.getWarningLevelId() + ".png");
+	static String css(String resourceName) {
+		try {
+			URL resource = Resources.getResource(resourceName);
+			return Resources.readLines(resource, StandardCharsets.UTF_8).stream()
+				.map(String::trim)
+				.filter(l -> !l.isEmpty())
+				.filter(l -> !(l.startsWith("/*") && l.endsWith("*/")))
+				.collect(Collectors.joining(""));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
 		}
-		// dangerRating.put("symbol", "cid:warning_picto/" +
-		// getWarningLevelId(daytimeBulletin,
-		// avalancheBulletin.isHasElevationDependency()));
-		if (daytimeBulletin.isHasElevationDependency()
-				&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
-			if (daytimeBulletin.getTreeline())
-				dangerRating.put("elevation", lang.getBundleString("elevation.treeline.capitalized"));
-			else if (daytimeBulletin.getElevation() > 0)
-				dangerRating.put("elevation", daytimeBulletin.getElevation() + "m");
-			else
-				dangerRating.put("elevation", "");
-		} else
-			dangerRating.put("elevation", "");
-		bulletin.put("dangerRating", dangerRating);
-
-		// maps
-		if (isAfternoon)
-			bulletin.put("map", avalancheReport.getMapsUrl() + "/"
-					+ MapUtil.filename(region, avalancheBulletin, DaytimeDependency.pm, false, MapImageFormat.jpg));
-		else
-			bulletin.put("map", avalancheReport.getMapsUrl() + "/"
-					+ MapUtil.filename(region, avalancheBulletin, DaytimeDependency.am, false, MapImageFormat.jpg));
-
-		// avalanche problems
-		bulletin.put("avalancheProblem1", createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), lang, region));
-		bulletin.put("avalancheProblem2", createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), lang, region));
-		bulletin.put("avalancheProblem3", createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), lang, region));
-		bulletin.put("avalancheProblem4", createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), lang, region));
-		bulletin.put("avalancheProblem5", createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), lang, region));
 	}
 
-	private static Map<String, Object> createAvalancheProblem(eu.albina.model.AvalancheProblem avalancheProblem,
-															  LanguageCode lang, Region region) {
-		Map<String, Object> avalancheProblemMap = new HashMap<>();
-		final String serverImagesUrl =  region.getServerImagesUrl();
+	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, String color) {
+		Region region = avalancheReport.getRegion();
+		DangerRating highestDangerRating = bulletin.getHighestDangerRating();
 
-		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
-			avalancheProblemMap.put("empty", false);
-			if (avalancheProblem.getAvalancheProblem() != null) {
-				avalancheProblemMap.put("symbol", serverImagesUrl + "avalanche_problems/color/"
-						+ avalancheProblem.getAvalancheProblem().toStringId() + ".png");
-				avalancheProblemMap.put("text", avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
-				avalancheProblemMap.put("link",
-						getAvalancheProblemLink(lang, region, avalancheProblem.getAvalancheProblem()));
-			} else {
-				avalancheProblemMap.put("symbol",
-						serverImagesUrl + "avalanche_problems/color/empty.png");
-				avalancheProblemMap.put("text", "");
-				avalancheProblemMap.put("link", "");
-			}
+		pw.print("<table class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print("<tr>");
+		pw.print("<td class=\"container\" align=\"\" bgcolor=\"#FFFFFF\">");
+		pw.print("<div class=\"content bulletin-content\">");
+		pw.print("<table style=\"border-spacing: 0px;\">");
+		pw.print("<tr>");
+		pw.format("<td %s>", getDangerRatingColorStyle(highestDangerRating, region));
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.print("<table style=\"border-spacing: 0px;\">");
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.format("<h2 %s>%s</h2>", getHeadlineStyle(highestDangerRating), highestDangerRating.toString(lang.getLocale(), true));
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
 
-			String path = Aspect.getSymbolPath(avalancheProblem.getAspects(), false);
-			avalancheProblemMap.put("aspects", serverImagesUrl + path);
+		// forenoon / all-day
+		daytime(pw, false, bulletin);
 
-			Map<String, Object> elevation = new HashMap<>();
-			if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
-				if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-					// elevation high and low set
-					elevation.put("symbol",
-							serverImagesUrl + "elevation/color/levels_middle_two.png");
-					// elevation.put("symbol", "cid:elevation/middle");
-					if (avalancheProblem.getTreelineLow())
-						elevation.put("limitAbove", lang.getBundleString("elevation.treeline.capitalized"));
-					else if (avalancheProblem.getElevationLow() > 0)
-						elevation.put("limitAbove", avalancheProblem.getElevationLow() + "m");
-					if (avalancheProblem.getTreelineHigh())
-						elevation.put("limitBelow", lang.getBundleString("elevation.treeline.capitalized"));
-					else if (avalancheProblem.getElevationHigh() > 0)
-						elevation.put("limitBelow", avalancheProblem.getElevationHigh() + "m");
-				} else {
-					// elevation high set
-					elevation.put("symbol", serverImagesUrl + "elevation/color/levels_below.png");
-					// elevation.put("symbol", "cid:elevation/below");
-					elevation.put("limitAbove", "");
-					if (avalancheProblem.getTreelineHigh())
-						elevation.put("limitBelow", lang.getBundleString("elevation.treeline.capitalized"));
-					else if (avalancheProblem.getElevationHigh() > 0)
-						elevation.put("limitBelow", avalancheProblem.getElevationHigh() + "m");
-				}
-			} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-				// elevation low set
-				elevation.put("symbol", serverImagesUrl + "elevation/color/levels_above.png");
-				// elevation.put("symbol", "cid:elevation/above");
-				if (avalancheProblem.getTreelineLow())
-					elevation.put("limitAbove", lang.getBundleString("elevation.treeline.capitalized"));
-				else if (avalancheProblem.getElevationLow() > 0)
-					elevation.put("limitAbove", avalancheProblem.getElevationLow() + "m");
-				elevation.put("limitBelow", "");
-			} else {
-				// no elevation set
-				elevation.put("symbol", serverImagesUrl + "elevation/color/levels_all.png");
-				// elevation.put("symbol", "cid:elevation/all");
-				elevation.put("limitAbove", "");
-				elevation.put("limitBelow", "");
-			}
-			avalancheProblemMap.put("elevation", elevation);
-		} else {
-			avalancheProblemMap.put("empty", true);
-			avalancheProblemMap.put("symbol",
-					serverImagesUrl + "avalanche_problems/color/empty.png");
-			avalancheProblemMap.put("text", "");
-			avalancheProblemMap.put("link", "");
+		// afternoon
+		daytime(pw, true, bulletin);
 
-			String path = Aspect.getSymbolPath(null, false);
-			avalancheProblemMap.put("aspects", serverImagesUrl + path);
+		pw.print("<table style=\"padding-left: 15px;\">");
+		pw.print("<tr>");
+		pw.print("<td style=\"vertical-align: top; padding-top: 10px;\">");
+		pw.format("<h4>%s</h4>", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
+		pw.format("<p class=\"\">%s</p>", bulletin.getAvActivityCommentIn(lang).orElse(""));
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
 
-			Map<String, Object> elevation = new HashMap<>();
-			elevation.put("symbol", serverImagesUrl + "elevation/color/empty.png");
-			elevation.put("limitAbove", "");
-			elevation.put("limitBelow", "");
-			avalancheProblemMap.put("elevation", elevation);
+		// snowpack structure / danger patterns / synopsis / tendency
+		DangerPattern dangerPattern1 = bulletin.getDangerPattern1();
+		DangerPattern dangerPattern2 = bulletin.getDangerPattern2();
+		Optional<String> snowpackStructureComment = bulletin.getSnowpackStructureCommentIn(lang);
+		Optional<String> snowpackStructureHighlights = bulletin.getSnowpackStructureHighlightsIn(lang);
+		Optional<String> tendencyComment = bulletin.getTendencyCommentIn(lang);
+		Optional<String> synopsisComment = bulletin.getSynopsisCommentIn(lang);
+		boolean hasSnowpackSection = dangerPattern1 != null || dangerPattern2 != null
+			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent()
+			|| tendencyComment.isPresent();
+		boolean hasStructure = dangerPattern1 != null || dangerPattern2 != null
+			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent();
+		boolean hasDangerPatterns = dangerPattern1 != null || dangerPattern2 != null;
+
+		String snowpackStructureHeadline = hasStructure ? lang.getBundleString("headline.snowpack") : "";
+		String snowpackStructureCommentText = hasStructure ? snowpackStructureComment.orElse("") : "";
+		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getBundleString("headline.danger-patterns") : "";
+		String dangerPattern1Text = hasStructure && hasDangerPatterns && dangerPattern1 != null ? dangerPattern1.toString(lang.getLocale()) : "";
+		String dangerPatternLink1 = hasStructure && hasDangerPatterns && dangerPattern1 != null ? getDangerPatternLink(lang, region, dangerPattern1) : "";
+		String dangerPatternStyle1 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern1 != null);
+		String dangerPattern2Text = hasStructure && hasDangerPatterns && dangerPattern2 != null ? dangerPattern2.toString(lang.getLocale()) : "";
+		String dangerPatternLink2 = hasStructure && hasDangerPatterns && dangerPattern2 != null ? getDangerPatternLink(lang, region, dangerPattern2) : "";
+		String dangerPatternStyle2 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern2 != null);
+		String tendencyHeadline = tendencyComment.isPresent() ? lang.getBundleString("headline.tendency") : "";
+		String tendencyCommentText = tendencyComment.orElse("");
+
+		pw.format("<table %s>", getSnowpackStyle(hasSnowpackSection));
+		pw.print("<tr>");
+		pw.print("<td style=\"background-color: #" + color + "; width: 10px; min-width: 10px; height: 100%;\"></td>");
+		pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
+		pw.format("<h4 style=\"padding-top: 5px;\">%s</h4>", snowpackStructureHeadline);
+		pw.format("<h5 style=\"margin-right: 5px; display: inline-block\">%s</h5>", dangerPatternsHeadline);
+		pw.format("<a href=\"%s\" target=\"_blank\">", dangerPatternLink1);
+		pw.format("<p %s>%s</p>", dangerPatternStyle1, dangerPattern1Text);
+		pw.print("</a>");
+		pw.format("<a href=\"%s\" target=\"_blank\">", dangerPatternLink2);
+		pw.format("<p %s>%s</p>", dangerPatternStyle2, dangerPattern2Text);
+		pw.print("</a>");
+		pw.format("<p class=\"\">%s</p>", snowpackStructureCommentText);
+		if (hasSnowpackSection && synopsisComment.isPresent()) {
+			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getBundleString("headline.synopsis"));
+			pw.format("<p class=\"\">%s</p>", synopsisComment.get());
 		}
-		return avalancheProblemMap;
+		pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", tendencyHeadline);
+		pw.format("<p class=\"\">%s</p>", tendencyCommentText);
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+	}
+
+	private void daytime(PrintWriter pw, boolean pm, AvalancheBulletin bulletin) {
+		Region region = avalancheReport.getRegion();
+		String serverImagesUrl = region.getServerImagesUrl();
+		String mapsUrl = avalancheReport.getMapsUrl();
+		boolean bulletinDaytime = bulletin.isHasDaytimeDependency();
+
+		String text = bulletinDaytime
+			? lang.getBundleString(pm ? "valid-time-period.later" : "valid-time-period.earlier")
+			: "";
+		// when there is no daytime dependency, the afternoon block reuses the forenoon description and its map
+		AvalancheBulletinDaytimeDescription description = pm && bulletinDaytime ? bulletin.getAfternoon() : bulletin.getForenoon();
+		DaytimeDependency daytimeDependency = pm && bulletinDaytime ? DaytimeDependency.pm : DaytimeDependency.am;
+		String map = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
+
+		// tendency
+		String tendencyText = bulletin.getTendency() == null ? "" : bulletin.getTendency().toString(lang.getLocale());
+		String tendencySymbol;
+		String tendencyDate;
+		if (bulletin.getTendency() == Tendency.decreasing) {
+			tendencySymbol = serverImagesUrl + "tendency/tendency_decreasing_blue.png";
+			tendencyDate = avalancheReport.getTendencyDate(lang);
+		} else if (bulletin.getTendency() == Tendency.steady) {
+			tendencySymbol = serverImagesUrl + "tendency/tendency_steady_blue.png";
+			tendencyDate = avalancheReport.getTendencyDate(lang);
+		} else if (bulletin.getTendency() == Tendency.increasing) {
+			tendencySymbol = serverImagesUrl + "tendency/tendency_increasing_blue.png";
+			tendencyDate = avalancheReport.getTendencyDate(lang);
+		} else {
+			tendencySymbol = serverImagesUrl + "tendency/empty.png";
+			tendencyDate = "";
+		}
+
+		String stylepmtable = getPMStyleTable(bulletinDaytime);
+		String styleAttr = pm ? " " + stylepmtable : "";
+		if (pm) {
+			pw.format("<div %s>", getPMStyle(bulletinDaytime));
+		}
+		pw.format("<table style=\"%s\"%s>", pm ? "padding-left: 15px;" : "margin-top: 10px; padding-left: 15px;", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td class=\"daytime-text-div\">");
+		pw.format("<h2 class=\"daytime-text\">%s</h2>", text);
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.format("<td style=\"%s\">", pm ? "width: 150px;" : "width: 150px; padding-right: 10px;");
+		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", map);
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<table style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\"%s>", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.format("<table style=\"width: 0;\"%s>", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<div style=\"height: 48px;\">");
+		pw.print("<div style=\"height: 48px; width: 60px; margin-right: 10px;\">");
+		pw.format("<img height=\"48\" width=\"60\" style=\"display: inline-block; margin-bottom: 10px;\" src=\"%s\"/>", dangerRatingSymbol(description));
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td class=\"mountain\">");
+		pw.print("<div style=\"height: 48px;\">");
+		pw.print("<div style=\"height: 48px; margin-right: 10px;\">");
+		pw.print("<p style=\"height: 48px; display: inline-block; font-size: 12px; padding-top: 18px;\">");
+		pw.format("<b>%s</b>", dangerRatingElevation(description));
+		pw.print("</p>");
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td class=\"tendency\">");
+		pw.format("<table%s>", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td>");
+		if (pm) {
+			pw.format("<h5 style=\"text-align: left; margin-bottom: 10px;\">%s</h5>", tendencyText);
+			pw.format("<h5 style=\"text-align: left; font-weight: 100;\">%s</h5>", tendencyDate);
+		} else {
+			pw.format("<p style=\"text-align: left; font-weight: 900; margin-bottom: 10px;\">%s</p>", tendencyText);
+			pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s</p>", tendencyDate);
+		}
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", tendencySymbol);
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+
+		appendAvalancheProblem(pw, description.getAvalancheProblem1(), true, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem2(), false, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem3(), false, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem4(), false, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem5(), false, styleAttr);
+
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		if (pm) {
+			pw.print("</div>");
+		}
+	}
+
+	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem, boolean first, String tableExtraAttr) {
+		if (problem == null || problem.getAvalancheProblem() == null) {
+			return;
+		}
+		Region region = avalancheReport.getRegion();
+		String serverImagesUrl = region.getServerImagesUrl();
+
+		String symbol = serverImagesUrl + "avalanche_problems/color/" + problem.getAvalancheProblem().toStringId() + ".png";
+		String text = problem.getAvalancheProblem().toString(lang.getLocale());
+		String link = getAvalancheProblemLink(lang, region, problem.getAvalancheProblem());
+		String aspects = serverImagesUrl + Aspect.getSymbolPath(problem.getAspects(), false);
+
+		String elevationSymbol;
+		String limitAbove;
+		String limitBelow;
+		if (problem.getTreelineHigh() || problem.getElevationHigh() > 0) {
+			if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
+				// elevation high and low set
+				elevationSymbol = serverImagesUrl + "elevation/color/levels_middle_two.png";
+				limitAbove = problem.getTreelineLow()
+					? lang.getBundleString("elevation.treeline.capitalized")
+					: problem.getElevationLow() + "m";
+				limitBelow = problem.getTreelineHigh()
+					? lang.getBundleString("elevation.treeline.capitalized")
+					: problem.getElevationHigh() + "m";
+			} else {
+				// elevation high set
+				elevationSymbol = serverImagesUrl + "elevation/color/levels_below.png";
+				limitAbove = "";
+				limitBelow = problem.getTreelineHigh()
+					? lang.getBundleString("elevation.treeline.capitalized")
+					: problem.getElevationHigh() + "m";
+			}
+		} else if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
+			// elevation low set
+			elevationSymbol = serverImagesUrl + "elevation/color/levels_above.png";
+			limitAbove = problem.getTreelineLow()
+				? lang.getBundleString("elevation.treeline.capitalized")
+				: problem.getElevationLow() + "m";
+			limitBelow = "";
+		} else {
+			// no elevation set
+			elevationSymbol = serverImagesUrl + "elevation/color/levels_all.png";
+			limitAbove = "";
+			limitBelow = "";
+		}
+
+		String margin = first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px";
+		pw.format("<table style=\"%s; width: 0;\"%s>", margin, tableExtraAttr);
+		pw.print("<tr>");
+		pw.print("<td style=\"margin: 0 5px; width: 70px; text-align: center;\">");
+		pw.format("<a href=\"%s\" target=\"_blank\">", link);
+		pw.format("<img width=\"50\" class=\"avalanche-problem\" src=\"%s\"/>", symbol);
+		pw.print("</a>");
+		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px; line-height: 1.0;\">%s</p>", text);
+		pw.print("</td>");
+		pw.print("<td style=\"margin: 0 5px; width: 70px;\">");
+		pw.print("<div class=\"avalanche-problem-aspects-outer-div\">");
+		pw.print("<div class=\"avalanche-problem-aspects-div\">");
+		pw.print("<div class=\"avalanche-problem-aspects\">");
+		pw.format("<img width=\"60\" class=\"avalanche-problem-aspects-img\" src=\"%s\"/>", aspects);
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td style=\"width: 100px; margin: 0 5px;\">");
+		pw.print("<div style=\"width: 100px; height: 48px;\">");
+		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
+		pw.print("<div style=\"width: 100px; height: 48px;\">");
+		pw.format("<img height=\"48\" class=\"avalanche-problem-elevation-img\" src=\"%s\"/>", elevationSymbol);
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
+		pw.print("<div style=\"width: 100px; height: 48px;\">");
+		pw.print("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: 24px; margin-left: 68px;\">");
+		pw.format("<b>%s</b>", limitAbove);
+		pw.print("</p>");
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
+		pw.print("<div style=\"width: 100px; height: 48px;\">");
+		pw.print("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: 7px; margin-left: 68px;\">");
+		pw.format("<b>%s</b>", limitBelow);
+		pw.print("</p>");
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+	}
+
+	private String dangerRatingSymbol(AvalancheBulletinDaytimeDescription daytimeBulletin) {
+		String serverImagesUrl = avalancheReport.getRegion().getServerImagesUrl();
+		if ((daytimeBulletin.dangerRating(false) == null
+			|| daytimeBulletin.dangerRating(false) == DangerRating.missing
+			|| daytimeBulletin.dangerRating(false) == DangerRating.no_rating)
+			&& (daytimeBulletin.dangerRating(true) == null
+			|| daytimeBulletin.dangerRating(true) == DangerRating.missing
+			|| daytimeBulletin.dangerRating(true) == DangerRating.no_rating)) {
+			return serverImagesUrl + "warning_pictos/color/level_0_0.png";
+		} else {
+			return serverImagesUrl + "warning_pictos/color/level_" + daytimeBulletin.getWarningLevelId() + ".png";
+		}
+	}
+
+	private String dangerRatingElevation(AvalancheBulletinDaytimeDescription daytimeBulletin) {
+		if (daytimeBulletin.isHasElevationDependency()
+			&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
+			if (daytimeBulletin.getTreeline())
+				return lang.getBundleString("elevation.treeline.capitalized");
+			else if (daytimeBulletin.getElevation() > 0)
+				return daytimeBulletin.getElevation() + "m";
+			else
+				return "";
+		} else
+			return "";
 	}
 
 	private static String getDangerRatingColorStyle(DangerRating dangerRating, Region region) {
 		if (dangerRating.equals(DangerRating.very_high)) {
 			return "background=\"" + region.getServerImagesUrl() + "bg_checkered.png"
-					+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
+				+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
 		} else
 			return "style=\"background-color: " + dangerRating.getColor()
-					+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
+				+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
 	}
 
 	private static String getHeadlineStyle(DangerRating dangerRating) {
 		if (dangerRating.equals(DangerRating.low) || dangerRating.equals(DangerRating.moderate)) {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-					+ "#565F61" + "; background-color: " + dangerRating.getColor() + ";\"";
+				+ "#565F61" + "; background-color: " + dangerRating.getColor() + ";\"";
 		} else {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-					+ dangerRating.getColor() + ";\"";
+				+ dangerRating.getColor() + ";\"";
 		}
 	}
 
