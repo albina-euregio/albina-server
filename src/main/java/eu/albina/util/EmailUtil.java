@@ -338,56 +338,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// forenoon / all-day
-		pw.print("<table style=\"margin-top: 10px; padding-left: 15px;\">");
-		pw.print("<tr>");
-		pw.print("<td class=\"daytime-text-div\">");
-		pw.format("<h2 class=\"daytime-text\">%s</h2>", textam);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("<tr>");
-		pw.print("<td style=\"width: 150px; padding-right: 10px;\">");
-		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", mapAm);
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.print("<table style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\">");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print("<table style=\"width: 0;\">");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print("<div style=\"height: 48px;\">");
-		pw.print("<div style=\"height: 48px; width: 60px; margin-right: 10px;\">");
-		pw.format("<img height=\"48\" width=\"60\" style=\"display: inline-block; margin-bottom: 10px;\" src=\"%s\"/>", dangerRatingSymbol(forenoon));
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("</td>");
-		pw.print("<td class=\"mountain\">");
-		pw.print("<div style=\"height: 48px;\">");
-		pw.print("<div style=\"height: 48px; margin-right: 10px;\">");
-		pw.print("<p style=\"height: 48px; display: inline-block; font-size: 12px; padding-top: 18px;\">");
-		pw.format("<b>%s</b>", dangerRatingElevation(forenoon));
-		pw.print("</p>");
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("</td>");
-		pw.print("<td class=\"tendency\">");
-		pw.print("<table>");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.format("<p style=\"text-align: left; font-weight: 900; margin-bottom: 10px;\">%s</p>", tendencyText);
-		pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s</p>", tendencyDate);
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", tendencySymbol);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
+		daytime(pw, false, stylepmtable, textam, mapAm, forenoon, tendencyText, tendencyDate, tendencySymbol);
 
 		// forenoon avalanche problems
 		appendAvalancheProblem(pw, forenoon.getAvalancheProblem1(), true, "");
@@ -402,56 +353,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 		// afternoon
 		pw.format("<div %s>", stylepm);
-		pw.format("<table style=\"padding-left: 15px;\" %s>", stylepmtable);
-		pw.print("<tr>");
-		pw.print("<td class=\"daytime-text-div\">");
-		pw.format("<h2 class=\"daytime-text\">%s</h2>", textpm);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("<tr>");
-		pw.print("<td style=\"width: 150px;\">");
-		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", mapPm);
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.format("<table style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\" %s>", stylepmtable);
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.format("<table style=\"width: 0;\" %s>", stylepmtable);
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print("<div style=\"height: 48px;\">");
-		pw.print("<div style=\"height: 48px; width: 60px; margin-right: 10px;\">");
-		pw.format("<img height=\"48\" width=\"60\" style=\"display: inline-block; margin-bottom: 10px;\" src=\"%s\"/>", dangerRatingSymbol(afternoon));
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("</td>");
-		pw.print("<td class=\"mountain\">");
-		pw.print("<div style=\"height: 48px;\">");
-		pw.print("<div style=\"height: 48px; margin-right: 10px;\">");
-		pw.print("<p style=\"height: 48px; display: inline-block; font-size: 12px; padding-top: 18px;\">");
-		pw.format("<b>%s</b>", dangerRatingElevation(afternoon));
-		pw.print("</p>");
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("</td>");
-		pw.print("<td class=\"tendency\">");
-		pw.format("<table %s>", stylepmtable);
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.format("<h5 style=\"text-align: left; margin-bottom: 10px;\">%s</h5>", tendencyText);
-		pw.format("<h5 style=\"text-align: left; font-weight: 100;\">%s</h5>", tendencyDate);
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", tendencySymbol);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
+		daytime(pw, true, stylepmtable, textpm, mapPm, afternoon, tendencyText, tendencyDate, tendencySymbol);
 
 		// afternoon avalanche problems
 		String pmTableAttr = " " + stylepmtable;
@@ -526,6 +428,66 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</tr>");
 		pw.print("</table>");
 		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+	}
+
+	private void daytime(PrintWriter pw, boolean pm, String stylepmtable, String text, String map,
+						 AvalancheBulletinDaytimeDescription description, String tendencyText, String tendencyDate, String tendencySymbol) {
+		String styleAttr = pm ? " " + stylepmtable : "";
+		pw.format("<table style=\"%s\"%s>", pm ? "padding-left: 15px;" : "margin-top: 10px; padding-left: 15px;", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td class=\"daytime-text-div\">");
+		pw.format("<h2 class=\"daytime-text\">%s</h2>", text);
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("<tr>");
+		pw.format("<td style=\"%s\">", pm ? "width: 150px;" : "width: 150px; padding-right: 10px;");
+		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", map);
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<table style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\"%s>", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.format("<table style=\"width: 0;\"%s>", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<div style=\"height: 48px;\">");
+		pw.print("<div style=\"height: 48px; width: 60px; margin-right: 10px;\">");
+		pw.format("<img height=\"48\" width=\"60\" style=\"display: inline-block; margin-bottom: 10px;\" src=\"%s\"/>", dangerRatingSymbol(description));
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td class=\"mountain\">");
+		pw.print("<div style=\"height: 48px;\">");
+		pw.print("<div style=\"height: 48px; margin-right: 10px;\">");
+		pw.print("<p style=\"height: 48px; display: inline-block; font-size: 12px; padding-top: 18px;\">");
+		pw.format("<b>%s</b>", dangerRatingElevation(description));
+		pw.print("</p>");
+		pw.print("</div>");
+		pw.print("</div>");
+		pw.print("</td>");
+		pw.print("<td class=\"tendency\">");
+		pw.format("<table%s>", styleAttr);
+		pw.print("<tr>");
+		pw.print("<td>");
+		if (pm) {
+			pw.format("<h5 style=\"text-align: left; margin-bottom: 10px;\">%s</h5>", tendencyText);
+			pw.format("<h5 style=\"text-align: left; font-weight: 100;\">%s</h5>", tendencyDate);
+		} else {
+			pw.format("<p style=\"text-align: left; font-weight: 900; margin-bottom: 10px;\">%s</p>", tendencyText);
+			pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s</p>", tendencyDate);
+		}
+		pw.print("</td>");
+		pw.print("<td>");
+		pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", tendencySymbol);
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
