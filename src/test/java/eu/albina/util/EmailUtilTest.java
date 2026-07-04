@@ -51,7 +51,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
-		Assertions.assertEquals(154.7177734375, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1., "155 kB");
+		Assertions.assertEquals(105.72265625, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1., "106 kB");
 		Assertions.assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag, 17. Jänner 2019</h2>"));
 		Assertions.assertTrue(html.contains("Veröffentlicht am <b>16.01.2019, 17:00:00</b>"));
 		Assertions.assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
@@ -76,7 +76,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
-		Assertions.assertEquals(58, html.getBytes(StandardCharsets.UTF_8).length / 1024, "59 kB");
+		Assertions.assertEquals(46, html.getBytes(StandardCharsets.UTF_8).length / 1024, "47 kB");
 	}
 
 	@Test

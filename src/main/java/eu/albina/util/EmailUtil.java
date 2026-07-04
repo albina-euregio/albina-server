@@ -390,21 +390,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// forenoon avalanche problems
-		ProblemView am1 = problemView(forenoon.getAvalancheProblem1());
-		ProblemView am2 = problemView(forenoon.getAvalancheProblem2());
-		ProblemView am3 = problemView(forenoon.getAvalancheProblem3());
-		ProblemView am4 = problemView(forenoon.getAvalancheProblem4());
-		ProblemView am5 = problemView(forenoon.getAvalancheProblem5());
-		if (!am1.empty())
-			appendAvalancheProblem(pw, am1, true, "");
-		if (!am2.empty())
-			appendAvalancheProblem(pw, am2, false, "");
-		if (!am3.empty())
-			appendAvalancheProblem(pw, am3, false, "");
-		if (!am4.empty())
-			appendAvalancheProblem(pw, am4, false, "");
-		if (!am5.empty())
-			appendAvalancheProblem(pw, am5, false, "");
+		appendAvalancheProblem(pw, forenoon.getAvalancheProblem1(), true, "");
+		appendAvalancheProblem(pw, forenoon.getAvalancheProblem2(), false, "");
+		appendAvalancheProblem(pw, forenoon.getAvalancheProblem3(), false, "");
+		appendAvalancheProblem(pw, forenoon.getAvalancheProblem4(), false, "");
+		appendAvalancheProblem(pw, forenoon.getAvalancheProblem5(), false, "");
 
 		pw.print("</td>");
 		pw.print("</tr>");
@@ -463,13 +453,13 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</tr>");
 		pw.print("</table>");
 
-		// afternoon avalanche problems (always rendered)
+		// afternoon avalanche problems
 		String pmTableAttr = " " + stylepmtable;
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem1()), true, pmTableAttr);
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem2()), false, pmTableAttr);
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem3()), false, pmTableAttr);
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem4()), false, pmTableAttr);
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem5()), false, pmTableAttr);
+		appendAvalancheProblem(pw, afternoon.getAvalancheProblem1(), true, pmTableAttr);
+		appendAvalancheProblem(pw, afternoon.getAvalancheProblem2(), false, pmTableAttr);
+		appendAvalancheProblem(pw, afternoon.getAvalancheProblem3(), false, pmTableAttr);
+		appendAvalancheProblem(pw, afternoon.getAvalancheProblem4(), false, pmTableAttr);
+		appendAvalancheProblem(pw, afternoon.getAvalancheProblem5(), false, pmTableAttr);
 
 		pw.print("</td>");
 		pw.print("</tr>");
@@ -541,21 +531,67 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 	}
 
-	private void appendAvalancheProblem(PrintWriter pw, ProblemView v, boolean first, String tableExtraAttr) {
+	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem, boolean first, String tableExtraAttr) {
+		if (problem == null || problem.getAvalancheProblem() == null) {
+			return;
+		}
+		Region region = avalancheReport.getRegion();
+		String serverImagesUrl = region.getServerImagesUrl();
+
+		String symbol = serverImagesUrl + "avalanche_problems/color/" + problem.getAvalancheProblem().toStringId() + ".png";
+		String text = problem.getAvalancheProblem().toString(lang.getLocale());
+		String link = getAvalancheProblemLink(lang, region, problem.getAvalancheProblem());
+		String aspects = serverImagesUrl + Aspect.getSymbolPath(problem.getAspects(), false);
+
+		String elevationSymbol;
+		String limitAbove;
+		String limitBelow;
+		if (problem.getTreelineHigh() || problem.getElevationHigh() > 0) {
+			if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
+				// elevation high and low set
+				elevationSymbol = serverImagesUrl + "elevation/color/levels_middle_two.png";
+				limitAbove = problem.getTreelineLow()
+					? lang.getBundleString("elevation.treeline.capitalized")
+					: problem.getElevationLow() + "m";
+				limitBelow = problem.getTreelineHigh()
+					? lang.getBundleString("elevation.treeline.capitalized")
+					: problem.getElevationHigh() + "m";
+			} else {
+				// elevation high set
+				elevationSymbol = serverImagesUrl + "elevation/color/levels_below.png";
+				limitAbove = "";
+				limitBelow = problem.getTreelineHigh()
+					? lang.getBundleString("elevation.treeline.capitalized")
+					: problem.getElevationHigh() + "m";
+			}
+		} else if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
+			// elevation low set
+			elevationSymbol = serverImagesUrl + "elevation/color/levels_above.png";
+			limitAbove = problem.getTreelineLow()
+				? lang.getBundleString("elevation.treeline.capitalized")
+				: problem.getElevationLow() + "m";
+			limitBelow = "";
+		} else {
+			// no elevation set
+			elevationSymbol = serverImagesUrl + "elevation/color/levels_all.png";
+			limitAbove = "";
+			limitBelow = "";
+		}
+
 		String margin = first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px";
 		pw.format("<table style=\"%s; width: 0;\"%s>", margin, tableExtraAttr);
 		pw.print("<tr>");
 		pw.print("<td style=\"margin: 0 5px; width: 70px; text-align: center;\">");
-		pw.format("<a href=\"%s\" target=\"_blank\">", v.link());
-		pw.format("<img width=\"50\" class=\"avalanche-problem\" src=\"%s\"/>", v.symbol());
+		pw.format("<a href=\"%s\" target=\"_blank\">", link);
+		pw.format("<img width=\"50\" class=\"avalanche-problem\" src=\"%s\"/>", symbol);
 		pw.print("</a>");
-		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px; line-height: 1.0;\">%s</p>", v.text());
+		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px; line-height: 1.0;\">%s</p>", text);
 		pw.print("</td>");
 		pw.print("<td style=\"margin: 0 5px; width: 70px;\">");
 		pw.print("<div class=\"avalanche-problem-aspects-outer-div\">");
 		pw.print("<div class=\"avalanche-problem-aspects-div\">");
 		pw.print("<div class=\"avalanche-problem-aspects\">");
-		pw.format("<img width=\"60\" class=\"avalanche-problem-aspects-img\" src=\"%s\"/>", v.aspects());
+		pw.format("<img width=\"60\" class=\"avalanche-problem-aspects-img\" src=\"%s\"/>", aspects);
 		pw.print("</div>");
 		pw.print("</div>");
 		pw.print("</div>");
@@ -564,20 +600,20 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<div style=\"width: 100px; height: 48px;\">");
 		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
 		pw.print("<div style=\"width: 100px; height: 48px;\">");
-		pw.format("<img height=\"48\" class=\"avalanche-problem-elevation-img\" src=\"%s\"/>", v.elevationSymbol());
+		pw.format("<img height=\"48\" class=\"avalanche-problem-elevation-img\" src=\"%s\"/>", elevationSymbol);
 		pw.print("</div>");
 		pw.print("</div>");
 		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
 		pw.print("<div style=\"width: 100px; height: 48px;\">");
 		pw.print("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: 24px; margin-left: 68px;\">");
-		pw.format("<b>%s</b>", v.limitAbove());
+		pw.format("<b>%s</b>", limitAbove);
 		pw.print("</p>");
 		pw.print("</div>");
 		pw.print("</div>");
 		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
 		pw.print("<div style=\"width: 100px; height: 48px;\">");
 		pw.print("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: 7px; margin-left: 68px;\">");
-		pw.format("<b>%s</b>", v.limitBelow());
+		pw.format("<b>%s</b>", limitBelow);
 		pw.print("</p>");
 		pw.print("</div>");
 		pw.print("</div>");
@@ -612,64 +648,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 				return "";
 		} else
 			return "";
-	}
-
-	private record ProblemView(boolean empty, String symbol, String text, String link, String aspects,
-							   String elevationSymbol, String limitAbove, String limitBelow) {
-	}
-
-	private ProblemView problemView(AvalancheProblem avalancheProblem) {
-		Region region = avalancheReport.getRegion();
-		String serverImagesUrl = region.getServerImagesUrl();
-
-		if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
-			String symbol = serverImagesUrl + "avalanche_problems/color/"
-				+ avalancheProblem.getAvalancheProblem().toStringId() + ".png";
-			String text = avalancheProblem.getAvalancheProblem().toString(lang.getLocale());
-			String link = getAvalancheProblemLink(lang, region, avalancheProblem.getAvalancheProblem());
-			String aspects = serverImagesUrl + Aspect.getSymbolPath(avalancheProblem.getAspects(), false);
-
-			String elevationSymbol;
-			String limitAbove;
-			String limitBelow;
-			if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
-				if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-					// elevation high and low set
-					elevationSymbol = serverImagesUrl + "elevation/color/levels_middle_two.png";
-					limitAbove = avalancheProblem.getTreelineLow()
-						? lang.getBundleString("elevation.treeline.capitalized")
-						: avalancheProblem.getElevationLow() + "m";
-					limitBelow = avalancheProblem.getTreelineHigh()
-						? lang.getBundleString("elevation.treeline.capitalized")
-						: avalancheProblem.getElevationHigh() + "m";
-				} else {
-					// elevation high set
-					elevationSymbol = serverImagesUrl + "elevation/color/levels_below.png";
-					limitAbove = "";
-					limitBelow = avalancheProblem.getTreelineHigh()
-						? lang.getBundleString("elevation.treeline.capitalized")
-						: avalancheProblem.getElevationHigh() + "m";
-				}
-			} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-				// elevation low set
-				elevationSymbol = serverImagesUrl + "elevation/color/levels_above.png";
-				limitAbove = avalancheProblem.getTreelineLow()
-					? lang.getBundleString("elevation.treeline.capitalized")
-					: avalancheProblem.getElevationLow() + "m";
-				limitBelow = "";
-			} else {
-				// no elevation set
-				elevationSymbol = serverImagesUrl + "elevation/color/levels_all.png";
-				limitAbove = "";
-				limitBelow = "";
-			}
-			return new ProblemView(false, symbol, text, link, aspects, elevationSymbol, limitAbove, limitBelow);
-		} else {
-			String symbol = serverImagesUrl + "avalanche_problems/color/empty.png";
-			String aspects = serverImagesUrl + Aspect.getSymbolPath(null, false);
-			String elevationSymbol = serverImagesUrl + "elevation/color/empty.png";
-			return new ProblemView(true, symbol, "", "", aspects, elevationSymbol, "", "");
-		}
 	}
 
 	private static String getDangerRatingColorStyle(DangerRating dangerRating, Region region) {
