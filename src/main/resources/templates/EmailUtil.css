@@ -1,0 +1,437 @@
+/* ------------------------------------- GLOBAL ------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+* {
+    font-family: \"Open Sans\", sans-serif;
+    color: #565f61;
+}
+
+img {
+    max-width: 100%;
+}
+
+.collapse {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    width: 100% !important;
+    height: 100%;
+}
+
+@media screen and (min-width: 700px) {
+    .width-fix {
+        width: 100% !important;
+        min-width: 100%;
+    }
+}
+
+/* ------------------------------------- ELEMENTS ------------------------------------- */
+a {
+    color: #2BA6CB;
+}
+
+.btn {
+    text-decoration: none;
+    color: #565f61;
+    /*background-color: var(--albina-color);*/
+    padding: 0px 10px;
+    font-weight: bold;
+    margin-right: 10px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+}
+
+p.callout {
+    padding: 15px;
+    background-color: #ECF8FF;
+    margin-bottom: 15px;
+}
+
+.callout a {
+    font-weight: bold;
+    color: #2BA6CB;
+}
+
+table.social {
+    /* padding:15px; */
+    background-color: #ebebeb;
+}
+
+.social .soc-btn {
+    padding: 3px 7px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #FFF;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+}
+
+a.fb {
+    background-color: #3B5998 !important;
+}
+
+a.tw {
+    background-color: #1daced !important;
+}
+
+a.gp {
+    background-color: #DB4A39 !important;
+}
+
+a.ms {
+    background-color: #000 !important;
+}
+
+.sidebar .soc-btn {
+    display: block;
+    width: 100%;
+}
+
+/* ------------------------------------- HEADER ------------------------------------- */
+table.head-wrap {
+    width: 100%;
+    border-bottom: 1px solid #99daff;
+}
+
+table.head-ci {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+.header.container table td.logo {
+    padding: 15px;
+}
+
+.header.container table td.label {
+    padding: 15px;
+    padding-left: 0px;
+}
+
+/* ------------------------------------- BODY ------------------------------------- */
+table.body-wrap {
+    width: 100%;
+}
+
+/* ------------------------------------- FOOTER ------------------------------------- */
+table.footer-wrap {
+    width: 100%;
+    clear: both !important;
+    border-top: 1px solid #99daff;
+    padding-top: 15px;
+}
+
+.footer-wrap .container td.content p {
+    border-top: 1px solid rgb(215, 215, 215);
+    padding-top: 15px;
+}
+
+.footer-wrap .container td.content p {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.social-media-button {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* ------------------------------------- TYPOGRAPHY ------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: \"Open Sans\", sans-serif;
+    line-height: 1;
+    margin-bottom: 15px;
+    color: #565f61;
+}
+
+h1, h2 {
+    color: var(--albina-color);
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+    font-size: 60%;
+    color: #565f61;
+    line-height: 0;
+    text-transform: none;
+}
+
+h1 {
+    font-weight: 200;
+    font-size: 40px;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+h3 {
+    font-weight: 500;
+    font-size: 27px;
+}
+
+h4 {
+    font-weight: 500;
+    font-size: 23px;
+}
+
+h5 {
+    font-weight: 900;
+    font-size: 14px;
+}
+
+h6 {
+    font-weight: 900;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #444;
+}
+
+.collapse {
+    margin: 0 !important;
+}
+
+p, ul {
+    font-family: \"Open Sans\", sans-serif;
+    margin-bottom: 10px;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+p.lead {
+    font-size: 24px;
+    margin-bottom: 0px;
+}
+
+p.last {
+    margin-bottom: 0px;
+}
+
+ul li {
+    margin-left: 5px;
+    list-style-position: inside;
+}
+
+/* ------------------------------------- SIDEBAR ------------------------------------- */
+ul.sidebar {
+    background: #ebebeb;
+    display: block;
+    list-style-type: none;
+}
+
+ul.sidebar li {
+    display: block;
+    margin: 0;
+}
+
+ul.sidebar li a {
+    text-decoration: none;
+    color: #666;
+    padding: 10px 16px;
+    /* font-weight:bold; */
+    margin-right: 10px;
+    /* text-align:center; */
+    cursor: pointer;
+    border-bottom: 1px solid #777777;
+    border-top: 1px solid #FFFFFF;
+    display: block;
+    margin: 0;
+}
+
+ul.sidebar li a.last {
+    border-bottom-width: 0px;
+}
+
+ul.sidebar li a h1, ul.sidebar li a h2, ul.sidebar li a h3, ul.sidebar li a h4, ul.sidebar li a h5, ul.sidebar li a h6, ul.sidebar li a p {
+    margin-bottom: 0 !important;
+}
+
+/* --------------------------------------------------- RESPONSIVENESSNuke it from orbit. It's the only way to be sure. ------------------------------------------------------ */
+/* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+.container {
+    display: block !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    /* makes it centered */
+    clear: both !important;
+}
+
+/* This should also be a block element, so that it will fill 100% of the .container */
+.content {
+    padding: 0px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Let's make sure tables in the content area are 100% wide */
+.content table {
+    width: 100%;
+}
+
+/* Odds and ends */
+.column {
+    width: 400px;
+    float: left;
+}
+
+.column tr td {
+    padding: 15px;
+}
+
+.column-wrap {
+    padding: 0 !important;
+    margin: 0 auto;
+    max-width: 800px !important;
+}
+
+.column table {
+    width: 100%;
+}
+
+.social .column {
+    width: 280px;
+    min-width: 279px;
+    float: left;
+}
+
+/* Be sure to place a .clear element after each set of columns, just to be safe */
+.clear {
+    display: block;
+    clear: both;
+}
+
+/* ------------------------------------------- PHONEFor clients that support media queries.Nothing fancy. -------------------------------------------- */
+@media only screen and (max-width: 800px) {
+    div[class=\"column\"] {
+        width: auto !important;
+        float: none !important;
+    }
+
+    table.social div[class=\"column\"] {
+        width: auto !important;
+    }
+}
+
+.map-daytime-text {
+    color: #565f61;
+    font-size: 22px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.daytime-text {
+    color: #565f61;
+    font-size: 22px;
+}
+
+.daytime-text-div {
+    padding-top: 5px;
+}
+
+.snowpack {
+    border-left: 5px solid var(--albina-color);
+    padding-left: 10px;
+}
+
+.bulletin-content {
+    margin-top: 15px;
+    margin-bottom: 40px;
+}
+
+.tendency {
+    padding-left: 15px;
+    padding-right: 15px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.danger-patterns {
+}
+
+.danger-pattern {
+    font-size: 12px;
+    color: #565f61;
+    border: 1px solid #565f61;
+    border-radius: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 5px;
+    display: inline-block;
+    background-color: #FFFFFF;
+}
+
+.detail-map {
+    max-width: 150px;
+}
+
+.tendency-symbol {
+    display: inline-block;
+    max-width: 40px;
+    margin-left: 5px;
+}
+
+.avalanche-problem {
+    max-width: 50px;
+    margin: 5px;
+}
+
+.avalanche-problem-aspects-div {
+    padding: 0;
+    margin: 0;
+    max-height: 0;
+    max-width: 0;
+    overflow: visible;
+}
+
+.avalanche-problem-aspects-outer-div {
+    height: 60px;
+    width: 60px;
+}
+
+.avalanche-problem-aspects-img {
+    max-width: 60px;
+    max-height: 60px;
+    display: inline-block;
+}
+
+.avalanche-problem-elevation-img {
+    max-width: 80px;
+    max-height: 48px;
+    display: inline-block;
+}
+
+.avalanche-problem-aspects {
+    width: 60px;
+    height: 60px;
+}
+
+.mountain {
+    border-right: 1px solid #e6eef2;
+}
+
+.danger-rating-number {
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 12px;
+}
+
+.danger-rating-text {
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 12px;
+}

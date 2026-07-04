@@ -51,7 +51,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
-		Assertions.assertEquals(105.72265625, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1., "106 kB");
+		Assertions.assertEquals(104.4296875, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1.);
 		Assertions.assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag, 17. Jänner 2019</h2>"));
 		Assertions.assertTrue(html.contains("Veröffentlicht am <b>16.01.2019, 17:00:00</b>"));
 		Assertions.assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
@@ -66,7 +66,9 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.en).replace("\n", "");
-		String expected = Resources.toString(Resources.getResource("lauegi.report-2021-12-10/2021-12-10.mail.html"), StandardCharsets.UTF_8);
+		String resourceName = "lauegi.report-2021-12-10/2021-12-10.mail.html";
+		String expected = Resources.toString(Resources.getResource(resourceName), StandardCharsets.UTF_8);
+		// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/" + resourceName), html);
 		Assertions.assertEquals(expected.trim(), html.trim());
 	}
 
@@ -76,7 +78,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
-		Assertions.assertEquals(46, html.getBytes(StandardCharsets.UTF_8).length / 1024, "47 kB");
+		Assertions.assertEquals(44, html.getBytes(StandardCharsets.UTF_8).length / 1024);
 	}
 
 	@Test

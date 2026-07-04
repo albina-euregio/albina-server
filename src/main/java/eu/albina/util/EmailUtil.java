@@ -1,11 +1,17 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.google.common.io.Resources;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
@@ -33,7 +39,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	}
 
 	static String getAvalancheProblemLink(LanguageCode lang, Region region,
-										  eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
+	                                      eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
 		return String.format("%s/education/avalanche-problems#%s",
 			region.getWebsiteUrl(lang), avalancheProblem.toStringId());
 	}
@@ -76,7 +82,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
 		pw.format("<title>%s</title>", lang.getBundleString("headline"));
 		pw.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheets/avalanche-report.css\" >");
-		pw.print("<style>/* ------------------------------------- GLOBAL ------------------------------------- */*{margin: 0;padding: 0;text-decoration: none;}*{font-family: \"Open Sans\", sans-serif;color: #565f61;}img{max-width: 100%;}.collapse{margin: 0;padding: 0;}body{-webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none; width: 100%!important; height: 100%;}@media screen and (min-width: 700px){.width-fix{width:100%!important;min-width:100%;}}/* ------------------------------------- ELEMENTS ------------------------------------- */a{color: #2BA6CB;}.btn{text-decoration: none;color: #565f61;/*background-color: #" + color + ";*/padding: 0px 10px;font-weight: bold;margin-right: 10px;text-align: center;cursor: pointer;display: inline-block;}p.callout{padding:15px;background-color:#ECF8FF;margin-bottom: 15px;}.callout a{font-weight:bold;color: #2BA6CB;}table.social{/* padding:15px; */background-color: #ebebeb;}.social .soc-btn{padding: 3px 7px;font-size: 12px;margin-bottom: 10px;text-decoration: none;color: #FFF;font-weight: bold;display: block;text-align: center;}a.fb{background-color: #3B5998!important;}a.tw{background-color: #1daced!important;}a.gp{background-color: #DB4A39!important;}a.ms{background-color: #000!important;}.sidebar .soc-btn{display: block;width: 100%;}/* ------------------------------------- HEADER ------------------------------------- */table.head-wrap{width: 100%;border-bottom: 1px solid #99daff;}table.head-ci{width: 100%;padding: 0px;margin: 0px;}.header.container table td.logo{padding: 15px;}.header.container table td.label{padding: 15px; padding-left:0px;}/* ------------------------------------- BODY ------------------------------------- */table.body-wrap{width: 100%;}/* ------------------------------------- FOOTER ------------------------------------- */table.footer-wrap{width: 100%;clear:both!important;border-top: 1px solid #99daff;padding-top: 15px;}.footer-wrap .container td.content p{border-top: 1px solid rgb(215,215,215);padding-top: 15px;}.footer-wrap .container td.content p{font-size: 10px;font-weight: bold;}.social-media-button{padding-left: 5px;padding-right: 5px;}/* ------------------------------------- TYPOGRAPHY ------------------------------------- */h1,h2,h3,h4,h5,h6{font-family: \"Open Sans\", sans-serif;line-height: 1;margin-bottom: 15px;color: #565f61;}h1, h2{color: #" + color + ";}h1 small, h2 small, h3 small, h4 small, h5 small, h6 small{font-size: 60%;color: #565f61;line-height: 0;text-transform: none;}h1{font-weight:200; font-size: 40px;}h2{font-weight:bold; font-size: 24px;}h3{font-weight:500; font-size: 27px;}h4{font-weight:500; font-size: 23px;}h5{font-weight:900; font-size: 14px;}h6{font-weight:900; font-size: 14px; text-transform: uppercase; color:#444;}.collapse{margin:0!important;}p, ul{font-family: \"Open Sans\", sans-serif;margin-bottom: 10px; font-weight: normal; font-size: 14px; line-height: 1.6;}p.lead{font-size: 24px; margin-bottom: 0px;}p.last{margin-bottom:0px;}ul li{margin-left:5px;list-style-position: inside;}/* ------------------------------------- SIDEBAR ------------------------------------- */ul.sidebar{background:#ebebeb;display:block;list-style-type: none;}ul.sidebar li{display: block; margin:0;}ul.sidebar li a{text-decoration:none;color: #666;padding:10px 16px;/* font-weight:bold; */margin-right:10px;/* text-align:center; */cursor:pointer;border-bottom: 1px solid #777777;border-top: 1px solid #FFFFFF;display:block;margin:0;}ul.sidebar li a.last{border-bottom-width:0px;}ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.sidebar li a h5,ul.sidebar li a h6,ul.sidebar li a p{margin-bottom:0!important;}/* --------------------------------------------------- RESPONSIVENESSNuke it from orbit. It's the only way to be sure. ------------------------------------------------------ *//* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */.container{display:block!important;max-width:800px!important;margin:0 auto!important; /* makes it centered */clear:both!important;}/* This should also be a block element, so that it will fill 100% of the .container */.content{padding:0px;max-width:800px;margin:0 auto;display:block;}/* Let's make sure tables in the content area are 100% wide */.content table{width: 100%;}/* Odds and ends */.column{width: 400px;float:left;}.column tr td{padding: 15px;}.column-wrap{padding:0!important; margin:0 auto; max-width:800px!important;}.column table{width:100%;}.social .column{width: 280px;min-width: 279px;float:left;}/* Be sure to place a .clear element after each set of columns, just to be safe */.clear{display: block; clear: both;}/* ------------------------------------------- PHONEFor clients that support media queries.Nothing fancy. -------------------------------------------- */@media only screen and (max-width: 800px){div[class=\"column\"]{width: auto!important; float:none!important;}table.social div[class=\"column\"]{width:auto!important;}}.map-daytime-text{color: #565f61;font-size: 22px;margin-bottom: 5px;text-align: center;}.daytime-text{color: #565f61;font-size: 22px;}.daytime-text-div{padding-top: 5px;}.snowpack{border-left: 5px solid #" + color + ";padding-left: 10px;}.bulletin-content{margin-top: 15px;margin-bottom: 40px;}.tendency{padding-left: 15px;padding-right: 15px;vertical-align: middle;text-align: center;}.danger-patterns{}.danger-pattern{font-size: 12px;color: #565f61;border: 1px solid #565f61; border-radius: 15px;padding-left: 10px;padding-right: 10px;padding-top: 2px;padding-bottom: 2px;margin-right: 5px;display: inline-block;background-color: #FFFFFF;}.detail-map{max-width: 150px;}.tendency-symbol{display: inline-block;max-width: 40px;margin-left: 5px;}.avalanche-problem{max-width: 50px;margin: 5px;}.avalanche-problem-aspects-div{padding: 0;margin: 0;max-height:0;max-width:0;overflow: visible;}.avalanche-problem-aspects-outer-div{height: 60px;width: 60px;}.avalanche-problem-aspects-img{max-width: 60px;max-height: 60px;display: inline-block;}.avalanche-problem-elevation-img{max-width: 80px;max-height: 48px;display: inline-block;}.avalanche-problem-aspects{width: 60px;height: 60px;}.mountain{border-right: 1px solid #e6eef2;}.danger-rating-number{text-align: center;margin-bottom: 0;font-size: 12px;}.danger-rating-text{text-align: center;margin-bottom: 0;font-size: 12px;}</style>");
+		pw.format("<style>%s</style>", css().replace("var(--albina-color)", "#" + color));
 		pw.print("</head>");
 		pw.print("<body bgcolor=\"#FFFFFF\" topmargin=\"0\" leftmargin=\"0\" marginheight=\"0\" marginwidth=\"0\">");
 
@@ -280,6 +286,19 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 		pw.flush();
 		return out.toString();
+	}
+
+	private static String css() {
+		try {
+			URL resource = Resources.getResource("templates/EmailUtil.css");
+			return Resources.readLines(resource, StandardCharsets.UTF_8).stream()
+				.map(String::trim)
+				.filter(l -> !l.isEmpty())
+				.filter(l -> !(l.startsWith("/*") && l.endsWith("*/")))
+				.collect(Collectors.joining(""));
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, String color) {
@@ -577,11 +596,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	private String dangerRatingSymbol(AvalancheBulletinDaytimeDescription daytimeBulletin) {
 		String serverImagesUrl = avalancheReport.getRegion().getServerImagesUrl();
 		if ((daytimeBulletin.dangerRating(false) == null
-				|| daytimeBulletin.dangerRating(false) == DangerRating.missing
-				|| daytimeBulletin.dangerRating(false) == DangerRating.no_rating)
-				&& (daytimeBulletin.dangerRating(true) == null
-						|| daytimeBulletin.dangerRating(true) == DangerRating.missing
-						|| daytimeBulletin.dangerRating(true) == DangerRating.no_rating)) {
+			|| daytimeBulletin.dangerRating(false) == DangerRating.missing
+			|| daytimeBulletin.dangerRating(false) == DangerRating.no_rating)
+			&& (daytimeBulletin.dangerRating(true) == null
+			|| daytimeBulletin.dangerRating(true) == DangerRating.missing
+			|| daytimeBulletin.dangerRating(true) == DangerRating.no_rating)) {
 			return serverImagesUrl + "warning_pictos/color/level_0_0.png";
 		} else {
 			return serverImagesUrl + "warning_pictos/color/level_" + daytimeBulletin.getWarningLevelId() + ".png";
@@ -590,7 +609,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 	private String dangerRatingElevation(AvalancheBulletinDaytimeDescription daytimeBulletin) {
 		if (daytimeBulletin.isHasElevationDependency()
-				&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
+			&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
 			if (daytimeBulletin.getTreeline())
 				return lang.getBundleString("elevation.treeline.capitalized");
 			else if (daytimeBulletin.getElevation() > 0)
@@ -604,19 +623,19 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	private static String getDangerRatingColorStyle(DangerRating dangerRating, Region region) {
 		if (dangerRating.equals(DangerRating.very_high)) {
 			return "background=\"" + region.getServerImagesUrl() + "bg_checkered.png"
-					+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
+				+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
 		} else
 			return "style=\"background-color: " + dangerRating.getColor()
-					+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
+				+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
 	}
 
 	private static String getHeadlineStyle(DangerRating dangerRating) {
 		if (dangerRating.equals(DangerRating.low) || dangerRating.equals(DangerRating.moderate)) {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-					+ "#565F61" + "; background-color: " + dangerRating.getColor() + ";\"";
+				+ "#565F61" + "; background-color: " + dangerRating.getColor() + ";\"";
 		} else {
 			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-					+ dangerRating.getColor() + ";\"";
+				+ dangerRating.getColor() + ";\"";
 		}
 	}
 
