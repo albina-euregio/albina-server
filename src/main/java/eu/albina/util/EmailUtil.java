@@ -61,7 +61,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String overviewPM = daytime
 			? mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false)
 			: serverImagesUrl + "/empty.png";
-		String widthPM = daytime ? "width=\"600\"" : "";
+		String widthPM = daytime ? "width=\"600\" " : "";
 		String dangerLevel5Style = "background=\"" + serverImagesUrl + "bg_checkered.png"
 			+ "\" height=\"10\" width=\"75\" bgcolor=\"#FF0000\"";
 
@@ -396,15 +396,15 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		ProblemView am4 = problemView(forenoon.getAvalancheProblem4());
 		ProblemView am5 = problemView(forenoon.getAvalancheProblem5());
 		if (!am1.empty())
-			appendAvalancheProblem(pw, am1, "<table style=\"margin: 5px 5px 0 5px; width: 0;\">", "avalanche-problem-aspects-outer-div", "23px");
+			appendAvalancheProblem(pw, am1, true, "");
 		if (!am2.empty())
-			appendAvalancheProblem(pw, am2, "<table style=\"margin-left: 5px; margin-top: 0px; width: 0;\">", "avalanche-problem-aspects", "24px");
+			appendAvalancheProblem(pw, am2, false, "");
 		if (!am3.empty())
-			appendAvalancheProblem(pw, am3, "<table style=\"margin: 5px 5px 0 5px; width: 0;\">", "avalanche-problem-aspects-outer-div", "23px");
+			appendAvalancheProblem(pw, am3, false, "");
 		if (!am4.empty())
-			appendAvalancheProblem(pw, am4, "<table style=\"margin: 5px 5px 0 5px; width: 0;\">", "avalanche-problem-aspects-outer-div", "23px");
+			appendAvalancheProblem(pw, am4, false, "");
 		if (!am5.empty())
-			appendAvalancheProblem(pw, am5, "<table style=\"margin: 5px 5px 0 5px; width: 0;\">", "avalanche-problem-aspects-outer-div", "23px");
+			appendAvalancheProblem(pw, am5, false, "");
 
 		pw.print("</td>\n");
 		pw.print("</tr>\n");
@@ -464,16 +464,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>\n");
 
 		// afternoon avalanche problems (always rendered)
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem1()),
-			"<table style=\"margin: 5px 5px 0 5px; width: 0;\" " + stylepmtable + ">", "avalanche-problem-aspects-outer-div", "24px");
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem2()),
-			"<table style=\"margin-left: 5px; margin-top: 0px; width: 0;\" " + stylepmtable + ">", "avalanche-problem-aspects", "24px");
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem3()),
-			"<table style=\"margin-left: 5px; margin-top: 0px; width: 0;\" " + stylepmtable + ">", "avalanche-problem-aspects", "24px");
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem4()),
-			"<table style=\"margin-left: 5px; margin-top: 0px; width: 0;\" " + stylepmtable + ">", "avalanche-problem-aspects", "24px");
-		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem5()),
-			"<table style=\"margin-left: 5px; margin-top: 0px; width: 0;\" " + stylepmtable + ">", "avalanche-problem-aspects", "24px");
+		String pmTableAttr = " " + stylepmtable;
+		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem1()), true, pmTableAttr);
+		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem2()), false, pmTableAttr);
+		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem3()), false, pmTableAttr);
+		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem4()), false, pmTableAttr);
+		appendAvalancheProblem(pw, problemView(afternoon.getAvalancheProblem5()), false, pmTableAttr);
 
 		pw.print("</td>\n");
 		pw.print("</tr>\n");
@@ -519,8 +515,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 		pw.format("<table %s>\n", getSnowpackStyle(hasSnowpackSection));
 		pw.print("<tr>\n");
-		pw.print("<td style=\"background-color: #" + color + "; width: 10px; min-widht: 10px; height: 100%;\";>\n");
-		pw.print("<td>\n");
+		pw.print("<td style=\"background-color: #" + color + "; width: 10px; min-width: 10px; height: 100%;\"></td>\n");
 		pw.print("<td style=\"vertical-align: top; padding: 15px;\">\n");
 		pw.format("<h4 style=\"padding-top: 5px;\">%s</h4>\n", snowpackStructureHeadline);
 		pw.format("<h5 style=\"margin-right: 5px; display: inline-block\">%s</h5>\n", dangerPatternsHeadline);
@@ -546,9 +541,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>\n");
 	}
 
-	private void appendAvalancheProblem(PrintWriter pw, ProblemView v, String tableOpen, String aspectsOuterClass,
-										String limitAboveMarginTop) {
-		pw.format("%s\n", tableOpen);
+	private void appendAvalancheProblem(PrintWriter pw, ProblemView v, boolean first, String tableExtraAttr) {
+		String margin = first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px";
+		pw.format("<table style=\"%s; width: 0;\"%s>\n", margin, tableExtraAttr);
 		pw.print("<tr>\n");
 		pw.print("<td style=\"margin: 0 5px; width: 70px; text-align: center;\">\n");
 		pw.format("<a href=\"%s\" target=\"_blank\">\n", v.link());
@@ -557,7 +552,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px; line-height: 1.0;\">%s</p>\n", v.text());
 		pw.print("</td>\n");
 		pw.print("<td style=\"margin: 0 5px; width: 70px;\">\n");
-		pw.format("<div class=\"%s\">\n", aspectsOuterClass);
+		pw.print("<div class=\"avalanche-problem-aspects-outer-div\">\n");
 		pw.print("<div class=\"avalanche-problem-aspects-div\">\n");
 		pw.print("<div class=\"avalanche-problem-aspects\">\n");
 		pw.format("<img width=\"60\" class=\"avalanche-problem-aspects-img\" src=\"%s\"/>\n", v.aspects());
@@ -574,7 +569,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</div>\n");
 		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">\n");
 		pw.print("<div style=\"width: 100px; height: 48px;\">\n");
-		pw.format("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: %s; margin-left: 68px;\">\n", limitAboveMarginTop);
+		pw.print("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: 24px; margin-left: 68px;\">\n");
 		pw.format("<b>%s</b>\n", v.limitAbove());
 		pw.print("</p>\n");
 		pw.print("</div>\n");
