@@ -340,32 +340,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		// forenoon / all-day
 		daytime(pw, false, stylepmtable, textam, mapAm, forenoon, tendencyText, tendencyDate, tendencySymbol);
 
-		// forenoon avalanche problems
-		appendAvalancheProblem(pw, forenoon.getAvalancheProblem1(), true, "");
-		appendAvalancheProblem(pw, forenoon.getAvalancheProblem2(), false, "");
-		appendAvalancheProblem(pw, forenoon.getAvalancheProblem3(), false, "");
-		appendAvalancheProblem(pw, forenoon.getAvalancheProblem4(), false, "");
-		appendAvalancheProblem(pw, forenoon.getAvalancheProblem5(), false, "");
-
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-
 		// afternoon
 		pw.format("<div %s>", stylepm);
 		daytime(pw, true, stylepmtable, textpm, mapPm, afternoon, tendencyText, tendencyDate, tendencySymbol);
-
-		// afternoon avalanche problems
-		String pmTableAttr = " " + stylepmtable;
-		appendAvalancheProblem(pw, afternoon.getAvalancheProblem1(), true, pmTableAttr);
-		appendAvalancheProblem(pw, afternoon.getAvalancheProblem2(), false, pmTableAttr);
-		appendAvalancheProblem(pw, afternoon.getAvalancheProblem3(), false, pmTableAttr);
-		appendAvalancheProblem(pw, afternoon.getAvalancheProblem4(), false, pmTableAttr);
-		appendAvalancheProblem(pw, afternoon.getAvalancheProblem5(), false, pmTableAttr);
-
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
 		pw.print("</div>");
 		pw.print("<table style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
@@ -488,6 +465,16 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+
+		appendAvalancheProblem(pw, description.getAvalancheProblem1(), true, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem2(), false, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem3(), false, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem4(), false, styleAttr);
+		appendAvalancheProblem(pw, description.getAvalancheProblem5(), false, styleAttr);
+
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
