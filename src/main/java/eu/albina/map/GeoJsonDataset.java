@@ -117,7 +117,7 @@ public class GeoJsonDataset implements GeographicDataset {
 	private double[] coordinates(MultiPoint geometry) {
 		List<LngLatAlt> coordinates = geometry.getCoordinates();
 		return DoubleStream.concat(
-			DoubleStream.of(Argument.GEOMETRY_MULTIPOINT, sizeL(coordinates)),
+			DoubleStream.of(Argument.GEOMETRY_MULTIPOINT, coordinates.size()),
 			coordinates.stream().flatMapToDouble(c -> Arrays.stream(coordinates(new Point(c))))
 		).toArray();
 	}
@@ -133,8 +133,8 @@ public class GeoJsonDataset implements GeographicDataset {
 	private double[] coordinates(MultiLineString geometry) {
 		List<List<LngLatAlt>> coordinates = geometry.getCoordinates();
 		return DoubleStream.concat(
-			DoubleStream.of(Argument.GEOMETRY_MULTILINESTRING, sizeLL(coordinates)),
-			coordinatesLL(coordinates)
+			DoubleStream.of(Argument.GEOMETRY_MULTILINESTRING, coordinates.size()),
+			coordinates.stream().flatMapToDouble(c -> Arrays.stream(coordinates(new LineString(c.toArray(LngLatAlt[]::new)))).skip(2))
 		).toArray();
 	}
 
