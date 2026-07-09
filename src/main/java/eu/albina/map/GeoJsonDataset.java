@@ -40,7 +40,9 @@ public class GeoJsonDataset implements GeographicDataset {
 	public GeoJsonDataset(FeatureCollection featureCollection) {
 		this.featureIterator = featureCollection.getFeatures().iterator();
 		this.fieldNames = Stream.concat(
-			featureCollection.getFeatures().get(0).getProperties().keySet().stream(),
+			featureCollection.getFeatures().isEmpty()
+				? Stream.of()
+				: featureCollection.getFeatures().getFirst().getProperties().keySet().stream(),
 			Stream.of(GEOMETRY)
 		).toArray(String[]::new);
 	}
