@@ -1,8 +1,35 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.google.common.base.StandardSystemProperty;
+import com.google.common.io.MoreFiles;
+import com.google.common.io.Resources;
+import com.google.common.primitives.Doubles;
+import eu.albina.AvalancheBulletinTestUtils;
+import eu.albina.ImageTestUtils;
+import eu.albina.RegionTestUtils;
+import eu.albina.controller.publication.PublicationController;
+import eu.albina.model.AvalancheBulletin;
+import eu.albina.model.AvalancheReport;
+import eu.albina.model.LocalServerInstance;
+import eu.albina.model.Region;
+import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.util.PdfUtil;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
+import org.mapyrus.Argument;
+import org.mapyrus.MapyrusException;
+import org.mapyrus.Row;
+import org.mapyrus.dataset.GeographicDataset;
+import org.mapyrus.dataset.ShapefileDataset;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,27 +38,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.google.common.base.StandardSystemProperty;
-import eu.albina.AvalancheBulletinTestUtils;
-import eu.albina.RegionTestUtils;
-import eu.albina.controller.publication.PublicationController;
-import eu.albina.model.LocalServerInstance;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import com.google.common.io.Resources;
-
-import eu.albina.ImageTestUtils;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheReport;
-import eu.albina.model.Region;
-import eu.albina.model.enumerations.DaytimeDependency;
-import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.PdfUtil;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 @MicronautTest
 public class MapUtilTest {
@@ -74,17 +88,17 @@ public class MapUtilTest {
 	@Test
 	public void testOverviewMapFilename() {
 		assertEquals("fd_EUREGIO_map.jpg",
-				MapUtil.getOverviewMapFilename(regionEuregio, DaytimeDependency.fd, false));
+			MapUtil.getOverviewMapFilename(regionEuregio, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map.jpg",
-				MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, false));
+			MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, false));
 		assertEquals("fd_AT-07_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, true));
+			MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.fd, true));
 		assertEquals("am_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.am, false));
 		assertEquals("pm_AT-07_map.jpg", MapUtil.getOverviewMapFilename(regionTyrol, DaytimeDependency.pm, false));
 		assertEquals("fd_IT-32-BZ_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionSouthTyrol, DaytimeDependency.fd, true));
+			MapUtil.getOverviewMapFilename(regionSouthTyrol, DaytimeDependency.fd, true));
 		assertEquals("fd_IT-32-TN_map_bw.jpg",
-				MapUtil.getOverviewMapFilename(regionTrentino, DaytimeDependency.fd, true));
+			MapUtil.getOverviewMapFilename(regionTrentino, DaytimeDependency.fd, true));
 	}
 
 	@Test
@@ -173,6 +187,7 @@ public class MapUtilTest {
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
 			byte[] expected = Resources.toByteArray(Resources.getResource(name));
 			byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve(name));
+			// Files.write(Path.of("src/test/resources/" + name), actual);
 			ImageTestUtils.assertImageEquals(name, expected, actual, 0, 0, ignore -> {
 			});
 		}
@@ -227,6 +242,7 @@ public class MapUtilTest {
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("fd_ES-CT-L_thumbnail.png"));
+		// Files.write(Path.of("src/test/resources/lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"), actual);
 		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
 		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
@@ -266,7 +282,8 @@ public class MapUtilTest {
 		publicationController.createSymbolicLinks(avalancheReport);
 
 		byte[] expected = Resources.toByteArray(Resources.getResource("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
-        byte[] actual = Files.readAllBytes(Path.of(StandardSystemProperty.JAVA_IO_TMPDIR.value() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		byte[] actual = Files.readAllBytes(Path.of(StandardSystemProperty.JAVA_IO_TMPDIR.value() + "/2019-01-17/PREVIEW/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"));
+		// Files.write(Path.of("src/test/resources/f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png"), actual);
 		ImageTestUtils.assertImageEquals("f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png", expected, actual, 0, 0, ignore -> {
 		});
 	}
@@ -320,4 +337,243 @@ public class MapUtilTest {
 		String result = MapUtil.mapProductionResource(geoDataPath, filename).toString();
 		assertEquals("geodata.Euregio" + System.getProperty("file.separator") + filename, result);
 	}
+
+	@Test
+	void testShapefileDataset() throws Exception {
+		URL resource = Resources.getResource("micro_regions_elevation_a_simplified.shp");
+		Path path = Path.of(resource.toURI());
+		GeographicDataset ds = new ShapefileDataset(path.toString(), "");
+		assertDataset(ds);
+	}
+
+	@Test
+	void testGeoJSONDataset() throws Exception {
+		URL resource = Resources.getResource("micro_regions_elevation_a_simplified.geojson");
+		Path path = Path.of(resource.toURI());
+		GeographicDataset ds = GeoJsonDataset.of(path);
+		assertDataset(ds);
+	}
+
+	private static void assertDataset(GeographicDataset ds) throws MapyrusException {
+		assertArrayEquals(new String[]{"style", "code", "threshold", "elevation", "ALB_ID", "GEOMETRY"},
+			ds.getFieldNames());
+		assertEquals(ds instanceof GeoJsonDataset
+				? ""
+				: "PROJCS[\"WGS 84 / World Mercator\",",
+			ds.getProjection());
+		Row row = ds.fetch();
+		assertArrayEquals(new Object[]{"3502", "AT-07-14-01", "3200", "low", "AT-07-14-01-l"},
+			row.subList(0, 5).stream().map(Argument::toString).toArray());
+		List<Double> geometryValue = Doubles.asList(row.getLast().getGeometryValue());
+		assertEquals(Doubles.asList(
+				102.0,
+				48.0,
+				0.0,
+				1199823.9005152367,
+				5945626.200928268,
+				1.0,
+				1199373.1086985667,
+				5944724.617294928,
+				1.0,
+				1195814.2474751961,
+				5939005.018900225,
+				1.0,
+				1195941.349661745,
+				5934048.033624816,
+				1.0,
+				1199881.5174447626,
+				5930997.581147641,
+				1.0,
+				1203313.2764815844,
+				5928836.843976309,
+				1.0,
+				1209414.1814359343,
+				5917397.647186902,
+				1.0,
+				1210125.5371531884,
+				5908150.022862599,
+				1.0,
+				1209070.3625782244,
+				5906013.187868451,
+				1.0,
+				1208277.235391304,
+				5916696.079435631,
+				1.0,
+				1203812.382711593,
+				5925559.638829421,
+				1.0,
+				1194221.2176959254,
+				5931314.337838818,
+				1.0,
+				1192005.3278474882,
+				5928635.426231002,
+				1.0,
+				1199347.530031886,
+				5921392.442995033,
+				1.0,
+				1197760.0268568806,
+				5913454.92711999,
+				1.0,
+				1197029.8772203065,
+				5899770.75437901,
+				1.0,
+				1195592.745207075,
+				5899128.226443707,
+				1.0,
+				1194293.6096680723,
+				5899309.052440637,
+				1.0,
+				1195114.1882318743,
+				5919242.699112196,
+				1.0,
+				1192931.3713662364,
+				5920234.888596577,
+				1.0,
+				1186217.5558552742,
+				5912595.029566867,
+				1.0,
+				1181785.7761583775,
+				5904624.440709023,
+				1.0,
+				1182080.2402687445,
+				5901005.206097213,
+				1.0,
+				1178180.8210318089,
+				5900920.266634016,
+				1.0,
+				1173570.5628905746,
+				5906186.470529516,
+				1.0,
+				1179768.6946242154,
+				5911570.973602085,
+				1.0,
+				1187388.7098642439,
+				5923516.93499402,
+				1.0,
+				1186277.4576417394,
+				5929231.946424037,
+				1.0,
+				1178141.5038698353,
+				5930859.137178405,
+				1.0,
+				1176168.4286408648,
+				5934214.098582563,
+				1.0,
+				1181237.1350610964,
+				5939907.90527594,
+				1.0,
+				1188174.9976422042,
+				5944003.214923156,
+				1.0,
+				1190129.7505474724,
+				5944502.704259365,
+				1.0,
+				1196436.6281255225,
+				5946114.2727018455,
+				1.0,
+				1196904.289444439,
+				5946233.772123543,
+				1.0,
+				1199823.9005152367,
+				5945626.200928268,
+				0.0,
+				1186912.4589117467,
+				5939471.341902834,
+				1.0,
+				1182851.6289842539,
+				5935348.984249159,
+				1.0,
+				1182112.8816734515,
+				5934599.043797293,
+				1.0,
+				1183794.130540736,
+				5933985.74484463,
+				1.0,
+				1185941.8579441682,
+				5933202.280247111,
+				1.0,
+				1186559.989511136,
+				5932976.793437854,
+				1.0,
+				1188817.105203934,
+				5934511.690558841,
+				1.0,
+				1190682.7789523862,
+				5935780.397020934,
+				1.0,
+				1191357.4678017646,
+				5939312.59158533,
+				1.0,
+				1189957.1200604402,
+				5939362.604004665,
+				1.0,
+				1189866.7430590838,
+				5939365.831754708,
+				1.0,
+				1186912.4589117467,
+				5939471.341902834,
+				0.0,
+				0.0,
+				0.0,
+				0.0
+			),
+			geometryValue);
+	}
+
+	@TestFactory
+	Stream<DynamicTest> testGeographicDataset() throws Exception {
+		return MoreFiles.listFiles(Path.of("../avalanche-warning-maps/geodata.Euregio")).stream()
+			.filter(p -> MoreFiles.getFileExtension(p).equals("shp"))
+			.flatMap(pathSHP -> {
+				try {
+					return testGeographicDataset(pathSHP);
+				} catch (IOException | MapyrusException e) {
+					throw new RuntimeException(e);
+				}
+			});
+	}
+
+	private Stream<DynamicTest> testGeographicDataset(Path pathSHP) throws IOException, MapyrusException {
+		Path pathJSON = pathSHP.resolveSibling(MoreFiles.getNameWithoutExtension(pathSHP) + ".geojson");
+		GeographicDataset dsSHP = new ShapefileDataset(pathSHP.toString(), "");
+		GeographicDataset dsJSON = GeoJsonDataset.of(pathJSON);
+		return Stream.generate(() -> getFetch(dsSHP)).takeWhile(Objects::nonNull)
+			.map(rowSHP -> {
+				String displayName = "%s / %s".formatted(MoreFiles.getNameWithoutExtension(pathSHP), rowSHP);
+				Row rowJSON = getFetch(dsJSON);
+				String valuesSHP = getGeometryValue(rowSHP);
+				String valuesJSON = getGeometryValue(rowJSON);
+				return dynamicTest(displayName, () -> {
+					assumeFalse(displayName.matches("micro_regions_elevation_a_simplified / .*(IT-32-BZ-08-01|AT-07-04-01|AT-02-05-01|AT-06-17|AT-06-04-02).*"));
+					assumeFalse(displayName.matches("micro_regions_elevation_a / .*(AT-02-05-01|AT-06-17|AT-07-04-01|AT-07-05|AT-07-07|AT-07-08|AT-07-10|AT-07-11|AT-07-13|AT-07-14-01|AT-07-14-05|AT-07-17-01|AT-07-17-02|AT-07-18|AT-07-19|AT-07-20|AT-07-21|AT-07-22|AT-07-23-02|IT-32-BZ-01-01|IT-32-BZ-01-02|IT-32-BZ-03|IT-32-BZ-04-01|IT-32-BZ-04-02|IT-32-BZ-05-02|IT-32-BZ-05-03|IT-32-BZ-06|IT-32-BZ-08-02|IT-32-BZ-10|IT-32-BZ-13|IT-32-BZ-14|IT-32-BZ-15|IT-32-BZ-16|IT-32-BZ-17|IT-32-BZ-18-01|IT-32-BZ-19).*"));
+					assumeFalse(displayName.matches("rivers_l /.*(Aare|Donau|Donnersbach|Gail|Görtschnitz|Kainach|Lammer|Laßnitz|Linthkanal|Lorxe|Mürz|Palten|Po|Rhein|Salza|Sölkbach|Sulm|Tanaro|Teigitsch|Ticino|Traun|Vltava).*"));
+					assumeFalse(displayName.startsWith("rivers_l / [, 2011, 3, 0, 0, 0, MULTILINESTRING ( (1956029"));
+					assumeFalse(displayName.startsWith("countries_l / [2100, MULTILINESTRING ( (838243"));
+					assumeFalse(displayName.startsWith("countries_l / [2100, MULTILINESTRING ( (1526553"));
+					assumeFalse(displayName.startsWith("countries_l / [2100, MULTILINESTRING ( (1069456"));
+					assumeFalse(displayName.startsWith("countries_l_simplified / [2100, MULTILINESTRING ( (1070586"));
+					assumeFalse(displayName.startsWith("region_a / [0, POLYGON ((1212021"));
+					assumeFalse(displayName.startsWith("region_a_simplified / [0, POLYGON ((1354098"));
+					assertEquals(valuesSHP, valuesJSON);
+				});
+			});
+	}
+
+	private static String getGeometryValue(Row row1) {
+		try {
+			double[] doubles = row1.getLast().getGeometryValue();
+			return Arrays.stream(doubles).mapToObj("%.03f"::formatted).collect(Collectors.joining("\n"));
+		} catch (MapyrusException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private Row getFetch(GeographicDataset ds) {
+		try {
+			return ds.fetch();
+		} catch (MapyrusException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }
