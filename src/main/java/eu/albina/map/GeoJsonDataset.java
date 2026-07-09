@@ -14,6 +14,8 @@ import org.mapyrus.Argument;
 import org.mapyrus.MapyrusException;
 import org.mapyrus.Row;
 import org.mapyrus.dataset.GeographicDataset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.databind.ObjectMapper;
 
 import java.awt.geom.Rectangle2D;
@@ -30,6 +32,7 @@ import java.util.stream.Stream;
 
 public class GeoJsonDataset implements GeographicDataset {
 
+	private static final Logger logger = LoggerFactory.getLogger(GeoJsonDataset.class);
 	private static final String GEOMETRY = "GEOMETRY";
 	private final Iterator<Feature> featureIterator;
 	private final String[] fieldNames;
@@ -44,8 +47,9 @@ public class GeoJsonDataset implements GeographicDataset {
 
 	public static GeoJsonDataset of(Path path) throws IOException {
 		try (InputStream src = Files.newInputStream(path)) {
-			System.out.println("Reading " + path);
+			logger.debug("Reading {}", path);
 			FeatureCollection featureCollection = new ObjectMapper().readValue(src, FeatureCollection.class);
+			logger.debug("Read {} features from {}", featureCollection.getFeatures().size(), path);
 			return new GeoJsonDataset(featureCollection);
 		}
 	}
@@ -83,7 +87,7 @@ public class GeoJsonDataset implements GeographicDataset {
 		final Row row = new Row();
 		for (String fieldName : fieldNames) {
 			if (GEOMETRY.equals(fieldName)) {
-				System.out.println(feature.getProperties());
+				logger.trace("{}", feature.getProperties());
 				row.add(new Argument(Argument.GEOMETRY_POLYGON, switch (feature.getGeometry()) {
 					case MultiPolygon multiPolygon -> coordinates(multiPolygon);
 					case Polygon polygon -> coordinates(polygon);
