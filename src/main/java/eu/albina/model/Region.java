@@ -19,6 +19,7 @@ import io.micronaut.core.annotation.Introspected;
 import io.micronaut.json.tree.JsonNode;
 import io.micronaut.serde.ObjectMapper;
 import io.micronaut.serde.annotation.Serdeable;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -46,9 +47,11 @@ import jakarta.persistence.Table;
 public class Region implements PersistentObject {
 
 	@Id
+	@Schema(description = "Region ID")
 	@Column(name = "ID", length = 191)
 	private String id;
 
+	@Schema(description = "Number of micro regions")
 	@Column(name = "MICRO_REGIONS")
 	private int microRegions;
 
@@ -77,158 +80,208 @@ public class Region implements PersistentObject {
 	private Set<Region> neighborRegions;
 
 	@OneToMany(mappedBy = "region", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Schema(description = "Language configuration")
 	private Set<RegionLanguageConfiguration> languageConfigurations;
 
+	@Schema(description = "Enabled languages")
 	@Column(name = "ENABLED_LANGUAGES", columnDefinition = LanguageCode.Converter.COLUMN_DEFINITION)
 	@Convert(converter = LanguageCode.Converter.class)
 	private Set<LanguageCode> enabledLanguages;
 
+	@Schema(description = "Text-to-speech languages")
 	@Column(name = "TTS_LANGUAGES", columnDefinition = LanguageCode.Converter.COLUMN_DEFINITION)
 	@Convert(converter = LanguageCode.Converter.class)
 	private Set<LanguageCode> ttsLanguages;
 
+	@Schema(description = "Publish avalanche forecast")
 	@Column(name = "PUBLISH_BULLETINS")
 	private boolean publishBulletins;
 
+	@Schema(description = "Publish blog posts")
 	@Column(name = "PUBLISH_BLOGS")
 	private boolean publishBlogs;
 
+	@Schema(description = "Create CAAML v6")
 	@Column(name = "CREATE_CAAML_V6")
 	private boolean createCaamlV6;
 
+	@Schema(description = "Create JSON")
 	@Column(name = "CREATE_JSON")
 	private boolean createJson;
 
+	@Schema(description = "Create maps")
 	@Column(name = "CREATE_MAPS")
 	private boolean createMaps;
 
+	@Schema(description = "Create PDF")
 	@Column(name = "CREATE_PDF")
 	private boolean createPdf;
 
+	@Schema(description = "Create simple HTML")
 	@Column(name = "CREATE_SIMPLE_HTML")
 	private boolean createSimpleHtml;
 
+	@Schema(description = "Send emails")
 	@Column(name = "SEND_EMAILS")
 	private boolean sendEmails;
 
+	@Schema(description = "Send telegram messages")
 	@Column(name = "SEND_TELEGRAM_MESSAGES")
 	private boolean sendTelegramMessages;
 
+	@Schema(description = "Send WhatsApp messages")
 	@Column(name = "SEND_WHATSAPP_MESSAGES")
 	private boolean sendWhatsAppMessages;
 
+	@Schema(description = "Send push notifications")
 	@Column(name = "SEND_PUSH_NOTIFICATIONS")
 	private boolean sendPushNotifications;
 
+	@Schema(description = "Enable media file")
 	@Column(name = "ENABLE_MEDIA_FILE")
 	private boolean enableMediaFile;
 
+	@Schema(description = "Enable avalanche problem CORNICES")
 	@Column(name = "ENABLE_AVALANCHE_PROBLEM_CORNICES")
 	private boolean enableAvalancheProblemCornices;
 
+	@Schema(description = "Enable avalanche problem NO DISTINCT AVALANCHE PROBLEM")
 	@Column(name = "ENABLE_AVALANCHE_PROBLEM_NO_DISTINCT_AVALANCHE_PROBLEM")
 	private boolean enableAvalancheProblemNoDistinctAvalancheProblem;
 
+	@Schema(description = "Enable danger sources")
 	@Column(name = "ENABLE_DANGER_SOURCES")
 	private boolean enableDangerSources;
 
+	@Schema(description = "Enable observations")
 	@Column(name = "ENABLE_OBSERVATIONS")
 	private boolean enableObservations;
 
+	@Schema(description = "Enable incidents")
 	@Column(name = "ENABLE_INCIDENTS")
 	private boolean enableIncidents;
 
+	@Schema(description = "Enable modelling")
 	@Column(name = "ENABLE_MODELLING")
 	private boolean enableModelling;
 
+	@Schema(description = "Enable LINEA export")
 	@Column(name = "ENABLE_LINEA_EXPORT")
 	private boolean enableLineaExport;
 
+	@Schema(description = "Enable weather")
 	@Column(name = "ENABLE_ICON")
 	private boolean enableIcon;
 
+	@Schema(description = "Textfields for bulletins to be entered using textcat")
 	@Column(name = "ENABLED_TEXTCAT_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
 	@Convert(converter = TextPart.Converter.class)
 	private Set<TextPart> enabledTextcatFields;
 
+	@Schema(description = "Editable textfields instead of textcat for bulletins")
 	@Column(name = "ENABLED_EDITABLE_FIELDS", columnDefinition = TextPart.Converter.COLUMN_DEFINITION)
 	@Convert(converter = TextPart.Converter.class)
 	private Set<TextPart> enabledEditableFields;
 
+	@Schema(description = "Show matrix")
 	@Column(name = "SHOW_MATRIX")
 	private boolean showMatrix;
 
+	@Schema(description = "Enable strategic mindset")
 	@Column(name = "ENABLE_STRATEGIC_MINDSET")
 	private boolean enableStrategicMindset;
 
+	@Schema(description = "Enable stress level")
 	@Column(name = "ENABLE_STRESS_LEVEL")
 	private boolean enableStressLevel;
 
+	@Schema(description = "PDF color")
 	@Column(name = "PDF_COLOR", length = 191)
 	private String pdfColor;
 
+	@Schema(description = "Email color")
 	@Column(name = "EMAIL_COLOR", length = 191)
 	private String emailColor;
 
+	@Schema(description = "Y for PDF map (am/pm)")
 	@Column(name = "PDF_MAP_Y_AM_PM")
 	private int pdfMapYAmPm;
 
+	@Schema(description = "Y for PDF map (fd)")
 	@Column(name = "PDF_MAP_Y_FD")
 	private int pdfMapYFd;
 
+	@Schema(description = "Map width for PDF (am/pm)")
 	@Column(name = "PDF_MAP_WIDTH_AM_PM")
 	private int pdfMapWidthAmPm;
 
+	@Schema(description = "Map width for PDF (fd)")
 	@Column(name = "PDF_MAP_WIDTH_FD")
 	private int pdfMapWidthFd;
 
+	@Schema(description = "Map height for PDF")
 	@Column(name = "PDF_MAP_HEIGHT")
 	private int pdfMapHeight;
 
+	@Schema(description = "Logo for PDF footer")
 	@Column(name = "PDF_FOOTER_LOGO")
 	private boolean pdfFooterLogo;
 
+	@Schema(description = "Logo for PDF footer (color)")
 	@Column(name = "PDF_FOOTER_LOGO_COLOR_PATH", length = 191)
 	private String pdfFooterLogoColorPath;
 
+	@Schema(description = "Logo for PDF footer (bw)")
 	@Column(name = "PDF_FOOTER_LOGO_BW_PATH", length = 191)
 	private String pdfFooterLogoBwPath;
 
+	@Schema(description = "Geodata directory")
 	@Column(name = "GEO_DATA_DIRECTORY", length = 191)
 	private String geoDataDirectory;
 
+	@Schema(description = "Logo position for map")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "MAP_LOGO_POSITION", length = 191)
 	private Position mapLogoPosition;
 
+	@Schema(description = "Colorbar (color)")
 	@Column(name = "IMAGE_COLORBAR_COLOR_PATH", length = 191)
 	private String imageColorbarColorPath;
 
+	@Schema(description = "Colorbar (b/w)")
 	@Column(name = "IMAGE_COLORBAR_BW_PATH", length = 191)
 	private String imageColorbarBwPath;
 
+	@Schema(description = "Default language for language dependent configuration")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DEFAULT_LANG", length = 191)
 	private LanguageCode defaultLang;
 
+	@Schema(description = "Logo for PDF (color)")
 	@Column(name = "LOGO_PATH", length = 191)
 	private String logoPath;
 
+	@Schema(description = "Logo for PDF (bw)")
 	@Column(name = "LOGO_BW_PATH", columnDefinition = "LONGBLOB")
 	private String logoBwPath;
 
+	@Schema(description = "Image URL for coat of arms")
 	@Column(name = "COAT_OF_ARMS", columnDefinition = "LONGBLOB")
 	private String coatOfArms;
 
+	@Schema(description = "URL to static avalanche files")
 	@Column(name = "STATIC_URL", length = 191)
 	private String staticUrl;
 
+	@Schema(description = "URL to server images")
 	@Column(name = "SERVER_IMAGES_URL", length = 191)
 	private String serverImagesUrl;
 
+	@Schema(description = "URL to education content")
 	@Column(name = "EDUCATION_URL", length = 191)
 	private String educationUrl;
 
+	@Schema(description = "URL to AWSOME modelling configuration")
 	@Column(name = "AWSOME_URL", length = 191)
 	private String awsomeUrl;
 
@@ -284,6 +337,7 @@ public class Region implements PersistentObject {
 	}
 
 	@JsonProperty("subRegions")
+	@Schema(description = "ID of sub regions")
 	public Set<String> getSubRegionsString() {
 		return subRegions.stream().map(Region::getId).collect(Collectors.toSet());
 	}
@@ -306,6 +360,7 @@ public class Region implements PersistentObject {
 	}
 
 	@JsonProperty("superRegions")
+	@Schema(description = "ID of super regions")
 	public Set<String> getSuperRegionsString() {
 		return superRegions.stream().map(Region::getId).collect(Collectors.toSet());
 	}
@@ -328,6 +383,7 @@ public class Region implements PersistentObject {
 	}
 
 	@JsonProperty("neighborRegions")
+	@Schema(description = "ID of neighbouring regions")
 	public Set<String> getNeighborRegionsString() {
 		return neighborRegions.stream().map(Region::getId).collect(Collectors.toSet());
 	}

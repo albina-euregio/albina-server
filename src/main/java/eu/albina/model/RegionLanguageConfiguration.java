@@ -9,6 +9,7 @@ import com.google.common.base.MoreObjects;
 import eu.albina.model.enumerations.LanguageCode;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,22 +35,28 @@ public class RegionLanguageConfiguration {
 	private Region region;
 
 	@Id
+	@Schema(description = "Language code")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "LANGUAGE_CODE", length = 191)
 	private LanguageCode lang;
 
+	@Schema(description = "Website name")
 	@Column(name = "WEBSITE_NAME", length = 191)
 	private String websiteName;
 
+	@Schema(description = "Warning service name")
 	@Column(name = "WARNING_SERVICE_NAME", length = 191)
 	private String warningServiceName;
 
+	@Schema(description = "Warning service email")
 	@Column(name = "WARNING_SERVICE_EMAIL", length = 191)
 	private String warningServiceEmail;
 
+	@Schema(description = "Website URL")
 	@Column(name = "URL", length = 191)
 	private String url;
 
+	@Schema(description = "Website URL for date given by %s")
 	@Column(name = "URL_WITH_DATE", length = 191)
 	private String urlWithDate;
 
