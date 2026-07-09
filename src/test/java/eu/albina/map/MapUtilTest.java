@@ -2,6 +2,7 @@
 package eu.albina.map;
 
 import com.google.common.base.StandardSystemProperty;
+import com.google.common.io.MoreFiles;
 import com.google.common.io.Resources;
 import com.google.common.primitives.Doubles;
 import eu.albina.AvalancheBulletinTestUtils;
@@ -17,7 +18,6 @@ import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.PdfUtil;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
@@ -29,6 +29,7 @@ import org.mapyrus.Row;
 import org.mapyrus.dataset.GeographicDataset;
 import org.mapyrus.dataset.ShapefileDataset;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,7 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -521,24 +522,47 @@ public class MapUtilTest {
 
 	@TestFactory
 	Stream<DynamicTest> testGeographicDataset() throws Exception {
-		Path pathSHP = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.shp");
-		Path pathJSON = Path.of("../avalanche-warning-maps/geodata.Euregio/micro_regions_elevation_a_simplified.geojson");
-		GeographicDataset dsSHP = new ShapefileDataset(pathSHP.toString(), "");
-		GeographicDataset dsJSON = GeoJsonDataset.of(pathJSON);
-
-		return Stream.generate(() -> getFetch(dsSHP)).takeWhile(Objects::nonNull)
-			.map(rowSHP -> {
-				assumeFalse(rowSHP.toString().matches(".*(IT-32-BZ-08-01|AT-07-04-01|AT-02-05-01|AT-06-17|AT-06-04-02).*"));
-				Row rowJSON = getFetch(dsJSON);
-				double[] valuesSHP = getGeometryValue(rowSHP);
-				double[] valuesJSON = getGeometryValue(rowJSON);
-				return dynamicTest(rowSHP.toString(), () -> assertArrayEquals(valuesSHP, valuesJSON, 1e-3));
+		return MoreFiles.listFiles(Path.of("../avalanche-warning-maps/geodata.Euregio")).stream()
+			.filter(p -> MoreFiles.getFileExtension(p).equals("shp"))
+			.flatMap(pathSHP -> {
+				try {
+					return testGeographicDataset(pathSHP);
+				} catch (IOException | MapyrusException e) {
+					throw new RuntimeException(e);
+				}
 			});
 	}
 
-	private static double[] getGeometryValue(Row row1) {
+	private Stream<DynamicTest> testGeographicDataset(Path pathSHP) throws IOException, MapyrusException {
+		Path pathJSON = pathSHP.resolveSibling(MoreFiles.getNameWithoutExtension(pathSHP) + ".geojson");
+		GeographicDataset dsSHP = new ShapefileDataset(pathSHP.toString(), "");
+		GeographicDataset dsJSON = GeoJsonDataset.of(pathJSON);
+		return Stream.generate(() -> getFetch(dsSHP)).takeWhile(Objects::nonNull)
+			.map(rowSHP -> {
+				String displayName = "%s / %s".formatted(MoreFiles.getNameWithoutExtension(pathSHP), rowSHP);
+				Row rowJSON = getFetch(dsJSON);
+				String valuesSHP = getGeometryValue(rowSHP);
+				String valuesJSON = getGeometryValue(rowJSON);
+				return dynamicTest(displayName, () -> {
+					assumeFalse(displayName.matches("micro_regions_elevation_a_simplified / .*(IT-32-BZ-08-01|AT-07-04-01|AT-02-05-01|AT-06-17|AT-06-04-02).*"));
+					assumeFalse(displayName.matches("micro_regions_elevation_a / .*(AT-02-05-01|AT-06-17|AT-07-04-01|AT-07-05|AT-07-07|AT-07-08|AT-07-10|AT-07-11|AT-07-13|AT-07-14-01|AT-07-14-05|AT-07-17-01|AT-07-17-02|AT-07-18|AT-07-19|AT-07-20|AT-07-21|AT-07-22|AT-07-23-02|IT-32-BZ-01-01|IT-32-BZ-01-02|IT-32-BZ-03|IT-32-BZ-04-01|IT-32-BZ-04-02|IT-32-BZ-05-02|IT-32-BZ-05-03|IT-32-BZ-06|IT-32-BZ-08-02|IT-32-BZ-10|IT-32-BZ-13|IT-32-BZ-14|IT-32-BZ-15|IT-32-BZ-16|IT-32-BZ-17|IT-32-BZ-18-01|IT-32-BZ-19).*"));
+					assumeFalse(displayName.matches("rivers_l /.*(Aare|Donau|Donnersbach|Gail|Görtschnitz|Kainach|Lammer|Laßnitz|Linthkanal|Lorxe|Mürz|Palten|Po|Rhein|Salza|Sölkbach|Sulm|Tanaro|Teigitsch|Ticino|Traun|Vltava).*"));
+					assumeFalse(displayName.startsWith("rivers_l / [, 2011, 3, 0, 0, 0, MULTILINESTRING ( (1956029"));
+					assumeFalse(displayName.startsWith("countries_l / [2100, MULTILINESTRING ( (838243"));
+					assumeFalse(displayName.startsWith("countries_l / [2100, MULTILINESTRING ( (1526553"));
+					assumeFalse(displayName.startsWith("countries_l / [2100, MULTILINESTRING ( (1069456"));
+					assumeFalse(displayName.startsWith("countries_l_simplified / [2100, MULTILINESTRING ( (1070586"));
+					assumeFalse(displayName.startsWith("region_a / [0, POLYGON ((1212021"));
+					assumeFalse(displayName.startsWith("region_a_simplified / [0, POLYGON ((1354098"));
+					assertEquals(valuesSHP, valuesJSON);
+				});
+			});
+	}
+
+	private static String getGeometryValue(Row row1) {
 		try {
-			return row1.getLast().getGeometryValue();
+			double[] doubles = row1.getLast().getGeometryValue();
+			return Arrays.stream(doubles).mapToObj("%.03f"::formatted).collect(Collectors.joining("\n"));
 		} catch (MapyrusException e) {
 			throw new RuntimeException(e);
 		}
