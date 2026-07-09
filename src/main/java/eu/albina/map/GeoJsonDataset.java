@@ -125,7 +125,7 @@ public class GeoJsonDataset implements GeographicDataset {
 	private double[] coordinates(LineString geometry) {
 		List<LngLatAlt> coordinates = geometry.getCoordinates();
 		return DoubleStream.concat(
-			DoubleStream.of(Argument.GEOMETRY_LINESTRING, sizeL(coordinates)),
+			DoubleStream.of(Argument.GEOMETRY_MULTILINESTRING, 1, Argument.GEOMETRY_LINESTRING, sizeL(coordinates)),
 			coordinatesL(coordinates)
 		).toArray();
 	}
