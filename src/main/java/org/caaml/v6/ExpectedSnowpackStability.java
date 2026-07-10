@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -10,17 +9,14 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum ExpectedSnowpackStability {
-    @JsonProperty("fair") FAIR,
-    @JsonProperty("good") GOOD,
-    @JsonProperty("poor") POOR,
-    @JsonProperty("very_poor") VERY_POOR;
+    fair, good, poor, very_poor;
 
     public static ExpectedSnowpackStability forValue(String value) {
 		return switch (value) {
-			case "fair" -> FAIR;
-			case "good" -> GOOD;
-			case "poor" -> POOR;
-			case "very_poor" -> VERY_POOR;
+			case "fair" -> fair;
+			case "good" -> good;
+			case "poor" -> poor;
+			case "very_poor" -> very_poor;
 			default -> throw new IllegalArgumentException("Cannot deserialize ExpectedSnowpackStability");
 		};
 	}

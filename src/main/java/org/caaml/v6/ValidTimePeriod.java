@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -10,8 +9,6 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum ValidTimePeriod {
-    @JsonProperty("all_day") ALL_DAY,
-    @JsonProperty("earlier") EARLIER,
-    @JsonProperty("later") LATER;
+    all_day, earlier, later;
 
 }

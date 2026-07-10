@@ -11,15 +11,7 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum Aspect {
-    @JsonProperty("E") E,
-    @JsonProperty("N") N,
-    @JsonProperty("NE") NE,
-    @JsonProperty("NW") NW,
-    @JsonProperty("n/a") N_A,
-    @JsonProperty("S") S,
-    @JsonProperty("SE") SE,
-    @JsonProperty("SW") SW,
-    @JsonProperty("W") W;
+    E, N, NE, NW, @JsonProperty("n/a") N_A, S, SE, SW, W;
 
     public static Aspect forValue(String value) {
 		return switch (value) {

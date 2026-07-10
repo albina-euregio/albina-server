@@ -76,12 +76,12 @@ public class Caaml6 {
 		bulletin.setAvalancheActivity(org.caaml.v6.Texts.of(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			bulletin.setAvalancheProblems(Stream.concat(
-				avalancheBulletin.getForenoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.EARLIER)),
-				avalancheBulletin.getAfternoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.LATER))
+				avalancheBulletin.getForenoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.earlier)),
+				avalancheBulletin.getAfternoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.later))
 			).filter(Objects::nonNull).toList());
 		} else {
 			bulletin.setAvalancheProblems(avalancheBulletin.getForenoon().getAvalancheProblems().stream()
-				.map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.ALL_DAY))
+				.map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.all_day))
 				.filter(Objects::nonNull).toList());
 		}
 		bulletin.setBulletinID(avalancheBulletin.getId());
@@ -179,11 +179,11 @@ public class Caaml6 {
 			result.setElevation(new ElevationBoundaryOrBand(null, bound));
 		}
 		if (!avalancheBulletin.isHasDaytimeDependency()) {
-			result.setValidTimePeriod(ValidTimePeriod.ALL_DAY);
+			result.setValidTimePeriod(ValidTimePeriod.all_day);
 		} else if (daytime == avalancheBulletin.getForenoon()) {
-			result.setValidTimePeriod(ValidTimePeriod.EARLIER);
+			result.setValidTimePeriod(ValidTimePeriod.earlier);
 		} else if (daytime == avalancheBulletin.getAfternoon()) {
-			result.setValidTimePeriod(ValidTimePeriod.LATER);
+			result.setValidTimePeriod(ValidTimePeriod.later);
 		} else {
 			result.setValidTimePeriod(null);
 		}

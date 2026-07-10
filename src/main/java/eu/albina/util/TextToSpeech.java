@@ -16,7 +16,6 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -204,17 +203,17 @@ public class TextToSpeech {
 		}
 
 		private String avalancheProblemTypeText(AvalancheProblemType problemType) {
-			return lang.getBundle("i18n.AvalancheProblem").getString(problemType.name().toLowerCase(Locale.ROOT) + ".speech");
+			return lang.getBundle("i18n.AvalancheProblem").getString(problemType.name() + ".speech");
 		}
 
 		private Stream<String> dangerRatingTexts(List<DangerRating> dangerRatings) {
-			boolean isAllDay = dangerRatings.stream().allMatch(dr -> dr.getValidTimePeriod() == ValidTimePeriod.ALL_DAY);
+			boolean isAllDay = dangerRatings.stream().allMatch(dr -> dr.getValidTimePeriod() == ValidTimePeriod.all_day);
 			if (isAllDay) {
-				return Stream.of(dangerRatingTexts0(dangerRatings, ValidTimePeriod.ALL_DAY));
+				return Stream.of(dangerRatingTexts0(dangerRatings, ValidTimePeriod.all_day));
 			} else {
 				return Stream.of(
-					dangerRatingTexts0(dangerRatings, ValidTimePeriod.EARLIER),
-					dangerRatingTexts0(dangerRatings, ValidTimePeriod.LATER));
+					dangerRatingTexts0(dangerRatings, ValidTimePeriod.earlier),
+					dangerRatingTexts0(dangerRatings, ValidTimePeriod.later));
 			}
 		}
 
@@ -240,7 +239,7 @@ public class TextToSpeech {
 		}
 
 		private String dangerRatingValueText(DangerRatingValue mainValue) {
-			return lang.getBundle("i18n.DangerRating").getString(mainValue.name().toLowerCase(Locale.ROOT) + ".speech");
+			return lang.getBundle("i18n.DangerRating").getString(mainValue.name() + ".speech");
 		}
 
 		private String elevationText(String elevation) {
@@ -250,7 +249,7 @@ public class TextToSpeech {
 		}
 
 		private String validTimePeriodText(ValidTimePeriod validTimePeriod) {
-			return lang.getBundleString("valid-time-period." + validTimePeriod.name().toLowerCase(Locale.ROOT) + ".long");
+			return lang.getBundleString("valid-time-period." + validTimePeriod.name() + ".long");
 		}
 
 		private void dangerPatterns() {
@@ -273,7 +272,7 @@ public class TextToSpeech {
 
 		private String tendencyText(Tendency tendency) {
 			String tendencyDate = getValidityDate(tendency.getValidTime());
-			return lang.getBundleString("speech.tendency." + tendency.getTendencyType().name().toLowerCase(Locale.ROOT), Map.of("tendencyDate", tendencyDate));
+			return lang.getBundleString("speech.tendency." + tendency.getTendencyType().name(), Map.of("tendencyDate", tendencyDate));
 		}
 
 		private String getValidityDate(ValidTime validTime) {
