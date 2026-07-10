@@ -145,6 +145,7 @@ public class AvalancheBulletinService {
 	@Get("/edit/caaml/json")
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN, Role.Str.OBSERVER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
+	@ApiResponse(description = "CAAML JSON bulletins", content = @Content(schema = @Schema(implementation = org.caaml.v6.AvalancheBulletins.class)))
 	@Operation(summary = "Get bulletins for date as CAAML JSON")
 	public String getCaamlJsonBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -186,6 +187,7 @@ public class AvalancheBulletinService {
 	@Get
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_XML)
+	@ApiResponse(description = "CAAML XML bulletins", content = @Content(mediaType = MediaType.APPLICATION_XML, schema = @Schema(implementation = org.caaml.v6.AvalancheBulletins.class)))
 	@Operation(deprecated = true)
 	public String getPublishedXMLBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -203,6 +205,7 @@ public class AvalancheBulletinService {
 	@Get("/caaml")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_XML)
+	@ApiResponse(description = "CAAML XML bulletins", content = @Content(mediaType = MediaType.APPLICATION_XML, schema = @Schema(implementation = org.caaml.v6.AvalancheBulletins.class)))
 	@Operation(summary = "Get published bulletins for date as CAAML XML")
 	public String getPublishedCaamlBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
@@ -227,6 +230,7 @@ public class AvalancheBulletinService {
 
 	@Get("/caaml/json")
 	@Secured(SecurityRule.IS_ANONYMOUS)
+	@ApiResponse(description = "CAAML JSON bulletins", content = @Content(schema = @Schema(implementation = org.caaml.v6.AvalancheBulletins.class)))
 	@Operation(summary = "Get published bulletins for date as CAAML JSON")
 	public String getPublishedCaamlJsonBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,

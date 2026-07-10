@@ -481,6 +481,7 @@ public class Region implements PersistentObject {
 	}
 
 	@JsonProperty("ttsLanguages")
+	@Schema(description = "Text-to-speech languages")
 	public Set<LanguageCode> getTTSLanguages() {
 		return ttsLanguages;
 	}
