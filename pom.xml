@@ -373,6 +373,9 @@
 					<compilerArgs>
 						<arg>-Amicronaut.processing.group=eu.albina</arg>
 						<arg>-Amicronaut.processing.module=albina</arg>
+						<!-- Prefix all CAAML schema names with "Caaml" to avoid
+						     conflicts with equally-named eu.albina classes. -->
+						<arg>-Amicronaut.openapi.schema.decorator.prefix.org.caaml.v6=Caaml</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
