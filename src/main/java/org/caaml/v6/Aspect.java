@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -11,7 +12,15 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum Aspect {
-    E, N, NE, NW, N_A, S, SE, SW, W;
+    @JsonProperty("E") E,
+    @JsonProperty("N") N,
+    @JsonProperty("NE") NE,
+    @JsonProperty("NW") NW,
+    @JsonProperty("n/a") N_A,
+    @JsonProperty("S") S,
+    @JsonProperty("SE") SE,
+    @JsonProperty("SW") SW,
+    @JsonProperty("W") W;
 
 	@JsonValue
 	@Override

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -9,7 +10,14 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum AvalancheProblemType {
-    CORNICES, FAVOURABLE_SITUATION, GLIDING_SNOW, NEW_SNOW, NO_DISTINCT_AVALANCHE_PROBLEM, PERSISTENT_WEAK_LAYERS, WET_SNOW, WIND_SLAB;
+    @JsonProperty("cornices") CORNICES,
+    @JsonProperty("favourable_situation") FAVOURABLE_SITUATION,
+    @JsonProperty("gliding_snow") GLIDING_SNOW,
+    @JsonProperty("new_snow") NEW_SNOW,
+    @JsonProperty("no_distinct_avalanche_problem") NO_DISTINCT_AVALANCHE_PROBLEM,
+    @JsonProperty("persistent_weak_layers") PERSISTENT_WEAK_LAYERS,
+    @JsonProperty("wet_snow") WET_SNOW,
+    @JsonProperty("wind_slab") WIND_SLAB;
 
 	@JsonValue
 	@Override

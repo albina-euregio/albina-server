@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -9,7 +10,9 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum AvalancheTypeType {
-    SLAB, LOOSE, GLIDE;
+    @JsonProperty("slab") SLAB,
+    @JsonProperty("loose") LOOSE,
+    @JsonProperty("glide") GLIDE;
 
 	@JsonValue
 	@Override

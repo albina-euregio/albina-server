@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -10,7 +11,10 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum ExpectedAvalancheFrequency {
-    FEW, MANY, NONE, SOME;
+    @JsonProperty("few") FEW,
+    @JsonProperty("many") MANY,
+    @JsonProperty("none") NONE,
+    @JsonProperty("some") SOME;
 
 	@JsonValue
 	@Override

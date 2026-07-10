@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package org.caaml.v6;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
@@ -9,7 +10,13 @@ import io.micronaut.serde.annotation.Serdeable;
  */
 @Serdeable
 public enum DangerRatingValue {
-    CONSIDERABLE, HIGH, LOW, MODERATE, NO_RATING, NO_SNOW, VERY_HIGH;
+    @JsonProperty("considerable") CONSIDERABLE,
+    @JsonProperty("high") HIGH,
+    @JsonProperty("low") LOW,
+    @JsonProperty("moderate") MODERATE,
+    @JsonProperty("no_rating") NO_RATING,
+    @JsonProperty("no_snow") NO_SNOW,
+    @JsonProperty("very_high") VERY_HIGH;
 
 	@JsonValue
 	@Override
