@@ -2,7 +2,6 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -15,17 +14,6 @@ public enum ExpectedSnowpackStability {
     @JsonProperty("good") GOOD,
     @JsonProperty("poor") POOR,
     @JsonProperty("very_poor") VERY_POOR;
-
-	@JsonValue
-	@Override
-    public String toString() {
-        return switch (this) {
-            case FAIR -> "fair";
-            case GOOD -> "good";
-            case POOR -> "poor";
-            case VERY_POOR -> "very_poor";
-        };
-    }
 
     public static ExpectedSnowpackStability forValue(String value) {
 		return switch (value) {

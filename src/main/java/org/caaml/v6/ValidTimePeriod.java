@@ -2,7 +2,6 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -14,15 +13,5 @@ public enum ValidTimePeriod {
     @JsonProperty("all_day") ALL_DAY,
     @JsonProperty("earlier") EARLIER,
     @JsonProperty("later") LATER;
-
-	@JsonValue
-	@Override
-	public String toString() {
-        return switch (this) {
-            case ALL_DAY -> "all_day";
-            case EARLIER -> "earlier";
-            case LATER -> "later";
-        };
-    }
 
 }

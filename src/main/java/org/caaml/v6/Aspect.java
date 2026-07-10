@@ -2,7 +2,6 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -21,22 +20,6 @@ public enum Aspect {
     @JsonProperty("SE") SE,
     @JsonProperty("SW") SW,
     @JsonProperty("W") W;
-
-	@JsonValue
-	@Override
-	public String toString() {
-        return switch (this) {
-            case E -> "E";
-            case N -> "N";
-            case NE -> "NE";
-            case NW -> "NW";
-            case N_A -> "n/a";
-            case S -> "S";
-            case SE -> "SE";
-            case SW -> "SW";
-            case W -> "W";
-        };
-    }
 
     public static Aspect forValue(String value) {
 		return switch (value) {

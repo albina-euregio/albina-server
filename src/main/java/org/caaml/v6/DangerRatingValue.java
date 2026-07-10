@@ -2,7 +2,6 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -17,20 +16,6 @@ public enum DangerRatingValue {
     @JsonProperty("no_rating") NO_RATING,
     @JsonProperty("no_snow") NO_SNOW,
     @JsonProperty("very_high") VERY_HIGH;
-
-	@JsonValue
-	@Override
-	public String toString() {
-        return switch (this) {
-            case CONSIDERABLE -> "considerable";
-            case HIGH -> "high";
-            case LOW -> "low";
-            case MODERATE -> "moderate";
-            case NO_RATING -> "no_rating";
-            case NO_SNOW -> "no_snow";
-            case VERY_HIGH -> "very_high";
-        };
-    }
 
     public static DangerRatingValue forValue(String value) {
 		return switch (value) {

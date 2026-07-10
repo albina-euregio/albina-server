@@ -2,7 +2,6 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -15,17 +14,6 @@ public enum ExpectedAvalancheFrequency {
     @JsonProperty("many") MANY,
     @JsonProperty("none") NONE,
     @JsonProperty("some") SOME;
-
-	@JsonValue
-	@Override
-	public String toString() {
-        return switch (this) {
-            case FEW -> "few";
-            case MANY -> "many";
-            case NONE -> "none";
-            case SOME -> "some";
-        };
-    }
 
     public static ExpectedAvalancheFrequency forValue(String value) {
 		return switch (value) {

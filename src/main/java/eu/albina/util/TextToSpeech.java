@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -152,7 +153,7 @@ public class TextToSpeech {
 
 		private String aspectsText(List<Aspect> aspects) {
 			List<String> texts = sortAspects(aspects).stream()
-				.map(Aspect::toString)
+				.map(Aspect::name)
 				.map(lang.getBundle("i18n.Aspect")::getString)
 				.toList();
             return switch (texts.size()) {
@@ -203,7 +204,7 @@ public class TextToSpeech {
 		}
 
 		private String avalancheProblemTypeText(AvalancheProblemType problemType) {
-			return lang.getBundle("i18n.AvalancheProblem").getString(problemType.toString() + ".speech");
+			return lang.getBundle("i18n.AvalancheProblem").getString(problemType.name().toLowerCase(Locale.ROOT) + ".speech");
 		}
 
 		private Stream<String> dangerRatingTexts(List<DangerRating> dangerRatings) {
@@ -239,7 +240,7 @@ public class TextToSpeech {
 		}
 
 		private String dangerRatingValueText(DangerRatingValue mainValue) {
-			return lang.getBundle("i18n.DangerRating").getString(mainValue.toString() + ".speech");
+			return lang.getBundle("i18n.DangerRating").getString(mainValue.name().toLowerCase(Locale.ROOT) + ".speech");
 		}
 
 		private String elevationText(String elevation) {
@@ -249,7 +250,7 @@ public class TextToSpeech {
 		}
 
 		private String validTimePeriodText(ValidTimePeriod validTimePeriod) {
-			return lang.getBundleString("valid-time-period." + validTimePeriod.toString() + ".long");
+			return lang.getBundleString("valid-time-period." + validTimePeriod.name().toLowerCase(Locale.ROOT) + ".long");
 		}
 
 		private void dangerPatterns() {
@@ -272,7 +273,7 @@ public class TextToSpeech {
 
 		private String tendencyText(Tendency tendency) {
 			String tendencyDate = getValidityDate(tendency.getValidTime());
-			return lang.getBundleString("speech.tendency." + tendency.getTendencyType(), Map.of("tendencyDate", tendencyDate));
+			return lang.getBundleString("speech.tendency." + tendency.getTendencyType().name().toLowerCase(Locale.ROOT), Map.of("tendencyDate", tendencyDate));
 		}
 
 		private String getValidityDate(ValidTime validTime) {

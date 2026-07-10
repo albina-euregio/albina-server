@@ -2,7 +2,6 @@
 package org.caaml.v6;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.micronaut.serde.annotation.Serdeable;
 
 /**
@@ -13,15 +12,5 @@ public enum AvalancheTypeType {
     @JsonProperty("slab") SLAB,
     @JsonProperty("loose") LOOSE,
     @JsonProperty("glide") GLIDE;
-
-	@JsonValue
-	@Override
-	public String toString() {
-        return switch (this) {
-            case SLAB -> "slab";
-            case LOOSE -> "loose";
-            case GLIDE -> "glide";
-        };
-    }
 
 }
