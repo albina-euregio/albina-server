@@ -5,6 +5,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Range;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -128,7 +129,7 @@ public class IncidentService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "List incidents for a region (public report data when unauthenticated)")
-	@ApiResponse(content = @Content(schema = @Schema(implementation = Incidents.IncidentSchema[].class)))
+	@ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidents.IncidentSchema.class))))
 	public String getIncidents(
 		@QueryValue("region") String regionId,
 		@Parameter(description = "Season year, expanded to yyyy-10-01 until (yyyy+1)-10-01")
