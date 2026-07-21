@@ -5,6 +5,10 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Range;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import io.micronaut.serde.ObjectMapper;
@@ -21,6 +25,7 @@ import eu.albina.controller.CrudRepository;
 import eu.albina.controller.RegionRepository;
 import eu.albina.model.Incident;
 import eu.albina.model.IncidentAttachment;
+import eu.albina.model.Incidents;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.GlobalVariables;
@@ -124,6 +129,7 @@ public class IncidentService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "List incidents for a region (public report data when unauthenticated)")
+	@ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = Incidents.IncidentSchema.class))))
 	public String getIncidents(
 		@QueryValue("region") String regionId,
 		@Parameter(description = "Season year, expanded to yyyy-10-01 until (yyyy+1)-10-01")
@@ -159,6 +165,7 @@ public class IncidentService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Get an incident by ID (public data when unauthenticated)")
+	@ApiResponse(content = @Content(schema = @Schema(implementation = Incidents.IncidentSchema.class)))
 	public String getIncident(@PathVariable UUID id, @Nullable Authentication authentication) {
 		Incident incident = incidentRepository.findOrThrow(id);
 		if (canViewInternalData(authentication)) {
