@@ -1,5 +1,6 @@
 package eu.albina.model;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ public interface Incidents {
 		String[] damagedAssets,
 		DangerPattern[] dangerPattern,
 		DangerRating dangerRating,
-		Object dateTime,
+		Instant dateTime,
 		Double debrisDensity,
 		String[] debrisType,
 		Double depositElevation,
@@ -64,7 +65,7 @@ public interface Incidents {
 		String publicAvalancheWarningService,
 		Boolean publicAvalancheWarningServiceOutside,
 		String publicExternalLinks,
-		Object publishedAt,
+		Instant publishedAt,
 		CriticalWarming recentLoading,
 		CriticalWarming recentSlabAvalanches,
 		String region,
@@ -87,7 +88,7 @@ public interface Incidents {
 		Boolean takeAwaysPublic,
 		TimeAccuracy timeAccuracy,
 		String trigger,
-		Object updatedAt,
+		Instant updatedAt,
 		String vehicle,
 		VictimInformation[] victimInformation,
 		Double weakLayerGrainSize1,
@@ -115,8 +116,8 @@ public interface Incidents {
 		String[] attachmentTags,
 		String caption,
 		String credit,
-		Object dateAdded,
-		Object dateCreated,
+		Instant dateAdded,
+		Instant dateCreated,
 		String file,
 		String fileName,
 		UUID id,
