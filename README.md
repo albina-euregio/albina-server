@@ -250,3 +250,13 @@ Micronaut Data is a database access toolkit that uses Ahead of Time (AoT) compil
 ## Feature hibernate-jpa documentation
 
 - [Micronaut Hibernate JPA documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#hibernate)
+
+## Functional Development & Contact
+
+The domain development and key decisions for this project are established by the ALBINA Consortium, based on the standards and recommendations of the European Avalanche Warning Services (EAWS)
+
+For technical or domain-related questions and discussions, please contact: [lawine@tirol.gv.at](mailto:lawine@tirol.gv.at)
+
+## License
+
+This project is licensed under AGPL-3.0 (see `LICENSE`).
