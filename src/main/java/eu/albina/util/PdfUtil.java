@@ -1262,12 +1262,22 @@ public class PdfUtil {
 
 	protected String getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {
 		String filename = MapUtil.filename(avalancheReport.getRegion(), avalancheBulletin, daytimeDependency, grayscale, MapImageFormat.jpg);
-		return avalancheReport.getMapsPathForPDF().resolve(filename).toString();
+		return getMapImage(filename);
 	}
 
 	protected String getMapImage(DaytimeDependency daytimeDependency) throws MalformedURLException {
 		String filename = MapUtil.getOverviewMapFilename(avalancheReport.getRegion(), daytimeDependency, grayscale);
-		return avalancheReport.getMapsPathForPDF().resolve(filename).toString();
+		return getMapImage(filename);
+	}
+
+	protected String getMapImage(String filename) {
+		Path local = avalancheReport.getMapsPathForPDF().resolve(filename);
+		if (Files.exists(local)) {
+			return local.toString();
+		}
+		String url = avalancheReport.getMapsUrl() + "/" + filename;
+		logger.debug("Local map {} not found, fetching map from {}", local, url);
+		return url;
 	}
 
 	private String replaceLinebreaks(String text) {
