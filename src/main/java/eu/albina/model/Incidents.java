@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public interface Incidents {
 
 	record IncidentSchema(
@@ -118,11 +120,10 @@ public interface Incidents {
 		String credit,
 		Instant dateAdded,
 		Instant dateCreated,
-		String file,
 		String fileName,
 		UUID id,
 		String mediaType,
-		Boolean attachmentPublic
+		@JsonProperty("public") Boolean isPublic
 	) {
 	}
 
