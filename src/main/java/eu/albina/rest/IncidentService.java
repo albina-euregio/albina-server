@@ -84,7 +84,7 @@ public class IncidentService {
 		default List<Incident> publicIncidents(String regionId, Range<Instant> range) {
 			return findByRegionIdAndDateTimeBetween(regionId, range.lowerEndpoint().toString(), range.upperEndpoint().toString())
 				.stream()
-				.filter(incident -> incident.getPublicData() != null)
+				.filter(Incident::isPublished)
 				.toList();
 		}
 
@@ -173,7 +173,7 @@ public class IncidentService {
 		if (canViewInternalData(authentication)) {
 			return writeWithView(JsonUtil.Views.Internal.class, incident);
 		}
-		if (incident.getPublicData() == null) {
+		if (!incident.isPublished()) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		return writeWithView(JsonUtil.Views.Public.class, incident);
@@ -225,6 +225,10 @@ public class IncidentService {
 	public Incident publishIncident(@PathVariable UUID id, @Body String body) {
 		try {
 			Object publicData = objectMapper.readValue(body, Object.class);
+			if (publicData == null) {
+				// otherwise the incident would be published without any public data
+				throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Missing public data");
+			}
 			Incident incident = incidentRepository.findOrThrow(id);
 			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 			incident.setPublicData(publicData);
@@ -274,6 +278,9 @@ public class IncidentService {
 
 	/** Whether the attachment is listed in the incident's public data and marked as public. */
 	private boolean isPublicAttachment(Incident incident, UUID attachmentId) {
+		if (!incident.isPublished()) {
+			return false;
+		}
 		try {
 			PublicAttachments publicData = objectMapper.readValue(
 				objectMapper.writeValueAsBytes(incident.getPublicData()), PublicAttachments.class);

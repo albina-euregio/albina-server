@@ -39,6 +39,7 @@ public class IncidentViewTest {
 		assertFalse(json.contains("\"data\""), json);
 		assertFalse(json.contains("\"createdAt\""), json);
 		assertFalse(json.contains("\"updatedAt\""), json);
+		assertFalse(json.contains("\"published\""), json);
 		assertFalse(json.contains("internal"), json);
 	}
 
@@ -53,6 +54,7 @@ public class IncidentViewTest {
 		assertTrue(json.contains("\"data\""), json);
 		assertTrue(json.contains("\"createdAt\""), json);
 		assertTrue(json.contains("\"updatedAt\""), json);
+		assertFalse(json.contains("\"published\""), json);
 		assertTrue(json.contains("internal"), json);
 	}
 }

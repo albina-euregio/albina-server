@@ -105,6 +105,12 @@ public class Incident extends AbstractPersistentObject {
 		return publicData;
 	}
 
+	/** An incident is published when {@link #getPublicData()} has been set via the publish endpoint. */
+	@JsonIgnore
+	public boolean isPublished() {
+		return publicData != null;
+	}
+
 	public void setPublicData(Object publicData) {
 		this.publicData = publicData;
 	}
