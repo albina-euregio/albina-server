@@ -213,6 +213,8 @@ public class IncidentService {
 		} catch (IOException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} finally {
+			publicIncidentsCache.invalidateAll();
 		}
 	}
 
@@ -230,6 +232,8 @@ public class IncidentService {
 		} catch (IOException e) {
 			logger.warn("Invalid JSON body for incident", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} finally {
+			publicIncidentsCache.invalidateAll();
 		}
 	}
 
@@ -238,10 +242,14 @@ public class IncidentService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Unpublish an incident")
 	public Incident unpublishIncident(@PathVariable UUID id) {
-		Incident incident = incidentRepository.findOrThrow(id);
-		incident.setPublishedAt(null);
-		incident.setPublicData(null);
-		return incidentRepository.update(incident);
+		try {
+			Incident incident = incidentRepository.findOrThrow(id);
+			incident.setPublishedAt(null);
+			incident.setPublicData(null);
+			return incidentRepository.update(incident);
+		} finally {
+			publicIncidentsCache.invalidateAll();
+		}
 	}
 
 	@Delete("/{id}")
@@ -249,9 +257,13 @@ public class IncidentService {
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete an incident")
 	public HttpResponse<Void> deleteIncident(@PathVariable UUID id) {
-		incidentRepository.existsOrThrow(id);
-		incidentRepository.deleteById(id.toString());
-		return HttpResponse.noContent();
+		try {
+			incidentRepository.existsOrThrow(id);
+			incidentRepository.deleteById(id.toString());
+			return HttpResponse.noContent();
+		} finally {
+			publicIncidentsCache.invalidateAll();
+		}
 	}
 
 	/** The {@code attachments} field of {@link Incidents.IncidentSchema}, all other fields are ignored. */
