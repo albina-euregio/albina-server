@@ -2,6 +2,74 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [9.0.0] - 2026-07-26
+
+### 🚀 Features
+
+- *(publication)* Add CAAML-only publication strategy
+- *(publication)* Generate simple HTML in the CAAML-only strategy
+- *(Region)* Add enableIncidents field
+- *(Region)* Add awsomeURL field and column
+- *(Incident)* Save incidents as JSON
+- *(Incident)* Save attachments
+- *(Incident)* Load attachments (return file content)
+- *(Incident)* Delete attachments
+- *(Incident)* Publish incident reports
+- *(Incident)* Filter incidents by date range
+- *(Incident)* Add anonymous endpoint for public reports
+- *(Incident)* Cache public report and select season by seasonYear
+- *(Incident)* Add endpoint to unpublish a public report
+- *(Incident)* Serve public report data on the existing GET endpoints
+- *(Incident)* Merge public report list into the GET endpoint
+- *(Incident)* Expose public report view (id, publishedAt, publicData)
+- *(Incident)* Filter public report fields via @JsonView
+- *(Incident)* Add records generated from the JSON schema
+- *(Incident)* Add records to public service methods
+- *(GenericObservation)* Add OpenAPI @Schema descriptions for fields
+- *(GenericObservation)* Create eu.albina.model.GenericObservation
+- *(GenericObservation)* Create eu.albina.rest.GenericObservationService
+- *(GenericObservation)* Use CREATE TABLE IF NOT EXISTS for GENERIC_OBSERVATIONS
+- *(SimpleHtmlUtil)* Add alt text for thumbnail map images
+- *(SimpleHtmlUtil)* Use data URLs to reduce dependencies
+- *(GeoJsonDataset)* Support LineString, MultiLineString and MultiPolygon geometries
+- *(GeoJsonDataset)* Encode line/point geometries and switch map layers to GeoJSON
+- *(caaml/v6)* Prefix CAAML OpenAPI schema names with Caaml
+- *(caaml/v6)* Annotate enum constants with @JsonProperty for OpenAPI
+- *(PdfUtil)* Fall back to remote map URL when local map is missing
+
+### 🚜 Refactor
+
+- [**breaking**] Remove support for CAAML v5
+- *(Region)* Remove unused simpleHtmlTemplateName field and column
+- *(SimpleHtmlUtil)* Inline template, replace FreeMarker with plain Java, build HTML with PrintWriter.format
+- *(SimpleHtmlUtil)* Extract inline CSS into templates/SimpleHtmlUtil.css
+- *(SimpleHtmlUtil)* Only support one template
+- *(SimpleHtmlUtil)* Only use WebP map (drop JPEG)
+- *(SimpleHtmlUtil)* Prefer WebP over SVG (much smaller)
+- *(SimpleHtmlUtil)* Add loading=lazy for map
+- *(EmailUtil)* Replace FreeMarker template with PrintWriter
+- *(EmailUtil)* Extract inline CSS into templates/EmailUtil.css
+- *(GeoJsonDataset)* Read eaws-regions from GeoJSON instead of shapefile
+- *(MapUtil)* Use avalanche-warning-maps logo
+- *(caaml/v6)* Drop @JsonValue toString() overrides
+- *(caaml/v6)* Use lowercase enum constants as wire values
+
+### 📚 Documentation
+
+- *(Region)* Add OpenAPI schema descriptions
+- *(AvalancheBulletinService)* Annotate CAAML response schema
+- *(AvalancheBulletinService)* Use absolute server URLs in OpenAPI
+- *(README)* Add sections on functional development, contact and license
+
+### Build
+
+- Run mvn wrapper:wrapper
+- Upgrade to Java 25
+- Upgrade to Hibernate ORM 7.3.4.Final
+- Upgrade to Micronaut 5 and migrate to tools.jackson.dataformat
+- *(jackson)* Migrate off Jackson 2 (com.fasterxml) to Jackson 3 (tools.jackson)
+- *(jackson)* Upgrade tools.jackson to 3.2.0
+
 ## [8.3.3] - 2026-05-21
 
 ### 🐛 Bug Fixes
