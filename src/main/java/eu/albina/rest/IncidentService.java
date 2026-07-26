@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Range;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import io.micronaut.serde.ObjectMapper;
+import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Part;
@@ -252,6 +254,26 @@ public class IncidentService {
 		return HttpResponse.noContent();
 	}
 
+	/** The {@code attachments} field of {@link Incidents.IncidentSchema}, all other fields are ignored. */
+	@Serdeable
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	record PublicAttachments(List<Incidents.Attachment> attachments) {
+	}
+
+	/** Whether the attachment is listed in the incident's public data and marked as public. */
+	private boolean isPublicAttachment(Incident incident, UUID attachmentId) {
+		try {
+			PublicAttachments publicData = objectMapper.readValue(
+				objectMapper.writeValueAsBytes(incident.getPublicData()), PublicAttachments.class);
+			return publicData != null && publicData.attachments() != null
+				&& publicData.attachments().stream()
+					.anyMatch(a -> attachmentId.equals(a.id()) && Boolean.TRUE.equals(a.isPublic()));
+		} catch (IOException e) {
+			logger.warn("Failed to parse public data of incident {}", incident.getId(), e);
+			return false;
+		}
+	}
+
 	@Get("/{id}/attachment/{attachmentId}")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Get incident attachment (public data when unauthenticated)")
@@ -260,7 +282,8 @@ public class IncidentService {
 	public SystemFile getIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId,
 			@Nullable Authentication authentication) {
 		Incident incident = incidentRepository.findOrThrow(id);
-		if (!canViewInternalData(authentication) && incident.getPublicData() == null) {
+		// do not distinguish between an unpublished incident and a non-public attachment
+		if (!canViewInternalData(authentication) && !isPublicAttachment(incident, attachmentId)) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		Path attachment = getAttachmentPath(id, attachmentId);

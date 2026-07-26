@@ -6,8 +6,11 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.micronaut.serde.annotation.Serdeable;
+
 public interface Incidents {
 
+	@Serdeable
 	record IncidentSchema(
 		AccidentalControlled accidentalControlled,
 		AdditionalLoad additionalLoad,
@@ -112,6 +115,7 @@ public interface Incidents {
 		High, Low
 	}
 
+	@Serdeable
 	record Attachment(
 		String altText,
 		AttachmentCategory attachmentCategory,
@@ -131,6 +135,7 @@ public interface Incidents {
 		Avalanche, Group, Incident, Person, Snowpack, Weather
 	}
 
+	@Serdeable
 	record AvalancheProblem(
 		StartZoneAspect[] aspects,
 		AvalancheProblemAvalancheSize avalancheSize,
@@ -190,6 +195,7 @@ public interface Incidents {
 		Dry, Moist, Wet
 	}
 
+	@Serdeable
 	record GroupInformation(
 		String anonymousGroupIdentifier,
 		AvalancheGear avalancheGear,
@@ -218,6 +224,7 @@ public interface Incidents {
 		ControlledTerrainClosed, ControlledTerrainOpen, FreeTerrain, Unknown
 	}
 
+	@Serdeable
 	record InvolvementsFatalitiesBurials(
 		Double caughtOnly,
 		Double fatalities,
@@ -271,6 +278,7 @@ public interface Incidents {
 		P1D, P2D, P3D, PT12H, PT15M, PT1H, PT2H, PT30M, PT4H, PT6H, exact, unknown
 	}
 
+	@Serdeable
 	record VictimInformation(
 		Age age,
 		Airbag airbag,
