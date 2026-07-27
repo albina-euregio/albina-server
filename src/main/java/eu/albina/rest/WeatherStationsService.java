@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import eu.albina.model.WeatherStations;
+import eu.albina.model.linea.WeatherStations;
 
 @Controller("/weather-stations")
 @Tag(name = "weather-stations")

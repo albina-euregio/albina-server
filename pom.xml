@@ -376,6 +376,9 @@
 						<!-- Prefix all CAAML schema names with "Caaml" to avoid
 						     conflicts with equally-named eu.albina classes. -->
 						<arg>-Amicronaut.openapi.schema.decorator.prefix.org.caaml.v6=Caaml</arg>
+						<!-- Prefix the generically-named weather station schemas
+						     (Feature, Geometry, Properties, …) with "Linea". -->
+						<arg>-Amicronaut.openapi.schema.decorator.prefix.eu.albina.model.linea=Linea</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
