@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>io.micronaut.platform</groupId>
 		<artifactId>micronaut-parent</artifactId>
-		<version>5.0.2</version>
+		<version>5.1.0</version>
 	</parent>
 
 	<properties>
@@ -26,7 +26,7 @@
 		<jackson.annotations.version>2.22</jackson.annotations.version>
 		<liquibase.version>4.30.0</liquibase.version>
 		<itextpdf.version>9.3.0</itextpdf.version>
-		<micronaut.version>5.0.2</micronaut.version>
+		<micronaut.version>5.1.0</micronaut.version>
 		<micronaut.runtime>tomcat</micronaut.runtime>
 		<micronaut.aot.enabled>false</micronaut.aot.enabled>
 		<micronaut.aot.packageName>eu.albina.aot.generated</micronaut.aot.packageName>
