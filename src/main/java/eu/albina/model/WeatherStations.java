@@ -1,4 +1,4 @@
-package eu.albina.model.linea;
+package eu.albina.model;
 
 import java.time.Instant;
 import java.util.List;
