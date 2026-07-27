@@ -56,18 +56,27 @@ public interface WeatherStations {
 		List<String> dataURLs,
 		@Schema(description = "ISO 8601 timestamp")
 		Instant date,
+		@Schema(description = "Wind direction (optionally average over the last 3h) in °")
 		Double DW,
+		@Schema(description = "Snow height in m")
 		Double HS,
+		@Schema(description = "Difference in snow height over the last 24h in m")
 		Double HSD_24,
+		@Schema(description = "Difference in snow height over the last 48h in m")
 		Double HSD_48,
+		@Schema(description = "Difference in snow height over the last 6h in m")
 		Double HSD_6,
+		@Schema(description = "Difference in snow height over the last 72h in m")
 		Double HSD_72,
+		@Schema(description = "Incoming Long Wave Radiation in W/m²")
 		Double ILWR,
+		@Schema(description = "Incoming Short Wave Radiation in W/m²")
 		Double ISWR,
 		@Schema(description = "EAWS micro region ID, see https://gitlab.com/eaws/eaws-regions")
 		String microRegionID,
 		@Schema(description = "Station name")
 		String name,
+		@Schema(description = "Outgoing Long Wave Radiation in W/m²")
 		Double OLWR,
 		@Schema(description = "Station operator")
 		String operator,
@@ -77,14 +86,21 @@ public interface WeatherStations {
 		String operatorLicenseLink,
 		@Schema(description = "Link to website of station operator", format = "uri")
 		String operatorLink,
+		@Schema(description = "Air pressure in Pa")
 		Double P,
 		@Schema(description = "For legacy PNG plots: name of plot which includes this station")
 		String plot,
+		@Schema(description = "Precipitation summed over the last 24h in mm")
 		Double PSUM_24,
+		@Schema(description = "Precipitation summed over the last 48h in mm")
 		Double PSUM_48,
+		@Schema(description = "Precipitation summed over the last 6h in mm")
 		Double PSUM_6,
+		@Schema(description = "Precipitation summed over the last 72h in mm")
 		Double PSUM_72,
+		@Schema(description = "Relative humidity between 0 and 1")
 		Double RH,
+		@Schema(description = "Reflected Short Wave Radiation in W/m²")
 		Double RSWR,
 		@Schema(description = "Station short name (such as ISEE2) consisting of [A-Za-z0-9] only", pattern = "^[A-Za-z0-9]+$")
 		String shortName,
@@ -93,12 +109,19 @@ public interface WeatherStations {
 		@Schema(description = "A few sentences describing the station characteristics/locality/history/...")
 		String stationCharacteristics,
 		Map<String, Statistics> statistics,
+		@Schema(description = "Air temperature in Kelvin")
 		Double TA,
+		@Schema(description = "Max. air temperature over the last 24h in Kelvin")
 		Double TA_MAX,
+		@Schema(description = "Min. air temperature over the last 24h in Kelvin")
 		Double TA_MIN,
+		@Schema(description = "Dew point temperature in Kelvin")
 		Double TD,
+		@Schema(description = "Temperature Snow Surface in Kelvin")
 		Double TSS,
+		@Schema(description = "Wind velocity (optionally as average over the last 3h) in m/s")
 		Double VW,
+		@Schema(description = "Max. wind velocity (optionally max over the last 3h) in m/s")
 		Double VW_MAX
 	) {
 	}
