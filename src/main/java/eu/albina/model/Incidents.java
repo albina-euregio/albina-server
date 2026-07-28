@@ -1,6 +1,7 @@
 package eu.albina.model;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -8,6 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.micronaut.serde.annotation.Serdeable;
 
+/**
+ * Documentation-only schema of the incident records API.
+ *
+ * <p>Collections of enums are declared as {@link List} rather than as arrays: micronaut-openapi
+ * collapses an {@code Enum[]} property to a bare {@code $ref} on the enum schema, losing the
+ * surrounding {@code type: array}. 
+ */
 public interface Incidents {
 
 	@Serdeable
@@ -33,7 +41,7 @@ public interface Incidents {
 		Double crownDepthMax,
 		Double crownDepthMin,
 		String[] damagedAssets,
-		DangerPattern[] dangerPattern,
+		List<DangerPattern> dangerPattern,
 		DangerRating dangerRating,
 		Instant dateTime,
 		Double debrisDensity,
@@ -137,7 +145,7 @@ public interface Incidents {
 
 	@Serdeable
 	record AvalancheProblem(
-		StartZoneAspect[] aspects,
+		List<StartZoneAspect> aspects,
 		AvalancheProblemAvalancheSize avalancheSize,
 		String elevationLowerBound,
 		String elevationUpperBound,
@@ -230,7 +238,7 @@ public interface Incidents {
 		Double fatalities,
 		Double fullyBuried,
 		String[] incidentActivity,
-		IncidentTerrainType[] incidentTerrainType,
+		List<IncidentTerrainType> incidentTerrainType,
 		Double injuredSurvivors,
 		String involvementsFatalitiesBurialsComment,
 		Double numberInvolved,
