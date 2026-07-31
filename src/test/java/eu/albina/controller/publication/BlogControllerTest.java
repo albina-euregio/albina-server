@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import eu.albina.RegionTestUtils;
 import eu.albina.controller.publication.blog.BlogController;
@@ -47,6 +48,9 @@ public class BlogControllerTest {
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.attachmentUrl() != null), "one blog has image");
 		assertTrue(blogController.getBlogPost(config, blogPosts.getFirst().id()).content().length() > 100, "blog has >100 chars");
+		assertEquals(
+			Map.of(LanguageCode.de, "14945", LanguageCode.it, "14968", LanguageCode.en, "14971"),
+			blogController.getBlogPost(config, "14945").translations());
 
 		Instant startDate = Instant.parse("2023-01-01T00:00:00Z");
 		Instant endDate = Instant.parse("2024-01-01T00:00:00Z");

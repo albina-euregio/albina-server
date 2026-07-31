@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import eu.albina.model.converter.EnumSetToStringConverter;
@@ -72,6 +74,18 @@ public enum LanguageCode {
 
 	public Locale getLocale() {
 		return locale;
+	}
+
+	/**
+	 * @param locale a locale string such as {@code de_AT} or {@code en-GB}
+	 * @return the language code matching the language subtag of the given locale
+	 */
+	public static Optional<LanguageCode> fromLocale(String locale) {
+		if (locale == null || locale.isBlank()) {
+			return Optional.empty();
+		}
+		String language = locale.split("[_-]", 2)[0];
+		return Arrays.stream(values()).filter(languageCode -> languageCode.name().equals(language)).findFirst();
 	}
 
 	public ResourceBundle getBundle(String name) {
