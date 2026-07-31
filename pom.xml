@@ -376,6 +376,10 @@
 						<!-- Prefix all CAAML schema names with "Caaml" to avoid
 						     conflicts with equally-named eu.albina classes. -->
 						<arg>-Amicronaut.openapi.schema.decorator.prefix.org.caaml.v6=Caaml</arg>
+						<!-- Merge hand-written documentation for the static files
+						     published to the web root (which are served by the web
+						     server, not by Micronaut) into the generated spec. -->
+						<arg>-Amicronaut.openapi.additional.files=${project.basedir}/src/main/openapi</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>

@@ -1,0 +1,261 @@
+# Static files published to the web root by the publication job. These are
+# plain files on disk served by the web server, not Micronaut routes, so they
+# cannot be discovered by the OpenAPI annotation processor. They are merged
+# into the generated specification via micronaut.openapi.additional.files
+# (see pom.xml).
+#
+# Note the per-path `servers`: unlike the generated operations these files are
+# served from static.avalanche.report, not below the /api context path.
+openapi: 3.0.1
+tags:
+  - name: static-files
+    description: Published bulletin files served by the web server
+
+paths:
+  /bulletins/archive/:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Browse the archive of published bulletins
+      operationId: getStaticArchive
+      responses:
+        "200":
+          description: Directory listing of the bulletin archive
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /bulletins/{date}/{date}_{region}{lang}_CAAMLv6.json:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get published bulletins as CAAML JSON
+      operationId: getStaticCaamlJson
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticRegion"
+        - $ref: "#/components/parameters/StaticLang"
+      responses:
+        "200":
+          description: CAAML v6 JSON bulletins
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaamlAvalancheBulletins"
+
+  /bulletins/{date}/{date}_{region}{lang}_CAAMLv6.xml:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get published bulletins as CAAML XML
+      operationId: getStaticCaamlXml
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticRegion"
+        - $ref: "#/components/parameters/StaticLang"
+      responses:
+        "200":
+          description: CAAML v6 XML bulletins
+          content:
+            application/xml:
+              schema:
+                type: string
+
+  /bulletins/{date}/{publication}/{date}_{region}{lang}_CAAMLv6.json:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get bulletins of a specific publication as CAAML JSON
+      operationId: getStaticCaamlJsonForPublication
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticPublication"
+        - $ref: "#/components/parameters/StaticRegion"
+        - $ref: "#/components/parameters/StaticLang"
+      responses:
+        "200":
+          description: CAAML v6 JSON bulletins
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaamlAvalancheBulletins"
+
+  /bulletins/{date}/{publication}/{file}.webp:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get a published danger map
+      operationId: getStaticMap
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticPublication"
+        - name: file
+          in: path
+          required: true
+          description: >-
+            Map file name, either `{daytime}_{region}_{mapLevel}[_bw]` for
+            overview maps or `{region}_{bulletinId}[_PM][_bw]` for
+            bulletin-specific maps
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Danger map
+          content:
+            image/webp:
+              schema:
+                type: string
+                format: binary
+
+  /bulletins/{date}/{region}_{lang}.mp3:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get the synthesized audio version of the published bulletins
+      operationId: getStaticMp3
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticRegion"
+        - $ref: "#/components/parameters/StaticLang"
+      responses:
+        "200":
+          description: Audio bulletin
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+
+  /eaws_bulletins/{date}/{date}.problems.json:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get published avalanche problems per micro-region (EAWS format)
+      operationId: getStaticEawsProblems
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+      responses:
+        "200":
+          description: Avalanche problems keyed by micro-region ID
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /eaws_bulletins/{date}/{date}{region}.ratings.json:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get published danger ratings per micro-region (EAWS format)
+      operationId: getStaticEawsRatings
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticRegion"
+      responses:
+        "200":
+          description: Danger ratings keyed by micro-region ID
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /eaws_weather_stations/linea.geojson:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get the latest weather station measurements
+      description: >-
+        The endpoint `GET /weather-stations` redirects here.
+      operationId: getStaticWeatherStations
+      responses:
+        "200":
+          description: Weather stations as GeoJSON
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/WeatherStations.FeatureCollection"
+
+  /eaws_weather_stations/{date}/{dateTime}_linea.geojson:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get an hourly snapshot of the weather station measurements
+      operationId: getStaticWeatherStationsForDateTime
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticDateTime"
+      responses:
+        "200":
+          description: Weather stations as GeoJSON
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/WeatherStations.FeatureCollection"
+
+  /simple/{date}/{region}_{lang}.html:
+    servers:
+      - url: https://static.avalanche.report
+    get:
+      tags: [static-files]
+      summary: Get published bulletins as simple HTML
+      operationId: getStaticSimpleHtml
+      parameters:
+        - $ref: "#/components/parameters/StaticDate"
+        - $ref: "#/components/parameters/StaticRegion"
+        - $ref: "#/components/parameters/StaticLang"
+      responses:
+        "200":
+          description: Simple HTML rendering of the bulletins
+          content:
+            text/html:
+              schema:
+                type: string
+
+components:
+  parameters:
+    StaticDate:
+      name: date
+      in: path
+      required: true
+      description: Date of validity in the format yyyy-MM-dd
+      schema:
+        type: string
+        format: date
+    StaticDateTime:
+      name: dateTime
+      in: path
+      required: true
+      description: Timestamp of the hourly snapshot in the format yyyy-MM-dd_HH-mm
+      schema:
+        type: string
+    StaticPublication:
+      name: publication
+      in: path
+      required: true
+      description: Publication timestamp in the format yyyy-MM-dd_HH-mm-ss
+      schema:
+        type: string
+    StaticRegion:
+      name: region
+      in: path
+      required: true
+      description: Region ID, e.g. `EUREGIO`, `AT-07`, `IT-32-BZ`, `IT-32-TN`
+      schema:
+        type: string
+    StaticLang:
+      name: lang
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/LanguageCode"
