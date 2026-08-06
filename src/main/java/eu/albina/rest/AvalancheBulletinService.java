@@ -373,23 +373,19 @@ public class AvalancheBulletinService {
 		@Parameter(description = "Micro region ID, e.g. AT-07-01") @QueryValue("region") String microRegionId) {
 		logger.debug("GET tendency for micro region {}", microRegionId);
 
-		// step the days in the local zone, so that the local time of the start dates
-		// is preserved across daylight saving time changes
-		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
-		List<Instant> dates = IntStream.range(0, TENDENCY_DAYS)
-			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
-			.toList();
-
 		// micro region IDs are not stored as regions, resolve the publishing region
 		Region region = regionRepository.getPublishBulletinRegions().stream()
 			.filter(r -> r.affects(microRegionId))
 			.collect(MoreCollectors.onlyElement());
-
-		Map<Instant, List<AvalancheBulletin>> bulletins = avalancheReportController
-			.getPublishedBulletins(dates.getFirst(), dates.getLast(), List.of(region));
-		return dates.stream()
-			.map(d -> new TendencyEntry(d, AvalancheBulletinController.getHighestDangerRating(
-				bulletins.getOrDefault(d, List.of()), microRegionId)))
+		// step the days in the local zone, so that the local time is preserved across
+		// daylight saving time changes
+		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
+		return IntStream.range(0, TENDENCY_DAYS)
+			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
+			.map(d -> new TendencyEntry(d, AvalancheBulletin.getHighestDangerRating(
+				avalancheReportController.getPublishedBulletins(d, List.of(region)).stream()
+					.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
+					.toList())))
 			.toList();
 	}
 

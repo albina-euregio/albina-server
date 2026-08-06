@@ -369,21 +369,6 @@ public class AvalancheBulletinController {
 	}
 
 	/**
-	 * Returns the highest {@code DangerRating} of the given bulletins in a specific
-	 * micro region.
-	 *
-	 * @param bulletins     the bulletins of interest
-	 * @param microRegionId the micro region of interest
-	 * @return the highest {@code DangerRating}, or {@code missing} if no bulletin is
-	 * published for the micro region
-	 */
-	public static DangerRating getHighestDangerRating(Collection<AvalancheBulletin> bulletins, String microRegionId) {
-		return AvalancheBulletin.getHighestDangerRating(bulletins.stream()
-			.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
-			.toList());
-	}
-
-	/**
 	 * Returns the most recent bulletins for a given time period and
 	 * {@code regions}.
 	 *
