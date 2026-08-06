@@ -369,6 +369,33 @@ public class AvalancheBulletinController {
 	}
 
 	/**
+	 * Returns the highest {@code DangerRating} of all bulletins with status
+	 * {@code published} for each day of a given time period and in specific
+	 * {@code regions}. Days without published bulletins are not contained in the
+	 * result.
+	 *
+	 * @param startDate     the start date of the first day of the time period (inclusive)
+	 * @param endDate       the start date of the last day of the time period (inclusive)
+	 * @param regions       the regions of interest
+	 * @param microRegionId the micro region of interest, or {@code null} to consider
+	 *                      all micro regions of {@code regions}
+	 * @return the highest {@code DangerRating} per day, keyed by the start date of
+	 * the bulletins
+	 */
+	public Map<Instant, DangerRating> getHighestDangerRatings(Instant startDate, Instant endDate,
+															  Collection<Region> regions, String microRegionId) {
+		return avalancheReportController.getPublishedBulletins(startDate, endDate, regions).entrySet().stream()
+			.collect(Collectors.toMap(Map.Entry::getKey,
+				entry -> getHighestDangerRating(entry.getValue(), microRegionId)));
+	}
+
+	static DangerRating getHighestDangerRating(Collection<AvalancheBulletin> bulletins, String microRegionId) {
+		return AvalancheBulletin.getHighestDangerRating(bulletins.stream()
+			.filter(bulletin -> microRegionId == null || bulletin.getPublishedRegions().contains(microRegionId))
+			.toList());
+	}
+
+	/**
 	 * Returns the most recent bulletins for a given time period and
 	 * {@code regions}.
 	 *

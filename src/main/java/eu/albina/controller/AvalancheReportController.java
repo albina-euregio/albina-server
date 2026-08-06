@@ -253,6 +253,24 @@ public class AvalancheReportController {
 		return mergeOrSplitBulletins(regions.stream().map(region -> getPublicReport(date, region)));
 	}
 
+	/**
+	 * Return all bulletins in a given time period and for specific regions with
+	 * status {@code published} or {@code republished}, grouped by the start date of
+	 * the bulletins.
+	 *
+	 * @param startDate the start date of the first day of the time period (inclusive)
+	 * @param endDate   the start date of the last day of the time period (inclusive)
+	 * @param regions   the regions of interest
+	 * @return all published bulletins grouped by their start date
+	 */
+	public Map<Instant, List<AvalancheBulletin>> getPublishedBulletins(Instant startDate, Instant endDate, Collection<Region> regions) {
+		return regions.stream()
+			.flatMap(region -> getPublicReports(startDate, endDate, region).stream())
+			.collect(Collectors.groupingBy(report -> report.getDate().toInstant()))
+			.entrySet().stream()
+			.collect(Collectors.toMap(Map.Entry::getKey, entry -> mergeOrSplitBulletins(entry.getValue().stream())));
+	}
+
 	public List<AvalancheBulletin> mergeOrSplitBulletins(Stream<AvalancheReport> reports) {
 		List<AvalancheBulletin> bulletins = reports
 			.filter(Objects::nonNull)

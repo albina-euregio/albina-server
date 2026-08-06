@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import eu.albina.controller.UserRepository;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -351,6 +353,63 @@ public class AvalancheBulletinService {
 			logger.warn("Error loading highest danger rating", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+	}
+
+	@Serdeable
+	public record TendencyEntry(
+		@Schema(description = "Start date of the bulletins of this day") Instant date,
+		@Schema(description = "Highest danger rating of this day") DangerRating dangerRating) {
+	}
+
+	private static final int TENDENCY_DAYS = 7;
+	private static final int TENDENCY_DAYS_MAX = 366;
+
+	@Get("/tendency")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	@ApiResponse(description = "tendency", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TendencyEntry.class))))
+	@Operation(summary = "Get the highest danger rating of each of the preceding days")
+	public List<TendencyEntry> getTendency(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@Parameter(description = "Region ID or micro region ID, e.g. AT-07 or AT-07-01") @QueryValue("region") String regionId,
+		@Parameter(description = "Number of days to return (the given date and the preceding days)")
+		@QueryValue(value = "days", defaultValue = "" + TENDENCY_DAYS) int days) {
+		logger.debug("GET tendency for region {}", regionId);
+
+		if (days < 1 || days > TENDENCY_DAYS_MAX) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "days must be between 1 and " + TENDENCY_DAYS_MAX);
+		}
+
+		List<Instant> dates = tendencyDates(DateControllerUtil.parseDateOrToday(date), days);
+
+		// micro region IDs (e.g. AT-07-01) are not stored as regions
+		Region region = regionRepository.findById(regionId).orElse(null);
+		String microRegionId = region != null ? null : regionId;
+		List<Region> regions = region == null
+			? regionRepository.getPublishBulletinRegions().stream().filter(r -> r.affects(regionId)).toList()
+			: region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
+				? List.of(region)
+				: List.copyOf(region.getSubRegions());
+		if (regions.isEmpty()) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No region with ID: " + regionId);
+		}
+
+		Map<Instant, DangerRating> dangerRatings = avalancheBulletinController
+			.getHighestDangerRatings(dates.getFirst(), dates.getLast(), regions, microRegionId);
+		return dates.stream()
+			.map(d -> new TendencyEntry(d, dangerRatings.getOrDefault(d, DangerRating.missing)))
+			.toList();
+	}
+
+	/**
+	 * Returns the start dates of the {@code days} days ending with {@code date}, in
+	 * ascending order. The days are stepped in the local zone, so that the local
+	 * time of the start dates is preserved across daylight saving time changes.
+	 */
+	static List<Instant> tendencyDates(Instant date, int days) {
+		ZonedDateTime lastDay = date.atZone(PublicationStrategy.localZone());
+		return IntStream.range(0, days)
+			.mapToObj(i -> lastDay.minusDays(days - 1L - i).toInstant())
+			.toList();
 	}
 
 	@Post("/preview")
