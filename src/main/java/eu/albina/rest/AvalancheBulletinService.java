@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.MoreCollectors;
 import com.google.common.util.concurrent.RateLimiter;
 
 import eu.albina.caaml.Caaml;
@@ -362,53 +363,33 @@ public class AvalancheBulletinService {
 	}
 
 	private static final int TENDENCY_DAYS = 7;
-	private static final int TENDENCY_DAYS_MAX = 366;
 
 	@Get("/tendency")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@ApiResponse(description = "tendency", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TendencyEntry.class))))
-	@Operation(summary = "Get the highest danger rating of each of the preceding days")
+	@Operation(summary = "Get the highest danger rating of each of the 7 preceding days")
 	public List<TendencyEntry> getTendency(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Parameter(description = "Region ID or micro region ID, e.g. AT-07 or AT-07-01") @QueryValue("region") String regionId,
-		@Parameter(description = "Number of days to return (the given date and the preceding days)")
-		@QueryValue(value = "days", defaultValue = "" + TENDENCY_DAYS) int days) {
-		logger.debug("GET tendency for region {}", regionId);
+		@Parameter(description = "Micro region ID, e.g. AT-07-01") @QueryValue("region") String microRegionId) {
+		logger.debug("GET tendency for micro region {}", microRegionId);
 
-		if (days < 1 || days > TENDENCY_DAYS_MAX) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "days must be between 1 and " + TENDENCY_DAYS_MAX);
-		}
-
-		List<Instant> dates = tendencyDates(DateControllerUtil.parseDateOrToday(date), days);
-
-		// micro region IDs (e.g. AT-07-01) are not stored as regions
-		Region region = regionRepository.findById(regionId).orElse(null);
-		String microRegionId = region != null ? null : regionId;
-		List<Region> regions = region == null
-			? regionRepository.getPublishBulletinRegions().stream().filter(r -> r.affects(regionId)).toList()
-			: region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
-				? List.of(region)
-				: List.copyOf(region.getSubRegions());
-		if (regions.isEmpty()) {
-			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No region with ID: " + regionId);
-		}
-
-		Map<Instant, DangerRating> dangerRatings = avalancheBulletinController
-			.getHighestDangerRatings(dates.getFirst(), dates.getLast(), regions, microRegionId);
-		return dates.stream()
-			.map(d -> new TendencyEntry(d, dangerRatings.getOrDefault(d, DangerRating.missing)))
+		// step the days in the local zone, so that the local time of the start dates
+		// is preserved across daylight saving time changes
+		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
+		List<Instant> dates = IntStream.range(0, TENDENCY_DAYS)
+			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
 			.toList();
-	}
 
-	/**
-	 * Returns the start dates of the {@code days} days ending with {@code date}, in
-	 * ascending order. The days are stepped in the local zone, so that the local
-	 * time of the start dates is preserved across daylight saving time changes.
-	 */
-	static List<Instant> tendencyDates(Instant date, int days) {
-		ZonedDateTime lastDay = date.atZone(PublicationStrategy.localZone());
-		return IntStream.range(0, days)
-			.mapToObj(i -> lastDay.minusDays(days - 1L - i).toInstant())
+		// micro region IDs are not stored as regions, resolve the publishing region
+		Region region = regionRepository.getPublishBulletinRegions().stream()
+			.filter(r -> r.affects(microRegionId))
+			.collect(MoreCollectors.onlyElement());
+
+		Map<Instant, List<AvalancheBulletin>> bulletins = avalancheReportController
+			.getPublishedBulletins(dates.getFirst(), dates.getLast(), List.of(region));
+		return dates.stream()
+			.map(d -> new TendencyEntry(d, AvalancheBulletinController.getHighestDangerRating(
+				bulletins.getOrDefault(d, List.of()), microRegionId)))
 			.toList();
 	}
 
