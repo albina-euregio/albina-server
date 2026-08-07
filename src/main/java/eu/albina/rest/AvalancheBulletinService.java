@@ -383,10 +383,14 @@ public class AvalancheBulletinService {
 		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
 		return IntStream.range(0, TENDENCY_DAYS)
 			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
-			.map(d -> new TendencyEntry(d, AvalancheBulletin.getHighestDangerRating(
-				avalancheReportController.getPublishedBulletins(d, List.of(region)).stream()
+			.map(startDate -> {
+				List<AvalancheBulletin> bulletins = avalancheReportController
+					.getPublishedBulletins(startDate, List.of(region))
+					.stream()
 					.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
-					.toList())))
+					.toList();
+				return new TendencyEntry(startDate, AvalancheBulletin.getHighestDangerRating(bulletins));
+			})
 			.toList();
 	}
 
