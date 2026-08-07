@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,7 @@ import eu.albina.controller.UserRepository;
 import eu.albina.controller.publication.PublicationController;
 import eu.albina.exception.AlbinaException;
 import eu.albina.jobs.PublicationJob;
+import eu.albina.jobs.PublicationStrategy;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
@@ -351,6 +355,56 @@ public class AvalancheBulletinService {
 			logger.warn("Error loading highest danger rating", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
+	}
+
+	@Serdeable
+	public record TendencyResult(
+		@Schema(description = "Start dates of the bulletins of the preceding days") List<Instant> dates,
+		@Schema(description = "Highest danger rating of each of these days, per micro region") Map<String, List<DangerRating>> dangerRatings) {
+	}
+
+	private static final int TENDENCY_DAYS = 7;
+
+	@Get("/tendency")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	@ApiResponse(description = "tendency of each micro region with published bulletins", content = @Content(schema = @Schema(implementation = TendencyResult.class)))
+	@Operation(summary = "Get tendency for region")
+	public TendencyResult getTendency(
+		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
+		@Parameter(description = "Region ID, e.g. AT-07 or EUREGIO, or empty for all regions")
+		@Nullable @QueryValue("region") String regionId) {
+		logger.debug("GET tendency for region {}", regionId);
+
+		Set<Region> regions;
+		if (regionId == null || regionId.isEmpty()) {
+			regions = regionRepository.getPublishBulletinRegions().stream()
+				.filter(r -> r.getSubRegions().isEmpty()) // no AvalancheReports for "EUREGIO"
+				.collect(Collectors.toSet());
+		} else {
+			Region region = regionRepository.findById(regionId).orElseThrow();
+			regions = region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
+				? Set.of(region)
+				: region.getSubRegions();
+		}
+		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
+		List<Instant> dates = IntStream.range(0, TENDENCY_DAYS)
+			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
+			.toList();
+		Map<Instant, List<AvalancheBulletin>> bulletins = avalancheReportController
+			.getPublishedBulletins(dates.getFirst(), dates.getLast(), regions);
+		Map<String, List<DangerRating>> dangerRatings = bulletins.values().stream()
+			.flatMap(List::stream)
+			.flatMap(bulletin -> bulletin.getPublishedRegions().stream())
+			.distinct()
+			.collect(Collectors.toMap(microRegionId -> microRegionId, microRegionId -> dates.stream()
+				.map(startDate -> {
+					List<AvalancheBulletin> microRegionBulletins = bulletins.getOrDefault(startDate, List.of()).stream()
+						.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
+						.toList();
+					return AvalancheBulletin.getHighestDangerRating(microRegionBulletins);
+				})
+				.toList(), (a, b) -> a, TreeMap::new));
+		return new TendencyResult(dates, dangerRatings);
 	}
 
 	@Post("/preview")
