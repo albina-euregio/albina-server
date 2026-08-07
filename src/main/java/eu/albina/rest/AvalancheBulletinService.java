@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
@@ -24,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.MoreCollectors;
 import com.google.common.util.concurrent.RateLimiter;
 
 import eu.albina.caaml.Caaml;
@@ -366,32 +367,33 @@ public class AvalancheBulletinService {
 
 	@Get("/tendency")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	@ApiResponse(description = "tendency", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TendencyEntry.class))))
-	@Operation(summary = "Get tendency for micro region")
-	public List<TendencyEntry> getTendency(
+	@ApiResponse(description = "tendency of each micro region with published bulletins")
+	@Operation(summary = "Get tendency for region")
+	public Map<String, List<TendencyEntry>> getTendency(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Parameter(description = "Micro region ID, e.g. AT-07-01") @QueryValue("region") String microRegionId) {
-		logger.debug("GET tendency for micro region {}", microRegionId);
+		@Parameter(description = "Region ID, e.g. AT-07 or EUREGIO") @QueryValue("region") String regionId) {
+		logger.debug("GET tendency for region {}", regionId);
 
-		// micro region IDs are not stored as regions, resolve the publishing region
-		Region region = regionRepository.getPublishBulletinRegions().stream()
-			.filter(r -> r.getSubRegions().isEmpty()) // no AvalancheReports for "EUREGIO"
-			.filter(r -> r.affects(microRegionId))
-			.collect(MoreCollectors.onlyElement());
-		// step the days in the local zone, so that the local time is preserved across
-		// daylight saving time changes
+		Region region = regionRepository.findById(regionId).orElseThrow();
+		Set<Region> regions = Set.of(region);
 		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
-		return IntStream.range(0, TENDENCY_DAYS)
+		Map<Instant, List<AvalancheBulletin>> bulletins = IntStream.range(0, TENDENCY_DAYS)
 			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
-			.map(startDate -> {
-				List<AvalancheBulletin> bulletins = avalancheReportController
-					.getPublishedBulletins(startDate, List.of(region))
-					.stream()
-					.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
-					.toList();
-				return new TendencyEntry(startDate, AvalancheBulletin.getHighestDangerRating(bulletins));
-			})
-			.toList();
+			.collect(Collectors.toMap(startDate -> startDate,
+				startDate -> avalancheReportController.getPublishedBulletins(startDate, regions),
+				(a, b) -> a, TreeMap::new));
+		return bulletins.values().stream()
+			.flatMap(List::stream)
+			.flatMap(bulletin -> bulletin.getPublishedRegions().stream())
+			.distinct()
+			.collect(Collectors.toMap(microRegionId -> microRegionId, microRegionId -> bulletins.entrySet().stream()
+				.map(entry -> {
+					List<AvalancheBulletin> microRegionBulletins = entry.getValue().stream()
+						.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
+						.toList();
+					return new TendencyEntry(entry.getKey(), AvalancheBulletin.getHighestDangerRating(microRegionBulletins));
+				})
+				.toList(), (a, b) -> a, TreeMap::new));
 	}
 
 	@Post("/preview")
