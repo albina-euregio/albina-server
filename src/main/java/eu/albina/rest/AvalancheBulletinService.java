@@ -367,7 +367,7 @@ public class AvalancheBulletinService {
 	@Get("/tendency")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@ApiResponse(description = "tendency", content = @Content(array = @ArraySchema(schema = @Schema(implementation = TendencyEntry.class))))
-	@Operation(summary = "Get the highest danger rating of each of the 7 preceding days")
+	@Operation(summary = "Get tendency for micro region")
 	public List<TendencyEntry> getTendency(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(description = "Micro region ID, e.g. AT-07-01") @QueryValue("region") String microRegionId) {
