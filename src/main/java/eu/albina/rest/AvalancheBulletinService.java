@@ -375,6 +375,7 @@ public class AvalancheBulletinService {
 
 		// micro region IDs are not stored as regions, resolve the publishing region
 		Region region = regionRepository.getPublishBulletinRegions().stream()
+			.filter(r -> r.getSubRegions().isEmpty()) // no AvalancheReports for "EUREGIO"
 			.filter(r -> r.affects(microRegionId))
 			.collect(MoreCollectors.onlyElement());
 		// step the days in the local zone, so that the local time is preserved across
