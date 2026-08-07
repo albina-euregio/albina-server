@@ -371,13 +371,21 @@ public class AvalancheBulletinService {
 	@Operation(summary = "Get tendency for region")
 	public TendencyResult getTendency(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
-		@Parameter(description = "Region ID, e.g. AT-07 or EUREGIO") @QueryValue("region") String regionId) {
+		@Parameter(description = "Region ID, e.g. AT-07 or EUREGIO, or empty for all regions")
+		@Nullable @QueryValue("region") String regionId) {
 		logger.debug("GET tendency for region {}", regionId);
 
-		Region region = regionRepository.findById(regionId).orElseThrow();
-		Set<Region> regions = region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
-			? Set.of(region)
-			: region.getSubRegions();
+		Set<Region> regions;
+		if (regionId == null || regionId.isEmpty()) {
+			regions = regionRepository.getPublishBulletinRegions().stream()
+				.filter(r -> r.getSubRegions().isEmpty()) // no AvalancheReports for "EUREGIO"
+				.collect(Collectors.toSet());
+		} else {
+			Region region = regionRepository.findById(regionId).orElseThrow();
+			regions = region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
+				? Set.of(region)
+				: region.getSubRegions();
+		}
 		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
 		Map<Instant, List<AvalancheBulletin>> bulletins = IntStream.range(0, TENDENCY_DAYS)
 			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
