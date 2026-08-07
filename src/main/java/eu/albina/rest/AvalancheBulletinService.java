@@ -387,24 +387,24 @@ public class AvalancheBulletinService {
 				: region.getSubRegions();
 		}
 		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
-		Map<Instant, List<AvalancheBulletin>> bulletins = IntStream.range(0, TENDENCY_DAYS)
+		List<Instant> dates = IntStream.range(0, TENDENCY_DAYS)
 			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
-			.collect(Collectors.toMap(startDate -> startDate,
-				startDate -> avalancheReportController.getPublishedBulletins(startDate, regions),
-				(a, b) -> a, TreeMap::new));
+			.toList();
+		Map<Instant, List<AvalancheBulletin>> bulletins = avalancheReportController
+			.getPublishedBulletins(dates.getFirst(), dates.getLast(), regions);
 		Map<String, List<DangerRating>> dangerRatings = bulletins.values().stream()
 			.flatMap(List::stream)
 			.flatMap(bulletin -> bulletin.getPublishedRegions().stream())
 			.distinct()
-			.collect(Collectors.toMap(microRegionId -> microRegionId, microRegionId -> bulletins.values().stream()
-				.map(dayBulletins -> {
-					List<AvalancheBulletin> microRegionBulletins = dayBulletins.stream()
+			.collect(Collectors.toMap(microRegionId -> microRegionId, microRegionId -> dates.stream()
+				.map(startDate -> {
+					List<AvalancheBulletin> microRegionBulletins = bulletins.getOrDefault(startDate, List.of()).stream()
 						.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
 						.toList();
 					return AvalancheBulletin.getHighestDangerRating(microRegionBulletins);
 				})
 				.toList(), (a, b) -> a, TreeMap::new));
-		return new TendencyResult(List.copyOf(bulletins.keySet()), dangerRatings);
+		return new TendencyResult(dates, dangerRatings);
 	}
 
 	@Post("/preview")
