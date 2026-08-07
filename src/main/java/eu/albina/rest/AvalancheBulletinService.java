@@ -358,18 +358,18 @@ public class AvalancheBulletinService {
 	}
 
 	@Serdeable
-	public record TendencyEntry(
-		@Schema(description = "Start date of the bulletins of this day") Instant date,
-		@Schema(description = "Highest danger rating of this day") DangerRating dangerRating) {
+	public record TendencyResult(
+		@Schema(description = "Start dates of the bulletins of the preceding days") List<Instant> dates,
+		@Schema(description = "Highest danger rating of each of these days, per micro region") Map<String, List<DangerRating>> dangerRatings) {
 	}
 
 	private static final int TENDENCY_DAYS = 7;
 
 	@Get("/tendency")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	@ApiResponse(description = "tendency of each micro region with published bulletins")
+	@ApiResponse(description = "tendency of each micro region with published bulletins", content = @Content(schema = @Schema(implementation = TendencyResult.class)))
 	@Operation(summary = "Get tendency for region")
-	public Map<String, List<TendencyEntry>> getTendency(
+	public TendencyResult getTendency(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(description = "Region ID, e.g. AT-07 or EUREGIO") @QueryValue("region") String regionId) {
 		logger.debug("GET tendency for region {}", regionId);
@@ -382,18 +382,19 @@ public class AvalancheBulletinService {
 			.collect(Collectors.toMap(startDate -> startDate,
 				startDate -> avalancheReportController.getPublishedBulletins(startDate, regions),
 				(a, b) -> a, TreeMap::new));
-		return bulletins.values().stream()
+		Map<String, List<DangerRating>> dangerRatings = bulletins.values().stream()
 			.flatMap(List::stream)
 			.flatMap(bulletin -> bulletin.getPublishedRegions().stream())
 			.distinct()
-			.collect(Collectors.toMap(microRegionId -> microRegionId, microRegionId -> bulletins.entrySet().stream()
-				.map(entry -> {
-					List<AvalancheBulletin> microRegionBulletins = entry.getValue().stream()
+			.collect(Collectors.toMap(microRegionId -> microRegionId, microRegionId -> bulletins.values().stream()
+				.map(dayBulletins -> {
+					List<AvalancheBulletin> microRegionBulletins = dayBulletins.stream()
 						.filter(bulletin -> bulletin.getPublishedRegions().contains(microRegionId))
 						.toList();
-					return new TendencyEntry(entry.getKey(), AvalancheBulletin.getHighestDangerRating(microRegionBulletins));
+					return AvalancheBulletin.getHighestDangerRating(microRegionBulletins);
 				})
 				.toList(), (a, b) -> a, TreeMap::new));
+		return new TendencyResult(List.copyOf(bulletins.keySet()), dangerRatings);
 	}
 
 	@Post("/preview")
