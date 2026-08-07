@@ -375,7 +375,9 @@ public class AvalancheBulletinService {
 		logger.debug("GET tendency for region {}", regionId);
 
 		Region region = regionRepository.findById(regionId).orElseThrow();
-		Set<Region> regions = Set.of(region);
+		Set<Region> regions = region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
+			? Set.of(region)
+			: region.getSubRegions();
 		ZonedDateTime lastDay = DateControllerUtil.parseDateOrToday(date).atZone(PublicationStrategy.localZone());
 		Map<Instant, List<AvalancheBulletin>> bulletins = IntStream.range(0, TENDENCY_DAYS)
 			.mapToObj(i -> lastDay.minusDays(TENDENCY_DAYS - 1L - i).toInstant())
