@@ -4,6 +4,7 @@ package eu.albina.controller.publication.blog;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MoreCollectors;
 
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 import eu.albina.util.HttpClientUtil;
 
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -170,8 +172,25 @@ class Wordpress implements AbstractBlog {
 				content != null ? content.rendered : null,
 				LocalDateTime.parse(Objects.requireNonNullElse(date_gmt, date)).atOffset(ZoneOffset.UTC),
 				categories.stream().filter(c -> this.categories.contains(c.id)).map(Category::name).toList(),
-				featured_image_url
+				featured_image_url,
+				translations()
 			);
+		}
+
+		/**
+		 * Maps the Polylang translations, such as {@code [{"locale": "de_AT", "id": 14945}, {"locale": "en_GB", "id": 14971}]},
+		 * to the corresponding {@link LanguageCode}s.
+		 */
+		Map<LanguageCode, String> translations() {
+			if (polylang_translations == null) {
+				return Map.of();
+			}
+			Map<LanguageCode, String> result = new EnumMap<>(LanguageCode.class);
+			for (PolylangTranslation translation : polylang_translations) {
+				LanguageCode.fromLocale(translation.locale).ifPresent(language ->
+					result.putIfAbsent(language, String.valueOf(translation.id)));
+			}
+			return result;
 		}
 	}
 
