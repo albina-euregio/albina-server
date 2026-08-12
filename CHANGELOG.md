@@ -2,6 +2,26 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [9.0.1] - 2026-08-12
+
+### 🚀 Features
+
+- *(bulletins)* Add GET /bulletins/tendency endpoint
+- *(blog)* Expose Polylang translations of blog items
+- *(weather-stations)* Add endpoint redirecting to the latest GeoJSON
+- *(weather-stations)* Document the measured value properties via OpenAPI
+- *(static)* Document static files via OpenAPI
+
+### 🐛 Bug Fixes
+
+- *(Incident)* Generate valid OpenAPI schemas for arrays of enums
+
+### Build
+
+- Upgrade to Micronaut 5.1.0
+- Upgrade tools.jackson to 3.2.1
+- *(application.properties)* Default to the albina database (albina_dev does not exist anymore)
+
 ## [9.0.0] - 2026-07-26
 
 ### 🚀 Features
