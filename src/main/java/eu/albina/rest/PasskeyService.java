@@ -252,14 +252,15 @@ public class PasskeyService {
 		if (!"webauthn.create".equals(clientData.type())) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
 		}
-		verifyChallengeAndOrigin(entry, clientData);
+		WebauthnConfig webauthn = globalVariables.getWebauthnConfig();
+		webauthn.verifyChallengeAndOrigin(entry.challenge(), BASE64URL_DECODER.decode(clientData.challenge()), clientData.origin());
 
 		byte[] attestationObjectBytes = BASE64URL_DECODER.decode(credential.response().attestationObject());
 		Map<Object, Object> attestationObject = Cbor.asMap(Cbor.decode(attestationObjectBytes));
 		String fmt = (String) attestationObject.get("fmt");
 		byte[] authData = (byte[]) attestationObject.get("authData");
 		AuthenticatorData parsed = AuthenticatorData.parse(authData);
-		verifyRpIdHash(parsed.rpIdHash());
+		webauthn.verifyRpIdHash(parsed.rpIdHash());
 		if (!parsed.userPresent()) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "User presence flag not set");
 		}
@@ -335,7 +336,8 @@ public class PasskeyService {
 		if (!"webauthn.get".equals(clientData.type())) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
 		}
-		verifyChallengeAndOrigin(entry, clientData);
+		WebauthnConfig webauthn = globalVariables.getWebauthnConfig();
+		webauthn.verifyChallengeAndOrigin(entry.challenge(), BASE64URL_DECODER.decode(clientData.challenge()), clientData.origin());
 
 		Passkey passkey = passkeyRepository.findByCredentialId(credential.id())
 			.orElseThrow(() -> new HttpStatusException(HttpStatus.UNAUTHORIZED, "Unknown passkey"));
@@ -350,7 +352,7 @@ public class PasskeyService {
 
 		byte[] authenticatorDataBytes = BASE64URL_DECODER.decode(credential.response().authenticatorData());
 		AuthenticatorData authenticatorData = AuthenticatorData.parse(authenticatorDataBytes);
-		verifyRpIdHash(authenticatorData.rpIdHash());
+		webauthn.verifyRpIdHash(authenticatorData.rpIdHash());
 		if (!authenticatorData.userPresent()) {
 			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "User presence flag not set");
 		}
@@ -383,8 +385,6 @@ public class PasskeyService {
 		return authenticationService.issueToken(user);
 	}
 
-	// ---- WebAuthn ceremonies ----
-
 	// ---- shared verification helpers ----
 
 	private ChallengeEntry consumeChallenge(String state, @Nullable String expectedUsername) {
@@ -397,24 +397,6 @@ public class PasskeyService {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Challenge does not belong to this user");
 		}
 		return entry;
-	}
-
-	private void verifyChallengeAndOrigin(ChallengeEntry entry, ClientData clientData) {
-		byte[] givenChallenge = BASE64URL_DECODER.decode(clientData.challenge());
-		if (!MessageDigest.isEqual(entry.challenge(), givenChallenge)) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Challenge mismatch");
-		}
-		if (!globalVariables.getWebauthnConfig().origin().equals(clientData.origin())) {
-			logger.warn("Rejected WebAuthn ceremony from unexpected origin: {}", clientData.origin());
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected origin");
-		}
-	}
-
-	private void verifyRpIdHash(byte[] rpIdHash) {
-		byte[] expected = sha256(globalVariables.getWebauthnConfig().rpId().getBytes(StandardCharsets.UTF_8));
-		if (!MessageDigest.isEqual(expected, rpIdHash)) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "RP ID hash mismatch");
-		}
 	}
 
 	private static byte[] sha256(byte[] input) {
