@@ -250,7 +250,7 @@ public class WebAuthnService {
 			// do not distinguish a deleted account's passkey from an unknown one
 			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Unknown passkey");
 		}
-		if (entry.username() != null && !entry.username().equalsIgnoreCase(user.getEmail())) {
+		if (entry.username() != null && !user.getEmail().equalsIgnoreCase(entry.username())) {
 			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Passkey does not belong to the requested account");
 		}
 
