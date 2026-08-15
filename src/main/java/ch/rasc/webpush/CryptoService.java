@@ -1,5 +1,7 @@
 package ch.rasc.webpush;
 
+import eu.albina.util.EcKeys;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -16,7 +18,6 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECPrivateKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -60,48 +61,15 @@ public class CryptoService {
 		return (ECPrivateKey) keyFactory.generatePrivate(keySpec);
 	}
 
-	// https://stackoverflow.com/questions/30445997/loading-raw-64-byte-long-ecdsa-public-key-in-java
-	// X509 head without (byte)4
-	private static final byte[] P256_HEAD = Base64.getDecoder().decode("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgA");
-
 	// String must start with (byte)4
-	ECPublicKey fromUncompressedECPublicKey(String encodedPublicKey) throws InvalidKeySpecException {
-
+	ECPublicKey fromUncompressedECPublicKey(String encodedPublicKey) {
 		byte[] w = Base64.getUrlDecoder().decode(encodedPublicKey);
-		byte[] encodedKey = new byte[P256_HEAD.length + w.length];
-		System.arraycopy(P256_HEAD, 0, encodedKey, 0, P256_HEAD.length);
-		System.arraycopy(w, 0, encodedKey, P256_HEAD.length, w.length);
-		X509EncodedKeySpec pubX509 = new X509EncodedKeySpec(encodedKey);
-		return getGeneratePublic(pubX509);
-	}
-
-	ECPublicKey getGeneratePublic(X509EncodedKeySpec pubX509) throws InvalidKeySpecException {
-		return (ECPublicKey) keyFactory.generatePublic(pubX509);
+		return EcKeys.ecPublicKeyFromUncompressedPoint("secp256r1", w);
 	}
 
 	// Result starts with (byte)4
 	static byte[] toUncompressedECPublicKey(ECPublicKey publicKey) {
-		byte[] result = new byte[65];
-		byte[] encoded = publicKey.getEncoded();
-		System.arraycopy(encoded, P256_HEAD.length, result, 0, encoded.length - P256_HEAD.length);
-		return result;
-	}
-
-	byte[] concat(byte[]... arrays) {
-		// Determine the length of the result array
-		int totalLength = Arrays.stream(arrays).mapToInt(array -> array.length).sum();
-
-		// create the result array
-		byte[] result = new byte[totalLength];
-
-		// copy the source arrays into the result array
-		int currentIndex = 0;
-		for (byte[] array : arrays) {
-			System.arraycopy(array, 0, result, currentIndex, array.length);
-			currentIndex += array.length;
-		}
-
-		return result;
+		return EcKeys.uncompressedPoint(publicKey);
 	}
 
 	// https://tools.ietf.org/html/rfc8291
@@ -136,7 +104,7 @@ public class CryptoService {
 		// # HKDF-Expand(PRK_key, key_info, L_key=32)
 		// key_info = "WebPush: info" || 0x00 || ua_public || as_public
 
-		byte[] keyInfo = concat("WebPush: info\0".getBytes(StandardCharsets.UTF_8), toUncompressedECPublicKey(uaPublicKey), uncompressedASPublicKey);
+		byte[] keyInfo = EcKeys.concat("WebPush: info\0".getBytes(StandardCharsets.UTF_8), toUncompressedECPublicKey(uaPublicKey), uncompressedASPublicKey);
 		// IKM = HMAC-SHA-256(PRK_key, key_info || 0x01)
 		hmacSHA256.init(new SecretKeySpec(prkKey, "HmacSHA256"));
 		hmacSHA256.update(keyInfo);
@@ -182,11 +150,11 @@ public class CryptoService {
 			inputs.add(new byte[padSize]);
 		}
 
-		byte[] encrypted = cipher.doFinal(concat(inputs.toArray(new byte[0][])));
+		byte[] encrypted = cipher.doFinal(EcKeys.concat(inputs.toArray(new byte[0][])));
 
 		ByteBuffer encryptedArrayLength = ByteBuffer.allocate(4);
 		encryptedArrayLength.putInt(encrypted.length);
 
-		return concat(salt, encryptedArrayLength.array(), new byte[]{(byte) uncompressedASPublicKey.length}, uncompressedASPublicKey, encrypted);
+		return EcKeys.concat(salt, encryptedArrayLength.array(), new byte[]{(byte) uncompressedASPublicKey.length}, uncompressedASPublicKey, encrypted);
 	}
 }

@@ -2,6 +2,8 @@
 package eu.albina.util;
 
 import eu.albina.model.LocalServerInstance;
+import eu.albina.webauthn.WebauthnConfig;
+
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 
@@ -28,9 +30,23 @@ public class GlobalVariables {
 	String incidentsPath;
 	@Value("${albina.conf.mapProductionUrl}")
 	String mapProductionUrl;
+	@Value("${albina.conf.webauthnRpId}")
+	String webauthnRpId;
+	@Value("${albina.conf.webauthnRpName}")
+	String webauthnRpName;
+	@Value("${albina.conf.webauthnOrigin}")
+	String webauthnOrigin;
 
 	public String getIncidentsPath() {
 		return Objects.requireNonNull(incidentsPath, "incidentsPath");
+	}
+
+	public WebauthnConfig getWebauthnConfig() {
+		return new WebauthnConfig(
+			Objects.requireNonNull(webauthnRpId, "webauthnRpId"),
+			Objects.requireNonNullElse(webauthnRpName, webauthnRpId),
+			Objects.requireNonNull(webauthnOrigin, "webauthnOrigin")
+		);
 	}
 
 	public LocalServerInstance getLocalServerInstance() {

@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import java.security.Principal;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -85,15 +86,21 @@ public class AuthenticationService {
 		try {
 			userRepository.authenticate(username, password);
 			User user = userRepository.findById(username).orElseThrow();
-			List<String> roles = user.getRoles().stream().map(Role::toString).toList();
-			List<String> regions = user.getRegions().stream().map(Region::getId).sorted().toList();
-			Authentication authentication = Authentication.build(username, roles, Map.of("regions", regions));
-			AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
-
-			return new AuthenticationResponse(user, user.getRegions(), token.getAccessToken());
+			return issueToken(user);
 		} catch (Exception e) {
 			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 		}
+	}
+
+	/** Mints an access token for an already-authenticated user, e.g. after a successful passkey login. */
+	public AuthenticationResponse issueToken(User user) {
+		user.setLastUsedAt(Instant.now());
+		userRepository.update(user);
+		List<String> roles = user.getRoles().stream().map(Role::toString).toList();
+		List<String> regions = user.getRegions().stream().map(Region::getId).sorted().toList();
+		Authentication authentication = Authentication.build(user.getEmail(), roles, Map.of("regions", regions));
+		AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
+		return new AuthenticationResponse(user, user.getRegions(), token.getAccessToken());
 	}
 
 	@Get("/test")
