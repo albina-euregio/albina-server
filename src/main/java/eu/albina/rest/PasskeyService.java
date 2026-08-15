@@ -15,6 +15,8 @@ import eu.albina.util.GlobalVariables;
 import eu.albina.webauthn.AuthenticatorData;
 import eu.albina.webauthn.Cbor;
 import eu.albina.webauthn.CoseKey;
+import eu.albina.webauthn.WebauthnConfig;
+
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
@@ -213,6 +215,7 @@ public class PasskeyService {
 	@Operation(summary = "Begin registering a new passkey for the current user")
 	public RegistrationChallenge beginRegistration(Principal principal) throws AlbinaException {
 		User user = userRepository.findByIdOrElseThrow(principal);
+		WebauthnConfig webauthn = globalVariables.getWebauthnConfig();
 		byte[] challenge = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
 		String state = UUID.randomUUID().toString();
 		challenges.put(state, new ChallengeEntry(user.getEmail(), challenge, Instant.now()));
@@ -223,7 +226,7 @@ public class PasskeyService {
 
 		PublicKeyCredentialCreationOptions options = new PublicKeyCredentialCreationOptions(
 			BASE64URL_ENCODER.encodeToString(challenge),
-			new RelyingParty(globalVariables.getWebauthnRpId(), globalVariables.getWebauthnRpName()),
+			new RelyingParty(webauthn.rpId(), webauthn.rpName()),
 			new UserEntity(BASE64URL_ENCODER.encodeToString(user.getEmail().getBytes(StandardCharsets.UTF_8)), user.getEmail(),
 				user.getName() != null && !user.getName().isBlank() ? user.getName() : user.getEmail()),
 			List.of(new PubKeyCredParam("public-key", -7), new PubKeyCredParam("public-key", -257),
@@ -318,7 +321,7 @@ public class PasskeyService {
 
 		challenges.put(state, new ChallengeEntry(normalizedUsername, challenge, Instant.now()));
 		PublicKeyCredentialRequestOptions options = new PublicKeyCredentialRequestOptions(
-			BASE64URL_ENCODER.encodeToString(challenge), globalVariables.getWebauthnRpId(), allow, "preferred", CHALLENGE_TIMEOUT_MILLIS);
+			BASE64URL_ENCODER.encodeToString(challenge), globalVariables.getWebauthnConfig().rpId(), allow, "preferred", CHALLENGE_TIMEOUT_MILLIS);
 		return new LoginChallenge(state, options);
 	}
 
@@ -401,14 +404,14 @@ public class PasskeyService {
 		if (!MessageDigest.isEqual(entry.challenge(), givenChallenge)) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Challenge mismatch");
 		}
-		if (!globalVariables.getWebauthnOrigin().equals(clientData.origin())) {
+		if (!globalVariables.getWebauthnConfig().origin().equals(clientData.origin())) {
 			logger.warn("Rejected WebAuthn ceremony from unexpected origin: {}", clientData.origin());
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected origin");
 		}
 	}
 
 	private void verifyRpIdHash(byte[] rpIdHash) {
-		byte[] expected = sha256(globalVariables.getWebauthnRpId().getBytes(StandardCharsets.UTF_8));
+		byte[] expected = sha256(globalVariables.getWebauthnConfig().rpId().getBytes(StandardCharsets.UTF_8));
 		if (!MessageDigest.isEqual(expected, rpIdHash)) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "RP ID hash mismatch");
 		}

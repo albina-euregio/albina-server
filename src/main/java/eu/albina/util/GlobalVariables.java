@@ -2,6 +2,8 @@
 package eu.albina.util;
 
 import eu.albina.model.LocalServerInstance;
+import eu.albina.webauthn.WebauthnConfig;
+
 import io.micronaut.context.annotation.Value;
 import jakarta.inject.Singleton;
 
@@ -39,18 +41,12 @@ public class GlobalVariables {
 		return Objects.requireNonNull(incidentsPath, "incidentsPath");
 	}
 
-	/** The WebAuthn Relying Party ID: a registrable domain suffix of every origin passkeys are used from. */
-	public String getWebauthnRpId() {
-		return Objects.requireNonNull(webauthnRpId, "webauthnRpId");
-	}
-
-	public String getWebauthnRpName() {
-		return Objects.requireNonNullElse(webauthnRpName, getWebauthnRpId());
-	}
-
-	/** The origin (scheme + host + port) this server instance's frontend is deployed at. */
-	public String getWebauthnOrigin() {
-		return Objects.requireNonNull(webauthnOrigin, "webauthnOrigin");
+	public WebauthnConfig getWebauthnConfig() {
+		return new WebauthnConfig(
+			Objects.requireNonNull(webauthnRpId, "webauthnRpId"),
+			Objects.requireNonNullElse(webauthnRpName, webauthnRpId),
+			Objects.requireNonNull(webauthnOrigin, "webauthnOrigin")
+		);
 	}
 
 	public LocalServerInstance getLocalServerInstance() {
