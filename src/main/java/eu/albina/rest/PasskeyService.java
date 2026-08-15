@@ -43,7 +43,6 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
-import java.security.Signature;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
@@ -374,7 +373,12 @@ public class PasskeyService {
 		byte[] clientDataHash = sha256(BASE64URL_DECODER.decode(credential.response().clientDataJSON()));
 		byte[] signedData = EcKeys.concat(authenticatorDataBytes, clientDataHash);
 		byte[] signature = BASE64URL_DECODER.decode(credential.response().signature());
-		if (!verifySignature(coseKey, signedData, signature)) {
+		try {
+			if (!coseKey.verifySignature(signedData, signature)) {
+				throw new GeneralSecurityException();
+			}
+		} catch (GeneralSecurityException e) {
+			logger.warn("Failed to verify passkey signature", e);
 			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Invalid passkey signature");
 		}
 
@@ -422,18 +426,6 @@ public class PasskeyService {
 		byte[] expected = sha256(globalVariables.getWebauthnRpId().getBytes(StandardCharsets.UTF_8));
 		if (!MessageDigest.isEqual(expected, rpIdHash)) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "RP ID hash mismatch");
-		}
-	}
-
-	private static boolean verifySignature(CoseKey coseKey, byte[] signedData, byte[] signature) {
-		try {
-			Signature verifier = Signature.getInstance(coseKey.signatureAlgorithm());
-			verifier.initVerify(coseKey.publicKey());
-			verifier.update(signedData);
-			return verifier.verify(signature);
-		} catch (GeneralSecurityException e) {
-			logger.warn("Failed to verify passkey signature", e);
-			return false;
 		}
 	}
 

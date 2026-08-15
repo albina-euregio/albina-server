@@ -5,8 +5,12 @@ import eu.albina.util.EcKeys;
 
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Map;
@@ -27,6 +31,13 @@ public record CoseKey(long kty, long alg, PublicKey publicKey) {
 		-259L, "SHA512withRSA",  // RS512
 		-8L, "Ed25519"           // EdDSA
 	);
+
+	public boolean verifySignature(byte[] signedData, byte[] signature) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+		Signature verifier = Signature.getInstance(signatureAlgorithm());
+		verifier.initVerify(publicKey());
+		verifier.update(signedData);
+		return verifier.verify(signature);
+	}
 
 	public String signatureAlgorithm() {
 		String name = SIGNATURE_ALGORITHMS.get(alg);
