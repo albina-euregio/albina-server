@@ -223,7 +223,41 @@ public class PasskeyService {
 	public HttpResponse<PasskeyInfo> finishRegistration(Principal principal, @Body RegisterFinishRequest request)
 			throws AlbinaException {
 		User user = userRepository.findByIdOrElseThrow(principal);
-		Passkey passkey = finishRegistration(user, request.state(), request.credential(), request.name());
+		RegistrationCredential credential = request.credential();
+		ChallengeEntry entry = consumeChallenge(request.state(), user.getEmail());
+		ClientData clientData = ClientData.parse(objectMapper, credential.response().clientDataJSON());
+		if (!"webauthn.create".equals(clientData.type())) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
+		}
+		verifyChallengeAndOrigin(entry, clientData);
+
+		byte[] attestationObjectBytes = BASE64URL_DECODER.decode(credential.response().attestationObject());
+		Map<Object, Object> attestationObject = Cbor.asMap(Cbor.decode(attestationObjectBytes));
+		String fmt = (String) attestationObject.get("fmt");
+		byte[] authData = (byte[]) attestationObject.get("authData");
+		AuthenticatorData parsed = AuthenticatorData.parse(authData);
+		verifyRpIdHash(parsed.rpIdHash());
+		if (!parsed.userPresent()) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "User presence flag not set");
+		}
+		if (parsed.credentialPublicKey() == null) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Authenticator did not return a public key");
+		}
+		logger.debug("Registering passkey (attestation format '{}') for {}", fmt, user.getEmail());
+
+		String credentialId = BASE64URL_ENCODER.encodeToString(parsed.credentialId());
+		if (passkeyRepository.findByCredentialId(credentialId).isPresent()) {
+			throw new HttpStatusException(HttpStatus.CONFLICT, "This passkey is already registered");
+		}
+
+		Passkey passkey = new Passkey();
+		passkey.setOwner(user);
+		passkey.setCredentialId(credentialId);
+		passkey.setPublicKeyCose(Base64.getEncoder().encodeToString(parsed.credentialPublicKeyRaw()));
+		passkey.setSignCount(parsed.signCount());
+		passkey.setName(request.name() != null && !request.name().isBlank() ? request.name() : "Passkey");
+		passkey.setLastUsedAt(Instant.now());
+		passkey = passkeyRepository.save(passkey);
 		return HttpResponse.created(PasskeyInfo.of(passkey));
 	}
 
@@ -300,43 +334,6 @@ public class PasskeyService {
 			CHALLENGE_TIMEOUT_MILLIS
 		);
 		return new RegistrationChallenge(state, options);
-	}
-
-	private Passkey finishRegistration(User user, String state, RegistrationCredential credential, @Nullable String name) {
-		ChallengeEntry entry = consumeChallenge(state, user.getEmail());
-		ClientData clientData = ClientData.parse(objectMapper, credential.response().clientDataJSON());
-		if (!"webauthn.create".equals(clientData.type())) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
-		}
-		verifyChallengeAndOrigin(entry, clientData);
-
-		byte[] attestationObjectBytes = BASE64URL_DECODER.decode(credential.response().attestationObject());
-		Map<Object, Object> attestationObject = Cbor.asMap(Cbor.decode(attestationObjectBytes));
-		String fmt = (String) attestationObject.get("fmt");
-		byte[] authData = (byte[]) attestationObject.get("authData");
-		AuthenticatorData parsed = AuthenticatorData.parse(authData);
-		verifyRpIdHash(parsed.rpIdHash());
-		if (!parsed.userPresent()) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "User presence flag not set");
-		}
-		if (parsed.credentialPublicKey() == null) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Authenticator did not return a public key");
-		}
-		logger.debug("Registering passkey (attestation format '{}') for {}", fmt, user.getEmail());
-
-		String credentialId = BASE64URL_ENCODER.encodeToString(parsed.credentialId());
-		if (passkeyRepository.findByCredentialId(credentialId).isPresent()) {
-			throw new HttpStatusException(HttpStatus.CONFLICT, "This passkey is already registered");
-		}
-
-		Passkey passkey = new Passkey();
-		passkey.setOwner(user);
-		passkey.setCredentialId(credentialId);
-		passkey.setPublicKeyCose(Base64.getEncoder().encodeToString(parsed.credentialPublicKeyRaw()));
-		passkey.setSignCount(parsed.signCount());
-		passkey.setName(name != null && !name.isBlank() ? name : "Passkey");
-		passkey.setLastUsedAt(Instant.now());
-		return passkeyRepository.save(passkey);
 	}
 
 	private User finishLogin(String state, AuthenticationCredential credential) {
