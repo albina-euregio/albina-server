@@ -28,9 +28,29 @@ public class GlobalVariables {
 	String incidentsPath;
 	@Value("${albina.conf.mapProductionUrl}")
 	String mapProductionUrl;
+	@Value("${albina.conf.webauthnRpId}")
+	String webauthnRpId;
+	@Value("${albina.conf.webauthnRpName}")
+	String webauthnRpName;
+	@Value("${albina.conf.webauthnOrigin}")
+	String webauthnOrigin;
 
 	public String getIncidentsPath() {
 		return Objects.requireNonNull(incidentsPath, "incidentsPath");
+	}
+
+	/** The WebAuthn Relying Party ID: a registrable domain suffix of every origin passkeys are used from. */
+	public String getWebauthnRpId() {
+		return Objects.requireNonNull(webauthnRpId, "webauthnRpId");
+	}
+
+	public String getWebauthnRpName() {
+		return Objects.requireNonNullElse(webauthnRpName, getWebauthnRpId());
+	}
+
+	/** The origin (scheme + host + port) this server instance's frontend is deployed at. */
+	public String getWebauthnOrigin() {
+		return Objects.requireNonNull(webauthnOrigin, "webauthnOrigin");
 	}
 
 	public LocalServerInstance getLocalServerInstance() {
