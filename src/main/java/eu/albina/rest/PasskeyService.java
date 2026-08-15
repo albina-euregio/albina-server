@@ -213,7 +213,27 @@ public class PasskeyService {
 	@Operation(summary = "Begin registering a new passkey for the current user")
 	public RegistrationChallenge beginRegistration(Principal principal) throws AlbinaException {
 		User user = userRepository.findByIdOrElseThrow(principal);
-		return beginRegistration(user);
+		byte[] challenge = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
+		String state = UUID.randomUUID().toString();
+		challenges.put(state, new ChallengeEntry(user.getEmail(), challenge, Instant.now()));
+
+		List<CredentialDescriptor> exclude = passkeyRepository.findByOwner(user).stream()
+			.map(p -> new CredentialDescriptor("public-key", p.getCredentialId()))
+			.toList();
+
+		PublicKeyCredentialCreationOptions options = new PublicKeyCredentialCreationOptions(
+			BASE64URL_ENCODER.encodeToString(challenge),
+			new RelyingParty(globalVariables.getWebauthnRpId(), globalVariables.getWebauthnRpName()),
+			new UserEntity(BASE64URL_ENCODER.encodeToString(user.getEmail().getBytes(StandardCharsets.UTF_8)), user.getEmail(),
+				user.getName() != null && !user.getName().isBlank() ? user.getName() : user.getEmail()),
+			List.of(new PubKeyCredParam("public-key", -7), new PubKeyCredParam("public-key", -257),
+				new PubKeyCredParam("public-key", -8)),
+			new AuthenticatorSelection("required", "preferred"),
+			"none",
+			exclude,
+			CHALLENGE_TIMEOUT_MILLIS
+		);
+		return new RegistrationChallenge(state, options);
 	}
 
 	@Post("/register")
@@ -311,30 +331,6 @@ public class PasskeyService {
 	}
 
 	// ---- WebAuthn ceremonies ----
-
-	private RegistrationChallenge beginRegistration(User user) {
-		byte[] challenge = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
-		String state = UUID.randomUUID().toString();
-		challenges.put(state, new ChallengeEntry(user.getEmail(), challenge, Instant.now()));
-
-		List<CredentialDescriptor> exclude = passkeyRepository.findByOwner(user).stream()
-			.map(p -> new CredentialDescriptor("public-key", p.getCredentialId()))
-			.toList();
-
-		PublicKeyCredentialCreationOptions options = new PublicKeyCredentialCreationOptions(
-			BASE64URL_ENCODER.encodeToString(challenge),
-			new RelyingParty(globalVariables.getWebauthnRpId(), globalVariables.getWebauthnRpName()),
-			new UserEntity(BASE64URL_ENCODER.encodeToString(user.getEmail().getBytes(StandardCharsets.UTF_8)), user.getEmail(),
-				user.getName() != null && !user.getName().isBlank() ? user.getName() : user.getEmail()),
-			List.of(new PubKeyCredParam("public-key", -7), new PubKeyCredParam("public-key", -257),
-				new PubKeyCredParam("public-key", -8)),
-			new AuthenticatorSelection("required", "preferred"),
-			"none",
-			exclude,
-			CHALLENGE_TIMEOUT_MILLIS
-		);
-		return new RegistrationChallenge(state, options);
-	}
 
 	private User finishLogin(String state, AuthenticationCredential credential) {
 		ChallengeEntry entry = consumeChallenge(state, null);
