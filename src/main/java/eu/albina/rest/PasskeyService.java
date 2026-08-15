@@ -247,7 +247,25 @@ public class PasskeyService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Begin a passkey login")
 	public LoginChallenge beginLogin(@Nullable @Body LoginBeginRequest request) {
-		return beginLogin(request != null ? request.username() : null);
+		byte[] challenge = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
+		String state = UUID.randomUUID().toString();
+		String normalizedUsername = request != null && request.username() != null ? request.username().toLowerCase() : null;
+
+		List<CredentialDescriptor> allow = List.of();
+		if (normalizedUsername != null) {
+			// an unknown username still yields an (empty) allow list rather than leaking account existence
+			allow = userRepository.findById(normalizedUsername)
+				.map(passkeyRepository::findByOwner)
+				.orElseGet(List::of)
+				.stream()
+				.map(p -> new CredentialDescriptor("public-key", p.getCredentialId()))
+				.toList();
+		}
+
+		challenges.put(state, new ChallengeEntry(normalizedUsername, challenge, Instant.now()));
+		PublicKeyCredentialRequestOptions options = new PublicKeyCredentialRequestOptions(
+			BASE64URL_ENCODER.encodeToString(challenge), globalVariables.getWebauthnRpId(), allow, "preferred", CHALLENGE_TIMEOUT_MILLIS);
+		return new LoginChallenge(state, options);
 	}
 
 	@Post("/login")
@@ -319,28 +337,6 @@ public class PasskeyService {
 		passkey.setName(name != null && !name.isBlank() ? name : "Passkey");
 		passkey.setLastUsedAt(Instant.now());
 		return passkeyRepository.save(passkey);
-	}
-
-	private LoginChallenge beginLogin(@Nullable String username) {
-		byte[] challenge = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
-		String state = UUID.randomUUID().toString();
-		String normalizedUsername = username != null ? username.toLowerCase() : null;
-
-		List<CredentialDescriptor> allow = List.of();
-		if (normalizedUsername != null) {
-			// an unknown username still yields an (empty) allow list rather than leaking account existence
-			allow = userRepository.findById(normalizedUsername)
-				.map(passkeyRepository::findByOwner)
-				.orElseGet(List::of)
-				.stream()
-				.map(p -> new CredentialDescriptor("public-key", p.getCredentialId()))
-				.toList();
-		}
-
-		challenges.put(state, new ChallengeEntry(normalizedUsername, challenge, Instant.now()));
-		PublicKeyCredentialRequestOptions options = new PublicKeyCredentialRequestOptions(
-			BASE64URL_ENCODER.encodeToString(challenge), globalVariables.getWebauthnRpId(), allow, "preferred", CHALLENGE_TIMEOUT_MILLIS);
-		return new LoginChallenge(state, options);
 	}
 
 	private User finishLogin(String state, AuthenticationCredential credential) {
