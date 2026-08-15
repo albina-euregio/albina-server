@@ -2,6 +2,7 @@
 package eu.albina.rest;
 
 import java.security.Principal;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -93,6 +94,8 @@ public class AuthenticationService {
 
 	/** Mints an access token for an already-authenticated user, e.g. after a successful passkey login. */
 	public AuthenticationResponse issueToken(User user) {
+		user.setLastUsedAt(Instant.now());
+		userRepository.update(user);
 		List<String> roles = user.getRoles().stream().map(Role::toString).toList();
 		List<String> regions = user.getRegions().stream().map(Region::getId).sorted().toList();
 		Authentication authentication = Authentication.build(user.getEmail(), roles, Map.of("regions", regions));

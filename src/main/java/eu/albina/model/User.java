@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import java.time.Instant;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -86,6 +87,10 @@ public class User implements NameAndEmail {
 
 	@Column(name = "DELETED")
 	private boolean deleted;
+
+	/** When the user last logged in, whether by password or passkey */
+	@Column(name = "LAST_USED_AT")
+	private Instant lastUsedAt;
 
 	/**
 	 * Standard constructor for a user.
@@ -185,6 +190,14 @@ public class User implements NameAndEmail {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public Instant getLastUsedAt() {
+		return lastUsedAt;
+	}
+
+	public void setLastUsedAt(Instant lastUsedAt) {
+		this.lastUsedAt = lastUsedAt;
 	}
 
 	public boolean hasPermissionForRegion(String regionId) {
