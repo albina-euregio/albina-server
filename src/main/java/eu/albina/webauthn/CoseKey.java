@@ -1,15 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.webauthn;
 
+import eu.albina.util.EcKeys;
+
 import java.math.BigInteger;
-import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.PublicKey;
-import java.security.spec.ECGenParameterSpec;
-import java.security.spec.ECParameterSpec;
-import java.security.spec.ECPoint;
-import java.security.spec.ECPublicKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Map;
@@ -74,16 +71,7 @@ public record CoseKey(long kty, long alg, PublicKey publicKey) {
 			case 3 -> "secp521r1"; // P-521
 			default -> throw new IllegalArgumentException("Unsupported EC2 curve: " + crv);
 		};
-		try {
-			AlgorithmParameters params = AlgorithmParameters.getInstance("EC");
-			params.init(new ECGenParameterSpec(curveName));
-			ECParameterSpec ecParameterSpec = params.getParameterSpec(ECParameterSpec.class);
-			ECPoint point = new ECPoint(new BigInteger(1, x), new BigInteger(1, y));
-			KeyFactory keyFactory = KeyFactory.getInstance("EC");
-			return keyFactory.generatePublic(new ECPublicKeySpec(point, ecParameterSpec));
-		} catch (GeneralSecurityException e) {
-			throw new IllegalArgumentException("Invalid EC public key", e);
-		}
+		return EcKeys.ecPublicKey(curveName, new BigInteger(1, x), new BigInteger(1, y));
 	}
 
 	private static PublicKey rsaPublicKey(Map<Object, Object> coseKey) {

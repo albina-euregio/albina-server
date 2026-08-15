@@ -8,6 +8,7 @@ import eu.albina.controller.PasskeyRepository;
 import eu.albina.controller.UserRepository;
 import eu.albina.model.Passkey;
 import eu.albina.model.User;
+import eu.albina.util.EcKeys;
 import eu.albina.util.GlobalVariables;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.exceptions.HttpStatusException;
@@ -258,7 +259,7 @@ public class WebAuthnService {
 
 		CoseKey coseKey = CoseKey.parse(Cbor.asMap(Cbor.decode(Base64.getDecoder().decode(passkey.getPublicKeyCose()))));
 		byte[] clientDataHash = sha256(BASE64URL_DECODER.decode(credential.response().clientDataJSON()));
-		byte[] signedData = concat(authenticatorDataBytes, clientDataHash);
+		byte[] signedData = EcKeys.concat(authenticatorDataBytes, clientDataHash);
 		byte[] signature = BASE64URL_DECODER.decode(credential.response().signature());
 		if (!verifySignature(coseKey, signedData, signature)) {
 			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Invalid passkey signature");
@@ -338,13 +339,6 @@ public class WebAuthnService {
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalStateException(e); // SHA-256 is always available on the JDK
 		}
-	}
-
-	private static byte[] concat(byte[] a, byte[] b) {
-		byte[] result = new byte[a.length + b.length];
-		System.arraycopy(a, 0, result, 0, a.length);
-		System.arraycopy(b, 0, result, a.length, b.length);
-		return result;
 	}
 
 	private static byte[] randomBytes(int length) {
