@@ -271,9 +271,9 @@ public class PasskeyService {
 			.toList();
 
 		PublicKeyCredentialCreationOptions options = new PublicKeyCredentialCreationOptions(
-			base64url(challenge),
+			BASE64URL_ENCODER.encodeToString(challenge),
 			new RelyingParty(globalVariables.getWebauthnRpId(), globalVariables.getWebauthnRpName()),
-			new UserEntity(base64url(user.getEmail().getBytes(StandardCharsets.UTF_8)), user.getEmail(),
+			new UserEntity(BASE64URL_ENCODER.encodeToString(user.getEmail().getBytes(StandardCharsets.UTF_8)), user.getEmail(),
 				user.getName() != null && !user.getName().isBlank() ? user.getName() : user.getEmail()),
 			List.of(new PubKeyCredParam("public-key", -7), new PubKeyCredParam("public-key", -257),
 				new PubKeyCredParam("public-key", -8)),
@@ -307,7 +307,7 @@ public class PasskeyService {
 		}
 		logger.debug("Registering passkey (attestation format '{}') for {}", fmt, user.getEmail());
 
-		String credentialId = base64url(parsed.credentialId());
+		String credentialId = BASE64URL_ENCODER.encodeToString(parsed.credentialId());
 		if (passkeyRepository.findByCredentialId(credentialId).isPresent()) {
 			throw new HttpStatusException(HttpStatus.CONFLICT, "This passkey is already registered");
 		}
@@ -340,7 +340,7 @@ public class PasskeyService {
 
 		challenges.put(state, new ChallengeEntry(normalizedUsername, challenge, Instant.now()));
 		PublicKeyCredentialRequestOptions options = new PublicKeyCredentialRequestOptions(
-			base64url(challenge), globalVariables.getWebauthnRpId(), allow, "preferred", CHALLENGE_TIMEOUT_MILLIS);
+			BASE64URL_ENCODER.encodeToString(challenge), globalVariables.getWebauthnRpId(), allow, "preferred", CHALLENGE_TIMEOUT_MILLIS);
 		return new LoginChallenge(state, options);
 	}
 
@@ -445,7 +445,4 @@ public class PasskeyService {
 		}
 	}
 
-	private static String base64url(byte[] bytes) {
-		return BASE64URL_ENCODER.encodeToString(bytes);
-	}
 }
