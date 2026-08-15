@@ -245,7 +245,14 @@ public class PasskeyService {
 			throws AlbinaException {
 		User user = userRepository.findByIdOrElseThrow(principal);
 		RegistrationCredential credential = request.credential();
-		ChallengeEntry entry = consumeChallenge(request.state(), user.getEmail());
+		ChallengeEntry entry = challenges.getIfPresent(request.state());
+		challenges.invalidate(request.state());
+		if (entry == null) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unknown or expired challenge");
+		}
+		if (user.getEmail() != null && !user.getEmail().equalsIgnoreCase(entry.username())) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Challenge does not belong to this user");
+		}
 		ClientData clientData = ClientData.parse(objectMapper, credential.response().clientDataJSON());
 		if (!"webauthn.create".equals(clientData.type())) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
@@ -329,7 +336,11 @@ public class PasskeyService {
 	@Operation(summary = "Finish a passkey login")
 	public AuthenticationService.AuthenticationResponse finishLogin(@Body LoginFinishRequest request) {
 		AuthenticationCredential credential = request.credential();
-		ChallengeEntry entry = consumeChallenge(request.state(), null);
+		ChallengeEntry entry = challenges.getIfPresent(request.state());
+		challenges.invalidate(request.state());
+		if (entry == null) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unknown or expired challenge");
+		}
 		ClientData clientData = ClientData.parse(objectMapper, credential.response().clientDataJSON());
 		if (!"webauthn.get".equals(clientData.type())) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
@@ -381,20 +392,6 @@ public class PasskeyService {
 		passkeyRepository.update(passkey);
 
 		return authenticationService.issueToken(user);
-	}
-
-	// ---- shared verification helpers ----
-
-	private ChallengeEntry consumeChallenge(String state, @Nullable String expectedUsername) {
-		ChallengeEntry entry = challenges.getIfPresent(state);
-		challenges.invalidate(state);
-		if (entry == null) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unknown or expired challenge");
-		}
-		if (expectedUsername != null && !expectedUsername.equalsIgnoreCase(entry.username())) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Challenge does not belong to this user");
-		}
-		return entry;
 	}
 
 }
