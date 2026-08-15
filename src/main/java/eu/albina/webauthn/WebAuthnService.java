@@ -21,11 +21,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.Signature;
 import java.time.Duration;
 import java.time.Instant;
@@ -48,7 +48,6 @@ import java.util.UUID;
 public class WebAuthnService {
 
 	private static final Logger logger = LoggerFactory.getLogger(WebAuthnService.class);
-	private static final SecureRandom RANDOM = new SecureRandom();
 	private static final Base64.Encoder BASE64URL_ENCODER = Base64.getUrlEncoder().withoutPadding();
 	private static final Base64.Decoder BASE64URL_DECODER = Base64.getUrlDecoder();
 	private static final long CHALLENGE_TIMEOUT_MILLIS = 60_000;
@@ -159,7 +158,7 @@ public class WebAuthnService {
 	// ---- registration ----
 
 	public RegistrationChallenge beginRegistration(User user) {
-		byte[] challenge = randomBytes(32);
+		byte[] challenge = uuidBytes(UUID.randomUUID());
 		String state = UUID.randomUUID().toString();
 		challenges.put(state, new ChallengeEntry(user.getEmail(), challenge, Instant.now()));
 
@@ -222,7 +221,7 @@ public class WebAuthnService {
 	// ---- login ----
 
 	public LoginChallenge beginLogin(@Nullable String username) {
-		byte[] challenge = randomBytes(32);
+		byte[] challenge = uuidBytes(UUID.randomUUID());
 		String state = UUID.randomUUID().toString();
 		String normalizedUsername = username != null ? username.toLowerCase() : null;
 
@@ -344,10 +343,11 @@ public class WebAuthnService {
 		}
 	}
 
-	private static byte[] randomBytes(int length) {
-		byte[] bytes = new byte[length];
-		RANDOM.nextBytes(bytes);
-		return bytes;
+	private static byte[] uuidBytes(UUID uuid) {
+		return ByteBuffer.allocate(16)
+			.putLong(uuid.getMostSignificantBits())
+			.putLong(uuid.getLeastSignificantBits())
+			.array();
 	}
 
 	private static String base64url(byte[] bytes) {
