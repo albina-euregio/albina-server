@@ -326,14 +326,8 @@ public class PasskeyService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Operation(summary = "Finish a passkey login")
 	public AuthenticationService.AuthenticationResponse finishLogin(@Body LoginFinishRequest request) {
-		User user = finishLogin(request.state(), request.credential());
-		return authenticationService.issueToken(user);
-	}
-
-	// ---- WebAuthn ceremonies ----
-
-	private User finishLogin(String state, AuthenticationCredential credential) {
-		ChallengeEntry entry = consumeChallenge(state, null);
+		AuthenticationCredential credential = request.credential();
+		ChallengeEntry entry = consumeChallenge(request.state(), null);
 		ClientData clientData = ClientData.parse(objectMapper, credential.response().clientDataJSON());
 		if (!"webauthn.get".equals(clientData.type())) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
@@ -383,8 +377,10 @@ public class PasskeyService {
 		passkey.setLastUsedAt(Instant.now());
 		passkeyRepository.update(passkey);
 
-		return user;
+		return authenticationService.issueToken(user);
 	}
+
+	// ---- WebAuthn ceremonies ----
 
 	// ---- shared verification helpers ----
 
