@@ -146,6 +146,14 @@ public class WebAuthnService {
 	@Serdeable
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	record ClientData(String type, String challenge, String origin) {
+		static ClientData parse(ObjectMapper objectMapper, String clientDataJsonBase64url) {
+			byte[] bytes = BASE64URL_DECODER.decode(clientDataJsonBase64url);
+			try {
+				return objectMapper.readValue(new String(bytes, StandardCharsets.UTF_8), ClientData.class);
+			} catch (IOException e) {
+				throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Invalid clientDataJSON");
+			}
+		}
 	}
 
 	// ---- registration ----
@@ -176,7 +184,7 @@ public class WebAuthnService {
 
 	public Passkey finishRegistration(User user, String state, RegistrationCredential credential, @Nullable String name) {
 		ChallengeEntry entry = consumeChallenge(state, user.getEmail());
-		ClientData clientData = parseClientData(credential.response().clientDataJSON());
+		ClientData clientData = ClientData.parse(objectMapper, credential.response().clientDataJSON());
 		if (!"webauthn.create".equals(clientData.type())) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
 		}
@@ -237,7 +245,7 @@ public class WebAuthnService {
 
 	public User finishLogin(String state, AuthenticationCredential credential) {
 		ChallengeEntry entry = consumeChallenge(state, null);
-		ClientData clientData = parseClientData(credential.response().clientDataJSON());
+		ClientData clientData = ClientData.parse(objectMapper, credential.response().clientDataJSON());
 		if (!"webauthn.get".equals(clientData.type())) {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Unexpected clientData type: " + clientData.type());
 		}
@@ -296,15 +304,6 @@ public class WebAuthnService {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Challenge does not belong to this user");
 		}
 		return entry;
-	}
-
-	private ClientData parseClientData(String clientDataJsonBase64url) {
-		byte[] bytes = BASE64URL_DECODER.decode(clientDataJsonBase64url);
-		try {
-			return objectMapper.readValue(new String(bytes, StandardCharsets.UTF_8), ClientData.class);
-		} catch (IOException e) {
-			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Invalid clientDataJSON");
-		}
 	}
 
 	private void verifyChallengeAndOrigin(ChallengeEntry entry, ClientData clientData) {
