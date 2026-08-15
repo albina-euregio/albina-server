@@ -35,7 +35,7 @@ public record WebauthnConfig(String rpId, String rpName, String origin) {
 		}
 	}
 
-	private static byte[] sha256(byte[] input) {
+	public static byte[] sha256(byte[] input) {
 		try {
 			return MessageDigest.getInstance("SHA-256").digest(input);
 		} catch (NoSuchAlgorithmException e) {

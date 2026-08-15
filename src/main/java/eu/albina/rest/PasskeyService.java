@@ -42,8 +42,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.time.Duration;
 import java.time.Instant;
@@ -358,7 +356,7 @@ public class PasskeyService {
 		}
 
 		CoseKey coseKey = CoseKey.parse(Cbor.asMap(Cbor.decode(Base64.getDecoder().decode(passkey.getPublicKeyCose()))));
-		byte[] clientDataHash = sha256(BASE64URL_DECODER.decode(credential.response().clientDataJSON()));
+		byte[] clientDataHash = WebauthnConfig.sha256(BASE64URL_DECODER.decode(credential.response().clientDataJSON()));
 		byte[] signedData = EcKeys.concat(authenticatorDataBytes, clientDataHash);
 		byte[] signature = BASE64URL_DECODER.decode(credential.response().signature());
 		try {
@@ -397,14 +395,6 @@ public class PasskeyService {
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Challenge does not belong to this user");
 		}
 		return entry;
-	}
-
-	private static byte[] sha256(byte[] input) {
-		try {
-			return MessageDigest.getInstance("SHA-256").digest(input);
-		} catch (NoSuchAlgorithmException e) {
-			throw new IllegalStateException(e); // SHA-256 is always available on the JDK
-		}
 	}
 
 }
