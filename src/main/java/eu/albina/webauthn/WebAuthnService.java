@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
@@ -158,7 +157,7 @@ public class WebAuthnService {
 	// ---- registration ----
 
 	public RegistrationChallenge beginRegistration(User user) {
-		byte[] challenge = uuidBytes(UUID.randomUUID());
+		byte[] challenge = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
 		String state = UUID.randomUUID().toString();
 		challenges.put(state, new ChallengeEntry(user.getEmail(), challenge, Instant.now()));
 
@@ -221,7 +220,7 @@ public class WebAuthnService {
 	// ---- login ----
 
 	public LoginChallenge beginLogin(@Nullable String username) {
-		byte[] challenge = uuidBytes(UUID.randomUUID());
+		byte[] challenge = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
 		String state = UUID.randomUUID().toString();
 		String normalizedUsername = username != null ? username.toLowerCase() : null;
 
@@ -341,13 +340,6 @@ public class WebAuthnService {
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalStateException(e); // SHA-256 is always available on the JDK
 		}
-	}
-
-	private static byte[] uuidBytes(UUID uuid) {
-		return ByteBuffer.allocate(16)
-			.putLong(uuid.getMostSignificantBits())
-			.putLong(uuid.getLeastSignificantBits())
-			.array();
 	}
 
 	private static String base64url(byte[] bytes) {
