@@ -49,6 +49,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Weakly bonded old snow represents the main danger.</highlights>
@@ -176,6 +177,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>The old snowpack remains prone to triggering.</highlights>
@@ -266,6 +268,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wet_snow</problemType>
@@ -281,6 +284,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>The old snowpack remains prone to triggering.</highlights>
@@ -399,6 +403,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Weakly bonded old snow represents the main danger.</highlights>
@@ -550,6 +555,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Weakly bonded old snow represents the main danger. &lt;br/></highlights>

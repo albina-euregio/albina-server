@@ -55,6 +55,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>many</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>high</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -75,6 +76,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -93,6 +95,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -223,6 +226,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -243,6 +247,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -333,6 +338,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -351,6 +357,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -371,6 +378,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -459,6 +467,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>loose</avalancheType>
@@ -482,6 +491,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -608,6 +618,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -628,6 +639,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -709,6 +721,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -729,6 +742,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -804,6 +818,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>loose</avalancheType>
@@ -870,6 +885,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -933,6 +949,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>1</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>loose</avalancheType>
@@ -1038,6 +1055,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>

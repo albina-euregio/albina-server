@@ -37,6 +37,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>many</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>high</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -50,6 +51,7 @@
       <snowpackStability>fair</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>The fresh wind slabs represent the main danger.</highlights>
@@ -113,6 +115,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>many</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>high</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -126,6 +129,7 @@
       <snowpackStability>fair</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>The fresh wind slabs represent the main danger.</highlights>
@@ -189,6 +193,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>many</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -202,6 +207,7 @@
       <snowpackStability>fair</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>The fresh wind slabs represent the main danger.</highlights>
@@ -265,6 +271,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>many</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -278,6 +285,7 @@
       <snowpackStability>fair</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>The fresh wind slabs represent the main danger.</highlights>
@@ -341,6 +349,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>many</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -354,6 +363,7 @@
       <snowpackStability>fair</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>The fresh wind slabs represent the main danger.</highlights>

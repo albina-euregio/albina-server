@@ -48,6 +48,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -63,6 +64,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>new_snow</problemType>
@@ -81,6 +83,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>many</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -96,6 +99,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Gliding snow requires caution. Afternoon: Increase in avalanche danger as a consequence of new snow and strong wind.</highlights>
@@ -169,6 +173,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -184,6 +189,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Fresh wind slabs require caution. Gliding snow represents the main danger.</highlights>
@@ -302,6 +308,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wind_slab</problemType>
@@ -315,6 +322,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wind_slab</problemType>
@@ -330,6 +338,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -345,6 +354,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Gliding snow requires caution. Afternoon: Fresh wind slabs require caution.</highlights>
@@ -411,6 +421,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>A quite favourable avalanche situation will prevail. Wind slabs require caution.</highlights>
@@ -464,6 +475,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>1</avalancheSize>
+      <dangerRatingValue>low</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>A generally favourable avalanche situation will prevail. Wind slabs require caution.</highlights>
