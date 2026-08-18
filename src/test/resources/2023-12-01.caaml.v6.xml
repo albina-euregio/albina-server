@@ -84,6 +84,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -102,6 +103,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -120,6 +122,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>new_snow</problemType>
@@ -138,6 +141,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -156,6 +160,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Weakly bonded old snow above approximately 2000 m. Gliding snow at intermediate altitudes.</highlights>
@@ -252,6 +257,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -270,6 +276,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>new_snow</problemType>
@@ -288,6 +295,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -306,6 +314,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -324,6 +333,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</highlights>
@@ -528,6 +538,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -546,6 +557,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>new_snow</problemType>
@@ -564,6 +576,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>persistent_weak_layers</problemType>
@@ -582,6 +595,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>3</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -600,6 +614,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>As the day progresses as a consequence of new snow and wind there will be a gradual increase in the danger.</highlights>
@@ -690,6 +705,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>new_snow</problemType>
@@ -708,6 +724,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>As the day progresses as a consequence of new snow and wind there will be only a slight increase in the danger.</highlights>
@@ -818,6 +835,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>1</avalancheSize>
+      <dangerRatingValue>low</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>wind_slab</problemType>
@@ -836,6 +854,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>1</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>Fresh wind slabs are to be evaluated critically.</highlights>
@@ -908,6 +927,7 @@
       <snowpackStability>fair</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>1</avalancheSize>
+      <dangerRatingValue>low</dangerRatingValue>
     </avalancheProblem>
     <avalancheActivity>
       <highlights>In all aspects in all altitude zones a little snow is lying. Fresh wind slabs are to be evaluated critically.</highlights>

@@ -149,6 +149,10 @@ public class Caaml6 {
 		result.setValidTimePeriod(validTimePeriod);
 		final EawsMatrixInformation matrixInformation = p.getEawsMatrixInformation();
 		if (matrixInformation != null) {
+			DangerRating rating = matrixInformation.getDangerRating();
+			if (rating != null) {
+				result.setDangerRatingValue(DangerRatingValue.forValue(rating.name()));
+			}
 			if (matrixInformation.getAvalancheSize() != null) {
 				result.setAvalancheSize(matrixInformation.getAvalancheSize().toInteger());
 			}

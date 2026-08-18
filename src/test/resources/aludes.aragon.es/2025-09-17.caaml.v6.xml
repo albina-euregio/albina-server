@@ -53,6 +53,7 @@
       <snowpackStability>poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>4</avalancheSize>
+      <dangerRatingValue>considerable</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>slab</avalancheType>
@@ -124,6 +125,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>some</frequency>
       <avalancheSize>4</avalancheSize>
+      <dangerRatingValue>high</dangerRatingValue>
     </avalancheProblem>
     <avalancheProblem>
       <problemType>gliding_snow</problemType>
@@ -132,6 +134,7 @@
       <snowpackStability>very_poor</snowpackStability>
       <frequency>few</frequency>
       <avalancheSize>2</avalancheSize>
+      <dangerRatingValue>moderate</dangerRatingValue>
       <customData>
         <ALBINA>
           <avalancheType>glide</avalancheType>
