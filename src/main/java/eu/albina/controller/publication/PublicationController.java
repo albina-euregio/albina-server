@@ -131,7 +131,7 @@ public class PublicationController {
 				avalancheReport.getDate().minusDays(1).toInstant(),
 				avalancheReport.getRegion()
 			).stream()
-				.filter(r -> r.getValidityDate() != null)
+				.filter(r -> !r.getBulletins().isEmpty())
 				.sorted(Comparator.comparing(AvalancheReport::getValidityDate))
 				.toList();
 			caaml.createCaamlFiles(avalancheReport, previousReports);
