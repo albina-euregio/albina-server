@@ -131,6 +131,7 @@ public class PublicationController {
 				avalancheReport.getDate().minusDays(1).toInstant(),
 				avalancheReport.getRegion()
 			).stream()
+				.filter(r -> r.getBulletins() != null)
 				.filter(r -> !r.getBulletins().isEmpty())
 				.sorted(Comparator.comparing(AvalancheReport::getValidityDate))
 				.toList();
