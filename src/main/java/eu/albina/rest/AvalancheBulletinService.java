@@ -43,6 +43,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
+import eu.albina.model.TendencyProgression;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
@@ -357,19 +358,13 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	@Serdeable
-	public record TendencyResult(
-		@Schema(description = "Start dates of the bulletins of the preceding days") List<Instant> dates,
-		@Schema(description = "Highest danger rating of each of these days, per micro region") Map<String, List<DangerRating>> dangerRatings) {
-	}
-
 	private static final int TENDENCY_DAYS = 7;
 
 	@Get("/tendency")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	@ApiResponse(description = "tendency of each micro region with published bulletins", content = @Content(schema = @Schema(implementation = TendencyResult.class)))
+	@ApiResponse(description = "tendency of each micro region with published bulletins", content = @Content(schema = @Schema(implementation = TendencyProgression.class)))
 	@Operation(summary = "Get tendency for region")
-	public TendencyResult getTendency(
+	public TendencyProgression getTendency(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(description = "Region ID, e.g. AT-07 or EUREGIO, or empty for all regions")
 		@Nullable @QueryValue("region") String regionId) {
@@ -404,7 +399,7 @@ public class AvalancheBulletinService {
 					return AvalancheBulletin.getHighestDangerRating(microRegionBulletins);
 				})
 				.toList(), (a, b) -> a, TreeMap::new));
-		return new TendencyResult(dates, dangerRatings);
+		return new TendencyProgression(dates, dangerRatings);
 	}
 
 	@Post("/preview")
