@@ -27,13 +27,9 @@ import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
-@Singleton
-public class Caaml6 {
+public interface Caaml6 {
 
-	@Inject
-	private ObjectMapper objectMapper;
-
-	public String createJSON(AvalancheReport avalancheReport, LanguageCode lang) {
+	static String createJSON(AvalancheReport avalancheReport, LanguageCode lang, ObjectMapper objectMapper) {
 		try {
 			return objectMapper
 				.writeValueAsString(toCAAML(avalancheReport, lang));
@@ -42,7 +38,7 @@ public class Caaml6 {
 		}
 	}
 
-	public static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
+	static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
 		try {
 			// Jackson 3: mappers are immutable and configured via the builder;
 			// java.time support is built in (no JavaTimeModule registration needed).

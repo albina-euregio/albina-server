@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import eu.albina.model.AvalancheReport;
+
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 
 import eu.albina.model.enumerations.LanguageCode;
@@ -23,7 +25,7 @@ import jakarta.inject.Singleton;
 public class Caaml {
 
 	@Inject
-	private Caaml6 caaml6;
+	private ObjectMapper objectMapper;
 
 	public void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
@@ -38,7 +40,7 @@ public class Caaml {
 
 	public String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
 		if (version == CaamlVersion.V6_JSON) {
-			return caaml6.createJSON(avalancheReport, lang);
+			return Caaml6.createJSON(avalancheReport, lang, objectMapper);
 		} else {
 			return Caaml6.createXML(avalancheReport, lang);
 		}
