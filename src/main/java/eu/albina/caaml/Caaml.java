@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import eu.albina.model.AvalancheReport;
 
@@ -32,7 +33,7 @@ public class Caaml {
 		Files.createDirectories(dirPath);
 
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
-			Caaml6 caaml6 = new Caaml6(avalancheReport, lang);
+			Caaml6 caaml6 = new Caaml6(avalancheReport, List.of(), lang);
 			Path pathJSON = dirPath.resolve("%s_%s_%s_CAAMLv6.json".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));
 			Files.writeString(pathJSON, caaml6.createJSON(objectMapper), StandardCharsets.UTF_8);
 			Path pathXML = dirPath.resolve("%s_%s_%s_CAAMLv6.xml".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));
@@ -40,8 +41,8 @@ public class Caaml {
 		}
 	}
 
-	public String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
-		Caaml6 caaml6 = new Caaml6(avalancheReport, lang);
+	public String createCaaml(AvalancheReport avalancheReport, List<AvalancheReport> previousReports, LanguageCode lang, CaamlVersion version) {
+		Caaml6 caaml6 = new Caaml6(avalancheReport, previousReports, lang);
 		if (version == CaamlVersion.V6_JSON) {
 			return caaml6.createJSON(objectMapper);
 		} else {

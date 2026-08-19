@@ -3,6 +3,7 @@ package org.caaml.v6;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -22,10 +23,18 @@ public record AvalancheBulletinCustomData(
 	@Serdeable
 	public record ALBINA(
 		String mainDate,
+		TendencyProgression tendencyProgression,
 		@JacksonXmlElementWrapper(useWrapping = false) @JacksonXmlProperty(localName = "bulletinPhoto")
 		List<BulletinPhoto> bulletinPhotos
 	) {
 	}
+
+	@Serdeable
+	public record TendencyProgression(
+		List<LocalDate> dates,
+		Map<String, List<DangerRatingValue>> dangerRatings) {
+	}
+
 
 	@Serdeable
 	public record LwdTyrol(

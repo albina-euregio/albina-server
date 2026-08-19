@@ -384,7 +384,7 @@ public class TextToSpeech {
 			return;
 		}
 		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
-			for (AvalancheBulletin caaml : new Caaml6(avalancheReport, lang).toCAAML().getBulletins()) {
+			for (AvalancheBulletin caaml : new Caaml6(avalancheReport, List.of(), lang).toCAAML().getBulletins()) {
 				String filename = String.format("%s_%s.ssml", caaml.getBulletinID(), lang);
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);
 				if (!Files.exists(path)) {

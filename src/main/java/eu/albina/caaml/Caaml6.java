@@ -1,11 +1,16 @@
 package eu.albina.caaml;
 
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import com.google.common.base.Strings;
@@ -25,7 +30,7 @@ import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
-public record Caaml6(AvalancheReport avalancheReport, LanguageCode lang) {
+public record Caaml6(AvalancheReport avalancheReport, List<AvalancheReport> previousReports, LanguageCode lang) {
 
 	public String createJSON(ObjectMapper objectMapper) {
 		try {
@@ -88,17 +93,29 @@ public record Caaml6(AvalancheReport avalancheReport, LanguageCode lang) {
 			: avalancheBulletin.getPhotos().stream()
 				.map(Caaml6::toCaamlBulletinPhoto)
 				.toList();
+		AvalancheBulletinCustomData.TendencyProgression tendencyProgression = new AvalancheBulletinCustomData.TendencyProgression(
+			previousReports.stream().map(AvalancheReport::getValidityDate).toList(),
+			avalancheBulletin.getPublishedRegions().stream().collect(Collectors.toMap(
+				r -> r,
+				region -> previousReports.stream().map(r -> r.getBulletins().stream()
+					.filter(b -> b.getPublishedRegions().contains(region))
+					.findFirst()
+					.stream()
+					.flatMap(Caaml6::getDangerRatings)
+					.map(org.caaml.v6.DangerRating::getMainValue)
+					.max(Comparator.naturalOrder())
+					.orElse(null)
+				).toList()
+			))
+		);
 		bulletin.setCustomData(new AvalancheBulletinCustomData(
-			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDateString(), images.isEmpty() ? null : images),
+			new AvalancheBulletinCustomData.ALBINA(
+				avalancheBulletin.getValidityDateString(),
+				tendencyProgression.dates().isEmpty() ? null : tendencyProgression,
+				images.isEmpty() ? null : images),
 			new AvalancheBulletinCustomData.LwdTyrol(dangerPatterns)
 		));
-		bulletin.setDangerRatings((avalancheBulletin.isHasDaytimeDependency()
-				? Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
-				: Stream.of(avalancheBulletin.getForenoon()))
-				.flatMap(daytime -> Stream.of(
-						getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
-						getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
-				.distinct().toList());
+		bulletin.setDangerRatings(getDangerRatings(avalancheBulletin).toList());
 		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang).orElse(null));
 		bulletin.setLang(lang.name());
 		bulletin.setMetaData(null);
@@ -117,6 +134,16 @@ public record Caaml6(AvalancheReport avalancheReport, LanguageCode lang) {
 		bulletin.setValidTime(new ValidTime(avalancheBulletin.getValidFrom().toInstant(), avalancheBulletin.getValidUntil().toInstant()));
 		bulletin.setWeatherForecast(org.caaml.v6.Texts.of(avalancheBulletin.getSynopsisHighlightsIn(lang), avalancheBulletin.getSynopsisCommentIn(lang)));
 		return bulletin;
+	}
+
+	private static Stream<org.caaml.v6.DangerRating> getDangerRatings(AvalancheBulletin avalancheBulletin) {
+		return (avalancheBulletin.isHasDaytimeDependency()
+			? Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
+			: Stream.of(avalancheBulletin.getForenoon()))
+			.flatMap(daytime -> Stream.of(
+				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
+				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
+			.distinct();
 	}
 
 	private static AvalancheBulletinCustomData.BulletinPhoto toCaamlBulletinPhoto(AvalancheBulletinPhoto photo) {

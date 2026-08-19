@@ -169,7 +169,7 @@ public class AvalancheBulletinService {
 			bulletins.forEach(b -> b.setPublishedRegions(b.getPublishedAndSavedRegions()));
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, globalVariables.getLocalServerInstance());
 			avalancheReport.setStatus(BulletinStatus.draft);
-			return caaml.createCaaml(avalancheReport, language, version);
+			return caaml.createCaaml(avalancheReport, List.of(), language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -222,7 +222,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReport.of(
 				avalancheReportController.getPublishedBulletins(startDate, regions), null,
 				globalVariables.getLocalServerInstance());
-			return caaml.createCaaml(avalancheReport, language, version);
+			return caaml.createCaaml(avalancheReport, List.of(), language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
