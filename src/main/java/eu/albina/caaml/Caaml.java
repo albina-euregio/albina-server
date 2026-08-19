@@ -39,10 +39,11 @@ public class Caaml {
 	}
 
 	public String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
+		Caaml6 caaml6 = new Caaml6(avalancheReport, lang);
 		if (version == CaamlVersion.V6_JSON) {
-			return Caaml6.createJSON(avalancheReport, lang, objectMapper);
+			return caaml6.createJSON(objectMapper);
 		} else {
-			return Caaml6.createXML(avalancheReport, lang);
+			return caaml6.createXML();
 		}
 	}
 
