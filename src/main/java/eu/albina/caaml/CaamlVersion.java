@@ -15,17 +15,6 @@ public enum CaamlVersion {
 		String V6_JSON = "V6_JSON";
 	}
 
-	String filenameSuffix() {
-		return switch (this) {
-			case V6 -> "_CAAMLv6.xml";
-			case V6_JSON -> "_CAAMLv6.json";
-		};
-	}
-
-	int version() {
-		return 6;
-	}
-
 	String namespace() {
 		return "http://caaml.org/Schemas/V6.0/Profiles/BulletinEAWS";
 	}

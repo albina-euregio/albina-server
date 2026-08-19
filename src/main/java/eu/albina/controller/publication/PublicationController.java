@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Stopwatch;
 
 import eu.albina.caaml.Caaml;
-import eu.albina.caaml.CaamlVersion;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -124,8 +123,7 @@ public class PublicationController {
 	public void createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for {} started", avalancheReport);
-			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
-			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
+			caaml.createCaamlFiles(avalancheReport);
 			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport);

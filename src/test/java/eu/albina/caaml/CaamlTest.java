@@ -80,11 +80,11 @@ public class CaamlTest {
 	public void createOldCaamlFiles() throws Exception {
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
+			createOldCaamlFiles(date);
 		}
 		for (LocalDate date = LocalDate.parse("2019-11-16"); date
 				.isBefore(LocalDate.parse("2020-05-04")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
+			createOldCaamlFiles(date);
 		}
 	}
 
@@ -95,19 +95,19 @@ public class CaamlTest {
 			 date.isBefore(LocalDate.parse("2022-05-02"));
 			 date = date.plusDays(1)) {
 			try {
-				createOldCaamlFiles(date, CaamlVersion.V6_JSON);
+				createOldCaamlFiles(date);
 			} catch (FileNotFoundException e) {
 				LoggerFactory.getLogger(getClass()).warn("Not found {}", e.getMessage());
 			}
 		}
 	}
 
-	private void createOldCaamlFiles(LocalDate date, CaamlVersion version) throws Exception {
+	private void createOldCaamlFiles(LocalDate date) throws Exception {
 		LoggerFactory.getLogger(getClass()).info("Loading {}", date);
 		AvalancheReport avalancheReport = date.isAfter(LocalDate.parse("2020-10-01")) ? loadFromURL(date): loadFromDatabase(date);
 		for (LanguageCode language : avalancheReport.getRegion().getEnabledLanguages()) {
-			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, version.filenameSuffix()));
-			String caaml = this.caaml.createCaaml(avalancheReport, language, version);
+			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, "_CAAMLv6.json"));
+			String caaml = this.caaml.createCaaml(avalancheReport, language, CaamlVersion.V6_JSON);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.createDirectories(path.getParent());
 			Files.writeString(path, caaml, StandardCharsets.UTF_8);
