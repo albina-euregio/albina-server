@@ -257,10 +257,10 @@ public class TextToSpeech {
 				return;
 			}
 			AvalancheBulletinCustomData customData = (AvalancheBulletinCustomData) bulletin.getCustomData();
-			if (customData.getLWD_Tyrol() == null) {
+			if (customData.LWD_Tyrol() == null) {
 				return;
 			}
-			String string = customData.getLWD_Tyrol().dangerPatterns.stream().map(String::valueOf)
+			String string = customData.LWD_Tyrol().dangerPatterns().stream().map(String::valueOf)
 				.map(DangerPattern::fromString)
 				.map(p -> p.toString(lang.getLocale()))
 				.collect(Collectors.joining(", "));
