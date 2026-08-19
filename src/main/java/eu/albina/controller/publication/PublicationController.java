@@ -130,7 +130,10 @@ public class PublicationController {
 				avalancheReport.getDate().minusDays(7).toInstant(),
 				avalancheReport.getDate().minusDays(1).toInstant(),
 				avalancheReport.getRegion()
-			).stream().sorted(Comparator.comparing(AvalancheReport::getDate)).toList();
+			).stream()
+				.filter(r -> r.getValidityDate() != null)
+				.sorted(Comparator.comparing(AvalancheReport::getValidityDate))
+				.toList();
 			caaml.createCaamlFiles(avalancheReport, previousReports);
 			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
