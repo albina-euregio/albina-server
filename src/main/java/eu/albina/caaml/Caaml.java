@@ -28,12 +28,12 @@ public class Caaml {
 	@Inject
 	private ObjectMapper objectMapper;
 
-	public void createCaamlFiles(AvalancheReport avalancheReport) throws IOException {
+	public void createCaamlFiles(AvalancheReport avalancheReport, List<AvalancheReport> previousReports) throws IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
 
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
-			Caaml6 caaml6 = new Caaml6(avalancheReport, List.of(), lang);
+			Caaml6 caaml6 = new Caaml6(avalancheReport, previousReports, lang);
 			Path pathJSON = dirPath.resolve("%s_%s_%s_CAAMLv6.json".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));
 			Files.writeString(pathJSON, caaml6.createJSON(objectMapper), StandardCharsets.UTF_8);
 			Path pathXML = dirPath.resolve("%s_%s_%s_CAAMLv6.xml".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));

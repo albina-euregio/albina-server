@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
@@ -123,7 +126,12 @@ public class PublicationController {
 	public void createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for {} started", avalancheReport);
-			caaml.createCaamlFiles(avalancheReport);
+			List<AvalancheReport> previousReports = avalancheReportController.getPublicReports(
+				avalancheReport.getDate().minusDays(7).toInstant(),
+				avalancheReport.getDate().minusDays(1).toInstant(),
+				avalancheReport.getRegion()
+			).stream().sorted(Comparator.comparing(AvalancheReport::getDate)).toList();
+			caaml.createCaamlFiles(avalancheReport, previousReports);
 			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport);
