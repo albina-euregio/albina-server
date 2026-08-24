@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
@@ -23,8 +24,8 @@ public record AvalancheBulletinCustomData(
 	@Serdeable
 	public record ALBINA(
 		String mainDate,
-		TendencyProgression tendencyProgression,
-		@JacksonXmlElementWrapper(useWrapping = false) @JacksonXmlProperty(localName = "bulletinPhoto")
+		@Nullable TendencyProgression tendencyProgression,
+		@Nullable @JacksonXmlElementWrapper(useWrapping = false) @JacksonXmlProperty(localName = "bulletinPhoto")
 		List<BulletinPhoto> bulletinPhotos
 	) {
 	}
@@ -38,7 +39,7 @@ public record AvalancheBulletinCustomData(
 
 	@Serdeable
 	public record LwdTyrol(
-		@JacksonXmlElementWrapper(useWrapping = false) @JacksonXmlProperty(localName = "dangerPatterns")
+		@Nullable @JacksonXmlElementWrapper(useWrapping = false) @JacksonXmlProperty(localName = "dangerPatterns")
 		List<String> dangerPatterns
 	) {
 	}
@@ -46,12 +47,12 @@ public record AvalancheBulletinCustomData(
 	@Serdeable
 	public record BulletinPhoto(
 		String url,
-		String copyright,
-		LocalDate date,
-		String microRegionId,
-		String locationName,
-		Double latitude,
-		Double longitude
+		@Nullable String copyright,
+		@Nullable LocalDate date,
+		@Nullable String microRegionId,
+		@Nullable String locationName,
+		@Nullable Double latitude,
+		@Nullable Double longitude
 	) {
 		public BulletinPhoto(String url) {
 			this(url, null, null, null, null, null, null);
