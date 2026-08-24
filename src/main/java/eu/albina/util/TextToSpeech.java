@@ -155,14 +155,14 @@ public class TextToSpeech {
 				.map(Aspect::name)
 				.map(lang.getBundle("i18n.Aspect")::getString)
 				.toList();
-            return switch (texts.size()) {
-                case 0 -> lang.getBundleString("speech.aspects.0");
-                case 1 -> lang.getBundleString("speech.aspects.1", Map.of("aspect1", texts.get(0)));
-                case 2 ->
-                        lang.getBundleString("speech.aspects.2", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1)));
-                default ->
-                        lang.getBundleString("speech.aspects.3", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1), "aspect3", texts.get(2)));
-            };
+			return switch (texts.size()) {
+				case 0 -> lang.getBundleString("speech.aspects.0");
+				case 1 -> lang.getBundleString("speech.aspects.1", Map.of("aspect1", texts.get(0)));
+				case 2 ->
+					lang.getBundleString("speech.aspects.2", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1)));
+				default ->
+					lang.getBundleString("speech.aspects.3", Map.of("aspect1", texts.get(0), "aspect2", texts.get(1), "aspect3", texts.get(2)));
+			};
 		}
 
 
@@ -257,10 +257,10 @@ public class TextToSpeech {
 				return;
 			}
 			AvalancheBulletinCustomData customData = (AvalancheBulletinCustomData) bulletin.getCustomData();
-			if (customData.getLWD_Tyrol() == null) {
+			if (customData.LWD_Tyrol() == null) {
 				return;
 			}
-			String string = customData.getLWD_Tyrol().dangerPatterns.stream().map(String::valueOf)
+			String string = customData.LWD_Tyrol().dangerPatterns().stream().map(String::valueOf)
 				.map(DangerPattern::fromString)
 				.map(p -> p.toString(lang.getLocale()))
 				.collect(Collectors.joining(", "));
@@ -383,9 +383,8 @@ public class TextToSpeech {
 			logger.info("Skipping synthesize speech since GOOGLE_APPLICATION_CREDENTIALS is undefined.");
 			return;
 		}
-		for (eu.albina.model.AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
-			for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
-				AvalancheBulletin caaml = Caaml6.toCAAML(bulletin, lang);
+		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
+			for (AvalancheBulletin caaml : new Caaml6(avalancheReport, List.of(), lang).toCAAML().getBulletins()) {
 				String filename = String.format("%s_%s.ssml", caaml.getBulletinID(), lang);
 				Path path = avalancheReport.getPdfDirectory().resolve(filename);
 				if (!Files.exists(path)) {

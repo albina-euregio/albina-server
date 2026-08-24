@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import eu.albina.model.AvalancheReport;
+
+import io.micronaut.serde.ObjectMapper;
 import jakarta.inject.Inject;
 
 import eu.albina.model.enumerations.LanguageCode;
@@ -23,24 +26,27 @@ import jakarta.inject.Singleton;
 public class Caaml {
 
 	@Inject
-	private Caaml6 caaml6;
+	private ObjectMapper objectMapper;
 
-	public void createCaamlFiles(AvalancheReport avalancheReport, CaamlVersion version) throws IOException {
+	public void createCaamlFiles(AvalancheReport avalancheReport, List<AvalancheReport> previousReports) throws IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
 
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
-			String caamlString = createCaaml(avalancheReport, lang, version);
-			Path path = dirPath.resolve(avalancheReport.getValidityDateString() + "_" + avalancheReport.getRegion().getId() + "_" + lang.toString() + version.filenameSuffix());
-			Files.writeString(path, caamlString, StandardCharsets.UTF_8);
+			Caaml6 caaml6 = new Caaml6(avalancheReport, previousReports, lang);
+			Path pathJSON = dirPath.resolve("%s_%s_%s_CAAMLv6.json".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));
+			Files.writeString(pathJSON, caaml6.createJSON(objectMapper), StandardCharsets.UTF_8);
+			Path pathXML = dirPath.resolve("%s_%s_%s_CAAMLv6.xml".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));
+			Files.writeString(pathXML, caaml6.createXML(), StandardCharsets.UTF_8);
 		}
 	}
 
-	public String createCaaml(AvalancheReport avalancheReport, LanguageCode lang, CaamlVersion version) {
+	public String createCaaml(AvalancheReport avalancheReport, List<AvalancheReport> previousReports, LanguageCode lang, CaamlVersion version) {
+		Caaml6 caaml6 = new Caaml6(avalancheReport, previousReports, lang);
 		if (version == CaamlVersion.V6_JSON) {
-			return caaml6.createJSON(avalancheReport, lang);
+			return caaml6.createJSON(objectMapper);
 		} else {
-			return Caaml6.createXML(avalancheReport, lang);
+			return caaml6.createXML();
 		}
 	}
 

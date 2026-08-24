@@ -6,30 +6,16 @@ import tools.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import io.micronaut.serde.annotation.Serdeable;
 
 @Serdeable
-public class AvalancheProblemCustomData {
-	public final ALBINA ALBINA;
-
-	public AvalancheProblemCustomData(ALBINA ALBINA) {
-		this.ALBINA = ALBINA;
-	}
-
+public record AvalancheProblemCustomData(
 	@JacksonXmlProperty(localName = "ALBINA")
-	public ALBINA getALBINA() {
-		return ALBINA;
-	}
+	ALBINA ALBINA
+) {
+
 
 	@Serdeable
-	public static class ALBINA {
-		@JacksonXmlElementWrapper(useWrapping = false)
-		@JacksonXmlProperty(localName = "avalancheType")
-		public final String avalancheType;
-
-		public ALBINA(String avalancheType) {
-			this.avalancheType = avalancheType;
-		}
-
-		public String getAvalancheType() {
-			return avalancheType;
-		}
+	public record ALBINA(
+		@JacksonXmlElementWrapper(useWrapping = false) @JacksonXmlProperty(localName = "avalancheType")
+		String avalancheType
+	) {
 	}
 }

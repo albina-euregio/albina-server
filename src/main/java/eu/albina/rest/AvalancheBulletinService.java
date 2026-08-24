@@ -43,6 +43,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.LocalServerInstance;
 import eu.albina.model.Region;
+import eu.albina.model.TendencyProgression;
 import eu.albina.model.User;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerRating;
@@ -168,7 +169,7 @@ public class AvalancheBulletinService {
 			bulletins.forEach(b -> b.setPublishedRegions(b.getPublishedAndSavedRegions()));
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, globalVariables.getLocalServerInstance());
 			avalancheReport.setStatus(BulletinStatus.draft);
-			return makeCAAML(avalancheReport, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
+			return caaml.createCaaml(avalancheReport, List.of(), language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -196,14 +197,10 @@ public class AvalancheBulletinService {
 	public String getPublishedXMLBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("region") String regionId,
-		@QueryValue("lang") LanguageCode language,
+		@QueryValue(value = "lang", defaultValue = "en") LanguageCode language,
 		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V6) CaamlVersion version) {
 		List<String> regionIds = regionId != null ? Collections.singletonList(regionId) : Collections.emptyList();
 		return getPublishedCaamlBulletins(date, regionIds, language, version);
-	}
-
-	private String makeCAAML(AvalancheReport avalancheReport, LanguageCode language, CaamlVersion version) {
-		return this.caaml.createCaaml(avalancheReport, MoreObjects.firstNonNull(language, LanguageCode.en), MoreObjects.firstNonNull(version, CaamlVersion.V6));
 	}
 
 	@Get("/caaml")
@@ -214,7 +211,7 @@ public class AvalancheBulletinService {
 	public String getPublishedCaamlBulletins(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@QueryValue("regions") List<String> regionIds,
-		@QueryValue("lang") LanguageCode language,
+		@QueryValue(value = "lang", defaultValue = "en") LanguageCode language,
 		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V6) CaamlVersion version) {
 		logger.debug("GET published XML bulletins");
 
@@ -225,7 +222,7 @@ public class AvalancheBulletinService {
 			AvalancheReport avalancheReport = AvalancheReport.of(
 				avalancheReportController.getPublishedBulletins(startDate, regions), null,
 				globalVariables.getLocalServerInstance());
-			return makeCAAML(avalancheReport, language, version);
+			return caaml.createCaaml(avalancheReport, List.of(), language, version);
 		} catch (RuntimeException e) {
 			logger.warn("Error loading bulletins", e);
 			throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -241,7 +238,7 @@ public class AvalancheBulletinService {
 		@QueryValue("regions") List<String> regionIds,
 		@QueryValue("lang") LanguageCode language,
 		@QueryValue(value = "version", defaultValue = CaamlVersion.Str.V6_JSON) CaamlVersion version) {
-		return getPublishedCaamlBulletins(date, regionIds, language, MoreObjects.firstNonNull(version, CaamlVersion.V6_JSON));
+		return getPublishedCaamlBulletins(date, regionIds, language, version);
 	}
 
 	@Serdeable
@@ -357,19 +354,13 @@ public class AvalancheBulletinService {
 		}
 	}
 
-	@Serdeable
-	public record TendencyResult(
-		@Schema(description = "Start dates of the bulletins of the preceding days") List<Instant> dates,
-		@Schema(description = "Highest danger rating of each of these days, per micro region") Map<String, List<DangerRating>> dangerRatings) {
-	}
-
 	private static final int TENDENCY_DAYS = 7;
 
 	@Get("/tendency")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	@ApiResponse(description = "tendency of each micro region with published bulletins", content = @Content(schema = @Schema(implementation = TendencyResult.class)))
+	@ApiResponse(description = "tendency of each micro region with published bulletins", content = @Content(schema = @Schema(implementation = TendencyProgression.class)))
 	@Operation(summary = "Get tendency for region")
-	public TendencyResult getTendency(
+	public TendencyProgression getTendency(
 		@Parameter(description = DateControllerUtil.DATE_FORMAT_DESCRIPTION) @QueryValue("date") String date,
 		@Parameter(description = "Region ID, e.g. AT-07 or EUREGIO, or empty for all regions")
 		@Nullable @QueryValue("region") String regionId) {
@@ -404,7 +395,7 @@ public class AvalancheBulletinService {
 					return AvalancheBulletin.getHighestDangerRating(microRegionBulletins);
 				})
 				.toList(), (a, b) -> a, TreeMap::new));
-		return new TendencyResult(dates, dangerRatings);
+		return new TendencyProgression(dates, dangerRatings);
 	}
 
 	@Post("/preview")

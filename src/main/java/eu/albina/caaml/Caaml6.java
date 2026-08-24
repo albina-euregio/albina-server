@@ -2,16 +2,16 @@ package eu.albina.caaml;
 
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import com.google.common.base.Strings;
 import io.micronaut.serde.ObjectMapper;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import org.caaml.v6.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -27,22 +27,18 @@ import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
-@Singleton
-public class Caaml6 {
+public record Caaml6(AvalancheReport avalancheReport, List<AvalancheReport> previousReports, LanguageCode lang) {
 
-	@Inject
-	private ObjectMapper objectMapper;
-
-	public String createJSON(AvalancheReport avalancheReport, LanguageCode lang) {
+	public String createJSON(ObjectMapper objectMapper) {
 		try {
 			return objectMapper
-				.writeValueAsString(toCAAML(avalancheReport, lang));
+				.writeValueAsString(toCAAML());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static String createXML(AvalancheReport avalancheReport, LanguageCode lang) {
+	public String createXML() {
 		try {
 			// Jackson 3: mappers are immutable and configured via the builder;
 			// java.time support is built in (no JavaTimeModule registration needed).
@@ -53,14 +49,14 @@ public class Caaml6 {
 				.changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
 				.build()
 				.writerWithDefaultPrettyPrinter()
-				.writeValueAsString(toCAAML(avalancheReport, lang))
+				.writeValueAsString(toCAAML())
 				.replaceFirst("^<bulletins>", String.format("<bulletins xmlns=\"%s\">", CaamlVersion.V6.namespace()));
 		} catch (JacksonException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	public static org.caaml.v6.AvalancheBulletins toCAAML(AvalancheReport avalancheReport, LanguageCode lang) {
+	public org.caaml.v6.AvalancheBulletins toCAAML() {
 		AvalancheBulletins bulletins = new AvalancheBulletins(avalancheReport.getBulletins().stream().map(b -> toCAAML(b, lang)).toList());
 		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
 			bulletins.setCustomData(new AvalancheBulletinsCustomData(
@@ -70,18 +66,18 @@ public class Caaml6 {
 		return bulletins;
 	}
 
-	public static org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
+	org.caaml.v6.AvalancheBulletin toCAAML(AvalancheBulletin avalancheBulletin, LanguageCode lang) {
 		org.caaml.v6.AvalancheBulletin bulletin = new org.caaml.v6.AvalancheBulletin();
 		bulletin.setUnscheduled(avalancheBulletin.isUpdate());
 		bulletin.setAvalancheActivity(org.caaml.v6.Texts.of(avalancheBulletin.getAvActivityHighlightsIn(lang), avalancheBulletin.getAvActivityCommentIn(lang)));
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			bulletin.setAvalancheProblems(Stream.concat(
-				avalancheBulletin.getForenoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.earlier)),
-				avalancheBulletin.getAfternoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.later))
+				avalancheBulletin.getForenoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, ValidTimePeriod.earlier)),
+				avalancheBulletin.getAfternoon().getAvalancheProblems().stream().map(p -> getAvalancheProblem(p, ValidTimePeriod.later))
 			).filter(Objects::nonNull).toList());
 		} else {
 			bulletin.setAvalancheProblems(avalancheBulletin.getForenoon().getAvalancheProblems().stream()
-				.map(p -> getAvalancheProblem(p, lang, ValidTimePeriod.all_day))
+				.map(p -> getAvalancheProblem(p, ValidTimePeriod.all_day))
 				.filter(Objects::nonNull).toList());
 		}
 		bulletin.setBulletinID(avalancheBulletin.getId());
@@ -94,17 +90,29 @@ public class Caaml6 {
 			: avalancheBulletin.getPhotos().stream()
 				.map(Caaml6::toCaamlBulletinPhoto)
 				.toList();
+		AvalancheBulletinCustomData.TendencyProgression tendencyProgression = new AvalancheBulletinCustomData.TendencyProgression(
+			previousReports.stream().map(AvalancheReport::getValidityDate).toList(),
+			avalancheBulletin.getPublishedRegions().stream().collect(Collectors.toMap(
+				r -> r,
+				region -> previousReports.stream().map(r -> r.getBulletins().stream()
+					.filter(b -> b.getPublishedRegions().contains(region))
+					.findFirst()
+					.stream()
+					.flatMap(Caaml6::getDangerRatings)
+					.map(org.caaml.v6.DangerRating::getMainValue)
+					.max(Comparator.naturalOrder())
+					.orElse(null)
+				).toList()
+			))
+		);
 		bulletin.setCustomData(new AvalancheBulletinCustomData(
-			new AvalancheBulletinCustomData.ALBINA(avalancheBulletin.getValidityDateString(), images.isEmpty() ? null : images),
+			new AvalancheBulletinCustomData.ALBINA(
+				avalancheBulletin.getValidityDateString(),
+				tendencyProgression.dates().isEmpty() ? null : tendencyProgression,
+				images.isEmpty() ? null : images),
 			new AvalancheBulletinCustomData.LwdTyrol(dangerPatterns)
 		));
-		bulletin.setDangerRatings((avalancheBulletin.isHasDaytimeDependency()
-				? Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
-				: Stream.of(avalancheBulletin.getForenoon()))
-				.flatMap(daytime -> Stream.of(
-						getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
-						getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
-				.distinct().toList());
+		bulletin.setDangerRatings(getDangerRatings(avalancheBulletin).toList());
 		bulletin.setHighlights(avalancheBulletin.getHighlightsIn(lang).orElse(null));
 		bulletin.setLang(lang.name());
 		bulletin.setMetaData(null);
@@ -125,6 +133,16 @@ public class Caaml6 {
 		return bulletin;
 	}
 
+	private static Stream<org.caaml.v6.DangerRating> getDangerRatings(AvalancheBulletin avalancheBulletin) {
+		return (avalancheBulletin.isHasDaytimeDependency()
+			? Stream.of(avalancheBulletin.getForenoon(), avalancheBulletin.getAfternoon())
+			: Stream.of(avalancheBulletin.getForenoon()))
+			.flatMap(daytime -> Stream.of(
+				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(false)),
+				getDangerRating(avalancheBulletin, daytime, daytime.dangerRating(true))))
+			.distinct();
+	}
+
 	private static AvalancheBulletinCustomData.BulletinPhoto toCaamlBulletinPhoto(AvalancheBulletinPhoto photo) {
 		return new AvalancheBulletinCustomData.BulletinPhoto(
 			photo.getUrl(),
@@ -136,7 +154,7 @@ public class Caaml6 {
 			photo.getLongitude());
 	}
 
-	public static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, LanguageCode lang, ValidTimePeriod validTimePeriod) {
+	private static org.caaml.v6.AvalancheProblem getAvalancheProblem(AvalancheProblem p, ValidTimePeriod validTimePeriod) {
 		if (p == null || p.getAvalancheProblem() == null) {
 			return null;
 		}
@@ -168,7 +186,7 @@ public class Caaml6 {
 		return result;
 	}
 
-	public static org.caaml.v6.DangerRating getDangerRating(AvalancheBulletin avalancheBulletin, AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
+	private static org.caaml.v6.DangerRating getDangerRating(AvalancheBulletin avalancheBulletin, AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
 		org.caaml.v6.DangerRating result = new org.caaml.v6.DangerRating();
 		if (!daytime.isHasElevationDependency() || Objects.equals(daytime.dangerRating(false), daytime.dangerRating(true))) {
 			result.setMainValue(DangerRatingValue.forValue(daytime.dangerRating(true).name()));

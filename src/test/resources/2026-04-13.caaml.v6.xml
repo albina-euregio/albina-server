@@ -121,6 +121,36 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <AT-07-23-02>moderate</AT-07-23-02>
+            <AT-07-23-02>moderate</AT-07-23-02>
+            <AT-07-23-02>moderate</AT-07-23-02>
+            <AT-07-23-01>moderate</AT-07-23-01>
+            <AT-07-23-01>moderate</AT-07-23-01>
+            <AT-07-23-01>moderate</AT-07-23-01>
+            <AT-07-20>moderate</AT-07-20>
+            <AT-07-20>moderate</AT-07-20>
+            <AT-07-20>moderate</AT-07-20>
+            <AT-07-21>moderate</AT-07-21>
+            <AT-07-21>moderate</AT-07-21>
+            <AT-07-21>moderate</AT-07-21>
+            <AT-07-26-01>moderate</AT-07-26-01>
+            <AT-07-26-01>moderate</AT-07-26-01>
+            <AT-07-26-01>moderate</AT-07-26-01>
+            <AT-07-22>moderate</AT-07-22>
+            <AT-07-22>moderate</AT-07-22>
+            <AT-07-22>moderate</AT-07-22>
+            <AT-07-24>moderate</AT-07-24>
+            <AT-07-24>moderate</AT-07-24>
+            <AT-07-24>moderate</AT-07-24>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP3</dangerPatterns>
@@ -272,6 +302,78 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <IT-32-BZ-18-02>moderate</IT-32-BZ-18-02>
+            <IT-32-BZ-18-02>moderate</IT-32-BZ-18-02>
+            <IT-32-BZ-18-02>moderate</IT-32-BZ-18-02>
+            <IT-32-BZ-18-01>moderate</IT-32-BZ-18-01>
+            <IT-32-BZ-18-01>moderate</IT-32-BZ-18-01>
+            <IT-32-BZ-18-01>moderate</IT-32-BZ-18-01>
+            <IT-32-BZ-20>moderate</IT-32-BZ-20>
+            <IT-32-BZ-20>moderate</IT-32-BZ-20>
+            <IT-32-BZ-20>moderate</IT-32-BZ-20>
+            <IT-32-BZ-10>moderate</IT-32-BZ-10>
+            <IT-32-BZ-10>moderate</IT-32-BZ-10>
+            <IT-32-BZ-10>moderate</IT-32-BZ-10>
+            <IT-32-BZ-11>moderate</IT-32-BZ-11>
+            <IT-32-BZ-11>moderate</IT-32-BZ-11>
+            <IT-32-BZ-11>moderate</IT-32-BZ-11>
+            <IT-32-BZ-02-01>moderate</IT-32-BZ-02-01>
+            <IT-32-BZ-02-01>moderate</IT-32-BZ-02-01>
+            <IT-32-BZ-02-01>moderate</IT-32-BZ-02-01>
+            <IT-32-BZ-05-03>moderate</IT-32-BZ-05-03>
+            <IT-32-BZ-05-03>moderate</IT-32-BZ-05-03>
+            <IT-32-BZ-05-03>moderate</IT-32-BZ-05-03>
+            <IT-32-BZ-12>moderate</IT-32-BZ-12>
+            <IT-32-BZ-12>moderate</IT-32-BZ-12>
+            <IT-32-BZ-12>moderate</IT-32-BZ-12>
+            <IT-32-BZ-05-02>moderate</IT-32-BZ-05-02>
+            <IT-32-BZ-05-02>moderate</IT-32-BZ-05-02>
+            <IT-32-BZ-05-02>moderate</IT-32-BZ-05-02>
+            <IT-32-BZ-13>moderate</IT-32-BZ-13>
+            <IT-32-BZ-13>moderate</IT-32-BZ-13>
+            <IT-32-BZ-13>moderate</IT-32-BZ-13>
+            <IT-32-BZ-05-01>moderate</IT-32-BZ-05-01>
+            <IT-32-BZ-05-01>moderate</IT-32-BZ-05-01>
+            <IT-32-BZ-05-01>moderate</IT-32-BZ-05-01>
+            <IT-32-BZ-01-02>moderate</IT-32-BZ-01-02>
+            <IT-32-BZ-01-02>moderate</IT-32-BZ-01-02>
+            <IT-32-BZ-01-02>moderate</IT-32-BZ-01-02>
+            <IT-32-BZ-01-01>moderate</IT-32-BZ-01-01>
+            <IT-32-BZ-01-01>moderate</IT-32-BZ-01-01>
+            <IT-32-BZ-01-01>moderate</IT-32-BZ-01-01>
+            <IT-32-BZ-02-02>moderate</IT-32-BZ-02-02>
+            <IT-32-BZ-02-02>moderate</IT-32-BZ-02-02>
+            <IT-32-BZ-02-02>moderate</IT-32-BZ-02-02>
+            <AT-07-25>moderate</AT-07-25>
+            <AT-07-25>moderate</AT-07-25>
+            <AT-07-25>moderate</AT-07-25>
+            <AT-07-27>moderate</AT-07-27>
+            <AT-07-27>moderate</AT-07-27>
+            <AT-07-27>moderate</AT-07-27>
+            <IT-32-BZ-08-01>moderate</IT-32-BZ-08-01>
+            <IT-32-BZ-08-01>moderate</IT-32-BZ-08-01>
+            <IT-32-BZ-08-01>moderate</IT-32-BZ-08-01>
+            <IT-32-BZ-19>moderate</IT-32-BZ-19>
+            <IT-32-BZ-19>moderate</IT-32-BZ-19>
+            <IT-32-BZ-19>moderate</IT-32-BZ-19>
+            <IT-32-BZ-09>moderate</IT-32-BZ-09>
+            <IT-32-BZ-09>moderate</IT-32-BZ-09>
+            <IT-32-BZ-09>moderate</IT-32-BZ-09>
+            <IT-32-BZ-08-02>moderate</IT-32-BZ-08-02>
+            <IT-32-BZ-08-02>moderate</IT-32-BZ-08-02>
+            <IT-32-BZ-08-02>moderate</IT-32-BZ-08-02>
+            <AT-07-19>moderate</AT-07-19>
+            <AT-07-19>moderate</AT-07-19>
+            <AT-07-19>moderate</AT-07-19>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP3</dangerPatterns>
@@ -404,6 +506,39 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <IT-32-BZ-07-01>moderate</IT-32-BZ-07-01>
+            <IT-32-BZ-07-01>moderate</IT-32-BZ-07-01>
+            <IT-32-BZ-07-01>moderate</IT-32-BZ-07-01>
+            <IT-32-BZ-07-02>moderate</IT-32-BZ-07-02>
+            <IT-32-BZ-07-02>moderate</IT-32-BZ-07-02>
+            <IT-32-BZ-07-02>moderate</IT-32-BZ-07-02>
+            <IT-32-BZ-04-02>moderate</IT-32-BZ-04-02>
+            <IT-32-BZ-04-02>moderate</IT-32-BZ-04-02>
+            <IT-32-BZ-04-02>moderate</IT-32-BZ-04-02>
+            <IT-32-BZ-04-01>moderate</IT-32-BZ-04-01>
+            <IT-32-BZ-04-01>moderate</IT-32-BZ-04-01>
+            <IT-32-BZ-04-01>moderate</IT-32-BZ-04-01>
+            <IT-32-BZ-14>moderate</IT-32-BZ-14>
+            <IT-32-BZ-14>moderate</IT-32-BZ-14>
+            <IT-32-BZ-14>moderate</IT-32-BZ-14>
+            <IT-32-BZ-03>moderate</IT-32-BZ-03>
+            <IT-32-BZ-03>moderate</IT-32-BZ-03>
+            <IT-32-BZ-03>moderate</IT-32-BZ-03>
+            <IT-32-BZ-15>moderate</IT-32-BZ-15>
+            <IT-32-BZ-15>moderate</IT-32-BZ-15>
+            <IT-32-BZ-15>moderate</IT-32-BZ-15>
+            <IT-32-BZ-06>moderate</IT-32-BZ-06>
+            <IT-32-BZ-06>moderate</IT-32-BZ-06>
+            <IT-32-BZ-06>moderate</IT-32-BZ-06>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP3</dangerPatterns>
@@ -516,6 +651,33 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <IT-32-TN-02>moderate</IT-32-TN-02>
+            <IT-32-TN-02>moderate</IT-32-TN-02>
+            <IT-32-TN-02>moderate</IT-32-TN-02>
+            <IT-32-TN-01>moderate</IT-32-TN-01>
+            <IT-32-TN-01>moderate</IT-32-TN-01>
+            <IT-32-TN-01>moderate</IT-32-TN-01>
+            <IT-32-TN-04>moderate</IT-32-TN-04>
+            <IT-32-TN-04>moderate</IT-32-TN-04>
+            <IT-32-TN-04>moderate</IT-32-TN-04>
+            <IT-32-TN-05>moderate</IT-32-TN-05>
+            <IT-32-TN-05>moderate</IT-32-TN-05>
+            <IT-32-TN-05>moderate</IT-32-TN-05>
+            <IT-32-TN-19>moderate</IT-32-TN-19>
+            <IT-32-TN-19>moderate</IT-32-TN-19>
+            <IT-32-TN-19>moderate</IT-32-TN-19>
+            <IT-32-TN-20>moderate</IT-32-TN-20>
+            <IT-32-TN-20>moderate</IT-32-TN-20>
+            <IT-32-TN-20>moderate</IT-32-TN-20>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP3</dangerPatterns>
@@ -664,6 +826,72 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <AT-07-02-02>moderate</AT-07-02-02>
+            <AT-07-02-02>moderate</AT-07-02-02>
+            <AT-07-02-02>moderate</AT-07-02-02>
+            <AT-07-14-01>moderate</AT-07-14-01>
+            <AT-07-14-01>moderate</AT-07-14-01>
+            <AT-07-14-01>moderate</AT-07-14-01>
+            <AT-07-10>moderate</AT-07-10>
+            <AT-07-10>moderate</AT-07-10>
+            <AT-07-10>moderate</AT-07-10>
+            <AT-07-17-01>moderate</AT-07-17-01>
+            <AT-07-17-01>moderate</AT-07-17-01>
+            <AT-07-17-01>moderate</AT-07-17-01>
+            <AT-07-11>moderate</AT-07-11>
+            <AT-07-11>moderate</AT-07-11>
+            <AT-07-11>moderate</AT-07-11>
+            <AT-07-01>moderate</AT-07-01>
+            <AT-07-01>moderate</AT-07-01>
+            <AT-07-01>moderate</AT-07-01>
+            <AT-07-12>moderate</AT-07-12>
+            <AT-07-12>moderate</AT-07-12>
+            <AT-07-12>moderate</AT-07-12>
+            <AT-07-13>moderate</AT-07-13>
+            <AT-07-13>moderate</AT-07-13>
+            <AT-07-13>moderate</AT-07-13>
+            <AT-07-03>moderate</AT-07-03>
+            <AT-07-03>moderate</AT-07-03>
+            <AT-07-03>moderate</AT-07-03>
+            <AT-07-15>moderate</AT-07-15>
+            <AT-07-15>moderate</AT-07-15>
+            <AT-07-15>moderate</AT-07-15>
+            <AT-07-16>moderate</AT-07-16>
+            <AT-07-16>moderate</AT-07-16>
+            <AT-07-16>moderate</AT-07-16>
+            <AT-07-07>moderate</AT-07-07>
+            <AT-07-07>moderate</AT-07-07>
+            <AT-07-07>moderate</AT-07-07>
+            <AT-07-08>moderate</AT-07-08>
+            <AT-07-08>moderate</AT-07-08>
+            <AT-07-08>moderate</AT-07-08>
+            <AT-07-14-04>moderate</AT-07-14-04>
+            <AT-07-14-04>moderate</AT-07-14-04>
+            <AT-07-14-04>moderate</AT-07-14-04>
+            <AT-07-09>moderate</AT-07-09>
+            <AT-07-09>moderate</AT-07-09>
+            <AT-07-09>moderate</AT-07-09>
+            <AT-07-14-05>moderate</AT-07-14-05>
+            <AT-07-14-05>moderate</AT-07-14-05>
+            <AT-07-14-05>moderate</AT-07-14-05>
+            <AT-07-14-02>moderate</AT-07-14-02>
+            <AT-07-14-02>moderate</AT-07-14-02>
+            <AT-07-14-02>moderate</AT-07-14-02>
+            <AT-07-14-03>moderate</AT-07-14-03>
+            <AT-07-14-03>moderate</AT-07-14-03>
+            <AT-07-14-03>moderate</AT-07-14-03>
+            <AT-07-04-01>moderate</AT-07-04-01>
+            <AT-07-04-01>moderate</AT-07-04-01>
+            <AT-07-04-01>moderate</AT-07-04-01>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP10</dangerPatterns>
@@ -767,6 +995,30 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <IT-32-TN-13>moderate</IT-32-TN-13>
+            <IT-32-TN-13>moderate</IT-32-TN-13>
+            <IT-32-TN-13>moderate</IT-32-TN-13>
+            <IT-32-TN-16>moderate</IT-32-TN-16>
+            <IT-32-TN-16>moderate</IT-32-TN-16>
+            <IT-32-TN-16>moderate</IT-32-TN-16>
+            <IT-32-TN-08>moderate</IT-32-TN-08>
+            <IT-32-TN-08>moderate</IT-32-TN-08>
+            <IT-32-TN-08>moderate</IT-32-TN-08>
+            <IT-32-TN-07>moderate</IT-32-TN-07>
+            <IT-32-TN-07>moderate</IT-32-TN-07>
+            <IT-32-TN-07>moderate</IT-32-TN-07>
+            <IT-32-TN-09>moderate</IT-32-TN-09>
+            <IT-32-TN-09>moderate</IT-32-TN-09>
+            <IT-32-TN-09>moderate</IT-32-TN-09>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP3</dangerPatterns>
@@ -843,6 +1095,33 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <AT-07-05>moderate</AT-07-05>
+            <AT-07-05>moderate</AT-07-05>
+            <AT-07-05>moderate</AT-07-05>
+            <AT-07-06>moderate</AT-07-06>
+            <AT-07-06>moderate</AT-07-06>
+            <AT-07-06>moderate</AT-07-06>
+            <AT-07-18>moderate</AT-07-18>
+            <AT-07-18>moderate</AT-07-18>
+            <AT-07-18>moderate</AT-07-18>
+            <AT-07-02-01>moderate</AT-07-02-01>
+            <AT-07-02-01>moderate</AT-07-02-01>
+            <AT-07-02-01>moderate</AT-07-02-01>
+            <AT-07-04-02>moderate</AT-07-04-02>
+            <AT-07-04-02>moderate</AT-07-04-02>
+            <AT-07-04-02>moderate</AT-07-04-02>
+            <AT-07-17-02>moderate</AT-07-17-02>
+            <AT-07-17-02>moderate</AT-07-17-02>
+            <AT-07-17-02>moderate</AT-07-17-02>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP10</dangerPatterns>
@@ -910,6 +1189,24 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <AT-07-28>moderate</AT-07-28>
+            <AT-07-28>moderate</AT-07-28>
+            <AT-07-28>moderate</AT-07-28>
+            <AT-07-26-02>moderate</AT-07-26-02>
+            <AT-07-26-02>moderate</AT-07-26-02>
+            <AT-07-26-02>moderate</AT-07-26-02>
+            <AT-07-29-03>moderate</AT-07-29-03>
+            <AT-07-29-03>moderate</AT-07-29-03>
+            <AT-07-29-03>moderate</AT-07-29-03>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP3</dangerPatterns>
@@ -974,6 +1271,21 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <AT-07-29-02>low</AT-07-29-02>
+            <AT-07-29-02>low</AT-07-29-02>
+            <AT-07-29-02>moderate</AT-07-29-02>
+            <AT-07-29-01>low</AT-07-29-01>
+            <AT-07-29-01>low</AT-07-29-01>
+            <AT-07-29-01>moderate</AT-07-29-01>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP3</dangerPatterns>
@@ -1080,6 +1392,54 @@
     <customData>
       <ALBINA>
         <mainDate>2026-04-13</mainDate>
+        <tendencyProgression>
+          <dates>
+            <dates>2026-04-10</dates>
+            <dates>2026-04-11</dates>
+            <dates>2026-04-12</dates>
+          </dates>
+          <dangerRatings>
+            <IT-32-BZ-16>low</IT-32-BZ-16>
+            <IT-32-BZ-16>low</IT-32-BZ-16>
+            <IT-32-BZ-16>low</IT-32-BZ-16>
+            <IT-32-BZ-17>low</IT-32-BZ-17>
+            <IT-32-BZ-17>low</IT-32-BZ-17>
+            <IT-32-BZ-17>low</IT-32-BZ-17>
+            <IT-32-TN-12>low</IT-32-TN-12>
+            <IT-32-TN-12>low</IT-32-TN-12>
+            <IT-32-TN-12>low</IT-32-TN-12>
+            <IT-32-TN-15>low</IT-32-TN-15>
+            <IT-32-TN-15>low</IT-32-TN-15>
+            <IT-32-TN-15>low</IT-32-TN-15>
+            <IT-32-BZ-08-03>low</IT-32-BZ-08-03>
+            <IT-32-BZ-08-03>low</IT-32-BZ-08-03>
+            <IT-32-BZ-08-03>low</IT-32-BZ-08-03>
+            <IT-32-TN-03>low</IT-32-TN-03>
+            <IT-32-TN-03>low</IT-32-TN-03>
+            <IT-32-TN-03>low</IT-32-TN-03>
+            <IT-32-TN-14>moderate</IT-32-TN-14>
+            <IT-32-TN-14>moderate</IT-32-TN-14>
+            <IT-32-TN-14>moderate</IT-32-TN-14>
+            <IT-32-TN-17>low</IT-32-TN-17>
+            <IT-32-TN-17>low</IT-32-TN-17>
+            <IT-32-TN-17>low</IT-32-TN-17>
+            <IT-32-TN-06>moderate</IT-32-TN-06>
+            <IT-32-TN-06>moderate</IT-32-TN-06>
+            <IT-32-TN-06>moderate</IT-32-TN-06>
+            <IT-32-TN-18>low</IT-32-TN-18>
+            <IT-32-TN-18>low</IT-32-TN-18>
+            <IT-32-TN-18>low</IT-32-TN-18>
+            <IT-32-TN-11>low</IT-32-TN-11>
+            <IT-32-TN-11>low</IT-32-TN-11>
+            <IT-32-TN-11>low</IT-32-TN-11>
+            <IT-32-TN-10>moderate</IT-32-TN-10>
+            <IT-32-TN-10>moderate</IT-32-TN-10>
+            <IT-32-TN-10>moderate</IT-32-TN-10>
+            <IT-32-TN-21>moderate</IT-32-TN-21>
+            <IT-32-TN-21>moderate</IT-32-TN-21>
+            <IT-32-TN-21>moderate</IT-32-TN-21>
+          </dangerRatings>
+        </tendencyProgression>
       </ALBINA>
       <LWD_Tyrol>
         <dangerPatterns>DP10</dangerPatterns>

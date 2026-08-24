@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
@@ -23,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Stopwatch;
 
 import eu.albina.caaml.Caaml;
-import eu.albina.caaml.CaamlVersion;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
 import eu.albina.model.Region;
@@ -124,8 +126,17 @@ public class PublicationController {
 	public void createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for {} started", avalancheReport);
-			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6);
-			caaml.createCaamlFiles(avalancheReport, CaamlVersion.V6_JSON);
+			List<AvalancheReport> previousReports = avalancheReportController.getPublicReports(
+				avalancheReport.getDate().minusDays(7).toInstant(),
+				avalancheReport.getDate().minusDays(1).toInstant(),
+				avalancheReport.getRegion()
+			).stream()
+				.peek(r -> r.setBulletins(r.getPublishedBulletins(objectMapper)))
+				.filter(r -> r.getBulletins() != null)
+				.filter(r -> !r.getBulletins().isEmpty())
+				.sorted(Comparator.comparing(AvalancheReport::getValidityDate))
+				.toList();
+			caaml.createCaamlFiles(avalancheReport, previousReports);
 			avalancheReportController.setAvalancheReportFlag(avalancheReport.getId(),
 				AvalancheReport::setCaamlV6Created);
 			logger.info("CAAMLv6 production for {} finished", avalancheReport);

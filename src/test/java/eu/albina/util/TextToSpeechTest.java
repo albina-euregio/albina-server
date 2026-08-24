@@ -41,7 +41,7 @@ class TextToSpeechTest {
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTestUtils.regionTyrol(), null);
 		for (LanguageCode lang : avalancheReport.getRegion().getTTSLanguages()) {
-			AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, lang);
+			AvalancheBulletins caaml = new Caaml6(avalancheReport, List.of(), lang).toCAAML();
 			caaml.getBulletins().forEach(textToSpeech::createAudioFileRequest);
 			String ssml = caaml.getBulletins().stream()
 				.map(bulletin -> new TextToSpeech.ScriptEngine(bulletin).createScript())
@@ -90,7 +90,7 @@ class TextToSpeechTest {
 		URL resource = Resources.getResource("2023-12-01.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
-		AvalancheBulletins caaml = Caaml6.toCAAML(avalancheReport, LanguageCode.de);
+		AvalancheBulletins caaml = new Caaml6(avalancheReport, List.of(), LanguageCode.de).toCAAML();
 		org.caaml.v6.AvalancheBulletin bulletin = caaml.getBulletins().getFirst();
 		byte[] mp3 = textToSpeech.createAudioFile(bulletin);
 		Path path = Path.of(bulletin.getBulletinID() + ".mp3");

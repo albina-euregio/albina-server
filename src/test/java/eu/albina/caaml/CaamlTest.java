@@ -3,6 +3,7 @@ package eu.albina.caaml;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +13,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.List;
 
 import eu.albina.AvalancheBulletinTestUtils;
@@ -67,24 +69,16 @@ public class CaamlTest {
 		regionEuregio = regionTestUtils.regionEuregio();
 	}
 
-	private String createCaaml(CaamlVersion version) throws Exception {
-		final URL resource = Resources.getResource("2019-01-16.json");
-		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
-		AvalancheReport.of(bulletins, null, serverInstance); // test without region for eu.albina.rest.AvalancheBulletinService.getJSONBulletins
-		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstance);
-		return caaml.createCaaml(avalancheReport, LanguageCode.en, version);
-	}
-
 	@Disabled
 	@Test
 	public void createOldCaamlFiles() throws Exception {
 		for (LocalDate date = LocalDate.parse("2018-12-04"); date
 				.isBefore(LocalDate.parse("2019-05-07")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
+			createOldCaamlFiles(date);
 		}
 		for (LocalDate date = LocalDate.parse("2019-11-16"); date
 				.isBefore(LocalDate.parse("2020-05-04")); date = date.plusDays(1)) {
-			createOldCaamlFiles(date, CaamlVersion.V6_JSON);
+			createOldCaamlFiles(date);
 		}
 	}
 
@@ -95,19 +89,19 @@ public class CaamlTest {
 			 date.isBefore(LocalDate.parse("2022-05-02"));
 			 date = date.plusDays(1)) {
 			try {
-				createOldCaamlFiles(date, CaamlVersion.V6_JSON);
+				createOldCaamlFiles(date);
 			} catch (FileNotFoundException e) {
 				LoggerFactory.getLogger(getClass()).warn("Not found {}", e.getMessage());
 			}
 		}
 	}
 
-	private void createOldCaamlFiles(LocalDate date, CaamlVersion version) throws Exception {
+	private void createOldCaamlFiles(LocalDate date) throws Exception {
 		LoggerFactory.getLogger(getClass()).info("Loading {}", date);
 		AvalancheReport avalancheReport = date.isAfter(LocalDate.parse("2020-10-01")) ? loadFromURL(date): loadFromDatabase(date);
 		for (LanguageCode language : avalancheReport.getRegion().getEnabledLanguages()) {
-			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, version.filenameSuffix()));
-			String caaml = this.caaml.createCaaml(avalancheReport, language, version);
+			Path path = Paths.get(String.format("/tmp/bulletins/%s/%s_%s%s", date, date, language, "_CAAMLv6.json"));
+			String caaml = this.caaml.createCaaml(avalancheReport, List.of(), language, CaamlVersion.V6_JSON);
 			LoggerFactory.getLogger(getClass()).info("Writing {}", path);
 			Files.createDirectories(path.getParent());
 			Files.writeString(path, caaml, StandardCharsets.UTF_8);
@@ -132,17 +126,26 @@ public class CaamlTest {
 		return report;
 	}
 
-	private void toCAAMLv6(String bulletinResource, String expectedCaamlResource) throws Exception {
-		final URL resource = Resources.getResource(bulletinResource);
-		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
-		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, null, null);
+	private void toCAAMLv6(String bulletinResource, String expectedCaamlResource, String... previousBulletinResource) throws Exception {
+		final AvalancheReport avalancheReport = getAvalancheReport(bulletinResource);
+		List<AvalancheReport> previousReports = Arrays.stream(previousBulletinResource).map(this::getAvalancheReport).toList();
 
-		toCAAMLv6(avalancheReport, expectedCaamlResource, CaamlVersion.V6_JSON);
-		toCAAMLv6(avalancheReport, expectedCaamlResource.replaceFirst(".json$", ".xml"), CaamlVersion.V6);
+		toCAAMLv6(avalancheReport, previousReports, expectedCaamlResource, CaamlVersion.V6_JSON);
+		toCAAMLv6(avalancheReport, previousReports, expectedCaamlResource.replaceFirst(".json$", ".xml"), CaamlVersion.V6);
 	}
 
-	private void toCAAMLv6(AvalancheReport avalancheReport, String expectedCaamlResource, CaamlVersion version) throws IOException, SAXException {
-		String caaml = this.caaml.createCaaml(avalancheReport, LanguageCode.en, version);
+	private AvalancheReport getAvalancheReport(String bulletinResource) {
+		try {
+			final URL resource = Resources.getResource(bulletinResource);
+			final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+			return AvalancheReport.of(bulletins, null, null);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
+	private void toCAAMLv6(AvalancheReport avalancheReport, List<AvalancheReport> previousReports, String expectedCaamlResource, CaamlVersion version) throws IOException, SAXException {
+		String caaml = this.caaml.createCaaml(avalancheReport, previousReports, LanguageCode.en, version);
 		// Files.write(Paths.get("src/test/resources/" + expectedCaamlResource), caaml.getBytes(StandardCharsets.UTF_8));
         String expected = Resources.toString(Resources.getResource(expectedCaamlResource), StandardCharsets.UTF_8);
 		if (version == CaamlVersion.V6_JSON) {
@@ -191,7 +194,7 @@ public class CaamlTest {
 
 	@Test
 	public void toCAAMLv6_h() throws Exception {
-		toCAAMLv6("2026-04-13.json", "2026-04-13.caaml.v6.json");
+		toCAAMLv6("2026-04-13.json", "2026-04-13.caaml.v6.json", "2026-04-10.json", "2026-04-11.json", "2026-04-12.json");
 	}
 
 	@Test
