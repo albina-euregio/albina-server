@@ -630,7 +630,7 @@ public class PdfUtil {
 					&& !(!isAfternoon && avalancheBulletin.getForenoon().dangerRating(true)
 							.equals(avalancheBulletin.getForenoon().dangerRating(false)))) {
 				if (daytimeBulletin.getTreeline()) {
-					Paragraph paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
+					Paragraph paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
 							.setFontColor(blackColor).setFontSize(8).setFont(openSansBoldFont);
 					paragraph.setRelativePosition(-2, 2, 0, 0);
 					cell.add(paragraph);
@@ -820,7 +820,7 @@ public class PdfUtil {
 				cell.add(img);
 				table.addCell(cell);
 				if (avalancheProblem.getTreelineHigh()) {
-					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
+					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph2.setRelativePosition(-6, 2, 0, 0);
 					cell = new Cell(1, 1);
@@ -843,7 +843,7 @@ public class PdfUtil {
 					elevationTable.addCell(cell);
 				}
 				if (avalancheProblem.getTreelineLow()) {
-					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
+					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph2.setRelativePosition(-6, -3, 0, 0);
 					cell = new Cell(1, 1);
@@ -882,7 +882,7 @@ public class PdfUtil {
 				table.addCell(cell);
 
 				if (avalancheProblem.getTreelineHigh()) {
-					paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
+					paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, -4, 0, 0);
 					cell = new Cell(1, 1);
@@ -921,7 +921,7 @@ public class PdfUtil {
 			table.addCell(cell);
 
 			if (avalancheProblem.getTreelineLow()) {
-				paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
+				paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
 					.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 				paragraph.setRelativePosition(-6, 4, 0, 0);
 				cell = new Cell(1, 1);
