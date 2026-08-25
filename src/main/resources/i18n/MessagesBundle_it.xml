@@ -18,13 +18,11 @@
   <entry key="headline.update">AGGIORNAMENTO della Previsione Valanghe</entry>
   <entry key="headline.tendency">Tendenza</entry>
   <entry key="headline.synopsis">Meteo</entry>
-  <entry key="headline.regions">Regioni</entry>
   <entry key="headline.avalanche-problem">Problema valanghivo</entry>
   <entry key="headline.danger-patterns">Situazione tipo</entry>
   <entry key="headline.snowpack">Manto nevoso</entry>
   <entry key="headline.danger-rating">Grado di pericolo</entry>
   <entry key="tendency.binding-word">per </entry>
-  <entry key="email.follow-us">Seguici</entry>
   <entry key="email.unsubscribe">Annullare l'iscrizione</entry>
   <entry key="email.subject">{0} per {1}, </entry>
   <entry key="email.subject.update">AGGIORNAMENTO sulla {0} per {1}, </entry>

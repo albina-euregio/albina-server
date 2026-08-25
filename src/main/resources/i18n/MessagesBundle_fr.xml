@@ -18,13 +18,11 @@
   <entry key="headline.update">UPDATE du Bulletin d'avalanche</entry>
   <entry key="headline.tendency">Tendance</entry>
   <entry key="headline.synopsis">Météo</entry>
-  <entry key="headline.regions">Régions</entry>
   <entry key="headline.avalanche-problem">Situation avalancheuse typique</entry>
   <entry key="headline.danger-patterns">Modèles de danger</entry>
   <entry key="headline.snowpack">Manteau neigeux</entry>
   <entry key="headline.danger-rating">Degré de danger</entry>
   <entry key="tendency.binding-word">le</entry>
-  <entry key="email.follow-us">Suivez-nous</entry>
   <entry key="email.unsubscribe">Désinscrire</entry>
   <entry key="email.subject">{0} pour {1}, </entry>
   <entry key="email.subject.update">UPDATE du {0} pour {1}, </entry>

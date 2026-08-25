@@ -18,13 +18,11 @@
   <entry key="headline.update">UPDATE der Lawinenvorhersage</entry>
   <entry key="headline.tendency">Tendenz</entry>
   <entry key="headline.synopsis">Wetter</entry>
-  <entry key="headline.regions">Regionen</entry>
   <entry key="headline.avalanche-problem">Lawinenproblem</entry>
   <entry key="headline.danger-patterns">Gefahrenmuster</entry>
   <entry key="headline.snowpack">Schneedecke</entry>
   <entry key="headline.danger-rating">Gefahrenstufe</entry>
   <entry key="tendency.binding-word">am </entry>
-  <entry key="email.follow-us">Folge uns</entry>
   <entry key="email.unsubscribe">Abmelden</entry>
   <entry key="email.subject">{0} für {1}, </entry>
   <entry key="email.subject.update">UPDATE der {0} für {1}, </entry>
