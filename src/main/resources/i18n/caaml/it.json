@@ -101,6 +101,7 @@
     "snowpack": "Manto nevoso",
     "travelAdvisory": "Travel Advisory",
     "avalancheProblem": "Problema valanghivo",
-    "dangerRating": "Grado di pericolo"
+    "dangerRating": "Grado di pericolo",
+    "forecast": "Previsione valanghe"
   }
 }

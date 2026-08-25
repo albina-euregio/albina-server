@@ -1102,7 +1102,7 @@ public class PdfUtil {
 
 			ImageData overviewMapAMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.am));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
-			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("headline.forecast"));
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
 			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY + mapHeight + 40);
 			canvas.add(overviewMapAMImg);
@@ -1112,7 +1112,7 @@ public class PdfUtil {
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.pm));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
-			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("headline.forecast"));
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
 			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY);
 			canvas.add(overviewMapPMImg);
@@ -1122,7 +1122,7 @@ public class PdfUtil {
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.fd));
 			Image overviewMapImg = new Image(overviewMapImageData);
-			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
+			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("headline.forecast"));
 			mapY = region.getPdfMapYFd();
 
 			avalancheReport.getGeneralHeadline(lang).ifPresent(text -> {

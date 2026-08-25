@@ -58,7 +58,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String publishedAt = publicationDate.isEmpty() ? "" : lang.getBundleString("published");
 		String headline = avalancheReport.getStatus() == BulletinStatus.republished
 			? lang.getBundleString("headline.update")
-			: lang.getBundleString("headline");
+			: lang.getCaamlBundleString("headline.forecast");
 		String textAm = daytime ? lang.getCaamlBundleString("validTimePeriod.earlier") : "";
 		String textPm = daytime ? lang.getCaamlBundleString("validTimePeriod.later") : "";
 		String overview = daytime
@@ -80,7 +80,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<head>");
 		pw.print("<meta name=\"viewport\" content=\"width=device-width\"/>");
 		pw.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
-		pw.format("<title>%s</title>", lang.getBundleString("headline"));
+		pw.format("<title>%s</title>", lang.getCaamlBundleString("headline.forecast"));
 		pw.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheets/avalanche-report.css\" >");
 		pw.format("<style>%s</style>", css("templates/EmailUtil.css").replace("var(--albina-color)", "#" + color));
 		pw.print("</head>");

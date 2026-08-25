@@ -14,7 +14,6 @@
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} por {1}: {2}</entry>
   <entry key="social-media.message.update">ACTUALIZACIÓN en {0} por {1}: {2}</entry>
-  <entry key="headline">Predicción de Aludes</entry>
   <entry key="headline.update">ACTUALIZACIÓN sobre la Predicción de Aludes</entry>
   <entry key="tendency.binding-word">en</entry>
   <entry key="email.unsubscribe">Cancela la suscripción</entry>

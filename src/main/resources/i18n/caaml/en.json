@@ -101,6 +101,7 @@
     "snowpack": "Snowpack",
     "travelAdvisory": "Travel Advisory",
     "avalancheProblem": "Avalanche Problem",
-    "dangerRating": "Danger rating"
+    "dangerRating": "Danger rating",
+    "forecast": "Avalanche Forecast"
   }
 }

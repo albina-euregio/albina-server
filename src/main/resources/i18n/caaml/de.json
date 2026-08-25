@@ -101,6 +101,7 @@
     "snowpack": "Schneedecke",
     "travelAdvisory": "Travel Advisory",
     "avalancheProblem": "Lawinenproblem",
-    "dangerRating": "Gefahrenstufe"
+    "dangerRating": "Gefahrenstufe",
+    "forecast": "Lawinenvorhersage"
   }
 }

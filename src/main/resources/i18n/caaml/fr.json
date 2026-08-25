@@ -101,6 +101,7 @@
     "snowpack": "Manteau neigeux",
     "travelAdvisory": "Travel Advisory",
     "avalancheProblem": "Situation avalancheuse typique",
-    "dangerRating": "Degré de danger"
+    "dangerRating": "Degré de danger",
+    "forecast": "Bulletin d'avalanche"
   }
 }

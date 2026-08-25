@@ -101,6 +101,7 @@
     "snowpack": "Manto nivoso",
     "travelAdvisory": "Travel Advisory",
     "avalancheProblem": "Problema de Aludes",
-    "dangerRating": "Grados de peligro"
+    "dangerRating": "Grados de peligro",
+    "forecast": "Predicción de Aludes"
   }
 }

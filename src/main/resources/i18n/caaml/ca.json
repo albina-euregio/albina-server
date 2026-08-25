@@ -101,6 +101,7 @@
     "snowpack": "Mantell de neu",
     "travelAdvisory": "Travel Advisory",
     "avalancheProblem": "Problema d'allaus",
-    "dangerRating": "Grau de perill"
+    "dangerRating": "Grau de perill",
+    "forecast": "Predicció d'allaus"
   }
 }

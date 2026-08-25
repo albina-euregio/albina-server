@@ -14,7 +14,6 @@
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} za {1}: {2}</entry>
   <entry key="social-media.message.update">POSODOBITEV {0} za {1}: {2}</entry>
-  <entry key="headline">Plazovna napoved</entry>
   <entry key="headline.update">POSODOBITEV plazovne napovedi</entry>
   <entry key="tendency.binding-word">na </entry>
   <entry key="email.unsubscribe">Odjavi</entry>

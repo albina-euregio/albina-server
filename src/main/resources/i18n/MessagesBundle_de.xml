@@ -14,7 +14,6 @@
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} für {1}: {2}</entry>
   <entry key="social-media.message.update">UPDATE der {0} für {1}: {2}</entry>
-  <entry key="headline">Lawinenvorhersage</entry>
   <entry key="headline.update">UPDATE der Lawinenvorhersage</entry>
   <entry key="tendency.binding-word">am </entry>
   <entry key="email.unsubscribe">Abmelden</entry>

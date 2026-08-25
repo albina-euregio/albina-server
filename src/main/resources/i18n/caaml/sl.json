@@ -101,6 +101,7 @@
     "snowpack": "Snežna odeja",
     "travelAdvisory": "Travel Advisory",
     "avalancheProblem": "Plazovni problem",
-    "dangerRating": "Stopnja nevarnosti"
+    "dangerRating": "Stopnja nevarnosti",
+    "forecast": "Plazovna napoved"
   }
 }

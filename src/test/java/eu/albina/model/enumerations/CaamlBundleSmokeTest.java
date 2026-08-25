@@ -43,5 +43,7 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("Travel Advisory", LanguageCode.de.getCaamlBundleString("headline.travelAdvisory"));
 		Assertions.assertEquals("Lawinenproblem", LanguageCode.de.getCaamlBundleString("headline.avalancheProblem"));
 		Assertions.assertEquals("Gefahrenstufe", LanguageCode.de.getCaamlBundleString("headline.dangerRating"));
+		Assertions.assertEquals("Lawinenvorhersage", LanguageCode.de.getCaamlBundleString("headline.forecast"));
+		Assertions.assertEquals("Avalanche Forecast", LanguageCode.en.getCaamlBundleString("headline.forecast"));
 	}
 }
