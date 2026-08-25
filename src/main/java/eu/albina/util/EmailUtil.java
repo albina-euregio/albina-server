@@ -58,9 +58,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String publishedAt = publicationDate.isEmpty() ? "" : lang.getBundleString("published");
 		String headline = avalancheReport.getStatus() == BulletinStatus.republished
 			? lang.getBundleString("headline.update")
-			: lang.getBundleString("headline");
-		String textAm = daytime ? lang.getBundleString("valid-time-period.earlier") : "";
-		String textPm = daytime ? lang.getBundleString("valid-time-period.later") : "";
+			: lang.getCaamlBundleString("forecast.label");
+		String textAm = daytime ? lang.getCaamlBundleString("validTimePeriod.earlier") : "";
+		String textPm = daytime ? lang.getCaamlBundleString("validTimePeriod.later") : "";
 		String overview = daytime
 			? mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false)
 			: mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false);
@@ -80,7 +80,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<head>");
 		pw.print("<meta name=\"viewport\" content=\"width=device-width\"/>");
 		pw.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
-		pw.format("<title>%s</title>", lang.getBundleString("headline"));
+		pw.format("<title>%s</title>", lang.getCaamlBundleString("forecast.label"));
 		pw.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheets/avalanche-report.css\" >");
 		pw.format("<style>%s</style>", css("templates/EmailUtil.css").replace("var(--albina-color)", "#" + color));
 		pw.print("</head>");
@@ -354,16 +354,16 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent();
 		boolean hasDangerPatterns = dangerPattern1 != null || dangerPattern2 != null;
 
-		String snowpackStructureHeadline = hasStructure ? lang.getBundleString("headline.snowpack") : "";
+		String snowpackStructureHeadline = hasStructure ? lang.getCaamlBundleString("snowpack.label") : "";
 		String snowpackStructureCommentText = hasStructure ? snowpackStructureComment.orElse("") : "";
-		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getBundleString("headline.danger-patterns") : "";
+		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getCaamlBundleString("dangerPattern.label") : "";
 		String dangerPattern1Text = hasStructure && hasDangerPatterns && dangerPattern1 != null ? dangerPattern1.toString(lang.getLocale()) : "";
 		String dangerPatternLink1 = hasStructure && hasDangerPatterns && dangerPattern1 != null ? getDangerPatternLink(lang, region, dangerPattern1) : "";
 		String dangerPatternStyle1 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern1 != null);
 		String dangerPattern2Text = hasStructure && hasDangerPatterns && dangerPattern2 != null ? dangerPattern2.toString(lang.getLocale()) : "";
 		String dangerPatternLink2 = hasStructure && hasDangerPatterns && dangerPattern2 != null ? getDangerPatternLink(lang, region, dangerPattern2) : "";
 		String dangerPatternStyle2 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern2 != null);
-		String tendencyHeadline = tendencyComment.isPresent() ? lang.getBundleString("headline.tendency") : "";
+		String tendencyHeadline = tendencyComment.isPresent() ? lang.getCaamlBundleString("tendency.label") : "";
 		String tendencyCommentText = tendencyComment.orElse("");
 
 		pw.format("<table %s>", getSnowpackStyle(hasSnowpackSection));
@@ -380,7 +380,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</a>");
 		pw.format("<p class=\"\">%s</p>", snowpackStructureCommentText);
 		if (hasSnowpackSection && synopsisComment.isPresent()) {
-			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getBundleString("headline.synopsis"));
+			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("synopsis.label"));
 			pw.format("<p class=\"\">%s</p>", synopsisComment.get());
 		}
 		pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", tendencyHeadline);
@@ -401,7 +401,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		boolean bulletinDaytime = bulletin.isHasDaytimeDependency();
 
 		String text = bulletinDaytime
-			? lang.getBundleString(pm ? "valid-time-period.later" : "valid-time-period.earlier")
+			? lang.getCaamlBundleString(pm ? "validTimePeriod.later" : "validTimePeriod.earlier")
 			: "";
 		// when there is no daytime dependency, the afternoon block reuses the forenoon description and its map
 		AvalancheBulletinDaytimeDescription description = pm && bulletinDaytime ? bulletin.getAfternoon() : bulletin.getForenoon();
@@ -521,24 +521,24 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 				// elevation high and low set
 				elevationSymbol = serverImagesUrl + "elevation/color/levels_middle_two.png";
 				limitAbove = problem.getTreelineLow()
-					? lang.getBundleString("elevation.treeline.capitalized")
+					? lang.getCaamlBundleString("elevation.treeline.capitalized")
 					: problem.getElevationLow() + "m";
 				limitBelow = problem.getTreelineHigh()
-					? lang.getBundleString("elevation.treeline.capitalized")
+					? lang.getCaamlBundleString("elevation.treeline.capitalized")
 					: problem.getElevationHigh() + "m";
 			} else {
 				// elevation high set
 				elevationSymbol = serverImagesUrl + "elevation/color/levels_below.png";
 				limitAbove = "";
 				limitBelow = problem.getTreelineHigh()
-					? lang.getBundleString("elevation.treeline.capitalized")
+					? lang.getCaamlBundleString("elevation.treeline.capitalized")
 					: problem.getElevationHigh() + "m";
 			}
 		} else if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
 			// elevation low set
 			elevationSymbol = serverImagesUrl + "elevation/color/levels_above.png";
 			limitAbove = problem.getTreelineLow()
-				? lang.getBundleString("elevation.treeline.capitalized")
+				? lang.getCaamlBundleString("elevation.treeline.capitalized")
 				: problem.getElevationLow() + "m";
 			limitBelow = "";
 		} else {
@@ -611,7 +611,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		if (daytimeBulletin.isHasElevationDependency()
 			&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
 			if (daytimeBulletin.getTreeline())
-				return lang.getBundleString("elevation.treeline.capitalized");
+				return lang.getCaamlBundleString("elevation.treeline.capitalized");
 			else if (daytimeBulletin.getElevation() > 0)
 				return daytimeBulletin.getElevation() + "m";
 			else

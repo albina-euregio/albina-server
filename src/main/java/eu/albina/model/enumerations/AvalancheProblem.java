@@ -12,9 +12,8 @@ public enum AvalancheProblem {
 	new_snow, wind_slab, persistent_weak_layers, wet_snow, gliding_snow, favourable_situation, cornices, no_distinct_avalanche_problem;
 
 	public String toString(Locale locale) {
-
-		return ResourceBundle.getBundle("i18n.AvalancheProblem", locale, new XMLResourceBundleControl())
-				.getString(name());
+		return ResourceBundle.getBundle("i18n.caaml", locale, new XMLResourceBundleControl())
+				.getString("avalancheProblem." + name());
 	}
 
 	public String toStringId() {

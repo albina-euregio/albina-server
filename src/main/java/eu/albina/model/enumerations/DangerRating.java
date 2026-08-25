@@ -10,8 +10,8 @@ public enum DangerRating {
 	missing, no_snow, no_rating, low, moderate, considerable, high, very_high;
 
 	public String toString(Locale locale, boolean useLong) {
-		return ResourceBundle.getBundle("i18n.DangerRating", locale, new XMLResourceBundleControl())
-				.getString(name() + (useLong ? ".long" : ""));
+		return ResourceBundle.getBundle("i18n.caaml", locale, new XMLResourceBundleControl())
+				.getString("dangerRating." + name() + (useLong ? ".long" : ""));
 	}
 
 	public String getColor() {

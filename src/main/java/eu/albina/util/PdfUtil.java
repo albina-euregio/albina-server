@@ -311,7 +311,7 @@ public class PdfUtil {
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			secondColumnWidths = new float[]{1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			Paragraph am = new Paragraph(lang.getBundleString("valid-time-period.earlier"))
+			Paragraph am = new Paragraph(lang.getCaamlBundleString("validTimePeriod.earlier"))
 				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
 			cell = new Cell(2, 1).add(am);
 			cell.setBorder(Border.NO_BORDER);
@@ -343,7 +343,7 @@ public class PdfUtil {
 
 			secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			secondTable.setBorderTop(new SolidBorder(blackColor, 1));
-			Paragraph pm = new Paragraph(lang.getBundleString("valid-time-period.later"))
+			Paragraph pm = new Paragraph(lang.getCaamlBundleString("validTimePeriod.later"))
 				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
 			cell = new Cell(2, 1).add(pm);
 			cell.setBorder(Border.NO_BORDER);
@@ -419,7 +419,7 @@ public class PdfUtil {
 		});
 
 		avalancheBulletin.getTravelAdvisoryCommentIn(lang).ifPresent(text -> {
-			Paragraph headline = new Paragraph(lang.getBundleString("headline.travelAdvisory"))
+			Paragraph headline = new Paragraph(lang.getCaamlBundleString("travelAdvisory.label"))
 				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 				.setMultipliedLeading(leadingHeadline);
 			Cell c = new Cell(1, 1).add(headline);
@@ -458,7 +458,7 @@ public class PdfUtil {
 			if (dangerPattern1 != null || dangerPattern2 != null
 				|| snowpackStructureComment.isPresent()
 				|| snowpackStructureHighlights.isPresent()) {
-				cell = new Cell(1, 10).add(new Paragraph(lang.getBundleString("headline.snowpack"))
+				cell = new Cell(1, 10).add(new Paragraph(lang.getCaamlBundleString("snowpack.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(5)
 					.setMultipliedLeading(leadingHeadline));
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -472,7 +472,7 @@ public class PdfUtil {
 				if (dangerPattern1 != null || dangerPattern2 != null) {
 					float[] dangerPatternColumnWidths = {1, 1, 1};
 					Table dangerPatternTable = new Table(dangerPatternColumnWidths);
-					Paragraph dangerPatternHeadline = new Paragraph(lang.getBundleString("headline.danger-patterns"))
+					Paragraph dangerPatternHeadline = new Paragraph(lang.getCaamlBundleString("dangerPattern.label"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					cell = new Cell(1, 1).add(dangerPatternHeadline);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -530,7 +530,7 @@ public class PdfUtil {
 			}
 
 			synopsisComment.ifPresent(text -> {
-				Paragraph weatherHeadline = new Paragraph(lang.getBundleString("headline.synopsis"))
+				Paragraph weatherHeadline = new Paragraph(lang.getCaamlBundleString("synopsis.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
 				Cell c = new Cell(1, 1).add(weatherHeadline);
@@ -555,7 +555,7 @@ public class PdfUtil {
 			});
 
 			tendencyComment.ifPresent(text -> {
-				Paragraph tendencyHeadline = new Paragraph(lang.getBundleString("headline.tendency"))
+				Paragraph tendencyHeadline = new Paragraph(lang.getCaamlBundleString("tendency.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
 				Cell c = new Cell(1, 1).add(tendencyHeadline);
@@ -630,7 +630,7 @@ public class PdfUtil {
 					&& !(!isAfternoon && avalancheBulletin.getForenoon().dangerRating(true)
 							.equals(avalancheBulletin.getForenoon().dangerRating(false)))) {
 				if (daytimeBulletin.getTreeline()) {
-					Paragraph paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+					Paragraph paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 							.setFontColor(blackColor).setFontSize(8).setFont(openSansBoldFont);
 					paragraph.setRelativePosition(-2, 2, 0, 0);
 					cell.add(paragraph);
@@ -820,7 +820,7 @@ public class PdfUtil {
 				cell.add(img);
 				table.addCell(cell);
 				if (avalancheProblem.getTreelineHigh()) {
-					Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph2.setRelativePosition(-6, 2, 0, 0);
 					cell = new Cell(1, 1);
@@ -843,7 +843,7 @@ public class PdfUtil {
 					elevationTable.addCell(cell);
 				}
 				if (avalancheProblem.getTreelineLow()) {
-					Paragraph paragraph2 = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph2.setRelativePosition(-6, -3, 0, 0);
 					cell = new Cell(1, 1);
@@ -882,7 +882,7 @@ public class PdfUtil {
 				table.addCell(cell);
 
 				if (avalancheProblem.getTreelineHigh()) {
-					paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+					paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, -4, 0, 0);
 					cell = new Cell(1, 1);
@@ -921,7 +921,7 @@ public class PdfUtil {
 			table.addCell(cell);
 
 			if (avalancheProblem.getTreelineLow()) {
-				paragraph = new Paragraph(lang.getBundleString("elevation.treeline.capitalized"))
+				paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 					.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 				paragraph.setRelativePosition(-6, 4, 0, 0);
 				cell = new Cell(1, 1);
@@ -973,18 +973,18 @@ public class PdfUtil {
 		}
 		Paragraph paragraph = new Paragraph().setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 		if (avalancheProblem != eu.albina.model.enumerations.AvalancheProblem.gliding_snow && matrixInformation.getSnowpackStability() != null) {
-			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability") + ": "));
-			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability." + matrixInformation.getSnowpackStability()) + "\n")
+			paragraph.add(new Text(lang.getCaamlBundleString("snowpackStability.label") + ": "));
+			paragraph.add(new Text(matrixInformation.getSnowpackStability().toString(lang.getLocale()) + "\n")
 				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
 		}
 		if (matrixInformation.getFrequency() != null) {
-			paragraph.add(new Text(lang.getBundleString("problem.frequency") + ": "));
-			paragraph.add(new Text(lang.getBundleString("problem.frequency." + matrixInformation.getFrequency()) + "\n")
+			paragraph.add(new Text(lang.getCaamlBundleString("frequency.label") + ": "));
+			paragraph.add(new Text(matrixInformation.getFrequency().toString(lang.getLocale()) + "\n")
 				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
 		}
 		if (matrixInformation.getAvalancheSize() != null) {
-			paragraph.add(new Text(lang.getBundleString("problem.avalanche-size") + ": "));
-			paragraph.add(new Text(lang.getBundleString("problem.avalanche-size." + matrixInformation.getAvalancheSize()) + "\n")
+			paragraph.add(new Text(lang.getCaamlBundleString("avalancheSize.label") + ": "));
+			paragraph.add(new Text(matrixInformation.getAvalancheSize().toString(lang.getLocale()) + "\n")
 				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
 		}
 		Cell cell = new Cell(1, 1);
@@ -1102,27 +1102,27 @@ public class PdfUtil {
 
 			ImageData overviewMapAMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.am));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
-			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("forecast.label"));
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
 			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY + mapHeight + 40);
 			canvas.add(overviewMapAMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2f - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
-					.showText(lang.getBundleString("valid-time-period.earlier")).endText();
+					.showText(lang.getCaamlBundleString("validTimePeriod.earlier")).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.pm));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
-			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("forecast.label"));
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
 			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY);
 			canvas.add(overviewMapPMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2f - 240, mapY + mapHeight + 10).setColor(blackColor, true)
-					.showText(lang.getBundleString("valid-time-period.later")).endText();
+					.showText(lang.getCaamlBundleString("validTimePeriod.later")).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.fd));
 			Image overviewMapImg = new Image(overviewMapImageData);
-			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getBundleString("headline"));
+			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("forecast.label"));
 			mapY = region.getPdfMapYFd();
 
 			avalancheReport.getGeneralHeadline(lang).ifPresent(text -> {
@@ -1299,7 +1299,7 @@ public class PdfUtil {
 		}
 
 		if (daytimeBulletin.getTreeline()) {
-			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, lang.getBundleString("elevation.treeline"), dangerRatingAbove, lang.getBundleString("elevation.treeline"));
+			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, lang.getCaamlBundleString("elevation.treeline"), dangerRatingAbove, lang.getCaamlBundleString("elevation.treeline"));
 		} else if (daytimeBulletin.getElevation() > 0) {
 			String elevation = daytimeBulletin.getElevation() + lang.getBundleString("unit.meter");
 			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, elevation, dangerRatingAbove, elevation);
@@ -1316,45 +1316,45 @@ public class PdfUtil {
 				String high = "";
 				if (avalancheProblem.getTreelineLow()) {
 					// elevation low treeline
-					low = lang.getBundleString("elevation.treeline");
+					low = lang.getCaamlBundleString("elevation.treeline");
 				} else if (avalancheProblem.getElevationLow() > 0) {
 					// elevation low number
 					low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
 				}
 				if (avalancheProblem.getTreelineHigh()) {
 					// elevation high treeline
-					high = lang.getBundleString("elevation.treeline");
+					high = lang.getCaamlBundleString("elevation.treeline");
 				} else if (avalancheProblem.getElevationHigh() > 0) {
 					// elevation high number
 					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
 				}
-				return MessageFormat.format(lang.getBundleString("elevation.band"), low, high);
+				return MessageFormat.format(lang.getCaamlBundleString("elevation.band"), low, high);
 			} else {
 				// elevation high set
 				String high = "";
 				if (avalancheProblem.getTreelineHigh()) {
 					// elevation high treeline
-					high = lang.getBundleString("elevation.treeline");
+					high = lang.getCaamlBundleString("elevation.treeline");
 				} else if (avalancheProblem.getElevationHigh() > 0) {
 					// elevation high number
 					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
 				}
-				return MessageFormat.format(lang.getBundleString("elevation.below"), high);
+				return MessageFormat.format(lang.getCaamlBundleString("elevation.below"), high);
 			}
 		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			String low = "";
 			if (avalancheProblem.getTreelineLow()) {
 				// elevation low treeline
-				low = lang.getBundleString("elevation.treeline");
+				low = lang.getCaamlBundleString("elevation.treeline");
 			} else if (avalancheProblem.getElevationLow() > 0) {
 				// elevation low number
 				low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
 			}
-			return MessageFormat.format(lang.getBundleString("elevation.above"), low);
+			return MessageFormat.format(lang.getCaamlBundleString("elevation.above"), low);
 		} else {
 			// no elevation set
-			return lang.getBundleString("elevation.all");
+			return lang.getCaamlBundleString("elevation.all");
 		}
 	}
 

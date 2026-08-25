@@ -8,7 +8,7 @@ class LanguageCodeTest {
 
 	@Test
 	public void retrieveTranslationTest() {
-		String string = LanguageCode.ca.getBundleString("headline.tendency");
+		String string = LanguageCode.ca.getCaamlBundleString("tendency.label");
 		Assertions.assertEquals("Tendència", string);
 	}
 

@@ -51,7 +51,7 @@ record AvalancheReportMultichannelMessage(
 			? lang.getBundleString("email.subject.update")
 			: lang.getBundleString("email.subject");
 
-		return MessageFormat.format(bundleString, lang.getBundleString("headline"), lang.getRegionName(region.getId()))
+		return MessageFormat.format(bundleString, lang.getCaamlBundleString("forecast.label"), lang.getRegionName(region.getId()))
 			+ avalancheReport.getDate(lang);
 	}
 
@@ -60,8 +60,8 @@ record AvalancheReportMultichannelMessage(
 		String dateString = avalancheReport.getDate(lang);
 		String bulletinUrl = avalancheReport.getRegion().getWebsiteUrlWithDate(lang, avalancheReport);
 		return avalancheReport.getStatus() == BulletinStatus.republished
-			? MessageFormat.format(lang.getBundleString("social-media.message.update"), lang.getBundleString("headline"), dateString, bulletinUrl)
-			: MessageFormat.format(lang.getBundleString("social-media.message"), lang.getBundleString("headline"), dateString, bulletinUrl);
+			? MessageFormat.format(lang.getBundleString("social-media.message.update"), lang.getCaamlBundleString("forecast.label"), dateString, bulletinUrl)
+			: MessageFormat.format(lang.getBundleString("social-media.message"), lang.getCaamlBundleString("forecast.label"), dateString, bulletinUrl);
 	}
 
 	@Override

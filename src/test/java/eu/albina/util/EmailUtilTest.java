@@ -83,8 +83,8 @@ public class EmailUtilTest {
 
 	@Test
 	public void langTest() {
-		Assertions.assertEquals("Alle Höhenlagen", LanguageCode.de.getBundleString("elevation.all"));
-		Assertions.assertEquals("Tutte le quote", LanguageCode.it.getBundleString("elevation.all"));
-		Assertions.assertEquals("All elevations", LanguageCode.en.getBundleString("elevation.all"));
+		Assertions.assertEquals("Alle Höhenlagen", LanguageCode.de.getCaamlBundleString("elevation.all"));
+		Assertions.assertEquals("Tutte le quote", LanguageCode.it.getCaamlBundleString("elevation.all"));
+		Assertions.assertEquals("All elevations", LanguageCode.en.getCaamlBundleString("elevation.all"));
 	}
 }

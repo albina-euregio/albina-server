@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import java.util.TreeMap;
@@ -36,6 +37,18 @@ public class XMLResourceBundleControl extends ResourceBundle.Control {
 		if ("micro-regions_names".equals(baseName)) {
 			URL resource = loader.getResource("micro-regions_names/" + locale + ".json");
 			TreeMap<String, String> strings;
+			try (InputStream stream = resource.openStream()) {
+				strings = new ObjectMapper().readValue(stream, new TypeReference<>() {
+				});
+			}
+			XMLResourceBundle bundle = new XMLResourceBundle();
+			strings.forEach(bundle::put);
+			return bundle;
+		}
+
+		if ("i18n.caaml".equals(baseName)) {
+			URL resource = loader.getResource("i18n/caaml/" + locale + ".json");
+			Map<String, String> strings;
 			try (InputStream stream = resource.openStream()) {
 				strings = new ObjectMapper().readValue(stream, new TypeReference<>() {
 				});

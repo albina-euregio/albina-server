@@ -16,8 +16,8 @@ public enum Aspect {
 	N, NE, E, SE, S, SW, W, NW;
 
 	public String toString(Locale locale) {
-		return ResourceBundle.getBundle("i18n.Aspect", locale, new XMLResourceBundleControl())
-			.getString(name());
+		return ResourceBundle.getBundle("i18n.caaml", locale, new XMLResourceBundleControl())
+			.getString("aspect." + name());
 	}
 
 	public String toCaamlString() {

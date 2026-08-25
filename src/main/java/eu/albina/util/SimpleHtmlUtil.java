@@ -108,8 +108,8 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("<article>\n");
 		pw.format("<p>\n");
 		if (bulletin.isHasDaytimeDependency()) {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>");
-			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>");
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getCaamlBundleString("validTimePeriod.earlier").toUpperCase() + "</b><br>");
+			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getCaamlBundleString("validTimePeriod.later").toUpperCase() + "</b><br>");
 		} else {
 			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, "");
 		}
@@ -117,12 +117,12 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">%s\n</h3>\n", bulletin.getHighlightsIn(lang).orElse(""));
 		pw.format("<h3>%s\n</h3>\n", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
 		pw.format("<p>%s\n</p>\n", bulletin.getAvActivityCommentIn(lang).orElse(""));
-		pw.format("<h3>%s\n</h3>\n", lang.getBundleString("headline.snowpack"));
+		pw.format("<h3>%s\n</h3>\n", lang.getCaamlBundleString("snowpack.label"));
 		String dangerPattern1 = bulletin.getDangerPattern1() != null ? bulletin.getDangerPattern1().toString(lang.getLocale()) + "<br>" : "";
 		String dangerPattern2 = bulletin.getDangerPattern2() != null ? bulletin.getDangerPattern2().toString(lang.getLocale()) + "<br>" : "";
 		pw.format("<p>%s%s\n</p>\n", dangerPattern1, dangerPattern2);
 		pw.format("<p>%s\n</p>\n", bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
-		pw.format("<h3>%s\n</h3>\n", lang.getBundleString("headline.tendency"));
+		pw.format("<h3>%s\n</h3>\n", lang.getCaamlBundleString("tendency.label"));
 		pw.format("<p>%s\n</p>\n", bulletin.getTendencyCommentIn(lang).orElse(""));
 		pw.format("</article>\n");
 	}
@@ -133,9 +133,9 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		String mapsUrl = avalancheReport.getMapsUrl();
 		Region region = avalancheReport.getRegion();
 
-		String dangerLevelText = "<b>" + lang.getBundleString("headline.danger-rating") + "</b><br>";
+		String dangerLevelText = "<b>" + lang.getCaamlBundleString("dangerRating.label") + "</b><br>";
 		String avalancheProblemText = daytimeDescription.getAvalancheProblems().stream()
-			.noneMatch(p -> p != null && p.getAvalancheProblem() != null) ? "" : "<b>" + lang.getBundleString("headline.avalanche-problem") + "</b><br>";
+			.noneMatch(p -> p != null && p.getAvalancheProblem() != null) ? "" : "<b>" + lang.getCaamlBundleString("avalancheProblem.label") + "</b><br>";
 		String warningPicto = DataURL.ofResource("images/warning_pictos/color/level_" + daytimeDescription.getWarningLevelId() + ".webp");
 		String elevation = getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline());
 
@@ -198,7 +198,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				if (avalancheProblem.getTreelineLow()) {
-					return lang.getBundleString("elevation.treeline.capitalized");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationLow() + "m";
 				}
@@ -209,7 +209,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			if (avalancheProblem.getTreelineLow()) {
-				return lang.getBundleString("elevation.treeline.capitalized");
+				return lang.getCaamlBundleString("elevation.treeline.capitalized");
 			} else {
 				return avalancheProblem.getElevationLow() + "m";
 			}
@@ -223,14 +223,14 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getBundleString("elevation.treeline.capitalized");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationHigh() + "m";
 				}
 			} else {
 				// elevation high set
 				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getBundleString("elevation.treeline.capitalized");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationHigh() + "m";
 				}
@@ -246,7 +246,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	private String getElevationString(int elevation, boolean treeline) {
 		String result = "";
 		if (treeline) {
-			result = lang.getBundleString("elevation.treeline");
+			result = lang.getCaamlBundleString("elevation.treeline");
 		} else if (elevation > 0) {
 			result = elevation + "m";
 		}
