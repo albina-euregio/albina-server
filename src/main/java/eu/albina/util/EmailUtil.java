@@ -521,24 +521,24 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 				// elevation high and low set
 				elevationSymbol = serverImagesUrl + "elevation/color/levels_middle_two.png";
 				limitAbove = problem.getTreelineLow()
-					? lang.getCaamlBundleString("elevation.treeline")
+					? lang.getCaamlBundleString("elevation.treeline.capitalized")
 					: problem.getElevationLow() + "m";
 				limitBelow = problem.getTreelineHigh()
-					? lang.getCaamlBundleString("elevation.treeline")
+					? lang.getCaamlBundleString("elevation.treeline.capitalized")
 					: problem.getElevationHigh() + "m";
 			} else {
 				// elevation high set
 				elevationSymbol = serverImagesUrl + "elevation/color/levels_below.png";
 				limitAbove = "";
 				limitBelow = problem.getTreelineHigh()
-					? lang.getCaamlBundleString("elevation.treeline")
+					? lang.getCaamlBundleString("elevation.treeline.capitalized")
 					: problem.getElevationHigh() + "m";
 			}
 		} else if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
 			// elevation low set
 			elevationSymbol = serverImagesUrl + "elevation/color/levels_above.png";
 			limitAbove = problem.getTreelineLow()
-				? lang.getCaamlBundleString("elevation.treeline")
+				? lang.getCaamlBundleString("elevation.treeline.capitalized")
 				: problem.getElevationLow() + "m";
 			limitBelow = "";
 		} else {
@@ -611,7 +611,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		if (daytimeBulletin.isHasElevationDependency()
 			&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
 			if (daytimeBulletin.getTreeline())
-				return lang.getCaamlBundleString("elevation.treeline");
+				return lang.getCaamlBundleString("elevation.treeline.capitalized");
 			else if (daytimeBulletin.getElevation() > 0)
 				return daytimeBulletin.getElevation() + "m";
 			else

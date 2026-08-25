@@ -848,7 +848,7 @@ public class StatisticsController {
 				sb.append(notAvailableString);
 			else {
 				if (daytimeDescription.getTreeline())
-					sb.append(lang.getBundleString("elevation.treeline"));
+					sb.append(lang.getCaamlBundleString("elevation.treeline"));
 				else
 					sb.append(daytimeDescription.getElevation());
 			}
@@ -1044,7 +1044,7 @@ public class StatisticsController {
 			sb.append(avalancheProblem.getAvalancheType() != null ? avalancheProblem.getAvalancheType() : notAvailableString);
 			sb.append(csvDeliminator);
 			if (avalancheProblem.getTreelineLow())
-				sb.append(lang.getBundleString("elevation.treeline"));
+				sb.append(lang.getCaamlBundleString("elevation.treeline"));
 			else {
 				if (avalancheProblem.getElevationLow() <= 0)
 					sb.append(notAvailableString);
@@ -1053,7 +1053,7 @@ public class StatisticsController {
 			}
 			sb.append(csvDeliminator);
 			if (avalancheProblem.getTreelineHigh())
-				sb.append(lang.getBundleString("elevation.treeline"));
+				sb.append(lang.getCaamlBundleString("elevation.treeline"));
 			else {
 				if (avalancheProblem.getElevationHigh() <= 0)
 					sb.append(notAvailableString);

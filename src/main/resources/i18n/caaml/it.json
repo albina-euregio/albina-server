@@ -102,7 +102,12 @@
     "later.long": "più tardi nella giornata"
   },
   "elevation": {
-    "treeline": "Limite del bosco"
+    "treeline.capitalized": "Limite del bosco",
+    "treeline": "limite del bosco",
+    "all": "Tutte le quote",
+    "below": "Sotto i {0}",
+    "above": "Sopra i {0}",
+    "band": "Tra {0} e {1}"
   },
   "synopsis": {
     "label": "Meteo"

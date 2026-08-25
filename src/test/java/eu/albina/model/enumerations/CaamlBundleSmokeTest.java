@@ -53,7 +53,13 @@ public class CaamlBundleSmokeTest {
 
 	@Test
 	public void testElevationReadsFromCaamlBundle() {
+		Assertions.assertEquals("Waldgrenze", LanguageCode.de.getCaamlBundleString("elevation.treeline.capitalized"));
+		Assertions.assertEquals("Treeline", LanguageCode.en.getCaamlBundleString("elevation.treeline.capitalized"));
+		Assertions.assertEquals("treeline", LanguageCode.en.getCaamlBundleString("elevation.treeline"));
 		Assertions.assertEquals("Waldgrenze", LanguageCode.de.getCaamlBundleString("elevation.treeline"));
-		Assertions.assertEquals("Treeline", LanguageCode.en.getCaamlBundleString("elevation.treeline"));
+		Assertions.assertEquals("All elevations", LanguageCode.en.getCaamlBundleString("elevation.all"));
+		Assertions.assertEquals("Unter {0}", LanguageCode.de.getCaamlBundleString("elevation.below"));
+		Assertions.assertEquals("Above {0}", LanguageCode.en.getCaamlBundleString("elevation.above"));
+		Assertions.assertEquals("Zwischen {0} und {1}", LanguageCode.de.getCaamlBundleString("elevation.band"));
 	}
 }

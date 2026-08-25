@@ -102,7 +102,12 @@
     "later.long": "al final del dia"
   },
   "elevation": {
-    "treeline": "Límit del bosc"
+    "treeline.capitalized": "Límit del bosc",
+    "treeline": "límit del bosc",
+    "all": "Totes les altituds",
+    "below": "Per sota de {0}",
+    "above": "Per sobre de {0}",
+    "band": "Entre {0} i {1}"
   },
   "synopsis": {
     "label": "Temps"

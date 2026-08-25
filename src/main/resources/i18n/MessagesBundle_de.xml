@@ -5,11 +5,6 @@
   <entry key="preview"> - VORSCHAU</entry>
   <entry key="standard.link.text">Standardansicht laden</entry>
   <entry key="danger-rating.elevation">{0} unter {1}, {2} über {3}</entry>
-  <entry key="elevation.treeline">Waldgrenze</entry>
-  <entry key="elevation.all">Alle Höhenlagen</entry>
-  <entry key="elevation.below">Unter {0}</entry>
-  <entry key="elevation.above">Über {0}</entry>
-  <entry key="elevation.band">Zwischen {0} und {1}</entry>
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} für {1}: {2}</entry>
   <entry key="social-media.message.update">UPDATE der {0} für {1}: {2}</entry>

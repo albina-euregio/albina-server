@@ -102,7 +102,12 @@
     "later.long": "mès tard pendent eth dia"
   },
   "elevation": {
-    "treeline": "Limit deth bòsc"
+    "treeline.capitalized": "Limit deth bòsc",
+    "treeline": "limit deth bòsc",
+    "all": "Totes es còtes",
+    "below": "Per dejós {0}",
+    "above": "Per desssús {0}",
+    "band": "Entre {0} e {1}"
   },
   "synopsis": {
     "label": "Temps"

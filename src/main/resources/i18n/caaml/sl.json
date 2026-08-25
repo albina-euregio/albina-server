@@ -102,7 +102,12 @@
     "later.long": "popoldne"
   },
   "elevation": {
-    "treeline": "Gozdna meja"
+    "treeline.capitalized": "Gozdna meja",
+    "treeline": "gozdna meja",
+    "all": "Na vseh višinah",
+    "below": "Pod {0}",
+    "above": "Nad {0}",
+    "band": "Med {0} in {1}"
   },
   "synopsis": {
     "label": "Vreme"

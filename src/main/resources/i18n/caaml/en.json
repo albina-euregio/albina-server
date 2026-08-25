@@ -102,7 +102,12 @@
     "later.long": "later in the day"
   },
   "elevation": {
-    "treeline": "Treeline"
+    "treeline.capitalized": "Treeline",
+    "treeline": "treeline",
+    "all": "All elevations",
+    "below": "Below {0}",
+    "above": "Above {0}",
+    "band": "Between {0} and {1}"
   },
   "synopsis": {
     "label": "Weather"

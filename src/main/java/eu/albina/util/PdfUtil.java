@@ -630,7 +630,7 @@ public class PdfUtil {
 					&& !(!isAfternoon && avalancheBulletin.getForenoon().dangerRating(true)
 							.equals(avalancheBulletin.getForenoon().dangerRating(false)))) {
 				if (daytimeBulletin.getTreeline()) {
-					Paragraph paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
+					Paragraph paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 							.setFontColor(blackColor).setFontSize(8).setFont(openSansBoldFont);
 					paragraph.setRelativePosition(-2, 2, 0, 0);
 					cell.add(paragraph);
@@ -820,7 +820,7 @@ public class PdfUtil {
 				cell.add(img);
 				table.addCell(cell);
 				if (avalancheProblem.getTreelineHigh()) {
-					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
+					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph2.setRelativePosition(-6, 2, 0, 0);
 					cell = new Cell(1, 1);
@@ -843,7 +843,7 @@ public class PdfUtil {
 					elevationTable.addCell(cell);
 				}
 				if (avalancheProblem.getTreelineLow()) {
-					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
+					Paragraph paragraph2 = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph2.setRelativePosition(-6, -3, 0, 0);
 					cell = new Cell(1, 1);
@@ -882,7 +882,7 @@ public class PdfUtil {
 				table.addCell(cell);
 
 				if (avalancheProblem.getTreelineHigh()) {
-					paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
+					paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					paragraph.setRelativePosition(-6, -4, 0, 0);
 					cell = new Cell(1, 1);
@@ -921,7 +921,7 @@ public class PdfUtil {
 			table.addCell(cell);
 
 			if (avalancheProblem.getTreelineLow()) {
-				paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline"))
+				paragraph = new Paragraph(lang.getCaamlBundleString("elevation.treeline.capitalized"))
 					.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 				paragraph.setRelativePosition(-6, 4, 0, 0);
 				cell = new Cell(1, 1);
@@ -1299,7 +1299,7 @@ public class PdfUtil {
 		}
 
 		if (daytimeBulletin.getTreeline()) {
-			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, lang.getBundleString("elevation.treeline"), dangerRatingAbove, lang.getBundleString("elevation.treeline"));
+			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, lang.getCaamlBundleString("elevation.treeline"), dangerRatingAbove, lang.getCaamlBundleString("elevation.treeline"));
 		} else if (daytimeBulletin.getElevation() > 0) {
 			String elevation = daytimeBulletin.getElevation() + lang.getBundleString("unit.meter");
 			return MessageFormat.format(lang.getBundleString("danger-rating.elevation"), dangerRatingBelow, elevation, dangerRatingAbove, elevation);
@@ -1316,45 +1316,45 @@ public class PdfUtil {
 				String high = "";
 				if (avalancheProblem.getTreelineLow()) {
 					// elevation low treeline
-					low = lang.getBundleString("elevation.treeline");
+					low = lang.getCaamlBundleString("elevation.treeline");
 				} else if (avalancheProblem.getElevationLow() > 0) {
 					// elevation low number
 					low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
 				}
 				if (avalancheProblem.getTreelineHigh()) {
 					// elevation high treeline
-					high = lang.getBundleString("elevation.treeline");
+					high = lang.getCaamlBundleString("elevation.treeline");
 				} else if (avalancheProblem.getElevationHigh() > 0) {
 					// elevation high number
 					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
 				}
-				return MessageFormat.format(lang.getBundleString("elevation.band"), low, high);
+				return MessageFormat.format(lang.getCaamlBundleString("elevation.band"), low, high);
 			} else {
 				// elevation high set
 				String high = "";
 				if (avalancheProblem.getTreelineHigh()) {
 					// elevation high treeline
-					high = lang.getBundleString("elevation.treeline");
+					high = lang.getCaamlBundleString("elevation.treeline");
 				} else if (avalancheProblem.getElevationHigh() > 0) {
 					// elevation high number
 					high = avalancheProblem.getElevationHigh() + lang.getBundleString("unit.meter");
 				}
-				return MessageFormat.format(lang.getBundleString("elevation.below"), high);
+				return MessageFormat.format(lang.getCaamlBundleString("elevation.below"), high);
 			}
 		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			String low = "";
 			if (avalancheProblem.getTreelineLow()) {
 				// elevation low treeline
-				low = lang.getBundleString("elevation.treeline");
+				low = lang.getCaamlBundleString("elevation.treeline");
 			} else if (avalancheProblem.getElevationLow() > 0) {
 				// elevation low number
 				low = avalancheProblem.getElevationLow() + lang.getBundleString("unit.meter");
 			}
-			return MessageFormat.format(lang.getBundleString("elevation.above"), low);
+			return MessageFormat.format(lang.getCaamlBundleString("elevation.above"), low);
 		} else {
 			// no elevation set
-			return lang.getBundleString("elevation.all");
+			return lang.getCaamlBundleString("elevation.all");
 		}
 	}
 

@@ -198,7 +198,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				if (avalancheProblem.getTreelineLow()) {
-					return lang.getCaamlBundleString("elevation.treeline");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationLow() + "m";
 				}
@@ -209,7 +209,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			if (avalancheProblem.getTreelineLow()) {
-				return lang.getCaamlBundleString("elevation.treeline");
+				return lang.getCaamlBundleString("elevation.treeline.capitalized");
 			} else {
 				return avalancheProblem.getElevationLow() + "m";
 			}
@@ -223,14 +223,14 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getCaamlBundleString("elevation.treeline");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationHigh() + "m";
 				}
 			} else {
 				// elevation high set
 				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getCaamlBundleString("elevation.treeline");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationHigh() + "m";
 				}
@@ -246,7 +246,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	private String getElevationString(int elevation, boolean treeline) {
 		String result = "";
 		if (treeline) {
-			result = lang.getBundleString("elevation.treeline");
+			result = lang.getCaamlBundleString("elevation.treeline");
 		} else if (elevation > 0) {
 			result = elevation + "m";
 		}

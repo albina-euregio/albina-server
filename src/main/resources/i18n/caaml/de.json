@@ -102,7 +102,12 @@
     "later.long": "Später am Tag"
   },
   "elevation": {
-    "treeline": "Waldgrenze"
+    "treeline.capitalized": "Waldgrenze",
+    "treeline": "Waldgrenze",
+    "all": "Alle Höhenlagen",
+    "below": "Unter {0}",
+    "above": "Über {0}",
+    "band": "Zwischen {0} und {1}"
   },
   "synopsis": {
     "label": "Wetter"

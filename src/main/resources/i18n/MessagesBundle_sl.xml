@@ -5,11 +5,6 @@
   <entry key="preview"> - PREDOGLED</entry>
   <entry key="standard.link.text">Naloži običajen pogled</entry>
   <entry key="danger-rating.elevation">{0} pod {1}, {2} nad {3}</entry>
-  <entry key="elevation.treeline">gozdna meja</entry>
-  <entry key="elevation.all">Na vseh višinah</entry>
-  <entry key="elevation.below">Pod {0}</entry>
-  <entry key="elevation.above">Nad {0}</entry>
-  <entry key="elevation.band">Med {0} in {1}</entry>
   <entry key="unit.meter">m</entry>
   <entry key="social-media.message">{0} za {1}: {2}</entry>
   <entry key="social-media.message.update">POSODOBITEV {0} za {1}: {2}</entry>
