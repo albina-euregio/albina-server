@@ -1,0 +1,89 @@
+{
+  "avalancheSize": {
+    "small": "klein",
+    "medium": "mittel",
+    "large": "groß",
+    "very_large": "sehr groß",
+    "extreme": "extrem"
+  },
+  "snowpackStability": {
+    "good": "gut",
+    "fair": "mittel",
+    "poor": "schlecht",
+    "very_poor": "sehr schlecht"
+  },
+  "frequency": {
+    "none": "keine",
+    "few": "wenige",
+    "some": "einige",
+    "many": "viele"
+  },
+  "dangerRating": {
+    "missing": "fehlt",
+    "missing.long": "Fehlt",
+    "no_snow": "kein Schnee",
+    "no_snow.long": "Kein Schnee",
+    "no_rating": "keine Beurteilung",
+    "no_rating.long": "Keine Beurteilung",
+    "low": "gering",
+    "low.long": "Gefahrenstufe 1 - Gering",
+    "low.speech": "geringe Lawinengefahr, also Gefahrenstufe eins",
+    "moderate": "mäßig",
+    "moderate.long": "Gefahrenstufe 2 - Mäßig",
+    "moderate.speech": "mäßige Lawinengefahr, also Gefahrenstufe zwei",
+    "considerable": "erheblich",
+    "considerable.long": "Gefahrenstufe 3 - Erheblich",
+    "considerable.speech": "erhebliche Lawinengefahr, also Gefahrenstufe drei",
+    "high": "groß",
+    "high.long": "Gefahrenstufe 4 - Groß",
+    "high.speech": "große Lawinengefahr, also Gefahrenstufe vier",
+    "very_high": "sehr groß",
+    "very_high.long": "Gefahrenstufe 5 - Sehr Groß",
+    "very_high.speech": "sehr große Lawinengefahr, also Gefahrenstufe fünf"
+  },
+  "avalancheProblem": {
+    "new_snow": "Neuschnee",
+    "wind_slab": "Triebschnee",
+    "persistent_weak_layers": "Altschnee",
+    "wet_snow": "Nassschnee",
+    "gliding_snow": "Gleitschnee",
+    "favourable_situation": "Günstige Situation",
+    "cornices": "Wechten",
+    "no_distinct_avalanche_problem": "Kein ausgeprägtes Lawinenproblem",
+    "new_snow.speech": "ein Neuschnee-Problem",
+    "wind_slab.speech": "ein Triebschnee-Problem",
+    "persistent_weak_layers.speech": "ein Altschnee-Problem",
+    "wet_snow.speech": "ein Nassschnee-Problem",
+    "gliding_snow.speech": "ein Gleitschnee-Problem",
+    "favourable_situation.speech": "eine günstige Situation",
+    "cornices.speech": "ein Wechten-Problem",
+    "no_distinct_avalanche_problem.speech": "kein ausgeprägtes Lawinenproblem"
+  },
+  "dangerPattern": {
+    "dp1": "gm.1: bodennahe schwachschicht",
+    "dp2": "gm.2: gleitschnee",
+    "dp3": "gm.3: regen auf schnee",
+    "dp4": "gm.4: kalt auf warm / warm auf kalt",
+    "dp5": "gm.5: schnee nach langer kälteperiode",
+    "dp6": "gm.6: lockerer schnee und wind",
+    "dp7": "gm.7: schneearm neben schneereich",
+    "dp8": "gm.8: eingeschneiter oberflächenreif",
+    "dp9": "gm.9: eingeschneiter graupel",
+    "dp10": "gm.10: frühjahrssituation"
+  },
+  "aspect": {
+    "N": "Nord",
+    "NE": "Nord-Ost",
+    "E": "Ost",
+    "SE": "Süd-Ost",
+    "S": "Süd",
+    "SW": "Süd-West",
+    "W": "West",
+    "NW": "Nord-West"
+  },
+  "tendency": {
+    "decreasing": "Tendenz: Lawinengefahr nimmt ab",
+    "steady": "Tendenz: Lawinengefahr bleibt gleich",
+    "increasing": "Tendenz: Lawinengefahr steigt"
+  }
+}

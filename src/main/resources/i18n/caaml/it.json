@@ -1,0 +1,89 @@
+{
+  "avalancheSize": {
+    "small": "piccole",
+    "medium": "medie",
+    "large": "grandi",
+    "very_large": "molto grandi",
+    "extreme": "estreme"
+  },
+  "snowpackStability": {
+    "good": "buona",
+    "fair": "discreta",
+    "poor": "scarsa",
+    "very_poor": "molto scarsa"
+  },
+  "frequency": {
+    "none": "pochissimi",
+    "few": "pochi",
+    "some": "alcuni",
+    "many": "molti"
+  },
+  "dangerRating": {
+    "missing": "mancante",
+    "missing.long": "Mancante",
+    "no_snow": "privo di neve",
+    "no_snow.long": "Privo di neve",
+    "no_rating": "senza valutazione",
+    "no_rating.long": "Senza Valutazione",
+    "low": "debole",
+    "low.long": "Grado di pericolo 1 - Debole",
+    "low.speech": "pericolo valanghe debole, dunque grado uno",
+    "moderate": "moderato",
+    "moderate.long": "Grado di pericolo 2 - Moderato",
+    "moderate.speech": "pericolo valanghe moderato, dunque grado due",
+    "considerable": "marcato",
+    "considerable.long": "Grado di pericolo 3 - Marcato",
+    "considerable.speech": "pericolo valanghe marcato, dunque grado tre",
+    "high": "forte",
+    "high.long": "Grado di pericolo 4 - Forte",
+    "high.speech": "pericolo valanghe forte, dunque grado quattro",
+    "very_high": "molto forte",
+    "very_high.long": "Grado di pericolo 5 - Molto Forte",
+    "very_high.speech": "pericolo valanghe molto forte, dunque grado cinque"
+  },
+  "avalancheProblem": {
+    "new_snow": "Neve fresca",
+    "wind_slab": "Lastrone da vento",
+    "persistent_weak_layers": "Strati deboli persistenti",
+    "wet_snow": "Neve bagnata",
+    "gliding_snow": "Valanghe di slittamento",
+    "favourable_situation": "Situazione favorevole",
+    "cornices": "Cornici",
+    "no_distinct_avalanche_problem": "Nessun problema valanghivo evidente",
+    "new_snow.speech": "un problema di neve fresca",
+    "wind_slab.speech": "un problema di lastroni da vento",
+    "persistent_weak_layers.speech": "un problema di strati deboli persistenti",
+    "wet_snow.speech": "un problema di neve bagnata",
+    "gliding_snow.speech": "un problema di valanghe di slittamento",
+    "favourable_situation.speech": "una situazione favorevole",
+    "cornices.speech": "un problema di cornici",
+    "no_distinct_avalanche_problem.speech": "nessun problema valanghivo evidente"
+  },
+  "dangerPattern": {
+    "dp1": "st.1: strato debole persistente basale",
+    "dp2": "st.2: neve da slittamento",
+    "dp3": "st.3: pioggia su neve",
+    "dp4": "st.4: freddo su caldo / caldo su freddo",
+    "dp5": "st.5: neve dopo un lungo periodo di freddo",
+    "dp6": "st.6: neve a debole coesione e vento",
+    "dp7": "st.7: passaggio da poca a molta neve",
+    "dp8": "st.8: brina di superficie sepolta",
+    "dp9": "st.9: neve pallottolare sepolta",
+    "dp10": "st.10: situazione primaverile"
+  },
+  "aspect": {
+    "N": "Nord",
+    "NE": "Nord-Est",
+    "E": "Est",
+    "SE": "Sud-Est",
+    "S": "Sud",
+    "SW": "Sud-Ovest",
+    "W": "Ovest",
+    "NW": "Nord-Ovest"
+  },
+  "tendency": {
+    "decreasing": "Tendenza: pericolo valanghe in diminuzione",
+    "steady": "Tendenza: pericolo valanghe stabile",
+    "increasing": "Tendenza: pericolo valanghe in aumento"
+  }
+}

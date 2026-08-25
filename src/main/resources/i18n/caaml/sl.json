@@ -1,0 +1,89 @@
+{
+  "avalancheSize": {
+    "small": "majhen",
+    "medium": "srednji",
+    "large": "velik",
+    "very_large": "zelo velik",
+    "extreme": "izjemno velik"
+  },
+  "snowpackStability": {
+    "good": "dobra",
+    "fair": "zadovoljiva",
+    "poor": "slaba",
+    "very_poor": "zelo slaba"
+  },
+  "frequency": {
+    "none": "nič",
+    "few": "redki",
+    "some": "nekaj",
+    "many": "veliko"
+  },
+  "dangerRating": {
+    "missing": "brez",
+    "missing.long": "Brez",
+    "no_snow": "ni snežne odeje",
+    "no_snow.long": "Ni snežne odeje",
+    "no_rating": "brez stopnje nevarnosti",
+    "no_rating.long": "Brez stopnje nevarnosti",
+    "low": "majhna",
+    "low.long": "Majhna, 1. stopnja",
+    "low.speech": "majhna nevarnost snežnih plazov, zato 1. stopnja",
+    "moderate": "zmerna",
+    "moderate.long": "Zmerna, 2. stopnja",
+    "moderate.speech": "zmerna nevarnost snežnih plazov, zato 2. stopnja",
+    "considerable": "znatna",
+    "considerable.long": "Znatna, 3. stopnja",
+    "considerable.speech": "znatna nevarnost snežnih plazov, zato 3. stopnja",
+    "high": "velika",
+    "high.long": "Velika, 4. stopnja",
+    "high.speech": "velika nevarnost snežnih plazov, zato 4. stopnja",
+    "very_high": "zelo velika",
+    "very_high.long": "Zelo velika, 5. stopnja",
+    "very_high.speech": "zelo velika nevarnost snežnih plazov, zato 5. stopnja"
+  },
+  "avalancheProblem": {
+    "new_snow": "Nov sneg",
+    "wind_slab": "Napihan sneg",
+    "persistent_weak_layers": "Šibke plasti v starem snegu",
+    "wet_snow": "Moker sneg",
+    "gliding_snow": "Drseč sneg",
+    "favourable_situation": "Ugodne razmere",
+    "cornices": "Opasti",
+    "no_distinct_avalanche_problem": "Ni določljivega plazovnega problema",
+    "new_snow.speech": "grožnja zaradi novega snega",
+    "wind_slab.speech": "grožnja zaradi napihanega snega",
+    "persistent_weak_layers.speech": "grožnja zaradi trdožive šibke plasti",
+    "wet_snow.speech": "grožnja zaradi mokrega snega",
+    "gliding_snow.speech": "grožnja zaradi drsečega snega",
+    "favourable_situation.speech": "ugodne razmere",
+    "cornices.speech": "možnost podiranja opasti",
+    "no_distinct_avalanche_problem.speech": "Ni določljivega plazovnega problema"
+  },
+  "dangerPattern": {
+    "dp1": "dp.1: globoka trdoživa šibka plast",
+    "dp2": "dp.2: drseč sneg",
+    "dp3": "dp.3: dež",
+    "dp4": "dp.4: ohladitev po toploti / otoplitev po mrazu",
+    "dp5": "dp.5: sneženje po dolgem hladnem obdobju",
+    "dp6": "dp.6: mrzel nesprijet sneg z vetrom",
+    "dp7": "dp.7: območja s tanjšo snežno odejo, obkrožena z debelejšo snežno odejo",
+    "dp8": "dp.8: zasnežen površinski srež",
+    "dp9": "dp.9: zasnežena plast babjega pšena",
+    "dp10": "dp.10: spomladanske razmere"
+  },
+  "aspect": {
+    "N": "Sever",
+    "NE": "Severovzhod",
+    "E": "Vzhod",
+    "SE": "Jugovzhod",
+    "S": "Jug",
+    "SW": "Jugozahod",
+    "W": "Zahod",
+    "NW": "Severozahod"
+  },
+  "tendency": {
+    "decreasing": "Obeti: Zmanjšana plazovne nevarnosti",
+    "steady": "Obeti: Nespremenjena plazovna nevarnost",
+    "increasing": "Obeti: Povečana plazovna nevarnost"
+  }
+}

@@ -14,6 +14,12 @@ source_file = src/main/resources/i18n/AvalancheProblem.xml
 source_lang = en
 type        = PROPERTIESXML
 
+[o:albina-euregio:p:albina-server:r:caaml-json]
+file_filter = src/main/resources/i18n/caaml/<lang>.json
+source_file = src/main/resources/i18n/caaml/en.json
+source_lang = en
+type        = STRUCTURED_JSON
+
 [o:albina-euregio:p:albina-server:r:danger-pattern-xml]
 file_filter = src/main/resources/i18n/DangerPattern_<lang>.xml
 source_file = src/main/resources/i18n/DangerPattern.xml
