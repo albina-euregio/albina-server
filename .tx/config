@@ -6,7 +6,7 @@ lang_map = sl_SI: sl
 file_filter = src/main/resources/i18n/caaml/<lang>.json
 source_file = src/main/resources/i18n/caaml/en.json
 source_lang = en
-type        = STRUCTURED_JSON
+type        = KEYVALUEJSON
 
 [o:albina-euregio:p:albina-server:r:messages-xml]
 file_filter = src/main/resources/i18n/MessagesBundle_<lang>.xml

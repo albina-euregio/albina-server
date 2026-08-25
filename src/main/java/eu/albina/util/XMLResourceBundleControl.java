@@ -48,13 +48,13 @@ public class XMLResourceBundleControl extends ResourceBundle.Control {
 
 		if ("i18n.caaml".equals(baseName)) {
 			URL resource = loader.getResource("i18n/caaml/" + locale + ".json");
-			Map<String, Object> tree;
+			Map<String, String> strings;
 			try (InputStream stream = resource.openStream()) {
-				tree = new ObjectMapper().readValue(stream, new TypeReference<>() {
+				strings = new ObjectMapper().readValue(stream, new TypeReference<>() {
 				});
 			}
 			XMLResourceBundle bundle = new XMLResourceBundle();
-			flatten(null, tree, bundle);
+			strings.forEach(bundle::put);
 			return bundle;
 		}
 
@@ -64,17 +64,5 @@ public class XMLResourceBundleControl extends ResourceBundle.Control {
 			bundle.loadFromXML(stream);
 			return bundle;
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void flatten(String prefix, Map<String, Object> tree, XMLResourceBundle bundle) {
-		tree.forEach((key, value) -> {
-			String fullKey = prefix == null ? key : prefix + "." + key;
-			if (value instanceof Map) {
-				flatten(fullKey, (Map<String, Object>) value, bundle);
-			} else {
-				bundle.put(fullKey, value);
-			}
-		});
 	}
 }
