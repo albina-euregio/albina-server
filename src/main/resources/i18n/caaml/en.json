@@ -22,6 +22,7 @@
     "many": "many"
   },
   "dangerRating": {
+    "label": "Danger rating",
     "missing": "missing",
     "missing.long": "Missing",
     "no_snow": "no snow",
@@ -45,6 +46,7 @@
     "very_high.speech": "very high avalanche danger, so danger level five"
   },
   "avalancheProblem": {
+    "label": "Avalanche Problem",
     "new_snow": "New snow",
     "wind_slab": "Wind slab",
     "persistent_weak_layers": "Persistent weak layer",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "no distinct avalanche problem"
   },
   "dangerPattern": {
+    "label": "Danger patterns",
     "dp1": "dp.1: deep persistent weak layer",
     "dp2": "dp.2: gliding snow",
     "dp3": "dp.3: rain",
@@ -85,6 +88,7 @@
     "NW": "North-West"
   },
   "tendency": {
+    "label": "Tendency",
     "decreasing": "Tendency: Decreasing avalanche danger",
     "steady": "Tendency: Constant avalanche danger",
     "increasing": "Tendency: Increasing avalanche danger"
@@ -97,17 +101,19 @@
     "later": "later",
     "later.long": "later in the day"
   },
-  "headline": {
-    "tendency": "Tendency",
-    "synopsis": "Weather",
-    "dangerPatterns": "Danger patterns",
-    "snowpack": "Snowpack",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Avalanche Problem",
-    "dangerRating": "Danger rating",
-    "forecast": "Avalanche Forecast"
-  },
   "elevation": {
     "treeline.capitalized": "Treeline"
+  },
+  "synopsis": {
+    "label": "Weather"
+  },
+  "snowpack": {
+    "label": "Snowpack"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Avalanche Forecast"
   }
 }

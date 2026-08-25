@@ -22,6 +22,7 @@
     "many": "veliko"
   },
   "dangerRating": {
+    "label": "Stopnja nevarnosti",
     "missing": "brez",
     "missing.long": "Brez",
     "no_snow": "ni snežne odeje",
@@ -45,6 +46,7 @@
     "very_high.speech": "zelo velika nevarnost snežnih plazov, zato 5. stopnja"
   },
   "avalancheProblem": {
+    "label": "Plazovni problem",
     "new_snow": "Nov sneg",
     "wind_slab": "Napihan sneg",
     "persistent_weak_layers": "Šibke plasti v starem snegu",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "Ni določljivega plazovnega problema"
   },
   "dangerPattern": {
+    "label": "Vzorci nevarnosti",
     "dp1": "dp.1: globoka trdoživa šibka plast",
     "dp2": "dp.2: drseč sneg",
     "dp3": "dp.3: dež",
@@ -85,6 +88,7 @@
     "NW": "Severozahod"
   },
   "tendency": {
+    "label": "Obeti",
     "decreasing": "Obeti: Zmanjšana plazovne nevarnosti",
     "steady": "Obeti: Nespremenjena plazovna nevarnost",
     "increasing": "Obeti: Povečana plazovna nevarnost"
@@ -97,17 +101,19 @@
     "later": "popoldne",
     "later.long": "popoldne"
   },
-  "headline": {
-    "tendency": "Obeti",
-    "synopsis": "Vreme",
-    "dangerPatterns": "Vzorci nevarnosti",
-    "snowpack": "Snežna odeja",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Plazovni problem",
-    "dangerRating": "Stopnja nevarnosti",
-    "forecast": "Plazovna napoved"
-  },
   "elevation": {
     "treeline.capitalized": "Gozdna meja"
+  },
+  "synopsis": {
+    "label": "Vreme"
+  },
+  "snowpack": {
+    "label": "Snežna odeja"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Plazovna napoved"
   }
 }

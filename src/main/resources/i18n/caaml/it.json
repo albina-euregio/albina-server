@@ -22,6 +22,7 @@
     "many": "molti"
   },
   "dangerRating": {
+    "label": "Grado di pericolo",
     "missing": "mancante",
     "missing.long": "Mancante",
     "no_snow": "privo di neve",
@@ -45,6 +46,7 @@
     "very_high.speech": "pericolo valanghe molto forte, dunque grado cinque"
   },
   "avalancheProblem": {
+    "label": "Problema valanghivo",
     "new_snow": "Neve fresca",
     "wind_slab": "Lastrone da vento",
     "persistent_weak_layers": "Strati deboli persistenti",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "nessun problema valanghivo evidente"
   },
   "dangerPattern": {
+    "label": "Situazione tipo",
     "dp1": "st.1: strato debole persistente basale",
     "dp2": "st.2: neve da slittamento",
     "dp3": "st.3: pioggia su neve",
@@ -85,6 +88,7 @@
     "NW": "Nord-Ovest"
   },
   "tendency": {
+    "label": "Tendenza",
     "decreasing": "Tendenza: pericolo valanghe in diminuzione",
     "steady": "Tendenza: pericolo valanghe stabile",
     "increasing": "Tendenza: pericolo valanghe in aumento"
@@ -97,17 +101,19 @@
     "later": "più tardi",
     "later.long": "più tardi nella giornata"
   },
-  "headline": {
-    "tendency": "Tendenza",
-    "synopsis": "Meteo",
-    "dangerPatterns": "Situazione tipo",
-    "snowpack": "Manto nevoso",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Problema valanghivo",
-    "dangerRating": "Grado di pericolo",
-    "forecast": "Previsione valanghe"
-  },
   "elevation": {
     "treeline.capitalized": "Limite del bosco"
+  },
+  "synopsis": {
+    "label": "Meteo"
+  },
+  "snowpack": {
+    "label": "Manto nevoso"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Previsione valanghe"
   }
 }

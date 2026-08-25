@@ -22,6 +22,7 @@
     "many": "beaucoup"
   },
   "dangerRating": {
+    "label": "Degré de danger",
     "missing": "manquant",
     "missing.long": "Manquant",
     "no_snow": "pas de neige",
@@ -45,6 +46,7 @@
     "very_high.speech": "risque d'avalanche très fort, donc degré de danger 5"
   },
   "avalancheProblem": {
+    "label": "Situation avalancheuse typique",
     "new_snow": "Neige fraîche",
     "wind_slab": "Neige ventée",
     "persistent_weak_layers": "Neige ancienne (Sous-couche fragile persistante)",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "pas de situation avalancheuse typique"
   },
   "dangerPattern": {
+    "label": "Modèles de danger",
     "dp1": "md.1: sous-couche fragile persistante",
     "dp2": "md.2: neige glissante",
     "dp3": "md.3: pluie",
@@ -85,6 +88,7 @@
     "NW": "Nord-Ouest"
   },
   "tendency": {
+    "label": "Tendance",
     "decreasing": "Tendance: Diminution du danger d'avalanche",
     "steady": "Tendance: danger d'avalanche constant",
     "increasing": "Tendance: Augmentation du danger d'avalanche"
@@ -97,17 +101,19 @@
     "later": "plus tard",
     "later.long": "plus tard dans la journée"
   },
-  "headline": {
-    "tendency": "Tendance",
-    "synopsis": "Météo",
-    "dangerPatterns": "Modèles de danger",
-    "snowpack": "Manteau neigeux",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Situation avalancheuse typique",
-    "dangerRating": "Degré de danger",
-    "forecast": "Bulletin d'avalanche"
-  },
   "elevation": {
     "treeline.capitalized": "Limite de la forêt"
+  },
+  "synopsis": {
+    "label": "Météo"
+  },
+  "snowpack": {
+    "label": "Manteau neigeux"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Bulletin d'avalanche"
   }
 }

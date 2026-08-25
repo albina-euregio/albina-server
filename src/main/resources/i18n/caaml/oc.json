@@ -22,6 +22,7 @@
     "many": "Molti"
   },
   "dangerRating": {
+    "label": "Grad de perilh",
     "missing": "absent",
     "missing.long": "Absent",
     "no_snow": "sense nhèu",
@@ -45,6 +46,7 @@
     "very_high.speech": "perilh de lauegi molt fòrt, per tant nivèu de perilh cinc"
   },
   "avalancheProblem": {
+    "label": "Problèma de lauegi",
     "new_snow": "Nhèu recenta",
     "wind_slab": "Placa de vent",
     "persistent_weak_layers": "Cocha fèble persistenta",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "cap problèma de lauegi evident"
   },
   "dangerPattern": {
+    "label": "Patrons de perilh",
     "dp1": "pp.1: cocha fèbla persistena prigonda",
     "dp2": "pp.2: esguitlament de nhèu",
     "dp3": "pp.3: ploja",
@@ -85,6 +88,7 @@
     "NW": "Nòrd-oèst"
   },
   "tendency": {
+    "label": "Tendéncia",
     "decreasing": "Tendéncia: Diminucion deth perilh de lauegi",
     "steady": "Tendéncia: perilh de lauegi constant",
     "increasing": "Tendéncia: aument deth perilh de lauegi"
@@ -97,17 +101,19 @@
     "later": "tard",
     "later.long": "mès tard pendent eth dia"
   },
-  "headline": {
-    "tendency": "Tendéncia",
-    "synopsis": "Temps",
-    "dangerPatterns": "Patrons de perilh",
-    "snowpack": "Celh de nhèu",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Problèma de lauegi",
-    "dangerRating": "Grad de perilh",
-    "forecast": "Prediccion de lauegi"
-  },
   "elevation": {
     "treeline.capitalized": "Limit deth bòsc"
+  },
+  "synopsis": {
+    "label": "Temps"
+  },
+  "snowpack": {
+    "label": "Celh de nhèu"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Prediccion de lauegi"
   }
 }

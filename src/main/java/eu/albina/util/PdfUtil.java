@@ -419,7 +419,7 @@ public class PdfUtil {
 		});
 
 		avalancheBulletin.getTravelAdvisoryCommentIn(lang).ifPresent(text -> {
-			Paragraph headline = new Paragraph(lang.getCaamlBundleString("headline.travelAdvisory"))
+			Paragraph headline = new Paragraph(lang.getCaamlBundleString("travelAdvisory.label"))
 				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 				.setMultipliedLeading(leadingHeadline);
 			Cell c = new Cell(1, 1).add(headline);
@@ -458,7 +458,7 @@ public class PdfUtil {
 			if (dangerPattern1 != null || dangerPattern2 != null
 				|| snowpackStructureComment.isPresent()
 				|| snowpackStructureHighlights.isPresent()) {
-				cell = new Cell(1, 10).add(new Paragraph(lang.getCaamlBundleString("headline.snowpack"))
+				cell = new Cell(1, 10).add(new Paragraph(lang.getCaamlBundleString("snowpack.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(5)
 					.setMultipliedLeading(leadingHeadline));
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -472,7 +472,7 @@ public class PdfUtil {
 				if (dangerPattern1 != null || dangerPattern2 != null) {
 					float[] dangerPatternColumnWidths = {1, 1, 1};
 					Table dangerPatternTable = new Table(dangerPatternColumnWidths);
-					Paragraph dangerPatternHeadline = new Paragraph(lang.getCaamlBundleString("headline.dangerPatterns"))
+					Paragraph dangerPatternHeadline = new Paragraph(lang.getCaamlBundleString("dangerPattern.label"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					cell = new Cell(1, 1).add(dangerPatternHeadline);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -530,7 +530,7 @@ public class PdfUtil {
 			}
 
 			synopsisComment.ifPresent(text -> {
-				Paragraph weatherHeadline = new Paragraph(lang.getCaamlBundleString("headline.synopsis"))
+				Paragraph weatherHeadline = new Paragraph(lang.getCaamlBundleString("synopsis.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
 				Cell c = new Cell(1, 1).add(weatherHeadline);
@@ -555,7 +555,7 @@ public class PdfUtil {
 			});
 
 			tendencyComment.ifPresent(text -> {
-				Paragraph tendencyHeadline = new Paragraph(lang.getCaamlBundleString("headline.tendency"))
+				Paragraph tendencyHeadline = new Paragraph(lang.getCaamlBundleString("tendency.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
 				Cell c = new Cell(1, 1).add(tendencyHeadline);
@@ -1102,7 +1102,7 @@ public class PdfUtil {
 
 			ImageData overviewMapAMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.am));
 			Image overviewMapAMImg = new Image(overviewMapAMImageData);
-			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("headline.forecast"));
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("forecast.label"));
 			overviewMapAMImg.scaleToFit(mapWidth, 500);
 			overviewMapAMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY + mapHeight + 40);
 			canvas.add(overviewMapAMImg);
@@ -1112,7 +1112,7 @@ public class PdfUtil {
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.pm));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
-			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("headline.forecast"));
+			overviewMapAMImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("forecast.label"));
 			overviewMapPMImg.scaleToFit(mapWidth, 500);
 			overviewMapPMImg.setFixedPosition(pageSize.getWidth() / 2f - mapWidth / 2f, mapY);
 			canvas.add(overviewMapPMImg);
@@ -1122,7 +1122,7 @@ public class PdfUtil {
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.fd));
 			Image overviewMapImg = new Image(overviewMapImageData);
-			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("headline.forecast"));
+			overviewMapImg.getAccessibilityProperties().setAlternateDescription(lang.getCaamlBundleString("forecast.label"));
 			mapY = region.getPdfMapYFd();
 
 			avalancheReport.getGeneralHeadline(lang).ifPresent(text -> {

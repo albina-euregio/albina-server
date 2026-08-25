@@ -22,6 +22,7 @@
     "many": "muchas"
   },
   "dangerRating": {
+    "label": "Grados de peligro",
     "missing": "ausente",
     "missing.long": "Ausente",
     "no_snow": "sin nieve",
@@ -45,6 +46,7 @@
     "very_high.speech": "Peligro de aludes muy fuerte, por lo que el grado de peligro es cinco."
   },
   "avalancheProblem": {
+    "label": "Problema de Aludes",
     "new_snow": "Nieve reciente",
     "wind_slab": "Placa de viento",
     "persistent_weak_layers": "Capa débil persistente",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "ningún problema de aludes evidente"
   },
   "dangerPattern": {
+    "label": "Patrones de peligro",
     "dp1": "pp.1: capas débiles persistentes profundas",
     "dp2": "pp.2: deslizamientos",
     "dp3": "pp.3: lluvia",
@@ -85,6 +88,7 @@
     "NW": "Noroeste"
   },
   "tendency": {
+    "label": "Tendencia",
     "decreasing": "Tendencia: peligro de aludes en disminución",
     "steady": "Tendencia: peligro de aludes sin cambios",
     "increasing": "Tendencia: peligro de aludes en aumento"
@@ -97,17 +101,19 @@
     "later": "PM",
     "later.long": "al final del día"
   },
-  "headline": {
-    "tendency": "Tendencia",
-    "synopsis": "Tiempo",
-    "dangerPatterns": "Patrones de peligro",
-    "snowpack": "Manto nivoso",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Problema de Aludes",
-    "dangerRating": "Grados de peligro",
-    "forecast": "Predicción de Aludes"
-  },
   "elevation": {
     "treeline.capitalized": "Límite del bosque"
+  },
+  "synopsis": {
+    "label": "Tiempo"
+  },
+  "snowpack": {
+    "label": "Manto nivoso"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Predicción de Aludes"
   }
 }

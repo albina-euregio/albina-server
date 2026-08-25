@@ -22,6 +22,7 @@
     "many": "viele"
   },
   "dangerRating": {
+    "label": "Gefahrenstufe",
     "missing": "fehlt",
     "missing.long": "Fehlt",
     "no_snow": "kein Schnee",
@@ -45,6 +46,7 @@
     "very_high.speech": "sehr große Lawinengefahr, also Gefahrenstufe fünf"
   },
   "avalancheProblem": {
+    "label": "Lawinenproblem",
     "new_snow": "Neuschnee",
     "wind_slab": "Triebschnee",
     "persistent_weak_layers": "Altschnee",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "kein ausgeprägtes Lawinenproblem"
   },
   "dangerPattern": {
+    "label": "Gefahrenmuster",
     "dp1": "gm.1: bodennahe schwachschicht",
     "dp2": "gm.2: gleitschnee",
     "dp3": "gm.3: regen auf schnee",
@@ -85,6 +88,7 @@
     "NW": "Nord-West"
   },
   "tendency": {
+    "label": "Tendenz",
     "decreasing": "Tendenz: Lawinengefahr nimmt ab",
     "steady": "Tendenz: Lawinengefahr bleibt gleich",
     "increasing": "Tendenz: Lawinengefahr steigt"
@@ -97,17 +101,19 @@
     "later": "später",
     "later.long": "Später am Tag"
   },
-  "headline": {
-    "tendency": "Tendenz",
-    "synopsis": "Wetter",
-    "dangerPatterns": "Gefahrenmuster",
-    "snowpack": "Schneedecke",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Lawinenproblem",
-    "dangerRating": "Gefahrenstufe",
-    "forecast": "Lawinenvorhersage"
-  },
   "elevation": {
     "treeline.capitalized": "Waldgrenze"
+  },
+  "synopsis": {
+    "label": "Wetter"
+  },
+  "snowpack": {
+    "label": "Schneedecke"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Lawinenvorhersage"
   }
 }

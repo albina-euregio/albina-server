@@ -22,6 +22,7 @@
     "many": "moltes"
   },
   "dangerRating": {
+    "label": "Grau de perill",
     "missing": "absent",
     "missing.long": "Absent",
     "no_snow": "sense neu",
@@ -45,6 +46,7 @@
     "very_high.speech": "Perill d'allaus molt fort, doncs grau de perill cinc"
   },
   "avalancheProblem": {
+    "label": "Problema d'allaus",
     "new_snow": "Neu recent",
     "wind_slab": "Placa de vent",
     "persistent_weak_layers": "Capa feble persistent",
@@ -63,6 +65,7 @@
     "no_distinct_avalanche_problem.speech": "cap problema d'allaus evident"
   },
   "dangerPattern": {
+    "label": "Patrons de perill",
     "dp1": "pp.1: capa feble persistent",
     "dp2": "pp.2: lliscaments",
     "dp3": "pp.3: pluja",
@@ -85,6 +88,7 @@
     "NW": "Nord-Oest"
   },
   "tendency": {
+    "label": "Tendència",
     "decreasing": "Tendència: perill d'allaus en disminució",
     "steady": "Tendència: Perill d'allaus constant",
     "increasing": "Tendència: perill d'allaus en augment"
@@ -97,17 +101,19 @@
     "later": "PM",
     "later.long": "al final del dia"
   },
-  "headline": {
-    "tendency": "Tendència",
-    "synopsis": "Temps",
-    "dangerPatterns": "Patrons de perill",
-    "snowpack": "Mantell de neu",
-    "travelAdvisory": "Travel Advisory",
-    "avalancheProblem": "Problema d'allaus",
-    "dangerRating": "Grau de perill",
-    "forecast": "Predicció d'allaus"
-  },
   "elevation": {
     "treeline.capitalized": "Límit del bosc"
+  },
+  "synopsis": {
+    "label": "Temps"
+  },
+  "snowpack": {
+    "label": "Mantell de neu"
+  },
+  "travelAdvisory": {
+    "label": "Travel Advisory"
+  },
+  "forecast": {
+    "label": "Predicció d'allaus"
   }
 }

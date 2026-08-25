@@ -35,20 +35,16 @@ public class CaamlBundleSmokeTest {
 	}
 
 	@Test
-	public void testHeadlinesReadFromCaamlBundle() {
-		Assertions.assertEquals("Tendenz", LanguageCode.de.getCaamlBundleString("headline.tendency"));
-		Assertions.assertEquals("Wetter", LanguageCode.de.getCaamlBundleString("headline.synopsis"));
-		Assertions.assertEquals("Gefahrenmuster", LanguageCode.de.getCaamlBundleString("headline.dangerPatterns"));
-		Assertions.assertEquals("Schneedecke", LanguageCode.de.getCaamlBundleString("headline.snowpack"));
-		Assertions.assertEquals("Travel Advisory", LanguageCode.de.getCaamlBundleString("headline.travelAdvisory"));
-		Assertions.assertEquals("Lawinenproblem", LanguageCode.de.getCaamlBundleString("headline.avalancheProblem"));
-		Assertions.assertEquals("Gefahrenstufe", LanguageCode.de.getCaamlBundleString("headline.dangerRating"));
-		Assertions.assertEquals("Lawinenvorhersage", LanguageCode.de.getCaamlBundleString("headline.forecast"));
-		Assertions.assertEquals("Avalanche Forecast", LanguageCode.en.getCaamlBundleString("headline.forecast"));
-	}
-
-	@Test
-	public void testProblemLabelsReadFromCaamlBundle() {
+	public void testLabelsReadFromCaamlBundle() {
+		Assertions.assertEquals("Tendenz", LanguageCode.de.getCaamlBundleString("tendency.label"));
+		Assertions.assertEquals("Wetter", LanguageCode.de.getCaamlBundleString("synopsis.label"));
+		Assertions.assertEquals("Gefahrenmuster", LanguageCode.de.getCaamlBundleString("dangerPattern.label"));
+		Assertions.assertEquals("Schneedecke", LanguageCode.de.getCaamlBundleString("snowpack.label"));
+		Assertions.assertEquals("Travel Advisory", LanguageCode.de.getCaamlBundleString("travelAdvisory.label"));
+		Assertions.assertEquals("Lawinenproblem", LanguageCode.de.getCaamlBundleString("avalancheProblem.label"));
+		Assertions.assertEquals("Gefahrenstufe", LanguageCode.de.getCaamlBundleString("dangerRating.label"));
+		Assertions.assertEquals("Lawinenvorhersage", LanguageCode.de.getCaamlBundleString("forecast.label"));
+		Assertions.assertEquals("Avalanche Forecast", LanguageCode.en.getCaamlBundleString("forecast.label"));
 		Assertions.assertEquals("Schneedeckenstabilität", LanguageCode.de.getCaamlBundleString("snowpackStability.label"));
 		Assertions.assertEquals("Gefahrenstellen", LanguageCode.de.getCaamlBundleString("frequency.label"));
 		Assertions.assertEquals("Lawinengröße", LanguageCode.de.getCaamlBundleString("avalancheSize.label"));
