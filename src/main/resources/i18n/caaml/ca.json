@@ -93,5 +93,12 @@
     "earlier.long": "a primera hora",
     "later": "PM",
     "later.long": "al final del dia"
+  },
+  "headline": {
+    "tendency": "Tendència",
+    "synopsis": "Temps",
+    "dangerPatterns": "Patrons de perill",
+    "snowpack": "Mantell de neu",
+    "travelAdvisory": "Travel Advisory"
   }
 }

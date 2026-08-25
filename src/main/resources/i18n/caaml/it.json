@@ -93,5 +93,12 @@
     "earlier.long": "nella prima parte della giornata",
     "later": "più tardi",
     "later.long": "più tardi nella giornata"
+  },
+  "headline": {
+    "tendency": "Tendenza",
+    "synopsis": "Meteo",
+    "dangerPatterns": "Situazione tipo",
+    "snowpack": "Manto nevoso",
+    "travelAdvisory": "Travel Advisory"
   }
 }

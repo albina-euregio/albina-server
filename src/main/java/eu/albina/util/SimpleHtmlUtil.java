@@ -117,12 +117,12 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">%s\n</h3>\n", bulletin.getHighlightsIn(lang).orElse(""));
 		pw.format("<h3>%s\n</h3>\n", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
 		pw.format("<p>%s\n</p>\n", bulletin.getAvActivityCommentIn(lang).orElse(""));
-		pw.format("<h3>%s\n</h3>\n", lang.getBundleString("headline.snowpack"));
+		pw.format("<h3>%s\n</h3>\n", lang.getCaamlBundleString("headline.snowpack"));
 		String dangerPattern1 = bulletin.getDangerPattern1() != null ? bulletin.getDangerPattern1().toString(lang.getLocale()) + "<br>" : "";
 		String dangerPattern2 = bulletin.getDangerPattern2() != null ? bulletin.getDangerPattern2().toString(lang.getLocale()) + "<br>" : "";
 		pw.format("<p>%s%s\n</p>\n", dangerPattern1, dangerPattern2);
 		pw.format("<p>%s\n</p>\n", bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
-		pw.format("<h3>%s\n</h3>\n", lang.getBundleString("headline.tendency"));
+		pw.format("<h3>%s\n</h3>\n", lang.getCaamlBundleString("headline.tendency"));
 		pw.format("<p>%s\n</p>\n", bulletin.getTendencyCommentIn(lang).orElse(""));
 		pw.format("</article>\n");
 	}

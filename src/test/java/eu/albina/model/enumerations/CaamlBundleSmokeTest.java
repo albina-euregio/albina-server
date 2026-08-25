@@ -33,4 +33,13 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("Später am Tag", LanguageCode.de.getCaamlBundleString("validTimePeriod.later.long"));
 		Assertions.assertEquals("earlier", LanguageCode.en.getCaamlBundleString("validTimePeriod.earlier"));
 	}
+
+	@Test
+	public void testHeadlinesReadFromCaamlBundle() {
+		Assertions.assertEquals("Tendenz", LanguageCode.de.getCaamlBundleString("headline.tendency"));
+		Assertions.assertEquals("Wetter", LanguageCode.de.getCaamlBundleString("headline.synopsis"));
+		Assertions.assertEquals("Gefahrenmuster", LanguageCode.de.getCaamlBundleString("headline.dangerPatterns"));
+		Assertions.assertEquals("Schneedecke", LanguageCode.de.getCaamlBundleString("headline.snowpack"));
+		Assertions.assertEquals("Travel Advisory", LanguageCode.de.getCaamlBundleString("headline.travelAdvisory"));
+	}
 }

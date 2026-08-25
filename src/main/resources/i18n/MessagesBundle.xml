@@ -16,13 +16,8 @@
   <entry key="social-media.message.update">UPDATE on {0} for {1}: {2}</entry>
   <entry key="headline">Avalanche Forecast</entry>
   <entry key="headline.update">UPDATE on Avalanche Forecast </entry>
-  <entry key="headline.tendency">Tendency</entry>
-  <entry key="headline.travelAdvisory">Travel Advisory</entry>
-  <entry key="headline.synopsis">Weather</entry>
   <entry key="headline.avalanche-problem">Avalanche Problem</entry>
-  <entry key="headline.danger-patterns">Danger patterns</entry>
-  <entry key="headline.snowpack">Snowpack</entry>
-  <entry key="headline.danger-rating">Danger level</entry>
+  <entry key="headline.danger-rating">Danger rating</entry>
   <entry key="tendency.binding-word">on </entry>
   <entry key="email.unsubscribe">Unsubscribe</entry>
   <entry key="email.subject">{0} for {1}, </entry>

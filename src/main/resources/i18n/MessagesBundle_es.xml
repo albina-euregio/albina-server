@@ -16,11 +16,7 @@
   <entry key="social-media.message.update">ACTUALIZACIÓN en {0} por {1}: {2}</entry>
   <entry key="headline">Predicción de Aludes</entry>
   <entry key="headline.update">ACTUALIZACIÓN sobre la Predicción de Aludes</entry>
-  <entry key="headline.tendency">Tendencia</entry>
-  <entry key="headline.synopsis">Tiempo</entry>
   <entry key="headline.avalanche-problem">Problema de Aludes</entry>
-  <entry key="headline.danger-patterns">Patrones de peligro</entry>
-  <entry key="headline.snowpack">Manto nivoso</entry>
   <entry key="headline.danger-rating">Grados de peligro</entry>
   <entry key="tendency.binding-word">en</entry>
   <entry key="email.unsubscribe">Cancela la suscripción</entry>

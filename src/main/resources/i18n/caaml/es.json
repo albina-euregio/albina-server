@@ -93,5 +93,12 @@
     "earlier.long": "al inicio del día",
     "later": "PM",
     "later.long": "al final del día"
+  },
+  "headline": {
+    "tendency": "Tendencia",
+    "synopsis": "Tiempo",
+    "dangerPatterns": "Patrones de peligro",
+    "snowpack": "Manto nivoso",
+    "travelAdvisory": "Travel Advisory"
   }
 }

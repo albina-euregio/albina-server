@@ -354,16 +354,16 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent();
 		boolean hasDangerPatterns = dangerPattern1 != null || dangerPattern2 != null;
 
-		String snowpackStructureHeadline = hasStructure ? lang.getBundleString("headline.snowpack") : "";
+		String snowpackStructureHeadline = hasStructure ? lang.getCaamlBundleString("headline.snowpack") : "";
 		String snowpackStructureCommentText = hasStructure ? snowpackStructureComment.orElse("") : "";
-		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getBundleString("headline.danger-patterns") : "";
+		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getCaamlBundleString("headline.dangerPatterns") : "";
 		String dangerPattern1Text = hasStructure && hasDangerPatterns && dangerPattern1 != null ? dangerPattern1.toString(lang.getLocale()) : "";
 		String dangerPatternLink1 = hasStructure && hasDangerPatterns && dangerPattern1 != null ? getDangerPatternLink(lang, region, dangerPattern1) : "";
 		String dangerPatternStyle1 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern1 != null);
 		String dangerPattern2Text = hasStructure && hasDangerPatterns && dangerPattern2 != null ? dangerPattern2.toString(lang.getLocale()) : "";
 		String dangerPatternLink2 = hasStructure && hasDangerPatterns && dangerPattern2 != null ? getDangerPatternLink(lang, region, dangerPattern2) : "";
 		String dangerPatternStyle2 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern2 != null);
-		String tendencyHeadline = tendencyComment.isPresent() ? lang.getBundleString("headline.tendency") : "";
+		String tendencyHeadline = tendencyComment.isPresent() ? lang.getCaamlBundleString("headline.tendency") : "";
 		String tendencyCommentText = tendencyComment.orElse("");
 
 		pw.format("<table %s>", getSnowpackStyle(hasSnowpackSection));
@@ -380,7 +380,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</a>");
 		pw.format("<p class=\"\">%s</p>", snowpackStructureCommentText);
 		if (hasSnowpackSection && synopsisComment.isPresent()) {
-			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getBundleString("headline.synopsis"));
+			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("headline.synopsis"));
 			pw.format("<p class=\"\">%s</p>", synopsisComment.get());
 		}
 		pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", tendencyHeadline);

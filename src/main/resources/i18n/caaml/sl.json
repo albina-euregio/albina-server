@@ -93,5 +93,12 @@
     "earlier.long": "dopoldne",
     "later": "popoldne",
     "later.long": "popoldne"
+  },
+  "headline": {
+    "tendency": "Obeti",
+    "synopsis": "Vreme",
+    "dangerPatterns": "Vzorci nevarnosti",
+    "snowpack": "Snežna odeja",
+    "travelAdvisory": "Travel Advisory"
   }
 }

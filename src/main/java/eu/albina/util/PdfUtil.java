@@ -419,7 +419,7 @@ public class PdfUtil {
 		});
 
 		avalancheBulletin.getTravelAdvisoryCommentIn(lang).ifPresent(text -> {
-			Paragraph headline = new Paragraph(lang.getBundleString("headline.travelAdvisory"))
+			Paragraph headline = new Paragraph(lang.getCaamlBundleString("headline.travelAdvisory"))
 				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 				.setMultipliedLeading(leadingHeadline);
 			Cell c = new Cell(1, 1).add(headline);
@@ -458,7 +458,7 @@ public class PdfUtil {
 			if (dangerPattern1 != null || dangerPattern2 != null
 				|| snowpackStructureComment.isPresent()
 				|| snowpackStructureHighlights.isPresent()) {
-				cell = new Cell(1, 10).add(new Paragraph(lang.getBundleString("headline.snowpack"))
+				cell = new Cell(1, 10).add(new Paragraph(lang.getCaamlBundleString("headline.snowpack"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(5)
 					.setMultipliedLeading(leadingHeadline));
 				cell.setTextAlignment(TextAlignment.LEFT);
@@ -472,7 +472,7 @@ public class PdfUtil {
 				if (dangerPattern1 != null || dangerPattern2 != null) {
 					float[] dangerPatternColumnWidths = {1, 1, 1};
 					Table dangerPatternTable = new Table(dangerPatternColumnWidths);
-					Paragraph dangerPatternHeadline = new Paragraph(lang.getBundleString("headline.danger-patterns"))
+					Paragraph dangerPatternHeadline = new Paragraph(lang.getCaamlBundleString("headline.dangerPatterns"))
 						.setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
 					cell = new Cell(1, 1).add(dangerPatternHeadline);
 					cell.setTextAlignment(TextAlignment.LEFT);
@@ -530,7 +530,7 @@ public class PdfUtil {
 			}
 
 			synopsisComment.ifPresent(text -> {
-				Paragraph weatherHeadline = new Paragraph(lang.getBundleString("headline.synopsis"))
+				Paragraph weatherHeadline = new Paragraph(lang.getCaamlBundleString("headline.synopsis"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
 				Cell c = new Cell(1, 1).add(weatherHeadline);
@@ -555,7 +555,7 @@ public class PdfUtil {
 			});
 
 			tendencyComment.ifPresent(text -> {
-				Paragraph tendencyHeadline = new Paragraph(lang.getBundleString("headline.tendency"))
+				Paragraph tendencyHeadline = new Paragraph(lang.getCaamlBundleString("headline.tendency"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
 				Cell c = new Cell(1, 1).add(tendencyHeadline);

@@ -93,5 +93,12 @@
     "earlier.long": "plus tôt dans la journée",
     "later": "plus tard",
     "later.long": "plus tard dans la journée"
+  },
+  "headline": {
+    "tendency": "Tendance",
+    "synopsis": "Météo",
+    "dangerPatterns": "Modèles de danger",
+    "snowpack": "Manteau neigeux",
+    "travelAdvisory": "Travel Advisory"
   }
 }

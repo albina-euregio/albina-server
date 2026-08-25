@@ -16,11 +16,7 @@
   <entry key="social-media.message.update">ACTUALITZACIÓ en {0} per {1}: {2}</entry>
   <entry key="headline">Predicció d'allaus</entry>
   <entry key="headline.update">ACTUALITZACIÓ Predicció d'allaus</entry>
-  <entry key="headline.tendency">Tendència</entry>
-  <entry key="headline.synopsis">Temps</entry>
   <entry key="headline.avalanche-problem">Problema d'allaus</entry>
-  <entry key="headline.danger-patterns">Patrons de perill</entry>
-  <entry key="headline.snowpack">Mantell de neu</entry>
   <entry key="headline.danger-rating">Grau de perill</entry>
   <entry key="tendency.binding-word">en</entry>
   <entry key="email.unsubscribe">Cancel·la subscripció</entry>

@@ -93,5 +93,12 @@
     "earlier.long": "Früher am Tag",
     "later": "später",
     "later.long": "Später am Tag"
+  },
+  "headline": {
+    "tendency": "Tendenz",
+    "synopsis": "Wetter",
+    "dangerPatterns": "Gefahrenmuster",
+    "snowpack": "Schneedecke",
+    "travelAdvisory": "Travel Advisory"
   }
 }
