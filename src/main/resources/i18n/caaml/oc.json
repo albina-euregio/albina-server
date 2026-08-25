@@ -85,5 +85,13 @@
     "decreasing": "Tendéncia: Diminucion deth perilh de lauegi",
     "steady": "Tendéncia: perilh de lauegi constant",
     "increasing": "Tendéncia: aument deth perilh de lauegi"
+  },
+  "validTimePeriod": {
+    "all_day": "tot eth dia",
+    "all_day.long": "tot eth dia",
+    "earlier": "mès lèu",
+    "earlier.long": "mès lèu pendent eth dia",
+    "later": "tard",
+    "later.long": "mès tard pendent eth dia"
   }
 }

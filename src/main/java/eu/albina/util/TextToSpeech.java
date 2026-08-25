@@ -153,7 +153,7 @@ public class TextToSpeech {
 		private String aspectsText(List<Aspect> aspects) {
 			List<String> texts = sortAspects(aspects).stream()
 				.map(Aspect::name)
-				.map(name -> lang.getBundle("i18n.caaml").getString("aspect." + name))
+				.map(name -> lang.getCaamlBundleString("aspect." + name))
 				.toList();
 			return switch (texts.size()) {
 				case 0 -> lang.getBundleString("speech.aspects.0");
@@ -203,7 +203,7 @@ public class TextToSpeech {
 		}
 
 		private String avalancheProblemTypeText(AvalancheProblemType problemType) {
-			return lang.getBundle("i18n.caaml").getString("avalancheProblem." + problemType.name() + ".speech");
+			return lang.getCaamlBundleString("avalancheProblem." + problemType.name() + ".speech");
 		}
 
 		private Stream<String> dangerRatingTexts(List<DangerRating> dangerRatings) {
@@ -239,7 +239,7 @@ public class TextToSpeech {
 		}
 
 		private String dangerRatingValueText(DangerRatingValue mainValue) {
-			return lang.getBundle("i18n.caaml").getString("dangerRating." + mainValue.name() + ".speech");
+			return lang.getCaamlBundleString("dangerRating." + mainValue.name() + ".speech");
 		}
 
 		private String elevationText(String elevation) {
@@ -249,7 +249,7 @@ public class TextToSpeech {
 		}
 
 		private String validTimePeriodText(ValidTimePeriod validTimePeriod) {
-			return lang.getBundleString("valid-time-period." + validTimePeriod.name() + ".long");
+			return lang.getCaamlBundleString("validTimePeriod." + validTimePeriod.name() + ".long");
 		}
 
 		private void dangerPatterns() {

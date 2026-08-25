@@ -85,5 +85,13 @@
     "decreasing": "Tendència: perill d'allaus en disminució",
     "steady": "Tendència: Perill d'allaus constant",
     "increasing": "Tendència: perill d'allaus en augment"
+  },
+  "validTimePeriod": {
+    "all_day": "dia sencer",
+    "all_day.long": "dia sencer",
+    "earlier": "AM",
+    "earlier.long": "a primera hora",
+    "later": "PM",
+    "later.long": "al final del dia"
   }
 }

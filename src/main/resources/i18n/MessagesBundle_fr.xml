@@ -46,12 +46,6 @@
   <entry key="problem.snowpack-stability">Stabilité du manteau neigeux</entry>
   <entry key="problem.frequency">Fréquence</entry>
   <entry key="problem.avalanche-size">Taille d'avalanche</entry>
-  <entry key="valid-time-period.all_day">toute la journée</entry>
-  <entry key="valid-time-period.all_day.long">toute la journée</entry>
-  <entry key="valid-time-period.earlier">plus tôt</entry>
-  <entry key="valid-time-period.earlier.long">plus tôt dans la journée</entry>
-  <entry key="valid-time-period.later">plus tard</entry>
-  <entry key="valid-time-period.later.long">plus tard dans la journée</entry>
   <entry key="speech.bulletin.update">Mise à jour des prévisions d'avalanches pour {validityDate}.</entry>
   <entry key="speech.bulletin">Prévisions d'avalanches pour {validityDate}.</entry>
   <entry key="speech.furthermore">En outre, {text}</entry>

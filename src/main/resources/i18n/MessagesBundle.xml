@@ -47,12 +47,6 @@
   <entry key="problem.snowpack-stability">Snowpack stability</entry>
   <entry key="problem.frequency">Frequency</entry>
   <entry key="problem.avalanche-size">Avalanche size</entry>
-  <entry key="valid-time-period.all_day">all day</entry>
-  <entry key="valid-time-period.all_day.long">all day</entry>
-  <entry key="valid-time-period.earlier">earlier</entry>
-  <entry key="valid-time-period.earlier.long">earlier in the day</entry>
-  <entry key="valid-time-period.later">later</entry>
-  <entry key="valid-time-period.later.long">later in the day</entry>
 
   <entry key="speech.bulletin.update">Update of the avalanche forecast for {validityDate}.</entry>
   <entry key="speech.bulletin">Avalanche forecast for {validityDate}.</entry>

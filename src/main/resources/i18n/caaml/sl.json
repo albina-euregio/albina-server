@@ -85,5 +85,13 @@
     "decreasing": "Obeti: Zmanjšana plazovne nevarnosti",
     "steady": "Obeti: Nespremenjena plazovna nevarnost",
     "increasing": "Obeti: Povečana plazovna nevarnost"
+  },
+  "validTimePeriod": {
+    "all_day": "cel dan",
+    "all_day.long": "cel dan",
+    "earlier": "dopoldne",
+    "earlier.long": "dopoldne",
+    "later": "popoldne",
+    "later.long": "popoldne"
   }
 }

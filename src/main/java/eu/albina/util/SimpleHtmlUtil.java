@@ -108,8 +108,8 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("<article>\n");
 		pw.format("<p>\n");
 		if (bulletin.isHasDaytimeDependency()) {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getBundleString("valid-time-period.earlier").toUpperCase() + "</b><br>");
-			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getBundleString("valid-time-period.later").toUpperCase() + "</b><br>");
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getCaamlBundleString("validTimePeriod.earlier").toUpperCase() + "</b><br>");
+			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getCaamlBundleString("validTimePeriod.later").toUpperCase() + "</b><br>");
 		} else {
 			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, "");
 		}

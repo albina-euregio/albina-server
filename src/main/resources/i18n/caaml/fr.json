@@ -85,5 +85,13 @@
     "decreasing": "Tendance: Diminution du danger d'avalanche",
     "steady": "Tendance: danger d'avalanche constant",
     "increasing": "Tendance: Augmentation du danger d'avalanche"
+  },
+  "validTimePeriod": {
+    "all_day": "toute la journée",
+    "all_day.long": "toute la journée",
+    "earlier": "plus tôt",
+    "earlier.long": "plus tôt dans la journée",
+    "later": "plus tard",
+    "later.long": "plus tard dans la journée"
   }
 }

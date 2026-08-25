@@ -311,7 +311,7 @@ public class PdfUtil {
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			secondColumnWidths = new float[]{1, 1};
 			Table secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			Paragraph am = new Paragraph(lang.getBundleString("valid-time-period.earlier"))
+			Paragraph am = new Paragraph(lang.getCaamlBundleString("validTimePeriod.earlier"))
 				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
 			cell = new Cell(2, 1).add(am);
 			cell.setBorder(Border.NO_BORDER);
@@ -343,7 +343,7 @@ public class PdfUtil {
 
 			secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			secondTable.setBorderTop(new SolidBorder(blackColor, 1));
-			Paragraph pm = new Paragraph(lang.getBundleString("valid-time-period.later"))
+			Paragraph pm = new Paragraph(lang.getCaamlBundleString("validTimePeriod.later"))
 				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
 			cell = new Cell(2, 1).add(pm);
 			cell.setBorder(Border.NO_BORDER);
@@ -1108,7 +1108,7 @@ public class PdfUtil {
 			canvas.add(overviewMapAMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2f - 240, mapY + mapHeight * 2 + 50).setColor(blackColor, true)
-					.showText(lang.getBundleString("valid-time-period.earlier")).endText();
+					.showText(lang.getCaamlBundleString("validTimePeriod.earlier")).endText();
 
 			ImageData overviewMapPMImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.pm));
 			Image overviewMapPMImg = new Image(overviewMapPMImageData);
@@ -1118,7 +1118,7 @@ public class PdfUtil {
 			canvas.add(overviewMapPMImg);
 			pdfCanvas.beginText().setFontAndSize(openSansBoldFont, 14)
 					.moveText(pageSize.getWidth() / 2f - 240, mapY + mapHeight + 10).setColor(blackColor, true)
-					.showText(lang.getBundleString("valid-time-period.later")).endText();
+					.showText(lang.getCaamlBundleString("validTimePeriod.later")).endText();
 		} else {
 			ImageData overviewMapImageData = ImageDataFactory.create(getMapImage(DaytimeDependency.fd));
 			Image overviewMapImg = new Image(overviewMapImageData);

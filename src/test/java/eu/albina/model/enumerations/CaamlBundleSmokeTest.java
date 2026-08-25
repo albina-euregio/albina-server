@@ -26,4 +26,11 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("erheblich", DangerRating.considerable.toString(Locale.GERMAN, false));
 		Assertions.assertEquals("Gefahrenstufe 3 - Erheblich", DangerRating.considerable.toString(Locale.GERMAN, true));
 	}
+
+	@Test
+	public void testValidTimePeriodReadsFromCaamlBundle() {
+		Assertions.assertEquals("früher", LanguageCode.de.getCaamlBundleString("validTimePeriod.earlier"));
+		Assertions.assertEquals("Später am Tag", LanguageCode.de.getCaamlBundleString("validTimePeriod.later.long"));
+		Assertions.assertEquals("earlier", LanguageCode.en.getCaamlBundleString("validTimePeriod.earlier"));
+	}
 }

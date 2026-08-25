@@ -85,5 +85,13 @@
     "decreasing": "Tendenza: pericolo valanghe in diminuzione",
     "steady": "Tendenza: pericolo valanghe stabile",
     "increasing": "Tendenza: pericolo valanghe in aumento"
+  },
+  "validTimePeriod": {
+    "all_day": "tutto il giorno",
+    "all_day.long": "tutto il giorno",
+    "earlier": "prima parte",
+    "earlier.long": "nella prima parte della giornata",
+    "later": "più tardi",
+    "later.long": "più tardi nella giornata"
   }
 }

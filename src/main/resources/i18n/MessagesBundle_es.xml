@@ -46,12 +46,6 @@
   <entry key="problem.snowpack-stability">Estabilidad del manto de nieve</entry>
   <entry key="problem.frequency">Frecuencia</entry>
   <entry key="problem.avalanche-size">Tamaño del alud</entry>
-  <entry key="valid-time-period.all_day">día entero</entry>
-  <entry key="valid-time-period.all_day.long">día entero</entry>
-  <entry key="valid-time-period.earlier">AM</entry>
-  <entry key="valid-time-period.earlier.long">al inicio del día</entry>
-  <entry key="valid-time-period.later">PM</entry>
-  <entry key="valid-time-period.later.long">al final del día</entry>
   <entry key="speech.bulletin.update">Actualización del boletín de aludes para {validityDate}.</entry>
   <entry key="speech.bulletin">Boletín de aludes para {validityDate}.</entry>
   <entry key="speech.furthermore">Además, {text}</entry>

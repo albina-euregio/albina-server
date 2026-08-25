@@ -46,12 +46,6 @@
   <entry key="problem.snowpack-stability">Stabilnost snežne odeje</entry>
   <entry key="problem.frequency">Pogostost</entry>
   <entry key="problem.avalanche-size">Velikost plazu</entry>
-  <entry key="valid-time-period.all_day">cel dan</entry>
-  <entry key="valid-time-period.all_day.long">cel dan</entry>
-  <entry key="valid-time-period.earlier">dopoldne</entry>
-  <entry key="valid-time-period.earlier.long">dopoldne</entry>
-  <entry key="valid-time-period.later">popoldne</entry>
-  <entry key="valid-time-period.later.long">popoldne</entry>
   <entry key="speech.bulletin.update">Posodobitev plazovne napovedi za {validityDate}.</entry>
   <entry key="speech.bulletin">Plazovna napoved za {validityDate}.</entry>
   <entry key="speech.furthermore">Poleg tega, {text}</entry>

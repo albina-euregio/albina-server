@@ -59,8 +59,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String headline = avalancheReport.getStatus() == BulletinStatus.republished
 			? lang.getBundleString("headline.update")
 			: lang.getBundleString("headline");
-		String textAm = daytime ? lang.getBundleString("valid-time-period.earlier") : "";
-		String textPm = daytime ? lang.getBundleString("valid-time-period.later") : "";
+		String textAm = daytime ? lang.getCaamlBundleString("validTimePeriod.earlier") : "";
+		String textPm = daytime ? lang.getCaamlBundleString("validTimePeriod.later") : "";
 		String overview = daytime
 			? mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.am, false)
 			: mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false);
@@ -401,7 +401,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		boolean bulletinDaytime = bulletin.isHasDaytimeDependency();
 
 		String text = bulletinDaytime
-			? lang.getBundleString(pm ? "valid-time-period.later" : "valid-time-period.earlier")
+			? lang.getCaamlBundleString(pm ? "validTimePeriod.later" : "validTimePeriod.earlier")
 			: "";
 		// when there is no daytime dependency, the afternoon block reuses the forenoon description and its map
 		AvalancheBulletinDaytimeDescription description = pm && bulletinDaytime ? bulletin.getAfternoon() : bulletin.getForenoon();

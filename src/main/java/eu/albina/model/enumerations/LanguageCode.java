@@ -96,6 +96,10 @@ public enum LanguageCode {
 		return getBundle("i18n.MessagesBundle").getString(key);
 	}
 
+	public String getCaamlBundleString(String key) {
+		return getBundle("i18n.caaml").getString(key);
+	}
+
 	public String getBundleString(String key, Map<String, String> replacements) {
 		String bundleString = getBundleString(key);
 		for (Map.Entry<String, String> replacement : replacements.entrySet()) {

@@ -85,5 +85,13 @@
     "decreasing": "Tendencia: peligro de aludes en disminución",
     "steady": "Tendencia: peligro de aludes sin cambios",
     "increasing": "Tendencia: peligro de aludes en aumento"
+  },
+  "validTimePeriod": {
+    "all_day": "día entero",
+    "all_day.long": "día entero",
+    "earlier": "AM",
+    "earlier.long": "al inicio del día",
+    "later": "PM",
+    "later.long": "al final del día"
   }
 }

@@ -85,5 +85,13 @@
     "decreasing": "Tendency: Decreasing avalanche danger",
     "steady": "Tendency: Constant avalanche danger",
     "increasing": "Tendency: Increasing avalanche danger"
+  },
+  "validTimePeriod": {
+    "all_day": "all day",
+    "all_day.long": "all day",
+    "earlier": "earlier",
+    "earlier.long": "earlier in the day",
+    "later": "later",
+    "later.long": "later in the day"
   }
 }

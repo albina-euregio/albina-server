@@ -46,12 +46,6 @@
   <entry key="problem.snowpack-stability">Stabilità del manto nevoso</entry>
   <entry key="problem.frequency">Punti pericolosi</entry>
   <entry key="problem.avalanche-size">Dimensione valanga</entry>
-  <entry key="valid-time-period.all_day">tutto il giorno</entry>
-  <entry key="valid-time-period.all_day.long">tutto il giorno</entry>
-  <entry key="valid-time-period.earlier">prima parte</entry>
-  <entry key="valid-time-period.earlier.long">nella prima parte della giornata</entry>
-  <entry key="valid-time-period.later">più tardi</entry>
-  <entry key="valid-time-period.later.long">più tardi nella giornata</entry>
   <entry key="speech.bulletin.update">Aggiornamento del bollettino valanghe per {validityDate}.</entry>
   <entry key="speech.bulletin">Bollettino valanghe per {validityDate}.</entry>
   <entry key="speech.furthermore">Inoltre, {text}</entry>

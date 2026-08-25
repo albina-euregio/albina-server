@@ -46,12 +46,6 @@
   <entry key="problem.snowpack-stability">Estabilitat del mantell de neu</entry>
   <entry key="problem.frequency">freqüència</entry>
   <entry key="problem.avalanche-size">Mida d'allau</entry>
-  <entry key="valid-time-period.all_day">dia sencer</entry>
-  <entry key="valid-time-period.all_day.long">dia sencer</entry>
-  <entry key="valid-time-period.earlier">AM</entry>
-  <entry key="valid-time-period.earlier.long">a primera hora</entry>
-  <entry key="valid-time-period.later">PM</entry>
-  <entry key="valid-time-period.later.long">al final del dia</entry>
   <entry key="speech.bulletin.update">Actualització del butlletí d'allaus per {validityDate}.</entry>
   <entry key="speech.bulletin">Butlletí d'allaus per {validityDate}.</entry>
   <entry key="speech.furthermore">A més, {text}</entry>

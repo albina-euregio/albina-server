@@ -46,12 +46,6 @@
   <entry key="problem.snowpack-stability">Estabilitat deth celh de nhèu</entry>
   <entry key="problem.frequency">Frecuéncia</entry>
   <entry key="problem.avalanche-size">Mesura de lauet</entry>
-  <entry key="valid-time-period.all_day">tot eth dia</entry>
-  <entry key="valid-time-period.all_day.long">tot eth dia</entry>
-  <entry key="valid-time-period.earlier">mès lèu</entry>
-  <entry key="valid-time-period.earlier.long">mès lèu pendent eth dia</entry>
-  <entry key="valid-time-period.later">tard</entry>
-  <entry key="valid-time-period.later.long">mès tard pendent eth dia</entry>
   <entry key="speech.bulletin.update">Actualizacion deth bulletin de lauegi per {validityDate}.</entry>
   <entry key="speech.bulletin">Bulletin de lauegi per {validityDate}.</entry>
   <entry key="speech.furthermore">Ath delà, {text}</entry>
