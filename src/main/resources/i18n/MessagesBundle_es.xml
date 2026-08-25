@@ -5,13 +5,6 @@
   <entry key="preview"> - VISTA PREVIA</entry>
   <entry key="standard.link.text">Cargar vista estandar</entry>
   <entry key="danger-rating.elevation">{0} por debajo de {1}, {2} por encima de {3}</entry>
-  <entry key="ext-file.regions.description">GeoJSON por regiones({0})</entry>
-  <entry key="ext-file.thumbnail.description">Mapa simplificado de grados de peligro de aludes de la región</entry>
-  <entry key="ext-file.simple-link.description">Enlace a la web simplificada</entry>
-  <entry key="ext-file.map.description">Mapa de grados de peligro {0} ({1})</entry>
-  <entry key="ext-file.overlay.description">Superposición de grados de peligro ({0})</entry>
-  <entry key="ext-file.website-link.description">Enlace a la web</entry>
-  <entry key="ext-file.region-link.description">Enlace a la región en la web</entry>
   <entry key="elevation.treeline">límite del bosque</entry>
   <entry key="elevation.treeline.capitalized">Límite del bosque</entry>
   <entry key="elevation.all">Todas las elevaciones</entry>

@@ -5,13 +5,6 @@
   <entry key="preview"> - PREDOGLED</entry>
   <entry key="standard.link.text">Naloži običajen pogled</entry>
   <entry key="danger-rating.elevation">{0} pod {1}, {2} nad {3}</entry>
-  <entry key="ext-file.regions.description">GeoJSON mikroregij ({0})</entry>
-  <entry key="ext-file.thumbnail.description">Zemljevid poenostavljenih stopenj nevarnosti v regiji</entry>
-  <entry key="ext-file.simple-link.description">Povezava na poenostavljeno spletno stran</entry>
-  <entry key="ext-file.map.description">Zemljevid stopenj nevarnosti {0} ({1})</entry>
-  <entry key="ext-file.overlay.description">Sloj stopenj nevarnosti ({0})</entry>
-  <entry key="ext-file.website-link.description">Povezava na spletno stran</entry>
-  <entry key="ext-file.region-link.description">Povezava na regijo na spletni strani</entry>
   <entry key="elevation.treeline">gozdna meja</entry>
   <entry key="elevation.treeline.capitalized">Gozdna meja</entry>
   <entry key="elevation.all">Na vseh višinah</entry>

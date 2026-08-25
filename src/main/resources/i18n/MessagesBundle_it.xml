@@ -5,13 +5,6 @@
   <entry key="preview">  - ANTEPRIMA</entry>
   <entry key="standard.link.text">Vista standard del carico</entry>
   <entry key="danger-rating.elevation">{0} sotto i {1}, {2} sopra i {3}</entry>
-  <entry key="ext-file.regions.description">GeoJSON per le regioni ({0})</entry>
-  <entry key="ext-file.thumbnail.description">Mappa di classificazione del pericolo semplificata della regione</entry>
-  <entry key="ext-file.simple-link.description">Link al sito web semplificato</entry>
-  <entry key="ext-file.map.description">Mappa di valutazione del pericolo {0} ({1})</entry>
-  <entry key="ext-file.overlay.description">Sovrapposizione della valutazione del pericolo ({0})</entry>
-  <entry key="ext-file.website-link.description">Link al sito web</entry>
-  <entry key="ext-file.region-link.description">Link alla regione sul sito web</entry>
   <entry key="elevation.treeline">limite del bosco</entry>
   <entry key="elevation.treeline.capitalized">Limite del bosco</entry>
   <entry key="elevation.all">Tutte le quote</entry>

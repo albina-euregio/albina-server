@@ -5,13 +5,6 @@
   <entry key="preview"> - VORSCHAU</entry>
   <entry key="standard.link.text">Standardansicht laden</entry>
   <entry key="danger-rating.elevation">{0} unter {1}, {2} über {3}</entry>
-  <entry key="ext-file.regions.description">GeoJSON für Regionen ({0})</entry>
-  <entry key="ext-file.thumbnail.description">Vereinfachte Gefahrenstufenkarte der Region</entry>
-  <entry key="ext-file.simple-link.description">Link zur vereinfachten Webseite</entry>
-  <entry key="ext-file.map.description">Gefahrenstufenkarte {0} ({1})</entry>
-  <entry key="ext-file.overlay.description">Gefahrenstufen Overlay ({0})</entry>
-  <entry key="ext-file.website-link.description">Link zur Webseite</entry>
-  <entry key="ext-file.region-link.description">Link zur Region auf der Webseite</entry>
   <entry key="elevation.treeline">Waldgrenze</entry>
   <entry key="elevation.treeline.capitalized">Waldgrenze</entry>
   <entry key="elevation.all">Alle Höhenlagen</entry>

@@ -5,13 +5,6 @@
   <entry key="preview"> - PREVIEW</entry>
   <entry key="standard.link.text">Load standard view</entry>
   <entry key="danger-rating.elevation">{0} below {1}, {2} above {3}</entry>
-  <entry key="ext-file.regions.description">GeoJSON for regions ({0})</entry>
-  <entry key="ext-file.thumbnail.description">Simplified danger rating map of the region</entry>
-  <entry key="ext-file.simple-link.description">Link to the simplified website</entry>
-  <entry key="ext-file.map.description">Danger rating map {0} ({1})</entry>
-  <entry key="ext-file.overlay.description">Danger rating overlay ({0})</entry>
-  <entry key="ext-file.website-link.description">Link to website</entry>
-  <entry key="ext-file.region-link.description">Link to region on the website</entry>
   <entry key="elevation.treeline">treeline</entry>
   <entry key="elevation.treeline.capitalized">Treeline</entry>
   <entry key="elevation.all">All elevations</entry>

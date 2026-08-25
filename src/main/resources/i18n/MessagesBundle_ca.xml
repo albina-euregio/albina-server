@@ -5,13 +5,6 @@
   <entry key="preview"> - PREVISUALITZACIÓ</entry>
   <entry key="standard.link.text">Carrega vista normal</entry>
   <entry key="danger-rating.elevation">{0} a sota {1}, {2} a sobre {3}</entry>
-  <entry key="ext-file.regions.description">GeoJSON per regions ({0})</entry>
-  <entry key="ext-file.thumbnail.description">Mapa simplificat de graus de perill de la regió</entry>
-  <entry key="ext-file.simple-link.description">Enllaç amb la web simplificada</entry>
-  <entry key="ext-file.map.description">Mapa de graus de perill {0} ({1})</entry>
-  <entry key="ext-file.overlay.description">Superposició de graus de perill ({0})</entry>
-  <entry key="ext-file.website-link.description">Enllaç al web</entry>
-  <entry key="ext-file.region-link.description">Enllaç a la regió al web</entry>
   <entry key="elevation.treeline">límit del bosc</entry>
   <entry key="elevation.treeline.capitalized">Límit del bosc</entry>
   <entry key="elevation.all">Totes les altituds</entry>
