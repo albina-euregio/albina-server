@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Dimensione valanga",
     "small": "piccole",
     "medium": "medie",
     "large": "grandi",
@@ -7,12 +8,14 @@
     "extreme": "estreme"
   },
   "snowpackStability": {
+    "label": "Stabilità del manto nevoso",
     "good": "buona",
     "fair": "discreta",
     "poor": "scarsa",
     "very_poor": "molto scarsa"
   },
   "frequency": {
+    "label": "Punti pericolosi",
     "none": "pochissimi",
     "few": "pochi",
     "some": "alcuni",

@@ -46,4 +46,12 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("Lawinenvorhersage", LanguageCode.de.getCaamlBundleString("headline.forecast"));
 		Assertions.assertEquals("Avalanche Forecast", LanguageCode.en.getCaamlBundleString("headline.forecast"));
 	}
+
+	@Test
+	public void testProblemLabelsReadFromCaamlBundle() {
+		Assertions.assertEquals("Schneedeckenstabilität", LanguageCode.de.getCaamlBundleString("snowpackStability.label"));
+		Assertions.assertEquals("Gefahrenstellen", LanguageCode.de.getCaamlBundleString("frequency.label"));
+		Assertions.assertEquals("Lawinengröße", LanguageCode.de.getCaamlBundleString("avalancheSize.label"));
+		Assertions.assertEquals("Snowpack stability", LanguageCode.en.getCaamlBundleString("snowpackStability.label"));
+	}
 }

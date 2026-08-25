@@ -27,9 +27,6 @@
   <entry key="pdf.page-number">Seite {0}</entry>
   <entry key="published">Veröffentlicht am </entry>
   <entry key="updated">Aktualisiert am </entry>
-  <entry key="problem.snowpack-stability">Schneedeckenstabilität</entry>
-  <entry key="problem.frequency">Gefahrenstellen</entry>
-  <entry key="problem.avalanche-size">Lawinengröße</entry>
   <entry key="speech.bulletin.update">Update der Lawinenvorhersage für {validityDate}.</entry>
   <entry key="speech.bulletin">Lawinenvorhersage für {validityDate}.</entry>
   <entry key="speech.furthermore">Des Weiteren, {text}</entry>

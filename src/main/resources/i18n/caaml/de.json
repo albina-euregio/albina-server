@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Lawinengröße",
     "small": "klein",
     "medium": "mittel",
     "large": "groß",
@@ -7,12 +8,14 @@
     "extreme": "extrem"
   },
   "snowpackStability": {
+    "label": "Schneedeckenstabilität",
     "good": "gut",
     "fair": "mittel",
     "poor": "schlecht",
     "very_poor": "sehr schlecht"
   },
   "frequency": {
+    "label": "Gefahrenstellen",
     "none": "keine",
     "few": "wenige",
     "some": "einige",

@@ -27,9 +27,6 @@
   <entry key="pdf.page-number">Stran {0}</entry>
   <entry key="published">Objavljeno </entry>
   <entry key="updated">Posodobljeno </entry>
-  <entry key="problem.snowpack-stability">Stabilnost snežne odeje</entry>
-  <entry key="problem.frequency">Pogostost</entry>
-  <entry key="problem.avalanche-size">Velikost plazu</entry>
   <entry key="speech.bulletin.update">Posodobitev plazovne napovedi za {validityDate}.</entry>
   <entry key="speech.bulletin">Plazovna napoved za {validityDate}.</entry>
   <entry key="speech.furthermore">Poleg tega, {text}</entry>

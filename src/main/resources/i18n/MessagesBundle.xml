@@ -27,9 +27,6 @@
   <entry key="pdf.page-number">Page {0}</entry>
   <entry key="published">Published </entry>
   <entry key="updated">Updated </entry>
-  <entry key="problem.snowpack-stability">Snowpack stability</entry>
-  <entry key="problem.frequency">Frequency</entry>
-  <entry key="problem.avalanche-size">Avalanche size</entry>
 
   <entry key="speech.bulletin.update">Update of the avalanche forecast for {validityDate}.</entry>
   <entry key="speech.bulletin">Avalanche forecast for {validityDate}.</entry>

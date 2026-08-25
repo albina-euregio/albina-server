@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Velikost plazu",
     "small": "majhen",
     "medium": "srednji",
     "large": "velik",
@@ -7,12 +8,14 @@
     "extreme": "izjemno velik"
   },
   "snowpackStability": {
+    "label": "Stabilnost snežne odeje",
     "good": "dobra",
     "fair": "zadovoljiva",
     "poor": "slaba",
     "very_poor": "zelo slaba"
   },
   "frequency": {
+    "label": "Pogostost",
     "none": "nič",
     "few": "redki",
     "some": "nekaj",

@@ -27,9 +27,6 @@
   <entry key="pdf.page-number">Page {0}</entry>
   <entry key="published">Publié </entry>
   <entry key="updated">Mise à jour du </entry>
-  <entry key="problem.snowpack-stability">Stabilité du manteau neigeux</entry>
-  <entry key="problem.frequency">Fréquence</entry>
-  <entry key="problem.avalanche-size">Taille d'avalanche</entry>
   <entry key="speech.bulletin.update">Mise à jour des prévisions d'avalanches pour {validityDate}.</entry>
   <entry key="speech.bulletin">Prévisions d'avalanches pour {validityDate}.</entry>
   <entry key="speech.furthermore">En outre, {text}</entry>

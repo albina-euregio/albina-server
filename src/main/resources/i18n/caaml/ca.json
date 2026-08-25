@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Mida d'allau",
     "small": "petita",
     "medium": "mitjana",
     "large": "gran",
@@ -7,12 +8,14 @@
     "extreme": "extrema"
   },
   "snowpackStability": {
+    "label": "Estabilitat del mantell de neu",
     "good": "bona",
     "fair": "regular",
     "poor": "pobre",
     "very_poor": "molt pobre"
   },
   "frequency": {
+    "label": "freqüència",
     "none": "cap",
     "few": "poques",
     "some": "algunes",

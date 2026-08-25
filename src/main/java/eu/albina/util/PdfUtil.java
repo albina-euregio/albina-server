@@ -973,17 +973,17 @@ public class PdfUtil {
 		}
 		Paragraph paragraph = new Paragraph().setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
 		if (avalancheProblem != eu.albina.model.enumerations.AvalancheProblem.gliding_snow && matrixInformation.getSnowpackStability() != null) {
-			paragraph.add(new Text(lang.getBundleString("problem.snowpack-stability") + ": "));
+			paragraph.add(new Text(lang.getCaamlBundleString("snowpackStability.label") + ": "));
 			paragraph.add(new Text(matrixInformation.getSnowpackStability().toString(lang.getLocale()) + "\n")
 				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
 		}
 		if (matrixInformation.getFrequency() != null) {
-			paragraph.add(new Text(lang.getBundleString("problem.frequency") + ": "));
+			paragraph.add(new Text(lang.getCaamlBundleString("frequency.label") + ": "));
 			paragraph.add(new Text(matrixInformation.getFrequency().toString(lang.getLocale()) + "\n")
 				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
 		}
 		if (matrixInformation.getAvalancheSize() != null) {
-			paragraph.add(new Text(lang.getBundleString("problem.avalanche-size") + ": "));
+			paragraph.add(new Text(lang.getCaamlBundleString("avalancheSize.label") + ": "));
 			paragraph.add(new Text(matrixInformation.getAvalancheSize().toString(lang.getLocale()) + "\n")
 				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
 		}

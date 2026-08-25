@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Taille d'avalanche",
     "small": "petite",
     "medium": "moyenne",
     "large": "grande",
@@ -7,12 +8,14 @@
     "extreme": "extrême"
   },
   "snowpackStability": {
+    "label": "Stabilité du manteau neigeux",
     "good": "bonne",
     "fair": "moyenne",
     "poor": "mauvaise",
     "very_poor": "très mauvaise"
   },
   "frequency": {
+    "label": "Fréquence",
     "none": "aucune",
     "few": "rare",
     "some": "plusieurs",

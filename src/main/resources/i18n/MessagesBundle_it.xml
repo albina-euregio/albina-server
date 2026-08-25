@@ -27,9 +27,6 @@
   <entry key="pdf.page-number">Pagina {0}</entry>
   <entry key="published">Pubblicato il </entry>
   <entry key="updated">Aggiornato</entry>
-  <entry key="problem.snowpack-stability">Stabilità del manto nevoso</entry>
-  <entry key="problem.frequency">Punti pericolosi</entry>
-  <entry key="problem.avalanche-size">Dimensione valanga</entry>
   <entry key="speech.bulletin.update">Aggiornamento del bollettino valanghe per {validityDate}.</entry>
   <entry key="speech.bulletin">Bollettino valanghe per {validityDate}.</entry>
   <entry key="speech.furthermore">Inoltre, {text}</entry>

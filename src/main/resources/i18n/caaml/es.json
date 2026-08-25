@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Tamaño del alud",
     "small": "pequeño",
     "medium": "mediano",
     "large": "grande",
@@ -7,12 +8,14 @@
     "extreme": "extremadamente grande"
   },
   "snowpackStability": {
+    "label": "Estabilidad del manto de nieve",
     "good": "buena",
     "fair": "regular",
     "poor": "pobre",
     "very_poor": "muy pobre"
   },
   "frequency": {
+    "label": "Frecuencia",
     "none": "ninguna",
     "few": "pocas",
     "some": "algunas",

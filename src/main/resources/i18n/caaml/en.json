@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Avalanche size",
     "small": "small",
     "medium": "medium",
     "large": "large",
@@ -7,12 +8,14 @@
     "extreme": "extreme"
   },
   "snowpackStability": {
+    "label": "Snowpack stability",
     "good": "good",
     "fair": "fair",
     "poor": "poor",
     "very_poor": "very poor"
   },
   "frequency": {
+    "label": "Frequency",
     "none": "none",
     "few": "few",
     "some": "some",

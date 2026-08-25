@@ -1,5 +1,6 @@
 {
   "avalancheSize": {
+    "label": "Mesura de lauet",
     "small": "Petit",
     "medium": "Mejan",
     "large": "Gran",
@@ -7,12 +8,14 @@
     "extreme": "Extremament gran"
   },
   "snowpackStability": {
+    "label": "Estabilitat deth celh de nhèu",
     "good": "bona",
     "fair": "regular",
     "poor": "praube",
     "very_poor": "molt praube"
   },
   "frequency": {
+    "label": "Frecuéncia",
     "none": "Cap",
     "few": "Pògui",
     "some": "Quauqui",
