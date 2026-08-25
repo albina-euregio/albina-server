@@ -99,6 +99,8 @@
     "synopsis": "Tiempo",
     "dangerPatterns": "Patrones de peligro",
     "snowpack": "Manto nivoso",
-    "travelAdvisory": "Travel Advisory"
+    "travelAdvisory": "Travel Advisory",
+    "avalancheProblem": "Problema de Aludes",
+    "dangerRating": "Grados de peligro"
   }
 }

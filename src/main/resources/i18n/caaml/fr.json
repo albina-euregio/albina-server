@@ -99,6 +99,8 @@
     "synopsis": "Météo",
     "dangerPatterns": "Modèles de danger",
     "snowpack": "Manteau neigeux",
-    "travelAdvisory": "Travel Advisory"
+    "travelAdvisory": "Travel Advisory",
+    "avalancheProblem": "Situation avalancheuse typique",
+    "dangerRating": "Degré de danger"
   }
 }

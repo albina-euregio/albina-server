@@ -99,6 +99,8 @@
     "synopsis": "Vreme",
     "dangerPatterns": "Vzorci nevarnosti",
     "snowpack": "Snežna odeja",
-    "travelAdvisory": "Travel Advisory"
+    "travelAdvisory": "Travel Advisory",
+    "avalancheProblem": "Plazovni problem",
+    "dangerRating": "Stopnja nevarnosti"
   }
 }

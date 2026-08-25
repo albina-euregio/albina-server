@@ -99,6 +99,8 @@
     "synopsis": "Temps",
     "dangerPatterns": "Patrons de perill",
     "snowpack": "Mantell de neu",
-    "travelAdvisory": "Travel Advisory"
+    "travelAdvisory": "Travel Advisory",
+    "avalancheProblem": "Problema d'allaus",
+    "dangerRating": "Grau de perill"
   }
 }

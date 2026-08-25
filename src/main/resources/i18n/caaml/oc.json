@@ -99,6 +99,8 @@
     "synopsis": "Temps",
     "dangerPatterns": "Patrons de perilh",
     "snowpack": "Celh de nhèu",
-    "travelAdvisory": "Travel Advisory"
+    "travelAdvisory": "Travel Advisory",
+    "avalancheProblem": "Problèma de lauegi",
+    "dangerRating": "Grad de perilh"
   }
 }

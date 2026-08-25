@@ -99,6 +99,8 @@
     "synopsis": "Wetter",
     "dangerPatterns": "Gefahrenmuster",
     "snowpack": "Schneedecke",
-    "travelAdvisory": "Travel Advisory"
+    "travelAdvisory": "Travel Advisory",
+    "avalancheProblem": "Lawinenproblem",
+    "dangerRating": "Gefahrenstufe"
   }
 }
