@@ -10,7 +10,7 @@ public enum Tendency {
 	decreasing, steady, increasing;
 
 	public String toString(Locale locale) {
-		return ResourceBundle.getBundle("i18n.Tendency", locale, new XMLResourceBundleControl()).getString(name());
+		return ResourceBundle.getBundle("i18n.caaml", locale, new XMLResourceBundleControl()).getString("tendency." + name());
 	}
 
 	public static String getCaamlString(Tendency tendency) {
