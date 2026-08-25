@@ -106,5 +106,8 @@
     "avalancheProblem": "Avalanche Problem",
     "dangerRating": "Danger rating",
     "forecast": "Avalanche Forecast"
+  },
+  "elevation": {
+    "treeline.capitalized": "Treeline"
   }
 }

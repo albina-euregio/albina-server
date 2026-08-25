@@ -106,5 +106,8 @@
     "avalancheProblem": "Problema valanghivo",
     "dangerRating": "Grado di pericolo",
     "forecast": "Previsione valanghe"
+  },
+  "elevation": {
+    "treeline.capitalized": "Limite del bosco"
   }
 }

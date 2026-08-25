@@ -54,4 +54,10 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("Lawinengröße", LanguageCode.de.getCaamlBundleString("avalancheSize.label"));
 		Assertions.assertEquals("Snowpack stability", LanguageCode.en.getCaamlBundleString("snowpackStability.label"));
 	}
+
+	@Test
+	public void testElevationReadsFromCaamlBundle() {
+		Assertions.assertEquals("Waldgrenze", LanguageCode.de.getCaamlBundleString("elevation.treeline.capitalized"));
+		Assertions.assertEquals("Treeline", LanguageCode.en.getCaamlBundleString("elevation.treeline.capitalized"));
+	}
 }

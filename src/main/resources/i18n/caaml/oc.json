@@ -106,5 +106,8 @@
     "avalancheProblem": "Problèma de lauegi",
     "dangerRating": "Grad de perilh",
     "forecast": "Prediccion de lauegi"
+  },
+  "elevation": {
+    "treeline.capitalized": "Limit deth bòsc"
   }
 }

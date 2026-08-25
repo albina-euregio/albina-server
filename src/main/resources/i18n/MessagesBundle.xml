@@ -6,7 +6,6 @@
   <entry key="standard.link.text">Load standard view</entry>
   <entry key="danger-rating.elevation">{0} below {1}, {2} above {3}</entry>
   <entry key="elevation.treeline">treeline</entry>
-  <entry key="elevation.treeline.capitalized">Treeline</entry>
   <entry key="elevation.all">All elevations</entry>
   <entry key="elevation.below">Below {0}</entry>
   <entry key="elevation.above">Above {0}</entry>

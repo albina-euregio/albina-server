@@ -106,5 +106,8 @@
     "avalancheProblem": "Problema de Aludes",
     "dangerRating": "Grados de peligro",
     "forecast": "Predicción de Aludes"
+  },
+  "elevation": {
+    "treeline.capitalized": "Límite del bosque"
   }
 }

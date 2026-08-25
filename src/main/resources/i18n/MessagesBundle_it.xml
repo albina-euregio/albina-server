@@ -6,7 +6,6 @@
   <entry key="standard.link.text">Vista standard del carico</entry>
   <entry key="danger-rating.elevation">{0} sotto i {1}, {2} sopra i {3}</entry>
   <entry key="elevation.treeline">limite del bosco</entry>
-  <entry key="elevation.treeline.capitalized">Limite del bosco</entry>
   <entry key="elevation.all">Tutte le quote</entry>
   <entry key="elevation.below">Sotto i {0}</entry>
   <entry key="elevation.above">Sopra i {0}</entry>

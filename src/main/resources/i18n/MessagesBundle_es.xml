@@ -6,7 +6,6 @@
   <entry key="standard.link.text">Cargar vista estandar</entry>
   <entry key="danger-rating.elevation">{0} por debajo de {1}, {2} por encima de {3}</entry>
   <entry key="elevation.treeline">límite del bosque</entry>
-  <entry key="elevation.treeline.capitalized">Límite del bosque</entry>
   <entry key="elevation.all">Todas las elevaciones</entry>
   <entry key="elevation.below">Por debajo de {0}</entry>
   <entry key="elevation.above">Por encima de {0}</entry>

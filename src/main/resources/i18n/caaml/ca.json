@@ -106,5 +106,8 @@
     "avalancheProblem": "Problema d'allaus",
     "dangerRating": "Grau de perill",
     "forecast": "Predicció d'allaus"
+  },
+  "elevation": {
+    "treeline.capitalized": "Límit del bosc"
   }
 }

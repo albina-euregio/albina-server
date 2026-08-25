@@ -198,7 +198,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				if (avalancheProblem.getTreelineLow()) {
-					return lang.getBundleString("elevation.treeline.capitalized");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationLow() + "m";
 				}
@@ -209,7 +209,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 			// elevation low set
 			if (avalancheProblem.getTreelineLow()) {
-				return lang.getBundleString("elevation.treeline.capitalized");
+				return lang.getCaamlBundleString("elevation.treeline.capitalized");
 			} else {
 				return avalancheProblem.getElevationLow() + "m";
 			}
@@ -223,14 +223,14 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
 				// elevation high and low set
 				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getBundleString("elevation.treeline.capitalized");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationHigh() + "m";
 				}
 			} else {
 				// elevation high set
 				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getBundleString("elevation.treeline.capitalized");
+					return lang.getCaamlBundleString("elevation.treeline.capitalized");
 				} else {
 					return avalancheProblem.getElevationHigh() + "m";
 				}

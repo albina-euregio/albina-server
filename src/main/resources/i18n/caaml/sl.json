@@ -106,5 +106,8 @@
     "avalancheProblem": "Plazovni problem",
     "dangerRating": "Stopnja nevarnosti",
     "forecast": "Plazovna napoved"
+  },
+  "elevation": {
+    "treeline.capitalized": "Gozdna meja"
   }
 }

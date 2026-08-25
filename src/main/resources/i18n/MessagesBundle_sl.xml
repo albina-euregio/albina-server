@@ -6,7 +6,6 @@
   <entry key="standard.link.text">Naloži običajen pogled</entry>
   <entry key="danger-rating.elevation">{0} pod {1}, {2} nad {3}</entry>
   <entry key="elevation.treeline">gozdna meja</entry>
-  <entry key="elevation.treeline.capitalized">Gozdna meja</entry>
   <entry key="elevation.all">Na vseh višinah</entry>
   <entry key="elevation.below">Pod {0}</entry>
   <entry key="elevation.above">Nad {0}</entry>

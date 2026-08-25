@@ -106,5 +106,8 @@
     "avalancheProblem": "Lawinenproblem",
     "dangerRating": "Gefahrenstufe",
     "forecast": "Lawinenvorhersage"
+  },
+  "elevation": {
+    "treeline.capitalized": "Waldgrenze"
   }
 }
