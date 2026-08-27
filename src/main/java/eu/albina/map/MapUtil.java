@@ -68,8 +68,8 @@ public interface MapUtil {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 				bindings.put("bulletin_ids", region + "-high", new Argument(Argument.STRING, bulletin.getId()));
 				bindings.put("bulletin_ids", region + "-low", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.dangerRating(true))));
-				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.dangerRating(false))));
+				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.highestDangerRating())));
+				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.highestDangerRating())));
 				bindings.put("elevation_h", region + "-high", new Argument(description.getElevation()));
 			});
 		}
@@ -93,8 +93,8 @@ public interface MapUtil {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 				bindings.put("bulletin_ids", region + "-high", new Argument(Argument.STRING, bulletin.getId()));
 				bindings.put("bulletin_ids", region + "-low", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.dangerRating(true))));
-				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.dangerRating(false))));
+				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.highestDangerRating())));
+				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.highestDangerRating())));
 				bindings.put("elevation_h", region + "-high", new Argument(description.getElevation()));
 			});
 		}
@@ -268,8 +268,8 @@ public interface MapUtil {
 				if (bulletin != null) {
 					AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
 					mapyrus.context.getBindings().put("elevation_level", description.getElevation());
-					mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.dangerRating(false)));
-					mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.dangerRating(true)));
+					mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.highestDangerRating()));
+					mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.highestDangerRating()));
 				}
 				mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 			}

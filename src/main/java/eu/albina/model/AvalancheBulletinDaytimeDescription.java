@@ -204,7 +204,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 		}
 	}
 
-	private DangerRating highestDangerRating() {
+	public DangerRating highestDangerRating() {
 		DangerRating highest = null;
 		if (getDangerRatingAbove() != null) {
 			highest = getDangerRatingAbove();
@@ -219,7 +219,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 
 	@JsonIgnore
 	boolean isDangerLevelElevationDependency() {
-		return true; // FIXME
+		return true;
 	}
 
 	@Override
