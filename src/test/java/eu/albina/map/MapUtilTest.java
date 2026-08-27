@@ -186,9 +186,9 @@ public class MapUtilTest {
 		publicationController.createSymbolicLinks(avalancheReport);
 
 		for (String name : Arrays.asList("fd_EUREGIO_thumbnail.png", "EUREGIO_f6cf685e-2d1d-4d76-b1dc-b152dfa9b5dd.png")) {
-			byte[] expected = Resources.toByteArray(Resources.getResource(name));
 			byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve(name));
 			// Files.write(Path.of("src/test/resources/" + name), actual);
+			byte[] expected = Resources.toByteArray(Resources.getResource(name));
 			ImageTestUtils.assertImageEquals(name, expected, actual, 0, 0, ignore -> {
 			});
 		}
@@ -216,24 +216,6 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Disabled
-	public void testMapyrusMapsAragon() throws Exception {
-		URL resource = Resources.getResource("aludes.aragon.es/2025-09-17.json");
-		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
-		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAragon, serverInstance);
-		MapUtil.createMapyrusMaps(avalancheReport);
-		publicationController.createSymbolicLinks(avalancheReport);
-
-		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
-		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("fd_ES-CT-L_thumbnail.png"));
-		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
-		});
-		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
-			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
-		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
-	}
-
-	@Test
 	public void testMapyrusMapsAran() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-01-24/2021-01-24.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
@@ -241,9 +223,9 @@ public class MapUtilTest {
 		MapUtil.createMapyrusMaps(avalancheReport);
 		publicationController.createSymbolicLinks(avalancheReport);
 
-		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("fd_ES-CT-L_thumbnail.png"));
 		// Files.write(Path.of("src/test/resources/lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"), actual);
+		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-01-24/fd_ES-CT-L_thumbnail.png"));
 		ImageTestUtils.assertImageEquals("fd_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
 		});
 		assertEquals("2021-01-24/2021-01-23_16-00-00/2021-01-24_ES-CT-L_en.pdf",
@@ -252,13 +234,20 @@ public class MapUtilTest {
 	}
 
 	@Test
-	@Disabled
 	public void testMapyrusMapsAranVeryHigh() throws Exception {
 		URL resource = Resources.getResource("lauegi.report-2021-12-10/2021-12-10.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstance);
 		MapUtil.createMapyrusMaps(avalancheReport);
 		publicationController.createSymbolicLinks(avalancheReport);
+
+		byte[] actual = Files.readAllBytes(avalancheReport.getMapsPath().resolve("am_ES-CT-L_thumbnail.png"));
+		// Files.write(Path.of("src/test/resources/lauegi.report-2021-12-10/am_ES-CT-L_thumbnail.png"), actual);
+		byte[] expected = Resources.toByteArray(Resources.getResource("lauegi.report-2021-12-10/am_ES-CT-L_thumbnail.png"));
+		ImageTestUtils.assertImageEquals("am_ES-CT-L_thumbnail.png", expected, actual, 0, 0, ignore -> {
+		});
+		assertEquals("2021-12-10/2021-12-09_16-06-27/2021-12-10_ES-CT-L_en.pdf",
+			getRelativePath(new PdfUtil(avalancheReport, LanguageCode.en, false).getPath()).toString());
 		new PdfUtil(avalancheReport, LanguageCode.ca, false).createPdf();
 	}
 
