@@ -66,11 +66,8 @@ public interface MapUtil {
 				: bulletin.regions(preview).stream();
 			regions.forEach(region -> {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
-				bindings.put("bulletin_ids", region + "-high", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("bulletin_ids", region + "-low", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.highestDangerRating())));
-				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.highestDangerRating())));
-				bindings.put("elevation_h", region + "-high", new Argument(description.getElevation()));
+				bindings.put("bulletin_ids", region, new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("danger_ratings", region, new Argument(DangerRating.getInt(description.highestDangerRating())));
 			});
 		}
 		SimpleBindings simpleBindings = new SimpleBindings();
@@ -91,11 +88,8 @@ public interface MapUtil {
 				: bulletin.regions(preview).stream().filter(r -> publicationRegion.affects(r));
 			regions.forEach(region -> {
 				AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
-				bindings.put("bulletin_ids", region + "-high", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("bulletin_ids", region + "-low", new Argument(Argument.STRING, bulletin.getId()));
-				bindings.put("danger_h", region + "-high", new Argument(DangerRating.getInt(description.highestDangerRating())));
-				bindings.put("danger_l", region + "-low", new Argument(DangerRating.getInt(description.highestDangerRating())));
-				bindings.put("elevation_h", region + "-high", new Argument(description.getElevation()));
+				bindings.put("bulletin_ids", region, new Argument(Argument.STRING, bulletin.getId()));
+				bindings.put("danger_ratings", region, new Argument(DangerRating.getInt(description.highestDangerRating())));
 			});
 		}
 		SimpleBindings simpleBindings = new SimpleBindings();
@@ -218,7 +212,7 @@ public interface MapUtil {
 				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout_simplified.geojson"));
 				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l_simplified.geojson"));
 				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l_simplified.geojson"));
-				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a_simplified.geojson"));
+				bindings.put("micro_regions_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_a_simplified.geojson"));
 				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l_simplified.geojson"));
 				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a_simplified.geojson"));
 				bindings.put("region_a", MapUtil.mapProductionResource(geodataPath, "region_a_simplified.geojson"));
@@ -229,7 +223,7 @@ public interface MapUtil {
 				bindings.put("passe_partout", MapUtil.mapProductionResource(geodataPath, "passe_partout.geojson"));
 				bindings.put("countries_l", MapUtil.mapProductionResource(geodataPath, "countries_l.geojson"));
 				bindings.put("provinces_l", MapUtil.mapProductionResource(geodataPath, "provinces_l.geojson"));
-				bindings.put("micro_regions_elevation_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_elevation_a.geojson"));
+				bindings.put("micro_regions_a", MapUtil.mapProductionResource(geodataPath, "micro_regions_a.geojson"));
 				bindings.put("rivers_l", MapUtil.mapProductionResource(geodataPath, "rivers_l.geojson"));
 				bindings.put("lakes_a", MapUtil.mapProductionResource(geodataPath, "lakes_a.geojson"));
 				bindings.put("regionShapeFile", MapUtil.mapProductionResource(geodataPath, "region.geojson"));
@@ -267,9 +261,7 @@ public interface MapUtil {
 			} else {
 				if (bulletin != null) {
 					AvalancheBulletinDaytimeDescription description = daytimeDependency.getBulletinDaytimeDescription(bulletin);
-					mapyrus.context.getBindings().put("elevation_level", description.getElevation());
-					mapyrus.context.getBindings().put("danger_rating_low", DangerRating.getString(description.highestDangerRating()));
-					mapyrus.context.getBindings().put("danger_rating_high", DangerRating.getString(description.highestDangerRating()));
+					mapyrus.context.getBindings().put("danger_rating", DangerRating.getString(description.highestDangerRating()));
 				}
 				mapyrus.interpret(Resources.getResource("mapyrus/albina_drawmap.mapyrus"));
 			}

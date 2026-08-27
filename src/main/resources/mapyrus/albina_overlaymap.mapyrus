@@ -22,7 +22,7 @@ let my2 = pagesize_y
 ###################################################################
 
 # Warning Regions
-polygon_feature_danger_levels micro_regions_elevation_a
+polygon_feature_danger_levels micro_regions_a
 
 
 ###############################################################

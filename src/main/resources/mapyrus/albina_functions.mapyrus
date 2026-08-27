@@ -332,9 +332,8 @@ begin polygon_feature_danger_levels file
 				addpath GEOMETRY
 				eval reg_line
 				eval reg_line_color
-				let ALB_ID = code . "-" . elevation
 				if dynamic_region eq "one" and colormode eq "bw" then
-					if bulletin_ids[ALB_ID] eq bulletin_id then
+					if bulletin_ids[code] eq bulletin_id then
 						stroke
 					endif
 				endif
@@ -347,35 +346,33 @@ begin polygon_feature_danger_levels file
 				clearpath
 				addpath GEOMETRY
 				linestyle 0.01
-				let ALB_ID = code . "-" . elevation
-				let ALB_ID_LOW = code . "-low"
 				if dynamic_region eq "all" then
-					if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
+					if danger_ratings[code] eq 1 then
 						eval danger_color[1]
 						fill
 						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
-					elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
+					elif danger_ratings[code] eq 2 then
 						eval danger_color[2]
 						fill
 						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
-					elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
+					elif danger_ratings[code] eq 3 then
 						eval danger_color[3]
 						fill
 						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
-					elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
+					elif danger_ratings[code] eq 4 then
 						eval danger_color[4]
 						fill
 						if map_level eq "thumbnail" or map_level eq "overlay" then
 							stroke
 						endif
 						#let dr_4_5 = "yes"
-					elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
+					elif danger_ratings[code] eq 5 then
 						eval danger_color[4]
 						fill
 						if map_level eq "thumbnail" then
@@ -385,59 +382,41 @@ begin polygon_feature_danger_levels file
 						endif
 						#HALFFILL danger_color[4], danger_color[5], danger_color[5], danger_color[4], 0.5
 						let dr_4_5 = "yes"
-					elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
+					elif danger_ratings[code] eq 0 then
 						eval danger_color[0]
 						fill
 						if map_level eq "thumbnail" then
 							stroke
 						endif
-					elif threshold < elevation_h[ALB_ID] then
-						let high_color = danger_l[ALB_ID_LOW]
-						if high_color eq 5 then
-							eval danger_color[4]
-							fill
-							if map_level eq "thumbnail" then
-								CHESSBORD_LWD5_SMALL danger_color[5]
-							else
-								CHESSBORD_LWD5 danger_color[5]
-							endif
-							let dr_4_5 = "yes"
-						else
-							eval danger_color[high_color]
-							fill
-							if map_level eq "thumbnail" or map_level eq "overlay" then
-								stroke
-							endif
-						endif
 					endif
 				elif dynamic_region eq "one" then
-					if bulletin_ids[ALB_ID] eq bulletin_id then
-						if (danger_h[ALB_ID] eq 1 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 1 then
+					if bulletin_ids[code] eq bulletin_id then
+						if danger_ratings[code] eq 1 then
 							eval danger_color[1]
 							fill
 							if map_level eq "thumbnail" then
 								stroke
 							endif
-						elif (danger_h[ALB_ID] eq 2 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 2 then
+						elif danger_ratings[code] eq 2 then
 							eval danger_color[2]
 							fill
 							if map_level eq "thumbnail" then
 								stroke
 							endif
-						elif (danger_h[ALB_ID] eq 3 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 3 then
+						elif danger_ratings[code] eq 3 then
 							eval danger_color[3]
 							fill
 							if map_level eq "thumbnail" then
 								stroke
 							endif
-						elif (danger_h[ALB_ID] eq 4 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 4 then
+						elif danger_ratings[code] eq 4 then
 							eval danger_color[4]
 							fill
 							if map_level eq "thumbnail" then
 								stroke
 							endif
 							#let dr_4_5 = "yes"
-						elif (danger_h[ALB_ID] eq 5 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 5 then
+						elif danger_ratings[code] eq 5 then
 							eval danger_color[4]
 							fill
 							if map_level eq "thumbnail" then
@@ -447,29 +426,11 @@ begin polygon_feature_danger_levels file
 							endif
 							#HALFFILL danger_color[4], danger_color[5], danger_color[5], danger_color[4], 0.5
 							let dr_4_5 = "yes"
-						elif (danger_h[ALB_ID] eq 0 and threshold >= elevation_h[ALB_ID]) or danger_l[ALB_ID] eq 0 then
+						elif danger_ratings[code] eq 0 then
 							eval danger_color[0]
 							fill
 							if map_level eq "thumbnail" then
 								stroke
-							endif
-						elif threshold < elevation_h[ALB_ID] then
-							let high_color = danger_l[ALB_ID_LOW]
-							if high_color eq 5 then
-								eval danger_color[4]
-								fill
-								if map_level eq "thumbnail" then
-									CHESSBORD_LWD5_SMALL danger_color[5]
-								else
-									CHESSBORD_LWD5 danger_color[5]
-								endif
-								let dr_4_5 = "yes"
-							else
-								eval danger_color[high_color]
-								fill
-								if map_level eq "thumbnail" then
-									stroke
-								endif
 							endif
 						endif
 					endif
@@ -706,7 +667,7 @@ begin point_feature_city_marker file, map_level
 			if (map_level eq "thumbnail" and ALBINA_1 == 1) then
 				if category <= 3 then
 					SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
-					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+					if dr_4_5 eq "yes" or danger_rating >= 5 then
 						LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					else
 						LABEL_POINT marker_line_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
@@ -715,14 +676,14 @@ begin point_feature_city_marker file, map_level
 			elif (map_level eq "standard" and ALBINA_2 == 1 and bulletin_id ne not_in_map) or (map_level eq "overlay" and ALBINA_3 == 1) then
 				if category <= 3 then
 					SQUAREMARKER marker_scale, marker_color, marker_line_color, marker_line
-					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+					if dr_4_5 eq "yes" or danger_rating >= 5 then
 						LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					else
 						LABEL_POINT city_label_color, font_bold, cap_city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					endif
 				else
 					CIRCLEMARKER marker_scale, marker_color, marker_line_color, marker_line
-					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+					if dr_4_5 eq "yes" or danger_rating >= 5 then
 						LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					else
 						LABEL_POINT city_label_color, font_semibold, city_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
@@ -754,7 +715,7 @@ begin point_feature_labels file, map_level
 				if style == 5100 then
 					LABEL_POINT country_label_color, font_semibold, country_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 				elif style == 5110 then
-					if dr_4_5 eq "yes" or danger_rating_high >= 5 or danger_rating_low >= 5 then
+					if dr_4_5 eq "yes" or danger_rating >= 5 then
 						LABEL_POINT prov_label_color, font_semibold, prov_font_size, label_halo_background_color, label_halo_width5, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
 					else
 						LABEL_POINT prov_label_color, font_semibold, prov_font_size, label_halo_background_color, label_halo_width, l_ext_o, l_inn_o, l_x_off, l_y_off, l_angle, l_spacing, label
