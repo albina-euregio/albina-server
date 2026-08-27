@@ -41,7 +41,7 @@ if dynamic_region eq "one" then
 endif
 
 # Warning Regions
-polygon_feature_danger_levels micro_regions_elevation_a
+polygon_feature_danger_levels micro_regions_a
 
 # Rivers & Lakes
 line_feature_rivers rivers_l, map_level

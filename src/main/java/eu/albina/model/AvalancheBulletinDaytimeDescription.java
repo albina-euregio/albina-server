@@ -87,11 +87,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public boolean isHasElevationDependency() {
-		if (isDangerLevelElevationDependency()) {
-			return hasElevationDependency;
-		} else {
-			return false;
-		}
+		return hasElevationDependency;
 	}
 
 	public void setHasElevationDependency(boolean hasElevationDependency) {
@@ -99,11 +95,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public int getElevation() {
-		if (isDangerLevelElevationDependency()) {
-			return elevation;
-		} else {
-			return 0;
-		}
+		return elevation;
 	}
 
 	public void setElevation(int elevation) {
@@ -111,11 +103,7 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public boolean getTreeline() {
-		if (isDangerLevelElevationDependency()) {
-			return treeline;
-		} else {
-			return false;
-		}
+		return treeline;
 	}
 
 	public void setTreeline(boolean treeline) {
@@ -193,18 +181,14 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 	}
 
 	public DangerRating dangerRating(boolean above) {
-		if (isDangerLevelElevationDependency()) {
-			if (isHasElevationDependency() && !above) {
-				return getDangerRatingBelow();
-			} else {
-				return getDangerRatingAbove();
-			}
+		if (isHasElevationDependency() && !above) {
+			return getDangerRatingBelow();
 		} else {
-			return highestDangerRating();
+			return getDangerRatingAbove();
 		}
 	}
 
-	private DangerRating highestDangerRating() {
+	public DangerRating highestDangerRating() {
 		DangerRating highest = null;
 		if (getDangerRatingAbove() != null) {
 			highest = getDangerRatingAbove();
@@ -215,11 +199,6 @@ public class AvalancheBulletinDaytimeDescription extends AbstractPersistentObjec
 			highest = getDangerRatingBelow();
 		}
 		return highest;
-	}
-
-	@JsonIgnore
-	boolean isDangerLevelElevationDependency() {
-		return true; // FIXME
 	}
 
 	@Override
