@@ -153,7 +153,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// danger scale
-		pw.print(TABLE + " align=\"center\" style=\"text-align: center;\">");
+		pw.print(TABLE + " align=\"center\" style=\"width: auto; margin-left: auto; margin-right: auto; text-align: center;\">");
 		pw.print("<tr>");
 		pw.print(SWATCH + " bgcolor=\"#CCFF66\">&nbsp;</td>");
 		pw.print(SWATCH + " bgcolor=\"#FFFF00\">&nbsp;</td>");
