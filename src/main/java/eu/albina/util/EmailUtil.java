@@ -216,10 +216,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 		// general headline
 		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
-			pw.print(TABLE + ">");
+			pw.print(TABLE + " class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 			pw.print("<tr>");
-			pw.print("<td style=\"padding: 15px 0;\">");
+			pw.print("<td class=\"container\" style=\"padding: 15px 0;\" bgcolor=\"#FFFFFF\">");
+			pw.print("<div class=\"content\">");
 			pw.format("<h2>%s</h2>", generalHeadline);
+			pw.print("</div>");
 			pw.print("</td>");
 			pw.print("</tr>");
 			pw.print("</table>");
