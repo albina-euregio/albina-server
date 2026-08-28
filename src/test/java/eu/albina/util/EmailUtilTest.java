@@ -42,8 +42,9 @@ public class EmailUtilTest {
 		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, "/mnt/simple_local/", null, null);
 		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, "/mnt/simple_local/", null, null);
 		regionEuregio = regionTestUtils.regionEuregio();
+		regionEuregio.setServerImagesUrl("https://admin.avalanche.report/images/");
 		regionTyrol = regionTestUtils.regionTyrol();
-		regionTyrol.setServerImagesUrl("/mnt/images/");
+		regionTyrol.setServerImagesUrl("https://admin.avalanche.report/images/");
 		regionAran = regionTestUtils.regionAran();
 	}
 
