@@ -29,6 +29,13 @@ import eu.albina.model.enumerations.Tendency;
 
 public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
+	/** Opens a layout table. Outlook needs the presentational attributes on every one of them. */
+	private static final String TABLE = "<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"";
+
+	/** Keeps Outlook from scaling the whole mail up on displays with more than 96 dpi. */
+	private static final String MSO_PIXELS_PER_INCH = "<!--[if mso]><xml><o:OfficeDocumentSettings>"
+		+ "<o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->";
+
 	public static String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) {
 		return new EmailUtil(avalancheReport, lang).createBulletinEmailHtml();
 	}
@@ -75,18 +82,20 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		PrintWriter pw = new PrintWriter(out);
 
 		// head
-		pw.print("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-		pw.print("<html>");
+		pw.print("<!DOCTYPE html>");
+		pw.format("<html lang=\"%s\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">", lang);
 		pw.print("<head>");
-		pw.print("<meta name=\"viewport\" content=\"width=device-width\"/>");
-		pw.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+		pw.print("<meta charset=\"utf-8\"/>");
+		pw.print("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>");
+		pw.print("<meta name=\"x-apple-disable-message-reformatting\"/>");
 		pw.format("<title>%s</title>", lang.getCaamlBundleString("forecast.label"));
+		pw.print(MSO_PIXELS_PER_INCH);
 		pw.format("<style>%s</style>", css("templates/EmailUtil.css").replace("var(--albina-color)", "#" + color));
 		pw.print("</head>");
-		pw.print("<body bgcolor=\"#FFFFFF\" topmargin=\"0\" leftmargin=\"0\" marginheight=\"0\" marginwidth=\"0\">");
+		pw.print("<body bgcolor=\"#FFFFFF\" style=\"margin: 0; padding: 0;\">");
 
 		// header
-		pw.print("<table class=\"head-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print(TABLE + " class=\"head-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\"/>");
@@ -95,7 +104,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<tr>");
 		pw.print("<td class=\"header container\" style=\"padding: 15px;\">");
 		pw.print("<div class=\"content\">");
-		pw.print("<table bgcolor=\"\" >");
+		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.format("<p class=\"lead\">%s</p>", headline);
@@ -118,11 +127,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// overview maps
-		pw.print("<table align=\"center\" class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print(TABLE + " align=\"center\" class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
 		pw.print("<td class=\"container\" bgcolor=\"#FFFFFF\">");
 		pw.print("<div class=\"content\">");
-		pw.print("<table style=\"padding: 15px 0;\">");
+		pw.print(TABLE + " style=\"padding: 15px 0;\">");
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.format("<h2 class=\"map-daytime-text\">%s</h2>", textAm);
@@ -158,26 +167,26 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// danger scale
-		pw.print("<table align=\"center\" style=\"width: auto; margin-left: auto; margin-right: auto; text-align: center; border-spacing: 0px;\">");
+		pw.print(TABLE + " align=\"center\" style=\"width: auto; margin-left: auto; margin-right: auto; text-align: center; border-spacing: 0px;\">");
 		pw.print("<tr>");
 		pw.print("<td>");
-		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#CCFF66\">");
+		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#CCFF66\">");
 		pw.print("</table>");
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#FFFF00\">");
+		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#FFFF00\">");
 		pw.print("</table>");
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#FF9900\">");
+		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#FF9900\">");
 		pw.print("</table>");
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.print("<table height=\"10\" width=\"75\" bgcolor=\"#FF0000\">");
+		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#FF0000\">");
 		pw.print("</table>");
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format("<table %s>", dangerLevel5Style);
+		pw.format(TABLE + " %s>", dangerLevel5Style);
 		pw.print("</table>");
 		pw.print("</td>");
 		pw.print("</tr>");
@@ -229,7 +238,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 		// general headline
 		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
-			pw.print("<table bgcolor=\"\" >");
+			pw.print(TABLE + ">");
 			pw.print("<tr>");
 			pw.print("<td>");
 			pw.format("<h2 style=\"margin: 24px 0\">%s</h2>", generalHeadline);
@@ -243,11 +252,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		}
 
 		// footer
-		pw.print("<table class=\"footer-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print(TABLE + " class=\"footer-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
 		pw.print("<td class=\"container\">");
 		pw.print("<div class=\"content\">");
-		pw.print("<table>");
+		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print("<td align=\"center\">");
 		pw.print("<p>");
@@ -264,7 +273,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<tr>");
 		pw.print("<td class=\"container\">");
 		pw.print("<div class=\"content\">");
-		pw.print("<table>");
+		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print("<td align=\"center\">");
 		pw.print("<p>");
@@ -304,16 +313,16 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		Region region = avalancheReport.getRegion();
 		DangerRating highestDangerRating = bulletin.getHighestDangerRating();
 
-		pw.print("<table class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
+		pw.print(TABLE + " class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
-		pw.print("<td class=\"container\" align=\"\" bgcolor=\"#FFFFFF\">");
+		pw.print("<td class=\"container\" bgcolor=\"#FFFFFF\">");
 		pw.print("<div class=\"content bulletin-content\">");
-		pw.print("<table style=\"border-spacing: 0px;\">");
+		pw.print(TABLE + " style=\"border-spacing: 0px;\">");
 		pw.print("<tr>");
 		pw.format("<td %s>", getDangerRatingColorStyle(highestDangerRating, region));
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.print("<table style=\"border-spacing: 0px;\">");
+		pw.print(TABLE + " style=\"border-spacing: 0px;\">");
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.format("<h2 %s>%s</h2>", getHeadlineStyle(highestDangerRating), highestDangerRating.toString(lang.getLocale(), true));
@@ -327,11 +336,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		// afternoon
 		daytime(pw, true, bulletin);
 
-		pw.print("<table style=\"padding-left: 15px;\">");
+		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		pw.print("<td style=\"vertical-align: top; padding-top: 10px;\">");
 		pw.format("<h4>%s</h4>", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
-		pw.format("<p class=\"\">%s</p>", bulletin.getAvActivityCommentIn(lang).orElse(""));
+		pw.format("<p>%s</p>", bulletin.getAvActivityCommentIn(lang).orElse(""));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
@@ -365,7 +374,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String tendencyHeadline = tendencyComment.isPresent() ? lang.getCaamlBundleString("tendency.label") : "";
 		String tendencyCommentText = tendencyComment.orElse("");
 
-		pw.format("<table %s>", getSnowpackStyle(hasSnowpackSection));
+		pw.format(TABLE + " %s>", getSnowpackStyle(hasSnowpackSection));
 		pw.print("<tr>");
 		pw.print("<td style=\"background-color: #" + color + "; width: 10px; min-width: 10px; height: 100%;\"></td>");
 		pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
@@ -377,13 +386,13 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<a href=\"%s\" target=\"_blank\">", dangerPatternLink2);
 		pw.format("<p %s>%s</p>", dangerPatternStyle2, dangerPattern2Text);
 		pw.print("</a>");
-		pw.format("<p class=\"\">%s</p>", snowpackStructureCommentText);
+		pw.format("<p>%s</p>", snowpackStructureCommentText);
 		if (hasSnowpackSection && synopsisComment.isPresent()) {
 			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("synopsis.label"));
-			pw.format("<p class=\"\">%s</p>", synopsisComment.get());
+			pw.format("<p>%s</p>", synopsisComment.get());
 		}
 		pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", tendencyHeadline);
-		pw.format("<p class=\"\">%s</p>", tendencyCommentText);
+		pw.format("<p>%s</p>", tendencyCommentText);
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
@@ -424,7 +433,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		if (pm) {
 			pw.format("<div %s>", getPMStyle(bulletinDaytime));
 		}
-		pw.format("<table style=\"%s\"%s>", pm ? "padding-left: 15px;" : "margin-top: 10px; padding-left: 15px;", styleAttr);
+		pw.format(TABLE + " style=\"%s\"%s>", pm ? "padding-left: 15px;" : "margin-top: 10px; padding-left: 15px;", styleAttr);
 		pw.print("<tr>");
 		pw.print("<td class=\"daytime-text-div\">");
 		pw.format("<h2 class=\"daytime-text\">%s</h2>", text);
@@ -435,10 +444,10 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", map);
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format("<table style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\"%s>", styleAttr);
+		pw.format(TABLE + " style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\"%s>", styleAttr);
 		pw.print("<tr>");
 		pw.print("<td>");
-		pw.format("<table style=\"width: 0;\"%s>", styleAttr);
+		pw.format(TABLE + " style=\"width: 0;\"%s>", styleAttr);
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.print("<div style=\"height: 48px;\">");
@@ -457,7 +466,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</div>");
 		pw.print("</td>");
 		pw.print("<td class=\"tendency\">");
-		pw.format("<table%s>", styleAttr);
+		pw.format(TABLE + "%s>", styleAttr);
 		pw.print("<tr>");
 		pw.print("<td>");
 		if (pm) {
@@ -511,7 +520,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String limitBelow = problem.getElevationHighText(lang);
 
 		String margin = first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px";
-		pw.format("<table style=\"%s; width: 0;\"%s>", margin, tableExtraAttr);
+		pw.format(TABLE + " style=\"%s; width: 0;\"%s>", margin, tableExtraAttr);
 		pw.print("<tr>");
 		pw.print("<td style=\"margin: 0 5px; width: 70px; text-align: center;\">");
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
