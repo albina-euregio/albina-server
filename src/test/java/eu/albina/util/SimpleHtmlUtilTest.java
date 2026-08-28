@@ -36,6 +36,7 @@ public class SimpleHtmlUtilTest {
 	private LocalServerInstance serverInstanceEuregio;
 	private LocalServerInstance serverInstanceAran;
 	private Region regionEuregio;
+	private Region regionVorarlberg;
 	private Region regionTyrol;
 	private Region regionAran;
 
@@ -44,6 +45,7 @@ public class SimpleHtmlUtilTest {
 		serverInstanceEuregio = new LocalServerInstance(false, false, "/mnt/bulletins/", null, null, "/mnt/simple_local/", null);
 		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, null, "/mnt/simple_local/", null);
 		regionEuregio = regionTestUtils.regionEuregio();
+		regionVorarlberg = regionTestUtils.regionVorarlberg();
 		regionTyrol = regionTestUtils.regionTyrol();
 		regionAran = regionTestUtils.regionAran();
 	}
@@ -61,6 +63,15 @@ public class SimpleHtmlUtilTest {
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
 		assertResourceEquals("2026-04-13.simple.html", htmlString);
+	}
+
+	@Test
+	public void createSimpleHtmlStringVorarlberg() throws IOException {
+		URL resource = Resources.getResource("2026-04-13.AT-08.json");
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionVorarlberg, serverInstanceEuregio);
+		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
+		assertResourceEquals("2026-04-13.AT-08.simple.html", htmlString);
 	}
 
 	@Test
