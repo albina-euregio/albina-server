@@ -41,7 +41,7 @@ public class OpenApiService {
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_YAML)
 	public String getOpenApi() throws IOException {
-		URL resource = Resources.getResource("META-INF/swagger/albina-server-0.0.yml");
+		URL resource = Resources.getResource("META-INF/swagger/albina-server.yml");
 		return Resources.toString(resource, StandardCharsets.UTF_8);
 	}
 

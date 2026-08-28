@@ -386,6 +386,9 @@
 						     published to the web root (which are served by the web
 						     server, not by Micronaut) into the generated spec. -->
 						<arg>-Amicronaut.openapi.additional.files=${project.basedir}/src/main/openapi</arg>
+						<!-- Keep the file name stable regardless of the version. -->
+						<arg>-Amicronaut.openapi.filename=albina-server</arg>
+						<arg>-Amicronaut.openapi.expand.albina.conf.git.version=${albina.conf.git.version}</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>

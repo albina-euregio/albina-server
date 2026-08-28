@@ -92,7 +92,7 @@ import jakarta.transaction.Transactional;
 @Tag(name = "bulletins")
 @OpenAPIDefinition(info = @Info(
 	title = "albina-server",
-	version = "0.0",
+	version = "${albina.conf.git.version}",
 	description = "Server component to compose and publish multilingual avalanche bulletins",
 	license = @License(name = "GNU Affero General Public License v3.0", url = "https://gitlab.com/albina-euregio/albina-server/-/blob/master/LICENSE"),
 	contact = @Contact(name = "avalanche.report", url = "https://avalanche.report/", email = "info@avalanche.report")
