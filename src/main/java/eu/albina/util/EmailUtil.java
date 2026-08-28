@@ -7,13 +7,10 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.io.Resources;
@@ -28,7 +25,6 @@ import eu.albina.model.enumerations.AvalancheSize;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
-import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
 import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.LanguageCode;
@@ -38,6 +34,7 @@ import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheBulletinsCustomData;
 import org.caaml.v6.AvalancheProblem;
+import org.caaml.v6.DangerRatingValue;
 import org.caaml.v6.ElevationBoundaryOrBand;
 import org.caaml.v6.Texts;
 import org.caaml.v6.ValidTimePeriod;
@@ -89,7 +86,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		String ci = serverImagesUrl + region.getImageColorbarColorPath();
 		String website = region.getWebsiteUrlWithDate(lang, avalancheReport);
 		String mapsUrl = avalancheReport.getMapsUrl();
-		boolean daytime = bulletins.getBulletins().stream().anyMatch(EmailUtil::hasDaytimeDependency);
+		boolean daytime = bulletins.getBulletins().stream().anyMatch(AvalancheBulletin::hasDaytimeDependency);
 
 		String publicationDate = avalancheReport.getPublicationDate(lang);
 		String publishedAt = publicationDate.isEmpty() ? "" : lang.getBundleString("published");
@@ -218,19 +215,19 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print("</tr>");
 		pw.print("<tr>");
 		pw.print("<td>");
-		pw.format("<p class=\"danger-rating\">%s</p>", DangerRating.low.toString(lang.getLocale(), false));
+		pw.format("<p class=\"danger-rating\">%s</p>", lang.getCaamlBundleString("dangerRating.low"));
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format("<p class=\"danger-rating\">%s</p>", DangerRating.moderate.toString(lang.getLocale(), false));
+		pw.format("<p class=\"danger-rating\">%s</p>", lang.getCaamlBundleString("dangerRating.moderate"));
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format("<p class=\"danger-rating\">%s</p>", DangerRating.considerable.toString(lang.getLocale(), false));
+		pw.format("<p class=\"danger-rating\">%s</p>", lang.getCaamlBundleString("dangerRating.considerable"));
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format("<p class=\"danger-rating\">%s</p>", DangerRating.high.toString(lang.getLocale(), false));
+		pw.format("<p class=\"danger-rating\">%s</p>", lang.getCaamlBundleString("dangerRating.high"));
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format("<p class=\"danger-rating\">%s</p>", DangerRating.very_high.toString(lang.getLocale(), false));
+		pw.format("<p class=\"danger-rating\">%s</p>", lang.getCaamlBundleString("dangerRating.very_high"));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
@@ -327,7 +324,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, String color) {
 		Region region = avalancheReport.getRegion();
-		DangerRating highestDangerRating = highestDangerRating(bulletin);
+		DangerRatingValue highestDangerRating = Objects.requireNonNullElse(bulletin.highestDangerRating(), DangerRatingValue.no_rating);
 
 		pw.print(TABLE + " class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
@@ -341,12 +338,13 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print("<td>");
-		pw.format("<h2 %s>%s</h2>", getHeadlineStyle(highestDangerRating), highestDangerRating.toString(lang.getLocale(), true));
+		pw.format("<h2 %s>%s</h2>", getHeadlineStyle(highestDangerRating),
+			lang.getCaamlBundleString("dangerRating." + highestDangerRating.name() + ".long"));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
 
-		if (hasDaytimeDependency(bulletin)) {
+		if (bulletin.hasDaytimeDependency()) {
 			appendDaytime(pw, bulletin, ValidTimePeriod.earlier, DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
 			appendDaytime(pw, bulletin, ValidTimePeriod.later, DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
 		} else {
@@ -421,7 +419,6 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		Region region = avalancheReport.getRegion();
 		String map = avalancheReport.getMapsUrl() + "/"
 			+ MapUtil.filename(region, bulletin.getBulletinID(), daytimeDependency, false, MapImageFormat.jpg);
-		List<org.caaml.v6.DangerRating> dangerRatings = dangerRatings(bulletin, validTimePeriod);
 
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
@@ -436,16 +433,16 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.format("<img width=\"150\" src=\"%s\" alt=\"%s\"/>", map, regions(bulletin));
 		pw.print("</td>");
 		pw.format("<td style=\"width: 60px; vertical-align: middle; %s\">", ROW_BORDER);
-		pw.format("<img height=\"48\" width=\"60\" src=\"%s\" alt=\"%s\"/>", dangerRatingSymbol(dangerRatings),
+		pw.format("<img height=\"48\" width=\"60\" src=\"%s\" alt=\"%s\"/>", dangerRatingSymbol(bulletin, validTimePeriod),
 			lang.getCaamlBundleString("dangerRating.label"));
 		pw.print("</td>");
 		pw.format("<td style=\"vertical-align: middle; padding-left: 10px; %s\">", ROW_BORDER);
-		pw.format("<p class=\"small\"><b>%s</b></p>", dangerRatingElevation(dangerRatings));
+		pw.format("<p class=\"small\"><b>%s</b></p>", elevationText(bulletin.dangerRatingElevation(validTimePeriod)));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
 
-		avalancheProblems(bulletin, validTimePeriod).forEach(problem -> appendAvalancheProblem(pw, problem));
+		bulletin.avalancheProblems(validTimePeriod).forEach(problem -> appendAvalancheProblem(pw, problem));
 	}
 
 	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem) {
@@ -459,12 +456,14 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		String symbol = serverImagesUrl + "avalanche_problems/color/" + avalancheProblem.toStringId() + ".png";
 		String text = avalancheProblem.toString(lang.getLocale());
 		String link = getAvalancheProblemLink(lang, region, avalancheProblem);
-		String aspects = serverImagesUrl + Aspect.getSymbolPath(aspects(problem), false);
-		String elevationSymbol = serverImagesUrl + elevationSymbolPath(elevation) + ".png";
+		String aspects = serverImagesUrl + Aspect.getSymbolPath(org.caaml.v6.Aspect.bitmask(problem.aspects()), false);
+		String elevationSymbol = serverImagesUrl + eu.albina.model.AvalancheProblem.getElevationSymbolPath(
+			elevation != null && elevation.getUpperBound() != null,
+			elevation != null && elevation.getLowerBound() != null) + ".png";
 
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
-		pw.print(dangerRatingColorCell(dangerRating(problem.getDangerRatingValue()), region));
+		pw.print(dangerRatingColorCell(problem.getDangerRatingValue(), region));
 		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
 		pw.format("<img width=\"50\" src=\"%s\" alt=\"\"/>", symbol);
@@ -500,75 +499,22 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		}
 	}
 
-	private static boolean hasDaytimeDependency(AvalancheBulletin bulletin) {
-		return bulletin.getDangerRatings().stream()
-			.anyMatch(dangerRating -> dangerRating.getValidTimePeriod() != ValidTimePeriod.all_day);
-	}
-
-	private static List<org.caaml.v6.DangerRating> dangerRatings(AvalancheBulletin bulletin, ValidTimePeriod validTimePeriod) {
-		return bulletin.getDangerRatings().stream()
-			.filter(dangerRating -> dangerRating.getValidTimePeriod() == validTimePeriod)
-			.toList();
-	}
-
-	private static List<AvalancheProblem> avalancheProblems(AvalancheBulletin bulletin, ValidTimePeriod validTimePeriod) {
-		return bulletin.getAvalancheProblems().stream()
-			.filter(problem -> problem.getValidTimePeriod() == validTimePeriod)
-			.toList();
-	}
-
-	private static DangerRating highestDangerRating(AvalancheBulletin bulletin) {
-		return bulletin.getDangerRatings().stream()
-			.map(org.caaml.v6.DangerRating::getMainValue)
-			.map(EmailUtil::dangerRating)
-			.filter(Objects::nonNull)
-			.max(Comparator.naturalOrder())
-			.orElse(DangerRating.no_rating);
-	}
-
-	/** The danger rating above resp. below the elevation boundary of the given daytime. */
-	private static DangerRating dangerRating(List<org.caaml.v6.DangerRating> dangerRatings, boolean above) {
-		return dangerRatings.stream()
-			.filter(dangerRating -> dangerRating.getElevation() == null
-				|| (above ? dangerRating.getElevation().getLowerBound() : dangerRating.getElevation().getUpperBound()) != null)
-			.map(org.caaml.v6.DangerRating::getMainValue)
-			.map(EmailUtil::dangerRating)
-			.filter(Objects::nonNull)
-			.findFirst()
-			.orElse(null);
-	}
-
-	private static DangerRating dangerRating(org.caaml.v6.DangerRatingValue dangerRatingValue) {
-		return dangerRatingValue != null ? DangerRating.valueOf(dangerRatingValue.name()) : null;
-	}
-
 	private static String regions(AvalancheBulletin bulletin) {
 		return bulletin.getRegions().stream().map(org.caaml.v6.Region::getName).collect(Collectors.joining(", "));
 	}
 
 	private String aspectsText(AvalancheProblem problem) {
-		return aspects(problem).stream().map(aspect -> aspect.toString(lang.getLocale())).collect(Collectors.joining(", "));
-	}
-
-	private static Set<Aspect> aspects(AvalancheProblem problem) {
-		return problem.getAspects() == null
-			? Set.of()
-			: problem.getAspects().stream().map(aspect -> Aspect.valueOf(aspect.name()))
-				.collect(Collectors.toCollection(LinkedHashSet::new));
+		return problem.aspects().stream()
+			.map(aspect -> lang.getCaamlBundleString("aspect." + aspect.name()))
+			.collect(Collectors.joining(", "));
 	}
 
 	private static AvalancheType avalancheType(AvalancheProblem problem) {
-		return problem.getCustomData() == null || problem.getCustomData().ALBINA() == null
-			? null
-			: AvalancheType.valueOf(problem.getCustomData().ALBINA().avalancheType());
+		return problem.albinaAvalancheType() == null ? null : AvalancheType.valueOf(problem.albinaAvalancheType());
 	}
 
 	private static List<DangerPattern> dangerPatterns(AvalancheBulletin bulletin) {
-		if (bulletin.getCustomData() == null || bulletin.getCustomData().LWD_Tyrol() == null
-			|| bulletin.getCustomData().LWD_Tyrol().dangerPatterns() == null) {
-			return List.of();
-		}
-		return bulletin.getCustomData().LWD_Tyrol().dangerPatterns().stream()
+		return bulletin.dangerPatterns().stream()
 			.map(DangerPattern::fromString)
 			.filter(Objects::nonNull)
 			.toList();
@@ -598,17 +544,6 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		return Optional.ofNullable(texts).map(Texts::getComment);
 	}
 
-	/** Path of the elevation pictogram below {@code images/}, without file extension. */
-	private static String elevationSymbolPath(ElevationBoundaryOrBand elevation) {
-		boolean upperBound = elevation != null && elevation.getUpperBound() != null;
-		boolean lowerBound = elevation != null && elevation.getLowerBound() != null;
-		if (upperBound) {
-			return lowerBound ? "elevation/color/levels_middle_two" : "elevation/color/levels_below";
-		} else {
-			return lowerBound ? "elevation/color/levels_above" : "elevation/color/levels_all";
-		}
-	}
-
 	/** The elevation boundary as text, or an empty string if it is not set. */
 	private String elevationText(String bound) {
 		if (bound == null) {
@@ -628,43 +563,32 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 			problem.getAvalancheSize() != null ? AvalancheSize.fromInteger(problem.getAvalancheSize()) : null);
 	}
 
-	private String dangerRatingSymbol(List<org.caaml.v6.DangerRating> dangerRatings) {
+	private String dangerRatingSymbol(AvalancheBulletin bulletin, ValidTimePeriod validTimePeriod) {
 		return avalancheReport.getRegion().getServerImagesUrl() + "warning_pictos/color/level_"
-			+ DangerRating.getString(dangerRating(dangerRatings, false)) + "_"
-			+ DangerRating.getString(dangerRating(dangerRatings, true)) + ".png";
-	}
-
-	private String dangerRatingElevation(List<org.caaml.v6.DangerRating> dangerRatings) {
-		return dangerRatings.stream()
-			.map(org.caaml.v6.DangerRating::getElevation)
-			.filter(Objects::nonNull)
-			.map(ElevationBoundaryOrBand::getLowerBound)
-			.filter(Objects::nonNull)
-			.findFirst()
-			.map(this::elevationText)
-			.orElse("");
+			+ DangerRatingValue.level(bulletin.dangerRating(validTimePeriod, false)) + "_"
+			+ DangerRatingValue.level(bulletin.dangerRating(validTimePeriod, true)) + ".png";
 	}
 
 	/**
 	 * The coloured bar in front of a bulletin or an avalanche problem. An empty cell collapses in
 	 * Outlook, hence the space.
 	 */
-	private static String dangerRatingColorCell(DangerRating dangerRating, Region region) {
-		if (DangerRating.getInt(dangerRating) == 0) {
+	private static String dangerRatingColorCell(DangerRatingValue dangerRating, Region region) {
+		if (DangerRatingValue.level(dangerRating) == 0) {
 			return "<td width=\"10\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>";
 		}
-		String background = dangerRating.equals(DangerRating.very_high)
+		String background = dangerRating == DangerRatingValue.very_high
 			? " background=\"" + region.getServerImagesUrl() + "bg_checkered.png\""
 			: "";
 		return String.format("<td width=\"10\" bgcolor=\"%s\"%s style=\"font-size: 0; line-height: 0;\">&nbsp;</td>",
-			dangerRating.getColor(), background);
+			dangerRating.color(), background);
 	}
 
 	/** The light colours of the low danger levels are legible as a background only. */
-	private static String getHeadlineStyle(DangerRating dangerRating) {
-		String color = DangerRating.getInt(dangerRating) >= 3
-			? "color: " + dangerRating.getColor()
-			: "color: #565F61; background-color: " + dangerRating.getColor();
+	private static String getHeadlineStyle(DangerRatingValue dangerRating) {
+		String color = dangerRating.level() >= 3
+			? "color: " + dangerRating.color()
+			: "color: #565F61; background-color: " + dangerRating.color();
 		return String.format("style=\"padding-left: 15px; %s;\"", color);
 	}
 

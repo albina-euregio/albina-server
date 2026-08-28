@@ -216,20 +216,15 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	/** Path of the elevation pictogram below {@code images/}, without file extension. */
 	@JsonIgnore
 	public String getElevationSymbolPath() {
-		if (getTreelineHigh() || getElevationHigh() > 0) {
-			if (getTreelineLow() || getElevationLow() > 0) {
-				// elevation high and low set
-				return "elevation/color/levels_middle_two";
-			} else {
-				// elevation high set
-				return "elevation/color/levels_below";
-			}
-		} else if (getTreelineLow() || getElevationLow() > 0) {
-			// elevation low set
-			return "elevation/color/levels_above";
+		return getElevationSymbolPath(getTreelineHigh() || getElevationHigh() > 0, getTreelineLow() || getElevationLow() > 0);
+	}
+
+	/** Path of the elevation pictogram below {@code images/}, without file extension. */
+	public static String getElevationSymbolPath(boolean elevationHigh, boolean elevationLow) {
+		if (elevationHigh) {
+			return elevationLow ? "elevation/color/levels_middle_two" : "elevation/color/levels_below";
 		} else {
-			// no elevation set
-			return "elevation/color/levels_all";
+			return elevationLow ? "elevation/color/levels_above" : "elevation/color/levels_all";
 		}
 	}
 

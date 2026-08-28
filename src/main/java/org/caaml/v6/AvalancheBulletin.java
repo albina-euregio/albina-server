@@ -3,6 +3,7 @@ package org.caaml.v6;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import tools.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -158,4 +159,55 @@ public class AvalancheBulletin {
      */
     public Texts getWeatherReview() { return weatherReview; }
     public void setWeatherReview(Texts value) { this.weatherReview = value; }
+
+	/** Whether the danger ratings and the avalanche problems are split into forenoon and afternoon. */
+	public boolean hasDaytimeDependency() {
+		return dangerRatings.stream().anyMatch(dangerRating -> dangerRating.getValidTimePeriod() != ValidTimePeriod.all_day);
+	}
+
+	public List<DangerRating> dangerRatings(ValidTimePeriod validTimePeriod) {
+		return dangerRatings.stream().filter(dangerRating -> dangerRating.getValidTimePeriod() == validTimePeriod).toList();
+	}
+
+	public List<AvalancheProblem> avalancheProblems(ValidTimePeriod validTimePeriod) {
+		return avalancheProblems.stream().filter(problem -> problem.getValidTimePeriod() == validTimePeriod).toList();
+	}
+
+	/** The highest danger rating of all daytimes and elevations, or null if there is none. */
+	public DangerRatingValue highestDangerRating() {
+		return dangerRatings.stream()
+			.map(DangerRating::getMainValue)
+			.filter(Objects::nonNull)
+			.max(DangerRatingValue.BY_SEVERITY)
+			.orElse(null);
+	}
+
+	/** The danger rating above resp. below the elevation boundary of the given daytime, or null if there is none. */
+	public DangerRatingValue dangerRating(ValidTimePeriod validTimePeriod, boolean above) {
+		return dangerRatings(validTimePeriod).stream()
+			.filter(dangerRating -> dangerRating.getElevation() == null
+				|| (above ? dangerRating.getElevation().getLowerBound() : dangerRating.getElevation().getUpperBound()) != null)
+			.map(DangerRating::getMainValue)
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
+	}
+
+	/** The elevation boundary separating the danger ratings of the given daytime, or null if there is none. */
+	public String dangerRatingElevation(ValidTimePeriod validTimePeriod) {
+		return dangerRatings(validTimePeriod).stream()
+			.map(DangerRating::getElevation)
+			.filter(Objects::nonNull)
+			.map(ElevationBoundaryOrBand::getLowerBound)
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
+	}
+
+	/** The danger patterns of the LWD Tyrol custom data, or an empty list if there are none. */
+	public List<String> dangerPatterns() {
+		return customData == null || customData.LWD_Tyrol() == null || customData.LWD_Tyrol().dangerPatterns() == null
+			? List.of()
+			: customData.LWD_Tyrol().dangerPatterns();
+	}
 }

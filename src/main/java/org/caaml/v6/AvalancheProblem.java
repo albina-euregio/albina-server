@@ -69,6 +69,16 @@ public class AvalancheProblem {
     public ValidTimePeriod getValidTimePeriod() { return validTimePeriod; }
     public void setValidTimePeriod(ValidTimePeriod value) { this.validTimePeriod = value; }
 
+	/** The avalanche type of the ALBINA custom data, or null if there is none. */
+	public String albinaAvalancheType() {
+		return customData == null || customData.ALBINA() == null ? null : customData.ALBINA().avalancheType();
+	}
+
+	/** The aspects, or an empty list if there are none. */
+	public List<Aspect> aspects() {
+		return aspects == null ? List.of() : aspects;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

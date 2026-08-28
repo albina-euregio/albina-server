@@ -51,18 +51,22 @@ public enum Aspect {
 	}
 
 	public static String getSymbolPath(Set<Aspect> aspects, boolean grayscale) {
-		if (aspects == null || aspects.isEmpty()) {
+		return getSymbolPath(aspects == null ? 0 : aspects.stream().mapToInt(Aspect::bitmask).reduce(0b00000000, (a, b) -> a | b), grayscale);
+	}
+
+	/** @param bitmask the aspects, see {@link org.caaml.v6.Aspect#bitmask(List)} */
+	public static String getSymbolPath(int bitmask, boolean grayscale) {
+		if (bitmask == 0) {
 			return "aspects/color/empty.png";
 		}
-		int bitmask = aspects.stream().mapToInt(Aspect::bitmask).reduce(0b00000000, (a, b) -> a | b);
 		if (grayscale)
 			return "aspects/grey/" + Integer.valueOf(bitmask).toString() + ".png";
 		else
 			return "aspects/color/" + Integer.valueOf(bitmask).toString() + ".png";
 	}
 
-	public static String getDataURL(Set<Aspect> aspects, boolean grayscale) {
-		return DataURL.ofResource("images/" + getSymbolPath(aspects, grayscale));
+	public static String getDataURL(int bitmask, boolean grayscale) {
+		return DataURL.ofResource("images/" + getSymbolPath(bitmask, grayscale));
 	}
 
 	private static int bitmask(Aspect aspect) {
