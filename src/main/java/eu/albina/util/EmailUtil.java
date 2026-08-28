@@ -8,6 +8,7 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -124,7 +125,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print(TABLE + " class=\"head-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
 		pw.print("<td>");
-		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\"/>");
+		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\" alt=\"\"/>");
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("<tr>");
@@ -140,7 +141,8 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print("</td>");
 		pw.print("<td align=\"right\">");
 		pw.format("<a href=\"%s\">", website);
-		pw.format("<img width=\"110\" src=\"%s\"/>", serverImagesUrl + region.getLogoPath());
+		pw.format("<img width=\"110\" src=\"%s\" alt=\"%s\"/>", serverImagesUrl + region.getLogoPath(),
+			region.getWebsiteName(lang));
 		pw.print("</a>");
 		pw.print("</td>");
 		pw.print("</tr>");
@@ -283,7 +285,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
-		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\"/>");
+		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\" alt=\"\"/>");
 		pw.print("</body>");
 		pw.print("</html>");
 
@@ -297,12 +299,13 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 			.map(AvalancheBulletinsCustomData.ALBINA::generalHeadline);
 	}
 
-	private static void appendOverviewMap(PrintWriter pw, String website, String map) {
+	private void appendOverviewMap(PrintWriter pw, String website, String map) {
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.print("<p class=\"last\" style=\"text-align: center;\">");
 		pw.format("<a href=\"%s\">", website);
-		pw.format("<img width=\"600\" style=\"max-width: 600px;\" src=\"%s\"/>", map);
+		pw.format("<img width=\"600\" style=\"max-width: 600px;\" src=\"%s\" alt=\"%s\"/>", map,
+			lang.getCaamlBundleString("forecast.label"));
 		pw.print("</a>");
 		pw.print("</p>");
 		pw.print("</td>");
@@ -429,10 +432,11 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 			pw.print("<tr>");
 		}
 		pw.format("<td style=\"width: 150px; padding-right: 10px; %s\">", ROW_BORDER);
-		pw.format("<img width=\"150\" src=\"%s\"/>", map);
+		pw.format("<img width=\"150\" src=\"%s\" alt=\"%s\"/>", map, regions(bulletin));
 		pw.print("</td>");
 		pw.format("<td style=\"width: 60px; vertical-align: middle; %s\">", ROW_BORDER);
-		pw.format("<img height=\"48\" width=\"60\" src=\"%s\"/>", dangerRatingSymbol(dangerRatings));
+		pw.format("<img height=\"48\" width=\"60\" src=\"%s\" alt=\"%s\"/>", dangerRatingSymbol(dangerRatings),
+			lang.getCaamlBundleString("dangerRating.label"));
 		pw.print("</td>");
 		pw.format("<td style=\"vertical-align: middle; padding-left: 10px; %s\">", ROW_BORDER);
 		pw.format("<p class=\"small\"><b>%s</b></p>", dangerRatingElevation(dangerRatings));
@@ -462,15 +466,15 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print(dangerRatingColorCell(dangerRating(problem.getDangerRatingValue()), region));
 		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
-		pw.format("<img width=\"50\" src=\"%s\"/>", symbol);
+		pw.format("<img width=\"50\" src=\"%s\" alt=\"\"/>", symbol);
 		pw.print("</a>");
 		pw.format("<p class=\"small\">%s</p>", text);
 		pw.print("</td>");
 		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
-		pw.format("<img width=\"60\" height=\"60\" src=\"%s\"/>", aspects);
+		pw.format("<img width=\"60\" height=\"60\" src=\"%s\" alt=\"%s\"/>", aspects, aspectsText(problem));
 		pw.print("</td>");
 		pw.format("<td style=\"width: 80px; text-align: center; %s\">", PROBLEM_CELL);
-		pw.format("<img width=\"80\" height=\"48\" src=\"%s\"/>", elevationSymbol);
+		pw.format("<img width=\"80\" height=\"48\" src=\"%s\" alt=\"\"/>", elevationSymbol);
 		pw.print("</td>");
 		pw.format("<td style=\"width: 60px; %s\">", PROBLEM_CELL);
 		appendElevationLimit(pw, elevationText(elevation != null ? elevation.getUpperBound() : null));
@@ -537,10 +541,19 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		return dangerRatingValue != null ? DangerRating.valueOf(dangerRatingValue.name()) : null;
 	}
 
+	private static String regions(AvalancheBulletin bulletin) {
+		return bulletin.getRegions().stream().map(org.caaml.v6.Region::getName).collect(Collectors.joining(", "));
+	}
+
+	private String aspectsText(AvalancheProblem problem) {
+		return aspects(problem).stream().map(aspect -> aspect.toString(lang.getLocale())).collect(Collectors.joining(", "));
+	}
+
 	private static Set<Aspect> aspects(AvalancheProblem problem) {
 		return problem.getAspects() == null
 			? Set.of()
-			: problem.getAspects().stream().map(aspect -> Aspect.valueOf(aspect.name())).collect(Collectors.toSet());
+			: problem.getAspects().stream().map(aspect -> Aspect.valueOf(aspect.name()))
+				.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 
 	private static AvalancheType avalancheType(AvalancheProblem problem) {

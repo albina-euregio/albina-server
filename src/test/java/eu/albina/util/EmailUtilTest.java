@@ -132,6 +132,10 @@ public class EmailUtilTest {
 			html.split("<table", -1).length,
 			html.split("<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"", -1).length,
 			"every layout table needs the presentational attributes");
+		Assertions.assertEquals(
+			html.split("<img", -1).length,
+			html.split(" alt=\"", -1).length,
+			"every image needs an alt attribute");
 	}
 
 	@Test
