@@ -25,17 +25,6 @@ a {
     color: #2BA6CB;
 }
 
-.btn {
-    text-decoration: none;
-    color: #565f61;
-    padding: 0px 10px;
-    font-weight: bold;
-    margin-right: 10px;
-    text-align: center;
-    cursor: pointer;
-    display: inline-block;
-}
-
 /* ------------------------------------- LAYOUT ------------------------------------- */
 table.head-wrap {
     width: 100%;
@@ -50,7 +39,6 @@ table.footer-wrap {
     width: 100%;
     clear: both !important;
     border-top: 1px solid #99daff;
-    padding-top: 15px;
 }
 
 .container {
@@ -61,7 +49,6 @@ table.footer-wrap {
 }
 
 .content {
-    padding: 0px;
     max-width: 800px;
     margin: 0 auto;
     display: block;
@@ -105,7 +92,21 @@ p {
 
 p.lead {
     font-size: 24px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
+}
+
+.small {
+    font-size: 12px;
+    margin-bottom: 0;
+}
+
+.last {
+    margin-bottom: 0;
+}
+
+.inline {
+    display: inline-block;
+    margin-right: 5px;
 }
 
 /* ------------------------------------- BULLETIN ------------------------------------- */
@@ -125,16 +126,9 @@ p.lead {
     padding-top: 5px;
 }
 
-.bulletin-content {
-    margin-top: 15px;
-    margin-bottom: 40px;
-}
-
 .tendency {
     padding-left: 15px;
-    padding-right: 15px;
     vertical-align: middle;
-    text-align: center;
 }
 
 .detail-map {
@@ -177,5 +171,4 @@ p.lead {
 /* ------------------------------------- AVALANCHE PROBLEM ------------------------------------- */
 .avalanche-problem {
     max-width: 50px;
-    margin: 5px;
 }

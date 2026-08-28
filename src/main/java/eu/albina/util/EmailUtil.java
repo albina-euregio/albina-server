@@ -32,6 +32,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	/** Opens a layout table. Outlook needs the presentational attributes on every one of them. */
 	private static final String TABLE = "<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"";
 
+	/** Separates one avalanche problem from the next. Outlook supports padding on cells, not on tables. */
+	private static final String PROBLEM_CELL = "padding-top: 5px; padding-bottom: 5px;";
+
 	/** Separates the daytime row from the avalanche problems below it. */
 	private static final String ROW_BORDER = "border-bottom: 1px solid #e6eef2; padding-bottom: 5px;";
 
@@ -111,12 +114,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.format("<p class=\"lead\">%s</p>", headline);
-		pw.format("<h2 style=\"margin-bottom: 5px\">%s</h2>", avalancheReport.getDate(lang));
-		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px\">%s<b>%s</b>", publishedAt, publicationDate);
+		pw.format("<h2>%s</h2>", avalancheReport.getDate(lang));
+		pw.format("<p class=\"small\">%s<b>%s</b>", publishedAt, publicationDate);
 		pw.print("</p>");
 		pw.print("</td>");
 		pw.print("<td align=\"right\">");
-		pw.format("<a class=\"btn\" href=\"%s\">", website);
+		pw.format("<a href=\"%s\">", website);
 		pw.format("<img width=\"110\" src=\"%s\"/>", serverImagesUrl + region.getLogoPath());
 		pw.print("</a>");
 		pw.print("</td>");
@@ -130,9 +133,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		// overview maps
 		pw.print(TABLE + " align=\"center\" class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
-		pw.print("<td class=\"container\" bgcolor=\"#FFFFFF\">");
+		pw.print("<td class=\"container\" style=\"padding: 15px 0;\" bgcolor=\"#FFFFFF\">");
 		pw.print("<div class=\"content\">");
-		pw.print(TABLE + " style=\"padding: 15px 0;\">");
+		pw.print(TABLE + ">");
 		if (daytime) {
 			pw.print("<tr>");
 			pw.print("<td>");
@@ -143,8 +146,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		appendOverviewMap(pw, website, overview);
 		if (daytime) {
 			pw.print("<tr>");
-			pw.print("<td>");
-			pw.format("<h2 class=\"map-daytime-text\" style=\"margin-top: 15px;\">%s</h2>", textPm);
+			pw.print("<td style=\"padding-top: 15px;\">");
+			pw.format("<h2 class=\"map-daytime-text\">%s</h2>", textPm);
 			pw.print("</td>");
 			pw.print("</tr>");
 			appendOverviewMap(pw, website, overviewPM);
@@ -214,8 +217,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
 			pw.print(TABLE + ">");
 			pw.print("<tr>");
-			pw.print("<td>");
-			pw.format("<h2 style=\"margin: 24px 0\">%s</h2>", generalHeadline);
+			pw.print("<td style=\"padding: 15px 0;\">");
+			pw.format("<h2>%s</h2>", generalHeadline);
 			pw.print("</td>");
 			pw.print("</tr>");
 			pw.print("</table>");
@@ -228,7 +231,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		// footer
 		pw.print(TABLE + " class=\"footer-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
-		pw.print("<td class=\"container\">");
+		pw.print("<td class=\"container\" style=\"padding: 15px 0;\">");
 		pw.print("<div class=\"content\">");
 		pw.print(TABLE + ">");
 		pw.print("<tr>");
@@ -243,7 +246,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("<tr>");
-		pw.print("<td class=\"container\">");
+		pw.print("<td class=\"container\" style=\"padding: 15px 0;\">");
 		pw.print("<div class=\"content\">");
 		pw.print(TABLE + ">");
 		pw.print("<tr>");
@@ -269,7 +272,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	private static void appendOverviewMap(PrintWriter pw, String website, String map) {
 		pw.print("<tr>");
 		pw.print("<td>");
-		pw.print("<p style=\"margin-bottom: 0px; text-align: center;\">");
+		pw.print("<p class=\"last\" style=\"text-align: center;\">");
 		pw.format("<a href=\"%s\">", website);
 		pw.format("<img width=\"600\" style=\"max-width: 600px;\" src=\"%s\"/>", map);
 		pw.print("</a>");
@@ -297,8 +300,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 		pw.print(TABLE + " class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
-		pw.print("<td class=\"container\" bgcolor=\"#FFFFFF\">");
-		pw.print("<div class=\"content bulletin-content\">");
+		pw.print("<td class=\"container\" style=\"padding: 15px 0;\" bgcolor=\"#FFFFFF\">");
+		pw.print("<div class=\"content\">");
 		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print(dangerRatingColorCell(highestDangerRating, region));
@@ -321,7 +324,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
-		pw.print("<td style=\"vertical-align: top; padding-top: 10px;\">");
+		pw.print("<td style=\"vertical-align: top; padding-top: 15px;\">");
 		pw.format("<h4>%s</h4>", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
 		pw.format("<p>%s</p>", bulletin.getAvActivityCommentIn(lang).orElse(""));
 		pw.print("</td>");
@@ -356,8 +359,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			pw.print("<tr>");
 			pw.format("<td width=\"10\" bgcolor=\"#%s\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>", color);
 			pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
-			pw.format("<h4 style=\"padding-top: 5px;\">%s</h4>", snowpackStructureHeadline);
-			pw.format("<h5 style=\"margin-right: 5px; display: inline-block\">%s</h5>", dangerPatternsHeadline);
+			pw.format("<h4>%s</h4>", snowpackStructureHeadline);
+			pw.format("<h5 class=\"inline\">%s</h5>", dangerPatternsHeadline);
 			if (hasStructure) {
 				appendDangerPattern(pw, dangerPattern1);
 				appendDangerPattern(pw, dangerPattern2);
@@ -387,9 +390,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			+ MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
 		Tendency tendency = bulletin.getTendency();
 
-		pw.format(TABLE + " style=\"%s\">", daytimeDependency == DaytimeDependency.pm
-			? "padding-left: 15px;"
-			: "margin-top: 10px; padding-left: 15px;");
+		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		if (heading != null) {
 			pw.print("<td colspan=\"4\" class=\"daytime-text-div\">");
@@ -405,12 +406,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<img height=\"48\" width=\"60\" src=\"%s\"/>", dangerRatingSymbol(description));
 		pw.print("</td>");
 		pw.format("<td class=\"mountain\" style=\"vertical-align: middle; padding-right: 10px; %s\">", ROW_BORDER);
-		pw.format("<p style=\"font-size: 12px;\"><b>%s</b></p>", dangerRatingElevation(description));
+		pw.format("<p class=\"small\"><b>%s</b></p>", dangerRatingElevation(description));
 		pw.print("</td>");
 		pw.format("<td class=\"tendency\" style=\"%s\">", ROW_BORDER);
 		if (tendency != null) {
-			pw.format("<p style=\"text-align: left; font-weight: 900; margin-bottom: 10px;\">%s</p>", tendency.toString(lang.getLocale()));
-			pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s", avalancheReport.getTendencyDate(lang));
+			pw.format("<p><b>%s</b></p>", tendency.toString(lang.getLocale()));
+			pw.format("<p class=\"small\">%s", avalancheReport.getTendencyDate(lang));
 			pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", serverImagesUrl + tendency.getSymbolPath(false));
 			pw.print("</p>");
 		}
@@ -418,14 +419,14 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</tr>");
 		pw.print("</table>");
 
-		appendAvalancheProblem(pw, description.getAvalancheProblem1(), true);
-		appendAvalancheProblem(pw, description.getAvalancheProblem2(), false);
-		appendAvalancheProblem(pw, description.getAvalancheProblem3(), false);
-		appendAvalancheProblem(pw, description.getAvalancheProblem4(), false);
-		appendAvalancheProblem(pw, description.getAvalancheProblem5(), false);
+		appendAvalancheProblem(pw, description.getAvalancheProblem1());
+		appendAvalancheProblem(pw, description.getAvalancheProblem2());
+		appendAvalancheProblem(pw, description.getAvalancheProblem3());
+		appendAvalancheProblem(pw, description.getAvalancheProblem4());
+		appendAvalancheProblem(pw, description.getAvalancheProblem5());
 	}
 
-	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem, boolean first) {
+	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem) {
 		if (problem == null || problem.getAvalancheProblem() == null) {
 			return;
 		}
@@ -438,31 +439,30 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String aspects = serverImagesUrl + Aspect.getSymbolPath(problem.getAspects(), false);
 		String elevationSymbol = serverImagesUrl + problem.getElevationSymbolPath() + ".png";
 
-		pw.format(TABLE + " style=\"%s\">", first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px");
+		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
-		pw.print("<td style=\"width: 70px; text-align: center;\">");
+		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
 		pw.format("<img width=\"50\" class=\"avalanche-problem\" src=\"%s\"/>", symbol);
 		pw.print("</a>");
-		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px; line-height: 1.0;\">%s</p>", text);
+		pw.format("<p class=\"small\">%s</p>", text);
 		pw.print("</td>");
-		pw.print("<td style=\"width: 70px; text-align: center;\">");
+		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<img width=\"60\" height=\"60\" src=\"%s\"/>", aspects);
 		pw.print("</td>");
-		pw.print("<td style=\"width: 80px; text-align: center;\">");
+		pw.format("<td style=\"width: 80px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<img width=\"80\" height=\"48\" src=\"%s\"/>", elevationSymbol);
 		pw.print("</td>");
-		pw.print("<td style=\"width: 60px; padding-left: 5px;\">");
+		pw.format("<td style=\"width: 60px; padding-left: 10px; %s\">", PROBLEM_CELL);
 		appendElevationLimit(pw, problem.getElevationHighText(lang));
 		appendElevationLimit(pw, problem.getElevationLowText(lang));
 		pw.print("</td>");
-		pw.print("<td style=\"padding-left: 10px;\">");
+		pw.format("<td style=\"padding-left: 10px; %s\">", PROBLEM_CELL);
 		if (problem.getAvalancheType() != null) {
-			pw.format("<p style=\"margin-bottom: 0px; font-size: 12px;\"><b>%s</b></p>",
-				problem.getAvalancheType().toString(lang.getLocale()));
+			pw.format("<p class=\"small\"><b>%s</b></p>", problem.getAvalancheType().toString(lang.getLocale()));
 		}
 		problem.getMatrixParameters(lang).forEach((label, value) ->
-			pw.format("<p style=\"margin-bottom: 0px; font-size: 12px;\">%s: %s</p>", label, value));
+			pw.format("<p class=\"small\">%s: %s</p>", label, value));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
@@ -470,7 +470,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 	private static void appendElevationLimit(PrintWriter pw, String elevation) {
 		if (!elevation.isEmpty()) {
-			pw.format("<p style=\"margin-bottom: 0px; font-size: 12px;\"><b>%s</b></p>", elevation);
+			pw.format("<p class=\"small\"><b>%s</b></p>", elevation);
 		}
 	}
 
@@ -515,7 +515,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String color = DangerRating.getInt(dangerRating) >= 3
 			? "color: " + dangerRating.getColor()
 			: "color: #565F61; background-color: " + dangerRating.getColor();
-		return String.format("style=\"padding-left: 15px; margin-bottom: 0px; %s;\"", color);
+		return String.format("style=\"padding-left: 15px; %s;\"", color);
 	}
 
 	private void appendDangerPattern(PrintWriter pw, DangerPattern dangerPattern) {
