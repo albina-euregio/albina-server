@@ -106,6 +106,7 @@ article {
     gap: var(--space-md);
     padding: var(--space-lg);
     background-color: var(--color-article);
+    border-left: var(--space-sm) solid transparent;
 }
 
 article > section {

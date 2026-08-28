@@ -115,7 +115,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	}
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin) {
-		pw.format("<article id=\"%s\">\n", bulletin.getId());
+		pw.format("<article id=\"%s\"%s>\n", bulletin.getId(), borderColor(bulletin.getHighestDangerRating()));
 		if (bulletin.isHasDaytimeDependency()) {
 			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
 			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
@@ -221,8 +221,16 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		if (dangerRating == null) {
 			return "";
 		}
-		return String.format(" style=\"border-color: %s\" title=\"%s: %s\"", dangerRating.getColor(),
+		return borderColor(dangerRating) + String.format(" title=\"%s: %s\"",
 			lang.getCaamlBundleString("dangerRating.label"), dangerRating.toString(lang.getLocale(), false));
+	}
+
+	/** Colors the bar in front of a bulletin or an avalanche problem according to the given danger rating. */
+	private String borderColor(DangerRating dangerRating) {
+		if (dangerRating == null || dangerRating == DangerRating.missing) {
+			return "";
+		}
+		return String.format(" style=\"border-color: %s\"", dangerRating.getColor());
 	}
 
 	/** The EAWS matrix parameters, shown for slab avalanches only (as in the PDF bulletin). */
