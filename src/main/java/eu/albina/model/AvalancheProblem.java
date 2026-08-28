@@ -2,6 +2,7 @@
 package eu.albina.model;
 
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import io.micronaut.serde.annotation.Serdeable;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Direction;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.util.DataURL;
 
 import jakarta.persistence.AttributeOverride;
@@ -211,22 +213,59 @@ public class AvalancheProblem extends AbstractPersistentObject {
 		return true;
 	}
 
+	/** Path of the elevation pictogram below {@code images/}, without file extension. */
 	@JsonIgnore
-	public String getElevationDataURL() {
+	public String getElevationSymbolPath() {
 		if (getTreelineHigh() || getElevationHigh() > 0) {
 			if (getTreelineLow() || getElevationLow() > 0) {
 				// elevation high and low set
-				return DataURL.ofResource("images/elevation/color/levels_middle_two.webp");
+				return "elevation/color/levels_middle_two";
 			} else {
 				// elevation high set
-				return DataURL.ofResource("images/elevation/color/levels_below.webp");
+				return "elevation/color/levels_below";
 			}
 		} else if (getTreelineLow() || getElevationLow() > 0) {
 			// elevation low set
-			return DataURL.ofResource("images/elevation/color/levels_above.webp");
+			return "elevation/color/levels_above";
 		} else {
 			// no elevation set
-			return DataURL.ofResource("images/elevation/color/levels_all.webp");
+			return "elevation/color/levels_all";
+		}
+	}
+
+	@JsonIgnore
+	public String getElevationDataURL() {
+		return DataURL.ofResource("images/" + getElevationSymbolPath() + ".webp");
+	}
+
+	public Map<String, String> getMatrixParameters(LanguageCode lang) {
+		if (eawsMatrixInformation == null) {
+			return Map.of();
+		}
+		return EawsMatrixInformation.getMatrixParameters(lang, avalancheType, avalancheProblem,
+			eawsMatrixInformation.getSnowpackStability(), eawsMatrixInformation.getFrequency(),
+			eawsMatrixInformation.getAvalancheSize());
+	}
+
+	/** The upper elevation of the avalanche problem, or an empty string if it is not set. */
+	public String getElevationHighText(LanguageCode lang) {
+		if (getTreelineHigh()) {
+			return lang.getCaamlBundleString("elevation.treeline.capitalized");
+		} else if (getElevationHigh() > 0) {
+			return getElevationHigh() + "m";
+		} else {
+			return "";
+		}
+	}
+
+	/** The lower elevation of the avalanche problem, or an empty string if it is not set. */
+	public String getElevationLowText(LanguageCode lang) {
+		if (getTreelineLow()) {
+			return lang.getCaamlBundleString("elevation.treeline.capitalized");
+		} else if (getElevationLow() > 0) {
+			return getElevationLow() + "m";
+		} else {
+			return "";
 		}
 	}
 }

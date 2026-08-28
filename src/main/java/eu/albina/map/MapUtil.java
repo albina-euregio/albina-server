@@ -335,9 +335,13 @@ public interface MapUtil {
 	}
 
 	static String filename(Region region, AvalancheBulletin bulletin, DaytimeDependency daytimeDependency, boolean grayscale, MapImageFormat format) {
+		return filename(region, bulletin.getId(), daytimeDependency, grayscale, format);
+	}
+
+	static String filename(Region region, String bulletinId, DaytimeDependency daytimeDependency, boolean grayscale, MapImageFormat format) {
 		return String.format("%s_%s%s%s.%s",
 			region.getId(),
-			bulletin.getId(),
+			bulletinId,
 			DaytimeDependency.pm.equals(daytimeDependency) ? "_PM" : "",
 			grayscale ? "_bw" : "",
 			format);

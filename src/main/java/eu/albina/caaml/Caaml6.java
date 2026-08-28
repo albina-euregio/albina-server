@@ -174,8 +174,12 @@ public record Caaml6(AvalancheReport avalancheReport, List<AvalancheReport> prev
 			if (matrixInformation.getAvalancheSize() != null) {
 				result.setAvalancheSize(matrixInformation.getAvalancheSize().toInteger());
 			}
-			result.setFrequency(ExpectedAvalancheFrequency.forValue(matrixInformation.getFrequency().toString()));
-			result.setSnowpackStability(ExpectedSnowpackStability.forValue(matrixInformation.getSnowpackStability().toString()));
+			if (matrixInformation.getFrequency() != null) {
+				result.setFrequency(ExpectedAvalancheFrequency.forValue(matrixInformation.getFrequency().toString()));
+			}
+			if (matrixInformation.getSnowpackStability() != null) {
+				result.setSnowpackStability(ExpectedSnowpackStability.forValue(matrixInformation.getSnowpackStability().toString()));
+			}
 		}
 		if (p.getAvalancheType() != null) {
 			result.setCustomData(new AvalancheProblemCustomData(
@@ -186,17 +190,23 @@ public record Caaml6(AvalancheReport avalancheReport, List<AvalancheReport> prev
 		return result;
 	}
 
+	private static DangerRatingValue getMainValue(DangerRating rating) {
+		return rating == null || rating == DangerRating.missing
+			? DangerRatingValue.no_rating
+			: DangerRatingValue.forValue(rating.name());
+	}
+
 	private static org.caaml.v6.DangerRating getDangerRating(AvalancheBulletin avalancheBulletin, AvalancheBulletinDaytimeDescription daytime, DangerRating rating) {
 		org.caaml.v6.DangerRating result = new org.caaml.v6.DangerRating();
 		if (!daytime.isHasElevationDependency() || Objects.equals(daytime.dangerRating(false), daytime.dangerRating(true))) {
-			result.setMainValue(DangerRatingValue.forValue(daytime.dangerRating(true).name()));
+			result.setMainValue(getMainValue(daytime.dangerRating(true)));
 			result.setElevation(null);
 		} else if (rating == daytime.dangerRating(true)) {
-			result.setMainValue(DangerRatingValue.forValue(rating.name()));
+			result.setMainValue(getMainValue(rating));
 			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
 			result.setElevation(new ElevationBoundaryOrBand(bound, null));
 		} else if (rating == daytime.dangerRating(false)) {
-			result.setMainValue(DangerRatingValue.forValue(rating.name()));
+			result.setMainValue(getMainValue(rating));
 			String bound = daytime.getTreeline() ? "treeline" : Integer.toString(daytime.getElevation());
 			result.setElevation(new ElevationBoundaryOrBand(null, bound));
 		}

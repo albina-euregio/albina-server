@@ -15,6 +15,16 @@ public class DangerRatingTest {
 	}
 
 	@Test
+	public void testLevel0() {
+		Assertions.assertEquals("0", DangerRating.getString(null));
+		Assertions.assertEquals("0", DangerRating.getString(DangerRating.missing));
+		Assertions.assertEquals("0", DangerRating.getString(DangerRating.no_rating));
+		Assertions.assertEquals("0", DangerRating.getString(DangerRating.no_snow));
+		Assertions.assertEquals(0, DangerRating.getInt(null));
+		Assertions.assertEquals(0, DangerRating.getInt(DangerRating.missing));
+	}
+
+	@Test
 	@Disabled
 	public void convert() {
 		for (LanguageCode languageCode : LanguageCode.values()) {

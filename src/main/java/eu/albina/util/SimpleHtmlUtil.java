@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Period;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +27,6 @@ import eu.albina.model.AvalancheProblem;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -138,7 +136,8 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			.map(dangerPattern -> dangerPattern.toString(lang.getLocale()))
 			.collect(Collectors.joining("<br>"));
 		appendTextBlock(pw, "snowpack", lang.getCaamlBundleString("snowpack.label"),
-			dangerPatterns, bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
+			dangerPatterns, bulletin.getSnowpackStructureHighlightsIn(lang).orElse(""),
+			bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
 		appendTextBlock(pw, "tendency", lang.getCaamlBundleString("tendency.label"),
 			bulletin.getTendencyCommentIn(lang).orElse(""));
 		pw.format("</article>\n");
@@ -209,7 +208,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		String aspects = avalancheProblem.getAspects().stream()
 			.map(aspect -> aspect.toString(lang.getLocale()))
 			.collect(Collectors.joining(", "));
-		String elevation = Stream.of(getElevationHighText(avalancheProblem), getElevationLowText(avalancheProblem))
+		String elevation = Stream.of(avalancheProblem.getElevationHighText(lang), avalancheProblem.getElevationLowText(lang))
 			.filter(text -> !text.isEmpty())
 			.collect(Collectors.joining("<br>"));
 
@@ -248,23 +247,8 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		return String.format(" style=\"border-color: %s\"", dangerRating.getColor());
 	}
 
-	/** The EAWS matrix parameters, shown for slab avalanches only (as in the PDF bulletin). */
 	private void appendMatrix(PrintWriter pw, AvalancheProblem avalancheProblem) {
-		EawsMatrixInformation matrix = avalancheProblem.getEawsMatrixInformation();
-		if (avalancheProblem.getAvalancheType() != AvalancheType.slab || matrix == null) {
-			return;
-		}
-		Map<String, String> parameters = new LinkedHashMap<>();
-		if (avalancheProblem.getAvalancheProblem() != eu.albina.model.enumerations.AvalancheProblem.gliding_snow
-				&& matrix.getSnowpackStability() != null) {
-			parameters.put(lang.getCaamlBundleString("snowpackStability.label"), matrix.getSnowpackStability().toString(lang.getLocale()));
-		}
-		if (matrix.getFrequency() != null) {
-			parameters.put(lang.getCaamlBundleString("frequency.label"), matrix.getFrequency().toString(lang.getLocale()));
-		}
-		if (matrix.getAvalancheSize() != null) {
-			parameters.put(lang.getCaamlBundleString("avalancheSize.label"), matrix.getAvalancheSize().toString(lang.getLocale()));
-		}
+		Map<String, String> parameters = avalancheProblem.getMatrixParameters(lang);
 		if (parameters.isEmpty()) {
 			return;
 		}
@@ -275,26 +259,6 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		parameters.forEach((label, value) -> pw.format("<dt>%s:</dt>\n<dd>%s</dd>\n", label, value));
 		pw.format("</dl>\n");
 		pw.format("</div>\n");
-	}
-
-	private String getElevationLowText(AvalancheProblem avalancheProblem) {
-		if (avalancheProblem.getTreelineLow()) {
-			return lang.getCaamlBundleString("elevation.treeline.capitalized");
-		} else if (avalancheProblem.getElevationLow() > 0) {
-			return avalancheProblem.getElevationLow() + "m";
-		} else {
-			return "";
-		}
-	}
-
-	private String getElevationHighText(AvalancheProblem avalancheProblem) {
-		if (avalancheProblem.getTreelineHigh()) {
-			return lang.getCaamlBundleString("elevation.treeline.capitalized");
-		} else if (avalancheProblem.getElevationHigh() > 0) {
-			return avalancheProblem.getElevationHigh() + "m";
-		} else {
-			return "";
-		}
 	}
 
 	private String getElevationString(int elevation, boolean treeline) {

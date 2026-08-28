@@ -14,6 +14,17 @@ public enum AvalancheSize {
 				.getString("avalancheSize." + name());
 	}
 
+	public static AvalancheSize fromInteger(int value) {
+		return switch (value) {
+			case 1 -> small;
+			case 2 -> medium;
+			case 3 -> large;
+			case 4 -> very_large;
+			case 5 -> extreme;
+			default -> throw new IllegalArgumentException("Cannot convert AvalancheSize: " + value);
+		};
+	}
+
 	public int toInteger() {
 		return switch (this) {
 			case small -> 1;
