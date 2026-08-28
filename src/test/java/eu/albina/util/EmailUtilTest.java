@@ -45,19 +45,19 @@ public class EmailUtilTest {
 		regionAran = regionTestUtils.regionAran();
 	}
 
+	private static void assertResourceEquals(String resourceName, String html) throws IOException {
+		String expected = Resources.toString(Resources.getResource(resourceName), StandardCharsets.UTF_8);
+		// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/" + resourceName), html);
+		Assertions.assertEquals(expected.trim(), html.trim());
+	}
+
 	@Test
 	public void createBulletinEmailHtml() throws Exception {
 		final URL resource = Resources.getResource("2019-01-17.json");
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
-		Assertions.assertEquals(104.4296875, html.getBytes(StandardCharsets.UTF_8).length / 1024., 1.);
-		Assertions.assertTrue(html.contains("<h2 style=\"margin-bottom: 5px\">Donnerstag, 17. Jänner 2019</h2>"));
-		Assertions.assertTrue(html.contains("Veröffentlicht am <b>16.01.2019, 17:00:00</b>"));
-		Assertions.assertTrue(html.contains("href=\"https://lawinen.report/bulletin/2019-01-17\""));
-		Assertions.assertTrue(html.contains("Tendenz: Lawinengefahr nimmt ab</p><p style=\"text-align: left; margin-bottom: 0;\">am Freitag, 18. Jänner 2019"));
-		Assertions.assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/fd_AT-07_map.jpg"));
-		Assertions.assertTrue(html.contains("2019-01-17/2019-01-16_16-00-00/AT-07_6385c958-018d-4c89-aa67-5eddc31ada5a.jpg"));
+		assertResourceEquals("2019-01-17.mail.html", html);
 	}
 
 	@Test
@@ -66,10 +66,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionAran, serverInstanceAran);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.en).replace("\n", "");
-		String resourceName = "lauegi.report-2021-12-10/2021-12-10.mail.html";
-		String expected = Resources.toString(Resources.getResource(resourceName), StandardCharsets.UTF_8);
-		// java.nio.file.Files.writeString(java.nio.file.Path.of("src/test/resources/" + resourceName), html);
-		Assertions.assertEquals(expected.trim(), html.trim());
+		assertResourceEquals("lauegi.report-2021-12-10/2021-12-10.mail.html", html);
 	}
 
 	@Test
@@ -78,7 +75,7 @@ public class EmailUtilTest {
 		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
-		Assertions.assertEquals(44, html.getBytes(StandardCharsets.UTF_8).length / 1024);
+		assertResourceEquals("2021-12-01.mail.html", html);
 	}
 
 	@Test
