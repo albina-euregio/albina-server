@@ -326,6 +326,10 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		pw.print("<td style=\"vertical-align: top; padding-top: 15px;\">");
+		String highlights = bulletin.getHighlightsIn(lang).orElse("");
+		if (!highlights.isBlank()) {
+			pw.format("<h4 class=\"highlights\">%s</h4>", highlights);
+		}
 		pw.format("<h4>%s</h4>", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
 		pw.format("<p>%s</p>", bulletin.getAvActivityCommentIn(lang).orElse(""));
 		pw.print("</td>");

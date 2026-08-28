@@ -104,6 +104,10 @@ p.lead {
     margin-bottom: 0;
 }
 
+.highlights {
+    color: red;
+}
+
 .inline {
     display: inline-block;
     margin-right: 5px;
