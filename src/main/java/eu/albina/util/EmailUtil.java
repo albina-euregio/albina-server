@@ -7,28 +7,42 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.io.Resources;
+import eu.albina.caaml.Caaml6;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
-import eu.albina.model.AvalancheBulletin;
-import eu.albina.model.AvalancheBulletinDaytimeDescription;
-import eu.albina.model.AvalancheProblem;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheSize;
+import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.BulletinStatus;
 import eu.albina.model.enumerations.DangerPattern;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DaytimeDependency;
+import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.LanguageCode;
+import eu.albina.model.enumerations.SnowpackStability;
 import eu.albina.model.enumerations.Tendency;
+import org.caaml.v6.AvalancheBulletin;
+import org.caaml.v6.AvalancheBulletins;
+import org.caaml.v6.AvalancheBulletinsCustomData;
+import org.caaml.v6.AvalancheProblem;
+import org.caaml.v6.AvalancheProblemType;
+import org.caaml.v6.ElevationBoundaryOrBand;
+import org.caaml.v6.Texts;
+import org.caaml.v6.ValidTimePeriod;
 
-public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
+public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bulletins, LanguageCode lang) {
 
 	/** Opens a layout table. Outlook needs the presentational attributes on every one of them. */
 	private static final String TABLE = "<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"";
@@ -45,6 +59,13 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	/** Keeps Outlook from scaling the whole mail up on displays with more than 96 dpi. */
 	private static final String MSO_PIXELS_PER_INCH = "<!--[if mso]><xml><o:OfficeDocumentSettings>"
 		+ "<o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->";
+
+	/** The elevation boundary of the CAAMLv6 model, either a number of metres or the treeline. */
+	private static final String TREELINE = "treeline";
+
+	public EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
+		this(avalancheReport, new Caaml6(avalancheReport, List.of(), lang).toCAAML(), lang);
+	}
 
 	public static String createBulletinEmailHtml(AvalancheReport avalancheReport, LanguageCode lang) {
 		return new EmailUtil(avalancheReport, lang).createBulletinEmailHtml();
@@ -68,8 +89,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String ci = serverImagesUrl + region.getImageColorbarColorPath();
 		String website = region.getWebsiteUrlWithDate(lang, avalancheReport);
 		String mapsUrl = avalancheReport.getMapsUrl();
-		List<AvalancheBulletin> bulletins = avalancheReport.getBulletins();
-		boolean daytime = avalancheReport.hasDaytimeDependency();
+		boolean daytime = bulletins.getBulletins().stream().anyMatch(EmailUtil::hasDaytimeDependency);
 
 		String publicationDate = avalancheReport.getPublicationDate(lang);
 		String publishedAt = publicationDate.isEmpty() ? "" : lang.getBundleString("published");
@@ -215,7 +235,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// general headline
-		avalancheReport.getGeneralHeadline(lang).ifPresent(generalHeadline -> {
+		getGeneralHeadline().ifPresent(generalHeadline -> {
 			pw.print(TABLE + " class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 			pw.print("<tr>");
 			pw.print("<td class=\"container\" style=\"padding: 15px 0;\" bgcolor=\"#FFFFFF\">");
@@ -227,7 +247,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			pw.print("</table>");
 		});
 
-		for (AvalancheBulletin bulletin : bulletins) {
+		for (AvalancheBulletin bulletin : bulletins.getBulletins()) {
 			appendBulletin(pw, bulletin, color);
 		}
 
@@ -272,6 +292,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		return out.toString();
 	}
 
+	private Optional<String> getGeneralHeadline() {
+		return Optional.ofNullable(bulletins.getCustomData())
+			.map(AvalancheBulletinsCustomData::ALBINA)
+			.map(AvalancheBulletinsCustomData.ALBINA::generalHeadline);
+	}
+
 	private static void appendOverviewMap(PrintWriter pw, String website, String map) {
 		pw.print("<tr>");
 		pw.print("<td>");
@@ -299,7 +325,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin, String color) {
 		Region region = avalancheReport.getRegion();
-		DangerRating highestDangerRating = bulletin.getHighestDangerRating();
+		DangerRating highestDangerRating = highestDangerRating(bulletin);
 
 		pw.print(TABLE + " class=\"body-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
@@ -318,22 +344,22 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</tr>");
 		pw.print("</table>");
 
-		if (bulletin.isHasDaytimeDependency()) {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
-			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
+		if (hasDaytimeDependency(bulletin)) {
+			appendDaytime(pw, bulletin, ValidTimePeriod.earlier, DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
+			appendDaytime(pw, bulletin, ValidTimePeriod.later, DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
 		} else {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, null);
+			appendDaytime(pw, bulletin, ValidTimePeriod.all_day, DaytimeDependency.fd, null);
 		}
 
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		pw.print("<td style=\"vertical-align: top; padding-top: 15px;\">");
-		String highlights = bulletin.getHighlightsIn(lang).orElse("");
+		String highlights = Optional.ofNullable(bulletin.getHighlights()).orElse("");
 		if (!highlights.isBlank()) {
 			pw.format("<h4 class=\"highlights\">%s</h4>", highlights);
 		}
-		pw.format("<h4>%s</h4>", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
-		pw.format("<p>%s</p>", bulletin.getAvActivityCommentIn(lang).orElse(""));
+		pw.format("<h4>%s</h4>", highlights(bulletin.getAvalancheActivity()).orElse(""));
+		pw.format("<p>%s</p>", comment(bulletin.getAvalancheActivity()).orElse(""));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
@@ -342,24 +368,20 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// snowpack structure / danger patterns / synopsis / tendency
-		DangerPattern dangerPattern1 = bulletin.getDangerPattern1();
-		DangerPattern dangerPattern2 = bulletin.getDangerPattern2();
-		Optional<String> snowpackStructureComment = bulletin.getSnowpackStructureCommentIn(lang);
-		Optional<String> snowpackStructureHighlights = bulletin.getSnowpackStructureHighlightsIn(lang);
-		Optional<String> tendencyComment = bulletin.getTendencyCommentIn(lang);
-		Optional<String> synopsisComment = bulletin.getSynopsisCommentIn(lang);
-		Tendency tendency = bulletin.getTendency();
+		List<DangerPattern> dangerPatterns = dangerPatterns(bulletin);
+		Optional<String> snowpackStructureComment = comment(bulletin.getSnowpackStructure());
+		Optional<String> snowpackStructureHighlights = highlights(bulletin.getSnowpackStructure());
+		Optional<String> tendencyComment = tendencyComment(bulletin);
+		Optional<String> synopsisComment = comment(bulletin.getWeatherForecast());
+		Tendency tendency = tendency(bulletin);
 		boolean hasTendency = tendency != null || tendencyComment.isPresent();
-		boolean hasSnowpackSection = dangerPattern1 != null || dangerPattern2 != null
-			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent()
-			|| hasTendency;
-		boolean hasStructure = dangerPattern1 != null || dangerPattern2 != null
+		boolean hasStructure = !dangerPatterns.isEmpty()
 			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent();
-		boolean hasDangerPatterns = dangerPattern1 != null || dangerPattern2 != null;
+		boolean hasSnowpackSection = hasStructure || hasTendency;
 
 		String snowpackStructureHeadline = hasStructure ? lang.getCaamlBundleString("snowpack.label") : "";
 		String snowpackStructureCommentText = hasStructure ? snowpackStructureComment.orElse("") : "";
-		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getCaamlBundleString("dangerPattern.label") : "";
+		String dangerPatternsHeadline = hasStructure && !dangerPatterns.isEmpty() ? lang.getCaamlBundleString("dangerPattern.label") : "";
 
 		if (hasSnowpackSection) {
 			pw.print(TABLE + " style=\"width: 100%; background-color: #f6fafc;\">");
@@ -369,8 +391,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			pw.format("<h4>%s</h4>", snowpackStructureHeadline);
 			pw.format("<h5 class=\"inline\">%s</h5>", dangerPatternsHeadline);
 			if (hasStructure) {
-				appendDangerPattern(pw, dangerPattern1);
-				appendDangerPattern(pw, dangerPattern2);
+				dangerPatterns.forEach(dangerPattern -> appendDangerPattern(pw, dangerPattern));
 			}
 			pw.format("<p>%s</p>", snowpackStructureCommentText);
 			if (synopsisComment.isPresent()) {
@@ -392,11 +413,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 	}
 
-	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,
-			AvalancheBulletinDaytimeDescription description, DaytimeDependency daytimeDependency, String heading) {
+	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin, ValidTimePeriod validTimePeriod,
+			DaytimeDependency daytimeDependency, String heading) {
 		Region region = avalancheReport.getRegion();
 		String map = avalancheReport.getMapsUrl() + "/"
-			+ MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
+			+ MapUtil.filename(region, bulletin.getBulletinID(), daytimeDependency, false, MapImageFormat.jpg);
+		List<org.caaml.v6.DangerRating> dangerRatings = dangerRatings(bulletin, validTimePeriod);
 
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
@@ -411,38 +433,34 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<img width=\"150\" src=\"%s\"/>", map);
 		pw.print("</td>");
 		pw.format("<td style=\"width: 60px; vertical-align: middle; %s\">", ROW_BORDER);
-		pw.format("<img height=\"48\" width=\"60\" src=\"%s\"/>", dangerRatingSymbol(description));
+		pw.format("<img height=\"48\" width=\"60\" src=\"%s\"/>", dangerRatingSymbol(dangerRatings));
 		pw.print("</td>");
 		pw.format("<td style=\"vertical-align: middle; padding-left: 10px; %s\">", ROW_BORDER);
-		pw.format("<p class=\"small\"><b>%s</b></p>", dangerRatingElevation(description));
+		pw.format("<p class=\"small\"><b>%s</b></p>", dangerRatingElevation(dangerRatings));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
 
-		appendAvalancheProblem(pw, description.getAvalancheProblem1());
-		appendAvalancheProblem(pw, description.getAvalancheProblem2());
-		appendAvalancheProblem(pw, description.getAvalancheProblem3());
-		appendAvalancheProblem(pw, description.getAvalancheProblem4());
-		appendAvalancheProblem(pw, description.getAvalancheProblem5());
+		avalancheProblems(bulletin, validTimePeriod).forEach(problem -> appendAvalancheProblem(pw, problem));
 	}
 
 	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem) {
-		if (problem == null || problem.getAvalancheProblem() == null) {
-			return;
-		}
 		Region region = avalancheReport.getRegion();
 		String serverImagesUrl = region.getServerImagesUrl();
+		eu.albina.model.enumerations.AvalancheProblem avalancheProblem =
+			eu.albina.model.enumerations.AvalancheProblem.valueOf(problem.getProblemType().name());
+		AvalancheType avalancheType = avalancheType(problem);
+		ElevationBoundaryOrBand elevation = problem.getElevation();
 
-		String symbol = serverImagesUrl + "avalanche_problems/color/" + problem.getAvalancheProblem().toStringId() + ".png";
-		String text = problem.getAvalancheProblem().toString(lang.getLocale());
-		String link = getAvalancheProblemLink(lang, region, problem.getAvalancheProblem());
-		String aspects = serverImagesUrl + Aspect.getSymbolPath(problem.getAspects(), false);
-		String elevationSymbol = serverImagesUrl + problem.getElevationSymbolPath() + ".png";
+		String symbol = serverImagesUrl + "avalanche_problems/color/" + avalancheProblem.toStringId() + ".png";
+		String text = avalancheProblem.toString(lang.getLocale());
+		String link = getAvalancheProblemLink(lang, region, avalancheProblem);
+		String aspects = serverImagesUrl + Aspect.getSymbolPath(aspects(problem), false);
+		String elevationSymbol = serverImagesUrl + elevationSymbolPath(elevation) + ".png";
 
-		EawsMatrixInformation matrix = problem.getEawsMatrixInformation();
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
-		pw.print(dangerRatingColorCell(matrix != null ? matrix.getDangerRating() : null, region));
+		pw.print(dangerRatingColorCell(dangerRating(problem.getDangerRatingValue()), region));
 		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
 		pw.format("<img width=\"50\" src=\"%s\"/>", symbol);
@@ -456,16 +474,16 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<img width=\"80\" height=\"48\" src=\"%s\"/>", elevationSymbol);
 		pw.print("</td>");
 		pw.format("<td style=\"width: 60px; %s\">", PROBLEM_CELL);
-		appendElevationLimit(pw, problem.getElevationHighText(lang));
-		appendElevationLimit(pw, problem.getElevationLowText(lang));
+		appendElevationLimit(pw, elevationText(elevation != null ? elevation.getUpperBound() : null));
+		appendElevationLimit(pw, elevationText(elevation != null ? elevation.getLowerBound() : null));
 		pw.print("</td>");
 		pw.format("<td style=\"width: 30px; text-align: center; %s\">%s</td>", PROBLEM_CELL,
-			problem.getAvalancheType() != null ? "\u2192" : "");
+			avalancheType != null ? "\u2192" : "");
 		pw.format("<td style=\"%s\">", PROBLEM_CELL);
-		if (problem.getAvalancheType() != null) {
-			pw.format("<p class=\"small\"><b>%s</b></p>", problem.getAvalancheType().toString(lang.getLocale()));
+		if (avalancheType != null) {
+			pw.format("<p class=\"small\"><b>%s</b></p>", avalancheType.toString(lang.getLocale()));
 		}
-		problem.getMatrixParameters(lang).forEach((label, value) ->
+		getMatrixParameters(problem, avalancheType).forEach((label, value) ->
 			pw.format("<p class=\"small\">%s: %s</p>", label, value));
 		pw.print("</td>");
 		pw.print("</tr>");
@@ -478,31 +496,170 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		}
 	}
 
-	private String dangerRatingSymbol(AvalancheBulletinDaytimeDescription daytimeBulletin) {
-		String serverImagesUrl = avalancheReport.getRegion().getServerImagesUrl();
-		if ((daytimeBulletin.dangerRating(false) == null
-			|| daytimeBulletin.dangerRating(false) == DangerRating.missing
-			|| daytimeBulletin.dangerRating(false) == DangerRating.no_rating)
-			&& (daytimeBulletin.dangerRating(true) == null
-			|| daytimeBulletin.dangerRating(true) == DangerRating.missing
-			|| daytimeBulletin.dangerRating(true) == DangerRating.no_rating)) {
-			return serverImagesUrl + "warning_pictos/color/level_0_0.png";
+	private static boolean hasDaytimeDependency(AvalancheBulletin bulletin) {
+		return bulletin.getDangerRatings().stream()
+			.anyMatch(dangerRating -> dangerRating.getValidTimePeriod() != ValidTimePeriod.all_day);
+	}
+
+	private static List<org.caaml.v6.DangerRating> dangerRatings(AvalancheBulletin bulletin, ValidTimePeriod validTimePeriod) {
+		return bulletin.getDangerRatings().stream()
+			.filter(dangerRating -> dangerRating.getValidTimePeriod() == validTimePeriod)
+			.toList();
+	}
+
+	private static List<AvalancheProblem> avalancheProblems(AvalancheBulletin bulletin, ValidTimePeriod validTimePeriod) {
+		return bulletin.getAvalancheProblems().stream()
+			.filter(problem -> problem.getValidTimePeriod() == validTimePeriod)
+			.toList();
+	}
+
+	private static DangerRating highestDangerRating(AvalancheBulletin bulletin) {
+		return bulletin.getDangerRatings().stream()
+			.map(org.caaml.v6.DangerRating::getMainValue)
+			.map(EmailUtil::dangerRating)
+			.filter(Objects::nonNull)
+			.max(Comparator.naturalOrder())
+			.orElse(DangerRating.missing);
+	}
+
+	/** The danger rating above resp. below the elevation boundary of the given daytime. */
+	private static DangerRating dangerRating(List<org.caaml.v6.DangerRating> dangerRatings, boolean above) {
+		return dangerRatings.stream()
+			.filter(dangerRating -> dangerRating.getElevation() == null
+				|| (above ? dangerRating.getElevation().getLowerBound() : dangerRating.getElevation().getUpperBound()) != null)
+			.map(org.caaml.v6.DangerRating::getMainValue)
+			.map(EmailUtil::dangerRating)
+			.filter(Objects::nonNull)
+			.findFirst()
+			.orElse(null);
+	}
+
+	private static DangerRating dangerRating(org.caaml.v6.DangerRatingValue dangerRatingValue) {
+		return dangerRatingValue != null ? DangerRating.valueOf(dangerRatingValue.name()) : null;
+	}
+
+	private static Set<Aspect> aspects(AvalancheProblem problem) {
+		return problem.getAspects() == null
+			? Set.of()
+			: problem.getAspects().stream().map(aspect -> Aspect.valueOf(aspect.name())).collect(Collectors.toSet());
+	}
+
+	private static AvalancheType avalancheType(AvalancheProblem problem) {
+		return problem.getCustomData() == null || problem.getCustomData().ALBINA() == null
+			? null
+			: AvalancheType.valueOf(problem.getCustomData().ALBINA().avalancheType());
+	}
+
+	private static List<DangerPattern> dangerPatterns(AvalancheBulletin bulletin) {
+		if (bulletin.getCustomData() == null || bulletin.getCustomData().LWD_Tyrol() == null
+			|| bulletin.getCustomData().LWD_Tyrol().dangerPatterns() == null) {
+			return List.of();
+		}
+		return bulletin.getCustomData().LWD_Tyrol().dangerPatterns().stream()
+			.map(DangerPattern::fromString)
+			.filter(Objects::nonNull)
+			.toList();
+	}
+
+	private static Tendency tendency(AvalancheBulletin bulletin) {
+		return bulletin.getTendency().stream()
+			.map(org.caaml.v6.Tendency::getTendencyType)
+			.filter(Objects::nonNull)
+			.map(tendencyType -> Tendency.valueOf(tendencyType.name()))
+			.findFirst()
+			.orElse(null);
+	}
+
+	private static Optional<String> tendencyComment(AvalancheBulletin bulletin) {
+		return bulletin.getTendency().stream()
+			.map(org.caaml.v6.Tendency::getHighlights)
+			.filter(Objects::nonNull)
+			.findFirst();
+	}
+
+	private static Optional<String> highlights(Texts texts) {
+		return Optional.ofNullable(texts).map(Texts::getHighlights);
+	}
+
+	private static Optional<String> comment(Texts texts) {
+		return Optional.ofNullable(texts).map(Texts::getComment);
+	}
+
+	/** Path of the elevation pictogram below {@code images/}, without file extension. */
+	private static String elevationSymbolPath(ElevationBoundaryOrBand elevation) {
+		boolean upperBound = elevation != null && elevation.getUpperBound() != null;
+		boolean lowerBound = elevation != null && elevation.getLowerBound() != null;
+		if (upperBound) {
+			return lowerBound ? "elevation/color/levels_middle_two" : "elevation/color/levels_below";
 		} else {
-			return serverImagesUrl + "warning_pictos/color/level_" + daytimeBulletin.getWarningLevelId() + ".png";
+			return lowerBound ? "elevation/color/levels_above" : "elevation/color/levels_all";
 		}
 	}
 
-	private String dangerRatingElevation(AvalancheBulletinDaytimeDescription daytimeBulletin) {
-		if (daytimeBulletin.isHasElevationDependency()
-			&& (daytimeBulletin.dangerRating(true) != daytimeBulletin.dangerRating(false))) {
-			if (daytimeBulletin.getTreeline())
-				return lang.getCaamlBundleString("elevation.treeline.capitalized");
-			else if (daytimeBulletin.getElevation() > 0)
-				return daytimeBulletin.getElevation() + "m";
-			else
-				return "";
-		} else
+	/** The elevation boundary as text, or an empty string if it is not set. */
+	private String elevationText(String bound) {
+		if (bound == null) {
 			return "";
+		} else if (TREELINE.equals(bound)) {
+			return lang.getCaamlBundleString("elevation.treeline.capitalized");
+		}
+		int elevation = Integer.parseInt(bound);
+		return elevation > 0 ? elevation + "m" : "";
+	}
+
+	/**
+	 * The EAWS matrix parameters to display, shown for slab avalanches only (as in the PDF
+	 * bulletin), and without the snowpack stability for gliding snow.
+	 */
+	private Map<String, String> getMatrixParameters(AvalancheProblem problem, AvalancheType avalancheType) {
+		Map<String, String> parameters = new LinkedHashMap<>();
+		if (avalancheType != AvalancheType.slab) {
+			return parameters;
+		}
+		if (problem.getProblemType() != AvalancheProblemType.gliding_snow && problem.getSnowpackStability() != null) {
+			parameters.put(lang.getCaamlBundleString("snowpackStability.label"),
+				SnowpackStability.valueOf(problem.getSnowpackStability().name()).toString(lang.getLocale()));
+		}
+		if (problem.getFrequency() != null) {
+			parameters.put(lang.getCaamlBundleString("frequency.label"),
+				Frequency.valueOf(problem.getFrequency().name()).toString(lang.getLocale()));
+		}
+		if (problem.getAvalancheSize() != null) {
+			parameters.put(lang.getCaamlBundleString("avalancheSize.label"),
+				AvalancheSize.fromInteger(problem.getAvalancheSize()).toString(lang.getLocale()));
+		}
+		return parameters;
+	}
+
+	private String dangerRatingSymbol(List<org.caaml.v6.DangerRating> dangerRatings) {
+		String serverImagesUrl = avalancheReport.getRegion().getServerImagesUrl();
+		DangerRating above = dangerRating(dangerRatings, true);
+		DangerRating below = dangerRating(dangerRatings, false);
+		if (isMissing(above) && isMissing(below)) {
+			return serverImagesUrl + "warning_pictos/color/level_0_0.png";
+		} else {
+			return serverImagesUrl + "warning_pictos/color/level_"
+				+ warningLevel(below) + "_" + warningLevel(above) + ".png";
+		}
+	}
+
+	private static boolean isMissing(DangerRating dangerRating) {
+		return dangerRating == null || dangerRating == DangerRating.missing || dangerRating == DangerRating.no_rating;
+	}
+
+	private static String warningLevel(DangerRating dangerRating) {
+		return dangerRating != null ? DangerRating.getString(dangerRating) : "0";
+	}
+
+	private String dangerRatingElevation(List<org.caaml.v6.DangerRating> dangerRatings) {
+		return dangerRatings.stream()
+			.map(org.caaml.v6.DangerRating::getElevation)
+			.filter(Objects::nonNull)
+			.map(ElevationBoundaryOrBand::getLowerBound)
+			.filter(Objects::nonNull)
+			.findFirst()
+			.map(this::elevationText)
+			.orElse("");
 	}
 
 	/**
