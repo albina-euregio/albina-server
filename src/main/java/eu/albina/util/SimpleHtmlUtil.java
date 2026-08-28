@@ -120,31 +120,35 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 
 		String highlights = bulletin.getHighlightsIn(lang).orElse("");
 		if (!highlights.isBlank()) {
-			pw.format("<h2 class=\"highlights\">%s</h2>\n", highlights);
+			pw.format("<section class=\"highlights\">\n");
+			pw.format("<h2>%s</h2>\n", highlights);
+			pw.format("</section>\n");
 		}
-		appendTextBlock(pw, bulletin.getAvActivityHighlightsIn(lang).orElse(""),
+		appendTextBlock(pw, "avalanche-activity", bulletin.getAvActivityHighlightsIn(lang).orElse(""),
 			bulletin.getAvActivityCommentIn(lang).orElse(""));
 		String dangerPatterns = Stream.of(bulletin.getDangerPattern1(), bulletin.getDangerPattern2())
 			.filter(Objects::nonNull)
 			.map(dangerPattern -> dangerPattern.toString(lang.getLocale()))
 			.collect(Collectors.joining("<br>"));
-		appendTextBlock(pw, lang.getCaamlBundleString("snowpack.label"),
+		appendTextBlock(pw, "snowpack", lang.getCaamlBundleString("snowpack.label"),
 			dangerPatterns, bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
-		appendTextBlock(pw, lang.getCaamlBundleString("tendency.label"),
+		appendTextBlock(pw, "tendency", lang.getCaamlBundleString("tendency.label"),
 			bulletin.getTendencyCommentIn(lang).orElse(""));
 		pw.format("</article>\n");
 	}
 
-	/** Writes the heading followed by the non-empty paragraphs, or nothing at all if there is no text. */
-	private void appendTextBlock(PrintWriter pw, String heading, String... paragraphs) {
+	/** Writes a section with the heading and the non-empty paragraphs, or nothing at all if there is no text. */
+	private void appendTextBlock(PrintWriter pw, String cssClass, String heading, String... paragraphs) {
 		List<String> texts = Stream.of(paragraphs).filter(text -> !text.isBlank()).toList();
 		if (texts.isEmpty()) {
 			return;
 		}
+		pw.format("<section class=\"%s\">\n", cssClass);
 		if (!heading.isBlank()) {
 			pw.format("<h2>%s</h2>\n", heading);
 		}
 		texts.forEach(text -> pw.format("<p>%s</p>\n", text));
+		pw.format("</section>\n");
 	}
 
 	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,

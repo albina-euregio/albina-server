@@ -104,15 +104,15 @@ article {
     background-color: var(--color-article);
 }
 
-.highlights {
-    color: var(--color-highlights);
-    font-weight: normal;
-}
-
-.daytime {
+article > section {
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
+}
+
+.highlights h2 {
+    color: var(--color-highlights);
+    font-weight: normal;
 }
 
 .daytime h2 {
