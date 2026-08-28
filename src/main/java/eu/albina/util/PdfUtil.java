@@ -984,6 +984,8 @@ public class PdfUtil {
 			return new Cell().setBorder(null);
 		}
 		Paragraph paragraph = new Paragraph().setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
+		paragraph.add(new Text(avalancheProblem.getAvalancheType().toString(lang.getLocale()) + "\n")
+			.setFont(openSansBoldFont));
 		avalancheProblem.getMatrixParameters(lang).forEach((label, value) -> {
 			paragraph.add(new Text(label + ": "));
 			paragraph.add(new Text(value + "\n").setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
