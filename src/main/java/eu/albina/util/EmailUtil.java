@@ -453,6 +453,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		appendElevationLimit(pw, problem.getElevationHighText(lang));
 		appendElevationLimit(pw, problem.getElevationLowText(lang));
 		pw.print("</td>");
+		pw.format("<td style=\"width: 30px; text-align: center; %s\">%s</td>", PROBLEM_CELL,
+			problem.getAvalancheType() != null ? "\u2192" : "");
 		pw.format("<td style=\"padding-left: 10px; %s\">", PROBLEM_CELL);
 		if (problem.getAvalancheType() != null) {
 			pw.format("<p class=\"small\"><b>%s</b></p>", problem.getAvalancheType().toString(lang.getLocale()));
