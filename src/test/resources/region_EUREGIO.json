@@ -30,7 +30,7 @@
 	"logoBwPath": "logo/grey/avalanche_report.png",
 	"defaultLang": "de",
 	"staticUrl": "https://static.avalanche.report",
-	"serverImagesUrl": "https://static.avalanche.report/images/",
+	"serverImagesUrl": "https://dev.avalanche.report/api/images/",
 	"languageConfigurations": [
 		{
 			"lang": "en",

@@ -51,7 +51,7 @@
 		"mapsPath": "/var/www/static.avalanche.report/bulletins_dev",
 		"mediaPath": "/var/www/static.avalanche.report/media_files_dev",
 		"mapProductionUrl": "/opt/avalanche-warning-maps_dev",
-		"serverImagesUrl": "https://admin.avalanche.report/images/",
+		"serverImagesUrl": "https://dev.avalanche.report/api/images/",
 		"dangerLevelElevationDependency": true
 	},
 	"pdfColor": "00ACFB",
@@ -77,7 +77,7 @@
 	"logoBwPath": "logo/grey/avalanche_report.png",
 	"coatOfArms": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Escudo_d%27Arag%C3%B3n.svg",
 	"staticUrl": "https://static.avalanche.report",
-	"serverImagesUrl": "https://static.avalanche.report/images/",
+	"serverImagesUrl": "https://dev.avalanche.report/api/images/",
 	"ttsLanguages": [
 		"ca",
 		"es",

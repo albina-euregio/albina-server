@@ -65,7 +65,7 @@
   "logoPath": "logo/color/avalanche_report.png",
   "logoBwPath": "logo/grey/avalanche_report.png",
   "staticUrl": "https://static.lawinen-warnung.eu",
-  "serverImagesUrl": "https://static.lawinen-warnung.eu/images/",
+  "serverImagesUrl": "https://dev.avalanche.report/api/images/",
   "languageConfigurations": [
     {
       "lang": "en",
