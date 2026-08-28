@@ -27,6 +27,7 @@ public enum DangerRating {
 
 	public static String getString(DangerRating dangerRating) {
 		return switch (dangerRating) {
+			case null -> "0";
 			case missing -> "0";
 			case no_rating -> "0";
 			case no_snow -> "0";
@@ -40,6 +41,7 @@ public enum DangerRating {
 
 	public static int getInt(DangerRating dangerRating) {
 		return switch (dangerRating) {
+			case null -> 0;
 			case missing -> 0;
 			case no_rating -> 0;
 			case no_snow -> 0;

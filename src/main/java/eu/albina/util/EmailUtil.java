@@ -616,12 +616,8 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 
 	private String dangerRatingSymbol(List<org.caaml.v6.DangerRating> dangerRatings) {
 		return avalancheReport.getRegion().getServerImagesUrl() + "warning_pictos/color/level_"
-			+ warningLevel(dangerRating(dangerRatings, false)) + "_"
-			+ warningLevel(dangerRating(dangerRatings, true)) + ".png";
-	}
-
-	private static String warningLevel(DangerRating dangerRating) {
-		return dangerRating != null ? DangerRating.getString(dangerRating) : "0";
+			+ DangerRating.getString(dangerRating(dangerRatings, false)) + "_"
+			+ DangerRating.getString(dangerRating(dangerRatings, true)) + ".png";
 	}
 
 	private String dangerRatingElevation(List<org.caaml.v6.DangerRating> dangerRatings) {
@@ -640,7 +636,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 	 * Outlook, hence the space.
 	 */
 	private static String dangerRatingColorCell(DangerRating dangerRating, Region region) {
-		if (dangerRating == null || DangerRating.getInt(dangerRating) == 0) {
+		if (DangerRating.getInt(dangerRating) == 0) {
 			return "<td width=\"10\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>";
 		}
 		String background = dangerRating.equals(DangerRating.very_high)

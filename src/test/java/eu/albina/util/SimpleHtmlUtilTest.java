@@ -64,6 +64,21 @@ public class SimpleHtmlUtilTest {
 	}
 
 	@Test
+	public void createSimpleHtmlStringWithoutDangerRating() throws IOException {
+		URL resource = Resources.getResource("2019-01-17.json");
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		bulletins.forEach(bulletin -> {
+			bulletin.getForenoon().setHasElevationDependency(false);
+			bulletin.getForenoon().setDangerRatingAbove(null);
+			bulletin.getForenoon().setDangerRatingBelow(null);
+		});
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
+		Assertions.assertTrue(htmlString.contains(DataURL.ofResource("images/warning_pictos/color/level_0_0.webp")),
+			"level_0_0");
+	}
+
+	@Test
 	public void createSimpleHtmlStringTyrol() throws IOException {
 		URL resource = Resources.getResource("2019-01-17.json");
 		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
