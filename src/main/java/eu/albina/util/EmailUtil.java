@@ -8,7 +8,6 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -21,6 +20,7 @@ import eu.albina.caaml.Caaml6;
 import eu.albina.map.MapImageFormat;
 import eu.albina.map.MapUtil;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheSize;
@@ -37,7 +37,6 @@ import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheBulletinsCustomData;
 import org.caaml.v6.AvalancheProblem;
-import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.ElevationBoundaryOrBand;
 import org.caaml.v6.Texts;
 import org.caaml.v6.ValidTimePeriod;
@@ -483,7 +482,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		if (avalancheType != null) {
 			pw.format("<p class=\"small\"><b>%s</b></p>", avalancheType.toString(lang.getLocale()));
 		}
-		getMatrixParameters(problem, avalancheType).forEach((label, value) ->
+		getMatrixParameters(problem, avalancheType, avalancheProblem).forEach((label, value) ->
 			pw.format("<p class=\"small\">%s: %s</p>", label, value));
 		pw.print("</td>");
 		pw.print("</tr>");
@@ -607,28 +606,12 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		return elevation > 0 ? elevation + "m" : "";
 	}
 
-	/**
-	 * The EAWS matrix parameters to display, shown for slab avalanches only (as in the PDF
-	 * bulletin), and without the snowpack stability for gliding snow.
-	 */
-	private Map<String, String> getMatrixParameters(AvalancheProblem problem, AvalancheType avalancheType) {
-		Map<String, String> parameters = new LinkedHashMap<>();
-		if (avalancheType != AvalancheType.slab) {
-			return parameters;
-		}
-		if (problem.getProblemType() != AvalancheProblemType.gliding_snow && problem.getSnowpackStability() != null) {
-			parameters.put(lang.getCaamlBundleString("snowpackStability.label"),
-				SnowpackStability.valueOf(problem.getSnowpackStability().name()).toString(lang.getLocale()));
-		}
-		if (problem.getFrequency() != null) {
-			parameters.put(lang.getCaamlBundleString("frequency.label"),
-				Frequency.valueOf(problem.getFrequency().name()).toString(lang.getLocale()));
-		}
-		if (problem.getAvalancheSize() != null) {
-			parameters.put(lang.getCaamlBundleString("avalancheSize.label"),
-				AvalancheSize.fromInteger(problem.getAvalancheSize()).toString(lang.getLocale()));
-		}
-		return parameters;
+	private Map<String, String> getMatrixParameters(AvalancheProblem problem, AvalancheType avalancheType,
+			eu.albina.model.enumerations.AvalancheProblem avalancheProblem) {
+		return EawsMatrixInformation.getMatrixParameters(lang, avalancheType, avalancheProblem,
+			problem.getSnowpackStability() != null ? SnowpackStability.valueOf(problem.getSnowpackStability().name()) : null,
+			problem.getFrequency() != null ? Frequency.valueOf(problem.getFrequency().name()) : null,
+			problem.getAvalancheSize() != null ? AvalancheSize.fromInteger(problem.getAvalancheSize()) : null);
 	}
 
 	private String dangerRatingSymbol(List<org.caaml.v6.DangerRating> dangerRatings) {

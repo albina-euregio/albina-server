@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import eu.albina.model.enumerations.AvalancheProblem;
 import eu.albina.model.enumerations.AvalancheSize;
+import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.DangerRatingModificator;
 import eu.albina.model.enumerations.Frequency;
+import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.enumerations.SnowpackStability;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
@@ -18,6 +21,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Embeddable
 @Serdeable
@@ -55,6 +60,29 @@ public class EawsMatrixInformation implements Comparable<EawsMatrixInformation> 
 	private int frequencyValue;
 
 	public EawsMatrixInformation() {
+	}
+
+	/**
+	 * The EAWS matrix parameters to display, shown for slab avalanches only (as in the PDF
+	 * bulletin), and without the snowpack stability for gliding snow.
+	 */
+	public static Map<String, String> getMatrixParameters(LanguageCode lang, AvalancheType avalancheType,
+			AvalancheProblem avalancheProblem, SnowpackStability snowpackStability, Frequency frequency,
+			AvalancheSize avalancheSize) {
+		Map<String, String> parameters = new LinkedHashMap<>();
+		if (avalancheType != AvalancheType.slab) {
+			return parameters;
+		}
+		if (avalancheProblem != AvalancheProblem.gliding_snow && snowpackStability != null) {
+			parameters.put(lang.getCaamlBundleString("snowpackStability.label"), snowpackStability.toString(lang.getLocale()));
+		}
+		if (frequency != null) {
+			parameters.put(lang.getCaamlBundleString("frequency.label"), frequency.toString(lang.getLocale()));
+		}
+		if (avalancheSize != null) {
+			parameters.put(lang.getCaamlBundleString("avalancheSize.label"), avalancheSize.toString(lang.getLocale()));
+		}
+		return parameters;
 	}
 
 	public DangerRating getDangerRating() {

@@ -61,7 +61,6 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
 import eu.albina.model.AvalancheReport;
-import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -743,7 +742,7 @@ public class PdfUtil {
 		table.addCell(getAspectsCell(avalancheProblem.getAspects()));
 		table.addCell(getElevationCell(avalancheProblem, table));
 		if (avalancheProblem.getAvalancheType() == eu.albina.model.enumerations.AvalancheType.slab) {
-			table.addCell(getMatrixInformationCell(avalancheProblem.getAvalancheProblem(), avalancheProblem.getEawsMatrixInformation()));
+			table.addCell(getMatrixInformationCell(avalancheProblem));
 		}
 	}
 
@@ -967,26 +966,15 @@ public class PdfUtil {
 		return cell;
 	}
 
-	private Cell getMatrixInformationCell(eu.albina.model.enumerations.AvalancheProblem avalancheProblem, EawsMatrixInformation matrixInformation) {
-		if (matrixInformation == null) {
+	private Cell getMatrixInformationCell(AvalancheProblem avalancheProblem) {
+		if (avalancheProblem.getEawsMatrixInformation() == null) {
 			return new Cell().setBorder(null);
 		}
 		Paragraph paragraph = new Paragraph().setFont(openSansRegularFont).setFontSize(8).setFontColor(blackColor);
-		if (avalancheProblem != eu.albina.model.enumerations.AvalancheProblem.gliding_snow && matrixInformation.getSnowpackStability() != null) {
-			paragraph.add(new Text(lang.getCaamlBundleString("snowpackStability.label") + ": "));
-			paragraph.add(new Text(matrixInformation.getSnowpackStability().toString(lang.getLocale()) + "\n")
-				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
-		}
-		if (matrixInformation.getFrequency() != null) {
-			paragraph.add(new Text(lang.getCaamlBundleString("frequency.label") + ": "));
-			paragraph.add(new Text(matrixInformation.getFrequency().toString(lang.getLocale()) + "\n")
-				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
-		}
-		if (matrixInformation.getAvalancheSize() != null) {
-			paragraph.add(new Text(lang.getCaamlBundleString("avalancheSize.label") + ": "));
-			paragraph.add(new Text(matrixInformation.getAvalancheSize().toString(lang.getLocale()) + "\n")
-				.setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
-		}
+		avalancheProblem.getMatrixParameters(lang).forEach((label, value) -> {
+			paragraph.add(new Text(label + ": "));
+			paragraph.add(new Text(value + "\n").setFontColor(getColor(avalancheReport.getRegion().getPdfColor())));
+		});
 		Cell cell = new Cell(1, 1);
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
