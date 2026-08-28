@@ -40,7 +40,7 @@
 			"lang": "de",
 			"websiteName": "Lawinen.report",
 			"url": "https://lawinen.report",
-			"urlWithDate": "https://lawinen.report/bulletin/%s"
+			"urlWithDate": "https://lawinen.report/%s"
 		}
 	]
 }

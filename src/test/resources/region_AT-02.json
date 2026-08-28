@@ -64,14 +64,14 @@
 			"lang": "en",
 			"websiteName": "Avalanche.report",
 			"url": "https://avalanche.report",
-			"urlWithDate": "https://avalanche.report/bulletin/%s"
+			"urlWithDate": "https://avalanche.report/%s"
 		},
 		{
 			"lang": "de",
 			"warningServiceEmail": "info@lawinen.report",
 			"websiteName": "Lawinen.report",
 			"url": "https://lawinen.report",
-			"urlWithDate": "https://lawinen.report/bulletin/%s"
+			"urlWithDate": "https://lawinen.report/%s"
 		}
 	]
 }

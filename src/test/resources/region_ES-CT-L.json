@@ -36,7 +36,7 @@
 			"lang": "en",
 			"websiteName": "Avalanche.report",
 			"url": "https://lauegi.report",
-			"urlWithDate": "https://lauegi.report/bulletin/%s"
+			"urlWithDate": "https://lauegi.report/%s"
 		}
 	]
 }
