@@ -11,7 +11,7 @@ public class DangerRatingTest {
 	@Test
 	public void testI18n() {
 		Assertions.assertEquals("erheblich", DangerRating.considerable.toString(Locale.GERMAN, false));
-		Assertions.assertEquals("Gefahrenstufe 3 - Erheblich", DangerRating.considerable.toString(Locale.GERMAN, true));
+		Assertions.assertEquals("Gefahrenstufe 3 — Erheblich", DangerRating.considerable.toString(Locale.GERMAN, true));
 	}
 
 	@Test
