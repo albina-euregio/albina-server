@@ -269,7 +269,9 @@ public class Region implements PersistentObject {
 	@Column(name = "COAT_OF_ARMS", columnDefinition = "LONGBLOB")
 	private String coatOfArms;
 
-	@Schema(description = "URL to static avalanche files")
+	@Schema(description = "URL to static avalanche files, e.g. `https://static.avalanche.report`. " +
+		"Bulletin PDFs and danger maps are published below `/bulletins`, simple HTML bulletins below `/simple`, " +
+		"and media files (e.g. audio) below `/media_files`.")
 	@Column(name = "STATIC_URL", length = 191)
 	private String staticUrl;
 
