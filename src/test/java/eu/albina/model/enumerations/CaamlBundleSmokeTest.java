@@ -15,6 +15,8 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("large", AvalancheSize.large.toString(Locale.ENGLISH));
 		Assertions.assertEquals("wenige", Frequency.few.toString(Locale.GERMAN));
 		Assertions.assertEquals("few", Frequency.few.toString(Locale.ENGLISH));
+		Assertions.assertEquals("Schneebrettlawine", AvalancheType.slab.toString(Locale.GERMAN));
+		Assertions.assertEquals("Glide snow avalanche", AvalancheType.glide.toString(Locale.ENGLISH));
 	}
 
 	@Test
@@ -42,6 +44,7 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("Schneedecke", LanguageCode.de.getCaamlBundleString("snowpack.label"));
 		Assertions.assertEquals("Travel Advisory", LanguageCode.de.getCaamlBundleString("travelAdvisory.label"));
 		Assertions.assertEquals("Lawinenproblem", LanguageCode.de.getCaamlBundleString("avalancheProblem.label"));
+		Assertions.assertEquals("Lawinenart", LanguageCode.de.getCaamlBundleString("avalancheType.label"));
 		Assertions.assertEquals("Gefahrenstufe", LanguageCode.de.getCaamlBundleString("dangerRating.label"));
 		Assertions.assertEquals("Lawinenvorhersage", LanguageCode.de.getCaamlBundleString("forecast.label"));
 		Assertions.assertEquals("Avalanche Forecast", LanguageCode.en.getCaamlBundleString("forecast.label"));
