@@ -487,54 +487,42 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String text = problem.getAvalancheProblem().toString(lang.getLocale());
 		String link = getAvalancheProblemLink(lang, region, problem.getAvalancheProblem());
 		String aspects = serverImagesUrl + Aspect.getSymbolPath(problem.getAspects(), false);
-
 		String elevationSymbol = serverImagesUrl + problem.getElevationSymbolPath() + ".png";
-		String limitAbove = problem.getElevationLowText(lang);
-		String limitBelow = problem.getElevationHighText(lang);
 
-		String margin = first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px";
-		pw.format(TABLE + " style=\"%s; width: 0;\">", margin);
+		pw.format(TABLE + " style=\"%s\">", first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px");
 		pw.print("<tr>");
-		pw.print("<td style=\"margin: 0 5px; width: 70px; text-align: center;\">");
+		pw.print("<td style=\"width: 70px; text-align: center;\">");
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
 		pw.format("<img width=\"50\" class=\"avalanche-problem\" src=\"%s\"/>", symbol);
 		pw.print("</a>");
 		pw.format("<p style=\"margin-bottom: 0px; font-size: 12px; line-height: 1.0;\">%s</p>", text);
 		pw.print("</td>");
-		pw.print("<td style=\"margin: 0 5px; width: 70px;\">");
-		pw.print("<div class=\"avalanche-problem-aspects-outer-div\">");
-		pw.print("<div class=\"avalanche-problem-aspects-div\">");
-		pw.print("<div class=\"avalanche-problem-aspects\">");
-		pw.format("<img width=\"60\" class=\"avalanche-problem-aspects-img\" src=\"%s\"/>", aspects);
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("</div>");
+		pw.print("<td style=\"width: 70px; text-align: center;\">");
+		pw.format("<img width=\"60\" height=\"60\" src=\"%s\"/>", aspects);
 		pw.print("</td>");
-		pw.print("<td style=\"width: 100px; margin: 0 5px;\">");
-		pw.print("<div style=\"width: 100px; height: 48px;\">");
-		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
-		pw.print("<div style=\"width: 100px; height: 48px;\">");
-		pw.format("<img height=\"48\" class=\"avalanche-problem-elevation-img\" src=\"%s\"/>", elevationSymbol);
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
-		pw.print("<div style=\"width: 100px; height: 48px;\">");
-		pw.print("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: 24px; margin-left: 68px;\">");
-		pw.format("<b>%s</b>", limitAbove);
-		pw.print("</p>");
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("<div style=\"max-height: 0; max-width: 0; overflow: visible;\">");
-		pw.print("<div style=\"width: 100px; height: 48px;\">");
-		pw.print("<p style=\"width: 100px; height: 48px; display: inline-block; font-size: 12px; margin-top: 7px; margin-left: 68px;\">");
-		pw.format("<b>%s</b>", limitBelow);
-		pw.print("</p>");
-		pw.print("</div>");
-		pw.print("</div>");
-		pw.print("</div>");
+		pw.print("<td style=\"width: 80px; text-align: center;\">");
+		pw.format("<img width=\"80\" height=\"48\" src=\"%s\"/>", elevationSymbol);
+		pw.print("</td>");
+		pw.print("<td style=\"width: 60px; padding-left: 5px;\">");
+		appendElevationLimit(pw, problem.getElevationHighText(lang));
+		appendElevationLimit(pw, problem.getElevationLowText(lang));
+		pw.print("</td>");
+		pw.print("<td style=\"padding-left: 10px;\">");
+		if (problem.getAvalancheType() != null) {
+			pw.format("<p style=\"margin-bottom: 0px; font-size: 12px;\"><b>%s</b></p>",
+				problem.getAvalancheType().toString(lang.getLocale()));
+		}
+		problem.getMatrixParameters(lang).forEach((label, value) ->
+			pw.format("<p style=\"margin-bottom: 0px; font-size: 12px;\">%s: %s</p>", label, value));
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
+	}
+
+	private static void appendElevationLimit(PrintWriter pw, String elevation) {
+		if (!elevation.isEmpty()) {
+			pw.format("<p style=\"margin-bottom: 0px; font-size: 12px;\"><b>%s</b></p>", elevation);
+		}
 	}
 
 	private String dangerRatingSymbol(AvalancheBulletinDaytimeDescription daytimeBulletin) {

@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Period;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +27,6 @@ import eu.albina.model.AvalancheProblem;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
@@ -248,23 +246,8 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		return String.format(" style=\"border-color: %s\"", dangerRating.getColor());
 	}
 
-	/** The EAWS matrix parameters, shown for slab avalanches only (as in the PDF bulletin). */
 	private void appendMatrix(PrintWriter pw, AvalancheProblem avalancheProblem) {
-		EawsMatrixInformation matrix = avalancheProblem.getEawsMatrixInformation();
-		if (avalancheProblem.getAvalancheType() != AvalancheType.slab || matrix == null) {
-			return;
-		}
-		Map<String, String> parameters = new LinkedHashMap<>();
-		if (avalancheProblem.getAvalancheProblem() != eu.albina.model.enumerations.AvalancheProblem.gliding_snow
-				&& matrix.getSnowpackStability() != null) {
-			parameters.put(lang.getCaamlBundleString("snowpackStability.label"), matrix.getSnowpackStability().toString(lang.getLocale()));
-		}
-		if (matrix.getFrequency() != null) {
-			parameters.put(lang.getCaamlBundleString("frequency.label"), matrix.getFrequency().toString(lang.getLocale()));
-		}
-		if (matrix.getAvalancheSize() != null) {
-			parameters.put(lang.getCaamlBundleString("avalancheSize.label"), matrix.getAvalancheSize().toString(lang.getLocale()));
-		}
+		Map<String, String> parameters = avalancheProblem.getMatrixParameters(lang);
 		if (parameters.isEmpty()) {
 			return;
 		}

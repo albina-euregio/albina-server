@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.model;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -235,6 +237,31 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	@JsonIgnore
 	public String getElevationDataURL() {
 		return DataURL.ofResource("images/" + getElevationSymbolPath() + ".webp");
+	}
+
+	/**
+	 * The EAWS matrix parameters to display, shown for slab avalanches only (as in the PDF
+	 * bulletin), and without the snowpack stability for gliding snow.
+	 */
+	public Map<String, String> getMatrixParameters(LanguageCode lang) {
+		Map<String, String> parameters = new LinkedHashMap<>();
+		if (avalancheType != AvalancheType.slab || eawsMatrixInformation == null) {
+			return parameters;
+		}
+		if (avalancheProblem != eu.albina.model.enumerations.AvalancheProblem.gliding_snow
+				&& eawsMatrixInformation.getSnowpackStability() != null) {
+			parameters.put(lang.getCaamlBundleString("snowpackStability.label"),
+				eawsMatrixInformation.getSnowpackStability().toString(lang.getLocale()));
+		}
+		if (eawsMatrixInformation.getFrequency() != null) {
+			parameters.put(lang.getCaamlBundleString("frequency.label"),
+				eawsMatrixInformation.getFrequency().toString(lang.getLocale()));
+		}
+		if (eawsMatrixInformation.getAvalancheSize() != null) {
+			parameters.put(lang.getCaamlBundleString("avalancheSize.label"),
+				eawsMatrixInformation.getAvalancheSize().toString(lang.getLocale()));
+		}
+		return parameters;
 	}
 
 	/** The upper elevation of the avalanche problem, or an empty string if it is not set. */
