@@ -3,9 +3,6 @@
     margin: 0;
     padding: 0;
     text-decoration: none;
-}
-
-* {
     font-family: "Open Sans", Arial, Helvetica, sans-serif;
     color: #565f61;
 }
@@ -26,18 +23,17 @@ a {
 }
 
 /* ------------------------------------- LAYOUT ------------------------------------- */
-table.head-wrap {
+table.head-wrap,
+table.body-wrap,
+table.footer-wrap {
     width: 100%;
+}
+
+table.head-wrap {
     border-bottom: 1px solid #99daff;
 }
 
-table.body-wrap {
-    width: 100%;
-}
-
 table.footer-wrap {
-    width: 100%;
-    clear: both !important;
     border-top: 1px solid #99daff;
 }
 
@@ -45,13 +41,11 @@ table.footer-wrap {
     display: block !important;
     max-width: 800px !important;
     margin: 0 auto !important;
-    clear: both !important;
 }
 
 .content {
-    max-width: 800px;
-    margin: 0 auto;
     display: block;
+    margin: 0 auto;
 }
 
 .content table {
@@ -60,10 +54,8 @@ table.footer-wrap {
 
 /* ------------------------------------- TYPOGRAPHY ------------------------------------- */
 h2, h4, h5 {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
     line-height: 1;
     margin-bottom: 15px;
-    color: #565f61;
 }
 
 h2 {
@@ -83,9 +75,7 @@ h5 {
 }
 
 p {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
     margin-bottom: 10px;
-    font-weight: normal;
     font-size: 14px;
     line-height: 1.6;
 }
@@ -114,33 +104,22 @@ p.lead {
 }
 
 /* ------------------------------------- BULLETIN ------------------------------------- */
-.map-daytime-text {
-    color: #565f61;
-    font-size: 22px;
-    margin-bottom: 5px;
-    text-align: center;
-}
-
+.map-daytime-text,
 .daytime-text {
     color: #565f61;
     font-size: 22px;
+}
+
+.map-daytime-text {
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .daytime-text-div {
     padding-top: 5px;
 }
 
-.detail-map {
-    max-width: 150px;
-}
-
-.danger-rating-number {
-    text-align: center;
-    margin-bottom: 0;
-    font-size: 12px;
-}
-
-.danger-rating-text {
+.danger-rating {
     text-align: center;
     margin-bottom: 0;
     font-size: 12px;
@@ -148,16 +127,10 @@ p.lead {
 
 .danger-pattern {
     font-size: 12px;
-    color: #565f61;
     border: 1px solid #565f61;
     border-radius: 15px;
     padding: 2px 10px;
     margin-right: 5px;
     display: inline-block;
     background-color: #FFFFFF;
-}
-
-/* ------------------------------------- AVALANCHE PROBLEM ------------------------------------- */
-.avalanche-problem {
-    max-width: 50px;
 }
