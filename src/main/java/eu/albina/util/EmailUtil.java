@@ -81,7 +81,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<meta name=\"viewport\" content=\"width=device-width\"/>");
 		pw.print("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
 		pw.format("<title>%s</title>", lang.getCaamlBundleString("forecast.label"));
-		pw.print("<link rel=\"stylesheet\" type=\"text/css\" href=\"stylesheets/avalanche-report.css\" >");
 		pw.format("<style>%s</style>", css("templates/EmailUtil.css").replace("var(--albina-color)", "#" + color));
 		pw.print("</head>");
 		pw.print("<body bgcolor=\"#FFFFFF\" topmargin=\"0\" leftmargin=\"0\" marginheight=\"0\" marginwidth=\"0\">");
