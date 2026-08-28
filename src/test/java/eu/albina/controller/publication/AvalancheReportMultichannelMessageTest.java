@@ -42,8 +42,8 @@ class AvalancheReportMultichannelMessageTest {
 		AvalancheReport report = AvalancheReport.of(bulletins, region, serverInstance);
 		MultichannelMessage message = MultichannelMessage.of(report, LanguageCode.de);
 		assertEquals("Lawinenvorhersage für Tirol, Freitag, 14. März 2025", message.getSubject());
-		assertEquals("Lawinenvorhersage für Freitag, 14. März 2025: https://lawinen.report/bulletin/2025-03-14", message.getSocialMediaText());
-		assertEquals("https://lawinen.report/bulletin/2025-03-14", message.getWebsiteUrl());
+		assertEquals("Lawinenvorhersage für Freitag, 14. März 2025: https://lawinen.report/2025-03-14", message.getSocialMediaText());
+		assertEquals("https://lawinen.report/2025-03-14", message.getWebsiteUrl());
 		assertEquals("https://static.avalanche.report/bulletins/2025-03-14/2025-03-13_16-00-00/fd_AT-07_map.jpg", message.getAttachmentUrl());
 	}
 }
