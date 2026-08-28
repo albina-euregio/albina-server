@@ -341,9 +341,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		Optional<String> snowpackStructureHighlights = bulletin.getSnowpackStructureHighlightsIn(lang);
 		Optional<String> tendencyComment = bulletin.getTendencyCommentIn(lang);
 		Optional<String> synopsisComment = bulletin.getSynopsisCommentIn(lang);
+		Tendency tendency = bulletin.getTendency();
+		boolean hasTendency = tendency != null || tendencyComment.isPresent();
 		boolean hasSnowpackSection = dangerPattern1 != null || dangerPattern2 != null
 			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent()
-			|| tendencyComment.isPresent();
+			|| hasTendency;
 		boolean hasStructure = dangerPattern1 != null || dangerPattern2 != null
 			|| snowpackStructureComment.isPresent() || snowpackStructureHighlights.isPresent();
 		boolean hasDangerPatterns = dangerPattern1 != null || dangerPattern2 != null;
@@ -351,8 +353,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String snowpackStructureHeadline = hasStructure ? lang.getCaamlBundleString("snowpack.label") : "";
 		String snowpackStructureCommentText = hasStructure ? snowpackStructureComment.orElse("") : "";
 		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getCaamlBundleString("dangerPattern.label") : "";
-		String tendencyHeadline = tendencyComment.isPresent() ? lang.getCaamlBundleString("tendency.label") : "";
-		String tendencyCommentText = tendencyComment.orElse("");
 
 		if (hasSnowpackSection) {
 			pw.print(TABLE + " style=\"width: 100%; background-color: #f6fafc;\">");
@@ -370,8 +370,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 				pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("synopsis.label"));
 				pw.format("<p>%s</p>", synopsisComment.get());
 			}
-			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", tendencyHeadline);
-			pw.format("<p>%s</p>", tendencyCommentText);
+			if (hasTendency) {
+				pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("tendency.label"));
+				appendTendency(pw, tendency);
+				tendencyComment.ifPresent(comment -> pw.format("<p>%s</p>", comment));
+			}
 			pw.print("</td>");
 			pw.print("</tr>");
 			pw.print("</table>");
@@ -385,15 +388,13 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,
 			AvalancheBulletinDaytimeDescription description, DaytimeDependency daytimeDependency, String heading) {
 		Region region = avalancheReport.getRegion();
-		String serverImagesUrl = region.getServerImagesUrl();
 		String map = avalancheReport.getMapsUrl() + "/"
 			+ MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
-		Tendency tendency = bulletin.getTendency();
 
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		if (heading != null) {
-			pw.print("<td colspan=\"4\" class=\"daytime-text-div\">");
+			pw.print("<td colspan=\"3\" class=\"daytime-text-div\">");
 			pw.format("<h2 class=\"daytime-text\">%s</h2>", heading);
 			pw.print("</td>");
 			pw.print("</tr>");
@@ -405,16 +406,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<td style=\"vertical-align: middle; %s\">", ROW_BORDER);
 		pw.format("<img height=\"48\" width=\"60\" src=\"%s\"/>", dangerRatingSymbol(description));
 		pw.print("</td>");
-		pw.format("<td class=\"mountain\" style=\"vertical-align: middle; padding-right: 10px; %s\">", ROW_BORDER);
+		pw.format("<td style=\"vertical-align: middle; padding-right: 10px; %s\">", ROW_BORDER);
 		pw.format("<p class=\"small\"><b>%s</b></p>", dangerRatingElevation(description));
-		pw.print("</td>");
-		pw.format("<td class=\"tendency\" style=\"%s\">", ROW_BORDER);
-		if (tendency != null) {
-			pw.format("<p><b>%s</b></p>", tendency.toString(lang.getLocale()));
-			pw.format("<p class=\"small\">%s", avalancheReport.getTendencyDate(lang));
-			pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", serverImagesUrl + tendency.getSymbolPath(false));
-			pw.print("</p>");
-		}
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
@@ -516,6 +509,16 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			? "color: " + dangerRating.getColor()
 			: "color: #565F61; background-color: " + dangerRating.getColor();
 		return String.format("style=\"padding-left: 15px; %s;\"", color);
+	}
+
+	private void appendTendency(PrintWriter pw, Tendency tendency) {
+		if (tendency == null) {
+			return;
+		}
+		pw.format("<p><b>%s</b>", tendency.toString(lang.getLocale()));
+		pw.format("<img class=\"tendency-symbol\" src=\"%s\"/></p>",
+			avalancheReport.getRegion().getServerImagesUrl() + tendency.getSymbolPath(false));
+		pw.format("<p class=\"small\">%s</p>", avalancheReport.getTendencyDate(lang));
 	}
 
 	private void appendDangerPattern(PrintWriter pw, DangerPattern dangerPattern) {
