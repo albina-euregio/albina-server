@@ -27,17 +27,13 @@ import org.slf4j.LoggerFactory;
 import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
-import eu.albina.model.enumerations.AvalancheSize;
-import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.DangerPattern;
-import eu.albina.model.enumerations.Frequency;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.model.enumerations.SnowpackStability;
 import org.caaml.v6.AvalancheBulletin;
 import org.caaml.v6.AvalancheBulletins;
 import org.caaml.v6.AvalancheProblem;
+import org.caaml.v6.AvalancheProblemType;
 import org.caaml.v6.DangerRatingValue;
-import org.caaml.v6.ElevationBoundaryOrBand;
 import org.caaml.v6.Tendency;
 import org.caaml.v6.Texts;
 import org.caaml.v6.ValidTimePeriod;
@@ -48,9 +44,6 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 
 	/** Language codes linked in the header, in display order. */
 	private static final List<String> LINKED_LANGUAGES = List.of("de", "it", "en", "es", "ca", "ar");
-
-	/** The elevation boundary of the CAAMLv6 model, either a number of metres or the treeline. */
-	private static final String TREELINE = "treeline";
 
 	public SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		this(avalancheReport, new Caaml6(avalancheReport, List.of(), lang).toCAAML(), lang);
@@ -201,7 +194,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 			+ DangerRatingValue.level(bulletin.dangerRating(validTimePeriod, false)) + "_"
 			+ DangerRatingValue.level(bulletin.dangerRating(validTimePeriod, true)) + ".webp");
 		String dangerRatingLabel = lang.getCaamlBundleString("dangerRating.label");
-		String elevation = elevationText(bulletin.dangerRatingElevation(validTimePeriod), false);
+		String elevation = lang.getElevationString(bulletin.dangerRatingElevation(validTimePeriod), false);
 		List<AvalancheProblem> problems = bulletin.avalancheProblems(validTimePeriod);
 
 		pw.format("<section class=\"daytime\">\n");
@@ -226,34 +219,31 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 	}
 
 	private void appendProblem(PrintWriter pw, AvalancheProblem avalancheProblem) {
-		eu.albina.model.enumerations.AvalancheProblem problem =
-			eu.albina.model.enumerations.AvalancheProblem.valueOf(avalancheProblem.getProblemType().name());
+		AvalancheProblemType problemType = avalancheProblem.getProblemType();
 		String aspectsText = avalancheProblem.aspects().stream()
 			.map(aspect -> lang.getCaamlBundleString("aspect." + aspect.name()))
 			.collect(Collectors.joining(", "));
-		ElevationBoundaryOrBand elevationBoundary = avalancheProblem.getElevation();
 		String elevation = Stream.of(
-				elevationText(elevationBoundary != null ? elevationBoundary.getUpperBound() : null, true),
-				elevationText(elevationBoundary != null ? elevationBoundary.getLowerBound() : null, true))
+				lang.getElevationString(avalancheProblem.upperBound(), true),
+				lang.getElevationString(avalancheProblem.lowerBound(), true))
 			.filter(text -> !text.isEmpty())
 			.collect(Collectors.joining("<br>"));
 
 		pw.format("<li class=\"problem\"%s>\n", dangerRatingAttributes(avalancheProblem));
 		pw.format("<figure>\n");
-		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", problem.getDataURL());
-		pw.format("<figcaption>%s</figcaption>\n", problem.toString(lang.getLocale()));
+		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", eu.albina.model.enumerations.AvalancheProblem.getDataURL(problemType));
+		pw.format("<figcaption>%s</figcaption>\n", lang.getCaamlBundleString("avalancheProblem." + problemType.name()));
 		pw.format("</figure>\n");
 		pw.format("<img class=\"icon\" src=\"%s\" alt=\"%s\">\n", Aspect.getDataURL(org.caaml.v6.Aspect.bitmask(avalancheProblem.aspects()), false), aspectsText);
 		pw.format("<div class=\"problem-elevation\">\n");
 		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", DataURL.ofResource("images/"
 			+ eu.albina.model.AvalancheProblem.getElevationSymbolPath(
-				elevationBoundary != null && elevationBoundary.getUpperBound() != null,
-				elevationBoundary != null && elevationBoundary.getLowerBound() != null) + ".webp"));
+				avalancheProblem.upperBound() != null, avalancheProblem.lowerBound() != null) + ".webp"));
 		if (!elevation.isEmpty()) {
 			pw.format("<span>%s</span>\n", elevation);
 		}
 		pw.format("</div>\n");
-		appendMatrix(pw, avalancheProblem, problem);
+		appendMatrix(pw, avalancheProblem);
 		pw.format("</li>\n");
 	}
 
@@ -276,36 +266,19 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 		return String.format(" style=\"border-color: %s\"", dangerRating.color());
 	}
 
-	private void appendMatrix(PrintWriter pw, AvalancheProblem avalancheProblem,
-			eu.albina.model.enumerations.AvalancheProblem problem) {
-		AvalancheType avalancheType = avalancheProblem.albinaAvalancheType() == null
-			? null
-			: AvalancheType.valueOf(avalancheProblem.albinaAvalancheType());
-		Map<String, String> parameters = EawsMatrixInformation.getMatrixParameters(lang, avalancheType, problem,
-			avalancheProblem.getSnowpackStability() != null ? SnowpackStability.valueOf(avalancheProblem.getSnowpackStability().name()) : null,
-			avalancheProblem.getFrequency() != null ? Frequency.valueOf(avalancheProblem.getFrequency().name()) : null,
-			avalancheProblem.getAvalancheSize() != null ? AvalancheSize.fromInteger(avalancheProblem.getAvalancheSize()) : null);
+	private void appendMatrix(PrintWriter pw, AvalancheProblem avalancheProblem) {
+		Map<String, String> parameters = EawsMatrixInformation.getMatrixParameters(lang, avalancheProblem);
 		if (parameters.isEmpty()) {
 			return;
 		}
 		pw.format("<span class=\"arrow\" aria-hidden=\"true\">→</span>\n");
 		pw.format("<div class=\"problem-matrix\">\n");
-		pw.format("<p class=\"avalanche-type\">%s</p>\n", avalancheType.toString(lang.getLocale()));
+		pw.format("<p class=\"avalanche-type\">%s</p>\n",
+			lang.getCaamlBundleString("avalancheType." + avalancheProblem.albinaAvalancheType()));
 		pw.format("<dl class=\"matrix\">\n");
 		parameters.forEach((label, value) -> pw.format("<dt>%s:</dt>\n<dd>%s</dd>\n", label, value));
 		pw.format("</dl>\n");
 		pw.format("</div>\n");
-	}
-
-	/** The elevation boundary as text, or an empty string if it is not set. */
-	private String elevationText(String bound, boolean capitalized) {
-		if (bound == null) {
-			return "";
-		} else if (TREELINE.equals(bound)) {
-			return lang.getCaamlBundleString(capitalized ? "elevation.treeline.capitalized" : "elevation.treeline");
-		}
-		int elevation = Integer.parseInt(bound);
-		return elevation > 0 ? elevation + "m" : "";
 	}
 
 }

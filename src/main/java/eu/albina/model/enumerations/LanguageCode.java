@@ -111,6 +111,20 @@ public enum LanguageCode {
 		return bundleString;
 	}
 
+	/**
+	 * The elevation boundary of the CAAMLv6 model as text, either a number of metres or the
+	 * treeline, or an empty string if it is not set.
+	 */
+	public String getElevationString(String bound, boolean capitalized) {
+		if (bound == null) {
+			return "";
+		} else if ("treeline".equals(bound)) {
+			return getCaamlBundleString(capitalized ? "elevation.treeline.capitalized" : "elevation.treeline");
+		}
+		int elevation = Integer.parseInt(bound);
+		return elevation > 0 ? elevation + "m" : "";
+	}
+
     public String getRegionName(String regionId) {
 		if ("".equals(regionId)) {
 			return "";

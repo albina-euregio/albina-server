@@ -74,6 +74,16 @@ public class AvalancheProblem {
 		return customData == null || customData.ALBINA() == null ? null : customData.ALBINA().avalancheType();
 	}
 
+	/** The upper elevation boundary, or null if there is none. */
+	public String upperBound() {
+		return elevation == null ? null : elevation.getUpperBound();
+	}
+
+	/** The lower elevation boundary, or null if there is none. */
+	public String lowerBound() {
+		return elevation == null ? null : elevation.getLowerBound();
+	}
+
 	/** The aspects, or an empty list if there are none. */
 	public List<Aspect> aspects() {
 		return aspects == null ? List.of() : aspects;

@@ -85,6 +85,16 @@ public class EawsMatrixInformation implements Comparable<EawsMatrixInformation> 
 		return parameters;
 	}
 
+	/** The EAWS matrix parameters of an avalanche problem of the CAAMLv6 model. */
+	public static Map<String, String> getMatrixParameters(LanguageCode lang, org.caaml.v6.AvalancheProblem problem) {
+		return getMatrixParameters(lang,
+			problem.albinaAvalancheType() != null ? AvalancheType.valueOf(problem.albinaAvalancheType()) : null,
+			AvalancheProblem.valueOf(problem.getProblemType().name()),
+			problem.getSnowpackStability() != null ? SnowpackStability.valueOf(problem.getSnowpackStability().name()) : null,
+			problem.getFrequency() != null ? Frequency.valueOf(problem.getFrequency().name()) : null,
+			problem.getAvalancheSize() != null ? AvalancheSize.fromInteger(problem.getAvalancheSize()) : null);
+	}
+
 	public DangerRating getDangerRating() {
 		return dangerRating;
 	}

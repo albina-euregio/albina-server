@@ -30,14 +30,32 @@ public enum AvalancheProblem {
 	}
 
 	public String getSymbolPath(boolean grayscale) {
+		return getSymbolPath(toStringId(), grayscale);
+	}
+
+	/** The pictogram of an avalanche problem of the CAAMLv6 model. */
+	public static String getSymbolPath(org.caaml.v6.AvalancheProblemType problemType, boolean grayscale) {
+		return getSymbolPath(problemType.name(), grayscale);
+	}
+
+	private static String getSymbolPath(String problemId, boolean grayscale) {
 		if (grayscale)
-			return "avalanche_problems/grey/" + toStringId() + ".png";
+			return "avalanche_problems/grey/" + problemId + ".png";
 		else
-			return "avalanche_problems/color/" + toStringId() + ".png";
+			return "avalanche_problems/color/" + problemId + ".png";
 	}
 
 	public String getDataURL() {
-		return DataURL.ofResource("images/avalanche_problems/color/" + toStringId() + ".webp");
+		return getDataURL(toStringId());
+	}
+
+	/** The pictogram of an avalanche problem of the CAAMLv6 model. */
+	public static String getDataURL(org.caaml.v6.AvalancheProblemType problemType) {
+		return getDataURL(problemType.name());
+	}
+
+	private static String getDataURL(String problemId) {
+		return DataURL.ofResource("images/avalanche_problems/color/" + problemId + ".webp");
 	}
 
 	@jakarta.persistence.Converter
