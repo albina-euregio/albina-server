@@ -218,6 +218,7 @@ public class PublicationJob {
 							.filter(bulletin -> bulletin.affectsRegionOnlyPublished(superRegion)).toList();
 						logger.info("Publishing super region {} with bulletins {} and publication time {}", superRegion, regionBulletins, publicationDate);
 						AvalancheReport report = AvalancheReport.of(regionBulletins, superRegion, serverInstance);
+						report.setDate(startDate.atZone(ZoneOffset.UTC));
 						if(strategy.createCAAMLOnly()) {
 							publicationController.createCaamlV6(report);
 							publicationController.createSimpleHtml(report);
