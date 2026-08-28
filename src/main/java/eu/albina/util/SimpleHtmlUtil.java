@@ -8,7 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Period;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,8 +25,11 @@ import org.slf4j.LoggerFactory;
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
+import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
+import eu.albina.model.enumerations.AvalancheType;
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
 public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang) {
@@ -185,6 +190,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	}
 
 	private void appendProblem(PrintWriter pw, AvalancheProblem avalancheProblem) {
+		eu.albina.model.enumerations.AvalancheProblem problem = avalancheProblem.getAvalancheProblem();
 		String aspects = avalancheProblem.getAspects().stream()
 			.map(aspect -> aspect.toString(lang.getLocale()))
 			.collect(Collectors.joining(", "));
@@ -192,17 +198,57 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			.filter(text -> !text.isEmpty())
 			.collect(Collectors.joining("<br>"));
 
-		pw.format("<li class=\"problem\">\n");
+		pw.format("<li class=\"problem\"%s>\n", dangerRatingAttributes(avalancheProblem));
 		pw.format("<figure>\n");
-		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", avalancheProblem.getAvalancheProblem().getDataURL());
-		pw.format("<figcaption>%s</figcaption>\n", avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
+		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", problem.getDataURL());
+		pw.format("<figcaption>%s</figcaption>\n", problem.toString(lang.getLocale()));
 		pw.format("</figure>\n");
+		pw.format("<img class=\"icon\" src=\"%s\" alt=\"%s\">\n", Aspect.getDataURL(avalancheProblem.getAspects(), false), aspects);
+		pw.format("<div class=\"problem-elevation\">\n");
 		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", avalancheProblem.getElevationDataURL());
 		if (!elevation.isEmpty()) {
-			pw.format("<p class=\"elevation\">%s</p>\n", elevation);
+			pw.format("<span>%s</span>\n", elevation);
 		}
-		pw.format("<img class=\"icon\" src=\"%s\" alt=\"%s\">\n", Aspect.getDataURL(avalancheProblem.getAspects(), false), aspects);
+		pw.format("</div>\n");
+		appendMatrix(pw, avalancheProblem);
 		pw.format("</li>\n");
+	}
+
+	/** Colors the bar in front of an avalanche problem according to its danger rating. */
+	private String dangerRatingAttributes(AvalancheProblem avalancheProblem) {
+		EawsMatrixInformation matrix = avalancheProblem.getEawsMatrixInformation();
+		DangerRating dangerRating = matrix != null ? matrix.getDangerRating() : null;
+		if (dangerRating == null) {
+			return "";
+		}
+		return String.format(" style=\"border-color: %s\" title=\"%s: %s\"", dangerRating.getColor(),
+			lang.getCaamlBundleString("dangerRating.label"), dangerRating.toString(lang.getLocale(), false));
+	}
+
+	/** The EAWS matrix parameters, shown for slab avalanches only (as in the PDF bulletin). */
+	private void appendMatrix(PrintWriter pw, AvalancheProblem avalancheProblem) {
+		EawsMatrixInformation matrix = avalancheProblem.getEawsMatrixInformation();
+		if (avalancheProblem.getAvalancheType() != AvalancheType.slab || matrix == null) {
+			return;
+		}
+		Map<String, String> parameters = new LinkedHashMap<>();
+		if (avalancheProblem.getAvalancheProblem() != eu.albina.model.enumerations.AvalancheProblem.gliding_snow
+				&& matrix.getSnowpackStability() != null) {
+			parameters.put(lang.getCaamlBundleString("snowpackStability.label"), matrix.getSnowpackStability().toString(lang.getLocale()));
+		}
+		if (matrix.getFrequency() != null) {
+			parameters.put(lang.getCaamlBundleString("frequency.label"), matrix.getFrequency().toString(lang.getLocale()));
+		}
+		if (matrix.getAvalancheSize() != null) {
+			parameters.put(lang.getCaamlBundleString("avalancheSize.label"), matrix.getAvalancheSize().toString(lang.getLocale()));
+		}
+		if (parameters.isEmpty()) {
+			return;
+		}
+		pw.format("<span class=\"arrow\" aria-hidden=\"true\">\u2192</span>\n");
+		pw.format("<dl class=\"matrix\">\n");
+		parameters.forEach((label, value) -> pw.format("<dt>%s:</dt>\n<dd>%s</dd>\n", label, value));
+		pw.format("</dl>\n");
 	}
 
 	private String getElevationLowText(AvalancheProblem avalancheProblem) {

@@ -133,7 +133,7 @@ article > section {
 .problems {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    gap: var(--space-md);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -144,6 +144,8 @@ article > section {
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-md);
+    border-left: var(--space-sm) solid transparent;
+    padding-left: var(--space-md);
 }
 
 .problem figure {
@@ -154,6 +156,25 @@ article > section {
 
 .problem figcaption {
     font-size: small;
+}
+
+.problem-elevation {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: bold;
+}
+
+.matrix {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0 var(--space-xs);
+    margin: 0;
+}
+
+.matrix dd {
+    margin: 0;
+    color: var(--color-accent);
 }
 
 rating1 {
