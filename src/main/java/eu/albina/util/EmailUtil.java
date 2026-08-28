@@ -121,8 +121,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 		pw.print("</div>");
 		pw.print("</td>");
-		pw.print("<td>");
-		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
 
@@ -155,7 +153,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 
 		// danger scale
-		pw.print(TABLE + " align=\"center\" style=\"width: auto; margin-left: auto; margin-right: auto; text-align: center; border-spacing: 0px;\">");
+		pw.print(TABLE + " align=\"center\" style=\"text-align: center;\">");
 		pw.print("<tr>");
 		pw.print(SWATCH + " bgcolor=\"#CCFF66\">&nbsp;</td>");
 		pw.print(SWATCH + " bgcolor=\"#FFFF00\">&nbsp;</td>");
@@ -240,8 +238,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 		pw.print("</div>");
 		pw.print("</td>");
-		pw.print("<td>");
-		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("<tr>");
 		pw.print("<td class=\"container\">");
@@ -257,11 +253,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 		pw.print("</div>");
 		pw.print("</td>");
-		pw.print("<td>");
-		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
-		pw.print("<img height=\"4px\" style=\"width: 100%;\" src=\"" + ci + "\"/>");
+		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\"/>");
 		pw.print("</body>");
 		pw.print("</html>");
 
@@ -302,12 +296,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<tr>");
 		pw.print("<td class=\"container\" bgcolor=\"#FFFFFF\">");
 		pw.print("<div class=\"content bulletin-content\">");
-		pw.print(TABLE + " style=\"border-spacing: 0px;\">");
+		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print(dangerRatingColorCell(highestDangerRating, region));
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.print(TABLE + " style=\"border-spacing: 0px;\">");
+		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.format("<h2 %s>%s</h2>", getHeadlineStyle(highestDangerRating), highestDangerRating.toString(lang.getLocale(), true));
@@ -354,26 +348,28 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String tendencyHeadline = tendencyComment.isPresent() ? lang.getCaamlBundleString("tendency.label") : "";
 		String tendencyCommentText = tendencyComment.orElse("");
 
-		pw.format(TABLE + " %s>", getSnowpackStyle(hasSnowpackSection));
-		pw.print("<tr>");
-		pw.print("<td style=\"background-color: #" + color + "; width: 10px; min-width: 10px; height: 100%;\"></td>");
-		pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
-		pw.format("<h4 style=\"padding-top: 5px;\">%s</h4>", snowpackStructureHeadline);
-		pw.format("<h5 style=\"margin-right: 5px; display: inline-block\">%s</h5>", dangerPatternsHeadline);
-		if (hasStructure) {
-			appendDangerPattern(pw, dangerPattern1);
-			appendDangerPattern(pw, dangerPattern2);
+		if (hasSnowpackSection) {
+			pw.print(TABLE + " style=\"width: 100%; background-color: #f6fafc;\">");
+			pw.print("<tr>");
+			pw.format("<td width=\"10\" bgcolor=\"#%s\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>", color);
+			pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
+			pw.format("<h4 style=\"padding-top: 5px;\">%s</h4>", snowpackStructureHeadline);
+			pw.format("<h5 style=\"margin-right: 5px; display: inline-block\">%s</h5>", dangerPatternsHeadline);
+			if (hasStructure) {
+				appendDangerPattern(pw, dangerPattern1);
+				appendDangerPattern(pw, dangerPattern2);
+			}
+			pw.format("<p>%s</p>", snowpackStructureCommentText);
+			if (synopsisComment.isPresent()) {
+				pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("synopsis.label"));
+				pw.format("<p>%s</p>", synopsisComment.get());
+			}
+			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", tendencyHeadline);
+			pw.format("<p>%s</p>", tendencyCommentText);
+			pw.print("</td>");
+			pw.print("</tr>");
+			pw.print("</table>");
 		}
-		pw.format("<p>%s</p>", snowpackStructureCommentText);
-		if (hasSnowpackSection && synopsisComment.isPresent()) {
-			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("synopsis.label"));
-			pw.format("<p>%s</p>", synopsisComment.get());
-		}
-		pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", tendencyHeadline);
-		pw.format("<p>%s</p>", tendencyCommentText);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
 		pw.print("</div>");
 		pw.print("</td>");
 		pw.print("</tr>");
@@ -539,14 +535,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			dangerRating.getColor(), background);
 	}
 
+	/** The light colours of the low danger levels are legible as a background only. */
 	private static String getHeadlineStyle(DangerRating dangerRating) {
-		if (dangerRating.equals(DangerRating.low) || dangerRating.equals(DangerRating.moderate)) {
-			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-				+ "#565F61" + "; background-color: " + dangerRating.getColor() + ";\"";
-		} else {
-			return "style=\"margin: 0; padding: 0; padding-left: 15px; text-decoration: none; font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; line-height: 1.6; margin-bottom: 0px; font-weight: bold; font-size: 24px; color: "
-				+ dangerRating.getColor() + ";\"";
-		}
+		String color = DangerRating.getInt(dangerRating) >= 3
+			? "color: " + dangerRating.getColor()
+			: "color: #565F61; background-color: " + dangerRating.getColor();
+		return String.format("style=\"padding-left: 15px; margin-bottom: 0px; %s;\"", color);
 	}
 
 	private void appendDangerPattern(PrintWriter pw, DangerPattern dangerPattern) {
@@ -556,13 +550,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<a href=\"%s\" target=\"_blank\"><span class=\"danger-pattern\">%s</span></a>",
 			getDangerPatternLink(lang, avalancheReport.getRegion(), dangerPattern),
 			dangerPattern.toString(lang.getLocale()));
-	}
-
-	private static String getSnowpackStyle(boolean b) {
-		if (!b)
-			return "style=\"overflow: hidden; float: left; display: none !important; line-height: 0px; height: 0px; border-spacing: 0px;\"";
-		else
-			return "style=\"padding: 0px; border-spacing: 0px; width: 100%; background-color: #f6fafc;\"";
 	}
 
 }

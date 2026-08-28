@@ -90,6 +90,22 @@ public class EmailUtilTest {
 		assertResourceEquals("2021-12-01.mail.html", html);
 	}
 
+	/** Outlook renders neither of these, so the mail must not depend on them. */
+	@Test
+	public void outlookCompatibility() throws Exception {
+		final URL resource = Resources.getResource("2026-04-13.json");
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		for (String unsupported : List.of("display: flex", "display: grid", "var(--", "data:image", ".webp")) {
+			Assertions.assertFalse(html.contains(unsupported), unsupported);
+		}
+		Assertions.assertEquals(
+			html.split("<table", -1).length,
+			html.split("<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"", -1).length,
+			"every layout table needs the presentational attributes");
+	}
+
 	@Test
 	public void langTest() {
 		Assertions.assertEquals("Alle Höhenlagen", LanguageCode.de.getCaamlBundleString("elevation.all"));
