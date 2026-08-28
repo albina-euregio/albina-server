@@ -115,7 +115,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	}
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin) {
-		pw.format("<article>\n");
+		pw.format("<article id=\"%s\">\n", bulletin.getId());
 		if (bulletin.isHasDaytimeDependency()) {
 			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
 			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
