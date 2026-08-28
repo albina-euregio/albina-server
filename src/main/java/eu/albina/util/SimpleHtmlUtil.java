@@ -115,7 +115,9 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 	}
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin) {
-		pw.format("<article id=\"%s\"%s>\n", bulletin.getId(), borderColor(bulletin.getHighestDangerRating()));
+		DangerRating dangerRating = bulletin.getHighestDangerRating();
+		pw.format("<article id=\"%s\"%s>\n", bulletin.getId(), borderColor(dangerRating));
+		appendDangerLevel(pw, dangerRating);
 		if (bulletin.isHasDaytimeDependency()) {
 			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
 			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
@@ -126,7 +128,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		String highlights = bulletin.getHighlightsIn(lang).orElse("");
 		if (!highlights.isBlank()) {
 			pw.format("<section class=\"highlights\">\n");
-			pw.format("<h2>%s</h2>\n", highlights);
+			pw.format("<h3>%s</h3>\n", highlights);
 			pw.format("</section>\n");
 		}
 		appendTextBlock(pw, "avalanche-activity", bulletin.getAvActivityHighlightsIn(lang).orElse(""),
@@ -142,6 +144,19 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		pw.format("</article>\n");
 	}
 
+	/** The headline of a bulletin, colored like the danger level headlines on the website. */
+	private void appendDangerLevel(PrintWriter pw, DangerRating dangerRating) {
+		if (dangerRating == null || dangerRating == DangerRating.missing) {
+			return;
+		}
+		// the light colors of the low danger levels are legible as a background only
+		String style = DangerRating.getInt(dangerRating) >= 3
+			? String.format("color: %s", dangerRating.getColor())
+			: String.format("background-color: %s", dangerRating.getColor());
+		pw.format("<h2 class=\"danger-level\" style=\"%s\">%s</h2>\n", style,
+			dangerRating.toString(lang.getLocale(), true));
+	}
+
 	/** Writes a section with the heading and the non-empty paragraphs, or nothing at all if there is no text. */
 	private void appendTextBlock(PrintWriter pw, String cssClass, String heading, String... paragraphs) {
 		List<String> texts = Stream.of(paragraphs).filter(text -> !text.isBlank()).toList();
@@ -150,7 +165,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		}
 		pw.format("<section class=\"%s\">\n", cssClass);
 		if (!heading.isBlank()) {
-			pw.format("<h2>%s</h2>\n", heading);
+			pw.format("<h3>%s</h3>\n", heading);
 		}
 		texts.forEach(text -> pw.format("<p>%s</p>\n", text));
 		pw.format("</section>\n");
@@ -170,10 +185,10 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 
 		pw.format("<section class=\"daytime\">\n");
 		if (heading != null) {
-			pw.format("<h2>%s</h2>\n", heading);
+			pw.format("<h3>%s</h3>\n", heading);
 		}
 		pw.format("<img class=\"map\" src=\"%s\" alt=\"%s\" loading=\"lazy\">\n", map, regions);
-		pw.format("<h3>%s</h3>\n", dangerRatingLabel);
+		pw.format("<h4>%s</h4>\n", dangerRatingLabel);
 		pw.format("<div class=\"danger-rating\">\n");
 		pw.format("<img class=\"icon\" src=\"%s\" alt=\"%s\">\n", warningPicto, dangerRatingLabel);
 		if (!elevation.isEmpty()) {
@@ -181,7 +196,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		}
 		pw.format("</div>\n");
 		if (!problems.isEmpty()) {
-			pw.format("<h3>%s</h3>\n", lang.getCaamlBundleString("avalancheProblem.label"));
+			pw.format("<h4>%s</h4>\n", lang.getCaamlBundleString("avalancheProblem.label"));
 			pw.format("<ul class=\"problems\">\n");
 			problems.forEach(problem -> appendProblem(pw, problem));
 			pw.format("</ul>\n");

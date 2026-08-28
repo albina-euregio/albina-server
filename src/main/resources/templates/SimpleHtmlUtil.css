@@ -42,7 +42,8 @@ img {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
     margin: 0;
     line-height: 1.25;
 }
@@ -52,10 +53,14 @@ h1 {
 }
 
 h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
 }
 
 h3 {
+    font-size: 1.25rem;
+}
+
+h4 {
     font-size: 1rem;
 }
 
@@ -115,12 +120,17 @@ article > section {
     gap: var(--space-sm);
 }
 
-.highlights h2 {
+.danger-level {
+    align-self: start;
+    padding: 0 var(--space-xs);
+}
+
+.highlights h3 {
     color: var(--color-highlights);
     font-weight: normal;
 }
 
-.daytime h2 {
+.daytime h3 {
     text-transform: uppercase;
 }
 
