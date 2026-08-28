@@ -412,14 +412,8 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String tendencyText = bulletin.getTendency() == null ? "" : bulletin.getTendency().toString(lang.getLocale());
 		String tendencySymbol;
 		String tendencyDate;
-		if (bulletin.getTendency() == Tendency.decreasing) {
-			tendencySymbol = serverImagesUrl + "tendency/tendency_decreasing_blue.png";
-			tendencyDate = avalancheReport.getTendencyDate(lang);
-		} else if (bulletin.getTendency() == Tendency.steady) {
-			tendencySymbol = serverImagesUrl + "tendency/tendency_steady_blue.png";
-			tendencyDate = avalancheReport.getTendencyDate(lang);
-		} else if (bulletin.getTendency() == Tendency.increasing) {
-			tendencySymbol = serverImagesUrl + "tendency/tendency_increasing_blue.png";
+		if (bulletin.getTendency() != null) {
+			tendencySymbol = serverImagesUrl + bulletin.getTendency().getSymbolPath(false);
 			tendencyDate = avalancheReport.getTendencyDate(lang);
 		} else {
 			tendencySymbol = serverImagesUrl + "tendency/empty.png";
@@ -513,40 +507,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String link = getAvalancheProblemLink(lang, region, problem.getAvalancheProblem());
 		String aspects = serverImagesUrl + Aspect.getSymbolPath(problem.getAspects(), false);
 
-		String elevationSymbol;
-		String limitAbove;
-		String limitBelow;
-		if (problem.getTreelineHigh() || problem.getElevationHigh() > 0) {
-			if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
-				// elevation high and low set
-				elevationSymbol = serverImagesUrl + "elevation/color/levels_middle_two.png";
-				limitAbove = problem.getTreelineLow()
-					? lang.getCaamlBundleString("elevation.treeline.capitalized")
-					: problem.getElevationLow() + "m";
-				limitBelow = problem.getTreelineHigh()
-					? lang.getCaamlBundleString("elevation.treeline.capitalized")
-					: problem.getElevationHigh() + "m";
-			} else {
-				// elevation high set
-				elevationSymbol = serverImagesUrl + "elevation/color/levels_below.png";
-				limitAbove = "";
-				limitBelow = problem.getTreelineHigh()
-					? lang.getCaamlBundleString("elevation.treeline.capitalized")
-					: problem.getElevationHigh() + "m";
-			}
-		} else if (problem.getTreelineLow() || problem.getElevationLow() > 0) {
-			// elevation low set
-			elevationSymbol = serverImagesUrl + "elevation/color/levels_above.png";
-			limitAbove = problem.getTreelineLow()
-				? lang.getCaamlBundleString("elevation.treeline.capitalized")
-				: problem.getElevationLow() + "m";
-			limitBelow = "";
-		} else {
-			// no elevation set
-			elevationSymbol = serverImagesUrl + "elevation/color/levels_all.png";
-			limitAbove = "";
-			limitBelow = "";
-		}
+		String elevationSymbol = serverImagesUrl + problem.getElevationSymbolPath() + ".png";
+		String limitAbove = problem.getElevationLowText(lang);
+		String limitBelow = problem.getElevationHighText(lang);
 
 		String margin = first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px";
 		pw.format("<table style=\"%s; width: 0;\"%s>", margin, tableExtraAttr);

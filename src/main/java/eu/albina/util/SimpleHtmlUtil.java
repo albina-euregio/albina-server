@@ -209,7 +209,7 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		String aspects = avalancheProblem.getAspects().stream()
 			.map(aspect -> aspect.toString(lang.getLocale()))
 			.collect(Collectors.joining(", "));
-		String elevation = Stream.of(getElevationHighText(avalancheProblem), getElevationLowText(avalancheProblem))
+		String elevation = Stream.of(avalancheProblem.getElevationHighText(lang), avalancheProblem.getElevationLowText(lang))
 			.filter(text -> !text.isEmpty())
 			.collect(Collectors.joining("<br>"));
 
@@ -275,26 +275,6 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		parameters.forEach((label, value) -> pw.format("<dt>%s:</dt>\n<dd>%s</dd>\n", label, value));
 		pw.format("</dl>\n");
 		pw.format("</div>\n");
-	}
-
-	private String getElevationLowText(AvalancheProblem avalancheProblem) {
-		if (avalancheProblem.getTreelineLow()) {
-			return lang.getCaamlBundleString("elevation.treeline.capitalized");
-		} else if (avalancheProblem.getElevationLow() > 0) {
-			return avalancheProblem.getElevationLow() + "m";
-		} else {
-			return "";
-		}
-	}
-
-	private String getElevationHighText(AvalancheProblem avalancheProblem) {
-		if (avalancheProblem.getTreelineHigh()) {
-			return lang.getCaamlBundleString("elevation.treeline.capitalized");
-		} else if (avalancheProblem.getElevationHigh() > 0) {
-			return avalancheProblem.getElevationHigh() + "m";
-		} else {
-			return "";
-		}
 	}
 
 	private String getElevationString(int elevation, boolean treeline) {
