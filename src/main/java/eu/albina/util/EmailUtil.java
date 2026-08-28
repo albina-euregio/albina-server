@@ -515,10 +515,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		if (tendency == null) {
 			return;
 		}
-		pw.format("<p><b>%s</b>", tendency.toString(lang.getLocale()));
-		pw.format("<img class=\"tendency-symbol\" src=\"%s\"/></p>",
-			avalancheReport.getRegion().getServerImagesUrl() + tendency.getSymbolPath(false));
-		pw.format("<p class=\"small\">%s</p>", avalancheReport.getTendencyDate(lang));
+		pw.format("<p><b>%s</b> %s</p>", tendency.toString(lang.getLocale()), avalancheReport.getTendencyDate(lang));
 	}
 
 	private void appendDangerPattern(PrintWriter pw, DangerPattern dangerPattern) {

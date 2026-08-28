@@ -130,12 +130,6 @@ p.lead {
     max-width: 150px;
 }
 
-.tendency-symbol {
-    display: inline-block;
-    max-width: 40px;
-    margin-left: 5px;
-}
-
 .mountain {
     border-right: 1px solid #e6eef2;
 }
