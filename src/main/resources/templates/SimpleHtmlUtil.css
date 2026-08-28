@@ -165,6 +165,15 @@ article > section {
     font-weight: bold;
 }
 
+.problem-matrix {
+    display: flex;
+    flex-direction: column;
+}
+
+.avalanche-type {
+    font-weight: bold;
+}
+
 .matrix {
     display: grid;
     grid-template-columns: auto auto;

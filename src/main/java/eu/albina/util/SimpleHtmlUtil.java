@@ -246,9 +246,12 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			return;
 		}
 		pw.format("<span class=\"arrow\" aria-hidden=\"true\">\u2192</span>\n");
+		pw.format("<div class=\"problem-matrix\">\n");
+		pw.format("<p class=\"avalanche-type\">%s</p>\n", avalancheProblem.getAvalancheType().toString(lang.getLocale()));
 		pw.format("<dl class=\"matrix\">\n");
 		parameters.forEach((label, value) -> pw.format("<dt>%s:</dt>\n<dd>%s</dd>\n", label, value));
 		pw.format("</dl>\n");
+		pw.format("</div>\n");
 	}
 
 	private String getElevationLowText(AvalancheProblem avalancheProblem) {
