@@ -34,7 +34,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	private static final String TABLE = "<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"";
 
 	/** Separates one avalanche problem from the next. Outlook supports padding on cells, not on tables. */
-	private static final String PROBLEM_CELL = "padding-top: 5px; padding-bottom: 5px;";
+	private static final String PROBLEM_CELL = "padding: 10px;";
 
 	/** Separates the daytime row from the avalanche problems below it. */
 	private static final String ROW_BORDER = "border-bottom: 1px solid #e6eef2; padding-bottom: 5px;";
@@ -437,7 +437,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		pw.print(dangerRatingColorCell(matrix != null ? matrix.getDangerRating() : null, region));
-		pw.format("<td style=\"width: 70px; text-align: center; padding-left: 10px; %s\">", PROBLEM_CELL);
+		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
 		pw.format("<img width=\"50\" class=\"avalanche-problem\" src=\"%s\"/>", symbol);
 		pw.print("</a>");
@@ -449,13 +449,13 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<td style=\"width: 80px; text-align: center; %s\">", PROBLEM_CELL);
 		pw.format("<img width=\"80\" height=\"48\" src=\"%s\"/>", elevationSymbol);
 		pw.print("</td>");
-		pw.format("<td style=\"width: 60px; padding-left: 10px; %s\">", PROBLEM_CELL);
+		pw.format("<td style=\"width: 60px; %s\">", PROBLEM_CELL);
 		appendElevationLimit(pw, problem.getElevationHighText(lang));
 		appendElevationLimit(pw, problem.getElevationLowText(lang));
 		pw.print("</td>");
 		pw.format("<td style=\"width: 30px; text-align: center; %s\">%s</td>", PROBLEM_CELL,
 			problem.getAvalancheType() != null ? "\u2192" : "");
-		pw.format("<td style=\"padding-left: 10px; %s\">", PROBLEM_CELL);
+		pw.format("<td style=\"%s\">", PROBLEM_CELL);
 		if (problem.getAvalancheType() != null) {
 			pw.format("<p class=\"small\"><b>%s</b></p>", problem.getAvalancheType().toString(lang.getLocale()));
 		}
