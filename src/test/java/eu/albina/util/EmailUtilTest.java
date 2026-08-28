@@ -34,6 +34,7 @@ public class EmailUtilTest {
 	private LocalServerInstance serverInstanceEuregio;
 	private LocalServerInstance serverInstanceAran;
 	private Region regionEuregio;
+	private Region regionVorarlberg;
 	private Region regionTyrol;
 	private Region regionAran;
 
@@ -43,6 +44,7 @@ public class EmailUtilTest {
 		serverInstanceAran = new LocalServerInstance(false, false, "/mnt/albina_files_local/", null, "/mnt/simple_local/", null, null);
 		regionEuregio = regionTestUtils.regionEuregio();
 		regionEuregio.setServerImagesUrl("https://admin.avalanche.report/images/");
+		regionVorarlberg = regionTestUtils.regionVorarlberg();
 		regionTyrol = regionTestUtils.regionTyrol();
 		regionTyrol.setServerImagesUrl("https://admin.avalanche.report/images/");
 		regionAran = regionTestUtils.regionAran();
@@ -79,6 +81,15 @@ public class EmailUtilTest {
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionEuregio, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
 		assertResourceEquals("2026-04-13.mail.html", html);
+	}
+
+	@Test
+	public void createBulletinEmailHtmlVorarlberg() throws Exception {
+		final URL resource = Resources.getResource("2026-04-13.AT-08.json");
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionVorarlberg, serverInstanceEuregio);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
+		assertResourceEquals("2026-04-13.AT-08.mail.html", html);
 	}
 
 	@Test

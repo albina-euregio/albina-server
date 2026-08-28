@@ -1,0 +1,83 @@
+{
+  "id": "AT-08",
+  "microRegions": 9,
+  "subRegions": [],
+  "superRegions": [],
+  "neighborRegions": [],
+  "enabledLanguages": [
+    "es",
+    "fr",
+    "de",
+    "it",
+    "oc",
+    "en",
+    "ca"
+  ],
+  "ttsLanguages": [
+    "de",
+    "it",
+    "en",
+    "es",
+    "ca"
+  ],
+  "enabledTextcatFields": [
+    "avActivityComment",
+    "avActivityHighlights",
+    "highlights",
+    "snowpackStructureComment",
+    "snowpackStructureHighlights",
+    "tendencyComment"
+  ],
+  "publishBulletins": true,
+  "publishBlogs": false,
+  "createCaamlV6": true,
+  "createJson": true,
+  "createMaps": true,
+  "createPdf": true,
+  "createSimpleHtml": true,
+  "sendEmails": true,
+  "sendTelegramMessages": false,
+  "sendWhatsAppMessages": false,
+  "sendPushNotifications": false,
+  "enableMediaFile": true,
+  "enableAvalancheProblemCornices": false,
+  "enableAvalancheProblemNoDistinctAvalancheProblem": false,
+  "enableDangerSources": false,
+  "enableObservations": false,
+  "enableModelling": false,
+  "showMatrix": true,
+  "enableStrategicMindset": false,
+  "enableStressLevel": false,
+  "pdfColor": "00ACFB",
+  "emailColor": "1AABFF",
+  "pdfMapYAmPm": 130,
+  "pdfMapYFd": 290,
+  "pdfMapWidthAmPm": 400,
+  "pdfMapWidthFd": 500,
+  "pdfMapHeight": 267,
+  "pdfFooterLogo": true,
+  "pdfFooterLogoColorPath": "logo/color/euregio.png",
+  "pdfFooterLogoBwPath": "logo/grey/euregio.png",
+  "geoDataDirectory": "geodata.Euregio/AT-07/",
+  "mapLogoPosition": "bottomright",
+  "imageColorbarColorPath": "logo/color/colorbar.gif",
+  "imageColorbarBwPath": "logo/grey/colorbar.gif",
+  "logoPath": "logo/color/avalanche_report.png",
+  "logoBwPath": "logo/grey/avalanche_report.png",
+  "staticUrl": "https://static.lawinen-warnung.eu",
+  "serverImagesUrl": "https://static.lawinen-warnung.eu/images/",
+  "languageConfigurations": [
+    {
+      "lang": "en",
+      "websiteName": "Avalanche.report",
+      "url": "https://www.lawinen-warnung.eu",
+      "urlWithDate": "https://www.lawinen-warnung.eu/bulletin/%s"
+    },
+    {
+      "lang": "de",
+      "websiteName": "Lawinen.report",
+      "url": "https://www.lawinen-warnung.eu",
+      "urlWithDate": "https://www.lawinen-warnung.eu/bulletin/%s"
+    }
+  ]
+}

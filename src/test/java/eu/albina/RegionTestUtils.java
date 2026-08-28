@@ -27,6 +27,10 @@ public class RegionTestUtils {
 		return readRegion(Resources.getResource("region_AT-07.json"));
 	}
 
+	public Region regionVorarlberg() {
+		return readRegion(Resources.getResource("region_AT-08.json"));
+	}
+
 	public Region regionCarinthia() {
 		return readRegion(Resources.getResource("region_AT-02.json"));
 	}
