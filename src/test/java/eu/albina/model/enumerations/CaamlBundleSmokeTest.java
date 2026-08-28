@@ -24,7 +24,7 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("Tendenz: Lawinengefahr nimmt ab", Tendency.decreasing.toString(Locale.GERMAN));
 		Assertions.assertEquals("gm.1: bodennahe schwachschicht", DangerPattern.dp1.toString(Locale.GERMAN));
 		Assertions.assertEquals("erheblich", DangerRating.considerable.toString(Locale.GERMAN, false));
-		Assertions.assertEquals("Gefahrenstufe 3 - Erheblich", DangerRating.considerable.toString(Locale.GERMAN, true));
+		Assertions.assertEquals("Gefahrenstufe 3 — Erheblich", DangerRating.considerable.toString(Locale.GERMAN, true));
 	}
 
 	@Test
