@@ -403,10 +403,10 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.format("<td style=\"width: 150px; padding-right: 10px; %s\">", ROW_BORDER);
 		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", map);
 		pw.print("</td>");
-		pw.format("<td style=\"vertical-align: middle; %s\">", ROW_BORDER);
+		pw.format("<td style=\"width: 60px; vertical-align: middle; %s\">", ROW_BORDER);
 		pw.format("<img height=\"48\" width=\"60\" src=\"%s\"/>", dangerRatingSymbol(description));
 		pw.print("</td>");
-		pw.format("<td style=\"vertical-align: middle; padding-right: 10px; %s\">", ROW_BORDER);
+		pw.format("<td style=\"vertical-align: middle; padding-left: 10px; %s\">", ROW_BORDER);
 		pw.format("<p class=\"small\"><b>%s</b></p>", dangerRatingElevation(description));
 		pw.print("</td>");
 		pw.print("</tr>");
