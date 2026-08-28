@@ -20,6 +20,7 @@ import com.google.common.io.Resources;
 
 import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.enumerations.DangerRating;
 import eu.albina.model.enumerations.LanguageCode;
 
 @MicronautTest
@@ -99,6 +100,22 @@ public class EmailUtilTest {
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de).replace("\n", "");
 		assertResourceEquals("2021-12-01.mail.html", html);
+	}
+
+	@Test
+	public void createBulletinEmailHtmlWithoutDangerRating() throws Exception {
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		bulletins.forEach(bulletin -> {
+			bulletin.getForenoon().setHasElevationDependency(false);
+			bulletin.getForenoon().setDangerRatingAbove(DangerRating.missing);
+			bulletin.getForenoon().setDangerRatingBelow(null);
+		});
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		Assertions.assertTrue(html.contains("warning_pictos/color/level_0_0.png"), "level_0_0");
+		Assertions.assertTrue(html.contains("Keine Beurteilung"), "Keine Beurteilung");
+		Assertions.assertFalse(html.contains("bgcolor=\"#969696\""), "no colour bar");
 	}
 
 	/** Outlook renders neither of these, so the mail must not depend on them. */

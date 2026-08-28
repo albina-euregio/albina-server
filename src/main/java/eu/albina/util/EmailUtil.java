@@ -519,7 +519,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 			.map(EmailUtil::dangerRating)
 			.filter(Objects::nonNull)
 			.max(Comparator.naturalOrder())
-			.orElse(DangerRating.missing);
+			.orElse(DangerRating.no_rating);
 	}
 
 	/** The danger rating above resp. below the elevation boundary of the given daytime. */
@@ -632,19 +632,9 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 	}
 
 	private String dangerRatingSymbol(List<org.caaml.v6.DangerRating> dangerRatings) {
-		String serverImagesUrl = avalancheReport.getRegion().getServerImagesUrl();
-		DangerRating above = dangerRating(dangerRatings, true);
-		DangerRating below = dangerRating(dangerRatings, false);
-		if (isMissing(above) && isMissing(below)) {
-			return serverImagesUrl + "warning_pictos/color/level_0_0.png";
-		} else {
-			return serverImagesUrl + "warning_pictos/color/level_"
-				+ warningLevel(below) + "_" + warningLevel(above) + ".png";
-		}
-	}
-
-	private static boolean isMissing(DangerRating dangerRating) {
-		return dangerRating == null || dangerRating == DangerRating.missing || dangerRating == DangerRating.no_rating;
+		return avalancheReport.getRegion().getServerImagesUrl() + "warning_pictos/color/level_"
+			+ warningLevel(dangerRating(dangerRatings, false)) + "_"
+			+ warningLevel(dangerRating(dangerRatings, true)) + ".png";
 	}
 
 	private static String warningLevel(DangerRating dangerRating) {
@@ -667,7 +657,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 	 * Outlook, hence the space.
 	 */
 	private static String dangerRatingColorCell(DangerRating dangerRating, Region region) {
-		if (dangerRating == null || dangerRating == DangerRating.missing) {
+		if (dangerRating == null || DangerRating.getInt(dangerRating) == 0) {
 			return "<td width=\"10\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>";
 		}
 		String background = dangerRating.equals(DangerRating.very_high)
