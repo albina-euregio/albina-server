@@ -163,6 +163,17 @@ p.lead {
     font-size: 12px;
 }
 
+.danger-pattern {
+    font-size: 12px;
+    color: #565f61;
+    border: 1px solid #565f61;
+    border-radius: 15px;
+    padding: 2px 10px;
+    margin-right: 5px;
+    display: inline-block;
+    background-color: #FFFFFF;
+}
+
 /* ------------------------------------- AVALANCHE PROBLEM ------------------------------------- */
 .avalanche-problem {
     max-width: 50px;

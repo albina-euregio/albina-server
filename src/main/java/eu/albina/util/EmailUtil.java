@@ -32,6 +32,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	/** Opens a layout table. Outlook needs the presentational attributes on every one of them. */
 	private static final String TABLE = "<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"";
 
+	/** A cell of the danger scale legend. Outlook renders a coloured cell, but not an empty table. */
+	private static final String SWATCH = "<td width=\"75\" height=\"10\" style=\"font-size: 0; line-height: 0;\"";
+
 	/** Keeps Outlook from scaling the whole mail up on displays with more than 96 dpi. */
 	private static final String MSO_PIXELS_PER_INCH = "<!--[if mso]><xml><o:OfficeDocumentSettings>"
 		+ "<o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->";
@@ -74,8 +77,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String overviewPM = daytime
 			? mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false)
 			: null;
-		String dangerLevel5Style = "background=\"" + serverImagesUrl + "bg_checkered.png"
-			+ "\" height=\"10\" width=\"75\" bgcolor=\"#FF0000\"";
 
 		StringWriter out = new StringWriter();
 		PrintWriter pw = new PrintWriter(out);
@@ -156,26 +157,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		// danger scale
 		pw.print(TABLE + " align=\"center\" style=\"width: auto; margin-left: auto; margin-right: auto; text-align: center; border-spacing: 0px;\">");
 		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#CCFF66\">");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#FFFF00\">");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#FF9900\">");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.print(TABLE + " height=\"10\" width=\"75\" bgcolor=\"#FF0000\">");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("<td>");
-		pw.format(TABLE + " %s>", dangerLevel5Style);
-		pw.print("</table>");
-		pw.print("</td>");
+		pw.print(SWATCH + " bgcolor=\"#CCFF66\">&nbsp;</td>");
+		pw.print(SWATCH + " bgcolor=\"#FFFF00\">&nbsp;</td>");
+		pw.print(SWATCH + " bgcolor=\"#FF9900\">&nbsp;</td>");
+		pw.print(SWATCH + " bgcolor=\"#FF0000\">&nbsp;</td>");
+		pw.format(SWATCH + " bgcolor=\"#FF0000\" background=\"%sbg_checkered.png\">&nbsp;</td>", serverImagesUrl);
 		pw.print("</tr>");
 		pw.print("<tr>");
 		pw.print("<td>");
@@ -318,7 +304,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<div class=\"content bulletin-content\">");
 		pw.print(TABLE + " style=\"border-spacing: 0px;\">");
 		pw.print("<tr>");
-		pw.format("<td %s>", getDangerRatingColorStyle(highestDangerRating, region));
+		pw.print(dangerRatingColorCell(highestDangerRating, region));
 		pw.print("</td>");
 		pw.print("<td>");
 		pw.print(TABLE + " style=\"border-spacing: 0px;\">");
@@ -365,12 +351,6 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String snowpackStructureHeadline = hasStructure ? lang.getCaamlBundleString("snowpack.label") : "";
 		String snowpackStructureCommentText = hasStructure ? snowpackStructureComment.orElse("") : "";
 		String dangerPatternsHeadline = hasStructure && hasDangerPatterns ? lang.getCaamlBundleString("dangerPattern.label") : "";
-		String dangerPattern1Text = hasStructure && hasDangerPatterns && dangerPattern1 != null ? dangerPattern1.toString(lang.getLocale()) : "";
-		String dangerPatternLink1 = hasStructure && hasDangerPatterns && dangerPattern1 != null ? getDangerPatternLink(lang, region, dangerPattern1) : "";
-		String dangerPatternStyle1 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern1 != null);
-		String dangerPattern2Text = hasStructure && hasDangerPatterns && dangerPattern2 != null ? dangerPattern2.toString(lang.getLocale()) : "";
-		String dangerPatternLink2 = hasStructure && hasDangerPatterns && dangerPattern2 != null ? getDangerPatternLink(lang, region, dangerPattern2) : "";
-		String dangerPatternStyle2 = getDangerPatternStyle(hasStructure && hasDangerPatterns && dangerPattern2 != null);
 		String tendencyHeadline = tendencyComment.isPresent() ? lang.getCaamlBundleString("tendency.label") : "";
 		String tendencyCommentText = tendencyComment.orElse("");
 
@@ -380,12 +360,10 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
 		pw.format("<h4 style=\"padding-top: 5px;\">%s</h4>", snowpackStructureHeadline);
 		pw.format("<h5 style=\"margin-right: 5px; display: inline-block\">%s</h5>", dangerPatternsHeadline);
-		pw.format("<a href=\"%s\" target=\"_blank\">", dangerPatternLink1);
-		pw.format("<p %s>%s</p>", dangerPatternStyle1, dangerPattern1Text);
-		pw.print("</a>");
-		pw.format("<a href=\"%s\" target=\"_blank\">", dangerPatternLink2);
-		pw.format("<p %s>%s</p>", dangerPatternStyle2, dangerPattern2Text);
-		pw.print("</a>");
+		if (hasStructure) {
+			appendDangerPattern(pw, dangerPattern1);
+			appendDangerPattern(pw, dangerPattern2);
+		}
 		pw.format("<p>%s</p>", snowpackStructureCommentText);
 		if (hasSnowpackSection && synopsisComment.isPresent()) {
 			pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("synopsis.label"));
@@ -552,13 +530,13 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			return "";
 	}
 
-	private static String getDangerRatingColorStyle(DangerRating dangerRating, Region region) {
-		if (dangerRating.equals(DangerRating.very_high)) {
-			return "background=\"" + region.getServerImagesUrl() + "bg_checkered.png"
-				+ "\" height=\"100%\" width=\"10px\" bgcolor=\"#FF0000\"";
-		} else
-			return "style=\"background-color: " + dangerRating.getColor()
-				+ "; height: 100%; width: 10px; min-width: 10px; padding: 0px; margin: 0px;\"";
+	/** The coloured bar in front of a bulletin. An empty cell collapses in Outlook, hence the space. */
+	private static String dangerRatingColorCell(DangerRating dangerRating, Region region) {
+		String background = dangerRating.equals(DangerRating.very_high)
+			? " background=\"" + region.getServerImagesUrl() + "bg_checkered.png\""
+			: "";
+		return String.format("<td width=\"10\" bgcolor=\"%s\"%s style=\"font-size: 0; line-height: 0;\">&nbsp;</td>",
+			dangerRating.getColor(), background);
 	}
 
 	private static String getHeadlineStyle(DangerRating dangerRating) {
@@ -571,11 +549,13 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		}
 	}
 
-	private static String getDangerPatternStyle(boolean b) {
-		if (b)
-			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; margin-bottom: 10px; font-weight: normal; line-height: 1.6; font-size: 12px; color: #565f61; border: 1px solid #565f61; border-radius: 15px; padding-left: 10px; padding-right: 10px; padding-top: 2px; padding-bottom: 2px; margin-right: 5px; display: inline-block; background-color: #FFFFFF;\"";
-		else
-			return "";
+	private void appendDangerPattern(PrintWriter pw, DangerPattern dangerPattern) {
+		if (dangerPattern == null) {
+			return;
+		}
+		pw.format("<a href=\"%s\" target=\"_blank\"><span class=\"danger-pattern\">%s</span></a>",
+			getDangerPatternLink(lang, avalancheReport.getRegion(), dangerPattern),
+			dangerPattern.toString(lang.getLocale()));
 	}
 
 	private static String getSnowpackStyle(boolean b) {
