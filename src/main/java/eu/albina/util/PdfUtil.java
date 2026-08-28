@@ -514,6 +514,19 @@ public class PdfUtil {
 					table.addCell(cell);
 				}
 
+				snowpackStructureHighlights.ifPresent(text -> {
+					Paragraph paragraph = new Paragraph(replaceLinebreaks(text))
+						.setFont(openSansBoldFont).setFontSize(10).setFontColor(blackColor)
+						.setMultipliedLeading(leadingText);
+					Cell c = new Cell(1, 1).add(paragraph);
+					c.setTextAlignment(TextAlignment.LEFT);
+					c.setPaddingLeft(paddingLeft);
+					c.setBorder(Border.NO_BORDER);
+					c.setBorderLeft(new SolidBorder(blue, 4));
+					c.setBackgroundColor(greyVeryVeryLight);
+					table.addCell(c);
+				});
+
 				snowpackStructureComment.ifPresent(text -> {
 					Paragraph paragraph = new Paragraph(replaceLinebreaks(text))
 						.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor)

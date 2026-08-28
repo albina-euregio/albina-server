@@ -395,6 +395,7 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 			if (hasStructure) {
 				dangerPatterns.forEach(dangerPattern -> appendDangerPattern(pw, dangerPattern));
 			}
+			snowpackStructureHighlights.ifPresent(text -> pw.format("<h5>%s</h5>", text));
 			pw.format("<p>%s</p>", snowpackStructureCommentText);
 			if (synopsisComment.isPresent()) {
 				pw.format("<h4 style=\"padding-top: 15px;\">%s</h4>", lang.getCaamlBundleString("synopsis.label"));

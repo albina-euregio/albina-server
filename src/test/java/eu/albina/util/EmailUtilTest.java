@@ -118,6 +118,17 @@ public class EmailUtilTest {
 		Assertions.assertFalse(html.contains("bgcolor=\"#969696\""), "no colour bar");
 	}
 
+	@Test
+	public void createBulletinEmailHtmlWithSnowpackStructureHighlights() throws Exception {
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		bulletins.forEach(bulletin -> bulletin.setSnowpackStructureHighlights(bulletin.getAvActivityHighlights()));
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		String highlights = bulletins.getFirst().getAvActivityHighlightsIn(LanguageCode.de).orElseThrow();
+		Assertions.assertTrue(html.contains("<h5>" + highlights + "</h5>"), "snowpack structure highlights");
+	}
+
 	/** Outlook renders neither of these, so the mail must not depend on them. */
 	@Test
 	public void outlookCompatibility() throws Exception {

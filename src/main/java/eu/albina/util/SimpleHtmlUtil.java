@@ -136,7 +136,8 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 			.map(dangerPattern -> dangerPattern.toString(lang.getLocale()))
 			.collect(Collectors.joining("<br>"));
 		appendTextBlock(pw, "snowpack", lang.getCaamlBundleString("snowpack.label"),
-			dangerPatterns, bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
+			dangerPatterns, bulletin.getSnowpackStructureHighlightsIn(lang).orElse(""),
+			bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
 		appendTextBlock(pw, "tendency", lang.getCaamlBundleString("tendency.label"),
 			bulletin.getTendencyCommentIn(lang).orElse(""));
 		pw.format("</article>\n");
