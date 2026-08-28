@@ -32,6 +32,9 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 	/** Opens a layout table. Outlook needs the presentational attributes on every one of them. */
 	private static final String TABLE = "<table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\"";
 
+	/** Separates the daytime row from the avalanche problems below it. */
+	private static final String ROW_BORDER = "border-bottom: 1px solid #e6eef2; padding-bottom: 5px;";
+
 	/** A cell of the danger scale legend. Outlook renders a coloured cell, but not an empty table. */
 	private static final String SWATCH = "<td width=\"75\" height=\"10\" style=\"font-size: 0; line-height: 0;\"";
 
@@ -389,56 +392,28 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			: "margin-top: 10px; padding-left: 15px;");
 		pw.print("<tr>");
 		if (heading != null) {
-			pw.print("<td class=\"daytime-text-div\">");
+			pw.print("<td colspan=\"4\" class=\"daytime-text-div\">");
 			pw.format("<h2 class=\"daytime-text\">%s</h2>", heading);
 			pw.print("</td>");
 			pw.print("</tr>");
 			pw.print("<tr>");
 		}
-		pw.print("<td style=\"width: 150px; padding-right: 10px;\">");
+		pw.format("<td style=\"width: 150px; padding-right: 10px; %s\">", ROW_BORDER);
 		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", map);
 		pw.print("</td>");
-		pw.print("<td>");
-		pw.print(TABLE + " style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\">");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print(TABLE + " style=\"width: 0;\">");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print("<div style=\"height: 48px;\">");
-		pw.print("<div style=\"height: 48px; width: 60px; margin-right: 10px;\">");
-		pw.format("<img height=\"48\" width=\"60\" style=\"display: inline-block; margin-bottom: 10px;\" src=\"%s\"/>", dangerRatingSymbol(description));
-		pw.print("</div>");
-		pw.print("</div>");
+		pw.format("<td style=\"vertical-align: middle; %s\">", ROW_BORDER);
+		pw.format("<img height=\"48\" width=\"60\" src=\"%s\"/>", dangerRatingSymbol(description));
 		pw.print("</td>");
-		pw.print("<td class=\"mountain\">");
-		pw.print("<div style=\"height: 48px;\">");
-		pw.print("<div style=\"height: 48px; margin-right: 10px;\">");
-		pw.print("<p style=\"height: 48px; display: inline-block; font-size: 12px; padding-top: 18px;\">");
-		pw.format("<b>%s</b>", dangerRatingElevation(description));
-		pw.print("</p>");
-		pw.print("</div>");
-		pw.print("</div>");
+		pw.format("<td class=\"mountain\" style=\"vertical-align: middle; padding-right: 10px; %s\">", ROW_BORDER);
+		pw.format("<p style=\"font-size: 12px;\"><b>%s</b></p>", dangerRatingElevation(description));
 		pw.print("</td>");
-		pw.print("<td class=\"tendency\">");
-		pw.print(TABLE + ">");
-		pw.print("<tr>");
-		pw.print("<td>");
+		pw.format("<td class=\"tendency\" style=\"%s\">", ROW_BORDER);
 		if (tendency != null) {
 			pw.format("<p style=\"text-align: left; font-weight: 900; margin-bottom: 10px;\">%s</p>", tendency.toString(lang.getLocale()));
-			pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s</p>", avalancheReport.getTendencyDate(lang));
-		}
-		pw.print("</td>");
-		pw.print("<td>");
-		if (tendency != null) {
+			pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s", avalancheReport.getTendencyDate(lang));
 			pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", serverImagesUrl + tendency.getSymbolPath(false));
+			pw.print("</p>");
 		}
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
