@@ -73,8 +73,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			: mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.fd, false);
 		String overviewPM = daytime
 			? mapsUrl + "/" + MapUtil.getOverviewMapFilename(region, DaytimeDependency.pm, false)
-			: serverImagesUrl + "/empty.png";
-		String widthPM = daytime ? "width=\"600\" " : "";
+			: null;
 		String dangerLevel5Style = "background=\"" + serverImagesUrl + "bg_checkered.png"
 			+ "\" height=\"10\" width=\"75\" bgcolor=\"#FF0000\"";
 
@@ -132,34 +131,22 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("<td class=\"container\" bgcolor=\"#FFFFFF\">");
 		pw.print("<div class=\"content\">");
 		pw.print(TABLE + " style=\"padding: 15px 0;\">");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.format("<h2 class=\"map-daytime-text\">%s</h2>", textAm);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print("<p style=\"margin-bottom: 0px; text-align: center;\">");
-		pw.format("<a href=\"%s\">", website);
-		pw.format("<img width=\"600\" style=\"max-width: 600px;\" src=\"%s\"/>", overview);
-		pw.print("</a>");
-		pw.print("</p>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.format("<h2 class=\"map-daytime-text\" style=\"margin-top: 15px;\">%s</h2>", textPm);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("<tr>");
-		pw.print("<td>");
-		pw.print("<p style=\"margin-bottom: 0px; text-align: center;\">");
-		pw.format("<a href=\"%s\">", website);
-		pw.format("<img %sstyle=\"max-width: 600px;\" src=\"%s\"/>", widthPM, overviewPM);
-		pw.print("</a>");
-		pw.print("</p>");
-		pw.print("</td>");
-		pw.print("</tr>");
+		if (daytime) {
+			pw.print("<tr>");
+			pw.print("<td>");
+			pw.format("<h2 class=\"map-daytime-text\">%s</h2>", textAm);
+			pw.print("</td>");
+			pw.print("</tr>");
+		}
+		appendOverviewMap(pw, website, overview);
+		if (daytime) {
+			pw.print("<tr>");
+			pw.print("<td>");
+			pw.format("<h2 class=\"map-daytime-text\" style=\"margin-top: 15px;\">%s</h2>", textPm);
+			pw.print("</td>");
+			pw.print("</tr>");
+			appendOverviewMap(pw, website, overviewPM);
+		}
 		pw.print("</table>");
 		pw.print("</div>");
 		pw.print("</td>");
@@ -296,6 +283,18 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		return out.toString();
 	}
 
+	private static void appendOverviewMap(PrintWriter pw, String website, String map) {
+		pw.print("<tr>");
+		pw.print("<td>");
+		pw.print("<p style=\"margin-bottom: 0px; text-align: center;\">");
+		pw.format("<a href=\"%s\">", website);
+		pw.format("<img width=\"600\" style=\"max-width: 600px;\" src=\"%s\"/>", map);
+		pw.print("</a>");
+		pw.print("</p>");
+		pw.print("</td>");
+		pw.print("</tr>");
+	}
+
 	static String css(String resourceName) {
 		try {
 			URL resource = Resources.getResource(resourceName);
@@ -330,11 +329,12 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</tr>");
 		pw.print("</table>");
 
-		// forenoon / all-day
-		daytime(pw, false, bulletin);
-
-		// afternoon
-		daytime(pw, true, bulletin);
+		if (bulletin.isHasDaytimeDependency()) {
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
+			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
+		} else {
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, null);
+		}
 
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
@@ -402,52 +402,33 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</table>");
 	}
 
-	private void daytime(PrintWriter pw, boolean pm, AvalancheBulletin bulletin) {
+	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,
+			AvalancheBulletinDaytimeDescription description, DaytimeDependency daytimeDependency, String heading) {
 		Region region = avalancheReport.getRegion();
 		String serverImagesUrl = region.getServerImagesUrl();
-		String mapsUrl = avalancheReport.getMapsUrl();
-		boolean bulletinDaytime = bulletin.isHasDaytimeDependency();
+		String map = avalancheReport.getMapsUrl() + "/"
+			+ MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
+		Tendency tendency = bulletin.getTendency();
 
-		String text = bulletinDaytime
-			? lang.getCaamlBundleString(pm ? "validTimePeriod.later" : "validTimePeriod.earlier")
-			: "";
-		// when there is no daytime dependency, the afternoon block reuses the forenoon description and its map
-		AvalancheBulletinDaytimeDescription description = pm && bulletinDaytime ? bulletin.getAfternoon() : bulletin.getForenoon();
-		DaytimeDependency daytimeDependency = pm && bulletinDaytime ? DaytimeDependency.pm : DaytimeDependency.am;
-		String map = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.jpg);
-
-		// tendency
-		String tendencyText = bulletin.getTendency() == null ? "" : bulletin.getTendency().toString(lang.getLocale());
-		String tendencySymbol;
-		String tendencyDate;
-		if (bulletin.getTendency() != null) {
-			tendencySymbol = serverImagesUrl + bulletin.getTendency().getSymbolPath(false);
-			tendencyDate = avalancheReport.getTendencyDate(lang);
-		} else {
-			tendencySymbol = serverImagesUrl + "tendency/empty.png";
-			tendencyDate = "";
-		}
-
-		String stylepmtable = getPMStyleTable(bulletinDaytime);
-		String styleAttr = pm ? " " + stylepmtable : "";
-		if (pm) {
-			pw.format("<div %s>", getPMStyle(bulletinDaytime));
-		}
-		pw.format(TABLE + " style=\"%s\"%s>", pm ? "padding-left: 15px;" : "margin-top: 10px; padding-left: 15px;", styleAttr);
+		pw.format(TABLE + " style=\"%s\">", daytimeDependency == DaytimeDependency.pm
+			? "padding-left: 15px;"
+			: "margin-top: 10px; padding-left: 15px;");
 		pw.print("<tr>");
-		pw.print("<td class=\"daytime-text-div\">");
-		pw.format("<h2 class=\"daytime-text\">%s</h2>", text);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("<tr>");
-		pw.format("<td style=\"%s\">", pm ? "width: 150px;" : "width: 150px; padding-right: 10px;");
+		if (heading != null) {
+			pw.print("<td class=\"daytime-text-div\">");
+			pw.format("<h2 class=\"daytime-text\">%s</h2>", heading);
+			pw.print("</td>");
+			pw.print("</tr>");
+			pw.print("<tr>");
+		}
+		pw.print("<td style=\"width: 150px; padding-right: 10px;\">");
 		pw.format("<img width=\"150\" class=\"detail-map\" src=\"%s\"/>", map);
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format(TABLE + " style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\"%s>", styleAttr);
+		pw.print(TABLE + " style=\"border-bottom: 1px solid #e6eef2; padding-bottom: 5px;\">");
 		pw.print("<tr>");
 		pw.print("<td>");
-		pw.format(TABLE + " style=\"width: 0;\"%s>", styleAttr);
+		pw.print(TABLE + " style=\"width: 0;\">");
 		pw.print("<tr>");
 		pw.print("<td>");
 		pw.print("<div style=\"height: 48px;\">");
@@ -466,44 +447,36 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		pw.print("</div>");
 		pw.print("</td>");
 		pw.print("<td class=\"tendency\">");
-		pw.format(TABLE + "%s>", styleAttr);
+		pw.print(TABLE + ">");
 		pw.print("<tr>");
 		pw.print("<td>");
-		if (pm) {
-			pw.format("<h5 style=\"text-align: left; margin-bottom: 10px;\">%s</h5>", tendencyText);
-			pw.format("<h5 style=\"text-align: left; font-weight: 100;\">%s</h5>", tendencyDate);
-		} else {
-			pw.format("<p style=\"text-align: left; font-weight: 900; margin-bottom: 10px;\">%s</p>", tendencyText);
-			pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s</p>", tendencyDate);
+		if (tendency != null) {
+			pw.format("<p style=\"text-align: left; font-weight: 900; margin-bottom: 10px;\">%s</p>", tendency.toString(lang.getLocale()));
+			pw.format("<p style=\"text-align: left; margin-bottom: 0;\">%s</p>", avalancheReport.getTendencyDate(lang));
 		}
 		pw.print("</td>");
 		pw.print("<td>");
-		pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", tendencySymbol);
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-
-		appendAvalancheProblem(pw, description.getAvalancheProblem1(), true, styleAttr);
-		appendAvalancheProblem(pw, description.getAvalancheProblem2(), false, styleAttr);
-		appendAvalancheProblem(pw, description.getAvalancheProblem3(), false, styleAttr);
-		appendAvalancheProblem(pw, description.getAvalancheProblem4(), false, styleAttr);
-		appendAvalancheProblem(pw, description.getAvalancheProblem5(), false, styleAttr);
-
-		pw.print("</td>");
-		pw.print("</tr>");
-		pw.print("</table>");
-		if (pm) {
-			pw.print("</div>");
+		if (tendency != null) {
+			pw.format("<img class=\"tendency-symbol\" src=\"%s\"/>", serverImagesUrl + tendency.getSymbolPath(false));
 		}
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+		pw.print("</td>");
+		pw.print("</tr>");
+		pw.print("</table>");
+
+		appendAvalancheProblem(pw, description.getAvalancheProblem1(), true);
+		appendAvalancheProblem(pw, description.getAvalancheProblem2(), false);
+		appendAvalancheProblem(pw, description.getAvalancheProblem3(), false);
+		appendAvalancheProblem(pw, description.getAvalancheProblem4(), false);
+		appendAvalancheProblem(pw, description.getAvalancheProblem5(), false);
 	}
 
-	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem, boolean first, String tableExtraAttr) {
+	private void appendAvalancheProblem(PrintWriter pw, AvalancheProblem problem, boolean first) {
 		if (problem == null || problem.getAvalancheProblem() == null) {
 			return;
 		}
@@ -520,7 +493,7 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String limitBelow = problem.getElevationHighText(lang);
 
 		String margin = first ? "margin: 5px 5px 0 5px" : "margin-left: 5px; margin-top: 0px";
-		pw.format(TABLE + " style=\"%s; width: 0;\"%s>", margin, tableExtraAttr);
+		pw.format(TABLE + " style=\"%s; width: 0;\">", margin);
 		pw.print("<tr>");
 		pw.print("<td style=\"margin: 0 5px; width: 70px; text-align: center;\">");
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
@@ -624,17 +597,4 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			return "style=\"padding: 0px; border-spacing: 0px; width: 100%; background-color: #f6fafc;\"";
 	}
 
-	private static String getPMStyle(boolean daytimeDependency) {
-		if (!daytimeDependency)
-			return "style=\"display:none;width:0px;max-height:0px;overflow:hidden;mso-hide:all;height:0;font-size:0;max-height:0;line-height:0;margin:0 auto;\"";
-		else
-			return "style=\"margin: 0; padding: 0; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #565f61; width: 100%; margin-top: 10px; border-top: 1px solid #e6eef2; padding-top: 10px;\"";
-	}
-
-	private static String getPMStyleTable(boolean daytimeDependency) {
-		if (!daytimeDependency)
-			return "style=\"mso-hide: all;\"";
-		else
-			return "";
-	}
 }
