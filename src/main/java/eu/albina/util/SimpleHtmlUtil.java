@@ -8,6 +8,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Period;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import eu.albina.model.AvalancheReport;
 import eu.albina.map.MapImageFormat;
@@ -26,6 +30,9 @@ import eu.albina.model.enumerations.LanguageCode;
 public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 
 	private static final Logger logger = LoggerFactory.getLogger(SimpleHtmlUtil.class);
+
+	/** Language codes linked in the header, in display order. */
+	private static final List<String> LINKED_LANGUAGES = List.of("de", "it", "en", "es", "ca", "ar");
 
 	public static void createRegionSimpleHtml(AvalancheReport avalancheReport) {
 		if (avalancheReport.getBulletins().isEmpty()) {
@@ -61,195 +68,166 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang)
 		StringWriter out = new StringWriter();
 		PrintWriter pw = new PrintWriter(out);
 		pw.format("<!DOCTYPE html>\n");
-		pw.format("<html lang=\"en\">\n");
+		pw.format("<html lang=\"%s\">\n", lang);
 		pw.format("<head>\n");
-		pw.format("<title>%s %s\n</title>\n", region.getWebsiteName(lang), avalancheReport.getDate(lang));
 		pw.format("<meta charset=\"utf-8\">\n");
 		pw.format("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
+		pw.format("<title>%s %s</title>\n", region.getWebsiteName(lang), avalancheReport.getDate(lang));
 		pw.format("<style>%s</style>\n", EmailUtil.css("templates/SimpleHtmlUtil.css"));
 		pw.format("</head>\n");
 		pw.format("<body>\n");
-		pw.format("<header>\n");
-		pw.format("<p class=\"top-link\">\n");
-		pw.format("<a class=\"previous-day\" href=\"%s\">%s\n</a>\n", website, lang.getBundleString("standard.link.text"));
-		pw.format("<a class=\"next-day\" href=\"%s_de.html\">DE&nbsp;\n</a>\n", prefix);
-		pw.format("<a class=\"next-day\" href=\"%s_it.html\">IT&nbsp;\n</a>\n", prefix);
-		pw.format("<a class=\"next-day\" href=\"%s_en.html\">EN&nbsp;\n</a>\n", prefix);
-		pw.format("<a class=\"next-day\" href=\"%s_es.html\">ES&nbsp;\n</a>\n", prefix);
-		pw.format("<a class=\"next-day\" href=\"%s_ca.html\">CA&nbsp;\n</a>\n", prefix);
-		pw.format("<a class=\"next-day\" href=\"%s_ar.html\">AR&nbsp;\n</a>\n", prefix);
-		pw.format("</p>\n");
-		pw.format("<h4>\n");
-		pw.format("<a href=\"%s\">%s\n</a>\n", website, region.getWebsiteName(lang));
-		pw.format("</h4>\n");
-		pw.format("<h3>%s\n</h3>\n", avalancheReport.getDate(lang));
-		pw.format("<h5>%s<b>%s</b></h5>\n", publicationDate.isEmpty() ? "" : lang.getBundleString("published"), publicationDate);
-		pw.format("<p class=\"day-link\">\n");
-		pw.format("<a class=\"previous-day\" href=\"%s\"> &#8592; %s\n</a>\n", previousDayLink, avalancheReport.getPreviousValidityDateString(lang));
-		pw.format("<a class=\"next-day\" href=\"%s\">%s &#8594;\n</a>\n", nextDayLink, avalancheReport.getNextValidityDateString(lang));
-		pw.format("</p>\n");
-		pw.format("</header>\n");
-		pw.format("<section>\n");
 
+		pw.format("<header>\n");
+		pw.format("<nav class=\"language-nav\">\n");
+		pw.format("<a href=\"%s\">%s</a>\n", website, lang.getBundleString("standard.link.text"));
+		pw.format("<span>%s</span>\n", LINKED_LANGUAGES.stream()
+			.map(code -> String.format("<a href=\"%s_%s.html\">%s</a>", prefix, code, code.toUpperCase()))
+			.collect(Collectors.joining("\n")));
+		pw.format("</nav>\n");
+		pw.format("<h1><a href=\"%s\">%s</a></h1>\n", website, region.getWebsiteName(lang));
+		pw.format("<p class=\"date\">%s</p>\n", avalancheReport.getDate(lang));
+		if (!publicationDate.isEmpty()) {
+			pw.format("<p class=\"published\">%s<b>%s</b></p>\n", lang.getBundleString("published"), publicationDate);
+		}
+		pw.format("<nav class=\"day-nav\">\n");
+		pw.format("<a rel=\"prev\" href=\"%s\">← %s</a>\n", previousDayLink, avalancheReport.getPreviousValidityDateString(lang));
+		pw.format("<a rel=\"next\" href=\"%s\">%s →</a>\n", nextDayLink, avalancheReport.getNextValidityDateString(lang));
+		pw.format("</nav>\n");
+		pw.format("</header>\n");
+
+		pw.format("<main>\n");
 		for (AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
 			if (bulletin.getPublishedRegions() == null || bulletin.getPublishedRegions().isEmpty()) {
 				continue;
 			}
 			appendBulletin(pw, bulletin);
 		}
+		pw.format("</main>\n");
 
-		pw.format("</section>\n</body>\n</html>\n");
+		pw.format("</body>\n</html>\n");
 		pw.flush();
 		return out.toString();
 	}
 
 	private void appendBulletin(PrintWriter pw, AvalancheBulletin bulletin) {
-
 		pw.format("<article>\n");
-		pw.format("<p>\n");
 		if (bulletin.isHasDaytimeDependency()) {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, "<b>" + lang.getCaamlBundleString("validTimePeriod.earlier").toUpperCase() + "</b><br>");
-			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, "<b>" + lang.getCaamlBundleString("validTimePeriod.later").toUpperCase() + "</b><br>");
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.am, lang.getCaamlBundleString("validTimePeriod.earlier"));
+			appendDaytime(pw, bulletin, bulletin.getAfternoon(), DaytimeDependency.pm, lang.getCaamlBundleString("validTimePeriod.later"));
 		} else {
-			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, "");
+			appendDaytime(pw, bulletin, bulletin.getForenoon(), DaytimeDependency.fd, null);
 		}
-		pw.format("</p>\n");
-		pw.format("<h3 style=\"color: red; padding: 15px 0; font-weight: normal;\">%s\n</h3>\n", bulletin.getHighlightsIn(lang).orElse(""));
-		pw.format("<h3>%s\n</h3>\n", bulletin.getAvActivityHighlightsIn(lang).orElse(""));
-		pw.format("<p>%s\n</p>\n", bulletin.getAvActivityCommentIn(lang).orElse(""));
-		pw.format("<h3>%s\n</h3>\n", lang.getCaamlBundleString("snowpack.label"));
-		String dangerPattern1 = bulletin.getDangerPattern1() != null ? bulletin.getDangerPattern1().toString(lang.getLocale()) + "<br>" : "";
-		String dangerPattern2 = bulletin.getDangerPattern2() != null ? bulletin.getDangerPattern2().toString(lang.getLocale()) + "<br>" : "";
-		pw.format("<p>%s%s\n</p>\n", dangerPattern1, dangerPattern2);
-		pw.format("<p>%s\n</p>\n", bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
-		pw.format("<h3>%s\n</h3>\n", lang.getCaamlBundleString("tendency.label"));
-		pw.format("<p>%s\n</p>\n", bulletin.getTendencyCommentIn(lang).orElse(""));
+
+		String highlights = bulletin.getHighlightsIn(lang).orElse("");
+		if (!highlights.isBlank()) {
+			pw.format("<h2 class=\"highlights\">%s</h2>\n", highlights);
+		}
+		appendTextBlock(pw, bulletin.getAvActivityHighlightsIn(lang).orElse(""),
+			bulletin.getAvActivityCommentIn(lang).orElse(""));
+		String dangerPatterns = Stream.of(bulletin.getDangerPattern1(), bulletin.getDangerPattern2())
+			.filter(Objects::nonNull)
+			.map(dangerPattern -> dangerPattern.toString(lang.getLocale()))
+			.collect(Collectors.joining("<br>"));
+		appendTextBlock(pw, lang.getCaamlBundleString("snowpack.label"),
+			dangerPatterns, bulletin.getSnowpackStructureCommentIn(lang).orElse(""));
+		appendTextBlock(pw, lang.getCaamlBundleString("tendency.label"),
+			bulletin.getTendencyCommentIn(lang).orElse(""));
 		pw.format("</article>\n");
 	}
 
+	/** Writes the heading followed by the non-empty paragraphs, or nothing at all if there is no text. */
+	private void appendTextBlock(PrintWriter pw, String heading, String... paragraphs) {
+		List<String> texts = Stream.of(paragraphs).filter(text -> !text.isBlank()).toList();
+		if (texts.isEmpty()) {
+			return;
+		}
+		if (!heading.isBlank()) {
+			pw.format("<h2>%s</h2>\n", heading);
+		}
+		texts.forEach(text -> pw.format("<p>%s</p>\n", text));
+	}
+
 	private void appendDaytime(PrintWriter pw, AvalancheBulletin bulletin,
-			AvalancheBulletinDaytimeDescription daytimeDescription, DaytimeDependency daytimeDependency, String content) {
-		String regions = String.join(", ", bulletin.getPublishedRegions().stream().map(lang::getRegionName).toList());
-		String mapsUrl = avalancheReport.getMapsUrl();
-		Region region = avalancheReport.getRegion();
-
-		String dangerLevelText = "<b>" + lang.getCaamlBundleString("dangerRating.label") + "</b><br>";
-		String avalancheProblemText = daytimeDescription.getAvalancheProblems().stream()
-			.noneMatch(p -> p != null && p.getAvalancheProblem() != null) ? "" : "<b>" + lang.getCaamlBundleString("avalancheProblem.label") + "</b><br>";
+			AvalancheBulletinDaytimeDescription daytimeDescription, DaytimeDependency daytimeDependency, String heading) {
+		String regions = bulletin.getPublishedRegions().stream().map(lang::getRegionName).collect(Collectors.joining(", "));
+		String map = avalancheReport.getMapsUrl() + "/"
+			+ MapUtil.filename(avalancheReport.getRegion(), bulletin, daytimeDependency, false, MapImageFormat.webp);
 		String warningPicto = DataURL.ofResource("images/warning_pictos/color/level_" + daytimeDescription.getWarningLevelId() + ".webp");
+		String dangerRatingLabel = lang.getCaamlBundleString("dangerRating.label");
 		String elevation = getElevationString(daytimeDescription.getElevation(), daytimeDescription.getTreeline());
+		List<AvalancheProblem> problems = daytimeDescription.getAvalancheProblems().stream()
+			.filter(problem -> problem != null && problem.getAvalancheProblem() != null)
+			.toList();
 
-		String mapWebp = mapsUrl + "/" + MapUtil.filename(region, bulletin, daytimeDependency, false, MapImageFormat.webp);
-		pw.format("<p>%s\n", content);
-		pw.format("<img style=\"margin-right: 10px;\" src=\"%s\" alt=\"%s\" loading=\"lazy\">\n", mapWebp, regions);
-		pw.format("<br>%s\n", dangerLevelText);
-		pw.format("<table>\n");
-		pw.format("<tr>\n");
-		pw.format("<td>\n");
-		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", warningPicto);
-		pw.format("</td>\n");
-		pw.format("<td>%s\n</td>\n", elevation);
-		pw.format("</tr>\n");
-		pw.format("</table>%s\n", avalancheProblemText);
-		pw.format("<table>\n");
-		daytimeDescription.getAvalancheProblems().stream()
-			.filter(p -> p != null && p.getAvalancheProblem() != null)
-			.forEach(p -> appendProblem(pw, p));
-		pw.format("</table>\n");
-		pw.format("</p>\n");
+		pw.format("<section class=\"daytime\">\n");
+		if (heading != null) {
+			pw.format("<h2>%s</h2>\n", heading);
+		}
+		pw.format("<img class=\"map\" src=\"%s\" alt=\"%s\" loading=\"lazy\">\n", map, regions);
+		pw.format("<h3>%s</h3>\n", dangerRatingLabel);
+		pw.format("<div class=\"danger-rating\">\n");
+		pw.format("<img class=\"icon\" src=\"%s\" alt=\"%s\">\n", warningPicto, dangerRatingLabel);
+		if (!elevation.isEmpty()) {
+			pw.format("<span>%s</span>\n", elevation);
+		}
+		pw.format("</div>\n");
+		if (!problems.isEmpty()) {
+			pw.format("<h3>%s</h3>\n", lang.getCaamlBundleString("avalancheProblem.label"));
+			pw.format("<ul class=\"problems\">\n");
+			problems.forEach(problem -> appendProblem(pw, problem));
+			pw.format("</ul>\n");
+		}
+		pw.format("</section>\n");
 	}
 
 	private void appendProblem(PrintWriter pw, AvalancheProblem avalancheProblem) {
-		Region region = avalancheReport.getRegion();
-		pw.format("<tr>\n");
-		pw.format("<td style=\"margin-right: 10px;\" >\n");
-		pw.format("<table>\n");
-		pw.format("<tr>\n");
-		pw.format("<td style=\"text-align: center;\">\n");
-		pw.format("<img height=\"50\" src=\"%s\"/>\n", avalancheProblem.getAvalancheProblem().getDataURL());
-		pw.format("</td>\n");
-		pw.format("</tr>\n");
-		pw.format("<tr>\n");
-		pw.format("<td style=\"text-align: center; font-size: small; max-width: 80px;\">%s\n</td>\n", avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
-		pw.format("</tr>\n");
-		pw.format("</table>\n");
-		pw.format("</td>\n");
-		pw.format("<td>\n");
-		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", avalancheProblem.getElevationDataURL());
-		pw.format("</td>\n");
-		pw.format("<td>\n");
-		pw.format("<table>\n");
-		pw.format("<tr>\n");
-		pw.format("<td>%s\n</td>\n", getElevationHighText(avalancheProblem));
-		pw.format("</tr>\n");
-		pw.format("<tr>\n");
-		pw.format("<td>%s\n</td>\n", getElevationLowText(avalancheProblem));
-		pw.format("</tr>\n");
-		pw.format("</table>\n");
-		pw.format("</td>\n");
-		pw.format("<td>\n");
-		pw.format("<img height=\"50\" style=\"margin-right: 10px;\" src=\"%s\"/>\n", Aspect.getDataURL(avalancheProblem.getAspects(), false));
-		pw.format("</td>\n");
-		pw.format("</tr>\n");
+		String aspects = avalancheProblem.getAspects().stream()
+			.map(aspect -> aspect.toString(lang.getLocale()))
+			.collect(Collectors.joining(", "));
+		String elevation = Stream.of(getElevationHighText(avalancheProblem), getElevationLowText(avalancheProblem))
+			.filter(text -> !text.isEmpty())
+			.collect(Collectors.joining("<br>"));
+
+		pw.format("<li class=\"problem\">\n");
+		pw.format("<figure>\n");
+		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", avalancheProblem.getAvalancheProblem().getDataURL());
+		pw.format("<figcaption>%s</figcaption>\n", avalancheProblem.getAvalancheProblem().toString(lang.getLocale()));
+		pw.format("</figure>\n");
+		pw.format("<img class=\"icon\" src=\"%s\" alt=\"\">\n", avalancheProblem.getElevationDataURL());
+		if (!elevation.isEmpty()) {
+			pw.format("<p class=\"elevation\">%s</p>\n", elevation);
+		}
+		pw.format("<img class=\"icon\" src=\"%s\" alt=\"%s\">\n", Aspect.getDataURL(avalancheProblem.getAspects(), false), aspects);
+		pw.format("</li>\n");
 	}
 
 	private String getElevationLowText(AvalancheProblem avalancheProblem) {
-		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
-			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-				// elevation high and low set
-				if (avalancheProblem.getTreelineLow()) {
-					return lang.getCaamlBundleString("elevation.treeline.capitalized");
-				} else {
-					return avalancheProblem.getElevationLow() + "m";
-				}
-			} else {
-				// elevation high set
-				return "";
-			}
-		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-			// elevation low set
-			if (avalancheProblem.getTreelineLow()) {
-				return lang.getCaamlBundleString("elevation.treeline.capitalized");
-			} else {
-				return avalancheProblem.getElevationLow() + "m";
-			}
+		if (avalancheProblem.getTreelineLow()) {
+			return lang.getCaamlBundleString("elevation.treeline.capitalized");
+		} else if (avalancheProblem.getElevationLow() > 0) {
+			return avalancheProblem.getElevationLow() + "m";
 		} else {
 			return "";
 		}
 	}
 
 	private String getElevationHighText(AvalancheProblem avalancheProblem) {
-		if (avalancheProblem.getTreelineHigh() || avalancheProblem.getElevationHigh() > 0) {
-			if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-				// elevation high and low set
-				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getCaamlBundleString("elevation.treeline.capitalized");
-				} else {
-					return avalancheProblem.getElevationHigh() + "m";
-				}
-			} else {
-				// elevation high set
-				if (avalancheProblem.getTreelineHigh()) {
-					return lang.getCaamlBundleString("elevation.treeline.capitalized");
-				} else {
-					return avalancheProblem.getElevationHigh() + "m";
-				}
-			}
-		} else if (avalancheProblem.getTreelineLow() || avalancheProblem.getElevationLow() > 0) {
-			// elevation low set
-			return "";
+		if (avalancheProblem.getTreelineHigh()) {
+			return lang.getCaamlBundleString("elevation.treeline.capitalized");
+		} else if (avalancheProblem.getElevationHigh() > 0) {
+			return avalancheProblem.getElevationHigh() + "m";
 		} else {
 			return "";
 		}
 	}
 
 	private String getElevationString(int elevation, boolean treeline) {
-		String result = "";
 		if (treeline) {
-			result = lang.getCaamlBundleString("elevation.treeline");
+			return lang.getCaamlBundleString("elevation.treeline");
 		} else if (elevation > 0) {
-			result = elevation + "m";
+			return elevation + "m";
+		} else {
+			return "";
 		}
-		return result + "<br>";
 	}
 }
