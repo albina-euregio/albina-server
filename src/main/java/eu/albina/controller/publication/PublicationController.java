@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import eu.albina.controller.AvalancheReportController;
 import eu.albina.controller.publication.rapidmail.RapidMailController;
@@ -126,14 +127,17 @@ public class PublicationController {
 	public void createCaamlV6(AvalancheReport avalancheReport) {
 		try {
 			logger.info("CAAMLv6 production for {} started", avalancheReport);
-			List<AvalancheReport> previousReports = avalancheReportController.getPublicReports(
+			Region region = avalancheReport.getRegion();
+			Set<Region> regions = region.getSubRegions().isEmpty() // no AvalancheReports for "EUREGIO"
+				? Set.of(region)
+				: region.getSubRegions();
+			List<AvalancheReport> previousReports = avalancheReportController.getPublishedBulletins(
 				avalancheReport.getDate().minusDays(7).toInstant(),
 				avalancheReport.getDate().minusDays(1).toInstant(),
-				avalancheReport.getRegion()
-			).stream()
-				.peek(r -> r.setBulletins(r.getPublishedBulletins(objectMapper)))
-				.filter(r -> r.getBulletins() != null)
-				.filter(r -> !r.getBulletins().isEmpty())
+				regions
+			).values().stream()
+				.filter(bulletins -> !bulletins.isEmpty())
+				.map(bulletins -> AvalancheReport.of(bulletins, region, avalancheReport.getServerInstance()))
 				.sorted(Comparator.comparing(AvalancheReport::getValidityDate))
 				.toList();
 			caaml.createCaamlFiles(avalancheReport, previousReports);
