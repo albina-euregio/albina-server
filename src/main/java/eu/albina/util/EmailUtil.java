@@ -18,6 +18,7 @@ import eu.albina.model.AvalancheBulletin;
 import eu.albina.model.AvalancheBulletinDaytimeDescription;
 import eu.albina.model.AvalancheProblem;
 import eu.albina.model.AvalancheReport;
+import eu.albina.model.EawsMatrixInformation;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.BulletinStatus;
@@ -432,9 +433,11 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		String aspects = serverImagesUrl + Aspect.getSymbolPath(problem.getAspects(), false);
 		String elevationSymbol = serverImagesUrl + problem.getElevationSymbolPath() + ".png";
 
+		EawsMatrixInformation matrix = problem.getEawsMatrixInformation();
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
-		pw.format("<td style=\"width: 70px; text-align: center; %s\">", PROBLEM_CELL);
+		pw.print(dangerRatingColorCell(matrix != null ? matrix.getDangerRating() : null, region));
+		pw.format("<td style=\"width: 70px; text-align: center; padding-left: 10px; %s\">", PROBLEM_CELL);
 		pw.format("<a href=\"%s\" target=\"_blank\">", link);
 		pw.format("<img width=\"50\" class=\"avalanche-problem\" src=\"%s\"/>", symbol);
 		pw.print("</a>");
@@ -494,8 +497,14 @@ public record EmailUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 			return "";
 	}
 
-	/** The coloured bar in front of a bulletin. An empty cell collapses in Outlook, hence the space. */
+	/**
+	 * The coloured bar in front of a bulletin or an avalanche problem. An empty cell collapses in
+	 * Outlook, hence the space.
+	 */
 	private static String dangerRatingColorCell(DangerRating dangerRating, Region region) {
+		if (dangerRating == null || dangerRating == DangerRating.missing) {
+			return "<td width=\"10\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>";
+		}
 		String background = dangerRating.equals(DangerRating.very_high)
 			? " background=\"" + region.getServerImagesUrl() + "bg_checkered.png\""
 			: "";
