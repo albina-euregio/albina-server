@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import io.micronaut.serde.annotation.Serdeable;
@@ -15,7 +14,6 @@ import eu.albina.model.enumerations.Aspect;
 import eu.albina.model.enumerations.AvalancheType;
 import eu.albina.model.enumerations.Direction;
 import eu.albina.model.enumerations.LanguageCode;
-import eu.albina.util.DataURL;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -214,23 +212,12 @@ public class AvalancheProblem extends AbstractPersistentObject {
 	}
 
 	/** Path of the elevation pictogram below {@code images/}, without file extension. */
-	@JsonIgnore
-	public String getElevationSymbolPath() {
-		return getElevationSymbolPath(getTreelineHigh() || getElevationHigh() > 0, getTreelineLow() || getElevationLow() > 0);
-	}
-
-	/** Path of the elevation pictogram below {@code images/}, without file extension. */
 	public static String getElevationSymbolPath(boolean elevationHigh, boolean elevationLow) {
 		if (elevationHigh) {
 			return elevationLow ? "elevation/color/levels_middle_two" : "elevation/color/levels_below";
 		} else {
 			return elevationLow ? "elevation/color/levels_above" : "elevation/color/levels_all";
 		}
-	}
-
-	@JsonIgnore
-	public String getElevationDataURL() {
-		return DataURL.ofResource("images/" + getElevationSymbolPath() + ".webp");
 	}
 
 	public Map<String, String> getMatrixParameters(LanguageCode lang) {
@@ -242,25 +229,4 @@ public class AvalancheProblem extends AbstractPersistentObject {
 			eawsMatrixInformation.getAvalancheSize());
 	}
 
-	/** The upper elevation of the avalanche problem, or an empty string if it is not set. */
-	public String getElevationHighText(LanguageCode lang) {
-		if (getTreelineHigh()) {
-			return lang.getCaamlBundleString("elevation.treeline.capitalized");
-		} else if (getElevationHigh() > 0) {
-			return getElevationHigh() + "m";
-		} else {
-			return "";
-		}
-	}
-
-	/** The lower elevation of the avalanche problem, or an empty string if it is not set. */
-	public String getElevationLowText(LanguageCode lang) {
-		if (getTreelineLow()) {
-			return lang.getCaamlBundleString("elevation.treeline.capitalized");
-		} else if (getElevationLow() > 0) {
-			return getElevationLow() + "m";
-		} else {
-			return "";
-		}
-	}
 }
