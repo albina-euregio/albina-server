@@ -9,9 +9,6 @@ import java.util.List;
 
 import eu.albina.model.AvalancheReport;
 
-import io.micronaut.serde.ObjectMapper;
-import jakarta.inject.Inject;
-
 import eu.albina.model.enumerations.LanguageCode;
 import jakarta.inject.Singleton;
 
@@ -25,9 +22,6 @@ import jakarta.inject.Singleton;
 @Singleton
 public class Caaml {
 
-	@Inject
-	private ObjectMapper objectMapper;
-
 	public void createCaamlFiles(AvalancheReport avalancheReport, List<AvalancheReport> previousReports) throws IOException {
 		Path dirPath = avalancheReport.getPdfDirectory();
 		Files.createDirectories(dirPath);
@@ -35,7 +29,7 @@ public class Caaml {
 		for (LanguageCode lang : avalancheReport.getRegion().getEnabledLanguages()) {
 			Caaml6 caaml6 = new Caaml6(avalancheReport, previousReports, lang);
 			Path pathJSON = dirPath.resolve("%s_%s_%s_CAAMLv6.json".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));
-			Files.writeString(pathJSON, caaml6.createJSON(objectMapper), StandardCharsets.UTF_8);
+			Files.writeString(pathJSON, caaml6.createJSON(), StandardCharsets.UTF_8);
 			Path pathXML = dirPath.resolve("%s_%s_%s_CAAMLv6.xml".formatted(avalancheReport.getValidityDateString(), avalancheReport.getRegion().getId(), lang));
 			Files.writeString(pathXML, caaml6.createXML(), StandardCharsets.UTF_8);
 		}
@@ -44,7 +38,7 @@ public class Caaml {
 	public String createCaaml(AvalancheReport avalancheReport, List<AvalancheReport> previousReports, LanguageCode lang, CaamlVersion version) {
 		Caaml6 caaml6 = new Caaml6(avalancheReport, previousReports, lang);
 		if (version == CaamlVersion.V6_JSON) {
-			return caaml6.createJSON(objectMapper);
+			return caaml6.createJSON();
 		} else {
 			return caaml6.createXML();
 		}

@@ -1,6 +1,5 @@
 package eu.albina.caaml;
 
-import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
@@ -10,8 +9,8 @@ import java.util.stream.Stream;
 
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
 import com.google.common.base.Strings;
-import io.micronaut.serde.ObjectMapper;
 import org.caaml.v6.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,11 +28,19 @@ import eu.albina.model.enumerations.LanguageCode;
 
 public record Caaml6(AvalancheReport avalancheReport, List<AvalancheReport> previousReports, LanguageCode lang) {
 
-	public String createJSON(ObjectMapper objectMapper) {
+	public String createJSON() {
 		try {
-			return objectMapper
+			// Use Jackson rather than Micronaut Serde: since Serde 3.2, the Jackson XML annotations
+			// on org.caaml.v6 (e.g. @JacksonXmlElementWrapper) also affect the JSON output.
+			return JsonMapper.builder()
+				// Jackson 3 sorts properties alphabetically by default; keep declaration order (Jackson 2 behaviour).
+				.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+				.disable(MapperFeature.SORT_CREATOR_PROPERTIES_FIRST)
+				.disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+				.changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL))
+				.build()
 				.writeValueAsString(toCAAML());
-		} catch (IOException e) {
+		} catch (JacksonException e) {
 			throw new RuntimeException(e);
 		}
 	}
