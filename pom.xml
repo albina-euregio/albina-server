@@ -235,7 +235,7 @@
 			<!-- override transitive version from micronaut-http-server-tomcat to fix CVEs -->
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
-			<version>11.0.22</version>
+			<version>11.0.26</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
