@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.collect.MoreCollectors;
 import eu.albina.model.publication.BlogConfiguration;
 
@@ -19,14 +16,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutionException;
 
 @Singleton
 class Blogger implements AbstractBlog {
@@ -37,31 +32,8 @@ class Blogger implements AbstractBlog {
 	@Inject
 	ObjectMapper objectMapper;
 
-	final LoadingCache<URI, List<BlogItem>> postsCache = CacheBuilder.newBuilder()
-		.expireAfterWrite(Duration.ofMinutes(5))
-		.build(new CacheLoader<>() {
-			@Override
-			public List<BlogItem> load(URI uri) throws Exception {
-				HttpRequest request = HttpRequest.newBuilder(uri).build();
-				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				Root root = objectMapper.readValue(response.body(), Root.class);
-				return root.toBlogItems();
-			}
-		});
-
-	final LoadingCache<URI, BlogItem> postCache = CacheBuilder.newBuilder()
-		.expireAfterWrite(Duration.ofMinutes(5))
-		.build(new CacheLoader<>() {
-			@Override
-			public BlogItem load(URI uri) throws Exception {
-				HttpRequest request = HttpRequest.newBuilder(uri).build();
-				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				return objectMapper.readValue(response.body(), Item.class).toBlogItem();
-			}
-		});
-
 	@Override
-	public List<BlogItem> getCachedBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Instant startDate, Instant endDate) throws ExecutionException {
+	public List<BlogItem> searchBlogPosts(BlogConfiguration config, String searchText, String searchCategory, Instant startDate, Instant endDate) throws IOException, InterruptedException {
 		Map<String, Object> params = new TreeMap<>(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"fetchBodies", Boolean.TRUE.toString(),
@@ -75,16 +47,10 @@ class Blogger implements AbstractBlog {
 			params.put("startDate", startDate);
 			params.put("endDate", endDate);
 		}
-		URI uri = URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(params)));
-		return postsCache.get(uri);
-	}
-
-	@Override
-	public BlogItem getCachedBlogPost(BlogConfiguration config, String blogPostId) throws ExecutionException {
-		URI uri = URI.create("%s/%s?%s".formatted(posts(config), blogPostId, HttpClientUtil.queryParams(Map.of(
-			"key", Objects.requireNonNull(config.getApiKey(), "apiKey")
-		))));
-		return postCache.get(uri);
+		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(params)))).build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		Root root = objectMapper.readValue(response.body(), Root.class);
+		return root.toBlogItems();
 	}
 
 	private static String posts(BlogConfiguration config) {

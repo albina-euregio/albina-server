@@ -54,8 +54,8 @@ public class BlogControllerTest {
 
 		Instant startDate = Instant.parse("2023-01-01T00:00:00Z");
 		Instant endDate = Instant.parse("2024-01-01T00:00:00Z");
-		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, null, null);
-		blogPosts = blogController.blogImplementation(config).getCachedBlogPosts(config, null, null, startDate, endDate);
+		blogPosts = blogController.blogImplementation(config).searchBlogPosts(config, null, null, null, null);
+		blogPosts = blogController.blogImplementation(config).searchBlogPosts(config, null, null, startDate, endDate);
 		assertEquals(List.of("Aktuelle Situation"), blogPosts.getFirst().categories());
 		assertEquals(OffsetDateTime.parse("2023-12-28T16:33:31Z"), blogPosts.getFirst().published());
 		objectMapper.writeValueAsString(blogPosts);

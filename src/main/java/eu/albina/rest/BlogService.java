@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.rest;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PublicationController;
 import io.micronaut.http.HttpStatus;
@@ -27,6 +29,7 @@ import eu.albina.model.publication.BlogConfiguration;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -45,6 +48,16 @@ public class BlogService {
 
 	@Inject
 	private PublicationController publicationController;
+
+	private final Cache<String, List<BlogItem>> postsCache = CacheBuilder.newBuilder()
+		.expireAfterWrite(Duration.ofMinutes(5))
+		.maximumSize(1000)
+		.build();
+
+	private final Cache<String, BlogItem> postCache = CacheBuilder.newBuilder()
+		.expireAfterWrite(Duration.ofMinutes(5))
+		.maximumSize(1000)
+		.build();
 
 	@Post("/publish/latest")
 	@Secured(Role.Str.ADMIN)
@@ -146,10 +159,13 @@ public class BlogService {
 		@QueryValue(defaultValue = "") String searchCategory,
 		@QueryValue(value = "startDate", defaultValue = "") String start,
 		@QueryValue(value = "endDate", defaultValue = "") String end) throws ExecutionException {
-		Instant startDate = DateControllerUtil.parseDateOrNull(start);
-		Instant endDate = DateControllerUtil.parseDateOrNull(end);
-		BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
-		return blogController.blogImplementation(configuration).getCachedBlogPosts(configuration, searchText, searchCategory, startDate, endDate);
+		String key = String.join("|", regionId, language.name(), searchText, searchCategory, start, end);
+		return postsCache.get(key, () -> {
+			Instant startDate = DateControllerUtil.parseDateOrNull(start);
+			Instant endDate = DateControllerUtil.parseDateOrNull(end);
+			BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
+			return blogController.blogImplementation(configuration).searchBlogPosts(configuration, searchText, searchCategory, startDate, endDate);
+		});
 	}
 
 	@Get("/post")
@@ -158,7 +174,10 @@ public class BlogService {
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
 		@QueryValue String id) throws ExecutionException {
-		BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
-		return blogController.blogImplementation(configuration).getCachedBlogPost(configuration, id);
+		String key = String.join("|", regionId, language.name(), id);
+		return postCache.get(key, () -> {
+			BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
+			return blogController.getBlogPost(configuration, id);
+		});
 	}
 }

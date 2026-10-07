@@ -1,12 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.util;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
-import org.apache.commons.io.function.IOFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +15,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public interface HttpClientUtil {
@@ -57,20 +52,6 @@ public interface HttpClientUtil {
 		if (response.statusCode() < 200 || response.statusCode() >= 300) {
 			throw new IOException("Failed to fetch posts from %s: %s".formatted(response.request().uri(), response.body()));
 		}
-	}
-
-	static <T> LoadingCache<URI, T> newHttpCache(Supplier<HttpClient> client, IOFunction<String, T> function) {
-		return CacheBuilder.newBuilder()
-			.expireAfterWrite(Duration.ofMinutes(5))
-			.build(new CacheLoader<>() {
-				@Override
-				public T load(URI uri) throws Exception {
-					HttpRequest request = HttpRequest.newBuilder(uri).build();
-					HttpResponse<String> response = client.get().send(request, HttpResponse.BodyHandlers.ofString());
-					checkResponse(response);
-					return function.apply(response.body());
-				}
-			});
 	}
 
 	@Factory
