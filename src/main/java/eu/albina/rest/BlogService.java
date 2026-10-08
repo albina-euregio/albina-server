@@ -5,13 +5,17 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PublicationController;
+import io.micronaut.http.HttpHeaders;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
+import io.micronaut.serde.ObjectMapper;
 
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
@@ -49,12 +53,15 @@ public class BlogService {
 	@Inject
 	private PublicationController publicationController;
 
-	private final Cache<String, List<BlogItem>> postsCache = CacheBuilder.newBuilder()
+	@Inject
+	ObjectMapper objectMapper;
+
+	private final Cache<String, Cached<List<BlogItem>>> postsCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.maximumSize(1000)
 		.build();
 
-	private final Cache<String, BlogItem> postCache = CacheBuilder.newBuilder()
+	private final Cache<String, Cached<BlogItem>> postCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.maximumSize(1000)
 		.build();
@@ -152,32 +159,37 @@ public class BlogService {
 
 	@Get("/posts")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	List<BlogItem> getBlogPosts(
+	HttpResponse<List<BlogItem>> getBlogPosts(
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
 		@QueryValue(defaultValue = "") String searchText,
 		@QueryValue(defaultValue = "") String searchCategory,
 		@QueryValue(value = "startDate", defaultValue = "") String start,
-		@QueryValue(value = "endDate", defaultValue = "") String end) throws ExecutionException {
+		@QueryValue(value = "endDate", defaultValue = "") String end,
+		@Header(value = HttpHeaders.IF_NONE_MATCH, defaultValue = "") String ifNoneMatch) throws ExecutionException {
 		String key = String.join("|", regionId, language.name(), searchText, searchCategory, start, end);
-		return postsCache.get(key, () -> {
+		Cached<List<BlogItem>> cached = postsCache.get(key, () -> {
 			Instant startDate = DateControllerUtil.parseDateOrNull(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 			BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
-			return blogController.blogImplementation(configuration).searchBlogPosts(configuration, searchText, searchCategory, startDate, endDate);
+			return Cached.withETag(objectMapper, blogController.blogImplementation(configuration).searchBlogPosts(configuration, searchText, searchCategory, startDate, endDate));
 		});
+		return Cached.toResponse(cached, ifNoneMatch);
 	}
 
 	@Get("/post")
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	BlogItem getBlogPost(
+	HttpResponse<BlogItem> getBlogPost(
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
-		@QueryValue String id) throws ExecutionException {
+		@QueryValue String id,
+		@Header(value = HttpHeaders.IF_NONE_MATCH, defaultValue = "") String ifNoneMatch) throws ExecutionException {
 		String key = String.join("|", regionId, language.name(), id);
-		return postCache.get(key, () -> {
+		Cached<BlogItem> cached = postCache.get(key, () -> {
 			BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
-			return blogController.getBlogPost(configuration, id);
+			return Cached.withETag(objectMapper, blogController.getBlogPost(configuration, id));
 		});
+		return Cached.toResponse(cached, ifNoneMatch);
 	}
+
 }
