@@ -96,7 +96,7 @@ public class User implements NameAndEmail {
 	/** Number of passkeys registered for the user (read-only) */
 	@Formula("(select count(*) from passkeys p where p.owner_email = email)")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private long passkeyCount;
+	private int passkeyCount;
 
 	/**
 	 * Standard constructor for a user.
@@ -206,7 +206,7 @@ public class User implements NameAndEmail {
 		this.lastUsedAt = lastUsedAt;
 	}
 
-	public long getPasskeyCount() {
+	public int getPasskeyCount() {
 		return passkeyCount;
 	}
 
