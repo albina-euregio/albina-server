@@ -21,6 +21,7 @@ import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.jspecify.annotations.Nullable;
 
 import eu.albina.controller.publication.blog.BlogController;
 import eu.albina.controller.publication.blog.BlogItem;
@@ -166,7 +167,7 @@ public class BlogService {
 		@QueryValue(defaultValue = "") String searchCategory,
 		@QueryValue(value = "startDate", defaultValue = "") String start,
 		@QueryValue(value = "endDate", defaultValue = "") String end,
-		@Header(value = HttpHeaders.IF_NONE_MATCH, defaultValue = "") String ifNoneMatch) throws ExecutionException {
+		@Nullable @Header(HttpHeaders.IF_NONE_MATCH) String ifNoneMatch) throws ExecutionException {
 		String key = String.join("|", regionId, language.name(), searchText, searchCategory, start, end);
 		Cached<List<BlogItem>> cached = postsCache.get(key, () -> {
 			Instant startDate = DateControllerUtil.parseDateOrNull(start);
@@ -183,7 +184,7 @@ public class BlogService {
 		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
 		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
 		@QueryValue String id,
-		@Header(value = HttpHeaders.IF_NONE_MATCH, defaultValue = "") String ifNoneMatch) throws ExecutionException {
+		@Nullable @Header(HttpHeaders.IF_NONE_MATCH) String ifNoneMatch) throws ExecutionException {
 		String key = String.join("|", regionId, language.name(), id);
 		Cached<BlogItem> cached = postCache.get(key, () -> {
 			BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();

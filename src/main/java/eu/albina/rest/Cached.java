@@ -5,6 +5,7 @@ import com.google.common.hash.Hashing;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.serde.ObjectMapper;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,8 +44,8 @@ record Cached<T>(T body, String etag) {
 	 * @param <T>         the type of the response body
 	 * @return the HTTP response
 	 */
-	static <T> HttpResponse<T> toResponse(Cached<T> cached, String ifNoneMatch) {
-		boolean notModified = Arrays.stream(ifNoneMatch.split(","))
+	static <T> HttpResponse<T> toResponse(Cached<T> cached, @Nullable String ifNoneMatch) {
+		boolean notModified = ifNoneMatch != null && Arrays.stream(ifNoneMatch.split(","))
 			.map(String::trim)
 			.map(tag -> tag.startsWith("W/") ? tag.substring(2) : tag)
 			.anyMatch(tag -> tag.equals("*") || tag.equals(cached.etag()));
