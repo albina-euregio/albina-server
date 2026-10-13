@@ -25,6 +25,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -91,6 +92,11 @@ public class User implements NameAndEmail {
 	/** When the user last logged in, whether by password or passkey */
 	@Column(name = "LAST_USED_AT")
 	private Instant lastUsedAt;
+
+	/** Number of passkeys registered for the user (read-only) */
+	@Formula("(select count(*) from passkeys p where p.owner_email = email)")
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private long passkeyCount;
 
 	/**
 	 * Standard constructor for a user.
@@ -198,6 +204,10 @@ public class User implements NameAndEmail {
 
 	public void setLastUsedAt(Instant lastUsedAt) {
 		this.lastUsedAt = lastUsedAt;
+	}
+
+	public long getPasskeyCount() {
+		return passkeyCount;
 	}
 
 	public boolean hasPermissionForRegion(String regionId) {
