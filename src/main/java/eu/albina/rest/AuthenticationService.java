@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import eu.albina.controller.UserRepository;
 import eu.albina.jobs.PublicationStrategy;
 import eu.albina.util.JsonUtil;
+import eu.albina.util.PasswordStrength;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -68,7 +69,7 @@ public class AuthenticationService {
 	}
 
 	@Serdeable
-	public record AuthenticationResponse(User user, Collection<Region> regions, String access_token) {
+	public record AuthenticationResponse(User user, Collection<Region> regions, String access_token, PasswordStrength passwordStrength) {
 	}
 
 	@Serdeable
@@ -86,7 +87,7 @@ public class AuthenticationService {
 		try {
 			userRepository.authenticate(username, password);
 			User user = userRepository.findById(username).orElseThrow();
-			return issueToken(user);
+			return issueToken(user, PasswordStrength.of(password, username));
 		} catch (Exception e) {
 			throw new HttpStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
 		}
@@ -94,13 +95,17 @@ public class AuthenticationService {
 
 	/** Mints an access token for an already-authenticated user, e.g. after a successful passkey login. */
 	public AuthenticationResponse issueToken(User user) {
+		return issueToken(user, null);
+	}
+
+	private AuthenticationResponse issueToken(User user, PasswordStrength passwordStrength) {
 		user.setLastUsedAt(Instant.now());
 		userRepository.update(user);
 		List<String> roles = user.getRoles().stream().map(Role::toString).toList();
 		List<String> regions = user.getRegions().stream().map(Region::getId).sorted().toList();
 		Authentication authentication = Authentication.build(user.getEmail(), roles, Map.of("regions", regions));
 		AccessRefreshToken token = tokenGenerator.generate(authentication).orElseThrow();
-		return new AuthenticationResponse(user, user.getRegions(), token.getAccessToken());
+		return new AuthenticationResponse(user, user.getRegions(), token.getAccessToken(), passwordStrength);
 	}
 
 	@Get("/test")
