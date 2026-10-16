@@ -33,7 +33,7 @@ public record AvalancheBulletinCustomData(
 	@Serdeable
 	public record TendencyProgression(
 		List<LocalDate> dates,
-		Map<String, List<DangerRatingValue>> dangerRatings) {
+		Map<String, List<@Nullable DangerRatingValue>> dangerRatings) {
 	}
 
 
