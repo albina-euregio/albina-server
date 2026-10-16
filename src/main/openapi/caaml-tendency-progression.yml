@@ -1,0 +1,24 @@
+openapi: 3.0.1
+components:
+  schemas:
+    # micronaut-openapi renders List<@Nullable DangerRatingValue> as
+    # allOf [$ref, {type: object, nullable: true}], which clients cannot type.
+    CaamlAvalancheBulletinCustomData.TendencyProgression:
+      required:
+      - dangerRatings
+      - dates
+      type: object
+      properties:
+        dates:
+          type: array
+          items:
+            type: string
+            format: date
+        dangerRatings:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              nullable: true
+              allOf:
+              - $ref: "#/components/schemas/CaamlDangerRatingValue"
