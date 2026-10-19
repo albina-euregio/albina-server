@@ -164,6 +164,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	private String synopsisCommentTextcat;
 
 	@Lob
+	@Column(name = "TRAVEL_ADVISORY_HIGHLIGHTS_TEXTCAT")
+	private String travelAdvisoryHighlightsTextcat;
+
+	@Lob
+	@Column(name = "TRAVEL_ADVISORY_COMMENT_TEXTCAT")
+	private String travelAdvisoryCommentTextcat;
+
+	@Lob
 	@Column(name = "AV_ACTIVITY_HIGHLIGHTS_NOTES")
 	private String avActivityHighlightsNotes;
 
@@ -186,6 +194,14 @@ public class AvalancheBulletin extends AbstractPersistentObject
 	@Lob
 	@Column(name = "GENERAL_HEADLINE_COMMENT_NOTES")
 	private String generalHeadlineCommentNotes;
+
+	@Lob
+	@Column(name = "TRAVEL_ADVISORY_HIGHLIGHTS_NOTES")
+	private String travelAdvisoryHighlightsNotes;
+
+	@Lob
+	@Column(name = "TRAVEL_ADVISORY_COMMENT_NOTES")
+	private String travelAdvisoryCommentNotes;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "TENDENCY", length=191)
@@ -335,6 +351,22 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		return synopsisCommentTextcat;
 	}
 
+	public String getTravelAdvisoryHighlightsTextcat() {
+		return travelAdvisoryHighlightsTextcat;
+	}
+
+	public void setTravelAdvisoryHighlightsTextcat(String travelAdvisoryHighlightsTextcat) {
+		this.travelAdvisoryHighlightsTextcat = travelAdvisoryHighlightsTextcat;
+	}
+
+	public String getTravelAdvisoryCommentTextcat() {
+		return travelAdvisoryCommentTextcat;
+	}
+
+	public void setTravelAdvisoryCommentTextcat(String travelAdvisoryCommentTextcat) {
+		this.travelAdvisoryCommentTextcat = travelAdvisoryCommentTextcat;
+	}
+
 	public String getAvActivityHighlightsNotes() {
 		return avActivityHighlightsNotes;
 	}
@@ -381,6 +413,22 @@ public class AvalancheBulletin extends AbstractPersistentObject
 
 	public void setGeneralHeadlineCommentNotes(String generalHeadlineCommentNotes) {
 		this.generalHeadlineCommentNotes = generalHeadlineCommentNotes;
+	}
+
+	public String getTravelAdvisoryHighlightsNotes() {
+		return travelAdvisoryHighlightsNotes;
+	}
+
+	public void setTravelAdvisoryHighlightsNotes(String travelAdvisoryHighlightsNotes) {
+		this.travelAdvisoryHighlightsNotes = travelAdvisoryHighlightsNotes;
+	}
+
+	public String getTravelAdvisoryCommentNotes() {
+		return travelAdvisoryCommentNotes;
+	}
+
+	public void setTravelAdvisoryCommentNotes(String travelAdvisoryCommentNotes) {
+		this.travelAdvisoryCommentNotes = travelAdvisoryCommentNotes;
 	}
 
 	@Serdeable
@@ -923,6 +971,7 @@ public class AvalancheBulletin extends AbstractPersistentObject
 			? bulletin.getPhotos().stream().map(AvalancheBulletinPhoto::new).collect(Collectors.toCollection(ArrayList::new))
 			: new ArrayList<>());
 
+		setHighlightsTextcat(bulletin.getHighlightsTextcat());
 		setAvActivityHighlightsTextcat(bulletin.getAvActivityHighlightsTextcat());
 		setAvActivityCommentTextcat(bulletin.getAvActivityCommentTextcat());
 		setSnowpackStructureHighlightsTextcat(bulletin.getSnowpackStructureHighlightsTextcat());
@@ -930,6 +979,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setTendencyCommentTextcat(bulletin.getTendencyCommentTextcat());
 		setGeneralHeadlineCommentTextcat(bulletin.getGeneralHeadlineCommentTextcat());
 		setSynopsisCommentTextcat(bulletin.getSynopsisCommentTextcat());
+		setTravelAdvisoryHighlightsTextcat(bulletin.getTravelAdvisoryHighlightsTextcat());
+		setTravelAdvisoryCommentTextcat(bulletin.getTravelAdvisoryCommentTextcat());
 
 		setAvActivityHighlightsNotes(bulletin.getAvActivityHighlightsNotes());
 		setAvActivityCommentNotes(bulletin.getAvActivityCommentNotes());
@@ -937,6 +988,8 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		setSnowpackStructureCommentNotes(bulletin.getSnowpackStructureCommentNotes());
 		setTendencyCommentNotes(bulletin.getTendencyCommentNotes());
 		setGeneralHeadlineCommentNotes(bulletin.getGeneralHeadlineCommentNotes());
+		setTravelAdvisoryHighlightsNotes(bulletin.getTravelAdvisoryHighlightsNotes());
+		setTravelAdvisoryCommentNotes(bulletin.getTravelAdvisoryCommentNotes());
 	}
 
 	@Override
@@ -974,6 +1027,10 @@ public class AvalancheBulletin extends AbstractPersistentObject
 		if (!Objects.equals(this.generalHeadlineCommentTextcat, other.generalHeadlineCommentTextcat))
 			return false;
 		if (!Objects.equals(this.synopsisCommentTextcat, other.synopsisCommentTextcat))
+			return false;
+		if (!Objects.equals(this.travelAdvisoryHighlightsTextcat, other.travelAdvisoryHighlightsTextcat))
+			return false;
+		if (!Objects.equals(this.travelAdvisoryCommentTextcat, other.travelAdvisoryCommentTextcat))
 			return false;
 		if (!Objects.equals(this.tendency, other.tendency))
 			return false;
