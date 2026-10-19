@@ -417,8 +417,12 @@ public class PdfUtil {
 			table.addCell(c);
 		});
 
-		avalancheBulletin.getTravelAdvisoryCommentIn(lang).ifPresent(text -> {
-			Paragraph headline = new Paragraph(lang.getCaamlBundleString("travelAdvisory.label"))
+		Optional<String> travelAdvisoryHighlights = avalancheBulletin.getTravelAdvisoryHighlightsIn(lang);
+		Optional<String> travelAdvisoryComment = avalancheBulletin.getTravelAdvisoryCommentIn(lang);
+		if (travelAdvisoryHighlights.isPresent() || travelAdvisoryComment.isPresent()) {
+			String headlineText = travelAdvisoryHighlights.map(this::replaceLinebreaks)
+				.orElseGet(() -> lang.getCaamlBundleString("travelAdvisory.label"));
+			Paragraph headline = new Paragraph(headlineText)
 				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 				.setMultipliedLeading(leadingHeadline);
 			Cell c = new Cell(1, 1).add(headline);
@@ -428,11 +432,13 @@ public class PdfUtil {
 			c.setBorderLeft(new SolidBorder(blue, 4));
 			c.setBackgroundColor(greyVeryVeryLight);
 			table.addCell(c);
+		}
 
+		travelAdvisoryComment.ifPresent(text -> {
 			Paragraph paragraph = new Paragraph(replaceLinebreaks(text))
 				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor)
 				.setMultipliedLeading(leadingText);
-			c = new Cell(1, 1).add(paragraph);
+			Cell c = new Cell(1, 1).add(paragraph);
 			c.setTextAlignment(TextAlignment.LEFT);
 			c.setPaddingLeft(paddingLeft);
 			c.setBorder(Border.NO_BORDER);

@@ -42,7 +42,7 @@ public class CaamlBundleSmokeTest {
 		Assertions.assertEquals("Wetter", LanguageCode.de.getCaamlBundleString("synopsis.label"));
 		Assertions.assertEquals("Gefahrenmuster", LanguageCode.de.getCaamlBundleString("dangerPattern.label"));
 		Assertions.assertEquals("Schneedecke", LanguageCode.de.getCaamlBundleString("snowpack.label"));
-		Assertions.assertEquals("Travel Advisory", LanguageCode.de.getCaamlBundleString("travelAdvisory.label"));
+		Assertions.assertEquals("Gelände- und Tourenhinweise", LanguageCode.de.getCaamlBundleString("travelAdvisory.label"));
 		Assertions.assertEquals("Lawinenproblem", LanguageCode.de.getCaamlBundleString("avalancheProblem.label"));
 		Assertions.assertEquals("Lawinenart", LanguageCode.de.getCaamlBundleString("avalancheType.label"));
 		Assertions.assertEquals("Gefahrenstufe", LanguageCode.de.getCaamlBundleString("dangerRating.label"));
