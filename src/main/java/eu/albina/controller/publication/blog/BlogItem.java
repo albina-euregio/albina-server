@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
+import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
 
@@ -21,11 +22,11 @@ public record BlogItem(
 	Map<LanguageCode, String> translations
 	) {
 
-	public String getTitleAndUrl(BlogConfiguration config) {
-		return title() + ": " + this.getAvalancheReportUrl(config);
+	public String getTitleAndUrl(BlogConfiguration config, Region region) {
+		return title() + ": " + this.getAvalancheReportUrl(config, region);
 	}
 
-	public String getAvalancheReportUrl(BlogConfiguration config) {
-		return config.getRegion().getWebsiteUrl(config.getLanguageCode()) + "/blog/" + config.getBlogUrl() + "/" + id();
+	public String getAvalancheReportUrl(BlogConfiguration config, Region region) {
+		return region.getWebsiteUrl(config.getLanguageCode()) + "/blog/" + config.getBlogUrl() + "/" + id();
 	}
 }

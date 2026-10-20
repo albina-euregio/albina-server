@@ -43,7 +43,7 @@ public class BlogControllerTest {
 		config.setBlogApiUrl("https://blog.avalanche.report/at-07/wp-json/wp/v2/");
 		config.setLanguageCode(LanguageCode.de);
 		config.setLastPublishedTimestamp(OffsetDateTime.parse("2023-01-01T00:00:00Z"));
-		config.setRegion(regionTestUtils.regionTyrol());
+		config.setRegionId(regionTestUtils.regionTyrol().getId());
 		List<BlogItem> blogPosts = blogController.getBlogPosts(config);
 		assertTrue(blogPosts.size() > 5, "size=" + blogPosts.size());
 		assertTrue(blogPosts.stream().anyMatch(item -> item.attachmentUrl() != null), "one blog has image");

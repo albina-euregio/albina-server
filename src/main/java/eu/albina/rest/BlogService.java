@@ -73,9 +73,7 @@ public class BlogService {
 	public void sendLatestBlogPost(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {}", regionId, language);
-			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
+			MultichannelMessage posting = getLatestSocialMediaPosting(regionId, language);
 			posting.sendToAllChannels(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -89,9 +87,7 @@ public class BlogService {
 	public void sendLatestBlogPostEmail(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via email", regionId, language);
-			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
+			MultichannelMessage posting = getLatestSocialMediaPosting(regionId, language);
 			posting.sendMails(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -105,9 +101,7 @@ public class BlogService {
 	public void sendLatestBlogPostTelegram(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via telegram", regionId, language);
-			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
+			MultichannelMessage posting = getLatestSocialMediaPosting(regionId, language);
 			posting.sendTelegramMessage(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -121,9 +115,7 @@ public class BlogService {
 	public void sendLatestBlogPostWhatsApp(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via whatsapp", regionId, language);
-			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
+			MultichannelMessage posting = getLatestSocialMediaPosting(regionId, language);
 			posting.sendWhatsAppMessage(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -137,9 +129,7 @@ public class BlogService {
 	public void sendLatestBlogPostPush(@QueryValue("region") String regionId, @QueryValue("lang") LanguageCode language) {
 		try {
 			logger.debug("POST send latest blog post for {} in {} via push", regionId, language);
-			BlogConfiguration config = getBlogConfiguration(regionId, language);
-			BlogItem blogPost = blogController.getLatestBlogPost(config);
-			MultichannelMessage posting = blogController.getSocialMediaPosting(config, blogPost.id());
+			MultichannelMessage posting = getLatestSocialMediaPosting(regionId, language);
 			posting.sendPushNotifications(publicationController);
 		} catch (Exception e) {
 			logger.warn("Error sending latest blog post", e);
@@ -147,7 +137,7 @@ public class BlogService {
 		}
 	}
 
-	private BlogConfiguration getBlogConfiguration(String regionId, LanguageCode language) throws AlbinaException {
+	private MultichannelMessage getLatestSocialMediaPosting(String regionId, LanguageCode language) throws Exception {
 		if (language == null) {
 			throw new AlbinaException("No language defined!");
 		}
@@ -155,7 +145,9 @@ public class BlogService {
 		if (!region.isPublishBlogs()) {
 			throw new AlbinaException("Publishing blogs is disabled for region " + regionId);
 		}
-		return blogController.getConfiguration(region, language).orElseThrow();
+		BlogConfiguration config = blogController.getConfiguration(region, language).orElseThrow();
+		BlogItem blogPost = blogController.getLatestBlogPost(config);
+		return blogController.getSocialMediaPosting(config, region, blogPost.id());
 	}
 
 	@Get("/posts")
@@ -172,7 +164,7 @@ public class BlogService {
 		Cached<List<BlogItem>> cached = postsCache.get(key, () -> {
 			Instant startDate = DateControllerUtil.parseDateOrNull(start);
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
-			BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
+			BlogConfiguration configuration = blogController.getConfiguration(regionId, language).orElseThrow();
 			return Cached.withETag(objectMapper, blogController.blogImplementation(configuration).searchBlogPosts(configuration, searchText, searchCategory, startDate, endDate));
 		});
 		return Cached.toResponse(cached, ifNoneMatch);
@@ -187,7 +179,7 @@ public class BlogService {
 		@Nullable @Header(HttpHeaders.IF_NONE_MATCH) String ifNoneMatch) throws ExecutionException {
 		String key = String.join("|", regionId, language.name(), id);
 		Cached<BlogItem> cached = postCache.get(key, () -> {
-			BlogConfiguration configuration = blogController.getConfiguration(new Region(regionId), language).orElseThrow();
+			BlogConfiguration configuration = blogController.getConfiguration(regionId, language).orElseThrow();
 			return Cached.withETag(objectMapper, blogController.getBlogPost(configuration, id));
 		});
 		return Cached.toResponse(cached, ifNoneMatch);

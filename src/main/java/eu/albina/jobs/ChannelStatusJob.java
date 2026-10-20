@@ -72,7 +72,7 @@ public class ChannelStatusJob {
 				rapidMailController.getConfigurations(region).stream()
 					.collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(RapidMailConfiguration::getUsername)))).stream()
 					.map(c -> rapidMailController.getStatusAsync(c, "Mail (%s)".formatted(c.getRegion()))),
-				blogController.getConfigurations(region).stream().map(c -> blogController.getStatusAsync(c, "Blog (%s/%s)".formatted(c.getRegion(), c.getLanguageCode())))
+				blogController.getConfigurations(region).stream().map(c -> blogController.getStatusAsync(c, "Blog (%s/%s)".formatted(c.getRegionId(), c.getLanguageCode())))
 			)
 			.flatMap(s -> s)
 			.toList();

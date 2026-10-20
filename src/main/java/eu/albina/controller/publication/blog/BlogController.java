@@ -57,16 +57,20 @@ public class BlogController {
 	public interface BlogConfigurationRepository extends CrudRepository<BlogConfiguration, Long> {
 		Optional<BlogConfiguration> findByBlogId(String blogId);
 
-		List<BlogConfiguration> findByRegion(Region region);
-		Optional<BlogConfiguration> findByRegionAndLanguageCode(Region region, LanguageCode languageCode);
+		List<BlogConfiguration> findByRegionId(String regionId);
+		Optional<BlogConfiguration> findByRegionIdAndLanguageCode(String regionId, LanguageCode languageCode);
 	}
 
 	public List<BlogConfiguration> getConfigurations(Region region) {
-		return blogConfigurationRepository.findByRegion(region);
+		return blogConfigurationRepository.findByRegionId(region.getId());
 	}
 
 	public Optional<BlogConfiguration> getConfiguration(Region region, LanguageCode languageCode) throws NoResultException {
-		return blogConfigurationRepository.findByRegionAndLanguageCode(region, languageCode);
+		return getConfiguration(region.getId(), languageCode);
+	}
+
+	public Optional<BlogConfiguration> getConfiguration(String regionId, LanguageCode languageCode) throws NoResultException {
+		return blogConfigurationRepository.findByRegionIdAndLanguageCode(regionId, languageCode);
 	}
 
 	public void updateConfigurationLastPublished(BlogConfiguration config, BlogItem object) {
@@ -95,7 +99,7 @@ public class BlogController {
 		Objects.requireNonNull(config.getBlogApiUrl(), "config.getBlogApiUrl");
 
 		BlogItem blogPost = blogImplementation(config).getLatestBlogPost(config);
-		logger.info("Fetched latest blog post for region={} lang={}", config.getRegion().getId(), config.getLanguageCode().toString());
+		logger.info("Fetched latest blog post for region={} lang={}", config.getRegionId(), config.getLanguageCode().toString());
 		return blogPost;
 	}
 
@@ -106,9 +110,9 @@ public class BlogController {
 		return blogImplementation(config).getBlogPost(config, blogPostId);
 	}
 
-	public MultichannelMessage getSocialMediaPosting(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
+	public MultichannelMessage getSocialMediaPosting(BlogConfiguration config, Region region, String blogPostId) throws IOException, InterruptedException {
 		BlogItem blogPost = getBlogPost(config, blogPostId);
-		return new BlogItemMultichannelMessage(config, blogPost);
+		return new BlogItemMultichannelMessage(config, region, blogPost);
 	}
 
 	public void sendNewBlogPosts(Region region, LanguageCode lang) throws IOException, InterruptedException {
@@ -132,7 +136,7 @@ public class BlogController {
 		}
 
 		for (BlogItem object : blogPosts) {
-			MultichannelMessage posting = getSocialMediaPosting(config, object.id());
+			MultichannelMessage posting = getSocialMediaPosting(config, region, object.id());
 			posting.sendToAllChannels(publicationController);
 			updateConfigurationLastPublished(config, object);
 		}
@@ -148,7 +152,6 @@ public class BlogController {
 			return;
 		}
 		Region regionOverride = regionRepository.findById(regionOverrideId).orElseThrow();
-		config.setRegion(regionOverride);
 
 		List<BlogItem> blogPosts;
 		try {
@@ -159,7 +162,7 @@ public class BlogController {
 		}
 
 		for (BlogItem object : blogPosts) {
-			MultichannelMessage posting = getSocialMediaPosting(config, object.id());
+			MultichannelMessage posting = getSocialMediaPosting(config, regionOverride, object.id());
 			posting.tryRunWithLogging("Email newsletter", () -> {
 				RapidMailConfiguration mailConfig = rapidMailController.getConfiguration(config.getLanguageCode(), subjectMatter)
 					.orElseThrow(() -> new NoSuchElementException("No RapidMailConfiguration found for " + subjectMatter));

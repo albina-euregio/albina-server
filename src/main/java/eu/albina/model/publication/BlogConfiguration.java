@@ -6,7 +6,6 @@ import java.time.OffsetDateTime;
 
 import com.google.common.base.MoreObjects;
 
-import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Column;
@@ -16,8 +15,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -37,9 +34,11 @@ public class BlogConfiguration implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "REGION_ID")
-	private Region region;
+	/**
+	 * Region ID without foreign key constraint, allowing configurations for regions not hosted by this instance.
+	 */
+	@Column(name = "REGION_ID", length = 191)
+	private String regionId;
 
 	@Column(name = "API_KEY", length = 191)
 	private String apiKey;
@@ -71,12 +70,12 @@ public class BlogConfiguration implements Serializable {
 		this.id = id;
 	}
 
-	public Region getRegion() {
-		return region;
+	public String getRegionId() {
+		return regionId;
 	}
 
-	public void setRegion(Region region) {
-		this.region = region;
+	public void setRegionId(String regionId) {
+		this.regionId = regionId;
 	}
 
 	public String getApiKey() {
@@ -139,7 +138,7 @@ public class BlogConfiguration implements Serializable {
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("id", id)
-			.add("region", region)
+			.add("regionId", regionId)
 			.add("blogId", blogId)
 			.add("blogUrl", blogUrl)
 			.add("blogApiUrl", blogApiUrl)
