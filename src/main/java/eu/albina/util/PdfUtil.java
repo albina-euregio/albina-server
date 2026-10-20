@@ -77,6 +77,7 @@ public class PdfUtil {
 	public static final Color blackColor = ColorConstants.BLACK;
 	public static final Color greyDarkColor = new DeviceRgb(85, 95, 96);
 	public static final Color whiteColor = ColorConstants.WHITE;
+	public static final Color greyVeryLightColor = new DeviceRgb(230, 238, 242);
 	public static final Color greyVeryVeryLightColor = new DeviceRgb(242, 247, 250);
 	public static final Color redColor = ColorConstants.RED;
 
@@ -94,6 +95,7 @@ public class PdfUtil {
 	public static final Color dangerLevel4ColorBw = new DeviceRgb(136, 136, 136);
 	public static final Color dangerLevel5ColorRedBw = new DeviceRgb(136, 136, 136);
 	public static final Color dangerLevel5ColorBlackBw = new DeviceRgb(70, 70, 70);
+	public static final Color greyVeryLightColorBw = new DeviceRgb(234, 234, 234);
 	public static final Color greyVeryVeryLightColorBw = new DeviceRgb(246, 246, 246);
 
 	private PdfFont openSansRegularFont;
@@ -281,6 +283,7 @@ public class PdfUtil {
 		document.add(new AreaBreak());
 
 		final Color blue = grayscale ? blueColorBw : getColor(avalancheReport.getRegion().getPdfColor());
+		final Color greyVeryLight = grayscale ? greyVeryLightColorBw : greyVeryLightColor;
 		final Color greyVeryVeryLight = grayscale ? greyVeryVeryLightColorBw : greyVeryVeryLightColor;
 
 		float leadingHeadline = 1.f;
@@ -499,14 +502,12 @@ public class PdfUtil {
 		Optional<String> snowpackStructureComment = avalancheBulletin.getSnowpackStructureCommentIn(lang);
 		Optional<String> snowpackStructureHighlights = avalancheBulletin.getSnowpackStructureHighlightsIn(lang);
 		Optional<String> tendencyComment = avalancheBulletin.getTendencyCommentIn(lang);
-		if (dangerPattern1 != null || dangerPattern2 != null
-				|| synopsisComment.isPresent()
-				|| snowpackStructureComment.isPresent()
-				|| snowpackStructureHighlights.isPresent()) {
+		boolean hasSnowpack = dangerPattern1 != null || dangerPattern2 != null
+			|| snowpackStructureComment.isPresent()
+			|| snowpackStructureHighlights.isPresent();
+		if (hasSnowpack || synopsisComment.isPresent()) {
 
-			if (dangerPattern1 != null || dangerPattern2 != null
-				|| snowpackStructureComment.isPresent()
-				|| snowpackStructureHighlights.isPresent()) {
+			if (hasSnowpack) {
 				cell = new Cell(1, 10).add(new Paragraph(lang.getCaamlBundleString("snowpack.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(5)
 					.setMultipliedLeading(leadingHeadline));
@@ -514,7 +515,6 @@ public class PdfUtil {
 				cell.setPaddingLeft(paddingLeft);
 				cell.setBorder(Border.NO_BORDER);
 				cell.setBorderLeft(new SolidBorder(blue, 4));
-				cell.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(cell);
 
 				// add danger patterns
@@ -560,7 +560,6 @@ public class PdfUtil {
 					cell.setPaddingLeft(paddingLeft);
 					cell.setBorder(Border.NO_BORDER);
 					cell.setBorderLeft(new SolidBorder(blue, 4));
-					cell.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(cell);
 				}
 
@@ -573,7 +572,6 @@ public class PdfUtil {
 					c.setPaddingLeft(paddingLeft);
 					c.setBorder(Border.NO_BORDER);
 					c.setBorderLeft(new SolidBorder(blue, 4));
-					c.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(c);
 				});
 
@@ -586,7 +584,6 @@ public class PdfUtil {
 					c.setPaddingLeft(paddingLeft);
 					c.setBorder(Border.NO_BORDER);
 					c.setBorderLeft(new SolidBorder(blue, 4));
-					c.setBackgroundColor(greyVeryVeryLight);
 					table.addCell(c);
 				});
 			}
@@ -595,12 +592,14 @@ public class PdfUtil {
 				Paragraph weatherHeadline = new Paragraph(lang.getCaamlBundleString("synopsis.label"))
 					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 					.setMultipliedLeading(leadingHeadline);
+				if (hasSnowpack) {
+					weatherHeadline.setBorderTop(new SolidBorder(greyVeryLight, 1)).setPaddingTop(10);
+				}
 				Cell c = new Cell(1, 1).add(weatherHeadline);
 				c.setTextAlignment(TextAlignment.LEFT);
 				c.setPaddingLeft(paddingLeft);
 				c.setBorder(Border.NO_BORDER);
 				c.setBorderLeft(new SolidBorder(blue, 4));
-				c.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(c);
 
 				Paragraph weatherComment = new Paragraph(replaceLinebreaks(text))
@@ -612,7 +611,6 @@ public class PdfUtil {
 				c.setPaddingLeft(paddingLeft);
 				c.setBorder(Border.NO_BORDER);
 				c.setBorderLeft(new SolidBorder(blue, 4));
-				c.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(c);
 			});
 		}
@@ -622,13 +620,15 @@ public class PdfUtil {
 			Paragraph developmentHeadline = new Paragraph(lang.getCaamlBundleString("tendency.progression.label"))
 				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
 				.setMultipliedLeading(leadingHeadline);
+			if (hasSnowpack || synopsisComment.isPresent()) {
+				developmentHeadline.setBorderTop(new SolidBorder(greyVeryLight, 1)).setPaddingTop(10);
+			}
 			Cell c = new Cell(1, 1).add(developmentHeadline);
 			c.add(createDevelopment(avalancheBulletin));
 			c.setTextAlignment(TextAlignment.LEFT);
 			c.setPaddingLeft(paddingLeft);
 			c.setBorder(Border.NO_BORDER);
 			c.setBorderLeft(new SolidBorder(blue, 4));
-			c.setBackgroundColor(greyVeryVeryLight);
 			table.addCell(c);
 
 			tendencyComment.ifPresent(text -> {
@@ -641,7 +641,6 @@ public class PdfUtil {
 				c2.setPaddingLeft(paddingLeft);
 				c2.setBorder(Border.NO_BORDER);
 				c2.setBorderLeft(new SolidBorder(blue, 4));
-				c2.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(c2);
 			});
 		}
