@@ -127,6 +127,31 @@ public class EmailUtilTest {
 		Assertions.assertTrue(html.contains("<h5>" + highlights + "</h5>"), "snowpack structure highlights");
 	}
 
+	@Test
+	public void createBulletinEmailHtmlWithTravelAdvisory() throws Exception {
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		bulletins.forEach(bulletin -> {
+			bulletin.setTravelAdvisoryHighlights(bulletin.getAvActivityHighlights());
+			bulletin.setTravelAdvisoryComment(bulletin.getAvActivityComment());
+		});
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		String highlights = bulletins.getFirst().getAvActivityHighlightsIn(LanguageCode.de).orElseThrow();
+		Assertions.assertTrue(html.contains("<h4>" + highlights + "</h4>"), "travel advisory highlights");
+		Assertions.assertFalse(html.contains("Gelände- und Tourenhinweise"), "no generic label");
+	}
+
+	@Test
+	public void createBulletinEmailHtmlWithTravelAdvisoryComment() throws Exception {
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		bulletins.forEach(bulletin -> bulletin.setTravelAdvisoryComment(bulletin.getAvActivityComment()));
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		Assertions.assertTrue(html.contains("<h4>Gelände- und Tourenhinweise</h4>"), "generic label");
+	}
+
 	/** Outlook renders neither of these, so the mail must not depend on them. */
 	@Test
 	public void outlookCompatibility() throws Exception {
