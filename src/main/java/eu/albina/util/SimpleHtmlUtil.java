@@ -144,6 +144,18 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 		Texts avalancheActivity = Objects.requireNonNullElse(bulletin.getAvalancheActivity(), new Texts());
 		appendTextBlock(pw, "avalanche-activity", Strings.nullToEmpty(avalancheActivity.getHighlights()),
 			Strings.nullToEmpty(avalancheActivity.getComment()));
+		Texts travelAdvisory = Objects.requireNonNullElse(bulletin.getTravelAdvisory(), new Texts());
+		String travelAdvisoryHighlights = Strings.nullToEmpty(travelAdvisory.getHighlights());
+		String travelAdvisoryComment = Strings.nullToEmpty(travelAdvisory.getComment());
+		if (!travelAdvisoryHighlights.isBlank() || !travelAdvisoryComment.isBlank()) {
+			pw.format("<section class=\"travel-advisory\">\n");
+			pw.format("<h3>%s</h3>\n", travelAdvisoryHighlights.isBlank()
+				? lang.getCaamlBundleString("travelAdvisory.label") : travelAdvisoryHighlights);
+			if (!travelAdvisoryComment.isBlank()) {
+				pw.format("<p>%s</p>\n", travelAdvisoryComment);
+			}
+			pw.format("</section>\n");
+		}
 		String dangerPatterns = bulletin.dangerPatterns().stream()
 			.map(DangerPattern::fromString).filter(Objects::nonNull)
 			.map(dangerPattern -> dangerPattern.toString(lang.getLocale()))
