@@ -306,6 +306,21 @@ public class PdfUtil {
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
 		table.addCell(cell);
 
+		// highlights
+		avalancheBulletin.getHighlightsIn(lang).ifPresent(text -> {
+			Paragraph paragraph = new Paragraph(replaceLinebreaks(text)).setFont(openSansRegularFont)
+				.setFontSize(14)
+				.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating(), grayscale))
+				.setMultipliedLeading(leadingText).setMarginBottom(5);
+			Cell c = new Cell(1, 1).add(paragraph);
+			c.setTextAlignment(TextAlignment.LEFT);
+			c.setPaddingLeft(paddingLeft);
+			c.setBorder(Border.NO_BORDER);
+			c.setBorderLeft(
+				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
+			table.addCell(c);
+		});
+
 		float[] secondColumnWidths;
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			secondColumnWidths = new float[]{1, 1};
