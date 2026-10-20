@@ -357,7 +357,6 @@ public class PdfUtil {
 			table.addCell(cell);
 
 			secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
-			secondTable.setBorderTop(new SolidBorder(blackColor, 1));
 			Paragraph pm = new Paragraph(lang.getCaamlBundleString("validTimePeriod.later"))
 				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
 			cell = new Cell(2, 1).add(pm);
@@ -405,6 +404,9 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		cell.setBorderLeft(
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
+		if (avalancheBulletin.isHasDaytimeDependency()) {
+			cell.setBorderTop(new SolidBorder(blackColor, 0.5f));
+		}
 		table.addCell(cell);
 
 		// avalanche problems
@@ -490,7 +492,7 @@ public class PdfUtil {
 			table.addCell(c);
 		});
 
-		// snowpack structure and tendency
+		// snowpack structure and weather
 		DangerPattern dangerPattern1 = avalancheBulletin.getDangerPattern1();
 		DangerPattern dangerPattern2 = avalancheBulletin.getDangerPattern2();
 		Optional<String> synopsisComment = avalancheBulletin.getSynopsisCommentIn(lang);
@@ -500,8 +502,7 @@ public class PdfUtil {
 		if (dangerPattern1 != null || dangerPattern2 != null
 				|| synopsisComment.isPresent()
 				|| snowpackStructureComment.isPresent()
-				|| snowpackStructureHighlights.isPresent()
-				|| tendencyComment.isPresent()) {
+				|| snowpackStructureHighlights.isPresent()) {
 
 			if (dangerPattern1 != null || dangerPattern2 != null
 				|| snowpackStructureComment.isPresent()
@@ -614,30 +615,34 @@ public class PdfUtil {
 				c.setBackgroundColor(greyVeryVeryLight);
 				table.addCell(c);
 			});
+		}
+
+		// development of avalanche danger
+		if (avalancheBulletin.getTendency() != null || tendencyComment.isPresent()) {
+			Paragraph developmentHeadline = new Paragraph(lang.getCaamlBundleString("tendency.progression.label"))
+				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
+				.setMultipliedLeading(leadingHeadline);
+			Cell c = new Cell(1, 1).add(developmentHeadline);
+			c.add(createDevelopment(avalancheBulletin));
+			c.setTextAlignment(TextAlignment.LEFT);
+			c.setPaddingLeft(paddingLeft);
+			c.setBorder(Border.NO_BORDER);
+			c.setBorderLeft(new SolidBorder(blue, 4));
+			c.setBackgroundColor(greyVeryVeryLight);
+			table.addCell(c);
 
 			tendencyComment.ifPresent(text -> {
-				Paragraph tendencyHeadline = new Paragraph(lang.getCaamlBundleString("tendency.label"))
-					.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
-					.setMultipliedLeading(leadingHeadline);
-				Cell c = new Cell(1, 1).add(tendencyHeadline);
-				c.setTextAlignment(TextAlignment.LEFT);
-				c.setPaddingLeft(paddingLeft);
-				c.setBorder(Border.NO_BORDER);
-				c.setBorderLeft(new SolidBorder(blue, 4));
-				c.setBackgroundColor(greyVeryVeryLight);
-				table.addCell(c);
-
 				Paragraph paragraph = new Paragraph(replaceLinebreaks(text))
 					.setFont(openSansRegularFont)
 					.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
 					.setMarginBottom(5);
-				c = new Cell(1, 1).add(paragraph);
-				c.setTextAlignment(TextAlignment.LEFT);
-				c.setPaddingLeft(paddingLeft);
-				c.setBorder(Border.NO_BORDER);
-				c.setBorderLeft(new SolidBorder(blue, 4));
-				c.setBackgroundColor(greyVeryVeryLight);
-				table.addCell(c);
+				Cell c2 = new Cell(1, 1).add(paragraph);
+				c2.setTextAlignment(TextAlignment.LEFT);
+				c2.setPaddingLeft(paddingLeft);
+				c2.setBorder(Border.NO_BORDER);
+				c2.setBorderLeft(new SolidBorder(blue, 4));
+				c2.setBackgroundColor(greyVeryVeryLight);
+				table.addCell(c2);
 			});
 		}
 
@@ -656,7 +661,7 @@ public class PdfUtil {
 		else
 			daytimeBulletin = avalancheBulletin.getForenoon();
 
-		float[] firstRowColumnWidths = { 1, 1, 1, 1 };
+		float[] firstRowColumnWidths = { 1, 1 };
 		Table firstRowTable = new Table(firstRowColumnWidths);
 
 		Paragraph firstRow = new Paragraph("").setFont(openSansBoldFont).setFontSize(8).setFontColor(blackColor);
@@ -705,49 +710,55 @@ public class PdfUtil {
 		}
 		firstRowTable.addCell(cell);
 
-		if (avalancheBulletin.getTendency() != null) {
-			cell = new Cell(1, 1);
-			cell.setTextAlignment(TextAlignment.LEFT);
-			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-			cell.setHeight(height);
-			cell.setBorder(Border.NO_BORDER);
-			cell.setBorderLeft(new SolidBorder(blackColor, 0.5f));
-
-			Paragraph paragraph = new Paragraph().setFontSize(8).setFontColor(blackColor).setMarginLeft(10)
-					.setMultipliedLeading(1.0f);
-			paragraph.add(
-					new Text(avalancheBulletin.getTendency().toString(lang.getLocale())).setFont(openSansBoldFont));
-			paragraph.add(new Text("\n"));
-			paragraph.add(new Text(avalancheReport.getTendencyDate(lang)).setFont(openSansRegularFont));
-			cell.add(paragraph);
-			firstRowTable.addCell(cell);
-
-			cell = new Cell(1, 1);
-			cell.setTextAlignment(TextAlignment.LEFT);
-			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
-			cell.setHeight(height);
-			cell.setBorder(Border.NO_BORDER);
-			Image tendencyImg = getImage(avalancheBulletin.getTendency().getSymbolPath(grayscale));
-			if (tendencyImg != null) {
-				tendencyImg.getAccessibilityProperties().setAlternateDescription(avalancheBulletin.getTendency().toString(lang.getLocale()));
-				tendencyImg.scaleToFit(25, 20);
-				tendencyImg.setMarginLeft(5);
-				cell.add(tendencyImg);
-			}
-
-			firstRowTable.addCell(cell);
-		} else {
-			cell = new Cell().setBorder(null);
-			firstRowTable.addCell(cell);
-			cell = new Cell().setBorder(null);
-			firstRowTable.addCell(cell);
-		}
-
 		cell = new Cell(1, 1).add(firstRowTable);
 		cell.setTextAlignment(TextAlignment.LEFT);
 		cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
+
+		return table;
+	}
+
+	private Table createDevelopment(AvalancheBulletin avalancheBulletin) {
+		Table table = new Table(new float[]{1, 1, 1}).setBorder(Border.NO_BORDER).setMarginTop(5);
+
+		int dangerRating = DangerRating.getInt(avalancheBulletin.getHighestDangerRating());
+		if (dangerRating > 0) {
+			Paragraph paragraph = new Paragraph().setFontColor(blackColor).setMultipliedLeading(1.0f);
+			paragraph.add(new Text(String.valueOf(dangerRating)).setFont(openSansBoldFont).setFontSize(16));
+			paragraph.add(new Text("\n"));
+			paragraph.add(new Text(avalancheReport.getDate(lang)).setFont(openSansRegularFont).setFontSize(8));
+			Cell cell = new Cell(1, 1).add(paragraph);
+			cell.setTextAlignment(TextAlignment.CENTER);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(Border.NO_BORDER);
+			cell.setPaddingRight(15);
+			table.addCell(cell);
+		}
+
+		if (avalancheBulletin.getTendency() != null) {
+			Cell cell = new Cell(1, 1);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(Border.NO_BORDER);
+			Image tendencyImg = getImage(avalancheBulletin.getTendency().getSymbolPath(grayscale));
+			if (tendencyImg != null) {
+				tendencyImg.getAccessibilityProperties().setAlternateDescription(avalancheBulletin.getTendency().toString(lang.getLocale()));
+				tendencyImg.scaleToFit(25, 20);
+				cell.add(tendencyImg);
+			}
+			table.addCell(cell);
+
+			Paragraph paragraph = new Paragraph().setFontSize(8).setFontColor(blackColor).setMarginLeft(5)
+				.setMultipliedLeading(1.0f);
+			paragraph.add(new Text(avalancheBulletin.getTendency().toString(lang.getLocale())).setFont(openSansBoldFont));
+			paragraph.add(new Text("\n"));
+			paragraph.add(new Text(avalancheReport.getTendencyDate(lang)).setFont(openSansRegularFont));
+			cell = new Cell(1, 1).add(paragraph);
+			cell.setTextAlignment(TextAlignment.LEFT);
+			cell.setVerticalAlignment(VerticalAlignment.MIDDLE);
+			cell.setBorder(Border.NO_BORDER);
+			table.addCell(cell);
+		}
 
 		return table;
 	}
