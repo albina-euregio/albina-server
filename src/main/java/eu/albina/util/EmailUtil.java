@@ -358,6 +358,21 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print("</tr>");
 		pw.print("</table>");
 
+		// travel advisory
+		Optional<String> travelAdvisoryHighlights = highlights(bulletin.getTravelAdvisory());
+		Optional<String> travelAdvisoryComment = comment(bulletin.getTravelAdvisory());
+		if (travelAdvisoryHighlights.isPresent() || travelAdvisoryComment.isPresent()) {
+			pw.print(TABLE + " style=\"width: 100%; background-color: #f6fafc;\">");
+			pw.print("<tr>");
+			pw.format("<td width=\"10\" bgcolor=\"#%s\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>", color);
+			pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
+			pw.format("<h4>%s</h4>", travelAdvisoryHighlights.orElseGet(() -> lang.getCaamlBundleString("travelAdvisory.label")));
+			travelAdvisoryComment.ifPresent(text -> pw.format("<p>%s</p>", text));
+			pw.print("</td>");
+			pw.print("</tr>");
+			pw.print("</table>");
+		}
+
 		// snowpack structure / danger patterns / synopsis / tendency
 		List<DangerPattern> dangerPatterns = dangerPatterns(bulletin);
 		Optional<String> snowpackStructureComment = comment(bulletin.getSnowpackStructure());
