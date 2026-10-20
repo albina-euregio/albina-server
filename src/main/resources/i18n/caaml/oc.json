@@ -79,6 +79,7 @@
   "aspect.W": "Oèst",
   "aspect.NW": "Nòrd-oèst",
   "tendency.label": "Tendéncia",
+  "tendency.progression.label": "Development of avalanche danger",
   "tendency.decreasing": "Tendéncia: Diminucion deth perilh de lauegi",
   "tendency.steady": "Tendéncia: perilh de lauegi constant",
   "tendency.increasing": "Tendéncia: aument deth perilh de lauegi",
