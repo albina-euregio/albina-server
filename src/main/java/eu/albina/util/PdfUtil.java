@@ -49,6 +49,7 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.properties.BorderCollapsePropertyValue;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
@@ -406,6 +407,33 @@ public class PdfUtil {
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
 		table.addCell(cell);
 
+		// avalanche problems
+		boolean hasAvalancheProblems = hasAvalancheProblems(avalancheBulletin.getForenoon())
+			|| (avalancheBulletin.isHasDaytimeDependency() && hasAvalancheProblems(avalancheBulletin.getAfternoon()));
+		if (hasAvalancheProblems) {
+			Cell c = new Cell(1, 1);
+			c.add(new Paragraph(lang.getCaamlBundleString("avalancheProblem.coreZones.label"))
+				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
+				.setMultipliedLeading(leadingHeadline));
+			if (avalancheBulletin.isHasDaytimeDependency()) {
+				c.add(new Paragraph(lang.getCaamlBundleString("validTimePeriod.earlier"))
+					.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor).setMarginTop(5));
+				c.add(createAvalancheProblems(avalancheBulletin.getForenoon()));
+				c.add(new Paragraph(lang.getCaamlBundleString("validTimePeriod.later"))
+					.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor).setMarginTop(5));
+				c.add(createAvalancheProblems(avalancheBulletin.getAfternoon()));
+			} else {
+				c.add(createAvalancheProblems(avalancheBulletin.getForenoon()));
+			}
+			c.setTextAlignment(TextAlignment.LEFT);
+			c.setPaddingLeft(paddingLeft);
+			c.setPaddingBottom(5);
+			c.setBorder(Border.NO_BORDER);
+			c.setBorderLeft(
+				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
+			table.addCell(c);
+		}
+
 		// avalanche activity
 		avalancheBulletin.getAvActivityHighlightsIn(lang).ifPresent(text -> {
 			Paragraph paragraph = new Paragraph(replaceLinebreaks(text)).setFont(openSansRegularFont)
@@ -721,62 +749,46 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		table.addCell(cell);
 
-		cell = new Cell(1, 1).add(createAvalancheProblems(daytimeBulletin));
-		cell.setTextAlignment(TextAlignment.LEFT);
-		cell.setBorder(Border.NO_BORDER);
-		table.addCell(cell);
-
 		return table;
 	}
 
+	private static boolean hasAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin) {
+		return daytimeBulletin != null && daytimeBulletin.getAvalancheProblems().stream()
+			.anyMatch(p -> p != null && p.getAvalancheProblem() != null);
+	}
+
 	private Table createAvalancheProblems(AvalancheBulletinDaytimeDescription daytimeBulletin) {
+		Table table = new Table(UnitValue.createPercentArray(new float[]{15, 9, 10, 12, 54}));
+		table.setWidth(UnitValue.createPercentValue(100));
+		table.setBorderCollapse(BorderCollapsePropertyValue.SEPARATE);
+		table.setHorizontalBorderSpacing(0);
+		table.setVerticalBorderSpacing(6);
 
-		float[] columnWidths = { 1, 1, 1, 1, 1 };
-		Table table = new Table(columnWidths);
-
-		if (daytimeBulletin.getAvalancheProblem1() != null
-				&& daytimeBulletin.getAvalancheProblem1().getAvalancheProblem() != null) {
-			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem1(), table
-			);
-		}
-		if (daytimeBulletin.getAvalancheProblem2() != null
-				&& daytimeBulletin.getAvalancheProblem2().getAvalancheProblem() != null) {
-			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem2(), table
-			);
-		}
-		if (daytimeBulletin.getAvalancheProblem3() != null
-				&& daytimeBulletin.getAvalancheProblem3().getAvalancheProblem() != null) {
-			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem3(), table
-			);
-		}
-		if (daytimeBulletin.getAvalancheProblem4() != null
-				&& daytimeBulletin.getAvalancheProblem4().getAvalancheProblem() != null) {
-			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem4(), table
-			);
-		}
-		if (daytimeBulletin.getAvalancheProblem5() != null
-				&& daytimeBulletin.getAvalancheProblem5().getAvalancheProblem() != null) {
-			table.setBorderTop(new SolidBorder(blackColor, 0.5f));
-			createAvalancheProblem(daytimeBulletin.getAvalancheProblem5(), table
-			);
+		for (AvalancheProblem avalancheProblem : daytimeBulletin.getAvalancheProblems()) {
+			if (avalancheProblem != null && avalancheProblem.getAvalancheProblem() != null) {
+				createAvalancheProblem(avalancheProblem, table);
+			}
 		}
 
 		return table;
 	}
 
 	private void createAvalancheProblem(AvalancheProblem avalancheProblem, Table table) {
-		if (avalancheProblem == null) {
-			return;
+		Cell avalancheProblemCell = getAvalancheProblemCell(avalancheProblem.getAvalancheProblem());
+		avalancheProblemCell.setPaddingLeft(6);
+		DangerRating dangerRating = avalancheProblem.getEawsMatrixInformation() != null
+			? avalancheProblem.getEawsMatrixInformation().getDangerRating()
+			: null;
+		if (dangerRating != null) {
+			avalancheProblemCell.setBorderLeft(new SolidBorder(getDangerRatingColor(dangerRating, grayscale), 4));
 		}
-		table.addCell(getAvalancheProblemCell(avalancheProblem.getAvalancheProblem()));
+		table.addCell(avalancheProblemCell);
 		table.addCell(getAspectsCell(avalancheProblem.getAspects()));
 		table.addCell(getElevationCell(avalancheProblem, table));
 		if (avalancheProblem.getAvalancheType() == eu.albina.model.enumerations.AvalancheType.slab) {
 			table.addCell(getMatrixInformationCell(avalancheProblem));
+		} else {
+			table.addCell(new Cell().setBorder(Border.NO_BORDER));
 		}
 	}
 
