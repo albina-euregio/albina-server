@@ -434,7 +434,7 @@
       <name>Stubai Alps South</name>
     </region>
     <region regionID="AT-07-17-01">
-      <name>Kitzbühel Alps Brixental</name>
+      <name>Kitzbühel Alps Wildschönau</name>
     </region>
     <region regionID="AT-07-21">
       <name>Gurgler Group</name>
@@ -658,7 +658,7 @@
       <name>Kitzbühel Alps Wildseeloder</name>
     </region>
     <region regionID="AT-07-17-02">
-      <name>Kitzbühel Alps Wildschönau</name>
+      <name>Kitzbühel Alps Brixental</name>
     </region>
     <dangerRating>
       <mainValue>low</mainValue>

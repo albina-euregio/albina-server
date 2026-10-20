@@ -7,10 +7,10 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="AT-07-23-02">
-      <name>Zillertal Alps Northeast</name>
+      <name>Zillertal Alps Northwest</name>
     </region>
     <region regionID="AT-07-23-01">
-      <name>Zillertal Alps Northwest</name>
+      <name>Zillertal Alps Northeast</name>
     </region>
     <region regionID="AT-07-20">
       <name>Weißkugel Group</name>
@@ -702,7 +702,7 @@
       <name>Verwall Mountains Central</name>
     </region>
     <region regionID="AT-07-17-01">
-      <name>Kitzbühel Alps Brixental</name>
+      <name>Kitzbühel Alps Wildschönau</name>
     </region>
     <region regionID="AT-07-11">
       <name>Verwall Mountains East</name>
@@ -1049,7 +1049,7 @@
       <name>Karwendel Mountains East</name>
     </region>
     <region regionID="AT-07-17-02">
-      <name>Kitzbühel Alps Wildschönau</name>
+      <name>Kitzbühel Alps Brixental</name>
     </region>
     <dangerRating>
       <mainValue>moderate</mainValue>
