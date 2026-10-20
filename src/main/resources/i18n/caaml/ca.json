@@ -42,6 +42,7 @@
   "avalancheType.loose": "Allau sense cohesió",
   "avalancheType.glide": "Allau de lliscament de neu",
   "avalancheProblem.label": "Problema d'allaus",
+  "avalancheProblem.coreZones.label": "Avalanche Problems with Core Zones",
   "avalancheProblem.new_snow": "Neu recent",
   "avalancheProblem.wind_slab": "Placa de vent",
   "avalancheProblem.persistent_weak_layers": "Capa feble persistent",

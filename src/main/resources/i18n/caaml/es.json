@@ -42,6 +42,7 @@
   "avalancheType.loose": "Alud de nieve sin cohesión",
   "avalancheType.glide": "Alud de deslizamiento de nieve",
   "avalancheProblem.label": "Problema de Aludes",
+  "avalancheProblem.coreZones.label": "Avalanche Problems with Core Zones",
   "avalancheProblem.new_snow": "Nieve reciente",
   "avalancheProblem.wind_slab": "Placa de viento",
   "avalancheProblem.persistent_weak_layers": "Capa débil persistente",

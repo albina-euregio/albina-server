@@ -42,6 +42,7 @@
   "avalancheType.loose": "Avalanche de neige meuble",
   "avalancheType.glide": "Avalanche de glissement",
   "avalancheProblem.label": "Situation avalancheuse typique",
+  "avalancheProblem.coreZones.label": "Avalanche Problems with Core Zones",
   "avalancheProblem.new_snow": "Neige fraîche",
   "avalancheProblem.wind_slab": "Neige ventée",
   "avalancheProblem.persistent_weak_layers": "Neige ancienne (Sous-couche fragile persistante)",

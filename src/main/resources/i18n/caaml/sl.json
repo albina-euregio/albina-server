@@ -42,6 +42,7 @@
   "avalancheType.loose": "Plaz nesprijetega snega",
   "avalancheType.glide": "Zdrsni plaz",
   "avalancheProblem.label": "Plazovni problem",
+  "avalancheProblem.coreZones.label": "Avalanche Problems with Core Zones",
   "avalancheProblem.new_snow": "Nov sneg",
   "avalancheProblem.wind_slab": "Napihan sneg",
   "avalancheProblem.persistent_weak_layers": "Šibke plasti v starem snegu",
