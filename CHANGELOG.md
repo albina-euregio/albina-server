@@ -2,6 +2,38 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [9.1.0] - 2026-10-28
+
+### ⚠️ Upgrade notes
+
+- Database migrations `009_000500` to `009_000800`: passkeys, `users.LAST_USED_AT`, travel advisory textcat, blog configuration region FK dropped
+- New settings `ALBINA_WEBAUTHN_RP_ID`, `ALBINA_WEBAUTHN_RP_NAME`, `ALBINA_WEBAUTHN_ORIGIN` (default to `avalanche.report`); set them on instances served from another domain
+
+### 🚀 Features
+
+- *(authentication)* Add passkey (WebAuthn) login
+- *(authentication)* Report password strength on login; expose `passkeyCount` and `lastUsedAt` for users
+- *(caaml/v6)* Add tendency progression, also for super regions
+- *(email, pdf, simple-html)* Redesign bulletin email, PDF and simple HTML to match the website
+  (avalanche problems, danger level headline, highlights, tendency), render travel advisory
+- *(MapUtil)* Drop above/below elevation split, use max danger rating
+- *(i18n)* Shared CAAML/EAWS translation bundle
+- *(blog)* Cache blog posts and support ETag / If-None-Match
+- *(blog)* Allow blog configurations for regions not hosted by this instance
+- *(openapi)* Report the real server version
+- Serve images under `/images/**`
+
+### 🐛 Bug Fixes
+
+- *(bulletin)* Persist travel advisory textcat and notes
+- *(caaml/v6)* Allow missing danger ratings (e.g. in tendency progression) without breaking the renderers
+- *(caaml/v6)* Set the date of super region reports
+- *(AT-07)* Fix swapped region names
+
+### Build
+
+- Upgrade to Micronaut 5.2.1, tools.jackson 3.2.3, mariadb-java-client 3.5.10, tomcat-embed-core 11.0.26
+
 ## [9.0.1] - 2026-08-12
 
 ### 🚀 Features
