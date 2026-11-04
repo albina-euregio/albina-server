@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jspecify.annotations.Nullable;
 
+import eu.albina.controller.publication.blog.BlogCategory;
 import eu.albina.controller.publication.blog.BlogController;
 import eu.albina.controller.publication.blog.BlogItem;
 import eu.albina.controller.publication.MultichannelMessage;
@@ -63,6 +64,11 @@ public class BlogService {
 		.build();
 
 	private final Cache<String, Cached<BlogItem>> postCache = CacheBuilder.newBuilder()
+		.expireAfterWrite(Duration.ofMinutes(5))
+		.maximumSize(1000)
+		.build();
+
+	private final Cache<String, Cached<List<BlogCategory>>> categoriesCache = CacheBuilder.newBuilder()
 		.expireAfterWrite(Duration.ofMinutes(5))
 		.maximumSize(1000)
 		.build();
@@ -166,6 +172,20 @@ public class BlogService {
 			Instant endDate = DateControllerUtil.parseDateOrNull(end);
 			BlogConfiguration configuration = blogController.getConfiguration(regionId, language).orElseThrow();
 			return Cached.withETag(objectMapper, blogController.blogImplementation(configuration).searchBlogPosts(configuration, searchText, searchCategory, startDate, endDate));
+		});
+		return Cached.toResponse(cached, ifNoneMatch);
+	}
+
+	@Get("/categories")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	HttpResponse<List<BlogCategory>> getBlogCategories(
+		@QueryValue(value = "region", defaultValue = "AT-07") String regionId,
+		@QueryValue(value = "lang", defaultValue = "de") LanguageCode language,
+		@Nullable @Header(HttpHeaders.IF_NONE_MATCH) String ifNoneMatch) throws ExecutionException {
+		String key = String.join("|", regionId, language.name());
+		Cached<List<BlogCategory>> cached = categoriesCache.get(key, () -> {
+			BlogConfiguration configuration = blogController.getConfiguration(regionId, language).orElseThrow();
+			return Cached.withETag(objectMapper, blogController.blogImplementation(configuration).getBlogCategories(configuration));
 		});
 		return Cached.toResponse(cached, ifNoneMatch);
 	}
