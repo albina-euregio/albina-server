@@ -149,7 +149,23 @@ public class EmailUtilTest {
 		bulletins.forEach(bulletin -> bulletin.setTravelAdvisoryComment(bulletin.getAvActivityComment()));
 		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
-		Assertions.assertTrue(html.contains("<h4>Gelände- und Tourenhinweise</h4>"), "generic label");
+		Assertions.assertTrue(html.contains("<h4>Gelände- und Tourenhinweise</h4><ul><li>"), "generic label, followed by bullets");
+	}
+
+	@Test
+	public void createBulletinEmailHtmlWithTravelAdvisoryAndHighlights() throws Exception {
+		final URL resource = Resources.getResource("2019-01-17.json");
+		final List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		bulletins.forEach(bulletin -> {
+			bulletin.setHighlights(bulletin.getAvActivityHighlights());
+			bulletin.setTravelAdvisoryComment(bulletin.getAvActivityComment());
+		});
+		final AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String html = EmailUtil.createBulletinEmailHtml(avalancheReport, LanguageCode.de);
+		String highlights = bulletins.getFirst().getAvActivityHighlightsIn(LanguageCode.de).orElseThrow();
+		String alert = "<h4 class=\"highlights\">" + highlights + "</h4>";
+		Assertions.assertTrue(html.contains(alert), "special alert as travel advisory headline");
+		Assertions.assertFalse(html.contains("Gelände- und Tourenhinweise"), "no generic label");
 	}
 
 	/** Outlook renders neither of these, so the mail must not depend on them. */

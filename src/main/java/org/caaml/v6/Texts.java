@@ -4,7 +4,10 @@ package org.caaml.v6;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.micronaut.serde.annotation.Serdeable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Texts element with highlight and comment for the avalanche activity.
@@ -42,6 +45,16 @@ public class Texts {
 			return null;
 		}
 		return new Texts(highlights.orElse(null), comment.orElse(null));
+	}
+
+	private static final Pattern LINE_BREAK = Pattern.compile("\\n|&lt;br\\s*/?&gt;|<br\\s*/?>", Pattern.CASE_INSENSITIVE);
+
+	/** Splits a text at its line breaks ({@code \n} or {@code <br/>}) into its non-blank, trimmed lines. */
+	public static List<String> lines(String text) {
+		if (text == null) {
+			return List.of();
+		}
+		return Arrays.stream(LINE_BREAK.split(text)).map(String::trim).filter(line -> !line.isEmpty()).toList();
 	}
 
 	public String getComment() { return comment; }

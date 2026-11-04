@@ -135,8 +135,22 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 			appendDaytime(pw, bulletin, ValidTimePeriod.all_day, DaytimeDependency.fd, null);
 		}
 
+		// special alert, takes the place of the travel advisory headline
 		String highlights = Strings.nullToEmpty(bulletin.getHighlights());
-		if (!highlights.isBlank()) {
+		Texts travelAdvisory = Objects.requireNonNullElse(bulletin.getTravelAdvisory(), new Texts());
+		String travelAdvisoryHighlights = Strings.nullToEmpty(travelAdvisory.getHighlights());
+		String travelAdvisoryComment = Strings.nullToEmpty(travelAdvisory.getComment());
+		if (!travelAdvisoryHighlights.isBlank() || !travelAdvisoryComment.isBlank()) {
+			pw.format("<section class=\"travel-advisory%s\">\n", highlights.isBlank() ? "" : " highlights");
+			pw.format("<h3>%s</h3>\n", !highlights.isBlank() ? highlights
+				: travelAdvisoryHighlights.isBlank() ? lang.getCaamlBundleString("travelAdvisory.label") : travelAdvisoryHighlights);
+			if (!travelAdvisoryComment.isBlank()) {
+				pw.format("<ul>\n");
+				Texts.lines(travelAdvisoryComment).forEach(line -> pw.format("<li>%s</li>\n", line));
+				pw.format("</ul>\n");
+			}
+			pw.format("</section>\n");
+		} else if (!highlights.isBlank()) {
 			pw.format("<section class=\"highlights\">\n");
 			pw.format("<h3>%s</h3>\n", highlights);
 			pw.format("</section>\n");
@@ -144,18 +158,6 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 		Texts avalancheActivity = Objects.requireNonNullElse(bulletin.getAvalancheActivity(), new Texts());
 		appendTextBlock(pw, "avalanche-activity", Strings.nullToEmpty(avalancheActivity.getHighlights()),
 			Strings.nullToEmpty(avalancheActivity.getComment()));
-		Texts travelAdvisory = Objects.requireNonNullElse(bulletin.getTravelAdvisory(), new Texts());
-		String travelAdvisoryHighlights = Strings.nullToEmpty(travelAdvisory.getHighlights());
-		String travelAdvisoryComment = Strings.nullToEmpty(travelAdvisory.getComment());
-		if (!travelAdvisoryHighlights.isBlank() || !travelAdvisoryComment.isBlank()) {
-			pw.format("<section class=\"travel-advisory\">\n");
-			pw.format("<h3>%s</h3>\n", travelAdvisoryHighlights.isBlank()
-				? lang.getCaamlBundleString("travelAdvisory.label") : travelAdvisoryHighlights);
-			if (!travelAdvisoryComment.isBlank()) {
-				pw.format("<p>%s</p>\n", travelAdvisoryComment);
-			}
-			pw.format("</section>\n");
-		}
 		String dangerPatterns = bulletin.dangerPatterns().stream()
 			.map(DangerPattern::fromString).filter(Objects::nonNull)
 			.map(dangerPattern -> dangerPattern.toString(lang.getLocale()))

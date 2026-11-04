@@ -112,8 +112,25 @@ public class SimpleHtmlUtilTest {
 		bulletins.forEach(bulletin -> bulletin.setTravelAdvisoryComment(bulletin.getAvActivityComment()));
 		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
 		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
-		Assertions.assertTrue(htmlString.contains("<section class=\"travel-advisory\">\n<h3>Gelände- und Tourenhinweise</h3>\n"),
-			"generic label");
+		Assertions.assertTrue(htmlString.contains("<section class=\"travel-advisory\">\n<h3>Gelände- und Tourenhinweise</h3>\n<ul>\n<li>"),
+			"generic label, followed by bullets");
+	}
+
+	@Test
+	public void createSimpleHtmlStringWithTravelAdvisoryAndHighlights() throws IOException {
+		URL resource = Resources.getResource("2019-01-17.json");
+		List<AvalancheBulletin> bulletins = avalancheBulletinTestUtils.readBulletins(resource);
+		bulletins.forEach(bulletin -> {
+			bulletin.setHighlights(bulletin.getAvActivityHighlights());
+			bulletin.setTravelAdvisoryComment(bulletin.getAvActivityComment());
+		});
+		AvalancheReport avalancheReport = AvalancheReport.of(bulletins, regionTyrol, serverInstanceEuregio);
+		String htmlString = new SimpleHtmlUtil(avalancheReport, LanguageCode.de).createSimpleHtmlString();
+		String highlights = bulletins.getFirst().getAvActivityHighlightsIn(LanguageCode.de).orElseThrow();
+		Assertions.assertTrue(htmlString.contains("<section class=\"travel-advisory highlights\">\n<h3>" + highlights + "</h3>\n"),
+			"special alert as travel advisory headline");
+		Assertions.assertFalse(htmlString.contains("<section class=\"highlights\">"), "no separate special alert");
+		Assertions.assertFalse(htmlString.contains("Gelände- und Tourenhinweise"), "no generic label");
 	}
 
 	@Test

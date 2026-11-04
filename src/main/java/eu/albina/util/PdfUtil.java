@@ -16,6 +16,7 @@ import java.util.StringJoiner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.caaml.v6.Texts;
 
 import com.google.common.io.Resources;
 import com.itextpdf.io.font.PdfEncodings;
@@ -46,6 +47,7 @@ import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.ListItem;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
@@ -310,20 +312,58 @@ public class PdfUtil {
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
 		table.addCell(cell);
 
-		// highlights
-		avalancheBulletin.getHighlightsIn(lang).ifPresent(text -> {
-			Paragraph paragraph = new Paragraph(replaceLinebreaks(text)).setFont(openSansRegularFont)
-				.setFontSize(14)
-				.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating(), grayscale))
-				.setMultipliedLeading(leadingText).setMarginBottom(5);
-			Cell c = new Cell(1, 1).add(paragraph);
+		// travel advisory, the special alert takes the place of its headline
+		Optional<String> highlights = avalancheBulletin.getHighlightsIn(lang);
+		Optional<String> travelAdvisoryHighlights = avalancheBulletin.getTravelAdvisoryHighlightsIn(lang);
+		Optional<String> travelAdvisoryComment = avalancheBulletin.getTravelAdvisoryCommentIn(lang);
+		if (travelAdvisoryHighlights.isPresent() || travelAdvisoryComment.isPresent()) {
+			String headlineText = highlights.or(() -> travelAdvisoryHighlights).map(this::replaceLinebreaks)
+				.orElseGet(() -> lang.getCaamlBundleString("travelAdvisory.label"));
+			Color headlineColor = highlights.isPresent()
+				? getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating(), grayscale) : blackColor;
+			Paragraph headline = new Paragraph(headlineText)
+				.setFont(openSansRegularFont).setFontSize(14).setFontColor(headlineColor).setMarginTop(10)
+				.setMultipliedLeading(leadingHeadline);
+			Cell c = new Cell(1, 1).add(headline);
 			c.setTextAlignment(TextAlignment.LEFT);
 			c.setPaddingLeft(paddingLeft);
 			c.setBorder(Border.NO_BORDER);
-			c.setBorderLeft(
-				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
+			c.setBorderLeft(new SolidBorder(blue, 4));
+			c.setBackgroundColor(greyVeryVeryLight);
 			table.addCell(c);
-		});
+
+			travelAdvisoryComment.ifPresent(text -> {
+				com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List()
+					.setListSymbol("•").setSymbolIndent(5)
+					.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor);
+				Texts.lines(text).forEach(line -> {
+					ListItem item = new ListItem();
+					item.add(new Paragraph(line).setMultipliedLeading(leadingText).setMargin(0));
+					list.add(item);
+				});
+				Cell commentCell = new Cell(1, 1).add(list);
+				commentCell.setTextAlignment(TextAlignment.LEFT);
+				commentCell.setPaddingLeft(paddingLeft);
+				commentCell.setBorder(Border.NO_BORDER);
+				commentCell.setBorderLeft(new SolidBorder(blue, 4));
+				commentCell.setBackgroundColor(greyVeryVeryLight);
+				table.addCell(commentCell);
+			});
+		} else {
+			highlights.ifPresent(text -> {
+				Paragraph paragraph = new Paragraph(replaceLinebreaks(text)).setFont(openSansRegularFont)
+					.setFontSize(14)
+					.setFontColor(getDangerRatingTextColor(avalancheBulletin.getHighestDangerRating(), grayscale))
+					.setMultipliedLeading(leadingText).setMarginBottom(5);
+				Cell c = new Cell(1, 1).add(paragraph);
+				c.setTextAlignment(TextAlignment.LEFT);
+				c.setPaddingLeft(paddingLeft);
+				c.setBorder(Border.NO_BORDER);
+				c.setBorderLeft(
+					new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
+				table.addCell(c);
+			});
+		}
 
 		float[] secondColumnWidths;
 		if (avalancheBulletin.isHasDaytimeDependency()) {
@@ -462,36 +502,6 @@ public class PdfUtil {
 			c.setBorder(Border.NO_BORDER);
 			c.setBorderLeft(
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-			table.addCell(c);
-		});
-
-		Optional<String> travelAdvisoryHighlights = avalancheBulletin.getTravelAdvisoryHighlightsIn(lang);
-		Optional<String> travelAdvisoryComment = avalancheBulletin.getTravelAdvisoryCommentIn(lang);
-		if (travelAdvisoryHighlights.isPresent() || travelAdvisoryComment.isPresent()) {
-			String headlineText = travelAdvisoryHighlights.map(this::replaceLinebreaks)
-				.orElseGet(() -> lang.getCaamlBundleString("travelAdvisory.label"));
-			Paragraph headline = new Paragraph(headlineText)
-				.setFont(openSansRegularFont).setFontSize(14).setFontColor(blackColor).setMarginTop(10)
-				.setMultipliedLeading(leadingHeadline);
-			Cell c = new Cell(1, 1).add(headline);
-			c.setTextAlignment(TextAlignment.LEFT);
-			c.setPaddingLeft(paddingLeft);
-			c.setBorder(Border.NO_BORDER);
-			c.setBorderLeft(new SolidBorder(blue, 4));
-			c.setBackgroundColor(greyVeryVeryLight);
-			table.addCell(c);
-		}
-
-		travelAdvisoryComment.ifPresent(text -> {
-			Paragraph paragraph = new Paragraph(replaceLinebreaks(text))
-				.setFont(openSansRegularFont).setFontSize(10).setFontColor(blackColor)
-				.setMultipliedLeading(leadingText);
-			Cell c = new Cell(1, 1).add(paragraph);
-			c.setTextAlignment(TextAlignment.LEFT);
-			c.setPaddingLeft(paddingLeft);
-			c.setBorder(Border.NO_BORDER);
-			c.setBorderLeft(new SolidBorder(blue, 4));
-			c.setBackgroundColor(greyVeryVeryLight);
 			table.addCell(c);
 		});
 

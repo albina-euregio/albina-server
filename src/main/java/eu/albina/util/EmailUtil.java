@@ -342,12 +342,34 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 			appendDaytime(pw, bulletin, ValidTimePeriod.all_day, DaytimeDependency.fd, null);
 		}
 
+		// special alert, takes the place of the travel advisory headline
+		Optional<String> highlights = Optional.ofNullable(bulletin.getHighlights()).filter(s -> !s.isBlank());
+		Optional<String> travelAdvisoryHighlights = highlights(bulletin.getTravelAdvisory()).filter(s -> !s.isBlank());
+		Optional<String> travelAdvisoryComment = comment(bulletin.getTravelAdvisory()).filter(s -> !s.isBlank());
+		if (travelAdvisoryHighlights.isPresent() || travelAdvisoryComment.isPresent()) {
+			pw.print(TABLE + " style=\"width: 100%; background-color: #f6fafc;\">");
+			pw.print("<tr>");
+			pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
+			if (highlights.isPresent()) {
+				pw.format("<h4 class=\"highlights\">%s</h4>", highlights.get());
+			} else {
+				pw.format("<h4>%s</h4>", travelAdvisoryHighlights.orElseGet(() -> lang.getCaamlBundleString("travelAdvisory.label")));
+			}
+			travelAdvisoryComment.ifPresent(text -> {
+				pw.print("<ul>");
+				Texts.lines(text).forEach(line -> pw.format("<li>%s</li>", line));
+				pw.print("</ul>");
+			});
+			pw.print("</td>");
+			pw.print("</tr>");
+			pw.print("</table>");
+		}
+
 		pw.print(TABLE + " style=\"padding-left: 15px;\">");
 		pw.print("<tr>");
 		pw.print("<td style=\"vertical-align: top; padding-top: 15px;\">");
-		String highlights = Optional.ofNullable(bulletin.getHighlights()).orElse("");
-		if (!highlights.isBlank()) {
-			pw.format("<h4 class=\"highlights\">%s</h4>", highlights);
+		if (highlights.isPresent() && travelAdvisoryHighlights.isEmpty() && travelAdvisoryComment.isEmpty()) {
+			pw.format("<h4 class=\"highlights\">%s</h4>", highlights.get());
 		}
 		pw.format("<h4>%s</h4>", highlights(bulletin.getAvalancheActivity()).orElse(""));
 		pw.format("<p>%s</p>", comment(bulletin.getAvalancheActivity()).orElse(""));
@@ -357,21 +379,6 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
-
-		// travel advisory
-		Optional<String> travelAdvisoryHighlights = highlights(bulletin.getTravelAdvisory());
-		Optional<String> travelAdvisoryComment = comment(bulletin.getTravelAdvisory());
-		if (travelAdvisoryHighlights.isPresent() || travelAdvisoryComment.isPresent()) {
-			pw.print(TABLE + " style=\"width: 100%; background-color: #f6fafc;\">");
-			pw.print("<tr>");
-			pw.format("<td width=\"10\" bgcolor=\"#%s\" style=\"font-size: 0; line-height: 0;\">&nbsp;</td>", color);
-			pw.print("<td style=\"vertical-align: top; padding: 15px;\">");
-			pw.format("<h4>%s</h4>", travelAdvisoryHighlights.orElseGet(() -> lang.getCaamlBundleString("travelAdvisory.label")));
-			travelAdvisoryComment.ifPresent(text -> pw.format("<p>%s</p>", text));
-			pw.print("</td>");
-			pw.print("</tr>");
-			pw.print("</table>");
-		}
 
 		// snowpack structure / danger patterns / synopsis / tendency
 		List<DangerPattern> dangerPatterns = dangerPatterns(bulletin);
