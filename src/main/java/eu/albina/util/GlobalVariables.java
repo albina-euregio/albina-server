@@ -62,13 +62,17 @@ public class GlobalVariables {
 	}
 
 	public LocalServerInstance getLocalServerInstance(String pdfDirectory, String mapsPath) {
+		return getLocalServerInstance(pdfDirectory, mapsPath, null);
+	}
+
+	public LocalServerInstance getLocalServerInstance(String pdfDirectory, String mapsPath, String htmlDirectory) {
 		return new LocalServerInstance(
 			publishAt5PM,
 			publishAt8AM,
 			Objects.requireNonNullElse(mapsPath, this.mapsPath),
 			Objects.requireNonNull(mapProductionUrl, "mapProductionUrl"),
 			Objects.requireNonNullElse(pdfDirectory, this.pdfDirectory),
-			Objects.requireNonNull(htmlDirectory, "htmlDirectory"),
+			Objects.requireNonNullElse(htmlDirectory, this.htmlDirectory),
 			Objects.requireNonNull(mediaPath, "mediaPath")
 		);
 	}

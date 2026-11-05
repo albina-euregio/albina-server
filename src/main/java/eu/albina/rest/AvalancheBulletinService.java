@@ -421,7 +421,7 @@ public class AvalancheBulletinService {
 			bulletins.forEach(b -> b.setPublicationDate(publicationDate));
 
 			LocalServerInstance serverInstance = globalVariables.getLocalServerInstance(
-				path.tempDirectory().toString(), path.tempDirectory().toString());
+				path.tempDirectory().toString(), path.tempDirectory().toString(), path.tempDirectory().toString());
 			AvalancheReport avalancheReport = AvalancheReport.of(bulletins, region, serverInstance);
 			avalancheReport.setStatus(BulletinStatus.draft); // preview
 
