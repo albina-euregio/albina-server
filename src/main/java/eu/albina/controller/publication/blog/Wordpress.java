@@ -82,6 +82,13 @@ class Wordpress implements AbstractBlog {
 		return Arrays.stream(fetch(uri, Item[].class)).map(item -> item.toBlogItem(categories)).toList();
 	}
 
+	@Override
+	public List<BlogCategory> getBlogCategories(BlogConfiguration config) throws IOException, InterruptedException {
+		return getCategories(config).stream()
+			.map(c -> new BlogCategory(c.id, c.name))
+			.toList();
+	}
+
 	List<Category> getCategories(BlogConfiguration config) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/categories/#arguments
 		Map<String, Object> params = Map.of(

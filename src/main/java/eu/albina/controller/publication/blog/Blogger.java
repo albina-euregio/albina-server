@@ -53,6 +53,12 @@ class Blogger implements AbstractBlog {
 		return root.toBlogItems();
 	}
 
+	@Override
+	public List<BlogCategory> getBlogCategories(BlogConfiguration config) {
+		// Blogger labels have no IDs to filter by
+		return List.of();
+	}
+
 	private static String posts(BlogConfiguration config) {
 		return config.getBlogApiUrl() + config.getBlogId() + "/posts";
 	}
