@@ -2,6 +2,14 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## Unreleased
+
+### 🚀 Features
+
+- *(bulletin)* Render travel advisory like the website in email, PDF and simple HTML
+  (special alert as headline, advisory description as bullet points); 
+- *(blog)* Add `/blogs/categories` endpoint, cached with ETag / If-None-Match; its IDs are accepted as `searchCategory` by `/blogs/posts`
+
 ## [9.1.0] - 2026-10-28
 
 ### ⚠️ Upgrade notes
