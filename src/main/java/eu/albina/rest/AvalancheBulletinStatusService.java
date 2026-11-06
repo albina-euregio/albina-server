@@ -115,7 +115,8 @@ public class AvalancheBulletinStatusService {
 		Instant startDate = DateControllerUtil.parseDateOrToday(date);
 		Instant endDate = startDate;
 
-		Region region = regionRepository.findById(regionId).orElseThrow();
+		Region region = regionRepository.findById(regionId)
+			.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No region with id: " + regionId));
 
 		Collection<AvalancheReport> reports = avalancheReportController.getPublicReports(startDate, endDate, region);
 
