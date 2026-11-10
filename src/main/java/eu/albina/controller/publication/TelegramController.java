@@ -112,11 +112,11 @@ public class TelegramController {
 		HttpClient client = HttpClientUtil
 			.newClientBuilder(80000) // sending photos may a while
 			.build();
-		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s",
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s",
 				apiToken,
 				URLEncoder.encode(chatId, StandardCharsets.UTF_8),
 				URLEncoder.encode(message, StandardCharsets.UTF_8)
-			)))
+			)), Duration.ofMillis(80000))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=" + boundary)
 			.POST(HttpRequest.BodyPublishers.ofByteArrays(List.of(
 				"--%s\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8),
@@ -137,7 +137,7 @@ public class TelegramController {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 		logger.info("Sending message {} to telegram channel using config {}", message, config);
 
-		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s",
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(String.format("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s",
 			apiToken,
 			URLEncoder.encode(chatId, StandardCharsets.UTF_8),
 			URLEncoder.encode(message, StandardCharsets.UTF_8)
@@ -151,7 +151,7 @@ public class TelegramController {
 	 * @see <a href="https://core.telegram.org/bots/api#getme">https://core.telegram.org/bots/api#getme</a>
 	 */
 	public CompletableFuture<StatusInformation> getStatusAsync(TelegramConfiguration config, String statusTitle) {
-		HttpRequest request = HttpRequest.newBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(String.format("https://api.telegram.org/bot%s/getMe", config.getApiToken()))).build();
 
 		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 			.thenApply(response -> mapToStatusInformation(response, statusTitle))

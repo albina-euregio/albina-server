@@ -3,6 +3,7 @@ package eu.albina.controller.publication;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -32,6 +33,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
 import eu.albina.model.publication.PushConfiguration;
+import eu.albina.util.HttpClientUtil;
 
 @Singleton
 public class PushNotificationUtil {
@@ -96,12 +98,39 @@ public class PushNotificationUtil {
 		sendPushMessage(subscription, payload, null);
 	}
 
+	/**
+	 * Push endpoints come from anonymous clients, and the server sends requests to them. Restricting them to the
+	 * browser vendors' push services prevents requests to arbitrary hosts, such as ports on localhost.
+	 */
+	public static boolean isValidEndpoint(String endpoint) {
+		final URI uri;
+		try {
+			uri = new URI(endpoint);
+		} catch (URISyntaxException | NullPointerException e) {
+			return false;
+		}
+		String host = uri.getHost();
+		return "https".equals(uri.getScheme())
+			&& uri.getUserInfo() == null
+			&& (uri.getPort() == -1 || uri.getPort() == 443)
+			&& host != null
+			&& (host.equals("fcm.googleapis.com")
+			|| host.equals("updates.push.services.mozilla.com")
+			|| host.equals("web.push.apple.com")
+			|| host.endsWith(".notify.windows.com"));
+	}
+
 	public PushConfiguration getConfiguration() {
 		return pushConfigurationRepository.findAll().stream().collect(MoreCollectors.onlyElement());
 	}
 
 	@Transactional
 	public void sendPushMessage(PushSubscription subscription, Message payload, ServerKeys serverKeys) {
+		if (!isValidEndpoint(subscription.getEndpoint())) {
+			logger.warn("Deleting subscription with invalid endpoint {}", subscription.getEndpoint());
+			pushSubscriptionRepository.delete(subscription);
+			return;
+		}
 		try {
 			logger.debug("Sending push notification to {}", subscription.getEndpoint());
 			if (serverKeys == null) {
@@ -112,7 +141,7 @@ public class PushNotificationUtil {
 			final String json = getJson(payload);
 			final byte[] encrypted = new CryptoService().encrypt(json, subscriptionKeys, 0);
 			final URI endpointURI = URI.create(subscription.getEndpoint());
-			final HttpRequest request = HttpRequest.newBuilder(endpointURI)
+			final HttpRequest request = HttpClientUtil.newRequestBuilder(endpointURI)
 				.header("Content-Type", "application/octet-stream")
 				.header("Content-Encoding", "aes128gcm")
 				.header("TTL", "180")

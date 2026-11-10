@@ -28,6 +28,18 @@ public interface HttpClientUtil {
 			.connectTimeout(Duration.ofMillis(readTimeout));
 	}
 
+	/**
+	 * {@link HttpClient} has no default request timeout, so a server that accepts the connection but never responds
+	 * blocks the calling thread indefinitely.
+	 */
+	static HttpRequest.Builder newRequestBuilder(URI uri) {
+		return newRequestBuilder(uri, Duration.ofSeconds(30));
+	}
+
+	static HttpRequest.Builder newRequestBuilder(URI uri, Duration timeout) {
+		return HttpRequest.newBuilder(uri).timeout(timeout);
+	}
+
 	static String queryParams(Map<String, Object> data) {
 		return data.entrySet().stream()
 			.map(entry -> entry.getKey() + "=" + URLEncoder.encode(String.valueOf(entry.getValue()), StandardCharsets.UTF_8))
@@ -37,7 +49,7 @@ public interface HttpClientUtil {
 	static boolean isUrlAvailable(HttpClient client, String url) {
 		Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 		try {
-			HttpRequest request = HttpRequest.newBuilder(URI.create(url))
+			HttpRequest request = newRequestBuilder(URI.create(url))
 				.method("HEAD", HttpRequest.BodyPublishers.noBody())
 				.build();
 			HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());

@@ -39,7 +39,7 @@ class Wordpress implements AbstractBlog {
 	ObjectMapper objectMapper;
 
 	private <T> T fetch(URI uri, Class<T> type) throws IOException, InterruptedException {
-		HttpResponse<String> response = client.send(HttpRequest.newBuilder(uri).build(), HttpResponse.BodyHandlers.ofString());
+		HttpResponse<String> response = client.send(HttpClientUtil.newRequestBuilder(uri).build(), HttpResponse.BodyHandlers.ofString());
 		HttpClientUtil.checkResponse(response);
 		return objectMapper.readValue(response.body(), type);
 	}
@@ -113,7 +113,7 @@ class Wordpress implements AbstractBlog {
 	public List<BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		// https://developer.wordpress.org/rest-api/reference/posts/#arguments
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
-		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
 			"lang", config.getLanguageCode(),
 			"after", lastPublishedTimestamp.toInstant().plusSeconds(1).toString(),
 			"order", "asc"
@@ -126,7 +126,7 @@ class Wordpress implements AbstractBlog {
 
 	@Override
 	public BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
-		HttpRequest request = HttpRequest.newBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(config.getBlogApiUrl() + "posts?" + HttpClientUtil.queryParams(Map.of(
 			"lang", config.getLanguageCode(),
 			"per_page", Integer.toString(1)
 		)))).build();

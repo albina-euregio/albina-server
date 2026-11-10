@@ -4,10 +4,12 @@ package eu.albina.rest;
 import eu.albina.controller.RegionRepository;
 import eu.albina.controller.publication.PushNotificationUtil;
 import eu.albina.model.PushSubscription;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.serde.annotation.Serdeable;
@@ -46,6 +48,9 @@ public class PushNotificationService {
 	@Operation(summary = "Subscribe push notification")
 	public void subscribe(@Body PushSubscription subscription) {
 		logger.info("Subscribing {}", subscription);
+		if (!PushNotificationUtil.isValidEndpoint(subscription.getEndpoint())) {
+			throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Invalid push endpoint");
+		}
 		pushSubscriptionRepository.save(subscription);
 		pushNotificationUtil.sendWelcomePushMessage(subscription, regionRepository.findById(subscription.getRegion()).orElseThrow());
 	}

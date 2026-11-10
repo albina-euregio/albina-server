@@ -69,6 +69,21 @@ public class PushNotificationUtilTest {
 		Assertions.assertEquals("180", getHeader(argumentCaptor, "TTL"));
 	}
 
+	@Test
+	public void isValidEndpoint() {
+		Assertions.assertTrue(PushNotificationUtil.isValidEndpoint("https://fcm.googleapis.com/fcm/send/fQ-USDMaFvY:APA91bF"));
+		Assertions.assertTrue(PushNotificationUtil.isValidEndpoint("https://updates.push.services.mozilla.com/wpush/v2/gAAAAAB"));
+		Assertions.assertTrue(PushNotificationUtil.isValidEndpoint("https://web.push.apple.com/QGuQyavXutnMH"));
+		Assertions.assertTrue(PushNotificationUtil.isValidEndpoint("https://wns2-db5p.notify.windows.com/w/?token=BQYAAAD"));
+		Assertions.assertFalse(PushNotificationUtil.isValidEndpoint(null));
+		Assertions.assertFalse(PushNotificationUtil.isValidEndpoint("http://127.0.0.1:25/"));
+		Assertions.assertFalse(PushNotificationUtil.isValidEndpoint("http://fcm.googleapis.com/fcm/send/x"));
+		Assertions.assertFalse(PushNotificationUtil.isValidEndpoint("https://fcm.googleapis.com:25/fcm/send/x"));
+		Assertions.assertFalse(PushNotificationUtil.isValidEndpoint("https://fcm.googleapis.com.example.org/x"));
+		Assertions.assertFalse(PushNotificationUtil.isValidEndpoint("https://user@fcm.googleapis.com/x"));
+		Assertions.assertFalse(PushNotificationUtil.isValidEndpoint("https://notify.windows.com.example.org/x"));
+	}
+
 	private static ArgumentCaptor<HttpRequest> getEntityArgumentCaptor() {
 		return ArgumentCaptor.forClass(HttpRequest.class);
 	}
