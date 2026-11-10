@@ -116,7 +116,7 @@ public class TelegramController {
 				apiToken,
 				URLEncoder.encode(chatId, StandardCharsets.UTF_8),
 				URLEncoder.encode(message, StandardCharsets.UTF_8)
-			)))
+			)), Duration.ofMillis(80000))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA + "; boundary=" + boundary)
 			.POST(HttpRequest.BodyPublishers.ofByteArrays(List.of(
 				"--%s\r\n".formatted(boundary).getBytes(StandardCharsets.UTF_8),

@@ -33,7 +33,11 @@ public interface HttpClientUtil {
 	 * blocks the calling thread indefinitely.
 	 */
 	static HttpRequest.Builder newRequestBuilder(URI uri) {
-		return HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(30));
+		return newRequestBuilder(uri, Duration.ofSeconds(30));
+	}
+
+	static HttpRequest.Builder newRequestBuilder(URI uri, Duration timeout) {
+		return HttpRequest.newBuilder(uri).timeout(timeout);
 	}
 
 	static String queryParams(Map<String, Object> data) {
