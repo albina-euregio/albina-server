@@ -33,6 +33,7 @@ import eu.albina.exception.AlbinaException;
 import eu.albina.model.PushSubscription;
 import eu.albina.model.Region;
 import eu.albina.model.publication.PushConfiguration;
+import eu.albina.util.HttpClientUtil;
 
 @Singleton
 public class PushNotificationUtil {
@@ -140,7 +141,7 @@ public class PushNotificationUtil {
 			final String json = getJson(payload);
 			final byte[] encrypted = new CryptoService().encrypt(json, subscriptionKeys, 0);
 			final URI endpointURI = URI.create(subscription.getEndpoint());
-			final HttpRequest request = HttpRequest.newBuilder(endpointURI)
+			final HttpRequest request = HttpClientUtil.newRequestBuilder(endpointURI)
 				.header("Content-Type", "application/octet-stream")
 				.header("Content-Encoding", "aes128gcm")
 				.header("TTL", "180")

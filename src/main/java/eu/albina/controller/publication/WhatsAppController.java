@@ -113,7 +113,7 @@ public class WhatsAppController {
 			"caption", message
 		));
 
-		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/messages/image"))
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create("https://gate.whapi.cloud/messages/image"))
 			.POST(HttpRequest.BodyPublishers.ofString(payload))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
@@ -138,7 +138,7 @@ public class WhatsAppController {
 			"body", message
 		));
 
-		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/messages/text"))
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create("https://gate.whapi.cloud/messages/text"))
 			.POST(HttpRequest.BodyPublishers.ofString(payload))
 			.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
@@ -155,7 +155,7 @@ public class WhatsAppController {
 	public CompletableFuture<StatusInformation> getStatusAsync(WhatsAppConfiguration config, String statusTitle) {
 		String apiToken = Objects.requireNonNull(config.getApiToken(), "config.getApiToken");
 
-		HttpRequest request = HttpRequest.newBuilder(URI.create("https://gate.whapi.cloud/health"))
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create("https://gate.whapi.cloud/health"))
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + apiToken)
 			.build();
 

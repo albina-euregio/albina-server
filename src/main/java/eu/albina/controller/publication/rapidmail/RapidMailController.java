@@ -27,6 +27,7 @@ import eu.albina.model.StatusInformation;
 import eu.albina.model.Subscriber;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.RapidMailConfiguration;
+import eu.albina.util.HttpClientUtil;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.http.MediaType;
 import io.micronaut.serde.ObjectMapper;
@@ -80,7 +81,7 @@ public class RapidMailController {
 	private RapidMailRecipientListResponse getRecipientsList(RapidMailConfiguration config) throws IOException, InterruptedException {
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Recipientlists#/Recipientlists/get_recipientlists
-		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/recipientlists"))
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(baseUrl + "/recipientlists"))
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
 			.build();
@@ -93,7 +94,7 @@ public class RapidMailController {
 		throws AlbinaException, IOException, InterruptedException {
 
 		PostRecipientsRequest recipient = new PostRecipientsRequest(subscriber.getEmail(), getRecipientId(config));
-		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/recipients?send_activationmail=yes"))
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(baseUrl + "/recipients?send_activationmail=yes"))
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
 			.header("Content-Type", MediaType.APPLICATION_JSON)
@@ -107,7 +108,7 @@ public class RapidMailController {
 
 		// https://developer.rapidmail.wiki/documentation.html?urls.primaryName=Mailings#/Mailings/post_mailings
 		logger.info("Sending {} ...", mailingsPost);
-		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/mailings"))
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(baseUrl + "/mailings"))
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
 			.header("Content-Type", MediaType.APPLICATION_JSON)
@@ -183,7 +184,7 @@ public class RapidMailController {
 	 * @return CompletableFuture with status information (number of recipient lists that were found)
 	 */
 	public CompletableFuture<StatusInformation> getStatusAsync(RapidMailConfiguration config, String statusTitle) {
-		HttpRequest request = HttpRequest.newBuilder(URI.create(baseUrl + "/recipientlists"))
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create(baseUrl + "/recipientlists"))
 				.header("Authorization", calcBasicAuth(config))
 				.header("Accept", MediaType.APPLICATION_JSON)
 				.build();

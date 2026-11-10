@@ -86,7 +86,7 @@ public record GoogleCredentials(
 			URLEncoder.encode("urn:ietf:params:oauth:grant-type:jwt-bearer", StandardCharsets.UTF_8),
 			URLEncoder.encode(jwt(), StandardCharsets.UTF_8)
 		);
-		HttpRequest request = HttpRequest.newBuilder(uri)
+		HttpRequest request = HttpClientUtil.newRequestBuilder(uri)
 			.header("Content-Type", "application/x-www-form-urlencoded")
 			.POST(HttpRequest.BodyPublishers.ofString(form))
 			.build();

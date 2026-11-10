@@ -47,7 +47,7 @@ class Blogger implements AbstractBlog {
 			params.put("startDate", startDate);
 			params.put("endDate", endDate);
 		}
-		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(params)))).build();
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(params)))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		Root root = objectMapper.readValue(response.body(), Root.class);
 		return root.toBlogItems();
@@ -66,7 +66,7 @@ class Blogger implements AbstractBlog {
 	@Override
 	public List<BlogItem> getBlogPosts(BlogConfiguration config) throws IOException, InterruptedException {
 		OffsetDateTime lastPublishedTimestamp = Objects.requireNonNull(config.getLastPublishedTimestamp(), "lastPublishedTimestamp");
-		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"startDate", lastPublishedTimestamp.toInstant().plusSeconds(1).toString(),
 			"fetchBodies", Boolean.TRUE.toString(),
@@ -79,7 +79,7 @@ class Blogger implements AbstractBlog {
 
 	@Override
 	public BlogItem getLatestBlogPost(BlogConfiguration config) throws IOException, InterruptedException {
-		HttpRequest request = HttpRequest.newBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create("%s?%s".formatted(posts(config), HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey"),
 			"fetchBodies", Boolean.TRUE.toString(),
 			"fetchImages", Boolean.TRUE.toString(),
@@ -92,7 +92,7 @@ class Blogger implements AbstractBlog {
 
 	@Override
 	public BlogItem getBlogPost(BlogConfiguration config, String blogPostId) throws IOException, InterruptedException {
-		HttpRequest request = HttpRequest.newBuilder(URI.create("%s/%s?%s".formatted(posts(config), blogPostId, HttpClientUtil.queryParams(Map.of(
+		HttpRequest request = HttpClientUtil.newRequestBuilder(URI.create("%s/%s?%s".formatted(posts(config), blogPostId, HttpClientUtil.queryParams(Map.of(
 			"key", Objects.requireNonNull(config.getApiKey(), "apiKey")
 		))))).build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
