@@ -75,7 +75,7 @@ Environment=ALBINA_MAPS_PATH=/var/www/static.avalanche.report/bulletins
 Environment=ALBINA_MEDIA_PATH=/var/www/static.avalanche.report/media_files
 Environment=ALBINA_MAP_PRODUCTION_URL=/opt/avalanche-warning-maps
 ExecStartPre=/usr/bin/mkdir -p tomcat.8080/work/Tomcat/localhost/albina#api
-ExecStart=/usr/lib/jvm/jre-21/bin/java -jar albina.jar
+ExecStart=/usr/lib/jvm/jre-25/bin/java -jar albina.jar
 Type=simple
 User=albina-server
 WorkingDirectory=/opt/albina-server/

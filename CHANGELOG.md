@@ -2,13 +2,22 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
-## Unreleased
+## [9.2.0] - 2026-11-10
+
+### ⚠️ Upgrade notes
+
+- mariadb-java-client 4.0.0 defaults to `sslMode=verify-full`: a `JDBC_URL` without `useSSL=false` (or an explicit `sslMode`) now requires a TLS connection with a valid server certificate
 
 ### 🚀 Features
 
 - *(bulletin)* Render travel advisory like the website in email, PDF and simple HTML
-  (special alert as headline, advisory description as bullet points); 
+  (special alert as headline, advisory description as bullet points)
 - *(blog)* Add `/blogs/categories` endpoint, cached with ETag / If-None-Match; its IDs are accepted as `searchCategory` by `/blogs/posts`
+- *(incidents)* Add `customData` to incidents, attachments, group information and victim information
+
+### Build
+
+- Upgrade mariadb-java-client to 4.0.0 (fixes GHSA-4jq2-8v3c-97w8, GHSA-fhx5-2xqw-2cgm, GHSA-grfq-r75j-rw9x, GHSA-h599-m3w5-9m7x), guava to 33.7.2-jre
 
 ## [9.1.0] - 2026-10-28
 
