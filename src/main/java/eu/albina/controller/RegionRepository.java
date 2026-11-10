@@ -4,9 +4,10 @@ package eu.albina.controller;
 import eu.albina.exception.AlbinaException;
 import eu.albina.model.Region;
 import io.micronaut.data.annotation.Repository;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.exceptions.HttpStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface RegionRepository extends CrudRepository<Region, String> {
@@ -23,7 +24,9 @@ public interface RegionRepository extends CrudRepository<Region, String> {
 		if (regionIds.isEmpty()) {
 			return getPublishBulletinRegions();
 		}
-		return regionIds.stream().map(this::findById).map(Optional::orElseThrow).toList();
+		return regionIds.stream()
+			.map(id -> findById(id).orElseThrow(() -> new HttpStatusException(HttpStatus.BAD_REQUEST, "No region with id: " + id)))
+			.toList();
 	}
 
 	default Region findByIdOrElseThrow(String id) throws AlbinaException {
