@@ -46,6 +46,7 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.ListItem;
 import com.itextpdf.layout.element.Paragraph;
@@ -140,10 +141,16 @@ public class PdfUtil {
 			document.setRenderer(new DocumentRenderer(document));
 			document.setMargins(110, 30, 60, 50);
 
-			createPdfFrontPage(pdf);
+			float frontPageBottom = createPdfFrontPage(pdf);
 
+			// compact layout: the first bulletin starts on the front page below the overview map and legend
+			boolean newPage = !avalancheReport.getRegion().isPdfCompactLayout();
+			if (!newPage) {
+				document.add(new Div().setHeight(pdf.getDefaultPageSize().getTop() - document.getTopMargin() - frontPageBottom));
+			}
 			for (AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
-				createPdfBulletinPage(bulletin, document);
+				createPdfBulletinPage(bulletin, document, newPage);
+				newPage = true;
 			}
 
 			return path;
@@ -281,8 +288,10 @@ public class PdfUtil {
 		return WebColors.getRGBColor(hex);
 	}
 
-	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, Document document) throws IOException {
-		document.add(new AreaBreak());
+	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, Document document, boolean newPage) throws IOException {
+		if (newPage) {
+			document.add(new AreaBreak());
+		}
 
 		final Color blue = grayscale ? blueColorBw : getColor(avalancheReport.getRegion().getPdfColor());
 		final Color greyVeryLight = grayscale ? greyVeryLightColorBw : greyVeryLightColor;
@@ -1128,7 +1137,10 @@ public class PdfUtil {
 		}
 	}
 
-	private void createPdfFrontPage(PdfDocument pdf) throws MalformedURLException {
+	/**
+	 * @return the y coordinate below the lowest content (the legend) of the front page
+	 */
+	private float createPdfFrontPage(PdfDocument pdf) throws MalformedURLException {
 		PdfPage page = pdf.addNewPage();
 		Rectangle pageSize = page.getPageSize();
 		PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdf);
@@ -1314,6 +1326,7 @@ public class PdfUtil {
 
 		canvas.close();
 		pdfCanvas.release();
+		return y - 20;
 	}
 
 	protected String getMapImage(DaytimeDependency daytimeDependency, AvalancheBulletin avalancheBulletin) throws MalformedURLException {

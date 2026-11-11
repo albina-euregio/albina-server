@@ -223,6 +223,10 @@ public class Region implements PersistentObject {
 	@Column(name = "PDF_MAP_HEIGHT")
 	private int pdfMapHeight;
 
+	@Schema(description = "Compact PDF layout: the first bulletin starts on the first page below the overview map")
+	@Column(name = "PDF_COMPACT_LAYOUT")
+	private boolean pdfCompactLayout;
+
 	@Schema(description = "Logo for PDF footer")
 	@Column(name = "PDF_FOOTER_LOGO")
 	private boolean pdfFooterLogo;
@@ -691,6 +695,14 @@ public class Region implements PersistentObject {
 
 	public void setPdfMapHeight(int pdfMapHeight) {
 		this.pdfMapHeight = pdfMapHeight;
+	}
+
+	public boolean isPdfCompactLayout() {
+		return pdfCompactLayout;
+	}
+
+	public void setPdfCompactLayout(boolean pdfCompactLayout) {
+		this.pdfCompactLayout = pdfCompactLayout;
 	}
 
 	public boolean isPdfFooterLogo() {
