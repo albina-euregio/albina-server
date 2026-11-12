@@ -143,14 +143,20 @@ public class PdfUtil {
 
 			float frontPageBottom = createPdfFrontPage(pdf);
 
-			// compact layout: the first bulletin starts on the front page below the overview map and legend
-			boolean newPage = !avalancheReport.getRegion().isPdfCompactLayout();
-			if (!newPage) {
+			// compact layout: bulletins flow continuously, starting on the front page below the overview map and legend
+			boolean compactLayout = avalancheReport.getRegion().isPdfCompactLayout();
+			if (compactLayout) {
 				document.add(new Div().setHeight(pdf.getDefaultPageSize().getTop() - document.getTopMargin() - frontPageBottom));
 			}
+			boolean first = true;
 			for (AvalancheBulletin bulletin : avalancheReport.getBulletins()) {
-				createPdfBulletinPage(bulletin, document, newPage);
-				newPage = true;
+				if (!compactLayout) {
+					document.add(new AreaBreak());
+				} else if (!first) {
+					document.add(new Div().setHeight(20));
+				}
+				createPdfBulletinPage(bulletin, document);
+				first = false;
 			}
 
 			return path;
@@ -288,11 +294,7 @@ public class PdfUtil {
 		return WebColors.getRGBColor(hex);
 	}
 
-	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, Document document, boolean newPage) throws IOException {
-		if (newPage) {
-			document.add(new AreaBreak());
-		}
-
+	private void createPdfBulletinPage(AvalancheBulletin avalancheBulletin, Document document) throws IOException {
 		final Color blue = grayscale ? blueColorBw : getColor(avalancheReport.getRegion().getPdfColor());
 		final Color greyVeryLight = grayscale ? greyVeryLightColorBw : greyVeryLightColor;
 		final Color greyVeryVeryLight = grayscale ? greyVeryVeryLightColorBw : greyVeryVeryLightColor;
@@ -303,8 +305,8 @@ public class PdfUtil {
 		float regionMapSize = 100;
 
 		float[] columnWidths = { 1 };
-		Table table = new Table(columnWidths).setBorder(null);
-		table.setWidth(UnitValue.createPercentValue(100));
+		Table headTable = new Table(columnWidths).setBorder(null);
+		headTable.setWidth(UnitValue.createPercentValue(100));
 		Cell cell;
 
 		Paragraph dangerRatingHeadline = new Paragraph(
@@ -319,7 +321,7 @@ public class PdfUtil {
 		cell.setBorder(Border.NO_BORDER);
 		cell.setBorderLeft(
 				new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-		table.addCell(cell);
+		headTable.addCell(cell);
 
 		// travel advisory, the special alert takes the place of its headline
 		Optional<String> highlights = avalancheBulletin.getHighlightsIn(lang);
@@ -339,7 +341,7 @@ public class PdfUtil {
 			c.setBorder(Border.NO_BORDER);
 			c.setBorderLeft(new SolidBorder(blue, 4));
 			c.setBackgroundColor(greyVeryVeryLight);
-			table.addCell(c);
+			headTable.addCell(c);
 
 			travelAdvisoryComment.ifPresent(text -> {
 				com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List()
@@ -356,7 +358,7 @@ public class PdfUtil {
 				commentCell.setBorder(Border.NO_BORDER);
 				commentCell.setBorderLeft(new SolidBorder(blue, 4));
 				commentCell.setBackgroundColor(greyVeryVeryLight);
-				table.addCell(commentCell);
+				headTable.addCell(commentCell);
 			});
 		} else {
 			highlights.ifPresent(text -> {
@@ -370,7 +372,7 @@ public class PdfUtil {
 				c.setBorder(Border.NO_BORDER);
 				c.setBorderLeft(
 					new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-				table.addCell(c);
+				headTable.addCell(c);
 			});
 		}
 
@@ -406,7 +408,7 @@ public class PdfUtil {
 			cell.setBorder(Border.NO_BORDER);
 			cell.setBorderLeft(
 					new SolidBorder(getDangerRatingColor(avalancheBulletin.getHighestDangerRating(), grayscale), 4));
-			table.addCell(cell);
+			headTable.addCell(cell);
 
 			secondTable = new Table(secondColumnWidths).setBorder(Border.NO_BORDER);
 			Paragraph pm = new Paragraph(lang.getCaamlBundleString("validTimePeriod.later"))
@@ -459,7 +461,12 @@ public class PdfUtil {
 		if (avalancheBulletin.isHasDaytimeDependency()) {
 			cell.setBorderTop(new SolidBorder(blackColor, 0.5f));
 		}
-		table.addCell(cell);
+		headTable.addCell(cell);
+
+		// keep danger rating, highlights and map together on one page
+		headTable.setKeepTogether(true);
+		Table table = new Table(columnWidths).setBorder(null);
+		table.setWidth(UnitValue.createPercentValue(100));
 
 		// avalanche problems
 		boolean hasAvalancheProblems = hasAvalancheProblems(avalancheBulletin.getForenoon())
@@ -644,26 +651,19 @@ public class PdfUtil {
 			}
 			Cell c = new Cell(1, 1).add(developmentHeadline);
 			c.add(createDevelopment(avalancheBulletin));
+			tendencyComment.ifPresent(text -> c.add(new Paragraph(replaceLinebreaks(text))
+				.setFont(openSansRegularFont)
+				.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
+				.setMarginBottom(5)));
 			c.setTextAlignment(TextAlignment.LEFT);
 			c.setPaddingLeft(paddingLeft);
 			c.setBorder(Border.NO_BORDER);
 			c.setBorderLeft(new SolidBorder(blue, 4));
+			c.setKeepTogether(true);
 			table.addCell(c);
-
-			tendencyComment.ifPresent(text -> {
-				Paragraph paragraph = new Paragraph(replaceLinebreaks(text))
-					.setFont(openSansRegularFont)
-					.setFontSize(10).setFontColor(blackColor).setMultipliedLeading(leadingText)
-					.setMarginBottom(5);
-				Cell c2 = new Cell(1, 1).add(paragraph);
-				c2.setTextAlignment(TextAlignment.LEFT);
-				c2.setPaddingLeft(paddingLeft);
-				c2.setBorder(Border.NO_BORDER);
-				c2.setBorderLeft(new SolidBorder(blue, 4));
-				table.addCell(c2);
-			});
 		}
 
+		document.add(headTable);
 		document.add(table).setLeftMargin(50);
 	}
 
@@ -811,7 +811,7 @@ public class PdfUtil {
 		if (dangerRating != null) {
 			avalancheProblemCell.setBorderLeft(new SolidBorder(getDangerRatingColor(dangerRating, grayscale), 4));
 		}
-		table.addCell(avalancheProblemCell);
+		table.addCell(avalancheProblemCell.setKeepTogether(true));
 		table.addCell(getAspectsCell(avalancheProblem.getAspects()));
 		table.addCell(getElevationCell(avalancheProblem, table));
 		if (avalancheProblem.getAvalancheType() == eu.albina.model.enumerations.AvalancheType.slab) {
