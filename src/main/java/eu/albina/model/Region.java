@@ -223,7 +223,7 @@ public class Region implements PersistentObject {
 	@Column(name = "PDF_MAP_HEIGHT")
 	private int pdfMapHeight;
 
-	@Schema(description = "Compact PDF layout: the first bulletin starts on the first page below the overview map")
+	@Schema(description = "Compact PDF layout: reduce page breaks")
 	@Column(name = "PDF_COMPACT_LAYOUT")
 	private boolean pdfCompactLayout;
 
