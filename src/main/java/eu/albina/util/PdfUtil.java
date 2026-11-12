@@ -240,8 +240,8 @@ public class PdfUtil {
 		// Add secondary logo
 		if (region.isPdfFooterLogo()) {
 			Image footerImg = PdfUtil.this.getImage(grayscale ? region.getPdfFooterLogoBwPath() : region.getPdfFooterLogoColorPath());
-			footerImg.scaleToFit(255, 40);
-			footerImg.setFixedPosition(15, 5);
+			footerImg.scaleToFit(213, 40);
+			footerImg.setFixedPosition(15, 5 + (40 - footerImg.getImageScaledHeight()) / 2);
 			canvas.add(footerImg);
 		}
 
