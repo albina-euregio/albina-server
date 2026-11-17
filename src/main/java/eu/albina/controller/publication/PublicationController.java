@@ -256,11 +256,7 @@ public class PublicationController {
 		}
 	}
 
-	void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
-		if (!Files.isDirectory(fromDirectory)) {
-			logger.warn("Source directory {} does not exist, skipping symbolic link creation", fromDirectory);
-			return;
-		}
+	public void createSymbolicLinks(Path fromDirectory, Path toDirectory) throws IOException {
 		// clean target directory
 		try (DirectoryStream<Path> stream = Files.newDirectoryStream(toDirectory)) {
 			for (Path path : stream) {
