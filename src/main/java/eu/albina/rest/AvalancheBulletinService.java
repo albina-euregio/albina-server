@@ -426,7 +426,8 @@ public class AvalancheBulletinService {
 			avalancheReport.setStatus(BulletinStatus.draft); // preview
 
 			MapUtil.createMapyrusMaps(avalancheReport);
-			publicationController.createSymbolicLinks(avalancheReport);
+			// PdfUtil reads maps from mapsPath/<date>; never touch the real html/pdf "latest" directories here
+			publicationController.createSymbolicLinks(avalancheReport.getMapsPath(), avalancheReport.getMapsPathForPDF());
 
 			final Path pdf = new PdfUtil(avalancheReport, language, false).createPdf();
 			return toStreamedFile(pdf).attach(pdf.getFileName().toString());
