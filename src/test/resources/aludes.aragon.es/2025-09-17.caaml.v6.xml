@@ -7,28 +7,28 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="ES-AR-01">
-      <name>Valles Occidentales - North</name>
+      <name>Valles Occidentales North</name>
     </region>
     <region regionID="ES-AR-02">
-      <name>Valles Occidentales - South</name>
+      <name>Valles Occidentales South</name>
     </region>
     <region regionID="ES-AR-03">
-      <name>Tena-Aragón northern strip</name>
+      <name>Aspe-Somport</name>
     </region>
     <region regionID="ES-AR-04">
-      <name>Anayet</name>
+      <name>Canal Roya-Portalet</name>
     </region>
     <region regionID="ES-AR-09">
-      <name>Ordesa</name>
+      <name>Tendeñera-Cotefablo</name>
     </region>
     <region regionID="ES-AR-10">
-      <name>High Cinca</name>
+      <name>Ara Headwaters-Bujaruelo</name>
     </region>
     <region regionID="ES-AR-11">
-      <name>Benasque-Chistau northern strip</name>
+      <name>Ordesa Valley-Góriz</name>
     </region>
     <region regionID="ES-AR-12">
-      <name>Posets</name>
+      <name>Bielsa North-Marboré</name>
     </region>
     <dangerRating>
       <mainValue>low</mainValue>
@@ -82,25 +82,25 @@
     </validTime>
     <unscheduled>false</unscheduled>
     <region regionID="ES-AR-06">
-      <name>Infiernos</name>
+      <name>Collarada-Telera</name>
     </region>
     <region regionID="ES-AR-09">
-      <name>Ordesa</name>
+      <name>Tendeñera-Cotefablo</name>
     </region>
     <region regionID="ES-AR-07">
-      <name>High Ara</name>
+      <name>La Sarra-Respomuso</name>
     </region>
     <region regionID="ES-AR-08">
-      <name>Tendeñera</name>
+      <name>Balneario de Panticosa-Bachimaña</name>
     </region>
     <region regionID="ES-AR-13">
-      <name>Vallibierna- Llauset</name>
+      <name>Bielsa South-Gistaín</name>
     </region>
     <region regionID="ES-AR-14">
-      <name>Cerler-Castanesa</name>
+      <name>Cinqueta Headwaters-Estós</name>
     </region>
     <region regionID="ES-AR-15">
-      <name>Cotiella-Turbón</name>
+      <name>Posets</name>
     </region>
     <dangerRating>
       <mainValue>moderate</mainValue>
