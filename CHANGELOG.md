@@ -2,6 +2,35 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [9.3.0] - 2026-11-17
+
+### ⚠️ Upgrade notes
+
+- Database migration `009_000900`: new `regions.PDF_COMPACT_LAYOUT` column, enabled for `ES-AR`
+
+### 🚀 Features
+
+- *(PdfUtil)* Compact PDF layout (per region): more compact first page, bulletins flow continuously
+- *(PdfUtil)* Smaller, vertically centered footer logo
+- *(ES-AR)* Combined Aragón-AEMET logo
+- *(publication)* Skip symbolic link creation when the source directory is missing
+- *(i18n)* Update translations, including renamed ES-AR micro-region names
+
+### 🐛 Bug Fixes
+
+- *(pdf-preview)* Draft previews no longer touch the real `html`/`latest` directories; only map images are linked
+- *(bulletin)* Return 400 for a missing region on `/publication`
+- *(avalanche-bulletin-status)* Return 404 for a missing region
+- *(ES-AR)* Strip PNG metadata from Aragón logos
+
+## [9.2.1] - 2026-11-10
+
+### 🐛 Bug Fixes
+
+- *(push)* Restrict subscription endpoints to push services
+- *(http)* Set a request timeout on outgoing requests (Telegram `sendPhoto` keeps 80s)
+- *(bulletins)* Answer 400 for unknown region IDs
+
 ## [9.2.0] - 2026-11-10
 
 ### ⚠️ Upgrade notes
