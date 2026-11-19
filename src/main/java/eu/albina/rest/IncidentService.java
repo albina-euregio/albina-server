@@ -57,6 +57,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -163,6 +167,21 @@ public class IncidentService {
 		return !Collections.disjoint(INTERNAL_ACCESS_ROLES, authentication.getRoles());
 	}
 
+	/** Roles allowed to publish or unpublish incidents, i.e. to change what is publicly visible. */
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.METHOD)
+	@interface PublishRoles {
+	}
+
+	private static final Set<String> PUBLISH_ROLES =
+		Set.of(PublishRoles.class.getAnnotation(Secured.class).value());
+
+	private static boolean canPublish(@Nullable Authentication authentication) {
+		if (authentication == null) return false;
+		return !Collections.disjoint(PUBLISH_ROLES, authentication.getRoles());
+	}
+
 	@Get("/{id}")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -180,7 +199,7 @@ public class IncidentService {
 	}
 
 	@Post
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create an incident")
 	public HttpResponse<Incident> createIncident(
@@ -201,7 +220,7 @@ public class IncidentService {
 	}
 
 	@Put("/{id}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update an incident")
 	public Incident updateIncident(@PathVariable UUID id, @Body String body) {
@@ -219,7 +238,7 @@ public class IncidentService {
 	}
 
 	@Post("/{id}/publish")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@PublishRoles
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Publish an incident")
 	public Incident publishIncident(@PathVariable UUID id, @Body String body) {
@@ -242,7 +261,7 @@ public class IncidentService {
 	}
 
 	@Delete("/{id}/publish")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@PublishRoles
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Unpublish an incident")
 	public Incident unpublishIncident(@PathVariable UUID id) {
@@ -257,12 +276,16 @@ public class IncidentService {
 	}
 
 	@Delete("/{id}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete an incident")
-	public HttpResponse<Void> deleteIncident(@PathVariable UUID id) {
+	public HttpResponse<Void> deleteIncident(@PathVariable UUID id, Authentication authentication) {
 		try {
-			incidentRepository.existsOrThrow(id);
+			Incident incident = incidentRepository.findOrThrow(id);
+			// deleting a published incident removes it from the public report, which requires publish permission
+			if (!canPublish(authentication) && incident.isPublished()) {
+				throw new HttpStatusException(HttpStatus.FORBIDDEN, "Not allowed to delete a published incident");
+			}
 			incidentRepository.deleteById(id.toString());
 			return HttpResponse.noContent();
 		} finally {
@@ -310,12 +333,17 @@ public class IncidentService {
 	}
 
 	@Delete("/{id}/attachment/{attachmentId}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete incident attachment")
 	@ExecuteOn(TaskExecutors.IO)
-	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
-		incidentRepository.existsOrThrow(id);
+	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId,
+			Authentication authentication) {
+		Incident incident = incidentRepository.findOrThrow(id);
+		// removing a published attachment changes the public report, which requires publish permission
+		if (!canPublish(authentication) && isPublicAttachment(incident, attachmentId)) {
+			throw new HttpStatusException(HttpStatus.FORBIDDEN, "Not allowed to delete a published attachment");
+		}
 		Path attachment = getAttachmentPath(id, attachmentId);
 		try {
 			Files.delete(attachment);
@@ -328,7 +356,7 @@ public class IncidentService {
 	}
 
 	@Post("/{id}/attachment")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Upload incident attachment")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
