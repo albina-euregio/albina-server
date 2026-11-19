@@ -25,10 +25,13 @@ import io.micronaut.scheduling.annotation.ExecuteOn;
 
 import eu.albina.controller.CrudRepository;
 import eu.albina.controller.RegionRepository;
+import eu.albina.controller.UserRepository;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.Incident;
 import eu.albina.model.IncidentAttachment;
 import eu.albina.model.Incidents;
 import eu.albina.model.Region;
+import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
@@ -64,6 +67,7 @@ import java.lang.annotation.Target;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.Year;
@@ -92,12 +96,6 @@ public class IncidentService {
 				.toList();
 		}
 
-		default void existsOrThrow(UUID id) {
-			if (!existsById(id.toString())) {
-				throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
-			}
-		}
-
 		@NonNull
 		default Incident findOrThrow(UUID id) {
 			return findById(id.toString())
@@ -110,6 +108,9 @@ public class IncidentService {
 
 	@Inject
 	RegionRepository regionRepository;
+
+	@Inject
+	UserRepository userRepository;
 
 	@Inject
 	ObjectMapper objectMapper;
@@ -182,6 +183,27 @@ public class IncidentService {
 		return !Collections.disjoint(PUBLISH_ROLES, authentication.getRoles());
 	}
 
+	/** Throws 403 unless the user is assigned to the given region. */
+	private void checkRegionPermission(Principal principal, String regionId) {
+		User user;
+		try {
+			user = userRepository.findByIdOrElseThrow(principal);
+		} catch (AlbinaException e) {
+			throw new HttpStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+		}
+		if (!user.hasPermissionForRegion(regionId)) {
+			throw new HttpStatusException(HttpStatus.FORBIDDEN, "User is not authorized for region: " + regionId);
+		}
+	}
+
+	/** Loads the incident for a modifying request, checking that the user is assigned to its region. */
+	@NonNull
+	private Incident findForWrite(UUID id, Principal principal) {
+		Incident incident = incidentRepository.findOrThrow(id);
+		checkRegionPermission(principal, incident.getRegion().getId());
+		return incident;
+	}
+
 	@Get("/{id}")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -204,11 +226,13 @@ public class IncidentService {
 	@Operation(summary = "Create an incident")
 	public HttpResponse<Incident> createIncident(
 		@QueryValue("region") String regionId,
-		@Body String body) {
+		@Body String body,
+		Principal principal) {
 		try {
 			Object data = objectMapper.readValue(body, Object.class);
 			Region region = regionRepository.findById(regionId)
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No region with id: " + regionId));
+			checkRegionPermission(principal, region.getId());
 			Incident incident = new Incident();
 			incident.setRegion(region);
 			incident.setData(data);
@@ -223,10 +247,10 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update an incident")
-	public Incident updateIncident(@PathVariable UUID id, @Body String body) {
+	public Incident updateIncident(@PathVariable UUID id, @Body String body, Principal principal) {
 		try {
 			Object data = objectMapper.readValue(body, Object.class);
-			Incident incident = incidentRepository.findOrThrow(id);
+			Incident incident = findForWrite(id, principal);
 			incident.setData(data);
 			return incidentRepository.update(incident);
 		} catch (IOException e) {
@@ -241,14 +265,14 @@ public class IncidentService {
 	@PublishRoles
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Publish an incident")
-	public Incident publishIncident(@PathVariable UUID id, @Body String body) {
+	public Incident publishIncident(@PathVariable UUID id, @Body String body, Principal principal) {
 		try {
 			Object publicData = objectMapper.readValue(body, Object.class);
 			if (publicData == null) {
 				// otherwise the incident would be published without any public data
 				throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Missing public data");
 			}
-			Incident incident = incidentRepository.findOrThrow(id);
+			Incident incident = findForWrite(id, principal);
 			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 			incident.setPublicData(publicData);
 			return incidentRepository.update(incident);
@@ -264,9 +288,9 @@ public class IncidentService {
 	@PublishRoles
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Unpublish an incident")
-	public Incident unpublishIncident(@PathVariable UUID id) {
+	public Incident unpublishIncident(@PathVariable UUID id, Principal principal) {
 		try {
-			Incident incident = incidentRepository.findOrThrow(id);
+			Incident incident = findForWrite(id, principal);
 			incident.setPublishedAt(null);
 			incident.setPublicData(null);
 			return incidentRepository.update(incident);
@@ -281,7 +305,7 @@ public class IncidentService {
 	@Operation(summary = "Delete an incident")
 	public HttpResponse<Void> deleteIncident(@PathVariable UUID id, Authentication authentication) {
 		try {
-			Incident incident = incidentRepository.findOrThrow(id);
+			Incident incident = findForWrite(id, authentication);
 			// deleting a published incident removes it from the public report, which requires publish permission
 			if (!canPublish(authentication) && incident.isPublished()) {
 				throw new HttpStatusException(HttpStatus.FORBIDDEN, "Not allowed to delete a published incident");
@@ -339,7 +363,7 @@ public class IncidentService {
 	@ExecuteOn(TaskExecutors.IO)
 	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId,
 			Authentication authentication) {
-		Incident incident = incidentRepository.findOrThrow(id);
+		Incident incident = findForWrite(id, authentication);
 		// removing a published attachment changes the public report, which requires publish permission
 		if (!canPublish(authentication) && isPublicAttachment(incident, attachmentId)) {
 			throw new HttpStatusException(HttpStatus.FORBIDDEN, "Not allowed to delete a published attachment");
@@ -363,8 +387,9 @@ public class IncidentService {
 	@ExecuteOn(TaskExecutors.IO)
 	public IncidentAttachment uploadIncidentAttachment(
 		@PathVariable UUID id,
-		@Part("file") CompletedFileUpload file) {
-		incidentRepository.existsOrThrow(id);
+		@Part("file") CompletedFileUpload file,
+		Principal principal) {
+		findForWrite(id, principal);
 		UUID uuid = UUID.randomUUID();
 		try {
 			Path attachment = getAttachmentPath(id, uuid);
