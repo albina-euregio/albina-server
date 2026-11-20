@@ -175,10 +175,11 @@ public class TelegramController {
 	}
 
 	private static HttpResponse<String> execute(HttpRequest request, HttpClient httpClient) throws IOException, InterruptedException {
-		logger.info("Sending request {}", request.uri());
+		String uri = request.uri().toString().replaceFirst("/bot[^/]+/", "/bot***/");
+		logger.info("Sending request {}", uri);
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		if (response.statusCode() != 200) {
-			logger.warn("Error publishing on telegram channel via {} (error code {}): {}", request.uri(), response.statusCode(), response.body());
+			logger.warn("Error publishing on telegram channel via {} (error code {}): {}", uri, response.statusCode(), response.body());
 		}
 		return response;
 	}
