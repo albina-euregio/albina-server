@@ -150,6 +150,12 @@ public class PushNotificationUtil {
 				.build();
 			final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			logger.debug("Received response on POST: {}", response.statusCode());
+			if (response.statusCode() == 404 || response.statusCode() == 410) {
+				// subscription has expired or was unsubscribed, see RFC 8030 section 7.3
+				logger.info("Deleting expired subscription {} ({})", subscription.getEndpoint(), response.statusCode());
+				pushSubscriptionRepository.delete(subscription);
+				return;
+			}
 			if (response.statusCode() != 200 && response.statusCode() != 201) {
 				throw new AlbinaException(response.statusCode() + " " + response.body());
 			}
