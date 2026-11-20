@@ -85,8 +85,11 @@ public class RapidMailController {
 			.header("Authorization", calcBasicAuth(config))
 			.header("Accept", MediaType.APPLICATION_JSON)
 			.build();
-		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpResponse<String> response = sendWithRetry(request, "getRecipientsList", 0, 3).join();
 		logger.info("Retrieving recipients -> {}", response.statusCode());
+		if (response.statusCode() != 200) {
+			throw new IOException("Failed to retrieve recipient lists (error code " + response.statusCode() + "): " + response.body());
+		}
 		return objectMapper.readValue(response.body(), RapidMailRecipientListResponse.class);
 	}
 
