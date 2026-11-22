@@ -25,10 +25,13 @@ import io.micronaut.scheduling.annotation.ExecuteOn;
 
 import eu.albina.controller.CrudRepository;
 import eu.albina.controller.RegionRepository;
+import eu.albina.controller.UserRepository;
+import eu.albina.exception.AlbinaException;
 import eu.albina.model.Incident;
 import eu.albina.model.IncidentAttachment;
 import eu.albina.model.Incidents;
 import eu.albina.model.Region;
+import eu.albina.model.User;
 import eu.albina.model.enumerations.Role;
 import eu.albina.util.GlobalVariables;
 import eu.albina.util.JsonUtil;
@@ -60,6 +63,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.Year;
@@ -88,17 +92,14 @@ public class IncidentService {
 				.toList();
 		}
 
-		default void existsOrThrow(UUID id) {
-			if (!existsById(id.toString())) {
-				throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
-			}
-		}
-
 		@NonNull
 		default Incident findOrThrow(UUID id) {
 			return findById(id.toString())
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id));
 		}
+
+		/** Deletes the incident only if it is not published, returns the number of deleted rows. */
+		int deleteByIdAndPublicDataIsNull(String id);
 	}
 
 	@Inject
@@ -106,6 +107,9 @@ public class IncidentService {
 
 	@Inject
 	RegionRepository regionRepository;
+
+	@Inject
+	UserRepository userRepository;
 
 	@Inject
 	ObjectMapper objectMapper;
@@ -163,6 +167,38 @@ public class IncidentService {
 		return !Collections.disjoint(INTERNAL_ACCESS_ROLES, authentication.getRoles());
 	}
 
+	/**
+	 * Roles allowed to publish or unpublish incidents, i.e. to change what is publicly visible.
+	 * Keep in sync with {@code @Secured} on {@link #publishIncident} and {@link #unpublishIncident}.
+	 */
+	private static final Set<String> PUBLISH_ROLES = Set.of(Role.Str.ADMIN, Role.Str.FORECASTER);
+
+	private static boolean canPublish(@Nullable Authentication authentication) {
+		if (authentication == null) return false;
+		return !Collections.disjoint(PUBLISH_ROLES, authentication.getRoles());
+	}
+
+	/** Throws 403 unless the user is assigned to the given region. */
+	private void checkRegionPermission(Principal principal, String regionId) {
+		User user;
+		try {
+			user = userRepository.findByIdOrElseThrow(principal);
+		} catch (AlbinaException e) {
+			throw new HttpStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+		}
+		if (!user.hasPermissionForRegion(regionId)) {
+			throw new HttpStatusException(HttpStatus.FORBIDDEN, "User is not authorized for region: " + regionId);
+		}
+	}
+
+	/** Loads the incident for a modifying request, checking that the user is assigned to its region. */
+	@NonNull
+	private Incident findForWrite(UUID id, Principal principal) {
+		Incident incident = incidentRepository.findOrThrow(id);
+		checkRegionPermission(principal, incident.getRegion().getId());
+		return incident;
+	}
+
 	@Get("/{id}")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -180,16 +216,18 @@ public class IncidentService {
 	}
 
 	@Post
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Create an incident")
 	public HttpResponse<Incident> createIncident(
 		@QueryValue("region") String regionId,
-		@Body String body) {
+		@Body String body,
+		Principal principal) {
 		try {
 			Object data = objectMapper.readValue(body, Object.class);
 			Region region = regionRepository.findById(regionId)
 				.orElseThrow(() -> new HttpStatusException(HttpStatus.NOT_FOUND, "No region with id: " + regionId));
+			checkRegionPermission(principal, region.getId());
 			Incident incident = new Incident();
 			incident.setRegion(region);
 			incident.setData(data);
@@ -201,13 +239,13 @@ public class IncidentService {
 	}
 
 	@Put("/{id}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Update an incident")
-	public Incident updateIncident(@PathVariable UUID id, @Body String body) {
+	public Incident updateIncident(@PathVariable UUID id, @Body String body, Principal principal) {
 		try {
 			Object data = objectMapper.readValue(body, Object.class);
-			Incident incident = incidentRepository.findOrThrow(id);
+			Incident incident = findForWrite(id, principal);
 			incident.setData(data);
 			return incidentRepository.update(incident);
 		} catch (IOException e) {
@@ -222,14 +260,14 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Publish an incident")
-	public Incident publishIncident(@PathVariable UUID id, @Body String body) {
+	public Incident publishIncident(@PathVariable UUID id, @Body String body, Principal principal) {
 		try {
 			Object publicData = objectMapper.readValue(body, Object.class);
 			if (publicData == null) {
 				// otherwise the incident would be published without any public data
 				throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Missing public data");
 			}
-			Incident incident = incidentRepository.findOrThrow(id);
+			Incident incident = findForWrite(id, principal);
 			incident.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 			incident.setPublicData(publicData);
 			return incidentRepository.update(incident);
@@ -245,9 +283,9 @@ public class IncidentService {
 	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Unpublish an incident")
-	public Incident unpublishIncident(@PathVariable UUID id) {
+	public Incident unpublishIncident(@PathVariable UUID id, Principal principal) {
 		try {
-			Incident incident = incidentRepository.findOrThrow(id);
+			Incident incident = findForWrite(id, principal);
 			incident.setPublishedAt(null);
 			incident.setPublicData(null);
 			return incidentRepository.update(incident);
@@ -257,13 +295,19 @@ public class IncidentService {
 	}
 
 	@Delete("/{id}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete an incident")
-	public HttpResponse<Void> deleteIncident(@PathVariable UUID id) {
+	public HttpResponse<Void> deleteIncident(@PathVariable UUID id, Authentication authentication) {
 		try {
-			incidentRepository.existsOrThrow(id);
-			incidentRepository.deleteById(id.toString());
+			findForWrite(id, authentication);
+			if (canPublish(authentication)) {
+				incidentRepository.deleteById(id.toString());
+			} else if (incidentRepository.deleteByIdAndPublicDataIsNull(id.toString()) == 0) {
+				// deleting a published incident removes it from the public report, which requires publish permission
+				// (checked atomically in the delete statement to avoid racing with a concurrent publish)
+				throw new HttpStatusException(HttpStatus.FORBIDDEN, "Not allowed to delete a published incident");
+			}
 			return HttpResponse.noContent();
 		} finally {
 			publicIncidentsCache.invalidateAll();
@@ -276,8 +320,12 @@ public class IncidentService {
 	record PublicAttachments(List<Incidents.Attachment> attachments) {
 	}
 
-	/** Whether the attachment is listed in the incident's public data and marked as public. */
-	private boolean isPublicAttachment(Incident incident, UUID attachmentId) {
+	/**
+	 * Whether the attachment is listed in the incident's public data and marked as public.
+	 *
+	 * @param resultOnParseError returned if the public data cannot be parsed, so callers can fail closed
+	 */
+	private boolean isPublicAttachment(Incident incident, UUID attachmentId, boolean resultOnParseError) {
 		if (!incident.isPublished()) {
 			return false;
 		}
@@ -289,7 +337,7 @@ public class IncidentService {
 					.anyMatch(a -> attachmentId.equals(a.id()) && Boolean.TRUE.equals(a.isPublic()));
 		} catch (IOException e) {
 			logger.warn("Failed to parse public data of incident {}", incident.getId(), e);
-			return false;
+			return resultOnParseError;
 		}
 	}
 
@@ -302,7 +350,7 @@ public class IncidentService {
 			@Nullable Authentication authentication) {
 		Incident incident = incidentRepository.findOrThrow(id);
 		// do not distinguish between an unpublished incident and a non-public attachment
-		if (!canViewInternalData(authentication) && !isPublicAttachment(incident, attachmentId)) {
+		if (!canViewInternalData(authentication) && !isPublicAttachment(incident, attachmentId, false)) {
 			throw new HttpStatusException(HttpStatus.NOT_FOUND, "No incident with id: " + id);
 		}
 		Path attachment = getAttachmentPath(id, attachmentId);
@@ -310,12 +358,17 @@ public class IncidentService {
 	}
 
 	@Delete("/{id}/attachment/{attachmentId}")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Delete incident attachment")
 	@ExecuteOn(TaskExecutors.IO)
-	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId) {
-		incidentRepository.existsOrThrow(id);
+	public HttpResponse<Void> deleteIncidentAttachment(@PathVariable UUID id, @PathVariable UUID attachmentId,
+			Authentication authentication) {
+		Incident incident = findForWrite(id, authentication);
+		// removing a published attachment changes the public report, which requires publish permission
+		if (!canPublish(authentication) && isPublicAttachment(incident, attachmentId, true)) {
+			throw new HttpStatusException(HttpStatus.FORBIDDEN, "Not allowed to delete a published attachment");
+		}
 		Path attachment = getAttachmentPath(id, attachmentId);
 		try {
 			Files.delete(attachment);
@@ -328,15 +381,16 @@ public class IncidentService {
 	}
 
 	@Post("/{id}/attachment")
-	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER})
+	@Secured({Role.Str.ADMIN, Role.Str.FORECASTER, Role.Str.FOREMAN})
 	@SecurityRequirement(name = AuthenticationService.SECURITY_SCHEME)
 	@Operation(summary = "Upload incident attachment")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@ExecuteOn(TaskExecutors.IO)
 	public IncidentAttachment uploadIncidentAttachment(
 		@PathVariable UUID id,
-		@Part("file") CompletedFileUpload file) {
-		incidentRepository.existsOrThrow(id);
+		@Part("file") CompletedFileUpload file,
+		Principal principal) {
+		findForWrite(id, principal);
 		UUID uuid = UUID.randomUUID();
 		try {
 			Path attachment = getAttachmentPath(id, uuid);
