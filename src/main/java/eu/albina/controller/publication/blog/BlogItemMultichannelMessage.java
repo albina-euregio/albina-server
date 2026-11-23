@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 package eu.albina.controller.publication.blog;
 
+import java.util.Objects;
+
 import eu.albina.controller.publication.MultichannelMessage;
 import eu.albina.model.Region;
 import eu.albina.model.enumerations.LanguageCode;
 import eu.albina.model.publication.BlogConfiguration;
+import eu.albina.util.EmailUtil;
 
 record BlogItemMultichannelMessage(BlogConfiguration config, Region region, BlogItem blogPost) implements MultichannelMessage {
 
@@ -40,7 +43,7 @@ record BlogItemMultichannelMessage(BlogConfiguration config, Region region, Blog
 
 	@Override
 	public String getHtmlMessage() {
-		return blogPost.content();
+		return Objects.requireNonNullElse(blogPost.content(), "") + EmailUtil.createFooterHtml(region, config.getLanguageCode());
 	}
 
 	@Override

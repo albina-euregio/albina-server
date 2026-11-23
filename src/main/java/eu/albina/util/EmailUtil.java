@@ -241,6 +241,27 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		}
 
 		// footer
+		appendFooter(pw, region, lang);
+		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\" alt=\"\"/>");
+		pw.print("</body>");
+		pw.print("</html>");
+
+		pw.flush();
+		return out.toString();
+	}
+
+	/**
+	 * Creates the footer with the imprint and the unsubscribe link, as used in all email newsletters.
+	 */
+	public static String createFooterHtml(Region region, LanguageCode lang) {
+		StringWriter out = new StringWriter();
+		PrintWriter pw = new PrintWriter(out);
+		appendFooter(pw, region, lang);
+		pw.flush();
+		return out.toString();
+	}
+
+	private static void appendFooter(PrintWriter pw, Region region, LanguageCode lang) {
 		pw.print(TABLE + " class=\"footer-wrap\" bgcolor=\"#FFFFFF\">");
 		pw.print("<tr>");
 		pw.print("<td class=\"container\" style=\"padding: 15px 0;\">");
@@ -273,12 +294,6 @@ public record EmailUtil(AvalancheReport avalancheReport, AvalancheBulletins bull
 		pw.print("</td>");
 		pw.print("</tr>");
 		pw.print("</table>");
-		pw.print("<img height=\"4\" style=\"width: 100%;\" src=\"" + ci + "\" alt=\"\"/>");
-		pw.print("</body>");
-		pw.print("</html>");
-
-		pw.flush();
-		return out.toString();
 	}
 
 	private Optional<String> getGeneralHeadline() {
