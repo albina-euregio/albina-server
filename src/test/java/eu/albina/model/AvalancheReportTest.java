@@ -83,6 +83,7 @@ public class AvalancheReportTest {
 		Assertions.assertEquals("jueves, 17 de enero de 2019", avalancheReport.getDate(LanguageCode.es));
 		Assertions.assertEquals("dijous, 17 de gener del 2019", avalancheReport.getDate(LanguageCode.ca));
 		Assertions.assertEquals("dijaus, 17 de Gèr del 2019", avalancheReport.getDate(LanguageCode.oc));
+		Assertions.assertEquals("četrtek, 17. januar 2019", avalancheReport.getDate(LanguageCode.sl));
 		Assertions.assertEquals("am Freitag, 18. Jänner 2019", avalancheReport.getTendencyDate(LanguageCode.de));
 		Assertions.assertEquals("16.01.2019", avalancheReport.getPreviousValidityDateString(LanguageCode.de));
 		Assertions.assertEquals("18.01.2019", avalancheReport.getNextValidityDateString(LanguageCode.de));

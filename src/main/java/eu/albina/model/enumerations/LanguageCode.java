@@ -64,7 +64,8 @@ public enum LanguageCode {
 		public String getLongDate(LocalDate date) {
 			return replaceAranes(super.getLongDate(date));
 		}
-	};
+	},
+	sl(Locale.of("sl"));
 
 	private final Locale locale;
 
@@ -147,7 +148,7 @@ public enum LanguageCode {
     @jakarta.persistence.Converter
     public static class Converter extends EnumSetToStringConverter<LanguageCode> {
 
-        public static final String COLUMN_DEFINITION = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc')";
+        public static final String COLUMN_DEFINITION = "set('de', 'it', 'en', 'fr', 'es', 'ca', 'oc', 'sl')";
 
         @Override
         protected Class<LanguageCode> getEnumClass() {

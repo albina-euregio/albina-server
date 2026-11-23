@@ -42,9 +42,6 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 
 	private static final Logger logger = LoggerFactory.getLogger(SimpleHtmlUtil.class);
 
-	/** Language codes linked in the header, in display order. */
-	private static final List<String> LINKED_LANGUAGES = List.of("de", "it", "en", "es", "ca", "ar");
-
 	public SimpleHtmlUtil(AvalancheReport avalancheReport, LanguageCode lang) {
 		this(avalancheReport, new Caaml6(avalancheReport, List.of(), lang).toCAAML(), lang);
 	}
@@ -95,8 +92,9 @@ public record SimpleHtmlUtil(AvalancheReport avalancheReport, AvalancheBulletins
 		pw.format("<header>\n");
 		pw.format("<nav class=\"language-nav\">\n");
 		pw.format("<a href=\"%s\">%s</a>\n", website, lang.getBundleString("standard.link.text"));
-		pw.format("<span>%s</span>\n", LINKED_LANGUAGES.stream()
-			.map(code -> String.format("<a href=\"%s_%s.html\">%s</a>", prefix, code, code.toUpperCase()))
+		pw.format("<span>%s</span>\n", region.getEnabledLanguages().stream()
+			.sorted()
+			.map(code -> String.format("<a href=\"%s_%s.html\">%s</a>", prefix, code, code.name().toUpperCase()))
 			.collect(Collectors.joining("\n")));
 		pw.format("</nav>\n");
 		pw.format("<h1><a href=\"%s\">%s</a></h1>\n", website, region.getWebsiteName(lang));
