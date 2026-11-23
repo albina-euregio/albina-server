@@ -2,6 +2,28 @@
 
 <!-- Update using `git-cliff -u -p CHANGELOG.md -t <TAG>` before creating new tag <TAG> with git. -->
 
+## [9.4.0] - 2026-11-23
+
+### ⚠️ Upgrade notes
+
+- Warnings are reported to GitLab Error Tracking via the Sentry SDK; set `SENTRY_DSN` to enable
+
+### 🚀 Features
+
+- Add Slovenian (sl) language
+- *(simple-html)* Link enabled languages of the region
+- *(logging)* Report warnings to GitLab Error Tracking via Sentry SDK
+- *(logging)* Add timezone offset to log timestamps
+- *(i18n)* Update translations
+
+### 🐛 Bug Fixes
+
+- *(incidents)* Allow role FOREMAN to save/edit incidents; check the user's region before editing; harden publish permission checks
+- *(newsletter)* Append imprint and unsubscribe link to blog newsletter as well
+- *(push)* Delete expired subscriptions on 404/410 without warning
+- *(telegram)* Mask bot token in logged request URIs
+- *(rapidmail)* Retry and check status when retrieving recipient lists
+
 ## [9.3.0] - 2026-11-17
 
 ### ⚠️ Upgrade notes
