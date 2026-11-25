@@ -99,6 +99,7 @@ class Blogger implements AbstractBlog {
 		return objectMapper.readValue(response.body(), Item.class).toBlogItem();
 	}
 
+	@Serdeable
 	record Root(
 		String kind,
 		String nextPageToken,
