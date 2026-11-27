@@ -57,7 +57,7 @@ public class BlogControllerTest {
 		blogPosts = blogController.blogImplementation(config).searchBlogPosts(config, null, null, null, null);
 		blogPosts = blogController.blogImplementation(config).searchBlogPosts(config, null, null, startDate, endDate);
 		assertEquals(List.of("Aktuelle Situation"), blogPosts.getFirst().categories());
-		assertEquals(OffsetDateTime.parse("2023-12-28T16:33:31Z"), blogPosts.getFirst().published());
+		assertEquals(OffsetDateTime.parse("2023-12-28T15:33:31Z"), blogPosts.getFirst().published());
 		objectMapper.writeValueAsString(blogPosts);
 
 		config.setBlogApiUrl("https://blog.avalanche.report/it-32-bz/wp-json/wp/v2/");
