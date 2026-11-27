@@ -56,6 +56,7 @@ class Wordpress implements AbstractBlog {
 				"_embedded",
 				"categories",
 				"date",
+				"date_gmt",
 				"featured_image_url",
 				"featured_media",
 				"id",
